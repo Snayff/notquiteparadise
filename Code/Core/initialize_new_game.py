@@ -9,18 +9,14 @@ from Code.Components.level import Level
 from Code.Entities.entity import Entity
 
 from Code.Entities.equipment_slots import EquipmentSlots
-
 from Code.Core.game_messages import MessageLog
-
 from Code.Core.game_states import GameStates
-
-from Code.map_objects.game_map import GameMap
-
+from Code.Map.game_map import GameMap
 from Code.Draw.render_functions import RenderOrder
 
 
 def get_constants():
-    window_title = 'Roguelike Tutorial Revised'
+    window_title = 'Not Quite Paradise'
 
     screen_width = 80
     screen_height = 50

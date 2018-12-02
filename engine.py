@@ -25,16 +25,17 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 
 	targeting_item = None
 
+	# Game Loop
 	while not libtcod.console_is_window_closed():
 		libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
 
 		if fov_recompute:
 			recompute_fov(fov_map, player.x, player.y, constants['fov_radius'], constants['fov_light_walls'],
-				constants['fov_algorithm'])
+					constants['fov_algorithm'])
 
 		render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, message_log,
-			constants['screen_width'], constants['screen_height'], constants['bar_width'],
-			constants['panel_height'], constants['panel_y'], mouse, constants['colors'], game_state)
+				constants['screen_width'], constants['screen_height'], constants['bar_width'],
+				constants['panel_height'], constants['panel_y'], mouse, constants['colors'], game_state)
 
 		fov_recompute = False
 
@@ -42,9 +43,15 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 
 		clear_all(con, entities)
 
+		# Get input
 		action = handle_keys(key, game_state)
 		mouse_action = handle_mouse(mouse)
 
+		# mouse action
+		left_click = mouse_action.get('left_click')
+		right_click = mouse_action.get('right_click')
+
+		# player actions
 		move = action.get('move')
 		wait = action.get('wait')
 		pickup = action.get('pickup')
@@ -54,14 +61,14 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 		take_stairs = action.get('take_stairs')
 		level_up = action.get('level_up')
 		show_character_screen = action.get('show_character_screen')
+
+		# game ACTIONS
 		exit = action.get('exit')
 		fullscreen = action.get('fullscreen')
 
-		left_click = mouse_action.get('left_click')
-		right_click = mouse_action.get('right_click')
-
 		player_turn_results = []
 
+		# Player's turn
 		if move and game_state == GameStates.PLAYERS_TURN:
 			dx, dy = move
 			destination_x = player.x + dx
@@ -112,10 +119,16 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 
 		if take_stairs and game_state == GameStates.PLAYERS_TURN:
 			for entity in entities:
+				# if player is standing on the stairs
 				if entity.stairs and entity.x == player.x and entity.y == player.y:
+					# set entities list to new value
 					entities = game_map.next_floor(player, message_log, constants)
+
+					# create new fov map
 					fov_map = initialize_fov(game_map)
 					fov_recompute = True
+
+					# clear the console
 					libtcod.console_clear(con)
 
 					break
@@ -142,16 +155,19 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 				target_x, target_y = left_click
 
 				item_use_results = player.inventory.use(targeting_item, entities=entities, fov_map=fov_map,
-					target_x=target_x, target_y=target_y)
+						target_x=target_x, target_y=target_y)
 				player_turn_results.extend(item_use_results)
 			elif right_click:
 				player_turn_results.append({'targeting_cancelled': True})
 
 		if exit:
+			# if we are showing a menu go back to previous state
 			if game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY, GameStates.CHARACTER_SCREEN):
 				game_state = previous_game_state
+			# or cancel targeting
 			elif game_state == GameStates.TARGETING:
 				player_turn_results.append({'targeting_cancelled': True})
+			# or exit the game
 			else:
 				save_game(player, entities, game_map, message_log, game_state)
 
@@ -160,6 +176,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 		if fullscreen:
 			libtcod.console_set_fullscreen(not libtcod.console_is_fullscreen())
 
+		# Handle player's turn RESULTS
 		for player_turn_result in player_turn_results:
 			message = player_turn_result.get('message')
 			dead_entity = player_turn_result.get('dead')
@@ -231,6 +248,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 					previous_game_state = game_state
 					game_state = GameStates.LEVEL_UP
 
+		#  Handle enemies' turns
 		if game_state == GameStates.ENEMY_TURN:
 			for entity in entities:
 				if entity.ai:
@@ -264,7 +282,7 @@ def main():
 	constants = get_constants()
 
 	libtcod.console_set_custom_font('Assets/Fonts/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE |
-																 libtcod.FONT_LAYOUT_TCOD)
+																  libtcod.FONT_LAYOUT_TCOD)
 
 	libtcod.console_init_root(constants['screen_width'], constants['screen_height'], constants['window_title'], False)
 
@@ -290,7 +308,7 @@ def main():
 
 		if show_main_menu:
 			main_menu(con, main_menu_background_image, constants['screen_width'],
-				constants['screen_height'])
+					constants['screen_height'])
 
 			if show_load_error_message:
 				message_box(con, 'No save game to load', 50, constants['screen_width'], constants['screen_height'])
