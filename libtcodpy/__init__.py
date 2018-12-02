@@ -1,6 +1,6 @@
 #
-# libtcod 1.6.3 Python wrapper
-# Copyright (c) 2008,2009,2010,2012,2013,2016,2017 Jice & Mingos & rmtew
+# libtcod Python wrapper
+# Copyright (c) 2008-2018 Jice & Mingos & rmtew
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -10,8 +10,9 @@
 #     * Redistributions in binary form must reproduce the above copyright
 #       notice, this list of conditions and the following disclaimer in the
 #       documentation and/or other materials provided with the distribution.
-#     * The name of Jice or Mingos may not be used to endorse or promote products
-#       derived from this software without specific prior written permission.
+#     * The name of Jice or Mingos may not be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
 #
 # THIS SOFTWARE IS PROVIDED BY JICE, MINGOS AND RMTEW ``AS IS'' AND ANY
 # EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -28,9 +29,17 @@
 from __future__ import print_function
 import os
 import sys
+import atexit
 import ctypes
 import struct
+import warnings
 from ctypes import *
+
+warnings.warn(
+    ("This implementation of libtcodpy is no longer maintained.\n"
+     "python-tcod can be used as a drop-in replacement."),
+    DeprecationWarning
+)
 
 # We do not have a fully unicode API on libtcod, so all unicode strings have to
 # be implicitly converted to ascii, and any unicode specific operations have to
@@ -43,14 +52,49 @@ is_python_3 = sys.version_info > (3, 0)
 
 if is_python_3:
     def convert_to_ascii(v):
-        if type(v) is str:
-            return v.encode('ascii')
+        if not isinstance(v, bytes):
+            return v.encode('utf-8')
+        warnings.warn("Passing bytes to this call is deprecated.",
+                      DeprecationWarning, stacklevel=3)
         return v
 else:
     def convert_to_ascii(v):
-        if type(v) is unicode:
-            return v.encode('ascii')
+        if isinstance(v, unicode):
+            return v.encode('utf-8')
         return v
+
+if sys.version_info[0] == 2: # Python 2
+    def _bytes(string):
+        if isinstance(string, unicode):
+            return string.encode('latin-1')
+        return string
+
+    def _unicode(string):
+        if not isinstance(string, unicode):
+            return string.decode('latin-1')
+        return string
+
+else: # Python 3
+    def _bytes(string):
+        if isinstance(string, str):
+            return string.encode('latin-1')
+        warnings.warn("Passing bytes to this call is deprecated.",
+                      DeprecationWarning, stacklevel=4)
+        return string
+
+    def _unicode(string):
+        if isinstance(string, bytes):
+            warnings.warn("Passing bytes to this call is deprecated.",
+                          DeprecationWarning, stacklevel=4)
+            return string.decode('latin-1')
+        return string
+
+
+def _fmt_bytes(string):
+    return _bytes(string).replace(b'%', b'%%')
+
+def _fmt_unicode(string):
+    return _unicode(string).replace(u'%', u'%%')
 
 if not hasattr(ctypes, "c_bool"):   # for Python < 2.6
     c_bool = c_uint8
@@ -187,9 +231,9 @@ else:
         else:
             raise Exception("unable to find wrapper", function_name)
 
-HEXVERSION = 0x010603
-STRVERSION = "1.6.3"
-TECHVERSION = 0x01060300
+HEXVERSION = 0x010604
+STRVERSION = "1.6.4"
+TECHVERSION = 0x01060400
 
 ############################
 # color module
@@ -823,11 +867,17 @@ COLCTRL_STOP=8
 RENDERER_GLSL=0
 RENDERER_OPENGL=1
 RENDERER_SDL=2
-NB_RENDERERS=3
+RENDERER_SDL2=3
+RENDERER_OPENGL2=4
+NB_RENDERERS=5
 # alignment
 LEFT=0
 RIGHT=1
 CENTER=2
+
+
+_lib.TCOD_quit.restype = c_void
+_lib.TCOD_quit.argtypes = []
 
 # initializing the console
 
@@ -835,6 +885,7 @@ _lib.TCOD_console_init_root.restype=c_void
 _lib.TCOD_console_init_root.argtypes=[c_int, c_int, c_char_p , c_bool , c_uint ]
 def console_init_root(w, h, title, fullscreen=False, renderer=RENDERER_SDL):
     _lib.TCOD_console_init_root(w, h, convert_to_ascii(title), fullscreen, renderer)
+    atexit.register(_lib.TCOD_quit)
 
 _lib.TCOD_console_set_custom_font.restype=c_void
 _lib.TCOD_console_set_custom_font.argtypes=[c_char_p, c_int,c_int, c_int]
@@ -994,43 +1045,31 @@ def console_get_alignment(con):
     return _lib.TCOD_console_get_alignment(con)
 
 _lib.TCOD_console_print.argtypes=[c_void_p,c_int,c_int,c_char_p]
+_lib.TCOD_console_print_utf.argtypes=[c_void_p,c_int,c_int,c_wchar_p]
 def console_print(con, x, y, fmt):
-    if type(fmt) == bytes or is_python_3:
-        _lib.TCOD_console_print(con, x, y, convert_to_ascii(fmt))
-    else:
-        _lib.TCOD_console_print_utf(con, x, y, fmt)
+    _lib.TCOD_console_print_utf(con, x, y, _fmt_unicode(fmt))
 
 _lib.TCOD_console_print_ex.argtypes=[c_void_p,c_int,c_int,c_int,c_int,c_char_p]
 _lib.TCOD_console_print_ex_utf.argtypes=[c_void_p, c_int, c_int, c_int, c_int, c_wchar_p]
 def console_print_ex(con, x, y, flag, alignment, fmt):
-    if type(fmt) == bytes or is_python_3:
-        _lib.TCOD_console_print_ex(con, x, y, flag, alignment, convert_to_ascii(fmt))
-    else:
-        _lib.TCOD_console_print_ex_utf(con, x, y, flag, alignment, fmt)
+    _lib.TCOD_console_print_ex_utf(con, x, y, flag, alignment,
+                                   _fmt_unicode(fmt))
 
 _lib.TCOD_console_print_rect.argtypes=[c_void_p, c_int, c_int, c_int, c_int, c_char_p]
 _lib.TCOD_console_print_rect_utf.argtypes=[c_void_p, c_int, c_int, c_int, c_int, c_wchar_p]
 def console_print_rect(con, x, y, w, h, fmt):
-    if type(fmt) == bytes or is_python_3:
-        return _lib.TCOD_console_print_rect(con, x, y, w, h, convert_to_ascii(fmt))
-    else:
-        return _lib.TCOD_console_print_rect_utf(con, x, y, w, h, fmt)
+    return _lib.TCOD_console_print_rect_utf(con, x, y, w, h, _fmt_unicode(fmt))
 
 _lib.TCOD_console_print_rect_ex.argtypes=[c_void_p, c_int, c_int, c_int, c_int, c_int, c_int, c_char_p]
 _lib.TCOD_console_print_rect_ex_utf.argtypes=[c_void_p, c_int, c_int, c_int, c_int, c_int, c_int, c_wchar_p]
 def console_print_rect_ex(con, x, y, w, h, flag, alignment, fmt):
-    if type(fmt) == bytes or is_python_3:
-        return _lib.TCOD_console_print_rect_ex(con, x, y, w, h, flag, alignment, convert_to_ascii(fmt))
-    else:
-        return _lib.TCOD_console_print_rect_ex_utf(con, x, y, w, h, flag, alignment, fmt)
+    return _lib.TCOD_console_print_rect_ex_utf(con, x, y, w, h, flag, alignment, _fmt_unicode(fmt))
 
 _lib.TCOD_console_get_height_rect.argtypes=[c_void_p, c_int, c_int, c_int, c_int, c_char_p]
 _lib.TCOD_console_get_height_rect_utf.argtypes=[c_void_p, c_int, c_int, c_int, c_int, c_wchar_p]
 def console_get_height_rect(con, x, y, w, h, fmt):
-    if type(fmt) == bytes or is_python_3:
-        return _lib.TCOD_console_get_height_rect(con, x, y, w, h, convert_to_ascii(fmt))
-    else:
-        return _lib.TCOD_console_get_height_rect_utf(con, x, y, w, h, fmt)
+    return _lib.TCOD_console_get_height_rect_utf(con, x, y, w, h,
+                                                 _fmt_unicode(fmt))
 
 _lib.TCOD_console_rect.argtypes=[ c_void_p, c_int, c_int, c_int, c_int, c_bool, c_int ]
 def console_rect(con, x, y, w, h, clr, flag=BKGND_DEFAULT):
@@ -1046,17 +1085,8 @@ def console_vline(con, x, y, l, flag=BKGND_DEFAULT):
 
 _lib.TCOD_console_print_frame.argtypes=[c_void_p,c_int,c_int,c_int,c_int,c_int,c_int,c_char_p]
 def console_print_frame(con, x, y, w, h, clear=True, flag=BKGND_DEFAULT, fmt=''):
-    _lib.TCOD_console_print_frame(con, x, y, w, h, clear, flag, convert_to_ascii(fmt))
-
-_lib.TCOD_console_get_foreground_color_image.restype=c_void_p
-_lib.TCOD_console_get_foreground_color_image.argtypes=[c_void_p]
-def console_get_foreground_image(con):
-    return _lib.TCOD_console_get_foreground_color_image(con)
-
-_lib.TCOD_console_get_background_color_image.restype=c_void_p
-_lib.TCOD_console_get_background_color_image.argtypes=[c_void_p]
-def console_get_background_image(con):
-    return _lib.TCOD_console_get_background_color_image(con)
+    _lib.TCOD_console_print_frame(con, x, y, w, h, clear, flag,
+                                  _fmt_bytes(fmt))
 
 _lib.TCOD_console_set_color_control.restype=c_void
 _lib.TCOD_console_set_color_control.argtypes=[c_void_p, Color, Color ]
@@ -1237,6 +1267,51 @@ _lib.TCOD_console_save_apf.restype=c_bool
 _lib.TCOD_console_save_apf.argtypes=[c_void_p , c_char_p]
 def console_save_apf(con, filename) :
     return _lib.TCOD_console_save_apf(con,convert_to_ascii(filename))
+
+_lib.TCOD_console_from_xp.restype = c_void_p
+_lib.TCOD_console_from_xp.argtypes = [c_char_p]
+def console_from_xp(filename):
+    return _lib.TCOD_console_from_xp(filename.encode('utf-8'))
+
+_lib.TCOD_console_load_xp.restype = c_bool
+_lib.TCOD_console_load_xp.argtypes = [c_void_p, c_char_p]
+def console_load_xp(con, filename):
+    return _lib.TCOD_console_load_xp(con, filename.encode('utf-8'))
+
+_lib.TCOD_console_save_xp.restype = c_bool
+_lib.TCOD_console_save_xp.argtypes = [c_void_p, c_char_p, c_int]
+def console_save_xp(con, filename, compress_level=9):
+    return _lib.TCOD_console_save_xp(con, filename.encode('utf-8'),
+                                     compress_level)
+
+_lib.TCOD_console_list_from_xp.restype = c_void_p
+_lib.TCOD_console_list_from_xp.argtypes = [c_char_p]
+def console_list_load_xp(filename):
+    tcod_list = _lib.TCOD_console_list_from_xp(filename.encode('utf-8'))
+    if not tcod_list:
+        return None
+    try:
+        python_list = []
+        _lib.TCOD_list_reverse(tcod_list)
+        while not _lib.TCOD_list_is_empty(tcod_list):
+            python_list.append(_lib.TCOD_list_pop(tcod_list))
+        return python_list
+    finally:
+        _lib.TCOD_list_delete(tcod_list)
+
+_lib.TCOD_console_list_save_xp.restype = c_bool
+_lib.TCOD_console_list_save_xp.argtypes = [c_void_p, c_char_p, c_int]
+def console_list_save_xp(console_list, filename, compress_level=9):
+    tcod_list = _lib.TCOD_list_new()
+    try:
+        for console in console_list:
+            _lib.TCOD_list_push(tcod_list, console)
+        return _lib.TCOD_console_list_save_xp(
+            tcod_list, filename.encode('utf-8'), compress_level
+            )
+    finally:
+        _lib.TCOD_list_delete(tcod_list)
+
 
 ############################
 # sys module
@@ -2002,10 +2077,10 @@ _lib.TCOD_map_set_properties.argtypes=[c_void_p , c_int, c_int, c_bool, c_bool]
 def map_set_properties(m, x, y, isTrans, isWalk):
     _lib.TCOD_map_set_properties(m, x, y, c_int(isTrans), c_int(isWalk))
 
-_lib.TCOD_map_clear.restype=c_void
-_lib.TCOD_map_clear.argtypes=[c_void_p , c_bool , c_bool ]
-def map_clear(m,walkable=False,transparent=False):
-    _lib.TCOD_map_clear(m,c_int(walkable),c_int(transparent))
+_lib.TCOD_map_clear.restype = c_void
+_lib.TCOD_map_clear.argtypes = [c_void_p , c_bool , c_bool]
+def map_clear(m, transparent=False, walkable=False):
+    _lib.TCOD_map_clear(m, c_int(transparent), c_int(walkable))
 
 _lib.TCOD_map_compute_fov.restype=c_void
 _lib.TCOD_map_compute_fov.argtypes=[c_void_p , c_int, c_int, c_int, c_bool, c_int ]
