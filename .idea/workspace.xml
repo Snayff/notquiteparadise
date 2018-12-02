@@ -12,13 +12,25 @@
     <splitter split-orientation="horizontal" split-proportion="0.49809057">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/engine.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="828">
-                  <caret line="303" column="27" lean-forward="true" selection-start-line="303" selection-start-column="27" selection-end-line="303" selection-end-column="27" />
+                <state relative-caret-position="484">
+                  <caret line="327" lean-forward="true" selection-start-line="327" selection-end-line="327" />
                   <folding>
                     <element signature="e#0#27#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Code/Core/initialize_new_game.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="368">
+                  <caret line="58" column="37" lean-forward="true" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
+                  <folding>
+                    <element signature="e#2#29#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -29,10 +41,19 @@
       <split-second>
         <leaf>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Code/Map/game_map.py">
+            <entry file="file://$PROJECT_DIR$/Data/ENG.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="694">
-                  <caret line="233" column="29" lean-forward="true" selection-start-line="233" selection-start-column="29" selection-end-line="233" selection-end-column="29" />
+                <state relative-caret-position="23">
+                  <caret line="1" column="38" lean-forward="true" selection-start-line="1" selection-start-column="38" selection-end-line="1" selection-end-column="38" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Code/Core/game_messages.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-88">
+                  <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="21" selection-end-column="80" />
                   <folding>
                     <element signature="e#0#27#0" expanded="true" />
                   </folding>
@@ -40,13 +61,24 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Code/Core/game_messages.py">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Code/Map/tile.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="671">
-                  <caret line="66" column="50" lean-forward="true" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
+                <state relative-caret-position="575">
+                  <caret line="25" column="44" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Code/Core/json_loaders.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="50">
+                  <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
                   <folding>
-                    <element signature="e#0#27#0" expanded="true" />
+                    <element signature="e#0#11#0" expanded="true" />
+                    <element signature="e#257#604#0" />
+                    <element signature="e#264#507#0" />
                   </folding>
                 </state>
               </provider>
@@ -71,14 +103,23 @@
       <list>
         <option value="$PROJECT_DIR$/loader_functions/initialize_new_game.py" />
         <option value="$PROJECT_DIR$/Code/map_objects/game_map.py" />
-        <option value="$PROJECT_DIR$/Code/Core/initialize_new_game.py" />
         <option value="$PROJECT_DIR$/Code/Draw/menus.py" />
-        <option value="$PROJECT_DIR$/engine.py" />
         <option value="$PROJECT_DIR$/Code/Core/data_loaders.py" />
-        <option value="$PROJECT_DIR$/Code/Core/json_loaders.py" />
         <option value="$PROJECT_DIR$/Code/Map/tile.py" />
         <option value="$PROJECT_DIR$/Code/Map/game_map.py" />
+        <option value="$PROJECT_DIR$/Code/Components/fighter.py" />
+        <option value="$PROJECT_DIR$/Code/Components/ai.py" />
         <option value="$PROJECT_DIR$/Code/Core/game_messages.py" />
+        <option value="$PROJECT_DIR$/Code/Components/inventory.py" />
+        <option value="$PROJECT_DIR$/Code/Entities/entity.py" />
+        <option value="$PROJECT_DIR$/Code/Components/item.py" />
+        <option value="$PROJECT_DIR$/Data/ENG.json" />
+        <option value="$PROJECT_DIR$/Code/Core/game_states.py" />
+        <option value="$PROJECT_DIR$/engine.py" />
+        <option value="$PROJECT_DIR$/Code/Core/initialize_new_game.py" />
+        <option value="$PROJECT_DIR$/Code/Core/globals.py" />
+        <option value="$PROJECT_DIR$/Code/Core/languages.py" />
+        <option value="$PROJECT_DIR$/Code/Core/json_loaders.py" />
       </list>
     </option>
   </component>
@@ -104,11 +145,6 @@
             <path>
               <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
               <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
-              <item name="Assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
               <item name="Code" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -120,8 +156,7 @@
             <path>
               <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
               <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
-              <item name="Code" type="462c0819:PsiDirectoryNode" />
-              <item name="Draw" type="462c0819:PsiDirectoryNode" />
+              <item name="Data" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -140,11 +175,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\GameDesign\NotQuiteParadise\Data" />
       <recent name="D:\GameDesign\NotQuiteParadise\Code\Core" />
       <recent name="D:\GameDesign\NotQuiteParadise\Assets\Menus" />
       <recent name="D:\GameDesign\NotQuiteParadise\Assets" />
       <recent name="D:\GameDesign\NotQuiteParadise\Fonts" />
-      <recent name="D:\GameDesign\NotQuiteParadise\Code\Entities" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -199,13 +234,13 @@
     <frame x="488" y="0" width="2075" height="1407" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10014728" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10014728" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.22011085" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.27790973" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.24782264" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.22011085" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.22327791" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -224,27 +259,10 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Code/Core/initialize_new_game.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="13" column="37" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Code/Draw/menus.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
           <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Code/Core/data_loaders.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="598">
-          <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -254,33 +272,6 @@
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/engine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="828">
-          <caret line="303" column="27" lean-forward="true" selection-start-line="303" selection-start-column="27" selection-end-line="303" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Code/Core/json_loaders.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="740">
-          <caret line="35" column="18" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Code/Map/tile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
         </state>
       </provider>
     </entry>
@@ -294,12 +285,169 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Code/Core/game_messages.py">
+    <entry file="file://$PROJECT_DIR$/Code/Components/fighter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="671">
-          <caret line="66" column="50" lean-forward="true" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
+        <state relative-caret-position="234">
+          <caret line="69" lean-forward="true" selection-start-line="69" selection-end-line="69" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Components/ai.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Components/inventory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="556">
+          <caret line="85" lean-forward="true" selection-start-line="85" selection-end-line="85" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#222#710#0" />
+            <element signature="e#762#1743#0" />
+            <element signature="e#1786#1809#0" />
+            <element signature="e#1850#2313#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Entities/entity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-295">
+          <caret line="172" column="80" selection-start-line="172" selection-start-column="80" selection-end-line="172" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#453#1506#0" />
+            <element signature="e#1544#1621#0" />
+            <element signature="e#1699#2067#0" />
+            <element signature="e#2107#2162#0" />
+            <element signature="e#2206#2301#0" />
+            <element signature="e#2365#4894#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Components/item.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="20" column="36" lean-forward="true" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/_bootlocale.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/json/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="294" selection-start-line="294" selection-end-line="294" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="267" selection-start-line="267" selection-end-line="267" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Core/data_loaders.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="46" lean-forward="true" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/save_game.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data/ENG.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="1" column="38" lean-forward="true" selection-start-line="1" selection-start-column="38" selection-end-line="1" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/engine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="327" lean-forward="true" selection-start-line="327" selection-end-line="327" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Core/game_states.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="22" lean-forward="true" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Core/game_messages.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-88">
+          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="21" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Map/tile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="575">
+          <caret line="25" column="44" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Core/globals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Core/languages.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Core/json_loaders.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#257#604#0" />
+            <element signature="e#264#507#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Code/Core/initialize_new_game.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="58" column="37" lean-forward="true" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
+          <folding>
+            <element signature="e#2#29#0" expanded="true" />
           </folding>
         </state>
       </provider>

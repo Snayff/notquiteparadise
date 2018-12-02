@@ -10,7 +10,7 @@ class Message:
 	def to_json(self):
 		json_data = {
 			'text': self.text,
-			'color': self.color
+			'color': (self.color[0], self.color[1], self.color[2])
 		}
 
 		return json_data
@@ -18,7 +18,8 @@ class Message:
 	@staticmethod
 	def from_json(json_data):
 		text = json_data.get('text')
-		color = json_data.get('color')
+		color_values = json_data.get('color')
+		color = libtcod.Color(color_values[0], color_values[1], color_values[2])
 
 		if color:
 			message = Message(text, color)

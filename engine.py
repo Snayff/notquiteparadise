@@ -7,7 +7,7 @@ from Code.Core.game_messages import Message
 from Code.Core.game_states import GameStates
 from Code.Core.input_handlers import handle_keys, handle_mouse, handle_main_menu
 from Code.Core.initialize_new_game import get_constants, get_game_variables
-from Code.Core.data_loaders import load_game, save_game
+from Code.Core.json_loaders import load_game, save_game
 from Code.Draw.menus import main_menu, message_box
 from Code.Draw.render_functions import clear_all, render_all
 
@@ -31,11 +31,11 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 
 		if fov_recompute:
 			recompute_fov(fov_map, player.x, player.y, constants['fov_radius'], constants['fov_light_walls'],
-					constants['fov_algorithm'])
+				constants['fov_algorithm'])
 
 		render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, message_log,
-				constants['screen_width'], constants['screen_height'], constants['bar_width'],
-				constants['panel_height'], constants['panel_y'], mouse, constants['colors'], game_state)
+			constants['screen_width'], constants['screen_height'], constants['bar_width'],
+			constants['panel_height'], constants['panel_y'], mouse, constants['colors'], game_state)
 
 		fov_recompute = False
 
@@ -155,7 +155,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
 				target_x, target_y = left_click
 
 				item_use_results = player.inventory.use(targeting_item, entities=entities, fov_map=fov_map,
-						target_x=target_x, target_y=target_y)
+					target_x=target_x, target_y=target_y)
 				player_turn_results.extend(item_use_results)
 			elif right_click:
 				player_turn_results.append({'targeting_cancelled': True})
@@ -282,7 +282,7 @@ def main():
 	constants = get_constants()
 
 	libtcod.console_set_custom_font('Assets/Fonts/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE |
-																  libtcod.FONT_LAYOUT_TCOD)
+																   libtcod.FONT_LAYOUT_TCOD)
 
 	libtcod.console_init_root(constants['screen_width'], constants['screen_height'], constants['window_title'], False)
 
@@ -307,8 +307,7 @@ def main():
 		libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
 
 		if show_main_menu:
-			main_menu(con, main_menu_background_image, constants['screen_width'],
-					constants['screen_height'])
+			main_menu(con, main_menu_background_image, constants['screen_width'], constants['screen_height'])
 
 			if show_load_error_message:
 				message_box(con, 'No save game to load', 50, constants['screen_width'], constants['screen_height'])
