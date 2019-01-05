@@ -18,6 +18,7 @@ PALETTE_BACKGROUND = COLOUR_WHITE
 
 # sprites
 SPRITE_PLAYER = pygame.image.load("assets/actor/player.png")
+SPRITE_ENEMY = pygame.image.load("assets/actor/enemy.png")
 
 
 class GameStates(Enum):

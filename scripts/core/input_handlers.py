@@ -66,7 +66,7 @@ def get_input():
 				input_values["down_left"] = True
 			elif input.key == pygame.K_KP3 or input.key == pygame.K_n:
 				input_values["down_right"] = True
-			elif pygame.K_z or input.key == input.key == pygame.K_KP5:
+			elif input.key == pygame.K_z or input.key == pygame.K_KP5:
 				input_values["wait"] = True
 			elif input.key == pygame.K_i:
 				input_values["inventory"] = True
@@ -128,9 +128,7 @@ def handle_input(values):
 
 		# if destination isnt 0 then we need to move an entity
 		if dx != 0 or dy != 0:
-			print("About to create movement event")
 			game_manager.create_event(Event(EntityEventNames.MOVE, EventTopics.ENTITY, [player, dx, dy]))
-			print("Movement event created")
 
 		if values["wait"]:
 			return {"wait": True}

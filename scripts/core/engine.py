@@ -7,6 +7,7 @@ from scripts.core.intialisers import initialise_game
 
 main_surface = None
 
+
 def main():
 	"""The container for the game init and game loop"""
 

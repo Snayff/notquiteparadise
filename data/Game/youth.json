@@ -1,0 +1,10 @@
+{
+	"beggar" : {
+		"name": "beggar",
+		"description" : "The beggar description ",
+		"max_hp": 40,
+		"power": 2,
+		"defense": 2,
+		"xp_given_on_death": 10
+	}
+}
