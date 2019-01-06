@@ -6,7 +6,8 @@
 		"race_component" : "orc",
 		"youth_component" : "beggar",
 		"adulthood_component" : "fighter",
-		"ai_component" : "basic_monster"
+		"ai_component" : "basic_monster",
+        "sprite" : "enemy"
 
 	},
 		"troll_fighter" : {

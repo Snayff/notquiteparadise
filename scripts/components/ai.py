@@ -2,22 +2,31 @@ import tcod
 
 from random import randint
 
+from scripts.core.constants import EntityEventNames, EventTopics
+from scripts.core.events import Event
+from scripts.core.global_data import game_manager, entity_manager
+
 
 class BasicMonster:
-    def take_turn(self, target, fov_map, game_map, entities):
+    def take_turn(self):
 
         monster = self.owner
-        #if tcod.map_is_in_fov(fov_map, monster.x, monster.y):
+        target = entity_manager.player
 
-            # # if monster in attack range then attack, else move
-            # if monster.distance_to(target) >= 2:
-            #     create_event(global_data.event_hub, Event(EntityEventNames.MOVE_ASTAR, EventTopics.ENTITY, [self,
-            #         target]))
-            # # monster.move_astar(target, entities, game_map)
-            #
-            # elif target.living.hp > 0:
-            #     create_event(global_data.event_hub, Event(EntityEventNames.ATTACK, EventTopics.ENTITY, [self, target]))
-            # # monster.living.attack(target)
+        game_manager.create_event(Event(EntityEventNames.GET_MOVE_TARGET, EventTopics.ENTITY, [monster,
+            target]))
+
+        # if monster.distance_to(target) >= 2:
+        #     game_manager.create_event(Event(EntityEventNames.GET_MOVE_TARGET, EventTopics.ENTITY, [self,
+        #         target]))
+        # elif target.living.hp > 0:
+        #     game_manager.create_event(Event(EntityEventNames.ATTACK, EventTopics.ENTITY, [self, target]))
+
+        # the original method is below, TODO remove when fov is in
+        # if tcod.map_is_in_fov(fov_map, monster.x, monster.y):
+            # if monster in attack range then attack, else move
+            # monster.move_astar(target, entities, game_map)
+            # monster.living.attack(target)
 
     def to_json(self):
         json_data = {

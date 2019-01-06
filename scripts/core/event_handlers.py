@@ -1,6 +1,6 @@
 from scripts.core.constants import EntityEventNames, EventTopics, LoggingEventNames, GameEventNames, GameStates
 from scripts.core.events import Subscriber, Event
-from scripts.core.global_data import world_manager, entity_manager, game_manager
+from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
 
 
 class GameHandler(Subscriber):
@@ -13,6 +13,9 @@ class GameHandler(Subscriber):
 
         if event.name == GameEventNames.EXIT:
             game_manager.update_game_state(GameStates.EXIT_GAME)
+
+        elif event.name == GameEventNames.END_TURN:
+            turn_manager.end_turn(event.values[0])
 
     # if event.name == GameEventNames.NEW_GAME:
     # 	from Code.Core.initialisers import initialise_new_game
@@ -53,9 +56,11 @@ class EntityHandler(Subscriber):
             destination_x = entity.x + event.values[1]
             destination_y = entity.y + event.values[2]
             tile_is_blocked = world_manager.game_map[destination_x][destination_y].blocks_movement
+            map_height = len(world_manager.game_map[0])
+            map_width = len(world_manager.game_map[1])
 
             # if the tile is accessible check if there is someone else there
-            if not tile_is_blocked:
+            if not tile_is_blocked and 0 <= destination_x <= map_width and 0 <= destination_y <= map_height:
                 target = entity_manager.get_blocking_entities_at_location(destination_x, destination_y)
 
                 # someone is in the way, attack them!
@@ -66,22 +71,29 @@ class EntityHandler(Subscriber):
                 # no one is in the way, move!
                 else:
                     entity.move(destination_x, destination_y)
-                    world_manager.fov_is_dirty = True
-                    log_string = f"{self.name} ({self}) moved to [{destination_x},{destination_y}]"
+                    world_manager.player_fov_is_dirty = True
+                    log_string = f"{entity.name} ({entity}) moved to [{destination_x},{destination_y}]"
                     game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
 
-            # turn_manager.next_turn()
+                    game_manager.create_event(Event(GameEventNames.END_TURN, EventTopics.GAME, [10])) # TODO abstract magic number
 
-    # if event.name == EntityEventNames.MOVE_ASTAR:
-    # 	entity = event.values[0]
-    # 	target = event.values[1]
-    #
-    # 	entity.move_astar(entity, target)
-    # 	turn_manager.next_turn()
-    #
-    # if event.name == EntityEventNames.ATTACK:
-    # 	attacker = event.values[0]
-    # 	defender = event.values[1]
-    #
-    # 	attacker.living.attack(defender)
-    # 	turn_manager.next_turn()
+            else:
+                log_string = f"Target location blocked and {entity.name} did not move."
+                game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
+
+        if event.name == EntityEventNames.GET_MOVE_TARGET:
+            entity = event.values[0]
+            target = event.values[1]
+            log_string = f"{entity.name} ({entity}) looked for a path to [{target.x},{target.y}] with a*"
+            game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
+
+            # get destination to move to and then move
+            dx, dy = entity.get_nearest_position_towards_target_astar(target)
+            game_manager.create_event(Event(EntityEventNames.MOVE, EventTopics.ENTITY, [entity, dx, dy]))
+
+        # if event.name == EntityEventNames.ATTACK:
+        # 	attacker = event.values[0]
+        # 	defender = event.values[1]
+        #
+        # 	attacker.living.attack(defender)
+        # 	turn_manager.next_turn()

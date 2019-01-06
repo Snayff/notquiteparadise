@@ -1,7 +1,9 @@
+import pygame
+
 from scripts.components.adulthood import Adulthood
-from scripts.components.ai import BasicMonster
 from scripts.components.living import Living
 from scripts.components.youth import Youth
+from scripts.core import global_data
 from scripts.core.constants import GameStates, LoggingEventNames, EventTopics
 from scripts.core.events import Publisher, Event, EventHub
 from scripts.data_loaders.getters import get_value_from_actor_json
@@ -40,13 +42,14 @@ class EntityManager:
         values = get_value_from_actor_json(actor_name)
 
         actor_name = values["name"]
-        sprite = values["sprite"]
+        sprite = pygame.image.load("assets/actor/" + values["sprite"] + ".png")
         living_component = Living()
         youth_component = Youth(values["youth_component"])
         adulthood_component = Adulthood(values["adulthood_component"])
 
         ai_value = values["ai_component"]
 
+        from scripts.components.ai import BasicMonster
         if ai_value == "basic_monster":
             ai_component = BasicMonster()
         else:
@@ -57,14 +60,19 @@ class EntityManager:
 
         actor.living.hp = actor.living.max_hp
 
+        self.add_entity(actor)
+
 
 class WorldManager:
     def __init__(self):
         self.game_map = None
         self.fov_map = None
-        self.fov_is_dirty = False
+        self.player_fov_is_dirty = False
         self.light_walls = True
         self.fov_algorithm = 0
+    # TODO create game map class:
+    #  To contain map tiles, fov map
+
 
     def create_new_map(self):
         """
@@ -88,7 +96,7 @@ class WorldManager:
 # 			tcod.map_set_properties(self.fov_map, x, y, not self.game_map.tiles[x][y].block_sight,
 # 				not self.game_map.tiles[x][y].blocked)
 #
-# 	self.fov_is_dirty = True
+# 	self.player_fov_is_dirty = True
 
 # def recompute_fov(self, x, y, radius):
 # 	tcod.map_compute_fov(self.fov_map, x, y, radius, self.light_walls, self.fov_algorithm)
@@ -102,39 +110,71 @@ class UIManager:
 
 
 class TurnManager:
+    # TODO What do we need from the turn queue?
+    #  Add all entities that are within X range of the player;
+    #  Add new entities to the queue as they get into range;
+    #  Amend an entities position in the queue;
+    #  Keep track of rounds;
 
     def __init__(self):
         self.turn_holder = None
-        self.turn_queue = []
+        self.turn_queue = []  # queue stores a tuple of the entity and there time to next action
+        self.round = 0
+        self.time = 0
 
+    def build_new_turn_queue(self):
+        from scripts.core.global_data import game_manager, entity_manager
+        log_string = f"Building a new turn queue."
+        game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
 
-# def build_new_turn_queue(self):
-# 	from Code.Core.global_data import entity_manager
-#
-# 	# create a turn queue from the entities list
-# 	for entity in entity_manager.entities:
-# 		if entity.ai or entity == entity_manager.player:
-# 			self.turn_queue.append((entity, entity.living.power))  # TODO change to sort by speed
-#
-# 	# sort the queue
-# 	self.turn_queue.sort(key=lambda x: x[1])
-# TODO what does lambda do? this approach was copied so no idea how it works
+        # create a turn queue from the entities list
+        for entity in entity_manager.entities:
+            if entity.ai or entity == entity_manager.player:
+                self.turn_queue.append((entity, entity.time_of_next_action))
 
-# def next_turn(self):
-# 	#
-# 	# 	if not self.turn_queue:
-# 	# 		self.build_new_turn_queue()
-# 	#
-# 	# 	# get the next entity in the queue
-# 	# 	self.turn_holder = self.turn_queue.pop(0)
-# 	# 	# TODO turn_holder needs to be inserted back into queue at end of turn
-# 	#
-# 	# 	# if turn holder is the player then update to player turn
-# 	# 	if self.turn_holder == global_data.entity_manager.player:
-# 	# 		global_data.update_game_state(GameStates.PLAYER_TURN)
-# 	# 	# if turn holder is not player and we aren't already in enemy turn then update to enemy turn
-# 	# 	elif global_data.game_state != GameStates.ENEMY_TURN:
-# 	# 		global_data.update_game_state(GameStates.ENEMY_TURN)
+        # sort the queue
+        self.turn_queue.sort(key=lambda x: x[1])
+
+        # get the next entity in the queue
+        self.turn_holder = self.turn_queue.pop(0)[0]
+
+    def end_turn(self, spent_time):
+        from scripts.core.global_data import game_manager
+        entity = self.turn_holder
+
+        log_string = f"Ending {entity.name}'s turn."
+        game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
+
+        #  update time spent
+        entity.spend_time(spent_time)
+        self.time += spent_time
+
+        self.next_turn()
+
+    def next_turn(self):
+        from scripts.core.global_data import game_manager
+
+        if not self.turn_queue:
+            self.build_new_turn_queue()
+
+        # add current turn holder back into queue
+        self.turn_queue.append((self.turn_holder, self.turn_holder.time_of_next_action))
+
+        # sort the queue so the next to act is top
+        self.turn_queue.sort(key=lambda x: x[1])
+
+        # get the next entity in the queue
+        self.turn_holder = self.turn_queue.pop(0)[0]
+
+        log_string = f"It is now {self.turn_holder.name}'s turn."
+        game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
+
+        # if turn holder is the player then update to player turn
+        if self.turn_holder == global_data.entity_manager.player:
+            game_manager.update_game_state(GameStates.PLAYER_TURN)
+        # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
+        elif game_manager.game_state != GameStates.ENEMY_TURN:
+            game_manager.update_game_state(GameStates.ENEMY_TURN)
 
 
 class GameManager:
@@ -142,14 +182,14 @@ class GameManager:
     def __init__(self):
         self.game_state = GameStates.GAME_INITIALISING
         self.previous_game_state = GameStates.GAME_INITIALISING
-        self.message_log = None
+       # self.message_log = None
         self.event_hub = EventHub()
 
-    def new_message_log(self, message_log):
-        """
-        :type message_log: MessageLog
-        """
-        self.message_log = message_log
+    # def new_message_log(self, message_log):
+    #     """
+    #     :type message_log: MessageLog
+    #     """
+    #     self.message_log = message_log
 
     def update_game_state(self, new_game_state):
         """

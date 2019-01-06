@@ -11,10 +11,10 @@ class Living:
     def max_hp(self):
         bonus = 0
 
-        if self.owner and self.owner.equipment:
-            bonus = bonus + self.owner.equipment.max_hp_bonus
-        else:
-            bonus = bonus + 0
+        # if self.owner and self.owner.equipment:
+        #     bonus = bonus + self.owner.equipment.max_hp_bonus
+        # else:
+        #     bonus = bonus + 0
 
         if self.owner and self.owner.race:
             bonus = bonus + self.owner.race.max_hp
@@ -37,10 +37,10 @@ class Living:
     def power(self):
         bonus = 0
 
-        if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.power_bonus
-        else:
-            bonus = bonus + 0
+        # if self.owner and self.owner.equipment:
+        #     bonus = self.owner.equipment.power_bonus
+        # else:
+        #     bonus = bonus + 0
 
         if self.owner and self.owner.race:
             bonus = bonus + self.owner.race.power
@@ -63,10 +63,10 @@ class Living:
     def defense(self):
         bonus = 0
 
-        if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.defense_bonus
-        else:
-            bonus = bonus + 0
+        # if self.owner and self.owner.equipment:
+        #     bonus = self.owner.equipment.defense_bonus
+        # else:
+        #     bonus = bonus + 0
 
         if self.owner and self.owner.race:
             bonus = bonus + self.owner.race.defense
