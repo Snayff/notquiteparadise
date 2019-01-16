@@ -65,7 +65,7 @@ class EntityManager:
 
 class WorldManager:
     def __init__(self):
-        self.game_map = None
+        self.game_map = []
         self.fov_map = None
         self.player_fov_is_dirty = False
         self.light_walls = True
@@ -73,18 +73,21 @@ class WorldManager:
     # TODO create game map class:
     #  To contain map tiles, fov map
 
-
     def create_new_map(self):
         """
         create a new game map
         """
-        map_width = 30
-        map_height = 30
 
-        self.game_map = [[Floor() for y in range(0, map_width)] for x in range(0, map_height)]
+        # get map size
+        map_width = 40  # TODO abstract  magic numbers
+        map_height = 32
 
-        self.game_map[10][10] = Wall()  # TODO remove - only for test
-        self.game_map[11][11] = Wall()
+        # populate map with floor tiles # N.B. the inner list should be the height
+        # which would mean that the first referenced index in list[][] is y. Stop getting it wrong.
+        self.game_map = [[Floor() for y in range(0, map_height)] for x in range(0, map_width)]
+
+        self.game_map[0][5] = Wall()  # TODO remove - only for test
+        self.game_map[10][2] = Wall()
 
 
 # def create_fov_map(self):
@@ -166,15 +169,15 @@ class TurnManager:
         # get the next entity in the queue
         self.turn_holder = self.turn_queue.pop(0)[0]
 
-        log_string = f"It is now {self.turn_holder.name}'s turn."
-        game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
-
         # if turn holder is the player then update to player turn
         if self.turn_holder == global_data.entity_manager.player:
             game_manager.update_game_state(GameStates.PLAYER_TURN)
         # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
         elif game_manager.game_state != GameStates.ENEMY_TURN:
             game_manager.update_game_state(GameStates.ENEMY_TURN)
+
+        log_string = f"It is now {self.turn_holder.name}'s turn."
+        game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
 
 
 class GameManager:

@@ -56,8 +56,8 @@ class EntityHandler(Subscriber):
             destination_x = entity.x + event.values[1]
             destination_y = entity.y + event.values[2]
             tile_is_blocked = world_manager.game_map[destination_x][destination_y].blocks_movement
-            map_height = len(world_manager.game_map[0])
-            map_width = len(world_manager.game_map[1])
+            map_height = len(world_manager.game_map)
+            map_width = len(world_manager.game_map[0])
 
             # if the tile is accessible check if there is someone else there
             if not tile_is_blocked and 0 <= destination_x <= map_width and 0 <= destination_y <= map_height:
@@ -84,11 +84,11 @@ class EntityHandler(Subscriber):
         if event.name == EntityEventNames.GET_MOVE_TARGET:
             entity = event.values[0]
             target = event.values[1]
-            log_string = f"{entity.name} ({entity}) looked for a path to [{target.x},{target.y}] with a*"
+            log_string = f"{entity.name} ({entity}) looked for a path to {target.name} [{target.x},{target.y}] with a*"
             game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
 
             # get destination to move to and then move
-            dx, dy = entity.get_nearest_position_towards_target_astar(target)
+            dx, dy = entity.get_nearest_position_towards_target_direct(target.x, target.y)
             game_manager.create_event(Event(EntityEventNames.MOVE, EventTopics.ENTITY, [entity, dx, dy]))
 
         # if event.name == EntityEventNames.ATTACK:

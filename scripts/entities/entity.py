@@ -97,10 +97,11 @@ class Entity:
         dx = int(round(dx / distance))
         dy = int(round(dy / distance))
 
+        tile_is_blocked = game_map[self.x + dx][self.y + dy].blocks_movement
+
         from scripts.core.global_data import entity_manager
 
-        if not (game_map.is_blocked(self.x + dx, self.y + dy) or
-                entity_manager.get_blocking_entities_at_location(self.x + dx, self.y + dy)):
+        if not (tile_is_blocked or entity_manager.get_blocking_entities_at_location(self.x + dx, self.y + dy)):
             return dx, dy
         else:
             return self.x, self.y
@@ -116,8 +117,9 @@ class Entity:
     def get_nearest_position_towards_target_astar(self, target):
         entities = global_data.entity_manager.entities
         game_map = global_data.world_manager.game_map
+        game_map_width = len(game_map)
         game_map_height = len(game_map[0])
-        game_map_width = len(game_map[1])
+
 
         # Create a FOV map that has the dimensions of the map
         fov = tcod.map_new(game_map_height, game_map_width)

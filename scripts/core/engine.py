@@ -58,12 +58,13 @@ def draw_game():
 
 
 def draw_map(map):
-    map_height = len(map)
-    map_width = len(map[0])
+    map_width = len(map)
+    map_height = len(map[0])
+
     for x in range(0, map_width):
         for y in range(0, map_height):
             tile_position = (x * TILE_SIZE, y * TILE_SIZE)
-            main_surface.blit(map[x][y].sprite, tile_position)
+            main_surface.blit(map[x][y].sprite, tile_position)  # Yes, it is [y][x] - don't forget it!
 
 
 def draw_entities():

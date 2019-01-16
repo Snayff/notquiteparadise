@@ -1,4 +1,3 @@
-import tcod
 
 from random import randint
 
@@ -13,14 +12,11 @@ class BasicMonster:
         monster = self.owner
         target = entity_manager.player
 
-        game_manager.create_event(Event(EntityEventNames.GET_MOVE_TARGET, EventTopics.ENTITY, [monster,
-            target]))
-
-        # if monster.distance_to(target) >= 2:
-        #     game_manager.create_event(Event(EntityEventNames.GET_MOVE_TARGET, EventTopics.ENTITY, [self,
-        #         target]))
-        # elif target.living.hp > 0:
-        #     game_manager.create_event(Event(EntityEventNames.ATTACK, EventTopics.ENTITY, [self, target]))
+        if monster.distance_to(target) >= 2:
+            game_manager.create_event(Event(EntityEventNames.GET_MOVE_TARGET, EventTopics.ENTITY, [monster,
+                target]))
+        else:
+            game_manager.create_event(Event(EntityEventNames.MOVE, EventTopics.ENTITY, [monster, target.x, target.y]))
 
         # the original method is below, TODO remove when fov is in
         # if tcod.map_is_in_fov(fov_map, monster.x, monster.y):

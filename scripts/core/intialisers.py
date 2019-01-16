@@ -20,7 +20,7 @@ def initialise_game():
 
     entity_manager.add_player(player)
 
-    entity_manager.create_actor(0, 1, "orc_fighter")
+    entity_manager.create_actor(0, 3, "orc_fighter")
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)
     turn_manager.turn_holder = player
