@@ -1,4 +1,4 @@
-import pygame
+import pygame.freetype
 
 from enum import Enum, auto
 
@@ -19,6 +19,10 @@ SPRITE_PLAYER = pygame.image.load("assets/actor/player.png")
 SPRITE_ENEMY = pygame.image.load("assets/actor/enemy.png")
 SPRITE_FLOOR = pygame.image.load("assets/world/floor.png")
 SPRITE_WALL = pygame.image.load("assets/world/wall.png")
+
+# fonts
+pygame.freetype.init()
+DEBUG_FONT = pygame.freetype.Font(None, 12)
 
 
 class GameStates(Enum):

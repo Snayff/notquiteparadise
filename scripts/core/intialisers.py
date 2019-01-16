@@ -1,5 +1,7 @@
 import pygame
 
+from scripts.components.actor import Actor
+from scripts.components.combatant import Combatant
 from scripts.core.constants import EventTopics, WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_PLAYER, GameStates
 from scripts.core.event_handlers import GameHandler, MessageHandler, LoggingHandler, EntityHandler
 from scripts.core.global_data import game_manager, world_manager, entity_manager, turn_manager
@@ -10,13 +12,14 @@ def initialise_game():
     """Init the game's required info"""
 
     pygame.init()
+
     main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     initialise_event_handlers()
 
     world_manager.create_new_map()
 
-    player = Entity(0, 0, SPRITE_PLAYER, "player")
+    player = Entity(0, 0, SPRITE_PLAYER, "player", actor=Actor(), combatant=Combatant())
 
     entity_manager.add_player(player)
 

@@ -1,5 +1,8 @@
 
-class Living:
+class Combatant:
+    """
+    Component: entity can fight
+    """
     def __init__(self, hp=0):
         self.hp = hp
         self.base_max_hp = hp
@@ -134,7 +137,7 @@ class Living:
     def to_json(self):
         json_data = {
             'hp': self.hp,
-            # "base_max_hp": self.base_max_hp, # TODO remove comments when Living updated to take vars
+            # "base_max_hp": self.base_max_hp, # TODO remove comments when Combatant updated to take vars
             # "base_power": self.base_power,
             # "base_defense": self.defense,
             # "xp_given_on_death": self.xp_given_on_death
@@ -150,4 +153,4 @@ class Living:
         # base_defense = json_data.get("base_defense")
         # xp_given_on_death = json_data.get("xp_given_on_death")
 
-        return Living(hp)
+        return Combatant(hp)

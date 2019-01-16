@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.core.constants import PALETTE_BACKGROUND, SPRITE_PLAYER, TILE_SIZE, GameStates
+from scripts.core.constants import PALETTE_BACKGROUND, TILE_SIZE, GameStates, DEBUG_FONT
 from scripts.core.global_data import world_manager, game_manager, entity_manager, turn_manager
 from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
@@ -47,11 +47,9 @@ def draw_game():
 
     main_surface.fill(PALETTE_BACKGROUND)
 
-    # draw map
     draw_map(world_manager.game_map)
-
-    # draw entities
     draw_entities()
+    draw_debug_info()
 
     # update the display
     pygame.display.flip()
@@ -70,6 +68,11 @@ def draw_map(map):
 def draw_entities():
     for entity in entity_manager.entities:
         main_surface.blit(entity.sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
+
+
+def draw_debug_info():
+    info_to_display = f"The current time is:{turn_manager.time}"
+    DEBUG_FONT.render_to(main_surface, (0, 0), info_to_display, (0, 0, 0))
 
 
 if __name__ == "__main__":  # prevents being run from other modules

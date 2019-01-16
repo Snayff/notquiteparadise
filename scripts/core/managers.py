@@ -1,7 +1,10 @@
+import math
+
 import pygame
 
+from scripts.components.actor import Actor
 from scripts.components.adulthood import Adulthood
-from scripts.components.living import Living
+from scripts.components.combatant import Combatant
 from scripts.components.youth import Youth
 from scripts.core import global_data
 from scripts.core.constants import GameStates, LoggingEventNames, EventTopics
@@ -43,9 +46,10 @@ class EntityManager:
 
         actor_name = values["name"]
         sprite = pygame.image.load("assets/actor/" + values["sprite"] + ".png")
-        living_component = Living()
+        combatant_component = Combatant()
         youth_component = Youth(values["youth_component"])
         adulthood_component = Adulthood(values["adulthood_component"])
+        actor_component = Actor()
 
         ai_value = values["ai_component"]
 
@@ -55,12 +59,40 @@ class EntityManager:
         else:
             ai_component = None
 
-        actor = Entity(x, y, sprite, actor_name, blocks_movement=True, living=living_component,
-                       youth=youth_component, adulthood=adulthood_component, ai=ai_component)
+        actor = Entity(x, y, sprite, actor_name, blocks_movement=True, combatant=combatant_component,
+                       youth=youth_component, adulthood=adulthood_component, ai=ai_component, actor=actor_component)
 
-        actor.living.hp = actor.living.max_hp
+        actor.combatant.hp = actor.combatant.max_hp
 
         self.add_entity(actor)
+
+    def get_direction_between_entities(self, entity1, entity2):
+        """
+        get direction from an entity towards another entity's location
+        :param self:
+        :param entity1:
+        :param entity2:
+        """
+        game_map = global_data.world_manager.game_map
+
+        dx = entity2.x - entity1.x
+        dy = entity2.y - entity1.y
+        distance = math.sqrt(dx ** 2 + dy ** 2)
+
+        dx = int(round(dx / distance))
+        dy = int(round(dy / distance))
+
+        tile_is_blocked = game_map[entity1.x + dx][entity1.y + dy].blocks_movement
+
+        if not (tile_is_blocked or self.get_blocking_entities_at_location(entity1.x + dx, entity1.y + dy)):
+            return dx, dy
+        else:
+            return entity1.x, entity1.y
+
+    def distance_between_entities(self, entity1, entity2):
+        dx = entity2.x - entity1.x
+        dy = entity2.y - entity1.y
+        return math.sqrt(dx ** 2 + dy ** 2)
 
 
 class WorldManager:
@@ -106,7 +138,9 @@ class WorldManager:
 
 
 class UIManager:
-    """Manage the UI, such as windows, resource bars etc"""
+    """
+    Manage the UI, such as windows, resource bars etc
+    """
 
     def __init__(self):
         self.focused_window = None
@@ -121,9 +155,10 @@ class TurnManager:
 
     def __init__(self):
         self.turn_holder = None
-        self.turn_queue = []  # queue stores a tuple of the entity and there time to next action
+        self.turn_queue = []  # queue stores a tuple of the entity and their time to next action
         self.round = 0
         self.time = 0
+        self.time_of_last_turn = 0
 
     def build_new_turn_queue(self):
         from scripts.core.global_data import game_manager, entity_manager
@@ -133,7 +168,7 @@ class TurnManager:
         # create a turn queue from the entities list
         for entity in entity_manager.entities:
             if entity.ai or entity == entity_manager.player:
-                self.turn_queue.append((entity, entity.time_of_next_action))
+                self.turn_queue.append((entity, entity.actor.time_of_next_action))
 
         # sort the queue
         self.turn_queue.sort(key=lambda x: x[1])
@@ -148,9 +183,8 @@ class TurnManager:
         log_string = f"Ending {entity.name}'s turn."
         game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
 
-        #  update time spent
-        entity.spend_time(spent_time)
-        self.time += spent_time
+        #  update actor's time spent
+        entity.actor.spend_time(spent_time)
 
         self.next_turn()
 
@@ -161,13 +195,17 @@ class TurnManager:
             self.build_new_turn_queue()
 
         # add current turn holder back into queue
-        self.turn_queue.append((self.turn_holder, self.turn_holder.time_of_next_action))
+        self.turn_queue.append((self.turn_holder, self.turn_holder.actor.time_of_next_action))
 
         # sort the queue so the next to act is top
         self.turn_queue.sort(key=lambda x: x[1])
 
         # get the next entity in the queue
         self.turn_holder = self.turn_queue.pop(0)[0]
+
+        # update time using last action and when new turn holder can act
+        self.time += self.turn_holder.actor.time_of_next_action - self.time_of_last_turn
+        self.time_of_last_turn = self.time
 
         # if turn holder is the player then update to player turn
         if self.turn_holder == global_data.entity_manager.player:
