@@ -1,6 +1,6 @@
-import pygame.freetype
-
 from enum import Enum, auto
+
+import pygame.freetype
 
 # game info
 WINDOW_WIDTH = 800

@@ -50,12 +50,11 @@ class Subscriber:
 
 
 class Event:
-    def __init__(self, name, topic, values):
+    def __init__(self, name, topic):
         """
         :type name:
         :type topic: EventTopics
-        :type values: list
         """
         self.name = name
         self.topic = topic
-        self.values = values
+

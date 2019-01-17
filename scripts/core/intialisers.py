@@ -3,7 +3,10 @@ import pygame
 from scripts.components.actor import Actor
 from scripts.components.combatant import Combatant
 from scripts.core.constants import EventTopics, WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_PLAYER, GameStates
-from scripts.events.event_handlers import GameHandler, MessageHandler, LoggingHandler, EntityHandler
+from scripts.events.entity_handler import EntityHandler
+from scripts.events.logging_handler import LoggingHandler
+from scripts.events.message_handler import MessageHandler
+from scripts.events.game_handler import GameHandler
 from scripts.core.global_data import game_manager, world_manager, entity_manager, turn_manager
 from scripts.entities.entity import Entity
 

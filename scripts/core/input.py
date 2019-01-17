@@ -1,8 +1,9 @@
 import pygame
 
-from scripts.core.constants import GameStates, EntityEventNames, EventTopics, GameEventNames
-from scripts.events.events import Event
+from scripts.core.constants import GameStates
 from scripts.core.global_data import entity_manager, game_manager
+from scripts.events.entity_events import MoveEvent
+from scripts.events.game_events import ExitEvent
 
 
 def get_input():
@@ -94,7 +95,6 @@ def handle_input(values):
     game_state = game_manager.game_state
     player = entity_manager.player
 
-    game_state = GameStates.PLAYER_TURN  # TODO remove once game_state is updated naturally
     if game_state == GameStates.PLAYER_TURN:
         dx = 0
         dy = 0
@@ -126,7 +126,7 @@ def handle_input(values):
 
         # if destination isnt 0 then we need to move an entity
         if dx != 0 or dy != 0:
-            game_manager.create_event(Event(EntityEventNames.MOVE, EventTopics.ENTITY, [player, dx, dy]))
+            game_manager.create_event(MoveEvent(player, dx, dy))
 
         if values["wait"]:
             return {"wait": True}
@@ -144,9 +144,7 @@ def handle_input(values):
         elif values["fullscreen"]:
             return {"fullscreen": True}
         elif values["cancel"]:
-            print("About to create exit event")
-            game_manager.create_event(Event(GameEventNames.EXIT, EventTopics.GAME, []))
-            print("Exit event created")
+            game_manager.create_event(ExitEvent())
 
     if game_state == GameStates.TARGETING:
         if values["cancel"]:
