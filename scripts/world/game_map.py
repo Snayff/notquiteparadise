@@ -1,3 +1,5 @@
+import tcod
+
 from scripts.world.tiles import Floor, Wall
 
 
@@ -15,12 +17,29 @@ class GameMap:
         # Stop getting it wrong.
         self.tiles = [[Floor() for y in range(0, self.height)] for x in range(0, self.width)]
 
-        self.tiles[0][5] = Wall()  # TODO remove - only for test
-        self.tiles[10][2] = Wall()
+        if self.width > 10 and self.height > 10:
+            self.tiles[0][5] = Wall()  # TODO remove - only for test
+            self.tiles[10][2] = Wall()
 
-    def tile_is_blocking_movement(self, x, y):
-        return self.tiles[x][y].blocks_movement
+    def is_tile_blocking_movement(self, x, y):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            return self.tiles[x][y].blocks_movement
+        else:
+            return True
 
-    def tile_is_blocking_sight(self, x, y):
-        return self.tiles[x][y].blocks_sight
+    def is_tile_blocking_sight(self, x, y):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            return self.tiles[x][y].blocks_sight
+        else:
+            return True
 
+    def update_tile_visibility(self, fov_map):
+        for x in range(0, self.width):
+            for y in range(0, self.height):
+                self.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
+
+    def is_tile_visible(self, x, y):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            return self.tiles[x][y].is_visible
+        else:
+            return False

@@ -5,7 +5,7 @@ class Entity:
     """
 
     def __init__(self, x, y, sprite, name, blocks_movement=True, blocks_sight=True,
-            combatant=None, race=None, youth=None, adulthood=None, ai=None, actor=None ):
+            combatant=None, race=None, youth=None, adulthood=None, ai=None, actor=None, sight_range=0 ):
 
         # item=None, inventory=None, stairs=None, level=None, equipment=None, equippable=None, sight_range=None
 
@@ -15,7 +15,7 @@ class Entity:
         self.name = name
         self.blocks_movement = blocks_movement
         self.blocks_sight = blocks_sight
-        # self.sight_range = sight_range
+        self.sight_range = sight_range
 
         # components
         self.race = race

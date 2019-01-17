@@ -79,7 +79,7 @@ class EntityManager:
         dx = int(round(dx / distance))
         dy = int(round(dy / distance))
 
-        tile_is_blocked = game_map.tile_is_blocking_movement(entity1.x + dx, entity1.y + dy)
+        tile_is_blocked = game_map.is_tile_blocking_movement(entity1.x + dx, entity1.y + dy)
 
         if not (tile_is_blocked or self.get_blocking_entities_at_location(entity1.x + dx, entity1.y + dy)):
             return dx, dy

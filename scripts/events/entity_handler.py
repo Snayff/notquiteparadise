@@ -18,7 +18,7 @@ class EntityHandler(Subscriber):
             entity = event.entity
             destination_x = entity.x + event.destination_x
             destination_y = entity.y + event.destination_y
-            tile_is_blocked = world_manager.game_map.tile_is_blocking_movement(destination_x, destination_y)
+            tile_is_blocked = world_manager.game_map.is_tile_blocking_movement(destination_x, destination_y)
             map_height = world_manager.game_map.height
             map_width = world_manager.game_map.width
 

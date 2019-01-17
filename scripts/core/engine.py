@@ -1,7 +1,8 @@
 import pygame
+import tcod
 
-from scripts.core.constants import PALETTE_BACKGROUND, TILE_SIZE, GameStates, DEBUG_FONT
-from scripts.core.global_data import world_manager, game_manager, entity_manager, turn_manager
+from scripts.core.constants import TILE_SIZE, GameStates, DEBUG_FONT
+from scripts.core.global_data import world_manager, game_manager, entity_manager, turn_manager, ui_manager
 from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
@@ -38,6 +39,10 @@ def game_loop():
         # HANDLE UPDATE
         game_manager.event_hub.update()
 
+        if world_manager.player_fov_is_dirty:
+            player = entity_manager.player
+            world_manager.recompute_player_fov(player.x, player.y, player.sight_range)
+
         # DRAW
         draw_game()
 
@@ -45,32 +50,35 @@ def game_loop():
 def draw_game():
     global main_surface
 
-    main_surface.fill(PALETTE_BACKGROUND)
+    main_surface.fill((0,0,0)) # TODO remove magic number
 
     draw_map(world_manager.game_map)
-    draw_entities()
+    draw_entities(world_manager.game_map)
     draw_debug_info()
 
     # update the display
     pygame.display.flip()
 
 
-def draw_map(map):
+def draw_map(game_map):
 
-    for x in range(0, map.width):
-        for y in range(0, map.height):
-            tile_position = (x * TILE_SIZE, y * TILE_SIZE)
-            main_surface.blit(map.tiles[x][y].sprite, tile_position)  # Yes, it is [y][x] - don't forget it!
+    for x in range(0, game_map.width):
+        for y in range(0, game_map.height):
+
+            if game_map.is_tile_visible(x, y):
+                tile_position = (x * TILE_SIZE, y * TILE_SIZE)
+                main_surface.blit(game_map.tiles[x][y].sprite, tile_position)
 
 
-def draw_entities():
+def draw_entities(game_map):
     for entity in entity_manager.entities:
-        main_surface.blit(entity.sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
+        if game_map.is_tile_visible(entity.x, entity.y):
+            main_surface.blit(entity.sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
 
 
 def draw_debug_info():
     info_to_display = f"The current time is:{turn_manager.time}"
-    DEBUG_FONT.render_to(main_surface, (0, 0), info_to_display, (0, 0, 0))
+    DEBUG_FONT.render_to(main_surface, (0, 0), info_to_display, ui_manager.palette.debug_font_colour)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

@@ -6,6 +6,7 @@ class Tile:
         self.blocks_movement = False
         self.blocks_sight = False
         self.sprite = False
+        self.is_visible = False
 
 
 class Floor(Tile):
