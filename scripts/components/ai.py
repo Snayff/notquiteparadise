@@ -2,7 +2,7 @@
 from random import randint
 
 from scripts.core.constants import EntityEventNames, EventTopics
-from scripts.core.events import Event
+from scripts.events.events import Event
 from scripts.core.global_data import game_manager, entity_manager
 
 

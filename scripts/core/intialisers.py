@@ -3,13 +3,15 @@ import pygame
 from scripts.components.actor import Actor
 from scripts.components.combatant import Combatant
 from scripts.core.constants import EventTopics, WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_PLAYER, GameStates
-from scripts.core.event_handlers import GameHandler, MessageHandler, LoggingHandler, EntityHandler
+from scripts.events.event_handlers import GameHandler, MessageHandler, LoggingHandler, EntityHandler
 from scripts.core.global_data import game_manager, world_manager, entity_manager, turn_manager
 from scripts.entities.entity import Entity
 
 
 def initialise_game():
-    """Init the game's required info"""
+    """
+    Init the game's required info
+    """
 
     pygame.init()
 
@@ -17,7 +19,7 @@ def initialise_game():
 
     initialise_event_handlers()
 
-    world_manager.create_new_map()
+    world_manager.create_new_map(50, 30)  # TODO remove magic numbers
 
     player = Entity(0, 0, SPRITE_PLAYER, "player", actor=Actor(), combatant=Combatant())
 

@@ -1,6 +1,7 @@
 import math
 
 import pygame
+import tcod
 
 from scripts.components.actor import Actor
 from scripts.components.adulthood import Adulthood
@@ -8,9 +9,10 @@ from scripts.components.combatant import Combatant
 from scripts.components.youth import Youth
 from scripts.core import global_data
 from scripts.core.constants import GameStates, LoggingEventNames, EventTopics
-from scripts.core.events import Publisher, Event, EventHub
+from scripts.events.events import Publisher, Event, EventHub
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.entities.entity import Entity
+from scripts.world.game_map import GameMap
 from scripts.world.tiles import Floor, Wall
 
 
@@ -82,7 +84,7 @@ class EntityManager:
         dx = int(round(dx / distance))
         dy = int(round(dy / distance))
 
-        tile_is_blocked = game_map[entity1.x + dx][entity1.y + dy].blocks_movement
+        tile_is_blocked = game_map.tile_is_blocking_movement(entity1.x + dx, entity1.y + dy)
 
         if not (tile_is_blocked or self.get_blocking_entities_at_location(entity1.x + dx, entity1.y + dy)):
             return dx, dy
@@ -97,44 +99,35 @@ class EntityManager:
 
 class WorldManager:
     def __init__(self):
-        self.game_map = []
-        self.fov_map = None
+        self.game_map = None
+        self.player_fov_map = None
         self.player_fov_is_dirty = False
         self.light_walls = True
         self.fov_algorithm = 0
-    # TODO create game map class:
-    #  To contain map tiles, fov map
 
-    def create_new_map(self):
+    def create_new_map(self, map_width, map_height):
         """
-        create a new game map
+        :return GameMap
         """
+        self.game_map = GameMap(map_width, map_height)
 
-        # get map size
-        map_width = 40  # TODO abstract  magic numbers
-        map_height = 32
+    def create_player_fov_map(self):
 
-        # populate map with floor tiles # N.B. the inner list should be the height
-        # which would mean that the first referenced index in list[][] is y. Stop getting it wrong.
-        self.game_map = [[Floor() for y in range(0, map_height)] for x in range(0, map_width)]
+        self.player_fov_map = tcod.map_new(self.game_map.width, self.game_map.height)
 
-        self.game_map[0][5] = Wall()  # TODO remove - only for test
-        self.game_map[10][2] = Wall()
+        for y in range(self.game_map.height):
+            for x in range(self.game_map.width):
+                tcod.map_set_properties(self.player_fov_map, x, y, not self.game_map.tiles[x][y].block_sight,
+                                        not self.game_map.tiles[x][y].blocks_movement)
+
+        self.player_fov_is_dirty = True
+
+    def recompute_player_fov(self, x, y, radius):
+        tcod.map_compute_fov(self.player_fov_map, x, y, radius, self.light_walls, self.fov_algorithm)
+        self.player_fov_is_dirty = False
 
 
-# def create_fov_map(self):
-#
-# 	self.fov_map = tcod.map_new(self.game_map.width, self.game_map.height)
-#
-# 	for y in range(self.game_map.height):
-# 		for x in range(self.game_map.width):
-# 			tcod.map_set_properties(self.fov_map, x, y, not self.game_map.tiles[x][y].block_sight,
-# 				not self.game_map.tiles[x][y].blocked)
-#
-# 	self.player_fov_is_dirty = True
 
-# def recompute_fov(self, x, y, radius):
-# 	tcod.map_compute_fov(self.fov_map, x, y, radius, self.light_walls, self.fov_algorithm)
 
 
 class UIManager:

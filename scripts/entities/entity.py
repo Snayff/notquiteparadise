@@ -1,12 +1,8 @@
-import math
-import tcod
-
-from scripts.core import global_data
-
-
 
 class Entity:
-    """ A generic object to represent players, enemies, items, etc. """
+    """
+    A generic object to represent players, enemies, items, etc.
+    """
 
     def __init__(self, x, y, sprite, name, blocks_movement=True, blocks_sight=True,
             combatant=None, race=None, youth=None, adulthood=None, ai=None, actor=None ):

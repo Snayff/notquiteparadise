@@ -1,7 +1,7 @@
 import pygame
 
 from scripts.core.constants import GameStates, EntityEventNames, EventTopics, GameEventNames
-from scripts.core.events import Event
+from scripts.events.events import Event
 from scripts.core.global_data import entity_manager, game_manager
 
 

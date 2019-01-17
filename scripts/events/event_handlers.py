@@ -1,5 +1,5 @@
 from scripts.core.constants import EntityEventNames, EventTopics, LoggingEventNames, GameEventNames, GameStates
-from scripts.core.events import Subscriber, Event
+from scripts.events.events import Subscriber, Event
 from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
 
 
@@ -55,9 +55,9 @@ class EntityHandler(Subscriber):
             entity = event.values[0]
             destination_x = entity.x + event.values[1]
             destination_y = entity.y + event.values[2]
-            tile_is_blocked = world_manager.game_map[destination_x][destination_y].blocks_movement
-            map_height = len(world_manager.game_map)
-            map_width = len(world_manager.game_map[0])
+            tile_is_blocked = world_manager.game_map.tile_is_blocking_movement(destination_x,destination_y)
+            map_height = world_manager.game_map.height
+            map_width = world_manager.game_map.width
 
             # if the tile is accessible check if there is someone else there
             if not tile_is_blocked and 0 <= destination_x <= map_width and 0 <= destination_y <= map_height:
