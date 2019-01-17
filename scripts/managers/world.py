@@ -11,6 +11,12 @@ class WorldManager:
         self.light_walls = True
         self.fov_algorithm = 0
 
+    def update(self):
+        if self.player_fov_is_dirty:
+            from scripts.core.global_data import entity_manager
+            player = entity_manager.player
+            self.recompute_player_fov(player.x, player.y, player.sight_range)
+
     def create_new_map(self, map_width, map_height):
         """
         :return GameMap

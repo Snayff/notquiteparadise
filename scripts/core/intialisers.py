@@ -2,7 +2,7 @@ import pygame
 
 from scripts.components.actor import Actor
 from scripts.components.combatant import Combatant
-from scripts.core.constants import EventTopics, WINDOW_WIDTH, WINDOW_HEIGHT, SPRITE_PLAYER, GameStates
+from scripts.core.constants import EventTopics, SPRITE_PLAYER, GameStates
 from scripts.events.entity_handler import EntityHandler
 from scripts.events.logging_handler import LoggingHandler
 from scripts.events.message_handler import MessageHandler
@@ -18,22 +18,19 @@ def initialise_game():
 
     pygame.init()
 
-    main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-
     initialise_event_handlers()
 
     world_manager.create_new_map(50, 30)  # TODO remove magic numbers
 
     player = Entity(0, 0, SPRITE_PLAYER, "player", actor=Actor(), combatant=Combatant(), sight_range=5)
+    # TODO move  to player creation  method
 
     entity_manager.add_player(player)
 
-    entity_manager.create_actor(0, 3, "orc_fighter")
+    entity_manager.create_actor(0, 3, "orc_fighter")  # TODO remove- test only
 
-    game_manager.update_game_state(GameStates.PLAYER_TURN)
+    game_manager.update_game_state(GameStates.PLAYER_TURN) # TODO remove when main menu is starting point
     turn_manager.turn_holder = player
-
-    return main_surface
 
 
 def initialise_event_handlers():

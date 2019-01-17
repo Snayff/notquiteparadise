@@ -1,16 +1,3 @@
-
-
-class UIManager:
-    """
-    Manage the UI, such as windows, resource bars etc
-    """
-
-    def __init__(self):
-        self.focused_window = None
-        self.colour = Colour()
-        self.palette = Palette()
-
-
 class Palette:
     def __init__(self):
         colour = Colour()
@@ -29,6 +16,8 @@ class Colour:
         self.tertiary = self.TertiaryColour()
         self.complement = self.ComplementColour()
 
+        self.black = (0, 0, 0)
+        self.white = (255, 255, 255)
 
     class PrimaryColour:
         def __init__(self):
@@ -38,7 +27,6 @@ class Colour:
             self.lighter = (164, 146, 126)
             self.lightest = (211, 193, 175)
 
-
     class SecondaryColour:
         def __init__(self):
             self.darkest = (66, 61, 28)
@@ -47,7 +35,6 @@ class Colour:
             self.lighter = (164, 159, 129)
             self.lightest = (211, 206, 175)
 
-
     class TertiaryColour:
         def __init__(self):
             self.darkest = (29, 22, 45)
@@ -55,7 +42,6 @@ class Colour:
             self.neutral = (69, 62, 83)
             self.lighter = (96, 89, 112)
             self.lightest = (129, 122, 144)
-
 
     class ComplementColour:
         def __init__(self):

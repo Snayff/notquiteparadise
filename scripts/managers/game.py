@@ -1,4 +1,6 @@
-from scripts.core.constants import GameStates, LoggingEventNames
+import pygame
+
+from scripts.core.constants import GameStates, LoggingEventNames, GAME_FPS
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import EventHub, Publisher
 
@@ -8,14 +10,14 @@ class GameManager:
     def __init__(self):
         self.game_state = GameStates.GAME_INITIALISING
         self.previous_game_state = GameStates.GAME_INITIALISING
-       # self.message_log = None
         self.event_hub = EventHub()
+        self.internal_clock = pygame.time.Clock()
 
-    # def new_message_log(self, message_log):
-    #     """
-    #     :type message_log: MessageLog
-    #     """
-    #     self.message_log = message_log
+    def update(self):
+        self.event_hub.update()
+
+        # set frame rate
+        self.internal_clock.tick(GAME_FPS)
 
     def update_game_state(self, new_game_state):
         """
