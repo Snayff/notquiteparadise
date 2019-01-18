@@ -41,7 +41,7 @@ def get_value_from_adulthood_json(adulthood_name, value="all"):
 
 
 def get_value_from_actor_json(actor_name, value="all"):
-    with open('Data/Game/actor.json') as file:
+    with open('Data/Game/actor_template.json') as file:
         data = json.load(file)
 
     if value == "all":

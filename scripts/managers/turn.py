@@ -12,7 +12,7 @@ class TurnManager:
 
     def __init__(self):
         self.turn_holder = None
-        self.turn_queue = []  # queue stores a tuple of the entity and their time to next action
+        self.turn_queue = []  # queue stores a tuple (entity, time) of the entity and their time to next action
         self.round = 0
         self.time = 0
         self.time_of_last_turn = 0

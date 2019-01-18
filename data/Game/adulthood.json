@@ -3,9 +3,9 @@
 	"fighter" : {
 		"name": "fighter",
 		"description" : "The fighter description.",
-		"max_hp": 50,
+		"max_hp": 5,
 		"power": 1,
-		"defense": 1,
+		"defence": 1,
 		"xp_given_on_death": 10
 	}
 }

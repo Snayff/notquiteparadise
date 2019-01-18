@@ -1,11 +1,11 @@
 {
-	"player" : {
+	"human" : {
 		"name": "human",
-		"description" : "A human description'",
+		"description" : "A human description",
 		"spawn_chance_growth": 0,
 		"max_hp": 200,
-		"power": 0,
-		"defense": 0,
+		"power": 20,
+		"defence": 0,
 		"xp_given_on_death": 0
 	},
 	"orc" : {
@@ -14,7 +14,7 @@
 		"spawn_chance_growth": 0,
 		"max_hp": 20,
 		"power": 4,
-		"defense": 0,
+		"defence": 0,
 		"xp_given_on_death": 35
 	},
 	"troll" : {
@@ -23,7 +23,7 @@
 		"spawn_chance_growth": 10,
 		"max_hp" : 30,
 		"power" : 8,
-		"defense" : 2,
+		"defence": 2,
 		"xp_given_on_death" : 100
 	}
 }

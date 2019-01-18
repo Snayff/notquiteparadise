@@ -38,7 +38,7 @@ class EntityManager:
 
         return None
 
-    def create_actor(self, x, y, actor_name):
+    def create_actor_entity(self, x, y, actor_name):
         values = get_value_from_actor_json(actor_name)
 
         actor_name = values["name"]

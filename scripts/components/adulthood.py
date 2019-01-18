@@ -8,21 +8,6 @@ class Adulthood:
         self.name = values["name"]
         self.max_hp = values["max_hp"]
         self.power = values["power"]
-        self.defense = values["defense"]
+        self.defence = values["defence"]
         self.xp_given_on_death = values["xp_given_on_death"]
 
-    def to_json(self):
-        # only name is required as all values are static in json
-        json_data = {
-            'name': self.name
-        }
-
-        return json_data
-
-    @staticmethod
-    def from_json(json_data):
-        adulthood_name = json_data.get('name')
-
-        adulthood = Adulthood(adulthood_name)
-
-        return adulthood

@@ -1,5 +1,5 @@
 from scripts.core.constants import EntityEventNames, LoggingEventNames
-from scripts.core.global_data import world_manager, entity_manager, game_manager
+from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
 from scripts.events.entity_events import AttackEvent, MoveEvent
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent
@@ -54,11 +54,20 @@ class EntityHandler(Subscriber):
             game_manager.create_event(MoveEvent(entity, dx, dy))
 
         if event.name == EntityEventNames.ATTACK:
-            attacker = event.values[0]
-            target = event.values[1]
+            attacker = event.attacker
+            target = event.defender
 
             log_string = f"{attacker.name} ({attacker}) tries to attack {target.name} [{target.x},{target.y}] "
             game_manager.create_event(LoggingEvent(LoggingEventNames.MUNDANE, log_string))
 
-            # attacker.living.attack(target)
+            attacker.combatant.attack(target)
+
             game_manager.create_event(EndTurnEvent(10))  # TODO abstract magic number
+
+        if event.name == EntityEventNames.DIE:
+            entity = event.dying_entity
+            entity.ai = None
+
+            entity_manager.entities.remove(entity)
+            turn_manager.turn_queue.remove(entity)
+

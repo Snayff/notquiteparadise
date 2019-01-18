@@ -1,3 +1,7 @@
+from scripts.core.constants import LoggingEventNames
+from scripts.events.entity_events import DieEvent
+from scripts.events.logging_events import LoggingEvent
+
 
 class Combatant:
     """
@@ -7,7 +11,7 @@ class Combatant:
         self.hp = hp
         self.base_max_hp = hp
         self.base_power = 0
-        self.base_defense = 0
+        self.base_defence = 0
         self.xp_given_on_death = 0
 
     @property
@@ -63,7 +67,7 @@ class Combatant:
         return self.base_power + bonus
 
     @property
-    def defense(self):
+    def defence(self):
         bonus = 0
 
         # if self.owner and self.owner.equipment:
@@ -72,31 +76,32 @@ class Combatant:
         #     bonus = bonus + 0
 
         if self.owner and self.owner.race:
-            bonus = bonus + self.owner.race.defense
+            bonus = bonus + self.owner.race.defence
         else:
             bonus = bonus + 0
 
         if self.owner and self.owner.youth:
-            bonus = bonus + self.owner.youth.defense
+            bonus = bonus + self.owner.youth.defence
         else:
             bonus = bonus + 0
 
         if self.owner and self.owner.adulthood:
-            bonus = bonus + self.owner.adulthood.defense
+            bonus = bonus + self.owner.adulthood.defence
         else:
             bonus = bonus + 0
 
-        return self.base_defense + bonus
+        return self.base_defence + bonus
 
     def take_damage(self, amount):
-        results = []
 
         self.hp -= amount
 
-        if self.hp <= 0:
-            results.append({'dead': self.owner, 'xp': self.xp_given_on_death})
+        log_string = f"{self.owner.name}  takes {amount} damage and has {self.hp} health remaining."
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventNames.MUNDANE, log_string))
 
-        return results
+        if self.hp <= 0:
+            game_manager.create_event(DieEvent(self.owner))
 
     def heal(self, amount):
         self.hp += amount
@@ -105,52 +110,13 @@ class Combatant:
             self.hp = self.max_hp
 
     def attack(self, target):
-        # results = []
-        #
-        # damage = self.power - target.living.defense
-        #
-        # if damage > 0:
-        # 	results.append({'message': Message('{0} attacks {1} for {2} hit points.'.format(
-        # 		self.owner.name.capitalize(), target.name, str(damage)), tcod.white)})
-        # 	results.extend(target.living.take_damage(damage))
-        # else:
-        # 	results.append({'message': Message('{0} attacks {1} but does no damage.'.format(
-        # 		self.owner.name.capitalize(), target.name), tcod.white)})
-        #
-        # return results
+        damage = self.power - target.combatant.defence
 
-        damage = self.power - target.living.defense
+        log_string = f"{self.owner.name}  deals {damage} damage."
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventNames.MUNDANE, log_string))
 
-        # if damage > 0:
-        #     outcome_message = Message(f"{self.owner.name.capitalize()} "
-        #                               f"attacks {target.name} for {str(damage)} hit points.", tcod.white)
-        #
-        # else:
-        #     outcome_message = Message(f"{self.owner.name.capitalize()} "
-        #                               f" flails harmlessly at {target.name} ")
-        #
-        # create_event(event_hub, Event(MessageEventNames.BASIC, EventTopics.MESSAGE, [outcome_message]))
-        #
-        # log_string = f"{self.name} ({self}) attacked {target.name} ({target}) "
-        # create_event(event_hub, Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING, [log_string]))
+        if damage > 0:
+            target.combatant.take_damage(damage)
 
-    def to_json(self):
-        json_data = {
-            'hp': self.hp,
-            # "base_max_hp": self.base_max_hp, # TODO remove comments when Combatant updated to take vars
-            # "base_power": self.base_power,
-            # "base_defense": self.defense,
-            # "xp_given_on_death": self.xp_given_on_death
-        }
 
-        return json_data
-
-    @staticmethod
-    def from_json(json_data):
-        hp = json_data.get('hp')
-        # base_max_hp = json_data.get("base_max_hp")
-        # base_power = json_data.get("base_power")
-        # base_defense = json_data.get("base_defense")
-        # xp_given_on_death = json_data.get("xp_given_on_death")
-
-        return Combatant(hp)

@@ -56,3 +56,4 @@ class EntityEventNames(Enum):
     MOVE = auto()
     GET_MOVE_TARGET = auto()
     ATTACK = auto()
+    DIE = auto()

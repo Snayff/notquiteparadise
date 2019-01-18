@@ -8,7 +8,7 @@ from scripts.core.intialisers import initialise_game
 
 
 def main():
-    """The container for the game init and game loop"""
+    """The container for the game initialisation and game loop"""
 
     initialise_game()
     game_loop()
