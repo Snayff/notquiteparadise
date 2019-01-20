@@ -169,8 +169,8 @@ def handle_input(values):
     if game_state == GameStates.MAIN_MENU:
         pass
     # if values["new_game"]:
-    # 	create_event(event_hub, Event(GameEventNames.NEW_GAME, EventTopics.GAME, []))
+    # 	create_event(event_hub, Event(GameEventTypes.NEW_GAME, EventTopics.GAME, []))
     # elif values["load_game"]:
     # 	return {"load_game": True}
     # elif values["cancel"]:
-    # 	create_event(event_hub, Event(GameEventNames.EXIT, EventTopics.GAME, []))
+    # 	create_event(event_hub, Event(GameEventTypes.EXIT, EventTopics.GAME, []))

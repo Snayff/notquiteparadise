@@ -46,15 +46,15 @@ class Subscriber:
 
 # def run(self, event):
 # 	log_msg = f"{self.name} received {event.name}"
-# 	game_manager.create_event(Event(LoggingEventNames.MUNDANE, EventTopics.LOGGING,  [log_msg]))
+# 	game_manager.create_event(Event(LoggingEventTypes.MUNDANE, EventTopics.LOGGING,  [log_msg]))
 
 
 class Event:
-    def __init__(self, name, topic):
+    def __init__(self, type, topic):
         """
-        :type name:
+        :type type:
         :type topic: EventTopics
         """
-        self.name = name
+        self.type = type
         self.topic = topic
 

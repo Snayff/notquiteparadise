@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.core.constants import GameStates, LoggingEventNames, GAME_FPS
+from scripts.core.constants import GameStates, LoggingEventTypes, GAME_FPS
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import EventHub, Publisher
 
@@ -27,7 +27,7 @@ class GameManager:
         self.game_state = new_game_state
 
         log_string = f"game_state updated to {self.game_state} from {self.previous_game_state}"
-        self.create_event(LoggingEvent(LoggingEventNames.MUNDANE, log_string))
+        self.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
 
     def create_event(self, event):
         pub = Publisher(self.event_hub)

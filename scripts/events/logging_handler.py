@@ -7,4 +7,4 @@ class LoggingHandler(Subscriber):
 
     def run(self, event):
         # Note: Does not create a log entry. Doing so causes infinite loops. Don't do that.
-        print(event.log_string)
+        print(event.log_string)  # TODO  move log to external file

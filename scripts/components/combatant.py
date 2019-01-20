@@ -1,6 +1,7 @@
-from scripts.core.constants import LoggingEventNames
+from scripts.core.constants import LoggingEventTypes, MessageEventTypes
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
+from scripts.events.message_events import MessageEvent
 
 
 class Combatant:
@@ -98,7 +99,7 @@ class Combatant:
 
         log_string = f"{self.owner.name}  takes {amount} damage and has {self.hp} health remaining."
         from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventNames.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
 
         if self.hp <= 0:
             game_manager.create_event(DieEvent(self.owner))
@@ -110,11 +111,11 @@ class Combatant:
             self.hp = self.max_hp
 
     def attack(self, target):
-        damage = self.power - target.combatant.defence
+        damage = max(self.power - target.combatant.defence, 0)
 
-        log_string = f"{self.owner.name}  deals {damage} damage."
+        msg = f"{self.owner.name}  deals {damage} damage."
         from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventNames.MUNDANE, log_string))
+        game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
 
         if damage > 0:
             target.combatant.take_damage(damage)

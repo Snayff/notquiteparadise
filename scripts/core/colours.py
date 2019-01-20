@@ -8,6 +8,9 @@ class Palette:
         # debug
         self.debug_font_colour = colour.primary.lightest
 
+        # message log
+        self.message_log_background = colour.tertiary.darker
+
 
 class Colour:
     def __init__(self):

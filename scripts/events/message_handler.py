@@ -1,5 +1,5 @@
-from scripts.core.constants import LoggingEventNames, EventTopics
-from scripts.core.global_data import game_manager
+from scripts.core.constants import LoggingEventTypes, EventTopics
+from scripts.core.global_data import game_manager, ui_manager
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber, Event
 
@@ -9,7 +9,7 @@ class MessageHandler(Subscriber):
         Subscriber.__init__(self, "message_handler", event_hub)
 
     def run(self, event):
-        log_string = f"{self.name} received {event.name}"
-        game_manager.create_event(LoggingEvent(LoggingEventNames.MUNDANE, log_string))
+        log_string = f"{self.name} received {event.type}"
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
 
-    # TODO add message to message log
+        ui_manager.message_log.add_message(event.type, event.message)

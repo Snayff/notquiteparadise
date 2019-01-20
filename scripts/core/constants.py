@@ -36,23 +36,23 @@ class EventTopics(Enum):
     ENTITY = auto()
 
 
-class GameEventNames(Enum):
+class GameEventTypes(Enum):
     EXIT = auto()
     NEW_GAME = auto()
     END_TURN = auto()
 
 
-class MessageEventNames(Enum):
+class MessageEventTypes(Enum):
     BASIC = auto()
 
 
-class LoggingEventNames(Enum):
+class LoggingEventTypes(Enum):
     CRITICAL = auto()
     INTERESTING = auto()
     MUNDANE = auto()
 
 
-class EntityEventNames(Enum):
+class EntityEventTypes(Enum):
     MOVE = auto()
     GET_MOVE_TARGET = auto()
     ATTACK = auto()

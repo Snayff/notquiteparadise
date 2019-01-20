@@ -1,5 +1,6 @@
 import pygame
 
+from scripts.panels.message_log import MessageLog
 from scripts.core.colours import Palette, Colour
 from scripts.core.constants import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE
 from scripts.core.fonts import Font
@@ -16,6 +17,8 @@ class UIManager:
         self.palette = Palette()
         self.font = Font()
         self.main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.message_log = MessageLog()
+        self.show_message_log = True
 
     def draw_game(self, game_map=None, entities=None, debug_active=False, debug_messages=None):
         # clear last frames drawing
@@ -27,6 +30,9 @@ class UIManager:
 
         if debug_active:
             self.draw_debug_info(debug_messages)
+
+        if self.show_message_log:
+            self.draw_message_log()
 
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
@@ -55,3 +61,26 @@ class UIManager:
             y_pos = 0 + (line * font_size) + (line * gap_between_lines)  # 0 is starting y coord
             font.render_to(self.main_surface, (0, y_pos), messages[line], self.palette.debug_font_colour,
                            self.colour.black)
+
+    def draw_message_log(self):
+        # show only as many messages as we can or have
+        messages_to_show = min(len(self.message_log.messages), self.message_log.number_of_messages_to_show)
+
+        # render the panel
+        bg_colour = self.message_log.background_colour
+        x = self.message_log.panel_x
+        y = self.message_log.panel_y
+        width = self.message_log.panel_width
+        height = self.message_log.panel_height
+        pygame.draw.rect(self.main_surface, bg_colour, [x, width, y, height])
+
+        # render the messages
+        msg_x = x + self.message_log.border_size + self.message_log.message_indent
+        msg_y = y + self.message_log.border_size
+        font = self.message_log.font
+        messages = self.message_log.messages
+        fg_colour = self.colour.white  # TODO remove when messages parse their own colour
+
+        for message_count in range(messages_to_show):
+            adjusted_y = msg_y + (message_count * (self.message_log.font.size + self.message_log.gap_between_lines))
+            font.render_to(self.main_surface, (msg_x, adjusted_y), messages[message_count][1], fg_colour)
