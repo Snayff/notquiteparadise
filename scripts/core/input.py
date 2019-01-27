@@ -7,6 +7,13 @@ from scripts.events.game_events import ExitEvent
 
 
 def get_input():
+    """
+    Get the pygame event, update the input_values dictionary and return input_values.
+
+    Returns:
+        Dict[] : `input_values` containing True for all appropriate inputs, and Tuple[int,int] for the `mouse_xy`.
+
+    """
     # gets mouse and key input as list of events
     input_events = pygame.event.get()
 
@@ -92,6 +99,13 @@ def get_input():
 
 
 def handle_input(values):
+    """
+    Process the user input into game action by interpreting the value in relation to the `GameState`.
+
+    Args:
+        values (Dict[]): User input events.
+
+    """
     game_state = game_manager.game_state
     player = entity_manager.player
 

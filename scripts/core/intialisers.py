@@ -36,6 +36,9 @@ def initialise_game():
 
 
 def initialise_event_handlers():
+    """
+    Create the various event handlers and subscribe to required events.
+    """
     game_handler = GameHandler(game_manager.event_hub)
     game_handler.subscribe(EventTopics.GAME)
 

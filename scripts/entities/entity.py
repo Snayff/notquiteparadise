@@ -1,13 +1,26 @@
-
 class Entity:
     """
-    A generic object to represent players, enemies, items, etc.
+    Game object that is extended by the inclusion of components. Every component has the entity as an `owner`.
     """
 
-    def __init__(self, x, y, sprite, name, blocks_movement=True, blocks_sight=True,
-            combatant=None, race=None, youth=None, adulthood=None, ai=None, actor=None, sight_range=0 ):
-
-        # item=None, inventory=None, stairs=None, level=None, equipment=None, equippable=None, sight_range=None
+    def __init__(self, x, y, sprite, name, blocks_movement=True, blocks_sight=True, combatant=None, race=None,
+            youth=None, adulthood=None, ai=None, actor=None, sight_range=0):
+        """
+        Args:
+            x (int) : X position, in tiles.
+            y (int) : Y position, in tiles.
+            sprite (pygame.image) :
+            name (str) : Name of the entity.
+            blocks_movement (bool) : Does entity block movement?
+            blocks_sight (bool) : Does entity block sight?
+            combatant (Combatant): Component.
+            race (Race): Component.
+            youth (Youth): Component.
+            adulthood (Adulthood): Component.
+            ai (AI): Component.
+            actor(Actor) : Component.
+            sight_range (int): How far the entity can see.
+        """
 
         self.x = x
         self.y = y
@@ -24,12 +37,6 @@ class Entity:
         self.adulthood = adulthood
         self.ai = ai
         self.actor = actor
-        # self.item = item
-        # self.inventory = inventory
-        # self.stairs = stairs
-        # self.level = level
-        # self.equipment = equipment
-        # self.equippable = equippable
 
         # Create owners so all components can refer to the owning entity
         if self.combatant:
@@ -49,29 +56,3 @@ class Entity:
 
         if self.actor:
             self.actor.owner = self
-
-    # if self.item:
-    # 	self.item.owner = self
-    #
-    # if self.inventory:
-    # 	self.inventory.owner = self
-    #
-    # if self.stairs:
-    # 	self.stairs.owner = self
-    #
-    # if self.level:
-    # 	self.level.owner = self
-    #
-    # if self.equipment:
-    # 	self.equipment.owner = self
-    #
-    # if self.equippable:
-    # 	self.equippable.owner = self
-    #
-    # 	if not self.item:
-    # 		item = Item()
-    # 		self.item = item
-    # 		self.item.owner = self
-
-
-

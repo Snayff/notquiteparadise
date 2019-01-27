@@ -6,9 +6,17 @@ from scripts.events.message_events import MessageEvent
 
 class Combatant:
     """
-    Component: entity can fight
+    [Component] Can fight.
+
+    Attributes:
+        hp (int): Health value.
     """
     def __init__(self, hp=0):
+        """
+
+        Args:
+            hp (int): Starting health value.
+        """
         self.hp = hp
         self.base_max_hp = hp
         self.base_power = 0
@@ -17,12 +25,14 @@ class Combatant:
 
     @property
     def max_hp(self):
-        bonus = 0
+        """
+        Maximum health.
 
-        # if self.owner and self.owner.equipment:
-        #     bonus = bonus + self.owner.equipment.max_hp_bonus
-        # else:
-        #     bonus = bonus + 0
+        Returns:
+            int: max_hp
+
+        """
+        bonus = 0
 
         if self.owner and self.owner.race:
             bonus = bonus + self.owner.race.max_hp
@@ -43,12 +53,14 @@ class Combatant:
 
     @property
     def power(self):
-        bonus = 0
+        """
+        Current power.
 
-        # if self.owner and self.owner.equipment:
-        #     bonus = self.owner.equipment.power_bonus
-        # else:
-        #     bonus = bonus + 0
+        Returns:
+            int: power
+
+        """
+        bonus = 0
 
         if self.owner and self.owner.race:
             bonus = bonus + self.owner.race.power
@@ -69,12 +81,14 @@ class Combatant:
 
     @property
     def defence(self):
-        bonus = 0
+        """
+        Current defence.
 
-        # if self.owner and self.owner.equipment:
-        #     bonus = self.owner.equipment.defense_bonus
-        # else:
-        #     bonus = bonus + 0
+        Returns:
+            int: defence
+
+        """
+        bonus = 0
 
         if self.owner and self.owner.race:
             bonus = bonus + self.owner.race.defence
@@ -94,7 +108,13 @@ class Combatant:
         return self.base_defence + bonus
 
     def take_damage(self, amount):
+        """
+        Apply damage to health.
 
+        Args:
+            amount (int): Amount to take from health.
+
+        """
         self.hp -= amount
 
         log_string = f"{self.owner.name}  takes {amount} damage and has {self.hp} health remaining."
@@ -105,12 +125,26 @@ class Combatant:
             game_manager.create_event(DieEvent(self.owner))
 
     def heal(self, amount):
+        """
+        Apply heal to health.
+
+        Args:
+            amount (int): Amount to add to health.
+
+        """
         self.hp += amount
 
         if self.hp > self.max_hp:
             self.hp = self.max_hp
 
     def attack(self, target):
+        """
+        Attack another entity.
+
+        Args:
+            target (Entity): Entity to get attacked.
+
+        """
         damage = max(self.power - target.combatant.defence, 0)
 
         msg = f"{self.owner.name}  deals {damage} damage."

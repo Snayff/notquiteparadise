@@ -8,7 +8,9 @@ from scripts.core.intialisers import initialise_game
 
 
 def main():
-    """The container for the game initialisation and game loop"""
+    """
+    The container for the game initialisation and game loop
+    """
 
     initialise_game()
     game_loop()
@@ -19,7 +21,9 @@ def main():
 
 
 def game_loop():
-
+    """
+    The core game loop handling input, rendering and logic.
+    """
     while not game_manager.game_state == GameStates.EXIT_GAME:
 
         # HANDLE INPUT
@@ -36,7 +40,8 @@ def game_loop():
         world_manager.update()
 
         # DRAW
-        ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.active, debug_manager.messages)
+        ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.active,
+                             debug_manager.messages)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

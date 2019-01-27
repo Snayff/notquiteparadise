@@ -23,7 +23,7 @@ class MessageLog:
 
         # log info
         self.gap_between_lines = 4
-        self.message_log_first_message_to_show = 0
+        self.first_message_to_show = 0
         self.number_of_messages_to_show = int((self.panel_height - 2 * self.border_size) / (self.font.size +
                                                                                 self.gap_between_lines))
 
@@ -34,9 +34,17 @@ class MessageLog:
 
         self.messages.append((message_type, message))
 
-    def update_message_logs_first_message(self, increment):
-        # TODO add limits to ensure stays in length of array
-        self.message_log_first_message_to_show += increment
+        # if more mesaages than we can show at once then increment first message position
+        if len(self.messages) > self.number_of_messages_to_show:
+            self.update_first_message_position(1)
+
+    def update_first_message_position(self, increment):
+        #  prevent the first message going too far and showing less than max number of messages to show
+        self.first_message_to_show = min(self.first_message_to_show + increment,  len(self.messages) -
+                                                                                  self.number_of_messages_to_show)
+
+        # ensure first message position cannot be less than the start of the messages
+        self.first_message_to_show = max(self.first_message_to_show, 0)
 
     def change_message_type_to_show(self, message_type):
         self.message_type_to_show = message_type

@@ -16,6 +16,9 @@ SPRITE_WALL = pygame.image.load("assets/world/wall.png")
 
 
 class GameStates(Enum):
+    """
+    States the Game can be in.
+    """
     PLAYER_TURN = auto()
     ENEMY_TURN = auto()
     PLAYER_DEAD = auto()
@@ -30,6 +33,7 @@ class GameStates(Enum):
 
 
 class EventTopics(Enum):
+    """Topics that Events can be associated with."""
     GAME = auto()
     MESSAGE = auto()
     LOGGING = auto()
@@ -37,22 +41,26 @@ class EventTopics(Enum):
 
 
 class GameEventTypes(Enum):
+    """Types of Game Events"""
     EXIT = auto()
     NEW_GAME = auto()
     END_TURN = auto()
 
 
 class MessageEventTypes(Enum):
+    """Types of Message Events"""
     BASIC = auto()
 
 
 class LoggingEventTypes(Enum):
+    """Types of Logging Events"""
     CRITICAL = auto()
     INTERESTING = auto()
     MUNDANE = auto()
 
 
 class EntityEventTypes(Enum):
+    """Types of Entity Events"""
     MOVE = auto()
     GET_MOVE_TARGET = auto()
     ATTACK = auto()

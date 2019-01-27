@@ -65,6 +65,7 @@ class UIManager:
     def draw_message_log(self):
         # show only as many messages as we can or have
         messages_to_show = min(len(self.message_log.messages), self.message_log.number_of_messages_to_show)
+        first_message_position = self.message_log.first_message_to_show
 
         # render the panel
         bg_colour = self.message_log.background_colour
@@ -83,4 +84,5 @@ class UIManager:
 
         for message_count in range(messages_to_show):
             adjusted_y = msg_y + (message_count * (self.message_log.font.size + self.message_log.gap_between_lines))
-            font.render_to(self.main_surface, (msg_x, adjusted_y), messages[message_count][1], fg_colour)
+            font.render_to(self.main_surface, (msg_x, adjusted_y), messages[message_count + first_message_position][
+                1], fg_colour)

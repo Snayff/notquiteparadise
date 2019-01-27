@@ -3,6 +3,7 @@ from scripts.events.entity_events import MoveEvent, GetMoveTargetEvent
 
 
 class BasicMonster:
+    # TODO create initial AI class, and then derive diff types from that
     def take_turn(self):
 
         monster = self.owner
