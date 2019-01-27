@@ -18,6 +18,8 @@ class Palette:
 
         # message log
         self.message_log_background = colour.tertiary.darker
+        self.message_log_expressions_player = colour.complement.lighter
+        self.message_log_default_text = colour.white
 
 
 class Colour:

@@ -8,8 +8,9 @@ class MessageLog:
     def __init__(self):
         # log setup
         self.palette = Palette()
-        self.messages = [(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise")]
+        self.message_list = [(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise")]
         self.message_type_to_show = MessageEventTypes.BASIC
+        self.expressions = self.create_expressions_list()
 
         # panel info
         self.font = Font().message_log
@@ -28,24 +29,43 @@ class MessageLog:
                                                                                 self.gap_between_lines))
 
     def add_message(self, message_type, message):
+        """
+        Add a message to the MessageLog
+        Args:
+            message_type:
+            message:
+        """
         log_string = f"{message} added to message log"
         from scripts.core.global_data import game_manager
         game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
 
-        self.messages.append((message_type, message))
+        self.message_list.append((message_type, message))
 
         # if more mesaages than we can show at once then increment first message position
-        if len(self.messages) > self.number_of_messages_to_show:
+        if len(self.message_list) > self.number_of_messages_to_show:
             self.update_first_message_position(1)
 
     def update_first_message_position(self, increment):
-        #  prevent the first message going too far and showing less than max number of messages to show
-        self.first_message_to_show = min(self.first_message_to_show + increment,  len(self.messages) -
-                                                                                  self.number_of_messages_to_show)
+        #  prevent the first message going too far and showing less than max number of message_list to show
+        self.first_message_to_show = min(self.first_message_to_show + increment, len(self.message_list) -
+                                                                                 self.number_of_messages_to_show)
 
-        # ensure first message position cannot be less than the start of the messages
+        # ensure first message position cannot be less than the start of the message_list
         self.first_message_to_show = max(self.first_message_to_show, 0)
 
     def change_message_type_to_show(self, message_type):
         self.message_type_to_show = message_type
+
+    def create_expressions_list(self):
+        """
+        Create list of expressions to look for in log and apply formatting
+
+        Returns:
+            Dict
+        """
+        expressions = {}
+
+        expressions["player"] = self.palette.message_log_expressions_player
+
+        return expressions
 

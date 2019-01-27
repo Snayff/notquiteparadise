@@ -9,6 +9,15 @@ from scripts.core.fonts import Font
 class UIManager:
     """
     Manage the UI, such as windows, resource bars etc
+
+    Attributes:
+        focused_window (pygame.surface) : The window currently in focus.
+        colour (Colour): Game Colours.
+        palette (Palette): Palette of Colours
+        font (Font): Renderable Font
+        main_surface (pygame.surface): The main sufrace to render to
+        message_log (MessageLog): Object holding message log functionality
+        show_message_log (bool): Should we draw the message log?
     """
 
     def __init__(self):
@@ -19,6 +28,7 @@ class UIManager:
         self.main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.message_log = MessageLog()
         self.show_message_log = True
+
 
     def draw_game(self, game_map=None, entities=None, debug_active=False, debug_messages=None):
         # clear last frames drawing
@@ -63,8 +73,12 @@ class UIManager:
                            self.colour.black)
 
     def draw_message_log(self):
-        # show only as many messages as we can or have
-        messages_to_show = min(len(self.message_log.messages), self.message_log.number_of_messages_to_show)
+        """
+        Draw the MessaegeLog, and all message_list that can be shown
+        """
+
+        # show only as many message_list as we can or have
+        messages_to_show = min(len(self.message_log.message_list), self.message_log.number_of_messages_to_show)
         first_message_position = self.message_log.first_message_to_show
 
         # render the panel
@@ -75,14 +89,74 @@ class UIManager:
         height = self.message_log.panel_height
         pygame.draw.rect(self.main_surface, bg_colour, [x, width, y, height])
 
-        # render the messages
+        # render the message_list
         msg_x = x + self.message_log.border_size + self.message_log.message_indent
         msg_y = y + self.message_log.border_size
         font = self.message_log.font
-        messages = self.message_log.messages
-        fg_colour = self.colour.white  # TODO remove when messages parse their own colour
+        messages = self.message_log.message_list
+        fg_colour = self.colour.white  # TODO remove when message_list parse their own colour
 
         for message_count in range(messages_to_show):
+            # reset offset
+            current_msg_x_offset = 0
+
+            # get position of line to write to
             adjusted_y = msg_y + (message_count * (self.message_log.font.size + self.message_log.gap_between_lines))
-            font.render_to(self.main_surface, (msg_x, adjusted_y), messages[message_count + first_message_position][
-                1], fg_colour)
+
+            # parse message for expressions
+            parsed_message = self.parse_message(messages[message_count + first_message_position][1])
+
+            # render all parsed messages
+            for counter in range(len(parsed_message)):
+                msg_to_render = parsed_message[counter][1]
+                adjusted_x = msg_x + current_msg_x_offset
+                msg_colour = parsed_message[counter][0]
+
+                font.render_to(self.main_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
+
+                # update x offset based on length of string just rendered
+                current_msg_x_offset += len(msg_to_render) * self.message_log.font.size
+
+    def parse_message(self, message):
+        """
+        Parse for colours, tags and formatting
+
+        Args:
+             message (str): The message string that needs parsing.
+
+        Returns:
+             List[Tuple[Colour, str]]: List of Tuples containing message and colour
+        """
+
+        # break message out by spaces
+        message_list = message.split()
+
+        parsed_message_list = []
+        default_colour = self.palette.message_log_default_text
+        msg_in_progress = ""
+
+        # check each word for inclusion in expressions and rebuild as new list
+        for message_count in range(len(message_list)):
+            msg = message_list[message_count]
+
+            if message_list[message_count] in self.message_log.expressions:
+
+                # expression found so let's deal with any in progress message
+                if msg_in_progress != "":
+                    # apply currently built string and then increment line
+                    parsed_message_list.append((default_colour, msg_in_progress))
+
+                # create the expression as a new message
+                colour = self.message_log.expressions.get(msg)
+                parsed_message_list.append((colour, msg))
+            else:
+                # No match so extend current message line
+                if msg_in_progress != "":
+                    msg_in_progress += " " + msg
+                else:
+                    msg_in_progress += msg
+
+        # add any remaining "in progress" messages
+        parsed_message_list.append((default_colour, msg_in_progress))
+
+        return parsed_message_list
