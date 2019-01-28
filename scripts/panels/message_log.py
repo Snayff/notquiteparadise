@@ -1,3 +1,5 @@
+import pygame
+
 from scripts.core.colours import Palette
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes
 from scripts.core.fonts import Font
@@ -11,6 +13,7 @@ class MessageLog:
         self.message_list = [(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise")]
         self.message_type_to_show = MessageEventTypes.BASIC
         self.expressions = self.create_expressions_list()
+        self.icons = self.create_icons_list()
 
         # panel info
         self.font = Font().message_log
@@ -23,7 +26,7 @@ class MessageLog:
         self.background_colour = self.palette.message_log_background
 
         # log info
-        self.gap_between_lines = 4
+        self.gap_between_lines = 8
         self.first_message_to_show = 0
         self.number_of_messages_to_show = int((self.panel_height - 2 * self.border_size) / (self.font.size +
                                                                                 self.gap_between_lines))
@@ -65,7 +68,19 @@ class MessageLog:
         """
         expressions = {}
 
-        expressions["player"] = self.palette.message_log_expressions_player
+        expressions["orc"] = self.palette.message_log_expressions_player
 
         return expressions
 
+    def create_icons_list(self):
+        """
+        Create list of icons to look for in log and render
+
+        Returns:
+            Dict
+        """
+        icons = {}
+
+        icons["player"] = pygame.image.load("assets/actor/player.png")
+
+        return icons

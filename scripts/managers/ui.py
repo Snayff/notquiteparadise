@@ -95,27 +95,46 @@ class UIManager:
         font = self.message_log.font
         messages = self.message_log.message_list
         fg_colour = self.colour.white  # TODO remove when message_list parse their own colour
+        font_size = int(self.message_log.font.size)
 
         for message_count in range(messages_to_show):
             # reset offset
             current_msg_x_offset = 0
 
-            # get position of line to write to
-            adjusted_y = msg_y + (message_count * (self.message_log.font.size + self.message_log.gap_between_lines))
+            # get y position of line to write to
+            adjusted_y = msg_y + (message_count * (font_size + self.message_log.gap_between_lines))
 
             # parse message for expressions
             parsed_message = self.parse_message(messages[message_count + first_message_position][1])
 
             # render all parsed messages
             for counter in range(len(parsed_message)):
+
+                # get the message to render and position to render to
                 msg_to_render = parsed_message[counter][1]
                 adjusted_x = msg_x + current_msg_x_offset
-                msg_colour = parsed_message[counter][0]
 
-                font.render_to(self.main_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
+                # check if it exists in the icon list
+                if msg_to_render == "icon":
+                    icon = parsed_message[counter][0]
+                    self.main_surface.blit(icon, (adjusted_x, adjusted_y))
 
-                # update x offset based on length of string just rendered
-                current_msg_x_offset += len(msg_to_render) * self.message_log.font.size
+                    # update x offset based on width of image
+                    image_size = icon.get_width()
+
+                    current_msg_x_offset += image_size + 1
+
+                else:
+                    # its not an icon so must be text
+                    msg_colour = parsed_message[counter][0]
+
+                    font.render_to(self.main_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
+
+                    # update x offset based on length of string just rendered
+                    msg_length = len(msg_to_render)
+
+                    current_msg_x_offset += (msg_length + 1) * (font_size / 2)  # Not sure about the formula, but it
+                                                                                # works.
 
     def parse_message(self, message):
         """
@@ -135,11 +154,12 @@ class UIManager:
         default_colour = self.palette.message_log_default_text
         msg_in_progress = ""
 
-        # check each word for inclusion in expressions and rebuild as new list
+        # check each word for inclusion in lists and rebuild as new list
         for message_count in range(len(message_list)):
             msg = message_list[message_count]
 
-            if message_list[message_count] in self.message_log.expressions:
+            # EXPRESSIONS
+            if msg in self.message_log.expressions:
 
                 # expression found so let's deal with any in progress message
                 if msg_in_progress != "":
@@ -149,6 +169,20 @@ class UIManager:
                 # create the expression as a new message
                 colour = self.message_log.expressions.get(msg)
                 parsed_message_list.append((colour, msg))
+
+            # ICONS
+            elif msg in self.message_log.icons:
+
+                # icon found so let's deal with any in progress message
+                if msg_in_progress != "":
+                    # apply currently built string and then increment line
+                    parsed_message_list.append((default_colour, msg_in_progress))
+
+                # create the icon as a new message
+                icon = self.message_log.icons.get(msg)
+                parsed_message_list.append((icon, "icon"))
+
+            # NORMAL TEXT
             else:
                 # No match so extend current message line
                 if msg_in_progress != "":
