@@ -28,7 +28,7 @@ class UIManager:
         self.main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.message_log = MessageLog()
         self.show_message_log = True
-
+        self.active_hyperlinks = []
 
     def draw_game(self, game_map=None, entities=None, debug_active=False, debug_messages=None):
         # clear last frames drawing
@@ -124,17 +124,45 @@ class UIManager:
 
                     current_msg_x_offset += image_size + 1
 
+                # its not an icon so must be text.
                 else:
-                    # its not an icon so must be text
-                    msg_colour = parsed_message[counter][0]
+                    #  Check for a hyperlink
+                    if msg_to_render in self.message_log.hyperlinks:
+                        msg_colour = self.palette.message_log_hyperlink
+                        # get the hyperlink rect
+                        hyperlink_rect = font.render_to(self.main_surface, (adjusted_x, adjusted_y), msg_to_render,
+                                                   msg_colour)
 
-                    font.render_to(self.main_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
+                        # update the rect to reflect current position
+                        hyperlink_rect.x = adjusted_x
+                        hyperlink_rect.y = adjusted_y
+
+                        # add rect of hyperlink to active list
+                        self.active_hyperlinks.append((hyperlink_rect, msg_to_render))
+                    else:
+                        msg_colour = parsed_message[counter][0]
+
+                        font.render_to(self.main_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
 
                     # update x offset based on length of string just rendered
                     msg_length = len(msg_to_render)
 
                     current_msg_x_offset += (msg_length + 1) * (font_size / 2)  # Not sure about the formula, but it
                                                                                 # works.
+
+                # TODO - move to separate function (in message log and return true/false?)
+                # TODO - increment active_hyperlinks rect positions when new lines added
+                # TODO - add new box and linked text
+                # TESTING MOUSE HOVER
+                for link in range(len(self.active_hyperlinks)):
+                    # get the link rect
+                    mouse_pos = pygame.mouse.get_pos()
+                    link_rect = self.active_hyperlinks[link][0]
+
+                    if link_rect.collidepoint(mouse_pos):
+                        print("MOUSE OVER SUCCESS MOTHER FUCKER")
+                    else:
+                        print(f"m:{str(mouse_pos)} // r: {str(link_rect)}")
 
     def parse_message(self, message):
         """
@@ -181,6 +209,17 @@ class UIManager:
                 # create the icon as a new message
                 icon = self.message_log.icons.get(msg)
                 parsed_message_list.append((icon, "icon"))
+
+            # HYPERLINKS
+            elif msg in self.message_log.hyperlinks:
+
+                # hyperlink found so let's deal with any in progress message
+                if msg_in_progress != "":
+                    # apply currently built string and then increment line
+                    parsed_message_list.append((default_colour, msg_in_progress))
+
+                # amend the colour to indicate the message is a  hyperlink
+                parsed_message_list.append((self.palette.message_log_hyperlink, msg))
 
             # NORMAL TEXT
             else:

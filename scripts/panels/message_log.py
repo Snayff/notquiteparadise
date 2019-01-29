@@ -14,6 +14,7 @@ class MessageLog:
         self.message_type_to_show = MessageEventTypes.BASIC
         self.expressions = self.create_expressions_list()
         self.icons = self.create_icons_list()
+        self.hyperlinks = self.create_hyperlinks_list()
 
         # panel info
         self.font = Font().message_log
@@ -84,3 +85,16 @@ class MessageLog:
         icons["player"] = pygame.image.load("assets/actor/player.png")
 
         return icons
+
+    def create_hyperlinks_list(self):
+        """
+        Create list of hyperlinks to look for in log and render
+
+        Returns:
+            Dict
+        """
+        hyperlinks = {}
+
+        hyperlinks["deals"] = "This is linked text"
+
+        return hyperlinks

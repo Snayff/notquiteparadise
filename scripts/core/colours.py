@@ -20,6 +20,7 @@ class Palette:
         self.message_log_background = colour.tertiary.darker
         self.message_log_expressions_player = colour.complement.lighter
         self.message_log_default_text = colour.white
+        self.message_log_hyperlink = colour.black
 
 
 class Colour:
