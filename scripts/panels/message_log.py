@@ -69,7 +69,8 @@ class MessageLog:
         """
         expressions = {}
 
-        expressions["orc"] = self.palette.message_log_expressions_player
+        expressions["fighter"] = self.palette.message_log_expressions_player
+        expressions["moved"] = self.palette.message_log_expressions_player
 
         return expressions
 
@@ -83,6 +84,7 @@ class MessageLog:
         icons = {}
 
         icons["player"] = pygame.image.load("assets/actor/player.png")
+        icons["orc"] = pygame.image.load("assets/actor/enemy.png")
 
         return icons
 
@@ -96,5 +98,6 @@ class MessageLog:
         hyperlinks = {}
 
         hyperlinks["deals"] = "This is linked text"
+        hyperlinks["damage"] = "This is ALSO linked text"
 
         return hyperlinks

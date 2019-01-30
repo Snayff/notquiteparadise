@@ -2,7 +2,7 @@ import pygame
 
 from scripts.panels.message_log import MessageLog
 from scripts.core.colours import Palette, Colour
-from scripts.core.constants import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE
+from scripts.core.constants import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE, GAME_FPS
 from scripts.core.fonts import Font
 
 
@@ -28,7 +28,9 @@ class UIManager:
         self.main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.message_log = MessageLog()
         self.show_message_log = True
-        self.active_hyperlinks = []
+        self.displayed_hyperlinks = []
+        self.mouse_over_timer = 0
+        self.index_of_active_hyperlink = -1
 
     def draw_game(self, game_map=None, entities=None, debug_active=False, debug_messages=None):
         # clear last frames drawing
@@ -62,6 +64,11 @@ class UIManager:
                 self.main_surface.blit(entity.sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
 
     def draw_debug_info(self, messages):
+        """
+        Draw the debug info
+        Args:
+            messages (str): Strings to show in the debug info section
+        """
         font = self.font.debug
         font_size = font.size
 
@@ -87,14 +94,13 @@ class UIManager:
         y = self.message_log.panel_y
         width = self.message_log.panel_width
         height = self.message_log.panel_height
-        pygame.draw.rect(self.main_surface, bg_colour, [x, width, y, height])
+        pygame.draw.rect(self.main_surface, bg_colour, [x, width, y, height]) # TODO move bg_colour to palette
 
         # render the message_list
         msg_x = x + self.message_log.border_size + self.message_log.message_indent
         msg_y = y + self.message_log.border_size
         font = self.message_log.font
         messages = self.message_log.message_list
-        fg_colour = self.colour.white  # TODO remove when message_list parse their own colour
         font_size = int(self.message_log.font.size)
 
         for message_count in range(messages_to_show):
@@ -138,7 +144,7 @@ class UIManager:
                         hyperlink_rect.y = adjusted_y
 
                         # add rect of hyperlink to active list
-                        self.active_hyperlinks.append((hyperlink_rect, msg_to_render))
+                        self.displayed_hyperlinks.append((hyperlink_rect, msg_to_render))
                     else:
                         msg_colour = parsed_message[counter][0]
 
@@ -151,18 +157,43 @@ class UIManager:
                                                                                 # works.
 
                 # TODO - move to separate function (in message log and return true/false?)
-                # TODO - increment active_hyperlinks rect positions when new lines added
-                # TODO - add new box and linked text
+                # TODO - increment displayed_hyperlinks rect positions when new lines added
+                # TODO - second hyperlink doesnt work?? check icons and expressions, too
+                # TODO - tooltip to hover over word, rather than follow mouse
                 # TESTING MOUSE HOVER
-                for link in range(len(self.active_hyperlinks)):
+                for link in range(len(self.displayed_hyperlinks)):
                     # get the link rect
                     mouse_pos = pygame.mouse.get_pos()
-                    link_rect = self.active_hyperlinks[link][0]
+                    link_rect = self.displayed_hyperlinks[link][0]
 
                     if link_rect.collidepoint(mouse_pos):
-                        print("MOUSE OVER SUCCESS MOTHER FUCKER")
+                        self.mouse_over_timer += 1  # one per frame
+                        self.index_of_active_hyperlink = link
                     else:
-                        print(f"m:{str(mouse_pos)} // r: {str(link_rect)}")
+                        self.mouse_over_timer = 0  # one per frame
+
+                # TESTING TOOLTIP
+                seconds_before_tooltip = 2
+                if self.mouse_over_timer / GAME_FPS > seconds_before_tooltip:
+
+                    # get location to show message, and linked text
+                    active_link = self.displayed_hyperlinks[self.index_of_active_hyperlink]
+                    linked_text = self.message_log.hyperlinks.get(active_link[1])
+                    mouse_pos = pygame.mouse.get_pos()
+                    text_x = mouse_pos[0] + 20
+                    text_y = mouse_pos[1] - font_size
+
+                    # create the text on a surface to get dimensions
+                    text_rect = font.render(linked_text, self.colour.white)[1]
+
+                    # move tooltip_rect to the place in the message_log, and resize
+                    text_rect.x = text_x
+                    text_rect.y = text_y
+                    text_rect.inflate_ip(5, 10)
+
+                    # draw the tooltip and text
+                    pygame.draw.rect(self.main_surface, self.colour.black, text_rect)
+                    font.render_to(self.main_surface, (text_x, text_y), linked_text, self.colour.white)
 
     def parse_message(self, message):
         """
