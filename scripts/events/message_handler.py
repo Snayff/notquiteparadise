@@ -13,3 +13,4 @@ class MessageHandler(Subscriber):
         game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
 
         ui_manager.message_log.add_message(event.type, event.message)
+        ui_manager.message_log_is_dirty = True

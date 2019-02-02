@@ -26,6 +26,9 @@ def game_loop():
     """
     while not game_manager.game_state == GameStates.EXIT_GAME:
 
+        # limit frames
+        game_manager.internal_clock.tick(60)
+
         # HANDLE INPUT
         # determine the action to take from the input with the context of the game state
         input_values = get_input()

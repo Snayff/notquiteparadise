@@ -5,7 +5,7 @@ class Palette:
     Attributes:
         menu_background (Colour): Colour of the Menu background.
         debug_font_colour (Colour): Colour of the Debug Font.
-        message_log_background (Colour): Colour of the Message Log background.
+
     """
     def __init__(self):
         colour = Colour()
@@ -15,13 +15,28 @@ class Palette:
 
         # debug
         self.debug_font_colour = colour.primary.lightest
+        self.message_log = self.MessageLogPalette()
 
-        # message log
-        self.message_log_background = colour.tertiary.darker
-        self.message_log_expressions_player = colour.complement.lighter
-        self.message_log_default_text = colour.white
-        self.message_log_hyperlink = colour.black
+    class MessageLogPalette:
+        """
+        The palette for the messagelog
 
+        Attributes:
+            background (Colour): Colour of the Message Log background.
+            expressions_player (Colour): Colour of the  player's expression.
+            default_text (Colour): Colour of the default text.
+            hyperlink (Colour): Colour of hyperlinks .
+            tooltip_background(Colour): Colour of the tooltip window background.
+            tooltip_text(Colour): Colour of the tooltip text.
+        """
+        def __init__(self):
+            self.colour = Colour()
+            self.background = self.colour.tertiary.darker
+            self.expressions_player = self.colour.complement.lighter
+            self.default_text = self.colour.white
+            self.hyperlink = self.colour.black
+            self.tooltip_text = self.colour.white
+            self.tooltip_background = self.colour.black
 
 class Colour:
     """
