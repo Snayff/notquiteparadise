@@ -1,4 +1,5 @@
 import math
+import random
 
 import pygame
 
@@ -7,6 +8,7 @@ from scripts.components.adulthood import Adulthood
 from scripts.components.combatant import Combatant
 from scripts.components.youth import Youth
 from scripts.core import global_data
+from scripts.core.constants import TILE_SIZE, GAME_FPS, ENTITY_SPRITE_FRAME_DURATION
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.entities.entity import Entity
 
@@ -16,6 +18,49 @@ class EntityManager:
         self.entities = []
         self.player = None
 
+    def update(self, game_map):
+        """
+        Update all entity info that requires per frame changes
+
+        Args:
+            game_map (GameMap): The current game map
+        """
+        self.update_entity_sprites(game_map)
+
+    def update_entity_sprites(self, game_map):
+        """
+        Loop all visible entities and update their sprites based on current sprite
+
+        Args:
+            game_map (GameMap): The current game map
+        """
+        # update entity sprites, if they're visible to player
+        for entity in self.entities:
+            if game_map.is_tile_visible(entity.x, entity.y):
+                time_increment = 1 / GAME_FPS
+                entity.delay_until_idle_animation -= time_increment
+
+                # FIXME - idle animation is flickering, why? is it even playing the right frame?
+
+                #  if we aren't in the still sprite
+                if entity.current_sprite != entity.spritesheet.get("still"):
+
+                    entity.animation_timer += time_increment
+
+                    # is it time to move to a new frame?
+                    if entity.animation_timer > ENTITY_SPRITE_FRAME_DURATION:
+
+                        # are we finished with the animation?
+                        if entity.current_sprite_frame >= len(entity.current_sprite) - 1:
+                            entity.current_sprite_frame = 0
+                            entity.current_sprite = entity.spritesheet.get("still")
+                        else:
+                            entity.current_sprite_frame += 1
+
+                # we are in still, so are we ready for idle?
+                elif entity.delay_until_idle_animation <= 0:
+                    entity.current_sprite = entity.spritesheet.get("idle")
+
     def add_entity(self, entity):
         self.entities.append(entity)
 
@@ -23,6 +68,7 @@ class EntityManager:
         self.entities.remove(entity)
 
     def add_player(self, entity):
+        # TODO - fold into create actor, use player arg default to false
         self.player = entity
         self.add_entity(entity)
 
@@ -42,7 +88,7 @@ class EntityManager:
         values = get_value_from_actor_json(actor_name)
 
         actor_name = values["name"]
-        sprite = pygame.image.load("assets/actor/" + values["sprite"] + ".png")
+        sprite = pygame.image.load("assets/actor/" + values["spritesheet"] + ".png")
         combatant_component = Combatant()
         youth_component = Youth(values["youth_component"])
         adulthood_component = Adulthood(values["adulthood_component"])
@@ -90,3 +136,84 @@ class EntityManager:
         dx = entity2.x - entity1.x
         dy = entity2.y - entity1.y
         return math.sqrt(dx ** 2 + dy ** 2)
+
+    def create_actor_sprite_dict(self, spritesheet_name):
+        """
+        Build a sprites dictionary for the actor. Spritesheet must be in assets/actor
+        Args:
+            spritesheet_name (str): name of actor's spritesheet
+
+        Returns:
+            Dict: Contains all sprites animations.
+        """
+
+        file_path = "assets/actor/"
+        spritesheet = pygame.image.load(file_path + spritesheet_name + ".png")
+
+        # define start and end points for image strips
+        still_image_info = (0, 0, 1)  # col, row, number of frames to get
+        idle_image_info = (0, 1, 5)
+        move_image_info = (0, 2, 5)
+        attack_image_info = (0, 2, 5)
+
+        sprite_dict = {}
+
+        sprite_dict["still"] = self.extract_images_from_spritesheet(spritesheet, still_image_info)
+        sprite_dict["idle"] = self.extract_images_from_spritesheet(spritesheet, idle_image_info)
+        sprite_dict["move"] = self.extract_images_from_spritesheet(spritesheet, move_image_info)
+        sprite_dict["attack"] = self.extract_images_from_spritesheet(spritesheet, attack_image_info)
+
+        return sprite_dict
+
+    def extract_images_from_spritesheet(self, spritesheet, images_info):
+        """
+        Extract a set of images from a spritesheet into a list.
+
+        Args:
+            spritesheet (pygame.image):
+            images_info(tuple):
+
+        Returns:
+            List: List of image strip frames
+        """
+        image_list = []
+
+        # get a surface to amend
+        image_surface = pygame.Surface([TILE_SIZE, TILE_SIZE], pygame.SRCALPHA)
+
+        starting_image_col = images_info[0]
+        starting_image_row = images_info[1]
+        number_of_sprites = images_info[2]
+
+        for sprite in range(number_of_sprites):
+            adjusted_image_col = (starting_image_col + sprite) * TILE_SIZE
+            adjusted_image_row = (starting_image_row + sprite) * TILE_SIZE
+            image_surface.blit(spritesheet, (adjusted_image_col, adjusted_image_row), (0, 0, TILE_SIZE, TILE_SIZE))
+
+            image_list.append(image_surface)
+
+        return image_list
+
+    def get_entity_current_frame(self, entity):
+        """
+        Get entity's current sprite frame
+
+        Args:
+            entity (Entity): The entity to get the frame from
+
+        Returns:
+            pygame.image: image of the current frame
+        """
+        sprite = entity.current_sprite
+        frame = entity.current_sprite_frame
+
+        return sprite[frame]
+
+    def set_delay_on_idle_animation(self, entity):
+        """
+        Set new delay timer for idle animation
+
+        Args:
+            entity (Entity): the entity to get new delay
+        """
+        entity.delay_until_idle_animation = random.uniform(3.0, 5.0)  # add delay of 3 to 5 seconds

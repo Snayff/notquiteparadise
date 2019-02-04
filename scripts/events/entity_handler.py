@@ -34,6 +34,8 @@ class EntityHandler(Subscriber):
                 else:
                     entity.actor.move(destination_x, destination_y)
                     world_manager.player_fov_is_dirty = True
+                    entity_manager.set_delay_on_idle_animation(entity)
+
                     log_string = f"{entity.name} ({entity}) moved to [{destination_x},{destination_y}]"
                     game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
 
@@ -60,6 +62,7 @@ class EntityHandler(Subscriber):
             log_string = f"{attacker.name} ({attacker}) tries to attack {target.name} [{target.x},{target.y}] "
             game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
 
+            entity_manager.set_delay_on_idle_animation(attacker)
             attacker.combatant.attack(target)
 
             game_manager.create_event(EndTurnEvent(10))  # TODO abstract magic number

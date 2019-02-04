@@ -22,7 +22,7 @@ def main():
 
 def game_loop():
     """
-    The core game loop handling input, rendering and logic.
+    The core game loop, handling input, rendering and logic.
     """
     while not game_manager.game_state == GameStates.EXIT_GAME:
 
@@ -41,6 +41,7 @@ def game_loop():
         game_manager.update()
         debug_manager.update()
         world_manager.update()
+        entity_manager.update(world_manager.game_map)
 
         # DRAW
         ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.active,

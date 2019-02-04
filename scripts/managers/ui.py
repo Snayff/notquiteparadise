@@ -2,7 +2,7 @@ import pygame
 
 from scripts.panels.message_log import MessageLog
 from scripts.core.colours import Palette, Colour
-from scripts.core.constants import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE, GAME_FPS
+from scripts.core.constants import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE
 from scripts.core.fonts import Font
 
 
@@ -61,7 +61,9 @@ class UIManager:
     def draw_entities(self, game_map, entities):
         for entity in entities:
             if game_map.is_tile_visible(entity.x, entity.y):
-                self.main_surface.blit(entity.sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
+                from scripts.core.global_data import entity_manager
+                sprite = entity_manager.get_entity_current_frame(entity)  # TODO - decouple link to entity_manager
+                self.main_surface.blit(sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
 
     def draw_debug_info(self, messages):
         """
@@ -110,7 +112,7 @@ class UIManager:
             adjusted_y = msg_y + (message_count * (font_size + self.message_log.gap_between_lines))
 
             # parse message for expressions
-            parsed_message = self.parse_message(messages[message_count + first_message_index][1])
+            parsed_message = self.message_log.parse_message(messages[message_count + first_message_index][1])
 
             # render all parsed messages
             for counter in range(len(parsed_message)):
@@ -192,90 +194,3 @@ class UIManager:
                 if extended_text_x != -1:
                     font.render_to(self.main_surface, (extended_text_x, extended_text_y), extended_tooltip_text,
                                    font_colour)
-
-    def parse_message(self, message):
-        """
-        Parse for colours, tags and formatting
-
-        Args:
-             message (str): The message string that needs parsing.
-
-        Returns:
-             List[Tuple[Colour, str]]: List of Tuples containing message and colour
-        """
-
-        # TODO move to messagelog
-
-        updated_message = message
-
-        # add spaces around special chars
-        for char in ['\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '>', '#', '+', '-', '.', '!', '$', '\'']:
-            if char in message:
-                updated_message = message.replace(char, " " + char)
-
-        # break message out by spaces
-        message_list = updated_message.split()
-
-        parsed_message_list = []
-        default_colour = self.palette.message_log.default_text
-        msg_in_progress = ""
-
-        # check each word for inclusion in lists and rebuild as new list
-        for message_count in range(len(message_list)):
-
-            msg = message_list[message_count]
-
-            # FOR TESTING # TODO - remove when tooltips working
-            if msg == "damage":
-                test = 0
-
-            # EXPRESSIONS
-            if msg in self.message_log.expressions:
-
-                # expression found so let's deal with any in progress message
-                if msg_in_progress != "":
-                    # apply currently built string and then increment line
-                    parsed_message_list.append((default_colour, msg_in_progress))
-                    msg_in_progress = ""
-
-                # create the expression as a new message
-                colour = self.message_log.expressions.get(msg)
-                parsed_message_list.append((colour, msg))
-
-            # ICONS
-            elif msg in self.message_log.icons:
-
-                # icon found so let's deal with any in progress message
-                if msg_in_progress != "":
-                    # apply currently built string and then increment line
-                    parsed_message_list.append((default_colour, msg_in_progress))
-                    msg_in_progress = ""
-
-                # create the icon as a new message
-                icon = self.message_log.icons.get(msg)
-                parsed_message_list.append((icon, "icon"))
-
-            # HYPERLINKS
-            elif msg in self.message_log.hyperlinks:
-
-                # hyperlink found so let's deal with any in progress message
-                if msg_in_progress != "":
-                    # apply currently built string and then increment line
-                    parsed_message_list.append((default_colour, msg_in_progress))
-                    msg_in_progress = ""
-
-                # amend the colour to indicate the message is a  hyperlink
-                parsed_message_list.append((self.palette.message_log.hyperlink, msg))
-
-            # NORMAL TEXT
-            else:
-                # No match so extend current message line
-                if msg_in_progress != "":
-                    msg_in_progress += " " + msg
-                else:
-                    msg_in_progress += msg
-
-        # add any remaining "in progress" messages
-        parsed_message_list.append((default_colour, msg_in_progress))
-
-        return parsed_message_list

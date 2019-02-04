@@ -7,6 +7,7 @@ WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 TILE_SIZE = 16
 GAME_FPS = 60
+ENTITY_SPRITE_FRAME_DURATION = 0.3 # seconds
 
 # sprites
 SPRITE_PLAYER = pygame.image.load("assets/actor/player.png")
@@ -33,7 +34,9 @@ class GameStates(Enum):
 
 
 class EventTopics(Enum):
-    """Topics that Events can be associated with."""
+    """
+    Topics that Events can be associated with.
+    """
     GAME = auto()
     MESSAGE = auto()
     LOGGING = auto()

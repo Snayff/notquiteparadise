@@ -1,15 +1,21 @@
 class Entity:
     """
     Game object that is extended by the inclusion of components. Every component has the entity as an `owner`.
+
+    Attributes:
+            current_sprite (list(pygame.image)): List of frames for the current sprite.
+            current_sprite_frame (int): Frame of sprite to display
+            animation_timer (float): Duration of current animation
+            delay_until_idle_animation (int): Seconds until the next idle animation is played
     """
 
-    def __init__(self, x, y, sprite, name, blocks_movement=True, blocks_sight=True, combatant=None, race=None,
+    def __init__(self, x, y, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None, race=None,
             youth=None, adulthood=None, ai=None, actor=None, sight_range=0):
         """
         Args:
             x (int) : X position, in tiles.
             y (int) : Y position, in tiles.
-            sprite (pygame.image) :
+            spritesheet (dict(list(pygame.image))) : dictionary of sprites
             name (str) : Name of the entity.
             blocks_movement (bool) : Does entity block movement?
             blocks_sight (bool) : Does entity block sight?
@@ -24,11 +30,15 @@ class Entity:
 
         self.x = x
         self.y = y
-        self.sprite = sprite
+        self.spritesheet = spritesheet
         self.name = name
         self.blocks_movement = blocks_movement
         self.blocks_sight = blocks_sight
-        self.sight_range = sight_range
+        self.sight_range = sight_range  # TODO - move to actor component (only actor def needs to see)
+        self.current_sprite = self.spritesheet.get("still")  # start using still
+        self.current_sprite_frame = 0
+        self.animation_timer = 0
+        self.delay_until_idle_animation = 2  # seconds
 
         # components
         self.race = race
