@@ -2,7 +2,7 @@ import pygame
 
 from scripts.panels.message_log import MessageLog
 from scripts.core.colours import Palette, Colour
-from scripts.core.constants import WINDOW_HEIGHT, WINDOW_WIDTH, TILE_SIZE
+from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, TILE_SIZE
 from scripts.core.fonts import Font
 
 
@@ -24,11 +24,27 @@ class UIManager:
         self.colour = Colour()
         self.palette = Palette()
         self.font = Font()
-        self.main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.desired_width = 1920  # TODO - allow for selection by player but only multiples of base (16:9)
+        self.desired_height = 1080
+        self.screen_scaling_mod_x = self.desired_width // BASE_WINDOW_WIDTH
+        self.screen_scaling_mod_y = self.desired_height // BASE_WINDOW_HEIGHT
+        self.screen = pygame.display.set_mode((self.desired_width, self.desired_height))
+        self.main_surface = pygame.Surface((BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT))
+
         self.message_log = MessageLog()
 
-
     def draw_game(self, game_map=None, entities=None, debug_active=False, debug_messages=None):
+        """
+        Draw the entire game.
+
+        Args:
+            game_map (GameMap): the current game map
+            entities (list[Entitiy]): list of entities
+            debug_active (bool): whether to show the debug messages
+            debug_messages (str): the debug message to show
+        """
+        # TODO - draw dirty only
+
         # clear last frames drawing
         self.main_surface.fill(self.colour.black)
 
@@ -45,6 +61,10 @@ class UIManager:
                 self.draw_message_log()
 
         self.draw_tooltips()
+
+        # resize the surface to the dersired resolution
+        scaled_surface = pygame.transform.scale(self.main_surface, (self.desired_width, self.desired_height))
+        self.screen.blit(scaled_surface, (0, 0))
 
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
@@ -64,6 +84,12 @@ class UIManager:
                 from scripts.core.global_data import entity_manager
                 sprite = entity_manager.get_entity_current_frame(entity)  # TODO - decouple link to entity_manager
                 self.main_surface.blit(sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
+
+                # TESTING - show frames
+                font = self.message_log.font
+                font.render_to(self.main_surface, (entity.x * TILE_SIZE, entity.y * TILE_SIZE),
+                                    str(entity.current_sprite_frame), self.colour.white)
+
 
     def draw_debug_info(self, messages):
         """
@@ -95,15 +121,16 @@ class UIManager:
         y = self.message_log.panel_y
         width = self.message_log.panel_width
         height = self.message_log.panel_height
-        pygame.draw.rect(self.main_surface, bg_colour, [x, width, y, height])
+        pygame.draw.rect(self.main_surface, bg_colour, [x, y, width, height])
 
-        # render the message_list
+        # init info for message render
         msg_x = x + self.message_log.border_size + self.message_log.message_indent
         msg_y = y + self.message_log.border_size
         font = self.message_log.font
         messages = self.message_log.message_list
         font_size = int(self.message_log.font.size)
 
+        # render the message_list
         for message_count in range(messages_to_show):
             # reset offset
             current_msg_x_offset = 0
@@ -129,7 +156,7 @@ class UIManager:
                     # update x offset based on width of image
                     image_size = icon.get_width()
 
-                    current_msg_x_offset += image_size + 1
+                    current_msg_x_offset += image_size + (font_size / 3)
 
                 # its not an icon so must be text.
                 else:
@@ -164,8 +191,7 @@ class UIManager:
 
                     # update x offset based on length of string just rendered
                     msg_length = len(msg_to_render)
-
-                    current_msg_x_offset += (msg_length + 1) * (font_size / 2)  # Not sure about the formula, but it
+                    current_msg_x_offset += (msg_length + 2) * (font_size / 2)  # Not sure about the formula, but it
                                                                                 # works.
 
         # no longer dirty # TODO - uncomment when able to setup message log is dirty

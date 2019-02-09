@@ -3,11 +3,11 @@ from enum import Enum, auto
 import pygame.freetype
 
 # game info
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
+BASE_WINDOW_WIDTH = 640
+BASE_WINDOW_HEIGHT = 360
 TILE_SIZE = 16
 GAME_FPS = 60
-ENTITY_SPRITE_FRAME_DURATION = 0.3 # seconds
+ENTITY_SPRITE_FRAME_DURATION = 0.3  # seconds
 
 # sprites
 SPRITE_PLAYER = pygame.image.load("assets/actor/player.png")

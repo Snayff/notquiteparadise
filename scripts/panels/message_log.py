@@ -1,7 +1,7 @@
 import pygame
 
 from scripts.core.colours import Palette, Colour
-from scripts.core.constants import MessageEventTypes, LoggingEventTypes, GAME_FPS
+from scripts.core.constants import MessageEventTypes, LoggingEventTypes, GAME_FPS, BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
 
@@ -32,6 +32,7 @@ class MessageLog:
         self.icons = self.create_icons_list()
         self.hyperlinks = self.create_hyperlinks_list()
         self.show = True
+        self.font = Font().message_log
 
         # hyperlink info
         self.is_dirty = True
@@ -42,18 +43,16 @@ class MessageLog:
         self.seconds_before_tooltip = 0.2
         self.seconds_before_extended_text = 1
 
-
         # panel info
-        self.font = Font().message_log
+        self.panel_width = int(BASE_WINDOW_WIDTH / 3)
+        self.panel_height = int(BASE_WINDOW_HEIGHT / 3)
         self.panel_x = 0
-        self.panel_y = 400
-        self.panel_width = 400  # TODO remove magic numbers
-        self.panel_height = 200
-        self.border_size = 3
-        self.message_indent = 10
+        self.panel_y = BASE_WINDOW_HEIGHT - self.panel_height  # TODO remove magic numbers
+        self.border_size = 1
+        self.message_indent = 5
 
         # log info
-        self.gap_between_lines = 8
+        self.gap_between_lines = int(self.font.size / 2)
         self.first_message_to_show = 0
         self.number_of_messages_to_show = int((self.panel_height - 2 * self.border_size) / (self.font.size +
                                                                                 self.gap_between_lines))
@@ -133,18 +132,21 @@ class MessageLog:
 
         for link in range(len(self.displayed_hyperlinks)):
             # get the link rect
+            from scripts.core.global_data import ui_manager
             mouse_pos = pygame.mouse.get_pos()
+            scaled_mouse_pos = (mouse_pos[0] / ui_manager.screen_scaling_mod_x, mouse_pos[1] /
+                                                                                 ui_manager.screen_scaling_mod_y)
             link_rect = self.displayed_hyperlinks[link][0]
             link_text = self.displayed_hyperlinks[link][1]
             link_mouse_over_timer = self.displayed_hyperlinks[link][2]
 
             # check mouse is over the lnk
-            if link_rect.collidepoint(mouse_pos):
+            if link_rect.collidepoint(scaled_mouse_pos):
                 # replace tuple with new one that has updated timer value
                 self.displayed_hyperlinks[link] = (link_rect, link_text, link_mouse_over_timer + 1)
                 self.index_of_active_hyperlink = link
                 # TESTING TIMING OVER HOVER OVER  # FIXME - timing isnt working, ~30 frames is 1 sec
-                #print(f"{link_mouse_over_timer + 1}")
+                print(f"{link_mouse_over_timer + 1}")
                 #from datetime import datetime
                 #print(datetime.now().time())
             else:

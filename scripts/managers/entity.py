@@ -40,26 +40,41 @@ class EntityManager:
                 time_increment = 1 / GAME_FPS
                 entity.delay_until_idle_animation -= time_increment
 
-                # FIXME - idle animation is flickering, why? is it even playing the right frame?
-
                 #  if we aren't in the still sprite
-                if entity.current_sprite != entity.spritesheet.get("still"):
+                if entity.current_sprite_name != "still":
 
                     entity.animation_timer += time_increment
 
                     # is it time to move to a new frame?
                     if entity.animation_timer > ENTITY_SPRITE_FRAME_DURATION:
 
+                        # reset the timer
+                        entity.animation_timer = 0
+
                         # are we finished with the animation?
                         if entity.current_sprite_frame >= len(entity.current_sprite) - 1:
-                            entity.current_sprite_frame = 0
-                            entity.current_sprite = entity.spritesheet.get("still")
+
+                            self.set_entity_current_sprite(entity, "still")
                         else:
                             entity.current_sprite_frame += 1
 
                 # we are in still, so are we ready for idle?
                 elif entity.delay_until_idle_animation <= 0:
-                    entity.current_sprite = entity.spritesheet.get("idle")
+                    self.set_entity_current_sprite(entity, "idle")
+
+    def set_entity_current_sprite(self, entity, sprite_name):
+        """
+        Set the current sprite to the named one
+        Args:
+            entity (Entity): the entity to update the sprite on
+            sprite_name (str): the name of the sprite
+        """
+        if entity.current_sprite_name != sprite_name:
+            entity.current_sprite_frame = 0
+            entity.current_sprite = entity.spritesheet.get(sprite_name)
+            entity.current_sprite_name = sprite_name
+            self.set_delay_on_idle_animation(entity)
+
 
     def add_entity(self, entity):
         self.entities.append(entity)
@@ -158,6 +173,7 @@ class EntityManager:
 
         sprite_dict = {}
 
+        # TODO - change strings into enums
         sprite_dict["still"] = self.extract_images_from_spritesheet(spritesheet, still_image_info)
         sprite_dict["idle"] = self.extract_images_from_spritesheet(spritesheet, idle_image_info)
         sprite_dict["move"] = self.extract_images_from_spritesheet(spritesheet, move_image_info)
@@ -178,19 +194,15 @@ class EntityManager:
         """
         image_list = []
 
-        # get a surface to amend
-        image_surface = pygame.Surface([TILE_SIZE, TILE_SIZE], pygame.SRCALPHA)
-
         starting_image_col = images_info[0]
         starting_image_row = images_info[1]
         number_of_sprites = images_info[2]
 
         for sprite in range(number_of_sprites):
             adjusted_image_col = (starting_image_col + sprite) * TILE_SIZE
-            adjusted_image_row = (starting_image_row + sprite) * TILE_SIZE
-            image_surface.blit(spritesheet, (adjusted_image_col, adjusted_image_row), (0, 0, TILE_SIZE, TILE_SIZE))
-
-            image_list.append(image_surface)
+            adjusted_image_row = starting_image_row * TILE_SIZE
+            frame = spritesheet.subsurface(pygame.Rect(adjusted_image_col, adjusted_image_row, TILE_SIZE, TILE_SIZE))
+            image_list.append(frame)
 
         return image_list
 

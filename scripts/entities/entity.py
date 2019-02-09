@@ -37,6 +37,7 @@ class Entity:
         self.sight_range = sight_range  # TODO - move to actor component (only actor def needs to see)
         self.current_sprite = self.spritesheet.get("still")  # start using still
         self.current_sprite_frame = 0
+        self.current_sprite_name = "still"
         self.animation_timer = 0
         self.delay_until_idle_animation = 2  # seconds
 
