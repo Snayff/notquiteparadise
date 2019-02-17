@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.panels.message_log import MessageLog
+from scripts.ui_element.message_log import MessageLog
 from scripts.core.colours import Palette, Colour
 from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, TILE_SIZE
 from scripts.core.fonts import Font
@@ -50,16 +50,25 @@ class UIManager:
 
         # draw new frame
         if game_map:
+            panel = game_map.panel
+            panel.surface.fill(self.colour.black)
+            panel.draw_rect()
             self.draw_map(game_map)
             self.draw_entities(game_map, entities)
+            panel.draw_panel_border()
+            self.main_surface.blit(panel.surface, (panel.x, panel.y))
 
         if debug_active:
             self.draw_debug_info(debug_messages)
 
         if self.message_log.show:
-            if self.message_log.is_dirty:
-                self.draw_message_log()
+            panel = self.message_log.panel
+            panel.draw_rect()
+            self.draw_message_log()
+            panel.draw_panel_border()
+            self.main_surface.blit(panel.surface, (panel.x, panel.y))
 
+        # tooltips are always conditional
         self.draw_tooltips()
 
         # resize the surface to the dersired resolution
@@ -69,27 +78,38 @@ class UIManager:
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
-    def draw_map(self, game_map):
-
+    @staticmethod
+    def draw_map(game_map):
+        """
+        Draw the specified game_map
+        Args:
+            game_map (GameMap): The game_map to draw
+        """
         for x in range(0, game_map.width):
             for y in range(0, game_map.height):
 
                 if game_map.is_tile_visible(x, y):
                     tile_position = (x * TILE_SIZE, y * TILE_SIZE)
-                    self.main_surface.blit(game_map.tiles[x][y].sprite, tile_position)
+                    game_map.panel.surface.blit(game_map.tiles[x][y].sprite, tile_position)
 
-    def draw_entities(self, game_map, entities):
+    @staticmethod
+    def draw_entities(game_map, entities):
+        """
+        Draw all existing entities on the specified map
+        Args:
+            game_map (GameMap): The game_map to draw
+            entities (list[Entity]): List of all existing entities
+        """
         for entity in entities:
             if game_map.is_tile_visible(entity.x, entity.y):
                 from scripts.core.global_data import entity_manager
                 sprite = entity_manager.get_entity_current_frame(entity)  # TODO - decouple link to entity_manager
-                self.main_surface.blit(sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
+                game_map.panel.surface.blit(sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
 
                 # TESTING - show frames
-                font = self.message_log.font
-                font.render_to(self.main_surface, (entity.x * TILE_SIZE, entity.y * TILE_SIZE),
-                                    str(entity.current_sprite_frame), self.colour.white)
-
+                # font = self.message_log.font
+                # font.render_to(self.main_surface, (entity.x * TILE_SIZE, entity.y * TILE_SIZE),
+                #                     str(entity.current_sprite_frame), self.colour.white)
 
     def draw_debug_info(self, messages):
         """
@@ -111,21 +131,16 @@ class UIManager:
         """
         Draw the MessageLog, and all message_list that can be shown
         """
+        # get the surface to draw to
+        panel_surface = self.message_log.panel.surface
+
         # show only as many message_list as we can or have
         messages_to_show = min(len(self.message_log.message_list), self.message_log.number_of_messages_to_show)
         first_message_index = self.message_log.first_message_to_show
 
-        # render the panel
-        bg_colour = self.palette.message_log.background
-        x = self.message_log.panel_x
-        y = self.message_log.panel_y
-        width = self.message_log.panel_width
-        height = self.message_log.panel_height
-        pygame.draw.rect(self.main_surface, bg_colour, [x, y, width, height])
-
         # init info for message render
-        msg_x = x + self.message_log.border_size + self.message_log.message_indent
-        msg_y = y + self.message_log.border_size
+        msg_x = self.message_log.edge_size + self.message_log.message_indent
+        msg_y = self.message_log.edge_size
         font = self.message_log.font
         messages = self.message_log.message_list
         font_size = int(self.message_log.font.size)
@@ -151,7 +166,7 @@ class UIManager:
                 # check if it exists in the icon list
                 if msg_to_render == "icon":
                     icon = parsed_message[counter][0]
-                    self.main_surface.blit(icon, (adjusted_x, adjusted_y))
+                    panel_surface.blit(icon, (adjusted_x, adjusted_y))
 
                     # update x offset based on width of image
                     image_size = icon.get_width()
@@ -174,7 +189,7 @@ class UIManager:
                         if not link_already_logged:
 
                             # get the hyperlink rect
-                            hyperlink_rect = font.render_to(self.main_surface,  (adjusted_x, adjusted_y),
+                            hyperlink_rect = font.render_to(panel_surface,  (adjusted_x, adjusted_y),
                                                             msg_to_render, msg_colour)
 
                             # update the rect to reflect current position
@@ -187,7 +202,7 @@ class UIManager:
                     else:
                         msg_colour = parsed_message[counter][0]
 
-                    font.render_to(self.main_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
+                    font.render_to(panel_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
 
                     # update x offset based on length of string just rendered
                     msg_length = len(msg_to_render)

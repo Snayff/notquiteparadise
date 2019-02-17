@@ -103,7 +103,7 @@ class EntityManager:
         values = get_value_from_actor_json(actor_name)
 
         actor_name = values["name"]
-        sprite = pygame.image.load("assets/actor/" + values["spritesheet"] + ".png")
+        sprite = pygame.image.load("assets/actor/" + values["spritesheet"] + ".png").convert()
         combatant_component = Combatant()
         youth_component = Youth(values["youth_component"])
         adulthood_component = Adulthood(values["adulthood_component"])
@@ -163,7 +163,7 @@ class EntityManager:
         """
 
         file_path = "assets/actor/"
-        spritesheet = pygame.image.load(file_path + spritesheet_name + ".png")
+        spritesheet = pygame.image.load(file_path + spritesheet_name + ".png").convert_alpha()
 
         # define start and end points for image strips
         still_image_info = (0, 0, 1)  # col, row, number of frames to get

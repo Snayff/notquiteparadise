@@ -1,5 +1,8 @@
 import tcod
 
+from scripts.core.colours import Palette
+from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT
+from scripts.ui_element.panel import Panel
 from scripts.world.tiles import Floor, Wall
 
 
@@ -20,6 +23,18 @@ class GameMap:
         if self.width > 10 and self.height > 10:
             self.tiles[0][5] = Wall()  # TODO remove - only for test
             self.tiles[10][2] = Wall()
+
+        # setup the panel
+        panel_x = 0
+        panel_y = 0
+        panel_width = BASE_WINDOW_WIDTH
+        panel_height = int(BASE_WINDOW_HEIGHT / 3) * 2
+        panel_border = 2
+        palette = Palette()
+        panel_colour = palette.map.background
+        border_colour = palette.map.border
+        self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_colour, panel_border, border_colour)
+
 
     def is_tile_blocking_movement(self, x, y):
         if 0 <= x < self.width and 0 <= y < self.height:

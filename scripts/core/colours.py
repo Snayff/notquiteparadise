@@ -16,6 +16,7 @@ class Palette:
         # debug
         self.debug_font_colour = colour.primary.lightest
         self.message_log = self.MessageLogPalette()
+        self.map = self.MapPalette()
 
     class MessageLogPalette:
         """
@@ -30,13 +31,27 @@ class Palette:
             tooltip_text(Colour): Colour of the tooltip text.
         """
         def __init__(self):
-            self.colour = Colour()
-            self.background = self.colour.tertiary.darker
-            self.expressions_player = self.colour.complement.lighter
-            self.default_text = self.colour.white
-            self.hyperlink = self.colour.black
-            self.tooltip_text = self.colour.white
-            self.tooltip_background = self.colour.black
+            colour = Colour()
+            self.background = colour.tertiary.darker
+            self.border = colour.complement.darker
+            self.expressions_player = colour.complement.lighter
+            self.default_text = colour.white
+            self.hyperlink = colour.black
+            self.tooltip_text = colour.white
+            self.tooltip_background = colour.black
+
+    class MapPalette:
+        """
+        The palette for the map
+
+        Attributes:
+            border_colour (Colour): Colour of the Message Log background.
+        """
+        def __init__(self):
+            colour = Colour()
+            self.background = colour.black
+            self.border = colour.complement.darker
+
 
 class Colour:
     """

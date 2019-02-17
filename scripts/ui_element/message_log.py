@@ -4,6 +4,7 @@ from scripts.core.colours import Palette, Colour
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, GAME_FPS, BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
+from scripts.ui_element.panel import Panel
 
 
 class MessageLog:
@@ -44,18 +45,23 @@ class MessageLog:
         self.seconds_before_extended_text = 1
 
         # panel info
-        self.panel_width = int(BASE_WINDOW_WIDTH / 3)
-        self.panel_height = int(BASE_WINDOW_HEIGHT / 3)
-        self.panel_x = 0
-        self.panel_y = BASE_WINDOW_HEIGHT - self.panel_height  # TODO remove magic numbers
-        self.border_size = 1
-        self.message_indent = 5
+        panel_width = int(BASE_WINDOW_WIDTH / 3)
+        panel_height = int(BASE_WINDOW_HEIGHT / 3)
+        panel_x = BASE_WINDOW_WIDTH - panel_width
+        panel_y = BASE_WINDOW_HEIGHT - panel_height
+        panel_border = 2
+        panel_background_colour = self.palette.message_log.background
+        panel_border_colour = self.palette.message_log.border
+        self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
+                           panel_border_colour)
 
         # log info
+        self.edge_size = 1
+        self.message_indent = 5
         self.gap_between_lines = int(self.font.size / 2)
         self.first_message_to_show = 0
-        self.number_of_messages_to_show = int((self.panel_height - 2 * self.border_size) / (self.font.size +
-                                                                                self.gap_between_lines))
+        self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
+                                                                                          self.gap_between_lines))
 
     def add_message(self, message_type, message):
         """
@@ -108,8 +114,8 @@ class MessageLog:
         """
         icons = {}
 
-        icons["player"] = pygame.image.load("assets/actor/player.png")
-        icons["orc"] = pygame.image.load("assets/actor/enemy.png")
+        icons["player"] = pygame.image.load("assets/actor/player.png").convert_alpha()
+        icons["orc"] = pygame.image.load("assets/actor/enemy.png").convert_alpha()
 
         return icons
 
@@ -122,7 +128,7 @@ class MessageLog:
         """
         hyperlinks = {}
 
-        hyperlinks["deals"] = ("This is linked text", "This is the extended linked text")
+        hyperlinks["to"] = ("This is linked text", "This is the extended linked text")
         hyperlinks["damage"] = ("2nd linked text", "2nd extended")
 
         return hyperlinks
@@ -132,11 +138,12 @@ class MessageLog:
 
         for link in range(len(self.displayed_hyperlinks)):
             # get the link rect
-            from scripts.core.global_data import ui_manager
             mouse_pos = pygame.mouse.get_pos()
+            from scripts.core.global_data import ui_manager
             scaled_mouse_pos = (mouse_pos[0] / ui_manager.screen_scaling_mod_x, mouse_pos[1] /
                                                                                  ui_manager.screen_scaling_mod_y)
-            link_rect = self.displayed_hyperlinks[link][0]
+            link_rect = self.displayed_hyperlinks[link][0]  # FIXME - rect recorded is relative not absolute and
+                                                            #  doesn't collide
             link_text = self.displayed_hyperlinks[link][1]
             link_mouse_over_timer = self.displayed_hyperlinks[link][2]
 
@@ -145,7 +152,7 @@ class MessageLog:
                 # replace tuple with new one that has updated timer value
                 self.displayed_hyperlinks[link] = (link_rect, link_text, link_mouse_over_timer + 1)
                 self.index_of_active_hyperlink = link
-                # TESTING TIMING OVER HOVER OVER  # FIXME - timing isnt working, ~30 frames is 1 sec
+                # TESTING TIMING OVER HOVER OVER  # FIXME - timing isnt working, ~30 frames is 1 sec. Use Delta time?
                 print(f"{link_mouse_over_timer + 1}")
                 #from datetime import datetime
                 #print(datetime.now().time())
