@@ -5,7 +5,7 @@ from scripts.world.game_map import GameMap
 
 class WorldManager:
     def __init__(self):
-        self.game_map = GameMap(0, 0)
+        self.game_map = None
         self.player_fov_map = None
         self.player_fov_is_dirty = False
         self.light_walls = True
@@ -19,7 +19,7 @@ class WorldManager:
 
     def create_new_map(self, map_width, map_height):
         """
-        :return GameMap
+        Create new GameMap and create player fov
         """
         self.game_map = GameMap(map_width, map_height)
         self.create_player_fov_map()

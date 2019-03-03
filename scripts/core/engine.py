@@ -44,8 +44,7 @@ def game_loop():
         entity_manager.update(world_manager.game_map)
 
         # DRAW
-        ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.active,
-                             debug_manager.messages)
+        ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.active)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

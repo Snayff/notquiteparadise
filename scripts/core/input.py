@@ -1,7 +1,8 @@
 import pygame
+from pygame.rect import Rect
 
 from scripts.core.constants import GameStates
-from scripts.core.global_data import entity_manager, game_manager
+from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager
 from scripts.events.entity_events import MoveEvent
 from scripts.events.game_events import ExitEvent
 
@@ -51,10 +52,10 @@ def get_input():
             # update MOUSE input values based on input
             if pygame.mouse.get_pressed()[0]:
                 input_values["left_click"] = True
-                input_values["mouse_xy"] = pygame.mouse.get_pos()
+                input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
             elif pygame.mouse.get_pressed()[1]:
                 input_values["right_click"] = True
-                input_values["mouse_xy"] = pygame.mouse.get_pos()
+                input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
 
             # update OTHER input values based on input
             if input.key == pygame.K_UP or input.key == pygame.K_KP8 or input.key == pygame.K_k:
@@ -110,6 +111,14 @@ def handle_input(values):
     player = entity_manager.player
 
     if game_state == GameStates.PLAYER_TURN:
+
+        if values["right_click"]:
+            clicked_rect = Rect().collidedict(ui_manager.visible_panels)
+
+            if clicked_rect == "game_map":
+                ui_manager.selected_tile = ""
+
+
         dx = 0
         dy = 0
 
