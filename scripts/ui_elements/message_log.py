@@ -267,8 +267,7 @@ class MessageLog:
             pos = ui_manager.get_relative_scaled_mouse_pos("message_log")
 
             # get the link rect
-            link_rect = self.displayed_hyperlinks[link][0]  # FIXME - rect recorded is relative not absolute and
-                                                            #  doesn't collide
+            link_rect = self.displayed_hyperlinks[link][0]
             link_text = self.displayed_hyperlinks[link][1]
             link_mouse_over_timer = self.displayed_hyperlinks[link][2]
 
@@ -278,7 +277,7 @@ class MessageLog:
                 self.displayed_hyperlinks[link] = (link_rect, link_text, link_mouse_over_timer + 1)
                 self.index_of_active_hyperlink = link
                 # TESTING TIMING OVER HOVER OVER  # FIXME - timing isnt working, ~30 frames is 1 sec. Use Delta time?
-                print(f"{link_mouse_over_timer + 1}")
+                # print(f"{link_mouse_over_timer + 1}")
                 # from datetime import datetime
                 # print(datetime.now().time())
             else:
@@ -310,42 +309,41 @@ class MessageLog:
 
             # is it long enough?
             if seconds_hovering > self.seconds_before_tooltip:
-                # print(f"SHOW TOOLTIP")
-
                 # get linked text
                 active_link = self.displayed_hyperlinks[self.index_of_active_hyperlink]
                 hyperlink_strings = self.hyperlinks.get(active_link[1])
                 tooltip_text = hyperlink_strings[0]
 
                 # get location to show message
-                text_x = active_link[0].x + 20
-                text_y = active_link[0].y - font_size
+                text_x = active_link[0].x + 10
+                text_y = active_link[0].y
 
                 # create the text on a surface to get dimensions
                 text_rect = self.font.render(tooltip_text, self.colour.white)[1]
 
                 # move tooltip_rect to the place in the message_log
-                text_rect.x = text_x
-                text_rect.y = text_y
+                text_rect.x = text_x + self.panel.x
+                text_rect.y = text_y + self.panel.y - (text_rect.height * 1.5)
 
                 # is it time for the extended text?
                 if seconds_hovering > self.seconds_before_extended_text:
-                    # print(f"SHOW EXTENDED TOOLTIP")
                     extended_tooltip_text = hyperlink_strings[1]
 
                     # create the text on a surface to get dimensions
                     extended_text_rect = self.font.render(extended_tooltip_text, self.colour.white)[1]
 
                     # move tooltip_rect to the place in the message_log, adjusting to be below first tooltip
-                    extended_text_x = text_x
-                    extended_text_y = text_y + font_size
-                    extended_text_rect.x = extended_text_x
-                    extended_text_rect.y = extended_text_y
+                    extended_text_x = text_x + self.panel.x
+                    extended_text_y = text_y + (font_size / 2) + self.panel.y
 
-                    # align the tooltip rects
+                    # resize the original rect to encompass both tooltips
                     width_of_widest_rect = max(text_rect.width, extended_text_rect.width)
                     text_rect.width = width_of_widest_rect
                     text_rect.height = text_rect.height + extended_text_rect.height
+
+                    # adjust the rects for new height
+                    text_rect.y -= extended_text_rect.height
+                    extended_text_y -= (extended_text_rect.height + font_size)
 
                 # resize the rect in place
                 text_rect.inflate_ip(5, 10)

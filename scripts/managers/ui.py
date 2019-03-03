@@ -113,3 +113,4 @@ class UIManager:
         scaled_mouse_pos = mouse_pos[0] // self.screen_scaling_mod_x, mouse_pos[1] // self.screen_scaling_mod_y
         relative_mouse_pos = scaled_mouse_pos[0] - panel_rect.x, scaled_mouse_pos[1] - panel_rect.y
         return relative_mouse_pos
+

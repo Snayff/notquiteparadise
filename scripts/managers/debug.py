@@ -8,7 +8,7 @@ class DebugManager:
         self.active = True
         self.messages = []
 
-        self.show_game_time = True
+        self.show_game_time = False
         self.show_fps = True
         self.show_mouse_pos = True
 
@@ -52,13 +52,13 @@ class DebugManager:
                 from scripts.core.global_data import game_manager
                 clock = game_manager.internal_clock
                 fps = str(int(clock.get_fps()))
-                msg = f"The FPS is: {fps}"
+                msg = f"FPS : {fps}"
                 self.messages.append(msg)
 
             if self.show_mouse_pos:
                 from scripts.core.global_data import ui_manager
                 pos = ui_manager.get_scaled_mouse_pos()
-                msg = f"Abs mouse pos {pos}"
+                msg = f"Abs mouse pos : {pos}"
                 self.messages.append(msg)
 
                 offset_x = 0
@@ -72,10 +72,5 @@ class DebugManager:
                         current_rect = key
                 relative_pos = pos[0] - offset_x, pos[1] - offset_y
                 if current_rect:
-                    msg2 = f"Rel mouse pos {relative_pos} in {current_rect}"
+                    msg2 = f"Rel mouse pos in {current_rect} : {relative_pos} "
                     self.messages.append(msg2)
-
-            from scripts.core.global_data import ui_manager
-            if ui_manager.message_log.displayed_hyperlinks:
-                msg = f"Link pos: {ui_manager.message_log.displayed_hyperlinks[0][0]} "
-                self.messages.append(msg)
