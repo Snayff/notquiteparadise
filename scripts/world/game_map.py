@@ -76,21 +76,6 @@ class GameMap:
         self.panel.draw_panel_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
-    def get_names_under_mouse(self, entities, fov_map):
-        """
-
-        Args:
-            entities:
-            fov_map:
-        """
-        (x, y) = (mouse.cx, mouse.cy)
-
-        names = [entity.name for entity in entities
-            if entity.x == x and entity.y == y and tcod.map_is_in_fov(fov_map, entity.x, entity.y)]
-        names = ', '.join(names)
-
-        return names.capitalize()
-
     def is_tile_blocking_movement(self, x, y):
         if 0 <= x < self.width and 0 <= y < self.height:
             return self.tiles[x][y].blocks_movement

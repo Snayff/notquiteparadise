@@ -75,7 +75,6 @@ class EntityManager:
             entity.current_sprite_name = sprite_name
             self.set_delay_on_idle_animation(entity)
 
-
     def add_entity(self, entity):
         self.entities.append(entity)
 
@@ -96,6 +95,25 @@ class EntityManager:
         for entity in self.entities:
             if entity.blocks_movement and entity.x == destination_x and entity.y == destination_y:
                 return entity
+
+        return None
+
+    def get_entity_at_tile(self, target_tile):
+        """
+        Get the entity at a target tile
+
+        Args:
+            target_tile(tuple): x y of tile
+
+        Returns:
+            entity: Entity or None if no entity found
+        """
+
+        for entity in self.entities:
+            if entity.x == target_tile[0] and entity.y == target_tile[1]:
+                from scripts.core.global_data import world_manager
+                if world_manager.is_tile_in_fov(target_tile):
+                    return entity
 
         return None
 

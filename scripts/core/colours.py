@@ -17,6 +17,7 @@ class Palette:
         self.debug_font_colour = colour.primary.lightest
         self.message_log = self.MessageLogPalette()
         self.map = self.MapPalette()
+        self.entity_info = self.EntityInfoPalette()
 
     class MessageLogPalette:
         """
@@ -47,6 +48,13 @@ class Palette:
         Attributes:
             border_colour (Colour): Colour of the Message Log background.
         """
+        def __init__(self):
+            colour = Colour()
+            self.background = colour.black
+            self.border = colour.complement.darker
+
+    class EntityInfoPalette:
+        """The Palette for the entity info panel"""
         def __init__(self):
             colour = Colour()
             self.background = colour.black

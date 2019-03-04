@@ -1,6 +1,7 @@
 import pygame
 from pygame.rect import Rect
 
+from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.message_log import MessageLog
 from scripts.core.colours import Palette, Colour
 from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, TILE_SIZE
@@ -35,12 +36,19 @@ class UIManager:
         self.visible_panels = {}  # dict of all panels that are currently being rendered
 
         self.message_log = None
+        self.entity_info = None
 
     def init_message_log(self):
         """
         Initialise the message log
         """
         self.message_log = MessageLog()
+
+    def init_entity_info(self):
+        """
+        Initialise the selected entity info
+        """
+        self.entity_info = SelectedEntityInfo()
 
     def draw_game(self, game_map=None, entities=None, debug_active=False):
         """
@@ -57,7 +65,7 @@ class UIManager:
         self.main_surface.fill(self.colour.black)
 
         # draw new frame
-        if self.visible_panels["game_map"]:
+        if "game_map" in self.visible_panels:
             game_map.draw(entities, self.main_surface)
 
         # debug doesnt use a panel so we check for the flag
@@ -65,9 +73,12 @@ class UIManager:
             from scripts.core.global_data import debug_manager
             debug_manager.draw(self.main_surface)
 
-        if self.visible_panels["message_log"]:
+        if "message_log" in self.visible_panels:
             self.message_log.draw(self.main_surface)
             self.message_log.draw_tooltips(self.main_surface)
+
+        if "entity_info" in self.visible_panels:
+            self.entity_info.draw(self.main_surface)
 
         # resize the surface to the desired resolution
         scaled_surface = pygame.transform.scale(self.main_surface, (self.desired_width, self.desired_height))

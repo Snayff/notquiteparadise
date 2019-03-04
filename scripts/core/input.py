@@ -1,7 +1,7 @@
 import pygame
 from pygame.rect import Rect
 
-from scripts.core.constants import GameStates
+from scripts.core.constants import GameStates, TILE_SIZE
 from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager
 from scripts.events.entity_events import MoveEvent
 from scripts.events.game_events import ExitEvent
@@ -115,8 +115,13 @@ def handle_input(values):
         if values["right_click"]:
             clicked_rect = Rect().collidedict(ui_manager.visible_panels)
 
+            # right clicked on the map so give the selected tile to the ui manager to display info
             if clicked_rect == "game_map":
-                ui_manager.selected_tile = ""
+                tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
+                tile_pos[0] /= TILE_SIZE
+                tile_pos[1] /= TILE_SIZE
+                entity = entity_manager.get_entity_at_tile(tile_pos)
+                ui_manager.entity_info.set_selected_entity(entity)
 
 
         dx = 0
