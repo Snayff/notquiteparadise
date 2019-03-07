@@ -22,6 +22,7 @@ def get_input():
     input_values = {
         "left_click": False,
         "right_click": False,
+        "middle_click": False,
         "mouse_xy": (0, 0),
         "up": False,
         "down": False,
@@ -46,16 +47,22 @@ def get_input():
     # check all input events
     for input in input_events:
 
-        # is a key pressed?
-        if input.type == pygame.KEYDOWN:
-
-            # update MOUSE input values based on input
+        # update MOUSE input values based on input
+        if input.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
                 input_values["left_click"] = True
-                input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
+                print(f"Got left click")
             elif pygame.mouse.get_pressed()[1]:
+                input_values["middle_click"] = True
+                print(f"Got middle click")
+            elif pygame.mouse.get_pressed()[2]:
                 input_values["right_click"] = True
-                input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
+                print(f"Got right click")
+
+            input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
+
+        # is a key pressed?
+        if input.type == pygame.KEYDOWN:
 
             # update OTHER input values based on input
             if input.key == pygame.K_UP or input.key == pygame.K_KP8 or input.key == pygame.K_k:
@@ -113,15 +120,21 @@ def handle_input(values):
     if game_state == GameStates.PLAYER_TURN:
 
         if values["right_click"]:
-            clicked_rect = Rect().collidedict(ui_manager.visible_panels)
+            #clicked_rect = Rect().collidedict(ui_manager.visible_panels)
+            pos = values["mouse_xy"]
+            for key, rect in ui_manager.visible_panels.items():
+                if rect.collidepoint(pos):
+                    clicked_rect = key
 
             # right clicked on the map so give the selected tile to the ui manager to display info
             if clicked_rect == "game_map":
                 tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
-                tile_pos[0] /= TILE_SIZE
-                tile_pos[1] /= TILE_SIZE
-                entity = entity_manager.get_entity_at_tile(tile_pos)
-                ui_manager.entity_info.set_selected_entity(entity)
+                tile_x = tile_pos[0] // TILE_SIZE
+                tile_y = tile_pos[1] // TILE_SIZE
+                entity = entity_manager.get_entity_in_fov_at_tile((tile_x, tile_y))
+
+                if entity:
+                    ui_manager.entity_info.set_selected_entity(entity)
 
 
         dx = 0

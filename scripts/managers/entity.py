@@ -98,7 +98,7 @@ class EntityManager:
 
         return None
 
-    def get_entity_at_tile(self, target_tile):
+    def get_entity_in_fov_at_tile(self, target_tile):
         """
         Get the entity at a target tile
 

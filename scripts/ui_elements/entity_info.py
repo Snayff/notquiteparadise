@@ -12,19 +12,15 @@ class SelectedEntityInfo:
         self.visible = False
 
         # setup the panel
-        panel_x = 0
-        panel_y = 0
-        panel_width = BASE_WINDOW_WIDTH
+        panel_width = BASE_WINDOW_WIDTH / 5
         panel_height = int(BASE_WINDOW_HEIGHT / 3) * 2
+        panel_x = BASE_WINDOW_WIDTH - panel_width
+        panel_y = 0
         panel_border = 2
         panel_background_colour = Palette().entity_info.background
         panel_border_colour = Palette().entity_info.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
-
-        # set panel to be rendered
-        from scripts.core.global_data import ui_manager
-        ui_manager.update_panel_visibility("entity_info", self.panel, True)
 
     def set_selected_entity(self, entity):
         """
@@ -60,6 +56,9 @@ class SelectedEntityInfo:
         # panel background
         self.panel.surface.fill(Colour().black)
         self.panel.draw_rect()
+
+        # entity info
+
 
         # panel border
         self.panel.draw_panel_border()

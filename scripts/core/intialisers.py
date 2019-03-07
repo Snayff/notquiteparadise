@@ -23,6 +23,7 @@ def initialise_game():
 
     world_manager.create_new_map(50, 30)  # TODO remove magic numbers
     ui_manager.init_message_log()
+    ui_manager.init_entity_info()
 
     player_sprite = entity_manager.create_actor_sprite_dict("actor_template")
     player = Entity(0, 0, player_sprite, "player", actor=Actor(), combatant=Combatant(), sight_range=5,
