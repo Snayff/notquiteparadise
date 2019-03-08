@@ -2,7 +2,7 @@ import pygame
 from pygame.rect import Rect
 
 from scripts.core.constants import GameStates, TILE_SIZE
-from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager
+from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager, debug_manager
 from scripts.events.entity_events import MoveEvent
 from scripts.events.game_events import ExitEvent
 
@@ -40,7 +40,8 @@ def get_input():
         "fullscreen": False,
         "cancel": False,
         "new_game": False,
-        "load_game": False
+        "load_game": False,
+        "debug_toggle": False
 
     }
 
@@ -51,13 +52,10 @@ def get_input():
         if input.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
                 input_values["left_click"] = True
-                print(f"Got left click")
             elif pygame.mouse.get_pressed()[1]:
                 input_values["middle_click"] = True
-                print(f"Got middle click")
             elif pygame.mouse.get_pressed()[2]:
                 input_values["right_click"] = True
-                print(f"Got right click")
 
             input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
 
@@ -102,6 +100,8 @@ def get_input():
             elif input.key == pygame.K_b:
                 # TODO remove this legacy when menu's can use kb+m
                 input_values["load_game"] = True
+            elif input.key == pygame.K_TAB:
+                input_values["debug_toggle"] = True
 
     return input_values
 
@@ -117,10 +117,17 @@ def handle_input(values):
     game_state = game_manager.game_state
     player = entity_manager.player
 
+    # game state agnostic
+    if game_state:
+        if values["debug_toggle"]:
+            if debug_manager.visible:
+                debug_manager.set_visibility(False)
+            else:
+                debug_manager.set_visibility(True)
+
     if game_state == GameStates.PLAYER_TURN:
 
         if values["right_click"]:
-            #clicked_rect = Rect().collidedict(ui_manager.visible_panels)
             pos = values["mouse_xy"]
             for key, rect in ui_manager.visible_panels.items():
                 if rect.collidepoint(pos):

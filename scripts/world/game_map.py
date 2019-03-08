@@ -50,7 +50,7 @@ class GameMap:
         """
         # panel background
         self.panel.surface.fill(Colour().black)
-        self.panel.draw_rect()
+        self.panel.draw_background()
 
         # tiles
         for x in range(0, self.width):

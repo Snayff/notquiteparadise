@@ -1,5 +1,6 @@
 from scripts.core.colours import Palette, Colour
 from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT
+from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 
 
@@ -10,6 +11,8 @@ class SelectedEntityInfo:
     def __init__(self):
         self.selected_entity = None
         self.visible = False
+        self.font = Font().default
+        self.gap_between_lines = int(self.font.size / 3)
 
         # setup the panel
         panel_width = BASE_WINDOW_WIDTH / 5
@@ -54,12 +57,32 @@ class SelectedEntityInfo:
 
         """
         # panel background
-        self.panel.surface.fill(Colour().black)
-        self.panel.draw_rect()
+        self.panel.draw_background()
 
         # entity info
+        font = self.font
+        font_size = self.font.size
+        adjusted_x = self.panel.width / 4
+        adjusted_y = self.panel.height / 8
+        font_colour = Colour().white
+        panel_surface = self.panel.surface
+        entity = self.selected_entity
+        messages = []
 
+        # what messages do we want to show?
+        messages.append(f"{entity.name.capitalize()}")
+        messages.append(f"")
+        messages.append(f"Hp: {entity.combatant.hp}")
+        messages.append(f"Power: {entity.combatant.power}")
+        messages.append(f"Defence: {entity.combatant.defence}")
+
+        # render the message_list
+        for message in messages:
+            font.render_to(panel_surface, (adjusted_x, adjusted_y), message, font_colour)
+            adjusted_y += font_size + self.gap_between_lines
 
         # panel border
         self.panel.draw_panel_border()
+
+        # draw all to provided surface
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))

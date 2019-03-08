@@ -17,22 +17,23 @@ class Panel:
 
     """
 
-    def __init__(self, x, y, width, height, colour, border_size, border_colour):
+    def __init__(self, x, y, width, height, background_colour, border_size, border_colour):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.border_size = border_size
-        self.colour = colour
+        self.background_colour = background_colour
         self.surface = pygame.Surface((self.width, self.height))
         self.border_colour = border_colour
 
-    def draw_rect(self):
+    def draw_background(self):
         """
         Draw a panel surface, including background
         """
+        self.surface.fill(self.background_colour)
         offset = self.border_size
-        pygame.draw.rect(self.surface, self.colour,  [0 + offset,  0 + offset, self.width - offset,
+        pygame.draw.rect(self.surface, self.background_colour,  [0 + offset,  0 + offset, self.width - offset,
                             self.height - offset], 0)
 
     def draw_panel_border(self):

@@ -10,6 +10,7 @@ from scripts.events.message_handler import MessageHandler
 from scripts.events.game_handler import GameHandler
 from scripts.core.global_data import game_manager, world_manager, entity_manager, turn_manager, ui_manager
 from scripts.entities.entity import Entity
+from scripts.events.ui_handler import UiHandler
 
 
 def initialise_game():
@@ -53,4 +54,8 @@ def initialise_event_handlers():
 
     entity_handler = EntityHandler(game_manager.event_hub)
     entity_handler.subscribe(EventTopics.ENTITY)
+
+    ui_handler = UiHandler(game_manager.event_hub)
+    ui_handler.subscribe(EventTopics.ENTITY)
+    ui_handler.subscribe(EventTopics.GAME)
 

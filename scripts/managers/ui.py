@@ -87,21 +87,21 @@ class UIManager:
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
-    def update_panel_visibility(self, name, panel, visibility):
+    def update_panel_visibility(self, name, panel, visible):
         """
         Update whether a panel is visible.
 
         Args:
             name(str): Key value
             panel(Panel):   The panel to pull the info from
-            visibility (bool): Whether to show the panel or not
+            visible (bool): Whether to show the panel or not
         """
-        if visibility:
+        if visible:
             self.visible_panels[name] = Rect(panel.x, panel.y, panel.width, panel.height)
         else:
             self.visible_panels.pop(name, None)
 
-    def get_scaled_mouse_pos(self ):
+    def get_scaled_mouse_pos(self):
         """
         Get the scaled mouse position
 

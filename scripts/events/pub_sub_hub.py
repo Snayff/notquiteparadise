@@ -44,10 +44,6 @@ class Subscriber:
     def unsubscribe(self, event):
         self.event_hub.unsubscribe(event, self)
 
-# def run(self, event):
-# 	log_msg = f"{self.name} received {event.name}"
-# 	game_manager.create_event(Event(LoggingEventTypes.MUNDANE, EventTopics.LOGGING,  [log_msg]))
-
 
 class Event:
     def __init__(self, type, topic):
