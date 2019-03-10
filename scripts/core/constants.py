@@ -1,20 +1,11 @@
 from enum import Enum, auto
 
-import pygame.freetype
-
 # game info
 BASE_WINDOW_WIDTH = 640
 BASE_WINDOW_HEIGHT = 360
 TILE_SIZE = 16
 GAME_FPS = 60
 ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
-
-# sprites
-SPRITE_PLAYER = pygame.image.load("assets/actor/player.png")
-SPRITE_ENEMY = pygame.image.load("assets/actor/enemy.png")
-SPRITE_FLOOR = pygame.image.load("assets/world/floor.png")
-SPRITE_WALL = pygame.image.load("assets/world/wall.png")
-
 
 class GameStates(Enum):
     """

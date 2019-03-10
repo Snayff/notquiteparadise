@@ -1,5 +1,4 @@
 import pygame
-from pygame.rect import Rect
 
 from scripts.core.constants import GameStates, TILE_SIZE
 from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager, debug_manager
@@ -49,15 +48,9 @@ def get_input():
     for input in input_events:
 
         # update MOUSE input values based on input
+        # TODO: move each set of event typ eto its own function
         if input.type == pygame.MOUSEBUTTONDOWN:
-            if pygame.mouse.get_pressed()[0]:
-                input_values["left_click"] = True
-            elif pygame.mouse.get_pressed()[1]:
-                input_values["middle_click"] = True
-            elif pygame.mouse.get_pressed()[2]:
-                input_values["right_click"] = True
-
-            input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
+            check_mouse_input(input_values)
 
         # is a key pressed?
         if input.type == pygame.KEYDOWN:
@@ -222,3 +215,20 @@ def handle_input(values):
     # 	return {"load_game": True}
     # elif values["cancel"]:
     # 	create_event(event_hub, Event(GameEventTypes.EXIT, EventTopics.GAME, []))
+
+
+def check_mouse_input(input_values):
+        """
+
+        Args:
+            input_values:
+        """
+
+        if pygame.mouse.get_pressed()[0]:
+            input_values["left_click"] = True
+        elif pygame.mouse.get_pressed()[1]:
+            input_values["middle_click"] = True
+        elif pygame.mouse.get_pressed()[2]:
+            input_values["right_click"] = True
+
+        input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
