@@ -1,3 +1,5 @@
+import logging
+
 from scripts.core.constants import LoggingEventTypes, GameEventTypes, GameStates
 from scripts.core.global_data import game_manager, turn_manager
 from scripts.events.logging_events import LoggingEvent
@@ -10,10 +12,11 @@ class GameHandler(Subscriber):
 
     def run(self, event):
         log_string = f"{self.name} received {event.type}"
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.type == GameEventTypes.EXIT:
             game_manager.update_game_state(GameStates.EXIT_GAME)
+            logging.shutdown()
 
         elif event.type == GameEventTypes.END_TURN:
             turn_manager.end_turn(event.time_spent)

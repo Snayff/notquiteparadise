@@ -119,7 +119,7 @@ class Combatant:
 
         log_string = f"{self.owner.name}  takes {amount} damage and has {self.hp} health remaining."
         from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if self.hp <= 0:
             game_manager.create_event(DieEvent(self.owner))

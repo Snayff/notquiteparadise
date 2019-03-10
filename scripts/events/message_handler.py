@@ -10,7 +10,7 @@ class MessageHandler(Subscriber):
 
     def run(self, event):
         log_string = f"{self.name} received {event.type}"
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         ui_manager.message_log.add_message(event.type, event.message)
         ui_manager.message_log_is_dirty = True

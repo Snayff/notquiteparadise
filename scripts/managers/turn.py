@@ -20,7 +20,7 @@ class TurnManager:
     def build_new_turn_queue(self):
         from scripts.core.global_data import game_manager, entity_manager
         log_string = f"Building a new turn queue."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         # create a turn queue from the entities list
         for entity in entity_manager.entities:
@@ -35,7 +35,7 @@ class TurnManager:
         entity = self.turn_holder
 
         log_string = f"Ending {entity.name}'s turn."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         #  update actor's time spent
         entity.actor.spend_time(spent_time)
@@ -66,4 +66,4 @@ class TurnManager:
             game_manager.update_game_state(GameStates.ENEMY_TURN)
 
         log_string = f"It is now {self.turn_holder.name}'s turn."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))

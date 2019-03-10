@@ -48,9 +48,12 @@ class MessageEventTypes(Enum):
 
 class LoggingEventTypes(Enum):
     """Types of Logging Events"""
-    CRITICAL = auto()
-    INTERESTING = auto()
-    MUNDANE = auto()
+
+    CRITICAL = auto()  # A serious error, indicating that may be unable to continue running.
+    ERROR = auto()  # A more serious problem, has not been able to perform some function.
+    WARNING = auto()  # An indication that something unexpected happened, but otherwise still working as expected.
+    INFO = auto()  # Confirmation that things are working as expected.
+    DEBUG = auto()  # Detailed information, typically of interest only when diagnosing problems
 
 
 class EntityEventTypes(Enum):

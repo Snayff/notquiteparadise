@@ -195,7 +195,7 @@ class MessageLog:
         """
         log_string = f"{message} added to message log"
         from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         self.message_list.append((message_type, message))
 

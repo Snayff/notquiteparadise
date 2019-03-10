@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 
 from scripts.core.constants import GameStates
@@ -11,7 +13,7 @@ def main():
     """
     The container for the game initialisation and game loop
     """
-
+    print(sys.path)
     initialise_game()
     game_loop()
 

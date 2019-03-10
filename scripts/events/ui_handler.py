@@ -18,7 +18,7 @@ class UiHandler(Subscriber):
 
         # log that event has been received
         log_string = f"{self.name} received {event.type}"
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.topic == EventTopics.ENTITY:
             self.hide_entity_info()
@@ -30,4 +30,4 @@ class UiHandler(Subscriber):
         """
         ui_manager.entity_info.set_visibility(False)
         log_string = f"Entity info hidden."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
