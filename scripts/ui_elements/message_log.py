@@ -237,8 +237,8 @@ class MessageLog:
         """
         icons = {}
 
-        icons["player"] = pygame.image.load("assets/actor/player.png").convert_alpha()
-        icons["orc"] = pygame.image.load("assets/actor/enemy.png").convert_alpha()
+        #icons["player"] = pygame.image.load("assets/actor/player.png").convert_alpha()
+        #icons["orc"] = pygame.image.load("assets/actor/enemy.png").convert_alpha()
 
         return icons
 

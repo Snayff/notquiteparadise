@@ -1,5 +1,3 @@
-import sys
-
 import pygame
 
 from scripts.core.constants import GameStates
@@ -8,12 +6,15 @@ from scripts.core.global_data import world_manager, game_manager, entity_manager
 from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
+# Project Wide to do list...
+# TODO - swap out nose for pytest
+# TODO - setup README, setup.py and requirements.txt
+# TODO - move json data to a dictionary on load; create reload/refresh function
 
 def main():
     """
     The container for the game initialisation and game loop
     """
-    print(sys.path)
     initialise_game()
     game_loop()
 

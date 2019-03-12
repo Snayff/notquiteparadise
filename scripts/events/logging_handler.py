@@ -12,7 +12,7 @@ class LoggingHandler(Subscriber):
         self.log_file_name = "logs/" + "log.log"
         self.log_level = logging.DEBUG
         self.file_mode = "w"
-            # File mode options
+            # File mode options:
             # 'r' - open for reading(default)
             # 'w' - open for writing, truncating the file first
             # 'x' - open for exclusive creation, failing if the file already exists
