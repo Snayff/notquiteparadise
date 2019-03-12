@@ -26,14 +26,14 @@ def initialise_game():
     ui_manager.init_message_log()
     ui_manager.init_entity_info()
 
-    player_sprite = entity_manager.create_actor_sprite_dict("actor_template")
+    player_sprite = entity_manager.animation.create_actor_sprite_dict("actor_template")
     player = Entity(0, 0, player_sprite, "player", actor=Actor(), combatant=Combatant(), sight_range=5,
                     race=Race("human"))
     # TODO move  to player creation  method
 
-    entity_manager.add_player(player)
+    entity_manager.existence.add_player(player)
 
-    # entity_manager.create_actor_entity(0, 3, "orc_fighter")  # TODO - remove when actor gen is in
+    # entity_manager_methods.existence.create_actor_entity(0, 3, "orc_fighter")  # TODO - remove when actor gen is in
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = player

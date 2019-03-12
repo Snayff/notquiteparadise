@@ -11,7 +11,7 @@ def get_text_from_lang_json(string_id):
 
 
 def get_value_from_race_json(race_name, value="all"):
-    with open('Data/Game/race.json') as file:
+    with open('Data/game/race.json') as file:
         data = json.load(file)
 
     if value == "all":
@@ -21,7 +21,7 @@ def get_value_from_race_json(race_name, value="all"):
 
 
 def get_value_from_youth_json(youth_name, value="all"):
-    with open('Data/Game/youth.json') as file:
+    with open('Data/game/youth.json') as file:
         data = json.load(file)
 
     if value == "all":
@@ -31,7 +31,7 @@ def get_value_from_youth_json(youth_name, value="all"):
 
 
 def get_value_from_adulthood_json(adulthood_name, value="all"):
-    with open('Data/Game/adulthood.json') as file:
+    with open('Data/game/adulthood.json') as file:
         data = json.load(file)
 
     if value == "all":
@@ -41,7 +41,7 @@ def get_value_from_adulthood_json(adulthood_name, value="all"):
 
 
 def get_value_from_actor_json(actor_name, value="all"):
-    with open('Data/Game/actor_template.json') as file:
+    with open('Data/game/actor_template.json') as file:
         data = json.load(file)
 
     if value == "all":

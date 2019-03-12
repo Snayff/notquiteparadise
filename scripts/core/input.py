@@ -131,7 +131,7 @@ def handle_input(values):
                 tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
                 tile_x = tile_pos[0] // TILE_SIZE
                 tile_y = tile_pos[1] // TILE_SIZE
-                entity = entity_manager.get_entity_in_fov_at_tile((tile_x, tile_y))
+                entity = entity_manager.query.get_entity_in_fov_at_tile((tile_x, tile_y))
 
                 if entity:
                     ui_manager.entity_info.set_selected_entity(entity)

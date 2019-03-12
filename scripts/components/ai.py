@@ -9,7 +9,7 @@ class BasicMonster:
         monster = self.owner
         target = entity_manager.player
 
-        if entity_manager.distance_between_entities(monster, target) >= 2:
+        if entity_manager.query.distance_between_entities(monster, target) >= 2:
             game_manager.create_event(GetMoveTargetEvent(monster, target))
         else:
             game_manager.create_event(MoveEvent(monster, target.x, target.y))

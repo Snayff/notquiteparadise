@@ -14,6 +14,7 @@ class Actor:
 
         """
         self.time_of_next_action = 0
+        self.learnt_skills = []
 
     def move(self, target_x, target_y):
         """
@@ -27,6 +28,7 @@ class Actor:
 
         self.owner.x = target_x
         self.owner.y = target_y
+
         from scripts.core.global_data import game_manager
         msg = f"{self.owner.name} moved to [{target_x},{target_y}]."
         game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))

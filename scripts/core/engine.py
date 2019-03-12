@@ -10,6 +10,8 @@ from scripts.core.intialisers import initialise_game
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function
+# TODO - create global tooltip method
+
 
 def main():
     """

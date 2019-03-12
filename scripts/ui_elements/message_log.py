@@ -167,6 +167,7 @@ class MessageLog:
         Args:
             surface (Surface): Main surface to draw to.
         """
+        # TODO - extract tooltip method from message log
         # Message log tooltips
         font = self.font
         font_colour = self.palette.message_log.tooltip_text
