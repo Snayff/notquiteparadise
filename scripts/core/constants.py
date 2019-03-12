@@ -1,20 +1,11 @@
 from enum import Enum, auto
 
-import pygame.freetype
-
 # game info
 BASE_WINDOW_WIDTH = 640
 BASE_WINDOW_HEIGHT = 360
 TILE_SIZE = 16
 GAME_FPS = 60
 ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
-
-# sprites
-SPRITE_PLAYER = pygame.image.load("assets/actor/player.png")
-SPRITE_ENEMY = pygame.image.load("assets/actor/enemy.png")
-SPRITE_FLOOR = pygame.image.load("assets/world/floor.png")
-SPRITE_WALL = pygame.image.load("assets/world/wall.png")
-
 
 class GameStates(Enum):
     """
@@ -57,9 +48,12 @@ class MessageEventTypes(Enum):
 
 class LoggingEventTypes(Enum):
     """Types of Logging Events"""
-    CRITICAL = auto()
-    INTERESTING = auto()
-    MUNDANE = auto()
+
+    CRITICAL = auto()  # A serious error, indicating that may be unable to continue running.
+    ERROR = auto()  # A more serious problem, has not been able to perform some function.
+    WARNING = auto()  # An indication that something unexpected happened, but otherwise still working as expected.
+    INFO = auto()  # Confirmation that things are working as expected.
+    DEBUG = auto()  # Detailed information, typically of interest only when diagnosing problems
 
 
 class EntityEventTypes(Enum):

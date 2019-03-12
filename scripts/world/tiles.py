@@ -1,5 +1,4 @@
-from scripts.core.constants import SPRITE_FLOOR, SPRITE_WALL
-
+import pygame
 
 class Tile:
     def __init__(self):
@@ -12,7 +11,7 @@ class Tile:
 class Floor(Tile):
     def __init__(self):
         super().__init__()
-        self.sprite = SPRITE_FLOOR
+        self.sprite = pygame.image.load("assets/world/floor.png")
 
 
 class Wall(Tile):
@@ -20,4 +19,4 @@ class Wall(Tile):
         super().__init__()
         self.blocks_movement = True
         self.blocks_sight = True
-        self.sprite = SPRITE_WALL
+        self.sprite = pygame.image.load("assets/world/wall.png")

@@ -1,5 +1,4 @@
 import pygame
-from pygame._freetype import STYLE_UNDERLINE
 
 from scripts.core.colours import Palette, Colour
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, GAME_FPS, BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
@@ -78,8 +77,7 @@ class MessageLog:
         panel_surface = self.panel.surface
 
         # panel background
-        panel_surface.fill(self.colour.black)
-        self.panel.draw_rect()
+        self.panel.draw_background()
 
         # show only as many message_list as we can or have
         messages_to_show = min(len(self.message_list), self.number_of_messages_to_show)
@@ -197,7 +195,7 @@ class MessageLog:
         """
         log_string = f"{message} added to message log"
         from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         self.message_list.append((message_type, message))
 

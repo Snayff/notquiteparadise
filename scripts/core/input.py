@@ -1,8 +1,7 @@
 import pygame
-from pygame.rect import Rect
 
-from scripts.core.constants import GameStates
-from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager
+from scripts.core.constants import GameStates, TILE_SIZE
+from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager, debug_manager
 from scripts.events.entity_events import MoveEvent
 from scripts.events.game_events import ExitEvent
 
@@ -22,6 +21,7 @@ def get_input():
     input_values = {
         "left_click": False,
         "right_click": False,
+        "middle_click": False,
         "mouse_xy": (0, 0),
         "up": False,
         "down": False,
@@ -39,23 +39,21 @@ def get_input():
         "fullscreen": False,
         "cancel": False,
         "new_game": False,
-        "load_game": False
+        "load_game": False,
+        "debug_toggle": False
 
     }
 
     # check all input events
     for input in input_events:
 
+        # update MOUSE input values based on input
+        # TODO: move each set of event typ eto its own function
+        if input.type == pygame.MOUSEBUTTONDOWN:
+            check_mouse_input(input_values)
+
         # is a key pressed?
         if input.type == pygame.KEYDOWN:
-
-            # update MOUSE input values based on input
-            if pygame.mouse.get_pressed()[0]:
-                input_values["left_click"] = True
-                input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
-            elif pygame.mouse.get_pressed()[1]:
-                input_values["right_click"] = True
-                input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
 
             # update OTHER input values based on input
             if input.key == pygame.K_UP or input.key == pygame.K_KP8 or input.key == pygame.K_k:
@@ -95,6 +93,8 @@ def get_input():
             elif input.key == pygame.K_b:
                 # TODO remove this legacy when menu's can use kb+m
                 input_values["load_game"] = True
+            elif input.key == pygame.K_TAB:
+                input_values["debug_toggle"] = True
 
     return input_values
 
@@ -110,13 +110,31 @@ def handle_input(values):
     game_state = game_manager.game_state
     player = entity_manager.player
 
+    # game state agnostic
+    if game_state:
+        if values["debug_toggle"]:
+            if debug_manager.visible:
+                debug_manager.set_visibility(False)
+            else:
+                debug_manager.set_visibility(True)
+
     if game_state == GameStates.PLAYER_TURN:
 
         if values["right_click"]:
-            clicked_rect = Rect().collidedict(ui_manager.visible_panels)
+            pos = values["mouse_xy"]
+            for key, rect in ui_manager.visible_panels.items():
+                if rect.collidepoint(pos):
+                    clicked_rect = key
 
+            # right clicked on the map so give the selected tile to the ui manager to display info
             if clicked_rect == "game_map":
-                ui_manager.selected_tile = ""
+                tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
+                tile_x = tile_pos[0] // TILE_SIZE
+                tile_y = tile_pos[1] // TILE_SIZE
+                entity = entity_manager.get_entity_in_fov_at_tile((tile_x, tile_y))
+
+                if entity:
+                    ui_manager.entity_info.set_selected_entity(entity)
 
 
         dx = 0
@@ -197,3 +215,20 @@ def handle_input(values):
     # 	return {"load_game": True}
     # elif values["cancel"]:
     # 	create_event(event_hub, Event(GameEventTypes.EXIT, EventTopics.GAME, []))
+
+
+def check_mouse_input(input_values):
+        """
+
+        Args:
+            input_values:
+        """
+
+        if pygame.mouse.get_pressed()[0]:
+            input_values["left_click"] = True
+        elif pygame.mouse.get_pressed()[1]:
+            input_values["middle_click"] = True
+        elif pygame.mouse.get_pressed()[2]:
+            input_values["right_click"] = True
+
+        input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()

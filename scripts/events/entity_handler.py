@@ -12,7 +12,7 @@ class EntityHandler(Subscriber):
 
     def run(self, event):
         log_string = f"{self.name} received {event.type}"
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.type == EntityEventTypes.MOVE:
             entity = event.entity
@@ -38,19 +38,19 @@ class EntityHandler(Subscriber):
                     entity_manager.set_entity_current_sprite(entity, "move")
 
                     log_string = f"{entity.name} ({entity}) moved to [{destination_x},{destination_y}]"
-                    game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+                    game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
                     game_manager.create_event(EndTurnEvent(10))  # TODO abstract magic number
 
             else:
                 log_string = f"Target location blocked and {entity.name} did not move."
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+                game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.type == EntityEventTypes.GET_MOVE_TARGET:
             entity = event.moving_entity
             target = event.target_entity
             log_string = f"{entity.name} ({entity}) looked for a path to {target.name} [{target.x},{target.y}] with a*"
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             # get destination to move to and then move
             dx, dy = entity_manager.get_direction_between_entities(entity, target)
@@ -61,7 +61,7 @@ class EntityHandler(Subscriber):
             target = event.defender
 
             log_string = f"{attacker.name} ({attacker}) tries to attack {target.name} [{target.x},{target.y}] "
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             attacker.combatant.attack(target)
             entity_manager.set_entity_current_sprite(attacker, "attack")

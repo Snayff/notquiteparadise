@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 
 from scripts.core.constants import GameStates
@@ -11,7 +13,7 @@ def main():
     """
     The container for the game initialisation and game loop
     """
-
+    print(sys.path)
     initialise_game()
     game_loop()
 
@@ -44,7 +46,7 @@ def game_loop():
         entity_manager.update(world_manager.game_map)
 
         # DRAW
-        ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.active)
+        ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.visible)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

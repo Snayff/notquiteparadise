@@ -39,3 +39,16 @@ class WorldManager:
         tcod.map_compute_fov(self.player_fov_map, x, y, radius, self.light_walls, self.fov_algorithm)
         self.game_map.update_tile_visibility(self.player_fov_map)
         self.player_fov_is_dirty = False
+
+    def is_tile_in_fov(self, target_tile):
+        """
+        Check if  target tile is in player's FOV
+
+        Args:
+            target_tile(tuple): x y of tile
+
+        Returns:
+            bool: True if tile is in FOV
+        """
+
+        return tcod.map_is_in_fov(self.player_fov_map , target_tile[0], target_tile[1])

@@ -27,7 +27,7 @@ class GameManager:
         self.game_state = new_game_state
 
         log_string = f"game_state updated to {self.game_state} from {self.previous_game_state}"
-        self.create_event(LoggingEvent(LoggingEventTypes.MUNDANE, log_string))
+        self.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
     def create_event(self, event):
         pub = Publisher(self.event_hub)
