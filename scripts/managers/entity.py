@@ -1,3 +1,4 @@
+from scripts.managers.entity_manager_methods.action_methods import EntityAction
 from scripts.managers.entity_manager_methods.animation_methods import EntityAnimation
 from scripts.managers.entity_manager_methods.existence_methods import EntityExistenceAmendment
 from scripts.managers.entity_manager_methods.query_methods import EntityQuery
@@ -10,6 +11,7 @@ class EntityManager:
         self.query = EntityQuery(self)
         self.existence = EntityExistenceAmendment(self)
         self.animation = EntityAnimation(self)
+        self.action = EntityAction(self)
 
     def update(self, game_map):
         """

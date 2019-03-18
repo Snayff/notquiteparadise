@@ -1,0 +1,20 @@
+{
+	"move" : {
+        "name":  "move",
+        "description": "This is the movement skill.",
+        "targeting_required": false,
+        "target_type": "tile",
+        "effects": ["move_self"],
+        "base_time_cost": 10,
+        "icon": ""
+    },
+    "basic_attack" : {
+        "name":  "basic_attack",
+        "description": "This is the basic attack. It does damage.",
+        "targeting_required": false,
+        "target_type": "entity",
+        "effects": ["damage_other"],
+        "base_time_cost": 20,
+        "icon": ""
+    }
+}

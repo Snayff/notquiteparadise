@@ -1,0 +1,25 @@
+{
+	"orc_fighter" : {
+		"name" : "orc fighter",
+		"description" : "Orc Fighter description",
+		"spawn_weight" : 50,
+		"race_component" : "orc",
+		"youth_component" : "beggar",
+		"adulthood_component" : "fighter",
+		"ai_component" : "basic_monster",
+        "spritesheet" : "enemy"
+
+	},
+		"troll_fighter" : {
+		"name" : "troll fighter",
+		"description" : "Troll Fighter description",
+		"spawn_weight" : 50,
+		"race_component" : "troll",
+		"youth_component" : "beggar",
+		"adulthood_component" : "fighter",
+		"ai_component" : "basic_monster",
+        "spritesheet" : "enemy"
+
+	}
+
+}

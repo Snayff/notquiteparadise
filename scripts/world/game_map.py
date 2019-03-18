@@ -1,7 +1,7 @@
 import tcod
 
 from scripts.core.colours import Palette, Colour
-from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TILE_SIZE
+from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TILE_SIZE, TargetTypes
 from scripts.ui_elements.templates.panel import Panel
 from scripts.world.tiles import Floor, Wall
 
@@ -77,15 +77,15 @@ class GameMap:
         self.panel.draw_panel_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
-    def is_tile_blocking_movement(self, x, y):
-        if 0 <= x < self.width and 0 <= y < self.height:
-            return self.tiles[x][y].blocks_movement
+    def is_tile_blocking_movement(self, tile_x, tile_y):
+        if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
+            return self.tiles[tile_x][tile_y].blocks_movement
         else:
             return True
 
-    def is_tile_blocking_sight(self, x, y):
-        if 0 <= x < self.width and 0 <= y < self.height:
-            return self.tiles[x][y].blocks_sight
+    def is_tile_blocking_sight(self, tile_x, tile_y):
+        if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
+            return self.tiles[tile_x][tile_y].blocks_sight
         else:
             return True
 
@@ -94,8 +94,31 @@ class GameMap:
             for y in range(0, self.height):
                 self.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
-    def is_tile_visible(self, x, y):
-        if 0 <= x < self.width and 0 <= y < self.height:
-            return self.tiles[x][y].is_visible
+    def is_tile_visible(self, tile_x, tile_y):
+        if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
+            return self.tiles[tile_x][tile_y].is_visible
         else:
             return False
+
+    def get_target_type(self, tile_x, tile_y):
+        """
+        Get type of target tile; tile, entity, wall
+        Args:
+            tile_x(int):  x position of the tile
+            tile_y(int):  y position of the tile
+        """
+
+        tile_is_blocked = self.is_tile_blocking_movement(tile_x, tile_y)
+
+        if tile_is_blocked:
+            return TargetTypes.WALL
+
+        if 0 > tile_x > self.width and 0 > tile_y > self.height:
+            return TargetTypes.OUT_OF_BOUNDS
+
+        from scripts.core.global_data import entity_manager
+        entity_at_location = entity_manager.query.get_blocking_entities_at_location(tile_x, tile_y)
+        if entity_at_location:
+            return TargetTypes.ENTITY
+
+        return TargetTypes.TILE

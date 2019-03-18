@@ -5,7 +5,7 @@ from scripts.components.adulthood import Adulthood
 from scripts.components.combatant import Combatant
 from scripts.components.youth import Youth
 from scripts.data_loaders.getters import get_value_from_actor_json
-from scripts.entities.entity import Entity
+from scripts.core.entity import Entity
 
 class EntityExistenceAmendment:
     def __init__(self, manager):

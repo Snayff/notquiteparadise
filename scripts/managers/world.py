@@ -52,3 +52,4 @@ class WorldManager:
         """
 
         return tcod.map_is_in_fov(self.player_fov_map , target_tile[0], target_tile[1])
+

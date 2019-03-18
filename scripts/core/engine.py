@@ -1,3 +1,4 @@
+import logging
 import pygame
 
 from scripts.core.constants import GameStates
@@ -7,11 +8,13 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
 # Project Wide to do list...
+# TODO *NEXT* add basic attack skill
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function
 # TODO - create global tooltip method
-
+# TODO - skill activation events (so that animation can listen and play)
+# TODO - effect activation events (so that world can update)
 
 def main():
     """
@@ -21,6 +24,7 @@ def main():
     game_loop()
 
     # we've left the game loop so now leave the game
+    logging.shutdown() # clear logging resources
     pygame.quit()  # clean up pygame resources
     raise SystemExit  # exit window and python
 

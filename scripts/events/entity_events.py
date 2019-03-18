@@ -1,13 +1,12 @@
 from scripts.core.constants import EntityEventTypes, EventTopics
 from scripts.events.pub_sub_hub import Event
 
-
-class MoveEvent(Event):
-    def __init__(self, entity, destination_x, destination_y):
-        Event.__init__(self, EntityEventTypes.MOVE, EventTopics.ENTITY)
+class UseSkillEvent(Event):
+    def __init__(self, entity, target, skill_name):
+        Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)
         self.entity = entity
-        self.destination_x = destination_x
-        self.destination_y = destination_y
+        self.target = target
+        self.skill_name = skill_name
 
 
 class GetMoveTargetEvent(Event):

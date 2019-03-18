@@ -1,6 +1,6 @@
 from scripts.core.constants import EntityEventTypes, LoggingEventTypes
 from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
-from scripts.events.entity_events import AttackEvent, MoveEvent
+from scripts.events.entity_events import AttackEvent
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
@@ -25,14 +25,24 @@ class EntityHandler(Subscriber):
 
             # get destination to move to and then move
             dx, dy = entity_manager.query.get_direction_between_entities(entity, target)
-            game_manager.create_event(MoveEvent(entity, dx, dy))
+            target_tile = (dx, dy)
+            #  game_manager.create_event(MoveEvent(entity, target_tile))
 
         if event.type == EntityEventTypes.ATTACK:
             self.process_attack(event)
 
+        if event.type == EntityEventTypes.SKILL:
+            skill = event.entity.actor.known_skills[event.skill_name]
+
+            if skill:
+                # TODO - loop through tiles on way to target to check for collisions and move as far as can
+                dest_x = event.target[0] + event.entity.x
+                dest_y = event.target[1] + event.entity.y
+                target_type = world_manager.game_map.get_target_type(dest_x, dest_y)
+                skill.use(event.target, target_type)
 
     def process_move(self, event):
-        # TODO - transition between tiles
+
         entity = event.entity
         destination_x = entity.x + event.destination_x
         destination_y = entity.y + event.destination_y
@@ -53,6 +63,7 @@ class EntityHandler(Subscriber):
                 entity.actor.move(destination_x, destination_y)
                 world_manager.player_fov_is_dirty = True
 
+                # TODO - transition between tiles
                 entity_manager.animation.set_entity_current_sprite(entity, "move")
 
                 log_string = f"{entity.name} ({entity}) moved to [{destination_x},{destination_y}]"

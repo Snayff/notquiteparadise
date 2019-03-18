@@ -62,3 +62,12 @@ class EntityEventTypes(Enum):
     GET_MOVE_TARGET = auto()
     ATTACK = auto()
     DIE = auto()
+    SKILL = auto()
+
+
+class TargetTypes(Enum):
+    """Types of target"""
+    TILE = auto()
+    WALL = auto()
+    ENTITY = auto()
+    OUT_OF_BOUNDS = auto()
