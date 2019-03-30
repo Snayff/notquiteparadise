@@ -21,7 +21,8 @@ class UiHandler(Subscriber):
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.topic == EventTopics.ENTITY:
-            self.hide_entity_info()
+            if ui_manager.entity_info.visible:
+                self.hide_entity_info()
 
     @staticmethod
     def hide_entity_info():

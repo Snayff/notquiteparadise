@@ -38,15 +38,15 @@ class SelectedEntityInfo:
         else:
             self.set_visibility(False)
 
-    def set_visibility(self, visibility):
+    def set_visibility(self, visible):
         """
         Set the visibility of the selected entity info
 
         Args:
-            visibility (bool): Visible or not
+            visible (bool): Visible or not
         """
         from scripts.core.global_data import ui_manager
-        ui_manager.update_panel_visibility("entity_info", self.panel, visibility)
+        ui_manager.update_panel_visibility("entity_info", self.panel, visible)
 
     def draw(self, surface):
         """

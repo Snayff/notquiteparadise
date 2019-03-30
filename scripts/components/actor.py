@@ -28,23 +28,6 @@ class Actor:
         skill.owner = self
         self.known_skills[skill.name] = skill
 
-    def move(self, target_x, target_y):
-        """
-        Move the Actor to a new tile.
-
-        Args:
-            target_x (int): tile's x location
-            target_y (int): tile's y location
-
-        """
-
-        self.owner.x = target_x
-        self.owner.y = target_y
-
-        from scripts.core.global_data import game_manager
-        msg = f"{self.owner.name} moved to [{target_x},{target_y}]."
-        game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
-
     def spend_time(self, time_spent):
         """
         Apply time spent from last action.

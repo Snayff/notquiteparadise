@@ -11,9 +11,16 @@ class MoveEffect(Effect):
         self.target_tile = target_tile
 
     def trigger(self):
+        # get start pos for log
+        start_pos_x, start_pos_y = self.entity_to_move.x, self.entity_to_move.y
+
         # move the entity
+        # TODO - loop through tiles on way to target to check for collisions and move as far as can
         self.entity_to_move.x += self.target_tile[0]
         self.entity_to_move.y += self.target_tile[1]
+
+        # get end pos for log
+        end_pos_x, end_pos_y = self.entity_to_move.x, self.entity_to_move.y
 
         # update the fov if player moved
         from scripts.core.global_data import entity_manager
@@ -22,10 +29,8 @@ class MoveEffect(Effect):
             world_manager.player_fov_is_dirty = True
 
         # log the movement
-        destination_x = self.entity_to_move.x + self.target_tile[0]
-        destination_y = self.entity_to_move.y + self.target_tile[1]
-        # FIXME - logging negative positions
-        log_string = f"{self.entity_to_move.name} ({self.entity_to_move}) moved to [{destination_x},{destination_y}]"
+        log_string = f"{self.entity_to_move.name} moved from [{start_pos_x},{start_pos_y}] to [{end_pos_x}," \
+            f"{end_pos_y}]"
         from scripts.core.global_data import game_manager
         from scripts.events.logging_events import LoggingEvent
         from scripts.core.constants import LoggingEventTypes
