@@ -3,10 +3,14 @@
         "name":  "move",
         "description": "This is the movement skill.",
         "targeting_required": false,
-        "target_type": "tile",
+        "target_size": 1,
+        "target_shape": "square",
+        "target_type": "floor",
         "effects": ["move_self"],
         "base_time_cost": 10,
-        "icon": ""
+        "base_resource_cost": 0,
+        "icon": "",
+        "cooldown": 0
     },
     "basic_attack" : {
         "name":  "basic_attack",

@@ -151,7 +151,7 @@ class MessageLog:
                     # update x offset based on length of string just rendered
                     msg_length = len(msg_to_render)
                     current_msg_x_offset += (msg_length + 2) * (font_size / 2)  # Not sure about the formula, but it
-                    # works.
+                                                                                # works.
 
         # no longer dirty # TODO - uncomment when able to setup message log is dirty
         # self.is_dirty = False

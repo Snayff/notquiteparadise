@@ -15,9 +15,11 @@ class MoveEffect(Effect):
         self.entity_to_move.x += self.target_tile[0]
         self.entity_to_move.y += self.target_tile[1]
 
-        # update the fov
-        from scripts.core.global_data import world_manager
-        world_manager.player_fov_is_dirty = True
+        # update the fov if player moved
+        from scripts.core.global_data import entity_manager
+        if self.entity_to_move == entity_manager.player:
+            from scripts.core.global_data import world_manager
+            world_manager.player_fov_is_dirty = True
 
         # log the movement
         destination_x = self.entity_to_move.x + self.target_tile[0]

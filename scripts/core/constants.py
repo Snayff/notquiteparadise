@@ -67,7 +67,7 @@ class EntityEventTypes(Enum):
 
 class TargetTypes(Enum):
     """Types of target"""
-    TILE = auto()
+    FLOOR = auto()
     WALL = auto()
     ENTITY = auto()
     OUT_OF_BOUNDS = auto()

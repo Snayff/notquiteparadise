@@ -29,6 +29,7 @@ def initialise_game():
     player_sprite = entity_manager.animation.create_actor_sprite_dict("actor_template")
     player = Entity(0, 0, player_sprite, "player", actor=Actor(), combatant=Combatant(), sight_range=5,
                     race=Race("human"))
+    player.combatant.hp = player.combatant.max_hp
     # TODO move  to player creation  method
 
     entity_manager.existence.add_player(player)

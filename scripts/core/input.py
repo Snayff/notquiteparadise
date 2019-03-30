@@ -136,7 +136,6 @@ def handle_input(values):
                 if entity:
                     ui_manager.entity_info.set_selected_entity(entity)
 
-
         dx = 0
         dy = 0
 

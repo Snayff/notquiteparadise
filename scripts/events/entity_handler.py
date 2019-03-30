@@ -35,11 +35,18 @@ class EntityHandler(Subscriber):
             skill = event.entity.actor.known_skills[event.skill_name]
 
             if skill:
-                # TODO - loop through tiles on way to target to check for collisions and move as far as can
-                dest_x = event.target[0] + event.entity.x
-                dest_y = event.target[1] + event.entity.y
-                target_type = world_manager.game_map.get_target_type(dest_x, dest_y)
-                skill.use(event.target, target_type)
+                if skill.targeting_required:
+                    pass
+                    # TODO - trigger targeting system and get new target
+                else:
+                    # TODO - loop through tiles on way to target to check for collisions and move as far as can
+                    target_x = event.target[0] + event.entity.x
+                    target_y = event.target[1] + event.entity.y
+
+                target_type = world_manager.game_map.get_target_type(target_x, target_y)
+                if skill.is_valid_target(event.target, target_type) and skill.user_can_afford_cost():
+                    skill.pay_the_resource_cost()
+                    skill.use(event.target)
 
     def process_move(self, event):
 

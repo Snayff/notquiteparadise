@@ -108,6 +108,9 @@ class GameMap:
             tile_y(int):  y position of the tile
         """
 
+        # TODO - tile may have entity and floor component, they are not mutually exclusive. Return tuple of tile_type
+        #  and if there is an entity
+
         tile_is_blocked = self.is_tile_blocking_movement(tile_x, tile_y)
 
         if tile_is_blocked:
@@ -121,4 +124,4 @@ class GameMap:
         if entity_at_location:
             return TargetTypes.ENTITY
 
-        return TargetTypes.TILE
+        return TargetTypes.FLOOR

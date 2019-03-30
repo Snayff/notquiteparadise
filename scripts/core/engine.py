@@ -15,6 +15,8 @@ from scripts.core.intialisers import initialise_game
 # TODO - create global tooltip method
 # TODO - skill activation events (so that animation can listen and play)
 # TODO - effect activation events (so that world can update)
+# TODO - text wrapping, especially in message log
+# TODO - all UI functionality to watch events and update UI in response
 
 def main():
     """
