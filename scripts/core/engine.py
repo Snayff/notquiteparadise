@@ -13,9 +13,10 @@ from scripts.core.intialisers import initialise_game
 
 # Project Wide to do list...
 # TODO *NEXT* add basic attack skill
+#  need to add back in enemy
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
-# TODO - move json data to a dictionary on load; create reload/refresh function
+# TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
 # TODO - create global tooltip method
 # TODO - skill activation events (so that animation can listen and play)
 # TODO - effect activation events (so that world can update)

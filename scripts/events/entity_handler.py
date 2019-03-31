@@ -1,6 +1,5 @@
 from scripts.core.constants import EntityEventTypes, LoggingEventTypes
 from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
-from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
 

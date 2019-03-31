@@ -17,13 +17,6 @@ class GetMoveTargetEvent(Event):
         self.target_entity = target_entity
 
 
-class AttackEvent(Event):
-    def __init__(self, attacking_entity, defending_entity):
-        Event.__init__(self, EntityEventTypes.ATTACK, EventTopics.ENTITY)
-        self.attacker = attacking_entity
-        self.defender = defending_entity
-
-
 class DieEvent(Event):
     def __init__(self, dying_entity):
         Event.__init__(self, EntityEventTypes.DIE, EventTopics.ENTITY)

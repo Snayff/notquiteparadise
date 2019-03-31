@@ -3,6 +3,7 @@ import pygame
 from scripts.components.actor import Actor
 from scripts.components.adulthood import Adulthood
 from scripts.components.combatant import Combatant
+from scripts.components.player import Player
 from scripts.components.youth import Youth
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.core.entity import Entity
@@ -26,14 +27,22 @@ class EntityExistenceAmendment:
         values = get_value_from_actor_json(actor_name)
 
         actor_name = values["name"]
-        sprite = pygame.image.load("assets/actor/" + values["spritesheet"] + ".png").convert()
+        sprite = self.manager.animation.create_actor_sprite_dict(values["spritesheet"])
         combatant_component = Combatant()
         youth_component = Youth(values["youth_component"])
         adulthood_component = Adulthood(values["adulthood_component"])
         actor_component = Actor()
+        sight_range = values["sight_range"]
 
+        # get then player value and convert to class if needed
+        player_value = values["player_component"]
+        if player_value:
+            player = Player()
+        else:
+            player = None
+
+        # get the AI value and convert to relevant class
         ai_value = values["ai_component"]
-
         from scripts.components.ai import BasicMonster
         if ai_value == "basic_monster":
             ai_component = BasicMonster()
@@ -42,8 +51,11 @@ class EntityExistenceAmendment:
 
         actor = Entity(x, y, sprite, actor_name, blocks_movement=True, combatant=combatant_component,
                        youth=youth_component, adulthood=adulthood_component, ai=ai_component,
-                       actor=actor_component)
+                       actor=actor_component, sight_range=sight_range, player=player)
 
         actor.combatant.hp = actor.combatant.max_hp
 
-        self.add_entity(actor)
+        if player:
+            self.add_player(actor)
+        else:
+            self.add_entity(actor)

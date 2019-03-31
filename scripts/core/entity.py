@@ -10,7 +10,7 @@ class Entity:
     """
 
     def __init__(self, x, y, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None, race=None,
-            youth=None, adulthood=None, ai=None, actor=None, sight_range=0):
+            youth=None, adulthood=None, ai=None, actor=None, sight_range=0, player=None):
         """
         Args:
             x (int) : X position, in tiles.
@@ -26,6 +26,7 @@ class Entity:
             ai (AI): Component.
             actor(Actor) : Component.
             sight_range (int): How far the entity can see.
+            player (Player): if the entity is controlled by the player
         """
 
         self.x = x
@@ -34,7 +35,7 @@ class Entity:
         self.name = name
         self.blocks_movement = blocks_movement
         self.blocks_sight = blocks_sight
-        self.sight_range = sight_range  # TODO - move to actor component (only actor def needs to see)
+        self.sight_range = sight_range
         self.current_sprite = self.spritesheet.get("still")  # start using still
         self.current_sprite_frame = 0
         self.current_sprite_name = "still"
@@ -48,6 +49,7 @@ class Entity:
         self.adulthood = adulthood
         self.ai = ai
         self.actor = actor
+        self.player = player
 
         # Create owners so all components can refer to the owning entity
         if self.combatant:
@@ -67,3 +69,6 @@ class Entity:
 
         if self.actor:
             self.actor.owner = self
+
+        if self.player:
+            self.player.owner = self
