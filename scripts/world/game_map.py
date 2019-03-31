@@ -56,13 +56,13 @@ class GameMap:
         for x in range(0, self.width):
             for y in range(0, self.height):
 
-                if self.is_tile_visible(x, y):
+                if self.is_tile_visible_to_player(x, y):
                     tile_position = (x * TILE_SIZE, y * TILE_SIZE)
                     self.panel.surface.blit(self.tiles[x][y].sprite, tile_position)
 
         # entities
         for entity in entities:
-            if self.is_tile_visible(entity.x, entity.y):
+            if self.is_tile_visible_to_player(entity.x, entity.y):
                 from scripts.core.global_data import entity_manager
                 sprite = entity_manager.animation.get_entity_current_frame(entity)  # TODO - decouple link to
                 # entity_manager_methods
@@ -94,7 +94,7 @@ class GameMap:
             for y in range(0, self.height):
                 self.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
-    def is_tile_visible(self, tile_x, tile_y):
+    def is_tile_visible_to_player(self, tile_x, tile_y):
         if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
             return self.tiles[tile_x][tile_y].is_visible
         else:
@@ -125,3 +125,9 @@ class GameMap:
             return TargetTypes.ENTITY
 
         return TargetTypes.FLOOR
+
+    def is_tile_in_bounds(self, tile_x, tile_y):
+        if (0 <= tile_x <= self.width) and (0 <= tile_y <= self.height):
+            return True
+        else:
+            return False

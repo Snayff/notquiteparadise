@@ -1,9 +1,15 @@
 class Effect:
+    """
+    Base class for effects that make up skills.
+    """
     def __init__(self):
         self.owner = None
 
 
 class MoveEffect(Effect):
+    """
+    Effect to move an entity towards target tile
+    """
     def __init__(self, entity_to_move, target_tile):
         Effect.__init__(self)
         self.description = "This is the move effect"
@@ -11,6 +17,9 @@ class MoveEffect(Effect):
         self.target_tile = target_tile
 
     def trigger(self):
+        """
+        Trigger the effect
+        """
         # get start pos for log
         start_pos_x, start_pos_y = self.entity_to_move.x, self.entity_to_move.y
 

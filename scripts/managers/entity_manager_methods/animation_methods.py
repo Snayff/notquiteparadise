@@ -16,7 +16,7 @@ class EntityAnimation:
         """
         # update entity sprites, if they're visible to player
         for entity in self.manager.entities:
-            if game_map.is_tile_visible(entity.x, entity.y):
+            if game_map.is_tile_visible_to_player(entity.x, entity.y):
                 time_increment = 1 / GAME_FPS
                 entity.delay_until_idle_animation -= time_increment
 

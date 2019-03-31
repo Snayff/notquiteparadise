@@ -1,6 +1,9 @@
 import math
+import tcod
 
-from scripts.core import global_data
+from scripts.core.constants import LoggingEventTypes
+from scripts.events.logging_events import LoggingEvent
+
 
 class EntityQuery:
     def __init__(self, manager):
@@ -37,30 +40,121 @@ class EntityQuery:
 
         return None
 
-    def get_direction_between_entities(self, entity1, entity2):
+    def get_distance_between_entities(self, start_entity, target_entity):
+        """
+        get distance from an entity towards another entity's location
+
+        Args:
+            start_entity (Entity):
+            target_entity (Entity):
+
+        """
+        dx = target_entity.x - start_entity.x
+        dy = target_entity.y - start_entity.y
+        return math.sqrt(dx ** 2 + dy ** 2)
+
+    def get_direct_direction_between_entities(self, start_entity, target_entity):
         """
         get direction from an entity towards another entity's location
-        :param self:
-        :param entity1:
-        :param entity2:
+
+        Args:
+            start_entity (Entity):
+            target_entity (Entity):
+
         """
-        game_map = global_data.world_manager.game_map
+        log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-        dx = entity2.x - entity1.x
-        dy = entity2.y - entity1.y
-        distance = math.sqrt(dx ** 2 + dy ** 2)
+        from scripts.core.global_data import world_manager
+        game_map = world_manager.game_map
 
-        dx = int(round(dx / distance))
-        dy = int(round(dy / distance))
+        direction_x = target_entity.x - start_entity.x
+        direction_y = target_entity.y - start_entity.y
+        distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
 
-        tile_is_blocked = game_map.is_tile_blocking_movement(entity1.x + dx, entity1.y + dy)
+        direction_x = int(round(direction_x / distance))
+        direction_y = int(round(direction_y / distance))
 
-        if not (tile_is_blocked or self.get_blocking_entities_at_location(entity1.x + dx, entity1.y + dy)):
-            return dx, dy
+        tile_is_blocked = game_map.is_tile_blocking_movement(start_entity.x + direction_x, start_entity.y +
+                                                                                           direction_y)
+
+        if not (tile_is_blocked or self.get_blocking_entities_at_location(start_entity.x + direction_x,
+                                                                          start_entity.y + direction_y)):
+            log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+            return direction_x, direction_y
         else:
-            return entity1.x, entity1.y
+            log_string = f"{start_entity.name} did NOT find a direct path to {target_entity.name}."
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-    def distance_between_entities(self, entity1, entity2):
-        dx = entity2.x - entity1.x
-        dy = entity2.y - entity1.y
-        return math.sqrt(dx ** 2 + dy ** 2)
+            return start_entity.x, start_entity.y
+
+    def get_a_star_direction_between_entities(self, start_entity, target_entity):
+
+        max_path_length = 25
+        from scripts.core.global_data import world_manager
+        game_map = world_manager.game_map
+        from scripts.core.global_data import entity_manager
+        entities = entity_manager.entities
+        entity_to_move = start_entity
+        target = target_entity
+
+        log_string = f"{entity_to_move.name} is looking for a path to {target.name} with a*"
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        # Create a FOV map that has the dimensions of the map
+        fov = tcod.map_new(game_map.width, game_map.height)
+
+        # Scan the current map each turn and set all the walls as unwalkable
+        for y1 in range(game_map.height):
+            for x1 in range(game_map.width):
+                tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,
+                                           not game_map.tiles[x1][y1].blocks_movement)
+
+        # Scan all the objects to see if there are objects that must be navigated around
+        # Check also that the object isn't self or the target (so that the start and the end points are free)
+        # The AI class handles the situation if self is next to the target so it will not use this A* function
+        # anyway
+        for entity in entities:
+            if entity.blocks_movement and entity != entity_to_move and entity != target:
+                # Set the tile as a wall so it must be navigated around
+                tcod.map_set_properties(fov, entity.x, entity.y, True, False)
+
+        # Allocate a A* path
+        # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited
+        my_path = tcod.path_new_using_map(fov, 1.41)
+
+        # Compute the path between self's coordinates and the target's coordinates
+        tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)
+
+        # Check if the path exists, and in this case, also the path is shorter than max_path_length
+        # The path size matters if you want the monster to use alternative longer paths (for example through
+        # other rooms) if for example the player is in a corridor
+        # It makes sense to keep path size relatively low to keep the monsters from running around the map if
+        # there's an alternative path really far away
+        if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) < max_path_length:
+            # Find the next coordinates in the computed full path
+            x, y = tcod.path_walk(my_path, True)
+
+            # convert to direction
+            direction_x = x - entity_to_move.x
+            direction_y = y - entity_to_move.y
+
+            log_string = f"{entity_to_move.name} found an a* path to {target.name}."
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            log_string = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction " \
+                f"[[{direction_x},{direction_y}]"
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        else:
+            # no path found return no movement direction
+            direction_x, direction_y = 0, 0
+            log_string = f"{entity_to_move.name} did NOT find an a* path to {target.name}."
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        # Delete the path to free memory
+        tcod.path_delete(my_path)
+        return direction_x, direction_y

@@ -12,34 +12,49 @@ class EntityHandler(Subscriber):
         log_string = f"{self.name} received {event.type}"
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
-        if event.type == EntityEventTypes.GET_MOVE_TARGET:
-            entity = event.moving_entity
-            target = event.target_entity
-            log_string = f"{entity.name} ({entity}) looked for a path to {target.name} [{target.x},{target.y}] with a*"
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
-
-            # get destination to move to and then move
-            dx, dy = entity_manager.query.get_direction_between_entities(entity, target)
-            target_tile = (dx, dy)
-            #  game_manager.create_event(MoveEvent(entity, target_tile))
-
         if event.type == EntityEventTypes.SKILL:
-            skill = event.entity.actor.known_skills[event.skill_name]
+            self.process_skill(event)
 
-            if skill:
-                if skill.targeting_required:
-                    pass
-                    # TODO - trigger targeting system and get new target
-                else:
-                    target_x = event.target[0] + event.entity.x
-                    target_y = event.target[1] + event.entity.y
+        if event.type == EntityEventTypes.DIE:
+            self.process_die(event)
 
-                target_type = world_manager.game_map.get_target_type(target_x, target_y)
-                if skill.is_valid_target(event.target, target_type) and skill.user_can_afford_cost():
-                    skill.pay_the_resource_cost()
-                    skill.use(event.target)
+    @staticmethod
+    def process_skill(event):
+        """
+        Process the entity skill
+        Args:
+            event(EntityEvent): the event to process
+        """
+        log_string = f"Processing {event.entity.name}'s skill: {event.skill_name}."
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
-    def process_die(self, event):
+        skill = event.entity.actor.known_skills[event.skill_name]
+
+        if skill:
+            if skill.targeting_required:
+                pass
+                target_x = 0
+                target_y = 0
+                # TODO - trigger targeting system and get new target
+            else:
+                target_x = event.target[0] + event.entity.x
+                target_y = event.target[1] + event.entity.y
+
+            target_type = world_manager.game_map.get_target_type(target_x, target_y)
+            if skill.is_valid_target(event.target, target_type) and skill.user_can_afford_cost():
+                skill.pay_the_resource_cost()
+                skill.use(event.target)
+
+    @staticmethod
+    def process_die(event):
+        """
+        Process the entity death
+        Args:
+            event(EntityEvent): the event to process
+        """
+        log_string = f"Processing {event.dying_entity.name}'s death."
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+
         # TODO add player death
         entity = event.dying_entity
         entity.ai = None
