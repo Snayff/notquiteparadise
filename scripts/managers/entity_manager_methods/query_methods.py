@@ -146,7 +146,7 @@ class EntityQuery:
             log_string = f"{entity_to_move.name} found an a* path to {target.name}."
             game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             log_string = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction " \
-                f"[[{direction_x},{direction_y}]"
+                f"[{direction_x},{direction_y}]"
             game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         else:

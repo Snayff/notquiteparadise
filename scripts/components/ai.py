@@ -20,16 +20,22 @@ class BasicMonster:
         distance_to_target = entity_manager.query.get_distance_between_entities(entity, target)
         target_tile_x, target_tile_y = entity.x + direction_x, entity.y + direction_y
 
-        # are we in range to attack?
-        attack_range = 1  # TODO - loop skills to get range; maybe get distance then find possible skills and try each
-                          #  in priority order
-        if distance_to_target <= attack_range:
-            # can we attack?
-            pass
-            return None # stop further processing in function
-        # if not move closer
+        # try to attack first
+        for skill_key, skill_value in entity.actor.known_skills.items():
+            # TODO - loop skills in priority order
+            # ignore the move skill
+            if skill_value.name == "move":
+                break
 
+            # are we in range to attack?
+            attack_range = skill_value.range
 
+            if distance_to_target <= attack_range:
+                # can we attack?
+                game_manager.create_event(UseSkillEvent(entity, target, skill_value.name))
+                return None  # stop further processing in function
+
+        # we can't attack so try to move closer
         # check target tile is valid
         if world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y):
             if direction_x != 0 or direction_y != [0]:

@@ -1,3 +1,9 @@
+from scripts.core.constants import MessageEventTypes, LoggingEventTypes
+from scripts.events.entity_events import DieEvent
+from scripts.events.logging_events import LoggingEvent
+from scripts.events.message_events import MessageEvent
+
+
 class Effect:
     """
     Base class for effects that make up skills.
@@ -44,3 +50,52 @@ class MoveEffect(Effect):
         from scripts.events.logging_events import LoggingEvent
         from scripts.core.constants import LoggingEventTypes
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+
+
+class DamageEffect(Effect):
+    """
+    Effect to damage an entity
+    """
+    def __init__(self, attacking_entity, defending_entities):
+        Effect.__init__(self)
+        self.description = "This is the damage effect"
+        self.attacking_entity = attacking_entity
+        self.defending_entities = defending_entities
+
+    def trigger(self):
+        """
+        Trigger the effect
+        """
+        from scripts.core.global_data import game_manager
+        attacker = self.attacking_entity
+
+        for defender in self.defending_entities:
+            damage = self.calculate_damage(defender)
+
+            # apply damage
+            if damage > 0:
+                defender.combatant.hp -= damage
+                msg = f"{attacker.name} deals {damage} damage to {defender.name}."
+
+                # check if defender died
+                if defender.combatant.hp <= 0:
+                    game_manager.create_event(DieEvent(defender))
+                    msg = f"{attacker.name} deals {damage} damage and kills {defender.name}."
+
+            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+
+            log_string = f"{attacker.name} deals {damage} damage to {defender.name} and they have " \
+                f"{defender.combatant.hp} health remaining."
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+    def calculate_damage(self, defender):
+        """
+        Work out the damage to be dealt
+        Args:
+            defender(Entity): the entity getting attacked
+
+        Returns:
+            int: damage to be dealt
+        """
+        damage = max(self.attacking_entity.combatant.power - defender.combatant.defence, 0)
+        return damage

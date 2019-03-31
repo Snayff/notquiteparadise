@@ -10,7 +10,8 @@
         "base_time_cost": 10,
         "base_resource_cost": 0,
         "icon": "",
-        "cooldown": 0
+        "base_cooldown": 0,
+        "range": 0
     },
     "basic_attack" : {
         "name":  "basic_attack",
@@ -19,6 +20,8 @@
         "target_type": "entity",
         "effects": ["damage_other"],
         "base_time_cost": 20,
-        "icon": ""
+        "icon": "",
+        "base_cooldown": 0,
+        "range": 1
     }
 }

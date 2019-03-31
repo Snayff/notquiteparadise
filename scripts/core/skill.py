@@ -1,5 +1,5 @@
 from scripts.core.constants import MessageEventTypes, TargetTypes
-from scripts.core.effects import MoveEffect
+from scripts.core.effects import MoveEffect, DamageEffect
 from scripts.data_loaders.getters import get_value_from_skill_json
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.message_events import MessageEvent
@@ -27,6 +27,8 @@ class Skill:
         self.base_time_cost = skill_values["base_time_cost"]  # base value of time spent to complete action
         self.base_resource_cost = skill_values["base_resource_cost"] # base value of resource spent to complete action
         self.icon = skill_values["icon"]  # icon showing the skill
+        self.range = skill_values["range"]  # how far away the skill can be used
+        self.base_cooldown = skill_values["base_cooldown"]  # how many rounds to wait between uses
 
     def is_valid_target(self, target=None, target_type=None):
         """
@@ -91,6 +93,10 @@ class Skill:
                 if effect_name == "move_self":
                     target_tile = target[0], target[1]
                     effect = MoveEffect(entity_using_skill, target_tile)
+
+                if effect_name == "damage_other":
+                    target_tile = target[0], target[1] #  TODO - change to take list of entities
+                    effect = DamageEffect(entity_using_skill, target_tile)
 
                 if effect:
                     effect.trigger()
