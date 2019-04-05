@@ -18,8 +18,8 @@ class Actor:
         self.known_skills = {}
         self.learn_skill("move")  # all actors know how to move
 
-        if self.owner.combatant:
-            self.learn_skill("basic_attack")  # all combatants know how to use basic attack
+        #if self.owner.combatant:
+        #    self.learn_skill("basic_attack")  # all combatants know how to use basic attack
 
     def learn_skill(self, skill_name):
         """
