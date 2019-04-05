@@ -2,7 +2,7 @@ import pygame
 
 from scripts.core.constants import GameStates, TILE_SIZE
 from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager, debug_manager
-from scripts.events.entity_events import MoveEvent
+from scripts.events.entity_events import UseSkillEvent
 from scripts.events.game_events import ExitEvent
 
 
@@ -131,11 +131,10 @@ def handle_input(values):
                 tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
                 tile_x = tile_pos[0] // TILE_SIZE
                 tile_y = tile_pos[1] // TILE_SIZE
-                entity = entity_manager.get_entity_in_fov_at_tile((tile_x, tile_y))
+                entity = entity_manager.query.get_entity_in_fov_at_tile((tile_x, tile_y))
 
                 if entity:
                     ui_manager.entity_info.set_selected_entity(entity)
-
 
         dx = 0
         dy = 0
@@ -165,9 +164,10 @@ def handle_input(values):
             dx = 1
             dy = 1
 
-        # if destination isnt 0 then we need to move an entity
+        # if destination isn't 0 then we need to move an entity
         if dx != 0 or dy != 0:
-            game_manager.create_event(MoveEvent(player, dx, dy))
+            target_tile = (dx, dy)
+            game_manager.create_event(UseSkillEvent(player, target_tile, "move"))
 
         if values["wait"]:
             return {"wait": True}

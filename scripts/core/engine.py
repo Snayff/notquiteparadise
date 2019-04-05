@@ -1,4 +1,7 @@
-import sys
+import cProfile
+import io
+import logging
+import pstats
 
 import pygame
 
@@ -8,16 +11,38 @@ from scripts.core.global_data import world_manager, game_manager, entity_manager
 from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
+# Project Wide to do list...
+# TODO *NEXT* add basic attack skill
+#  need to add back in enemy
+# TODO - swap out nose for pytest
+# TODO - setup README, setup.py and requirements.txt
+# TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
+# TODO - create global tooltip method
+# TODO - skill activation events (so that animation can listen and play)
+# TODO - effect activation events (so that world can update)
+# TODO - text wrapping, especially in message log
+# TODO - all UI functionality to watch events and update UI in response
+
 
 def main():
     """
     The container for the game initialisation and game loop
     """
-    print(sys.path)
+    # initialise profiling
+    # TODO - set to turn off for production builds
+    profiler = cProfile.Profile()
+    profiler.enable()
+
+    # load the game
     initialise_game()
+
     game_loop()
 
-    # we've left the game loop so now leave the game
+    # we've left the game loop so now close everything down
+
+    profiler.disable()
+    dump_profiling_data(profiler)
+    logging.shutdown()  # clear logging resources
     pygame.quit()  # clean up pygame resources
     raise SystemExit  # exit window and python
 
@@ -47,6 +72,27 @@ def game_loop():
 
         # DRAW
         ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.visible)
+
+
+def dump_profiling_data(profiler):
+    """
+    End profiling
+    Args:
+        profiler: The profiler
+    """
+
+    # dump the profiler stats
+    s = io.StringIO()
+    ps = pstats.Stats(profiler, stream=s).sort_stats("cumulative")
+    ps.dump_stats("logs/profile.dump")
+
+    # convert profiling to human readable format
+    import datetime
+    date_and_time = datetime.datetime.utcnow()
+
+    out_stream = open("logs/" + date_and_time.strftime("%d%m%y@%H%M") + ".profile", "w")
+    ps = pstats.Stats("logs/profile.dump", stream=out_stream)
+    ps.strip_dirs().sort_stats("cumulative").print_stats()
 
 
 if __name__ == "__main__":  # prevents being run from other modules

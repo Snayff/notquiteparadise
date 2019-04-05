@@ -5,7 +5,7 @@ from scripts.core.fonts import Font
 
 class DebugManager:
     def __init__(self):
-        self.visible = True
+        self.visible = False
         self.messages = []
 
         self.show_game_time = False

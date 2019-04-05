@@ -58,7 +58,13 @@ class LoggingEventTypes(Enum):
 
 class EntityEventTypes(Enum):
     """Types of Entity Events"""
-    MOVE = auto()
-    GET_MOVE_TARGET = auto()
-    ATTACK = auto()
     DIE = auto()
+    SKILL = auto()
+
+
+class TargetTypes(Enum):
+    """Types of target"""
+    FLOOR = auto()
+    WALL = auto()
+    ENTITY = auto()
+    OUT_OF_BOUNDS = auto()

@@ -1,0 +1,41 @@
+{
+	"player" : {
+		"name" : "player",
+		"description" : "Player description",
+		"spawn_weight" : 0,
+		"race_component" : "human",
+		"youth_component" : "beggar",
+		"adulthood_component" : "fighter",
+		"ai_component" : "none",
+        "player_component": true,
+        "sight_range": 5,
+        "spritesheet" : "actor_template"
+	},
+        "orc_fighter" : {
+		"name" : "orc fighter",
+		"description" : "Orc Fighter description",
+		"spawn_weight" : 50,
+		"race_component" : "orc",
+		"youth_component" : "beggar",
+		"adulthood_component" : "fighter",
+		"ai_component" : "basic_monster",
+        "player_component": false,
+        "sight_range": 3,
+        "spritesheet" : "actor_template"
+
+	},
+		"troll_fighter" : {
+		"name" : "troll fighter",
+		"description" : "Troll Fighter description",
+		"spawn_weight" : 50,
+		"race_component" : "troll",
+		"youth_component" : "beggar",
+		"adulthood_component" : "fighter",
+		"ai_component" : "basic_monster",
+        "player_component": false,
+        "sight_range": 3,
+        "spritesheet" : "actor_template"
+
+	}
+
+}

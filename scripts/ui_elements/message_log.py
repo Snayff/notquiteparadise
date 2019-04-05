@@ -151,7 +151,7 @@ class MessageLog:
                     # update x offset based on length of string just rendered
                     msg_length = len(msg_to_render)
                     current_msg_x_offset += (msg_length + 2) * (font_size / 2)  # Not sure about the formula, but it
-                    # works.
+                                                                                # works.
 
         # no longer dirty # TODO - uncomment when able to setup message log is dirty
         # self.is_dirty = False
@@ -167,6 +167,7 @@ class MessageLog:
         Args:
             surface (Surface): Main surface to draw to.
         """
+        # TODO - extract tooltip method from message log
         # Message log tooltips
         font = self.font
         font_colour = self.palette.message_log.tooltip_text
@@ -237,8 +238,8 @@ class MessageLog:
         """
         icons = {}
 
-        icons["player"] = pygame.image.load("assets/actor/player.png").convert_alpha()
-        icons["orc"] = pygame.image.load("assets/actor/enemy.png").convert_alpha()
+        #icons["player"] = pygame.image.load("assets/actor/player.png").convert_alpha()
+        #icons["orc"] = pygame.image.load("assets/actor/enemy.png").convert_alpha()
 
         return icons
 

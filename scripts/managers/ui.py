@@ -65,6 +65,7 @@ class UIManager:
         self.main_surface.fill(self.colour.black)
 
         # draw new frame
+        # TODO - change visible_panels to enum
         if "game_map" in self.visible_panels:
             game_map.draw(entities, self.main_surface)
 

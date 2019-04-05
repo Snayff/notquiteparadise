@@ -1,7 +1,7 @@
-from scripts.core.constants import LoggingEventTypes, EventTopics
+from scripts.core.constants import LoggingEventTypes
 from scripts.core.global_data import game_manager, ui_manager
 from scripts.events.logging_events import LoggingEvent
-from scripts.events.pub_sub_hub import Subscriber, Event
+from scripts.events.pub_sub_hub import Subscriber
 
 
 class MessageHandler(Subscriber):
