@@ -36,7 +36,7 @@ class Entity:
         self.blocks_movement = blocks_movement
         self.blocks_sight = blocks_sight
         self.sight_range = sight_range
-        self.current_sprite = self.spritesheet.get("still")  # start using still
+        #self.current_sprite = self.spritesheet.get("still")  # start using still
         self.current_sprite_frame = 0
         self.current_sprite_name = "still"
         self.animation_timer = 0

@@ -12,6 +12,7 @@ class EntityManager:
         self.existence = EntityExistenceAmendment(self)
         self.animation = EntityAnimation(self)
         self.action = EntityAction(self)
+        self.animation_enabled = False
 
     def update(self, game_map):
         """
@@ -20,7 +21,8 @@ class EntityManager:
         Args:
             game_map (GameMap): The current game map
         """
-        self.animation.update_entity_sprites(game_map)
+        if self.animation_enabled:
+            self.animation.update_entity_sprites(game_map)
 
 
 

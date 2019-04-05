@@ -5,6 +5,7 @@ from scripts.components.adulthood import Adulthood
 from scripts.components.combatant import Combatant
 from scripts.components.player import Player
 from scripts.components.youth import Youth
+from scripts.core.constants import TILE_SIZE
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.core.entity import Entity
 
@@ -27,7 +28,12 @@ class EntityExistenceAmendment:
         values = get_value_from_actor_json(actor_name)
 
         actor_name = values["name"]
-        sprite = self.manager.animation.create_actor_sprite_dict(values["spritesheet"])
+
+        sprite = pygame.image.load("assets/actor/" + values["spritesheet"]).convert_alpha()
+        # catch any images not resized and resize them
+        if sprite.get_size() != (TILE_SIZE, TILE_SIZE):
+            sprite = pygame.transform.scale(sprite, (TILE_SIZE, TILE_SIZE))
+
         combatant_component = Combatant()
         youth_component = Youth(values["youth_component"])
         adulthood_component = Adulthood(values["adulthood_component"])

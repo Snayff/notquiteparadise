@@ -9,7 +9,7 @@
 		"ai_component" : "none",
         "player_component": true,
         "sight_range": 5,
-        "spritesheet" : "actor_template"
+        "spritesheet" : "placeholder/Mobs_skeleton_06.png"
 	},
         "orc_fighter" : {
 		"name" : "orc fighter",
@@ -21,7 +21,7 @@
 		"ai_component" : "basic_monster",
         "player_component": false,
         "sight_range": 3,
-        "spritesheet" : "actor_template"
+        "spritesheet" : "placeholder/Mobs_snail_02.png"
 
 	},
 		"troll_fighter" : {
@@ -34,7 +34,7 @@
 		"ai_component" : "basic_monster",
         "player_component": false,
         "sight_range": 3,
-        "spritesheet" : "actor_template"
+        "spritesheet" : "placeholder/Mobs_madman.png"
 
 	}
 
