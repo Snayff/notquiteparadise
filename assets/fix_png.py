@@ -1,4 +1,5 @@
-path =r"C:\Users\Gabriel\Documents\NotQuiteParadise\assets\world\placeholder" # path to all .png images
+# remove sRGB errors from .png files
+path =r"C:\Users\Gabriel\Documents\NotQuiteParadise\assets" # path to all .png images
 import os
 
 png_files =[]

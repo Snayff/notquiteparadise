@@ -91,12 +91,10 @@ class Skill:
                 effect = None
 
                 if effect_name == "move_self":
-                    target_tile = target[0], target[1]
-                    effect = MoveEffect(entity_using_skill, target_tile)
+                    effect = MoveEffect(entity_using_skill, target, 1)
 
-                if effect_name == "damage_other":
-                    target_tile = target[0], target[1]  #  TODO - change to take list of entities
-                    effect = DamageEffect(entity_using_skill, target_tile)
+                if effect_name == "damage_other":  # TODO - change to take list of entities
+                    effect = DamageEffect(entity_using_skill, target)
 
                 if effect:
                     effect.trigger()

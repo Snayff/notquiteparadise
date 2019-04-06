@@ -32,15 +32,13 @@ class EntityHandler(Subscriber):
 
         if skill:
             if skill.targeting_required:
-                pass
-                target_x = 0
-                target_y = 0
                 # TODO - trigger targeting system and get new target
-            else:
-                target_x = event.target[0] + event.entity.x
-                target_y = event.target[1] + event.entity.y
+                pass
+                event.target.x = 0
+                event.target.y = 0
 
-            target_type = world_manager.game_map.get_target_type(target_x, target_y)
+            # confirm target type and resource cost
+            target_type = world_manager.game_map.get_target_type(event.target.x, event.target.y)
             if skill.is_valid_target(event.target, target_type) and skill.user_can_afford_cost():
                 skill.pay_the_resource_cost()
                 skill.use(event.target)

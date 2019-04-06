@@ -136,38 +136,38 @@ def handle_input(values):
                 if entity:
                     ui_manager.entity_info.set_selected_entity(entity)
 
-        dx = 0
-        dy = 0
+        direction_x = 0
+        direction_y = 0
 
         if values["up"]:
-            dx = 0
-            dy = -1
+            direction_x = 0
+            direction_y = -1
         elif values["down"]:
-            dx = 0
-            dy = 1
+            direction_x = 0
+            direction_y = 1
         elif values["left"]:
-            dx = -1
-            dy = 0
+            direction_x = -1
+            direction_y = 0
         elif values["right"]:
-            dx = 1
-            dy = 0
+            direction_x = 1
+            direction_y = 0
         elif values["up_left"]:
-            dx = -1
-            dy = -1
+            direction_x = -1
+            direction_y = -1
         elif values["up_right"]:
-            dx = 1
-            dy = -1
+            direction_x = 1
+            direction_y = -1
         elif values["down_left"]:
-            dx = -1
-            dy = 1
+            direction_x = -1
+            direction_y = 1
         elif values["down_right"]:
-            dx = 1
-            dy = 1
+            direction_x = 1
+            direction_y = 1
 
         # if destination isn't 0 then we need to move an entity
-        if dx != 0 or dy != 0:
-            target_tile = (dx, dy)
-            game_manager.create_event(UseSkillEvent(player, target_tile, "move"))
+        if direction_x != 0 or direction_y != 0:
+            target = world_manager.game_map.get_tile(player.x + direction_x, player.y + direction_y)
+            game_manager.create_event(UseSkillEvent(player, target, "move"))
 
         if values["wait"]:
             return {"wait": True}

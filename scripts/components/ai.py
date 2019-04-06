@@ -57,7 +57,7 @@ class BasicMonster:
             if direction_x != 0 or direction_y != 0:
                 # limit to only moving one tile then move
                 target_tile = int(numpy.sign(direction_x)), int(numpy.sign(direction_y))
-                game_manager.create_event(UseSkillEvent(entity, target_tile, "move"))
+                game_manager.create_event(UseSkillEvent(entity, target, "move"))
             else:
                 # TODO - if they can't move where they want move in a random direction before passing.
                 msg_string = f"{entity.name} passed their turn."
