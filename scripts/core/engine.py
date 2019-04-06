@@ -22,6 +22,8 @@ from scripts.core.intialisers import initialise_game
 # TODO - effect activation events (so that world can update)
 # TODO - text wrapping, especially in message log
 # TODO - all UI functionality to watch events and update UI in response
+# TODO - check if in battle; once damage taken keep an eye on enemy states
+# TODO - add version number to profile logs
 
 
 def main():

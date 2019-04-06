@@ -32,7 +32,7 @@ class EntityExistenceAmendment:
         sprite = pygame.image.load("assets/actor/" + values["spritesheet"]).convert_alpha()
         # catch any images not resized and resize them
         if sprite.get_size() != (TILE_SIZE, TILE_SIZE):
-            sprite = pygame.transform.scale(sprite, (TILE_SIZE, TILE_SIZE))
+            sprite = pygame.transform.smoothscale(sprite, (TILE_SIZE, TILE_SIZE))
 
         combatant_component = Combatant()
         youth_component = Youth(values["youth_component"])

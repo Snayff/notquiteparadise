@@ -31,12 +31,14 @@ class Entity:
 
         self.x = x
         self.y = y
-        self.spritesheet = spritesheet
+        self.spritesheet = spritesheet  # N.B. currently only taking a single image
         self.name = name
         self.blocks_movement = blocks_movement
         self.blocks_sight = blocks_sight
         self.sight_range = sight_range
-        #self.current_sprite = self.spritesheet.get("still")  # start using still
+
+        # animation config
+        self.current_sprite = ""  # self.spritesheet.get("still")  # start using still
         self.current_sprite_frame = 0
         self.current_sprite_name = "still"
         self.animation_timer = 0
@@ -72,3 +74,6 @@ class Entity:
 
         if self.player:
             self.player.owner = self
+
+        if self.actor and self.combatant:
+            self.actor.learn_skill("basic_attack")

@@ -4,3 +4,4 @@ NotQuiteParadise
 # tcod
 # pygame
 # sphinx
+# scipy

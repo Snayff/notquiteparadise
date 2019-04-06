@@ -82,7 +82,7 @@ class UIManager:
             self.entity_info.draw(self.main_surface)
 
         # resize the surface to the desired resolution
-        scaled_surface = pygame.transform.scale(self.main_surface, (self.desired_width, self.desired_height))
+        scaled_surface = pygame.transform.smoothscale(self.main_surface, (self.desired_width, self.desired_height))
         self.screen.blit(scaled_surface, (0, 0))
 
         # update the display

@@ -25,7 +25,7 @@ class Skill:
 
         self.effects = skill_values["effects"]  # list of effects to process
         self.base_time_cost = skill_values["base_time_cost"]  # base value of time spent to complete action
-        self.base_resource_cost = skill_values["base_resource_cost"] # base value of resource spent to complete action
+        self.base_resource_cost = skill_values["base_resource_cost"]  # base value of resource spent to complete action
         self.icon = skill_values["icon"]  # icon showing the skill
         self.range = skill_values["range"]  # how far away the skill can be used
         self.base_cooldown = skill_values["base_cooldown"]  # how many rounds to wait between uses
