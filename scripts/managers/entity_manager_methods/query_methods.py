@@ -1,8 +1,10 @@
 import math
 import tcod
+import scipy.spatial
 
 from scripts.core.constants import LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
+
 
 
 class EntityQuery:
@@ -40,7 +42,7 @@ class EntityQuery:
 
         return None
 
-    def get_distance_between_entities(self, start_entity, target_entity):
+    def get_euclidean_distance_between_entities(self, start_entity, target_entity):
         """
         get distance from an entity towards another entity's location
 
@@ -48,10 +50,29 @@ class EntityQuery:
             start_entity (Entity):
             target_entity (Entity):
 
+        Returns:
+            float: straight line distance
+
         """
         dx = target_entity.x - start_entity.x
         dy = target_entity.y - start_entity.y
         return math.sqrt(dx ** 2 + dy ** 2)
+
+    def get_chebyshev_distance_between_entities(self, start_entity, target_entity):
+        """
+        get distance from an entity towards another entity's location
+
+        Args:
+            start_entity (Entity):
+            target_entity (Entity):
+
+        Returns:
+            int: distance in tiles
+
+        """
+        start_entity_position = [start_entity.x, start_entity.y]
+        target_entity_position = [target_entity.x, target_entity.y]
+        return scipy.spatial.distance.chebyshev(start_entity_position, target_entity_position)
 
     def get_direct_direction_between_entities(self, start_entity, target_entity):
         """

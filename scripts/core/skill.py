@@ -25,7 +25,7 @@ class Skill:
 
         self.effects = skill_values["effects"]  # list of effects to process
         self.base_time_cost = skill_values["base_time_cost"]  # base value of time spent to complete action
-        self.base_resource_cost = skill_values["base_resource_cost"] # base value of resource spent to complete action
+        self.base_resource_cost = skill_values["base_resource_cost"]  # base value of resource spent to complete action
         self.icon = skill_values["icon"]  # icon showing the skill
         self.range = skill_values["range"]  # how far away the skill can be used
         self.base_cooldown = skill_values["base_cooldown"]  # how many rounds to wait between uses
@@ -95,7 +95,7 @@ class Skill:
                     effect = MoveEffect(entity_using_skill, target_tile)
 
                 if effect_name == "damage_other":
-                    target_tile = target[0], target[1] #  TODO - change to take list of entities
+                    target_tile = target[0], target[1]  #  TODO - change to take list of entities
                     effect = DamageEffect(entity_using_skill, target_tile)
 
                 if effect:

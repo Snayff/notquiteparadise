@@ -64,8 +64,12 @@ class GameMap:
         for entity in entities:
             if self.is_tile_visible_to_player(entity.x, entity.y):
                 from scripts.core.global_data import entity_manager
-                sprite = entity_manager.animation.get_entity_current_frame(entity)  # TODO - decouple link to
-                # entity_manager_methods
+                if entity_manager.animation_enabled:
+                    sprite = entity_manager.animation.get_entity_current_frame(entity)  # TODO - decouple link to
+                                                                                        #  entity_manager_methods
+                else:
+                    sprite = entity.spritesheet
+
                 self.panel.surface.blit(sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
 
                 # TESTING - show frames

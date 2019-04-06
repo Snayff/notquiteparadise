@@ -20,6 +20,7 @@
         "target_type": "entity",
         "effects": ["damage_other"],
         "base_time_cost": 20,
+        "base_resource_cost": 0,
         "icon": "",
         "base_cooldown": 0,
         "range": 1
