@@ -191,8 +191,8 @@ class MessageLog:
         """
         Add a message to the MessageLog
         Args:
-            message_type:
-            message:
+            message_type(MessageEventTypes):
+            message(str):
         """
         log_string = f"{message} added to message log"
         from scripts.core.global_data import game_manager
@@ -205,6 +205,11 @@ class MessageLog:
             self.update_first_message_position(1)
 
     def update_first_message_position(self, increment):
+        """
+
+        Args:
+            increment:
+        """
         #  prevent the first message going too far and showing less than max number of message_list to show
         self.first_message_to_show = min(self.first_message_to_show + increment, len(self.message_list) -
                                                                                  self.number_of_messages_to_show)
@@ -213,6 +218,11 @@ class MessageLog:
         self.first_message_to_show = max(self.first_message_to_show, 0)
 
     def change_message_type_to_show(self, message_type):
+        """
+
+        Args:
+            message_type(MessageEventTypes):
+        """
         self.message_type_to_show = message_type
 
     def create_expressions_list(self):
@@ -229,7 +239,8 @@ class MessageLog:
 
         return expressions
 
-    def create_icons_list(self):
+    @staticmethod
+    def create_icons_list():
         """
         Create list of icons to look for in log and render
 
@@ -243,7 +254,8 @@ class MessageLog:
 
         return icons
 
-    def create_hyperlinks_list(self):
+    @staticmethod
+    def create_hyperlinks_list():
         """
         Create list of hyperlinks to look for in log and render
 
@@ -258,6 +270,9 @@ class MessageLog:
         return hyperlinks
 
     def check_mouse_over_link(self):
+        """
+
+        """
         # TODO - increment displayed_hyperlinks rect positions when new lines added
 
         for link in range(len(self.displayed_hyperlinks)):
@@ -276,7 +291,7 @@ class MessageLog:
                 self.displayed_hyperlinks[link] = (link_rect, link_text, link_mouse_over_timer + 1)
                 self.index_of_active_hyperlink = link
                 # TESTING TIMING OVER HOVER OVER  # FIXME - timing isnt working, ~30 frames is 1 sec. Use Delta time?
-                print(f"{link_mouse_over_timer + 1}")
+                # print(f"{link_mouse_over_timer + 1}")
                 # from datetime import datetime
                 # print(datetime.now().time())
             else:

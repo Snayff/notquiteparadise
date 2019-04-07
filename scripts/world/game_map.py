@@ -82,23 +82,56 @@ class GameMap:
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
     def is_tile_blocking_movement(self, tile_x, tile_y):
+        """
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+
+        """
         if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
             return self.tiles[tile_x][tile_y].blocks_movement
         else:
             return True
 
     def is_tile_blocking_sight(self, tile_x, tile_y):
+        """
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+        """
         if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
             return self.tiles[tile_x][tile_y].blocks_sight
         else:
             return True
 
     def update_tile_visibility(self, fov_map):
+        """
+        Update the player's fov
+        Args:
+            fov_map:
+        """
         for x in range(0, self.width):
             for y in range(0, self.height):
                 self.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
     def is_tile_visible_to_player(self, tile_x, tile_y):
+        """
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+        """
         if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
             return self.tiles[tile_x][tile_y].is_visible
         else:
@@ -123,6 +156,15 @@ class GameMap:
             return TargetTags.FLOOR
 
     def is_tile_in_bounds(self, tile_x, tile_y):
+        """
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+        """
         if (0 <= tile_x <= self.width) and (0 <= tile_y <= self.height):
             return True
         else:

@@ -2,7 +2,7 @@ from scripts.core.constants import EntityEventTypes, LoggingEventTypes, TargetTa
 from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent
-from scripts.events.pub_sub_hub import Subscriber
+from scripts.events.pub_sub_hub import Subscriber, Event
 
 
 class EntityHandler(Subscriber):
@@ -10,6 +10,12 @@ class EntityHandler(Subscriber):
         Subscriber.__init__(self, "entity_handler", event_hub)
 
     def run(self, event):
+        """
+
+        Args:
+            event(Event):
+        """
+
         log_string = f"{self.name} received {event.type}"
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
@@ -30,7 +36,7 @@ class EntityHandler(Subscriber):
         Args:
             event:
         """
-        log_string = f"Processing {event.entity.name}'s move."
+        log_string = f"-> Processing {event.entity.name}'s move."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # get info from event
@@ -55,7 +61,7 @@ class EntityHandler(Subscriber):
         Args:
             event(EntityEvent): the event to process
         """
-        log_string = f"Processing {event.entity.name}'s skill: {event.skill_name}."
+        log_string = f"-> Processing {event.entity.name}'s skill: {event.skill_name}."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         skill = event.entity.actor.known_skills[event.skill_name]
@@ -85,7 +91,7 @@ class EntityHandler(Subscriber):
         Args:
             event(EntityEvent): the event to process
         """
-        log_string = f"Processing {event.dying_entity.name}'s death."
+        log_string = f"-> Processing {event.dying_entity.name}'s death."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # TODO add player death

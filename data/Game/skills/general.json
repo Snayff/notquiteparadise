@@ -16,12 +16,6 @@
                     "target_type": "entity",
                     "target_tags": ["other_entity"],
                     "amount": 5
-                },
-                {
-                    "name": "damage",
-                    "target_type": "entity",
-                    "target_tags": ["other_entity"],
-                    "amount": 6
                 }
         ]
     }

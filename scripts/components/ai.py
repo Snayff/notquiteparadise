@@ -1,6 +1,7 @@
 import numpy
 
 from scripts.core.constants import LoggingEventTypes, MessageEventTypes
+from scripts.core.entity import Entity
 from scripts.core.global_data import entity_manager, game_manager, world_manager
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import EndTurnEvent
@@ -20,11 +21,11 @@ class BasicMonster:
         distance_to_target = entity_manager.query.get_chebyshev_distance_between_entities(entity, target)
         target_tile_x, target_tile_y = entity.x + direction_x, entity.y + direction_y
 
-        log_string = f"{entity.name} is starting to take their turn."
+        log_string = f"{entity.name} is starting to take their turn..."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         # try to attack first
-        log_string = f"{entity.name} is looking to attack."
+        log_string = f"->{entity.name} is looking for a possible attack."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         for skill_key, skill_value in entity.actor.known_skills.items():
@@ -34,13 +35,13 @@ class BasicMonster:
             attack_range = skill_value.range
 
             if distance_to_target <= attack_range:
-                log_string = f"{entity.name} decided to use {skill_value.name}."
+                log_string = f"->{entity.name} decided to use {skill_value.name}."
                 game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-                game_manager.create_event(UseSkillEvent(entity, target, skill_value.name))
+                game_manager.create_event(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value.name))
                 return None  # stop further processing in function
 
-        log_string = f"{entity.name} found no possible attack."
+        log_string = f"->{entity.name} found no possible attack."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # we can't attack so try to move closer
@@ -72,7 +73,7 @@ class BasicMonster:
         """
         target = entity_manager.player
 
-        log_string = f"{self.owner.name} choose {target.name} as a target."
+        log_string = f"->{self.owner.name} choose {target.name} as a target."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
         return target
 

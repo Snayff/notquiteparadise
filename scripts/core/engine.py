@@ -12,7 +12,6 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
 # Project Wide to do list...
-# TODO *NEXT* add basic attack skill
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
@@ -21,6 +20,7 @@ from scripts.core.intialisers import initialise_game
 # TODO - effect activation events (so that world can update)
 # TODO - text wrapping, especially in message log
 # TODO - check if in battle; once damage taken keep an eye on enemy states
+# TODO - change from use fps for timing to delta time
 
 
 def main():

@@ -110,20 +110,27 @@ class DamageEffect(Effect):
                 if attacker != defender:
                     damage = self.calculate_damage(attacker, defender)
 
-        # apply damage
-        if damage > 0:
-            self.apply_damage(attacker, defender, damage)
+            # apply damage
+            if damage > 0:
+                self.apply_damage(attacker, defender, damage)
 
-            # check if defender died
-            if defender.combatant.hp <= 0:
-                game_manager.create_event(DieEvent(defender))
+                # check if defender died
+                if defender.combatant.hp <= 0:
+                    game_manager.create_event(DieEvent(defender))
 
-            log_string = f"->{attacker.name} deals {damage} damage to {defender.name} and they have " \
-                f"{defender.combatant.hp} health remaining."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                log_string = f"-> {attacker.name} deals {damage} damage to {defender.name} and they have " \
+                    f"{defender.combatant.hp} health remaining."
+                game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-    @staticmethod
-    def calculate_damage(attacker,  defender):
+            else:
+                msg = f"{attacker.name} deals no damage to {defender.name}."
+                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+
+        else:
+            msg = f"You can't do that there!"
+            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+
+    def calculate_damage(self, attacker,  defender):
         """
         Work out the damage to be dealt
         Args:
@@ -133,10 +140,11 @@ class DamageEffect(Effect):
         Returns:
             int: damage to be dealt
         """
-        damage = max(attacker.combatant.power - defender.combatant.defence, 0)
+        damage = max(attacker.combatant.power - defender.combatant.defence + self.damage_amount, 0)
+        # TODO - include the damage value in the base effect
 
         from scripts.core.global_data import game_manager
-        log_string = f"->Power({attacker.combatant.power}) - Defence({defender.combatant.defence}) = {damage}."
+        log_string = f"-> Power({attacker.combatant.power}) - Defence({defender.combatant.defence}) = {damage}."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return damage

@@ -11,7 +11,7 @@ class Skill:
     A skill to be used by an actor
 
     Args:
-            name:
+            name(str):
     """
     def __init__(self, name):
         self.name = name
@@ -134,7 +134,6 @@ class Skill:
             target_pos (tuple): x y of the target
         """
         entity = self.owner.owner  # owner is actor, actor's owner is entity
-        target_x, target_y = target_pos
         target = self.get_target(target_pos)  # get the tile or entity
 
         # apply any effects
@@ -156,7 +155,7 @@ class Skill:
         entity.combatant.hp -= self.resource_cost
 
         from scripts.core.global_data import game_manager
-        log_string = f"{entity.name} paid {self.resource_cost} hp."
+        log_string = f"{entity.name} paid {self.resource_cost} hp and has {entity.combatant.hp} left."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
     @staticmethod
