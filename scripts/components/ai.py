@@ -47,7 +47,7 @@ class BasicMonster:
         # check target tile is valid
         in_bounds = world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y)
         tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_tile_x, target_tile_y)
-        entity_blocking_movement = entity_manager.query.get_blocking_entities_at_location(target_tile_x, target_tile_y)
+        entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_tile_x, target_tile_y)
         if in_bounds and not tile_blocking_movement and not entity_blocking_movement:
             if direction_x != 0 or direction_y != 0:
                 # limit to only moving one tile then move

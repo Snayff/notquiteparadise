@@ -1,7 +1,9 @@
-from scripts.core.constants import MessageEventTypes, LoggingEventTypes
+from scripts.core.constants import MessageEventTypes, LoggingEventTypes, TargetTypes, TargetTags
+from scripts.core.entity import Entity
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
+from scripts.world.tiles import Tile
 
 
 class Effect:
@@ -39,8 +41,8 @@ class MoveEffect(Effect):
             # check target tile is valid
             in_bounds = world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y)
             tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_tile_x, target_tile_y)
-            entity_blocking_movement = entity_manager.query.get_blocking_entities_at_location(target_tile_x,
-                                                                                              target_tile_y)
+            entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_tile_x,
+                                                                                            target_tile_y)
             if in_bounds and not tile_blocking_movement and not entity_blocking_movement:
 
                 # move the entity
@@ -70,51 +72,86 @@ class DamageEffect(Effect):
         amount(int):
         tags(list): list of TargetType enums
     """
-    def __init__(self, amount, type, tags):
+    def __init__(self, amount, target_type, tags):
         Effect.__init__(self)
+        self.name = "Damage"
         self.description = "This is the damage effect"
         self.damage_amount = amount
-        self.target_type = type
+        self.target_type = target_type
         self.target_tags = tags
 
-    def trigger(self, attacking_entity, defending_entities):
+    def trigger(self, attacking_entity, defending_entity):
         """
         Trigger the effect
 
         Args:
             attacking_entity:
-            defending_entities(list):
+            defending_entity:
         """
-        from scripts.core.global_data import game_manager
         attacker = attacking_entity
+        defender = defending_entity
+        damage = 0
 
-        for defender in defending_entities:
-            damage = self.calculate_damage(defender)
+        from scripts.core.global_data import game_manager
+        log_string = f"Applying effect '{self.name}'..."
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-            # apply damage
-            if damage > 0:
-                defender.combatant.hp -= damage
-                msg = f"{attacker.name} deals {damage} damage to {defender.name}."
+        # store the base class type for comparison
+        target_type_for_comparison = None
+        if self.target_type == TargetTypes.TILE:
+            target_type_for_comparison = type(Tile(0, 0))
+        elif self.target_type == TargetTypes.ENTITY:
+            target_type_for_comparison = type(attacker)
 
-                # check if defender died
-                if defender.combatant.hp <= 0:
-                    game_manager.create_event(DieEvent(defender))
-                    msg = f"{attacker.name} deals {damage} damage and kills {defender.name}."
+        # check the type is correct, then that the tags match
+        if type(defender) == target_type_for_comparison:
+            # if it needs to be another entity then it can't be looking at itself
+            if TargetTags.OTHER_ENTITY in self.target_tags:
+                if attacker != defender:
+                    damage = self.calculate_damage(attacker, defender)
 
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+        # apply damage
+        if damage > 0:
+            self.apply_damage(attacker, defender, damage)
 
-            log_string = f"{attacker.name} deals {damage} damage to {defender.name} and they have " \
+            # check if defender died
+            if defender.combatant.hp <= 0:
+                game_manager.create_event(DieEvent(defender))
+
+            log_string = f"->{attacker.name} deals {damage} damage to {defender.name} and they have " \
                 f"{defender.combatant.hp} health remaining."
             game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-    def calculate_damage(self, defender):
+    @staticmethod
+    def calculate_damage(attacker,  defender):
         """
         Work out the damage to be dealt
         Args:
-            defender(Entity): the entity getting attacked
+            attacker(Entity):
+            defender(Entity):
 
         Returns:
             int: damage to be dealt
         """
-        damage = max(self.attacking_entity.combatant.power - defender.combatant.defence, 0)
+        damage = max(attacker.combatant.power - defender.combatant.defence, 0)
+
+        from scripts.core.global_data import game_manager
+        log_string = f"->Power({attacker.combatant.power}) - Defence({defender.combatant.defence}) = {damage}."
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
         return damage
+
+    @staticmethod
+    def apply_damage(attacker, defender, damage):
+        """
+        Apply damage to an entity
+
+        Args:
+            attacker(Entity):
+            defender(Entity):
+            damage(int):
+        """
+        defender.combatant.hp -= damage
+        from scripts.core.global_data import game_manager
+        msg = f"{attacker.name} deals {damage} damage to {defender.name}."
+        game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))

@@ -172,7 +172,7 @@ def handle_input(values):
             # is there something in the way?
             in_bounds = world_manager.game_map.is_tile_in_bounds(target_x, target_y)
             tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
-            entity_blocking_movement = entity_manager.query.get_blocking_entities_at_location(target_x, target_y)
+            entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
 
             if in_bounds and not tile_blocking_movement:
                 if not entity_blocking_movement:

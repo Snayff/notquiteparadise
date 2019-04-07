@@ -49,8 +49,9 @@ class Skill:
                 for tag in effect["target_tags"]:
                     target_tags.append(self.get_target_tags_from_tag_string(tag))
 
+                target_type = self.get_target_type_from_type_string(effect["target_type"])
                 # add effect object to skill
-                self.effects.append(DamageEffect(effect["amount"], effect["target_type"], target_tags))
+                self.effects.append(DamageEffect(effect["amount"], target_type, target_tags))
 
     def is_valid_target_type(self, tile_target_type, entity_target_type):
         """
@@ -68,7 +69,7 @@ class Skill:
         entity_target_ok = False
 
         from scripts.core.global_data import game_manager
-        log_string = f"Checking if target is valid type..."
+        log_string = f"Checking if target is valid type for skill..."
         log_string2 = f"-> looking for {self.target_tags}"
         log_string3 = f"-> got {tile_target_type} and {entity_target_type}"
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
@@ -125,28 +126,23 @@ class Skill:
             game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
             return False
 
-    def use(self, target):
+    def use(self, target_pos):
         """
         Use the skill
 
         Args:
-            target (object): the tile or entity being targeted
+            target_pos (tuple): x y of the target
         """
-        entity_using_skill = self.owner.owner  # owner is actor, actor's owner is entity
+        entity = self.owner.owner  # owner is actor, actor's owner is entity
+        target_x, target_y = target_pos
+        target = self.get_target(target_pos)  # get the tile or entity
 
         # apply any effects
         if self.effects:
-            for effect_name in self.effects:
-                effect = None
+            for effect in self.effects:
 
-                if effect_name == "move":
-                    effect = MoveEffect(entity_using_skill, target)
-
-                if effect_name == "damage":  # TODO - change to take list of entities
-                    effect = DamageEffect(entity_using_skill, target)
-
-                if effect:
-                    effect.trigger()
+                if type(effect) is DamageEffect:
+                    effect.trigger(entity, target)
 
         # end the turn
         from scripts.core.global_data import game_manager
@@ -156,8 +152,12 @@ class Skill:
         """
         Remove the resource cost from the using entity
         """
-        entity_using_skill = self.owner.owner  # owner is actor, actor's owner is entity
-        entity_using_skill.combatant.hp -= self.resource_cost
+        entity = self.owner.owner  # owner is actor, actor's owner is entity
+        entity.combatant.hp -= self.resource_cost
+
+        from scripts.core.global_data import game_manager
+        log_string = f"{entity.name} paid {self.resource_cost} hp."
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
     @staticmethod
     def get_target_tags_from_tag_string(tag):
@@ -197,5 +197,28 @@ class Skill:
         elif target_type == "tile":
             return TargetTypes.TILE
 
+    def get_target(self, target_pos):
+        """
+        Get target at xy based on target type
 
+        Args:
+            target_pos (tuple): x y of the target
+        """
+        # TODO - extend to target an area
+        target_x, target_y = target_pos
 
+        from scripts.core.global_data import game_manager
+        target = None
+
+        if self.target_type == TargetTypes.ENTITY:
+            from scripts.core.global_data import entity_manager
+            target = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
+
+        elif self.target_type == TargetTypes.TILE:
+            from scripts.core.global_data import world_manager
+            target = world_manager.get_tile(target_x, target_y)
+
+        log_string = f"Got target {target.name} for the skill."
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        return target

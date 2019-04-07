@@ -68,7 +68,7 @@ class EntityHandler(Subscriber):
 
             # confirm target type and resource cost
             tile_target_type = world_manager.game_map.get_target_type_from_tile(target_x, target_y)
-            entity_at_tile = entity_manager.query.get_blocking_entities_at_location(target_x, target_y)
+            entity_at_tile = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
             if entity_at_tile != event.entity:
                 entity_target_type = TargetTags.OTHER_ENTITY
             else:
@@ -76,7 +76,7 @@ class EntityHandler(Subscriber):
 
             if skill.is_valid_target_type(tile_target_type, entity_target_type) and skill.user_can_afford_cost():
                 skill.pay_the_resource_cost()
-                skill.use()
+                skill.use(event.target_pos)
 
     @staticmethod
     def process_die(event):
