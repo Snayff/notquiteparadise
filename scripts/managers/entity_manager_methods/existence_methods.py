@@ -1,10 +1,10 @@
 import pygame
 
 from scripts.components.actor import Actor
-from scripts.components.adulthood import Adulthood
+from scripts.components.motive import Motive
 from scripts.components.combatant import Combatant
 from scripts.components.player import Player
-from scripts.components.youth import Youth
+from scripts.components.trade import Trade
 from scripts.core.constants import TILE_SIZE
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.core.entity import Entity
@@ -35,8 +35,8 @@ class EntityExistenceAmendment:
             sprite = pygame.transform.smoothscale(sprite, (TILE_SIZE, TILE_SIZE))
 
         combatant_component = Combatant()
-        youth_component = Youth(values["youth_component"])
-        adulthood_component = Adulthood(values["adulthood_component"])
+        youth_component = Trade(values["trade_component"])
+        adulthood_component = Motive(values["motive_component"])
         actor_component = Actor()
         sight_range = values["sight_range"]
 
@@ -56,10 +56,10 @@ class EntityExistenceAmendment:
             ai_component = None
 
         actor = Entity(x, y, sprite, actor_name, blocks_movement=True, combatant=combatant_component,
-                       youth=youth_component, adulthood=adulthood_component, ai=ai_component,
+                       trade=youth_component, motive=adulthood_component, ai=ai_component,
                        actor=actor_component, sight_range=sight_range, player=player)
 
-        actor.combatant.hp = actor.combatant.max_hp
+        actor.combatant.hp = actor.combatant.secondary_stats.max_hp
 
         if player:
             self.add_player(actor)

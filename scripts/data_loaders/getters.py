@@ -20,24 +20,24 @@ def get_value_from_race_json(race_name, value="all"):
         return data[race_name].get(value)
 
 
-def get_value_from_youth_json(youth_name, value="all"):
-    with open('Data/game/entity/youth.json') as file:
+def get_value_from_trade_json(trade_name, value="all"):
+    with open('Data/game/entity/trade.json') as file:
         data = json.load(file)
 
     if value == "all":
-        return data[youth_name]
+        return data[trade_name]
     else:
-        return data[youth_name].get(value)
+        return data[trade_name].get(value)
 
 
-def get_value_from_adulthood_json(adulthood_name, value="all"):
-    with open('Data/game/entity/adulthood.json') as file:
+def get_value_from_motive_json(motive_name, value="all"):
+    with open('Data/game/entity/motive.json') as file:
         data = json.load(file)
 
     if value == "all":
-        return data[adulthood_name]
+        return data[motive_name]
     else:
-        return data[adulthood_name].get(value)
+        return data[motive_name].get(value)
 
 
 def get_value_from_actor_json(actor_name, value="all"):

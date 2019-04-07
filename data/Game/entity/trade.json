@@ -1,0 +1,11 @@
+{
+	"beggar" : {
+        "name": "beggar",
+        "description": "A beggar description",
+        "vigour": 1,
+        "clout": 1,
+        "subtlety": 2,
+        "bustle": 0,
+        "exactitude": -1
+    }
+}

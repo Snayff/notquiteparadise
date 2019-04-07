@@ -72,9 +72,16 @@ class SelectedEntityInfo:
         # what messages do we want to show?
         messages.append(f"{entity.name.capitalize()}")
         messages.append(f"")
-        messages.append(f"Hp: {entity.combatant.hp}")
-        messages.append(f"Power: {entity.combatant.power}")
-        messages.append(f"Defence: {entity.combatant.defence}")
+        messages.append(f"PRIMARY")
+        messages.append(f"HP: {entity.combatant.hp}")
+        messages.append(f"Vigour: {entity.combatant.primary_stats.vigour}")
+        messages.append(f"Clout: {entity.combatant.primary_stats.clout}")
+        messages.append(f"Subtlety: {entity.combatant.primary_stats.subtlety}")
+        messages.append(f"Bustle: {entity.combatant.primary_stats.bustle}")
+        messages.append(f"Exactitude: {entity.combatant.primary_stats.exactitude}")
+        messages.append(f"")
+        messages.append(f"SECONDARY")
+        messages.append(f"...")
 
         # render the message_list
         for message in messages:

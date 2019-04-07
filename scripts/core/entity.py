@@ -9,8 +9,8 @@ class Entity:
             delay_until_idle_animation (int): Seconds until the next idle animation is played
     """
 
-    def __init__(self, x, y, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None, race=None,
-            youth=None, adulthood=None, ai=None, actor=None, sight_range=0, player=None):
+    def __init__(self, x, y, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None,
+            race=None, trade=None, motive=None, ai=None, actor=None, sight_range=0, player=None):
         """
         Args:
             x (int) : X position, in tiles.
@@ -21,8 +21,8 @@ class Entity:
             blocks_sight (bool) : Does entity block sight?
             combatant (Combatant): Component.
             race (Race): Component.
-            youth (Youth): Component.
-            adulthood (Adulthood): Component.
+            trade (Trade): Component.
+            motive (Motive): Component.
             ai (AI): Component.
             actor(Actor) : Component.
             sight_range (int): How far the entity can see.
@@ -47,8 +47,8 @@ class Entity:
         # components
         self.race = race
         self.combatant = combatant
-        self.youth = youth
-        self.adulthood = adulthood
+        self.trade = trade
+        self.motive = motive
         self.ai = ai
         self.actor = actor
         self.player = player
@@ -60,11 +60,11 @@ class Entity:
         if self.race:
             self.race.owner = self
 
-        if self.youth:
-            self.youth.owner = self
+        if self.trade:
+            self.trade.owner = self
 
-        if self.adulthood:
-            self.adulthood.owner = self
+        if self.motive:
+            self.motive.owner = self
 
         if self.ai:
             self.ai.owner = self
