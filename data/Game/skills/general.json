@@ -1,28 +1,22 @@
 {
-	"move" : {
-        "name":  "move",
-        "description": "This is the movement skill.",
-        "targeting_required": false,
-        "target_size": 1,
-        "target_shape": "square",
-        "target_type": "floor",
-        "effects": ["move_self"],
-        "base_time_cost": 10,
-        "base_resource_cost": 0,
-        "icon": "",
-        "base_cooldown": 0,
-        "range": 0
-    },
-    "basic_attack" : {
-        "name":  "basic_attack",
+    "basic_attack": {
+        "name": "basic_attack",
         "description": "This is the basic attack. It does damage.",
-        "targeting_required": false,
-        "target_type": "entity",
-        "effects": ["damage_other"],
-        "base_time_cost": 20,
-        "base_resource_cost": 0,
         "icon": "",
-        "base_cooldown": 0,
-        "range": 1
+        "target_type": "entity",
+        "target_tags": ["other_entity"],
+        "range": 1,
+        "resource_type": "mana",
+        "resource_cost": 1,
+        "time_cost": 20,
+        "cooldown": 0,
+        "effects": [
+                {
+                    "name": "damage",
+                    "target_type": "entity",
+                    "target_tags": ["other_entity"],
+                    "amount": 5
+                }
+        ]
     }
 }

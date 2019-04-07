@@ -10,6 +10,7 @@ class UiHandler(Subscriber):
     """
     def __init__(self, event_hub):
         Subscriber.__init__(self, "ui_handler", event_hub)
+        # TODO - all UI functionality to watch events and update UI in response
 
     def run(self, event):
         """

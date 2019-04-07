@@ -9,7 +9,7 @@ class LoggingHandler(Subscriber):
     def __init__(self, event_hub):
         Subscriber.__init__(self, "logging_handler", event_hub)
 
-        self.log_file_name = "logs/" + "log.log"
+        self.log_file_name = "logs/" + "game.log"
         self.log_level = logging.DEBUG
         self.file_mode = "w"
             # File mode options:

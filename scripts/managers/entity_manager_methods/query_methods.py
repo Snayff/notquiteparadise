@@ -11,11 +11,15 @@ class EntityQuery:
     def __init__(self, manager):
         self.manager = manager
 
-    def get_blocking_entities_at_location(self, destination_x, destination_y):
+    def get_blocking_entity_at_location(self, destination_x, destination_y):
         """
-        :type destination_x: int
-        :type destination_y: int
-        :return entity
+
+        Args:
+            destination_x:
+            destination_y:
+
+        Returns:
+            entity
         """
         for entity in self.manager.entities:
             if entity.blocks_movement and entity.x == destination_x and entity.y == destination_y:
@@ -100,7 +104,7 @@ class EntityQuery:
         tile_is_blocked = game_map.is_tile_blocking_movement(start_entity.x + direction_x, start_entity.y +
                                                                                            direction_y)
 
-        if not (tile_is_blocked or self.get_blocking_entities_at_location(start_entity.x + direction_x,
+        if not (tile_is_blocked or self.get_blocking_entity_at_location(start_entity.x + direction_x,
                                                                           start_entity.y + direction_y)):
             log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
             game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
@@ -164,11 +168,11 @@ class EntityQuery:
             direction_x = x - entity_to_move.x
             direction_y = y - entity_to_move.y
 
-            log_string = f"{entity_to_move.name} found an a* path to {target.name}."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-            log_string = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction " \
+            log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
+            log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction "\
                 f"[{direction_x},{direction_y}]"
             game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string2))
 
         else:
             # no path found return no movement direction

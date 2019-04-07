@@ -1,9 +1,10 @@
 import pygame
 
-from scripts.core.constants import GameStates, TILE_SIZE
+from scripts.core.constants import GameStates, TILE_SIZE, MessageEventTypes
 from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager, debug_manager
-from scripts.events.entity_events import UseSkillEvent
+from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ExitEvent
+from scripts.events.message_events import MessageEvent
 
 
 def get_input():
@@ -136,38 +137,52 @@ def handle_input(values):
                 if entity:
                     ui_manager.entity_info.set_selected_entity(entity)
 
-        dx = 0
-        dy = 0
+        direction_x = 0
+        direction_y = 0
 
         if values["up"]:
-            dx = 0
-            dy = -1
+            direction_x = 0
+            direction_y = -1
         elif values["down"]:
-            dx = 0
-            dy = 1
+            direction_x = 0
+            direction_y = 1
         elif values["left"]:
-            dx = -1
-            dy = 0
+            direction_x = -1
+            direction_y = 0
         elif values["right"]:
-            dx = 1
-            dy = 0
+            direction_x = 1
+            direction_y = 0
         elif values["up_left"]:
-            dx = -1
-            dy = -1
+            direction_x = -1
+            direction_y = -1
         elif values["up_right"]:
-            dx = 1
-            dy = -1
+            direction_x = 1
+            direction_y = -1
         elif values["down_left"]:
-            dx = -1
-            dy = 1
+            direction_x = -1
+            direction_y = 1
         elif values["down_right"]:
-            dx = 1
-            dy = 1
+            direction_x = 1
+            direction_y = 1
 
-        # if destination isn't 0 then we need to move an entity
-        if dx != 0 or dy != 0:
-            target_tile = (dx, dy)
-            game_manager.create_event(UseSkillEvent(player, target_tile, "move"))
+        # if destination isn't 0 then we need to move player
+        if direction_x != 0 or direction_y != 0:
+            target_x, target_y = direction_x + player.x, direction_y + player.y
+
+            # is there something in the way?
+            in_bounds = world_manager.game_map.is_tile_in_bounds(target_x, target_y)
+            tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
+            entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
+
+            if in_bounds and not tile_blocking_movement:
+                if not entity_blocking_movement:
+                    # nothing in the way, time to move!
+                    game_manager.create_event(MoveEvent(player, (target_x, target_y)))
+                else:
+                    game_manager.create_event((UseSkillEvent(player, (target_x, target_y), "basic_attack")))
+            else:
+                msg = f"You can't do that there!"
+                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
 
         if values["wait"]:
             return {"wait": True}
@@ -209,26 +224,20 @@ def handle_input(values):
 
     if game_state == GameStates.MAIN_MENU:
         pass
-    # if values["new_game"]:
-    # 	create_event(event_hub, Event(GameEventTypes.NEW_GAME, EventTopics.GAME, []))
-    # elif values["load_game"]:
-    # 	return {"load_game": True}
-    # elif values["cancel"]:
-    # 	create_event(event_hub, Event(GameEventTypes.EXIT, EventTopics.GAME, []))
 
 
 def check_mouse_input(input_values):
-        """
+    """
 
-        Args:
-            input_values:
-        """
+    Args:
+        input_values:
+    """
 
-        if pygame.mouse.get_pressed()[0]:
-            input_values["left_click"] = True
-        elif pygame.mouse.get_pressed()[1]:
-            input_values["middle_click"] = True
-        elif pygame.mouse.get_pressed()[2]:
-            input_values["right_click"] = True
+    if pygame.mouse.get_pressed()[0]:
+        input_values["left_click"] = True
+    elif pygame.mouse.get_pressed()[1]:
+        input_values["middle_click"] = True
+    elif pygame.mouse.get_pressed()[2]:
+        input_values["right_click"] = True
 
-        input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
+    input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()

@@ -60,11 +60,20 @@ class EntityEventTypes(Enum):
     """Types of Entity Events"""
     DIE = auto()
     SKILL = auto()
+    MOVE = auto()
 
 
 class TargetTypes(Enum):
+    TILE = auto()
+    ENTITY = auto()
+
+
+class TargetTags(Enum):
     """Types of target"""
+
     FLOOR = auto()
     WALL = auto()
-    ENTITY = auto()
+    SELF = auto()
+    OTHER_ENTITY = auto()
+    NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
