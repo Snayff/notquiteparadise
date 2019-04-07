@@ -27,8 +27,9 @@ class UIManager:
         self.focused_window = None
 
         self.font = Font()
-        self.desired_width = 1920  # TODO - allow for selection by player but only multiples of base (16:9)
-        self.desired_height = 1080
+        self.desired_width = BASE_WINDOW_WIDTH#1920  # TODO - allow for selection by player but only multiples of
+        # base (16:9)
+        self.desired_height = BASE_WINDOW_HEIGHT#1080
         self.screen_scaling_mod_x = self.desired_width // BASE_WINDOW_WIDTH
         self.screen_scaling_mod_y = self.desired_height // BASE_WINDOW_HEIGHT
         self.screen = pygame.display.set_mode((self.desired_width, self.desired_height))

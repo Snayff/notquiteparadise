@@ -15,7 +15,6 @@ class Actor:
         """
         self.time_of_next_action = 0
         self.known_skills = {}
-        self.learn_skill("move")  # all actors know how to move
 
     def learn_skill(self, skill_name):
         """

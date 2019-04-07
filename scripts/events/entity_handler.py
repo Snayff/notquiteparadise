@@ -1,5 +1,6 @@
-from scripts.core.constants import EntityEventTypes, LoggingEventTypes
+from scripts.core.constants import EntityEventTypes, LoggingEventTypes, TargetTags
 from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
+from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
 
@@ -12,6 +13,9 @@ class EntityHandler(Subscriber):
         log_string = f"{self.name} received {event.type}"
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
+        if event.type == EntityEventTypes.MOVE:
+            self.process_move(event)
+
         if event.type == EntityEventTypes.SKILL:
             self.process_skill(event)
 
@@ -19,29 +23,60 @@ class EntityHandler(Subscriber):
             self.process_die(event)
 
     @staticmethod
+    def process_move(event):
+        """
+        Process the move event
+
+        Args:
+            event:
+        """
+        log_string = f"Processing {event.entity.name}'s move."
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        # get info from event
+        target_x, target_y = event.target_pos
+        entity = event.entity
+
+        # move entity
+        entity.x = target_x
+        entity.y = target_y
+
+        # update fov if needed
+        if entity.player:
+            world_manager.player_fov_is_dirty = True
+
+        # end turn
+        game_manager.create_event(EndTurnEvent(10))  # TODO - replace magic number with cost to move
+
+    @staticmethod
     def process_skill(event):
         """
-        Process the entity skill
+        Process the entity's skill
         Args:
             event(EntityEvent): the event to process
         """
         log_string = f"Processing {event.entity.name}'s skill: {event.skill_name}."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         skill = event.entity.actor.known_skills[event.skill_name]
+        target_x, target_y = event.target_pos
 
         if skill:
-            if skill.targeting_required:
+            if target_x == 0 and target_y == 0:
                 # TODO - trigger targeting system and get new target
                 pass
-                event.target.x = 0
-                event.target.y = 0
 
             # confirm target type and resource cost
-            target_type = world_manager.game_map.get_target_type(event.target.x, event.target.y)
-            if skill.is_valid_target(event.target, target_type) and skill.user_can_afford_cost():
+            tile_target_type = world_manager.game_map.get_target_type_from_tile(target_x, target_y)
+            entity_at_tile = entity_manager.query.get_blocking_entities_at_location(target_x, target_y)
+            if entity_at_tile != event.entity:
+                entity_target_type = TargetTags.OTHER_ENTITY
+            else:
+                entity_target_type = TargetTags.SELF
+
+            if skill.is_valid_target_type(tile_target_type, entity_target_type) and skill.user_can_afford_cost():
                 skill.pay_the_resource_cost()
-                skill.use(event.target)
+                skill.use()
 
     @staticmethod
     def process_die(event):
@@ -51,7 +86,7 @@ class EntityHandler(Subscriber):
             event(EntityEvent): the event to process
         """
         log_string = f"Processing {event.dying_entity.name}'s death."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # TODO add player death
         entity = event.dying_entity

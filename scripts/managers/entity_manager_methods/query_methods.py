@@ -164,11 +164,11 @@ class EntityQuery:
             direction_x = x - entity_to_move.x
             direction_y = y - entity_to_move.y
 
-            log_string = f"{entity_to_move.name} found an a* path to {target.name}."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-            log_string = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction " \
+            log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
+            log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction "\
                 f"[{direction_x},{direction_y}]"
             game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string2))
 
         else:
             # no path found return no movement direction

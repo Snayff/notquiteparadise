@@ -15,10 +15,10 @@ class SelectedEntityInfo:
         self.gap_between_lines = int(self.font.size / 3)
 
         # setup the panel
-        panel_width = BASE_WINDOW_WIDTH / 5
-        panel_height = int(BASE_WINDOW_HEIGHT / 3) * 2
+        panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
+        panel_height = int((BASE_WINDOW_HEIGHT / 5) * 2)
         panel_x = BASE_WINDOW_WIDTH - panel_width
-        panel_y = 0
+        panel_y = BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
         panel_background_colour = Palette().entity_info.background
         panel_border_colour = Palette().entity_info.border

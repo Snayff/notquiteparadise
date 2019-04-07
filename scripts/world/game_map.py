@@ -1,7 +1,7 @@
 import tcod
 
 from scripts.core.colours import Palette, Colour
-from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TILE_SIZE, TargetTypes
+from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TILE_SIZE, TargetTags
 from scripts.ui_elements.templates.panel import Panel
 from scripts.world.tiles import Floor, Wall
 
@@ -27,8 +27,8 @@ class GameMap:
         # setup the panel
         panel_x = 0
         panel_y = 0
-        panel_width = BASE_WINDOW_WIDTH
-        panel_height = int(BASE_WINDOW_HEIGHT / 3) * 2
+        panel_width = int((BASE_WINDOW_WIDTH / 4) * 3)
+        panel_height = BASE_WINDOW_HEIGHT
         panel_border = 2
         panel_background_colour = Palette().map.background
         panel_border_colour = Palette().map.border
@@ -104,31 +104,23 @@ class GameMap:
         else:
             return False
 
-    def get_target_type(self, tile_x, tile_y):
+    def get_target_type_from_tile(self, tile_x, tile_y):
         """
-        Get type of target tile; tile, entity, wall
+        Get type of target tile
+
         Args:
             tile_x(int):  x position of the tile
             tile_y(int):  y position of the tile
         """
+        tile = self.tiles[tile_x][tile_y]
 
-        # TODO - tile may have entity and floor component, they are not mutually exclusive. Return tuple of tile_type
-        #  and if there is an entity
+        if not self.is_tile_in_bounds(tile_x, tile_y):
+            return TargetTags.OUT_OF_BOUNDS
 
-        tile_is_blocked = self.is_tile_blocking_movement(tile_x, tile_y)
-
-        if tile_is_blocked:
-            return TargetTypes.WALL
-
-        if 0 > tile_x > self.width and 0 > tile_y > self.height:
-            return TargetTypes.OUT_OF_BOUNDS
-
-        from scripts.core.global_data import entity_manager
-        entity_at_location = entity_manager.query.get_blocking_entities_at_location(tile_x, tile_y)
-        if entity_at_location:
-            return TargetTypes.ENTITY
-
-        return TargetTypes.FLOOR
+        if type(tile) is Wall:
+            return TargetTags.WALL
+        elif type(tile) is Floor:
+            return TargetTags.FLOOR
 
     def is_tile_in_bounds(self, tile_x, tile_y):
         if (0 <= tile_x <= self.width) and (0 <= tile_y <= self.height):

@@ -45,8 +45,8 @@ class MessageLog:
         self.seconds_before_extended_text = 1
 
         # panel info
-        panel_width = int(BASE_WINDOW_WIDTH / 3)
-        panel_height = int(BASE_WINDOW_HEIGHT / 3)
+        panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
+        panel_height = int((BASE_WINDOW_HEIGHT / 5) * 2)
         panel_x = BASE_WINDOW_WIDTH - panel_width
         panel_y = BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
@@ -276,7 +276,7 @@ class MessageLog:
                 self.displayed_hyperlinks[link] = (link_rect, link_text, link_mouse_over_timer + 1)
                 self.index_of_active_hyperlink = link
                 # TESTING TIMING OVER HOVER OVER  # FIXME - timing isnt working, ~30 frames is 1 sec. Use Delta time?
-                # print(f"{link_mouse_over_timer + 1}")
+                print(f"{link_mouse_over_timer + 1}")
                 # from datetime import datetime
                 # print(datetime.now().time())
             else:

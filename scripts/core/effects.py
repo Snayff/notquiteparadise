@@ -47,7 +47,6 @@ class MoveEffect(Effect):
                 self.entity_to_move.x += direction_x
                 self.entity_to_move.y += direction_y
 
-
         # update the fov if player moved
         from scripts.core.global_data import entity_manager
         if self.entity_to_move == entity_manager.player:
@@ -66,21 +65,30 @@ class MoveEffect(Effect):
 class DamageEffect(Effect):
     """
     Effect to damage an entity
+
+    Args:
+        amount(int):
+        tags(list): list of TargetType enums
     """
-    def __init__(self, attacking_entity, defending_entities):
+    def __init__(self, amount, type, tags):
         Effect.__init__(self)
         self.description = "This is the damage effect"
-        self.attacking_entity = attacking_entity
-        self.defending_entities = defending_entities
+        self.damage_amount = amount
+        self.target_type = type
+        self.target_tags = tags
 
-    def trigger(self):
+    def trigger(self, attacking_entity, defending_entities):
         """
         Trigger the effect
+
+        Args:
+            attacking_entity:
+            defending_entities(list):
         """
         from scripts.core.global_data import game_manager
-        attacker = self.attacking_entity
+        attacker = attacking_entity
 
-        for defender in self.defending_entities:
+        for defender in defending_entities:
             damage = self.calculate_damage(defender)
 
             # apply damage
