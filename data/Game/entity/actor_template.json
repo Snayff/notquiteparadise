@@ -9,8 +9,9 @@
 		"ai_component" : "none",
         "player_component": true,
         "sight_range": 5,
-        "spritesheet" : "placeholder/Mobs_skeleton_06.png"
-	},
+        "spritesheet" : "placeholder/Mobs_skeleton_06.png",
+        "icon": "placeholder/Mobs_skeleton_06.png"
+    },
         "orc_fighter" : {
 		"name" : "orc fighter",
 		"description" : "Orc Fighter description",
@@ -21,21 +22,7 @@
 		"ai_component" : "basic_monster",
         "player_component": false,
         "sight_range": 3,
-        "spritesheet" : "placeholder/Mobs_snail_02.png"
-
-	},
-		"troll_fighter" : {
-		"name" : "troll fighter",
-		"description" : "Troll Fighter description",
-		"spawn_weight" : 50,
-		"race_component" : "troll",
-		"trade_component": "beggar",
-		"motive_component": "fighter",
-		"ai_component" : "basic_monster",
-        "player_component": false,
-        "sight_range": 3,
-        "spritesheet" : "placeholder/Mobs_madman.png"
-
+        "spritesheet" : "placeholder/Mobs_snail_02.png",
+        "icon": "placeholder/Mobs_snail_02.png"
 	}
-
 }

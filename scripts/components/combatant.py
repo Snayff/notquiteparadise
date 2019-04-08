@@ -1,8 +1,3 @@
-from scripts.core.constants import LoggingEventTypes, MessageEventTypes
-from scripts.events.entity_events import DieEvent
-from scripts.events.logging_events import LoggingEvent
-from scripts.events.message_events import MessageEvent
-
 
 class Combatant:
     """
@@ -109,6 +104,7 @@ class Combatant:
             return stat_total + base_amount
 
     class SecondaryStats:
+        # TODO - load the modifiers and base values from a json
 
         @property
         def max_hp(self):
@@ -171,7 +167,7 @@ class Combatant:
         @property
         def resist_elemental(self):
             subtlety = self.owner.primary_stats.subtlety
-            subtlety_modifier = 3
+            subtlety_modifier = 2
 
             stat_total = (subtlety * subtlety_modifier)
             return stat_total

@@ -12,6 +12,7 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
 # Project Wide to do list...
+# TODO - update combat to have damage types and target the correct resistances
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)

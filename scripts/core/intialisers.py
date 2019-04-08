@@ -1,8 +1,5 @@
 import pygame
 
-from scripts.components.actor import Actor
-from scripts.components.combatant import Combatant
-from scripts.components.race import Race
 from scripts.core.constants import EventTopics, GameStates
 from scripts.events.entity_handler import EntityHandler
 from scripts.events.logging_handler import LoggingHandler

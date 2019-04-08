@@ -68,7 +68,7 @@ class GameMap:
                     sprite = entity_manager.animation.get_entity_current_frame(entity)  # TODO - decouple link to
                                                                                         #  entity_manager_methods
                 else:
-                    sprite = entity.spritesheet
+                    sprite = entity.icon
 
                 self.panel.surface.blit(sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
 

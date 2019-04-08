@@ -30,9 +30,11 @@ class EntityExistenceAmendment:
         actor_name = values["name"]
 
         sprite = pygame.image.load("assets/actor/" + values["spritesheet"]).convert_alpha()
+        icon = pygame.image.load("assets/actor/" + values["icon"]).convert_alpha()
+
         # catch any images not resized and resize them
-        if sprite.get_size() != (TILE_SIZE, TILE_SIZE):
-            sprite = pygame.transform.smoothscale(sprite, (TILE_SIZE, TILE_SIZE))
+        if icon.get_size() != (TILE_SIZE, TILE_SIZE):
+            icon = pygame.transform.smoothscale(icon, (TILE_SIZE, TILE_SIZE))
 
         combatant_component = Combatant()
         youth_component = Trade(values["trade_component"])
@@ -57,7 +59,7 @@ class EntityExistenceAmendment:
 
         actor = Entity(x, y, sprite, actor_name, blocks_movement=True, combatant=combatant_component,
                        trade=youth_component, motive=adulthood_component, ai=ai_component,
-                       actor=actor_component, sight_range=sight_range, player=player)
+                       actor=actor_component, sight_range=sight_range, player=player, icon=icon)
 
         actor.combatant.hp = actor.combatant.secondary_stats.max_hp
 

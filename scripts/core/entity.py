@@ -10,7 +10,7 @@ class Entity:
     """
 
     def __init__(self, x, y, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None,
-            race=None, trade=None, motive=None, ai=None, actor=None, sight_range=0, player=None):
+            race=None, trade=None, motive=None, ai=None, actor=None, sight_range=0, player=None, icon=None):
         """
         Args:
             x (int) : X position, in tiles.
@@ -32,6 +32,7 @@ class Entity:
         self.x = x
         self.y = y
         self.spritesheet = spritesheet  # N.B. currently only taking a single image
+        self.icon = icon
         self.name = name
         self.blocks_movement = blocks_movement
         self.blocks_sight = blocks_sight
