@@ -7,6 +7,7 @@ TILE_SIZE = 64
 GAME_FPS = 60
 ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
 
+
 class GameStates(Enum):
     """
     States the Game can be in.
@@ -77,3 +78,41 @@ class TargetTags(Enum):
     OTHER_ENTITY = auto()
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
+
+
+class DamageTypes(Enum):
+    PIERCE = auto()
+    BLUNT = auto()
+    ELEMENTAL = auto()
+
+
+class PrimaryStatTypes(Enum):
+    VIGOUR = auto()
+    CLOUT = auto()
+    SUBTLETY = auto()
+    BUSTLE = auto()
+    EXACTITUDE = auto()
+
+
+class SecondaryStatTypes(Enum):
+    DODGE_SPEED = auto()
+    DODGE_TOUGHNESS = auto()
+    DODGE_INTELLIGENCE = auto()
+    RESIST_BLUNT = auto()
+    RESIST_PIERCE = auto()
+    RESIST_ELEMENTAL = auto()
+
+
+class HitTypes(Enum):
+    """
+    The value of each hit type. The value is the starting amount.
+    """
+    GRAZE = auto()
+    HIT = auto()
+    CRIT = auto()
+    GRAZE_VALUE = 0
+    HIT_VALUE = 100
+    CRIT_VALUE = 120
+    GRAZE_MODIFIER = 0.5
+    HIT_MODIFIER = 1
+    CRIT_MODIFIER = 1.3

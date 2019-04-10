@@ -46,7 +46,7 @@ class MessageLog:
 
         # panel info
         panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
-        panel_height = int((BASE_WINDOW_HEIGHT / 5) * 2)
+        panel_height = int(BASE_WINDOW_HEIGHT / 2)
         panel_x = BASE_WINDOW_WIDTH - panel_width
         panel_y = BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2

@@ -1,15 +1,8 @@
-from scripts.core.constants import LoggingEventTypes, MessageEventTypes
-from scripts.events.entity_events import DieEvent
-from scripts.events.logging_events import LoggingEvent
-from scripts.events.message_events import MessageEvent
-
 
 class Combatant:
     """
     [Component] Can fight.
 
-    Attributes:
-        hp (int): Health value.
     """
     def __init__(self, hp=0):
         """
@@ -18,91 +11,199 @@ class Combatant:
             hp (int): Starting health value.
         """
         self.hp = hp
-        self.base_max_hp = hp
-        self.base_power = 0
-        self.base_defence = 0
-        self.xp_given_on_death = 0
+        self.primary_stats = self.PrimaryStats()
+        self.primary_stats.owner = self
+        self.secondary_stats = self.SecondaryStats()
+        self.secondary_stats.owner = self
 
-    @property
-    def max_hp(self):
-        """
-        Maximum health.
+    class PrimaryStats:
 
-        Returns:
-            int: max_hp
+        @property
+        def vigour(self):
+            base_amount = 5
+            entity = self.owner.owner
+            stat_total = 0
 
-        """
-        bonus = 0
+            if entity.race:
+                stat_total += entity.race.vigour
 
-        if self.owner and self.owner.race:
-            bonus = bonus + self.owner.race.max_hp
-        else:
-            bonus = bonus + 0
+            if entity.trade:
+                stat_total += entity.trade.vigour
 
-        if self.owner and self.owner.youth:
-            bonus = bonus + self.owner.youth.max_hp
-        else:
-            bonus = bonus + 0
+            if entity.motive:
+                stat_total += entity.motive.vigour
 
-        if self.owner and self.owner.adulthood:
-            bonus = bonus + self.owner.adulthood.max_hp
-        else:
-            bonus = bonus + 0
+            return stat_total + base_amount
 
-        return self.base_max_hp + bonus
+        @property
+        def clout(self):
+            base_amount = 5
+            entity = self.owner.owner
+            stat_total = 0
 
-    @property
-    def power(self):
-        """
-        Current power.
+            if entity.race:
+                stat_total += entity.race.clout
 
-        Returns:
-            int: power
+            if entity.trade:
+                stat_total += entity.trade.clout
 
-        """
-        bonus = 0
+            if entity.motive:
+                stat_total += entity.motive.clout
 
-        if self.owner and self.owner.race:
-            bonus = bonus + self.owner.race.power
-        else:
-            bonus = bonus + 0
+            return stat_total + base_amount
 
-        if self.owner and self.owner.youth:
-            bonus = bonus + self.owner.youth.power
-        else:
-            bonus = bonus + 0
+        @property
+        def subtlety(self):
+            base_amount = 5
+            entity = self.owner.owner
+            stat_total = 0
 
-        if self.owner and self.owner.adulthood:
-            bonus = bonus + self.owner.adulthood.power
-        else:
-            bonus = bonus + 0
+            if entity.race:
+                stat_total += entity.race.subtlety
 
-        return self.base_power + bonus
+            if entity.trade:
+                stat_total += entity.trade.subtlety
 
-    @property
-    def defence(self):
-        """
-        Current defence.
+            if entity.motive:
+                stat_total += entity.motive.subtlety
 
-        Returns:
-            int: defence
+            return stat_total + base_amount
 
-        """
-        bonus = 0
+        @property
+        def bustle(self):
+            base_amount = 5
+            entity = self.owner.owner
+            stat_total = 0
 
-        if self.owner and self.owner.race:
-            bonus = bonus + self.owner.race.defence
-        else:
-            bonus = bonus + 0
+            if entity.race:
+                stat_total += entity.race.bustle
 
-        if self.owner and self.owner.youth:
-            bonus = bonus + self.owner.youth.defence
-        else:
-            bonus = bonus + 0
+            if entity.trade:
+                stat_total += entity.trade.bustle
 
-        if self.owner and self.owner.adulthood:
-            bonus = bonus + self.owner.adulthood.defence
-        else:
-            bonus = bonus + 0
+            if entity.motive:
+                stat_total += entity.motive.bustle
 
-        return self.base_defence + bonus
+            return stat_total + base_amount
+
+        @property
+        def exactitude(self):
+            base_amount = 5
+            entity = self.owner.owner
+            stat_total = 0
+
+            if entity.race:
+                stat_total += entity.race.exactitude
+
+            if entity.trade:
+                stat_total += entity.trade.exactitude
+
+            if entity.motive:
+                stat_total += entity.motive.exactitude
+
+            return stat_total + base_amount
+
+    class SecondaryStats:
+        # TODO - load the modifiers and base values from a json
+
+        @property
+        def max_hp(self):
+            base_amount = 20
+            vigour = self.owner.primary_stats.vigour
+            modifier = 4
+
+            stat_total = (vigour * modifier) + base_amount
+            return stat_total
+
+        @property
+        def dodge_speed(self):
+            base_amount = 5
+            exactitude = self.owner.primary_stats.exactitude
+            exactitude_modifier = 1
+            bustle = self.owner.primary_stats.bustle
+            bustle_modifier = 2
+
+            stat_total = (exactitude * exactitude_modifier) + (bustle * bustle_modifier) + base_amount
+            return stat_total
+
+        @property
+        def dodge_toughness(self):
+            base_amount = 5
+            clout = self.owner.primary_stats.clout
+            clout_modifier = 1
+            vigour = self.owner.primary_stats.vigour
+            vigour_modifier = 2
+
+            stat_total = (clout * clout_modifier) + (vigour * vigour_modifier) + base_amount
+            return stat_total
+
+        @property
+        def dodge_intelligence(self):
+            base_amount = 5
+            subtlety = self.owner.primary_stats.subtlety
+            subtlety_modifier = 3
+            exactitude = self.owner.primary_stats.exactitude
+            exactitude_modifier = 1
+
+            stat_total = (subtlety * subtlety_modifier) + (exactitude * exactitude_modifier) + base_amount
+            return stat_total
+
+        @property
+        def resist_blunt(self):
+            vigour = self.owner.primary_stats.vigour
+            vigour_modifier = 1
+
+            stat_total = (vigour * vigour_modifier)
+            return stat_total
+
+        @property
+        def resist_pierce(self):
+            bustle = self.owner.primary_stats.bustle
+            bustle_modifier = 1
+
+            stat_total = (bustle * bustle_modifier)
+            return stat_total
+
+        @property
+        def resist_elemental(self):
+            subtlety = self.owner.primary_stats.subtlety
+            subtlety_modifier = 2
+
+            stat_total = (subtlety * subtlety_modifier)
+            return stat_total
+
+        @property
+        def chance_to_hit(self):
+            base_amount = 20
+            clout = self.owner.primary_stats.clout
+            clout_modifier = 1
+            exactitude = self.owner.primary_stats.exactitude
+            exactitude_modifier = 1
+
+            stat_total = (clout * clout_modifier) + (exactitude * exactitude_modifier) + base_amount
+            return stat_total
+
+        @property
+        def base_damage(self):
+            base_amount = 5
+            clout = self.owner.primary_stats.clout
+            clout_modifier = 1
+
+            stat_total = (clout * clout_modifier) + base_amount
+            return stat_total
+
+        @property
+        def action_cost_change(self):
+            bustle = self.owner.primary_stats.bustle
+            bustle_modifier = 2
+
+            stat_total = (bustle * bustle_modifier)
+            return stat_total
+
+        @property
+        def status_length(self):
+            subtlety = self.owner.primary_stats.subtlety
+            subtlety_modifier = 3
+
+            stat_total = (subtlety * subtlety_modifier)
+            return stat_total

@@ -12,6 +12,7 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
 # Project Wide to do list...
+# TODO - update combat to have damage types and target the correct resistances
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
@@ -21,6 +22,7 @@ from scripts.core.intialisers import initialise_game
 # TODO - text wrapping, especially in message log
 # TODO - check if in battle; once damage taken keep an eye on enemy states
 # TODO - change from use fps for timing to delta time
+# TODO - draw dirty for map section (use an array to store ref to dirty x,y)
 
 
 def main():
@@ -90,7 +92,7 @@ def dump_profiling_data(profiler):
     date_and_time = datetime.datetime.utcnow()
 
     # TODO - add version number to profile logs
-    out_stream = open("logs/profiling/" + date_and_time.strftime("%d%m%y@%H%M") + ".profile", "w")
+    out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + ".profile", "w")
     ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 

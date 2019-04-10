@@ -15,7 +15,10 @@
                     "name": "damage",
                     "target_type": "entity",
                     "target_tags": ["other_entity"],
-                    "amount": 5
+                    "damage": 15,
+                    "damage_type": "pierce",
+                    "accuracy": 10,
+                    "stat_to_target": "bustle"
                 }
         ]
     }

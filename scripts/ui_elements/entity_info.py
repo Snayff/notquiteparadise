@@ -16,7 +16,7 @@ class SelectedEntityInfo:
 
         # setup the panel
         panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
-        panel_height = int((BASE_WINDOW_HEIGHT / 5) * 2)
+        panel_height = int(BASE_WINDOW_HEIGHT / 2)
         panel_x = BASE_WINDOW_WIDTH - panel_width
         panel_y = BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
@@ -56,29 +56,112 @@ class SelectedEntityInfo:
             surface (Surface): Surface to draw to
 
         """
+        # entity info
+        entity = self.selected_entity
+        icon = entity.icon
+
+        # formatting info
+        panel_centre_x = self.panel.width / 2
+        icon_width, icon_height = icon.get_rect().size
+        half_icon_width = icon_width / 2
+        half_icon_height = icon_height / 2
+        icon_x = panel_centre_x - half_icon_width
+        icon_y = (self.panel.height / 8) - half_icon_height
+        column_one_x = self.panel.width / 16
+        column_two_x = panel_centre_x + column_one_x
+        header_x = icon_x
+        header_y = icon_y + icon_height
+        font_colour = Colour().white
+        panel_surface = self.panel.surface
+        first_section_text = []
+        second_section_column_one_text = []
+        second_section_column_two_text = []
+        header_text = []
+        font = self.font
+        font_size = self.font.size
+
+        # what messages do we want to show?
+        # TODO - move content out of draw
+        header_text.append(f"{entity.name.capitalize()}")
+        header_text.append(f"Current Health: {entity.combatant.hp}")
+
+        first_section_text.append(f"PRIMARY")
+        first_section_text.append(f"Vigour: {entity.combatant.primary_stats.vigour}")
+        first_section_text.append(f"Clout: {entity.combatant.primary_stats.clout}")
+        first_section_text.append(f"Subtlety: {entity.combatant.primary_stats.subtlety}")
+        first_section_text.append(f"Bustle: {entity.combatant.primary_stats.bustle}")
+        first_section_text.append(f"Exactitude: {entity.combatant.primary_stats.exactitude}")
+
+        second_section_text_header = f"SECONDARY"
+        second_section_column_one_text.append(f"Offense:")
+        second_section_column_one_text.append(f"Base Damage: {entity.combatant.secondary_stats.base_damage}")
+        second_section_column_one_text.append(f"Chance to Hit: {entity.combatant.secondary_stats.chance_to_hit}")
+        second_section_column_one_text.append(f"")
+        second_section_column_one_text.append(f"Utility:")
+        second_section_column_one_text.append(f"Action Cost Change: "
+                                              f"{entity.combatant.secondary_stats.action_cost_change}")
+        second_section_column_one_text.append(f"Status Length: {entity.combatant.secondary_stats.status_length}")
+
+        second_section_column_two_text.append(f"Defence:")
+        second_section_column_two_text.append(f"Dodge speed: {entity.combatant.secondary_stats.dodge_speed}")
+        second_section_column_two_text.append(f"Dodge toughness: "
+                                              f"{entity.combatant.secondary_stats.dodge_toughness}")
+        second_section_column_two_text.append(f"Dodge intelligence: "
+                                              f"{entity.combatant.secondary_stats.dodge_intelligence}")
+        second_section_column_two_text.append(f"Resist blunt: {entity.combatant.secondary_stats.resist_blunt}")
+        second_section_column_two_text.append(f"Resist piece: {entity.combatant.secondary_stats.resist_pierce}")
+        second_section_column_two_text.append(f"Resist elemental: "
+                                              f"{entity.combatant.secondary_stats.resist_elemental}")
+
         # panel background
         self.panel.draw_background()
 
-        # entity info
-        font = self.font
-        font_size = self.font.size
-        adjusted_x = self.panel.width / 4
-        adjusted_y = self.panel.height / 8
-        font_colour = Colour().white
-        panel_surface = self.panel.surface
-        entity = self.selected_entity
-        messages = []
+        # render the entity's icon
+        self.panel.surface.blit(icon, (icon_x, icon_y))
 
-        # what messages do we want to show?
-        messages.append(f"{entity.name.capitalize()}")
-        messages.append(f"")
-        messages.append(f"Hp: {entity.combatant.hp}")
-        messages.append(f"Power: {entity.combatant.power}")
-        messages.append(f"Defence: {entity.combatant.defence}")
+        # render header
+        adjusted_y = header_y
+        for text in header_text:
+            font.render_to(panel_surface, (header_x, adjusted_y), text, font_colour)
+            adjusted_y += font_size + self.gap_between_lines
 
-        # render the message_list
-        for message in messages:
-            font.render_to(panel_surface, (adjusted_x, adjusted_y), message, font_colour)
+        # render the first section
+        adjusted_y += font_size + self.gap_between_lines
+        current_column = 0  # header of section
+        for text in first_section_text:
+            if current_column == 0:
+                font.render_to(panel_surface, (header_x, adjusted_y), text, font_colour)
+                current_column = 1
+                # just added header so increment y
+                adjusted_y += font_size + self.gap_between_lines
+            elif current_column == 1:
+                font.render_to(panel_surface, (column_one_x, adjusted_y), text, font_colour)
+                current_column = 2
+                # N.B. just moving column so don't increment y
+            elif current_column == 2:
+                font.render_to(panel_surface, (column_two_x, adjusted_y), text, font_colour)
+                current_column = 1
+                # now in second column so adjust y
+                adjusted_y += font_size + self.gap_between_lines
+
+        # render the second section
+        # render the header
+        adjusted_y += font_size + self.gap_between_lines
+        font.render_to(panel_surface, (header_x, adjusted_y), second_section_text_header, font_colour)
+        adjusted_y += font_size + self.gap_between_lines
+
+        second_main_row_y = adjusted_y + font_size + self.gap_between_lines
+
+        # render the first column of the second section
+        adjusted_y = second_main_row_y
+        for text in second_section_column_one_text:
+            font.render_to(panel_surface, (column_one_x, adjusted_y), text, font_colour)
+            adjusted_y += font_size + self.gap_between_lines
+
+        # render the second column of the second section
+        adjusted_y = second_main_row_y
+        for text in second_section_column_two_text:
+            font.render_to(panel_surface, (column_two_x, adjusted_y), text, font_colour)
             adjusted_y += font_size + self.gap_between_lines
 
         # panel border
