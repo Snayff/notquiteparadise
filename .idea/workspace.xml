@@ -9,17 +9,16 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
+    <splitter split-orientation="horizontal" split-proportion="0.5040043">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="322">
-                  <caret line="14" column="78" selection-start-line="14" selection-start-column="78" selection-end-line="14" selection-end-column="78" />
+                <state relative-caret-position="759">
+                  <caret line="76" selection-start-line="76" selection-end-line="76" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
-                    <element signature="e#2338#2973#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -28,8 +27,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="431">
-                  <caret line="88" column="28" lean-forward="true" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
+                <state relative-caret-position="1081">
+                  <caret line="88" column="28" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
                   <folding>
                     <element signature="e#809#1598#0" expanded="true" />
                     <element signature="e#1772#1879#0" expanded="true" />
@@ -41,8 +40,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="575">
-                  <caret line="84" column="24" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
+                <state relative-caret-position="610">
+                  <caret line="84" column="23" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
                   <folding>
                     <element signature="e#0#82#0" expanded="true" />
                   </folding>
@@ -50,22 +49,16 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/core/skill.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="391">
-                  <caret line="143" column="31" selection-start-line="143" selection-start-column="31" selection-end-line="143" selection-end-column="31" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/core/effects.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-115">
-                  <caret line="82" column="8" selection-start-line="82" selection-start-column="8" selection-end-line="82" selection-end-column="8" />
+                <state relative-caret-position="276">
+                  <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
                   <folding>
+                    <element signature="e#0#13#0" expanded="true" />
+                    <element signature="e#3192#3524#0" expanded="true" />
                     <element signature="e#3445#5403#0" expanded="true" />
+                    <element signature="e#5781#6633#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -75,19 +68,43 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="253">
-                  <caret line="106" column="52" selection-start-line="106" selection-start-column="52" selection-end-line="106" selection-end-column="52" />
+                <state relative-caret-position="311">
+                  <caret line="138" selection-start-line="138" selection-end-line="138" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/core/skill.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1530">
+                  <caret line="243" column="55" selection-start-line="243" selection-start-column="55" selection-end-line="243" selection-end-column="55" />
                   <folding>
-                    <element signature="e#255#294#1" expanded="true" />
-                    <element signature="e#648#2773#0" />
-                    <element signature="e#696#1061#0" expanded="true" />
-                    <element signature="e#1540#1911#0" expanded="true" />
-                    <element signature="e#1969#2334#0" expanded="true" />
-                    <element signature="e#2396#2773#0" expanded="true" />
+                    <element signature="e#522#2385#0" expanded="true" />
+                    <element signature="e#5827#6271#0" expanded="true" />
+                    <element signature="e#8035#8554#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/data/Game/skills/general.json">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="391">
+                  <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="472">
+                  <caret line="108" column="7" lean-forward="true" selection-start-line="108" selection-start-column="7" selection-end-line="108" selection-end-column="7" />
                 </state>
               </provider>
             </entry>
@@ -124,12 +141,16 @@
         <option value="$PROJECT_DIR$/scripts/ui_elements/message_log.py" />
         <option value="$PROJECT_DIR$/scripts/components/combatant.py" />
         <option value="$PROJECT_DIR$/scripts/core/engine.py" />
+        <option value="$PROJECT_DIR$/data/Game/skills/general.json" />
+        <option value="$PROJECT_DIR$/scripts/core/constants.py" />
+        <option value="$PROJECT_DIR$/scripts/core/skill.py" />
+        <option value="$PROJECT_DIR$/scripts/core/effects.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="348" />
-    <option name="width" value="2097" />
+    <option name="x" value="335" />
+    <option name="width" value="2110" />
     <option name="height" value="1407" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -161,7 +182,7 @@
               <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
               <item name="data" type="462c0819:PsiDirectoryNode" />
               <item name="Game" type="462c0819:PsiDirectoryNode" />
-              <item name="entity" type="462c0819:PsiDirectoryNode" />
+              <item name="skills" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
@@ -216,7 +237,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -275,15 +296,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="348" y="0" width="2097" height="1407" extended-state="0" />
+    <frame x="335" y="0" width="2110" height="1407" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1437591" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1023166" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49830014" weight="0.2724359" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49635744" weight="0.32932693" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4973288" weight="0.2724359" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49565637" visible="true" weight="0.32932693" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49830014" weight="0.39903846" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -292,7 +313,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49927148" weight="0.21474358" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" />
-      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.50364256" side_tool="true" visible="true" weight="0.32932693" />
+      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.5043436" side_tool="true" visible="true" weight="0.32932693" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -453,21 +474,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="106" column="52" selection-start-line="106" selection-start-column="52" selection-end-line="106" selection-end-column="52" />
-          <folding>
-            <element signature="e#255#294#1" expanded="true" />
-            <element signature="e#648#2773#0" />
-            <element signature="e#696#1061#0" expanded="true" />
-            <element signature="e#1540#1911#0" expanded="true" />
-            <element signature="e#1969#2334#0" expanded="true" />
-            <element signature="e#2396#2773#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/ui_elements/templates/panel.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
@@ -477,8 +483,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="88" column="28" lean-forward="true" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
+        <state relative-caret-position="1081">
+          <caret line="88" column="28" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
           <folding>
             <element signature="e#809#1598#0" expanded="true" />
             <element signature="e#1772#1879#0" expanded="true" />
@@ -486,40 +492,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="759">
+          <caret line="76" selection-start-line="76" selection-end-line="76" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="84" column="24" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
+        <state relative-caret-position="610">
+          <caret line="84" column="23" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
           <folding>
             <element signature="e#0#82#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/skill.py">
+    <entry file="file://$PROJECT_DIR$/data/Game/skills/general.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
-          <caret line="143" column="31" selection-start-line="143" selection-start-column="31" selection-end-line="143" selection-end-column="31" />
+          <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="138" selection-start-line="138" selection-end-line="138" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/skill.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1530">
+          <caret line="243" column="55" selection-start-line="243" selection-start-column="55" selection-end-line="243" selection-end-column="55" />
+          <folding>
+            <element signature="e#522#2385#0" expanded="true" />
+            <element signature="e#5827#6271#0" expanded="true" />
+            <element signature="e#8035#8554#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="472">
+          <caret line="108" column="7" lean-forward="true" selection-start-line="108" selection-start-column="7" selection-end-line="108" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/core/effects.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-115">
-          <caret line="82" column="8" selection-start-line="82" selection-start-column="8" selection-end-line="82" selection-end-column="8" />
+        <state relative-caret-position="276">
+          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
           <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#3192#3524#0" expanded="true" />
             <element signature="e#3445#5403#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="14" column="78" selection-start-line="14" selection-start-column="78" selection-end-line="14" selection-end-column="78" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-            <element signature="e#2338#2973#0" expanded="true" />
+            <element signature="e#5781#6633#0" expanded="true" />
           </folding>
         </state>
       </provider>

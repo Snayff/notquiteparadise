@@ -1,4 +1,5 @@
-from scripts.core.constants import MessageEventTypes, TargetTags, LoggingEventTypes, TargetTypes
+from scripts.core.constants import MessageEventTypes, TargetTags, LoggingEventTypes, TargetTypes, DamageTypes, \
+    PrimaryStatTypes, SecondaryStatTypes
 from scripts.core.effects import MoveEffect, DamageEffect
 from scripts.data_loaders.getters import get_value_from_skill_json
 from scripts.events.game_events import EndTurnEvent
@@ -24,7 +25,7 @@ class Skill:
 
         # target info
         self.range = skill_values["range"]  # how far away the skill can be used
-        self.target_type = self.get_target_type_from_type_string(skill_values["target_type"])
+        self.target_type = self.get_target_type_from_string(skill_values["target_type"])
         target_tags = skill_values["target_tags"]
         self.target_tags = []
 
@@ -49,9 +50,13 @@ class Skill:
                 for tag in effect["target_tags"]:
                     target_tags.append(self.get_target_tags_from_tag_string(tag))
 
-                target_type = self.get_target_type_from_type_string(effect["target_type"])
+                target_type = self.get_target_type_from_string(effect["target_type"])
+                damage_type = self.get_damage_type_from_string(effect["damage_type"])
+                stat_to_target = self.get_secondary_stat_from_string(effect["stat_to_target"])
+
                 # add effect object to skill
-                self.effects.append(DamageEffect(effect["amount"], target_type, target_tags))
+                self.effects.append(DamageEffect(effect["damage"], damage_type, target_type,
+                                                 target_tags, effect["accuracy"], stat_to_target))
 
     def is_valid_target_type(self, tile_target_type, entity_target_type):
         """
@@ -181,7 +186,7 @@ class Skill:
             return TargetTags.NO_ENTITY
 
     @staticmethod
-    def get_target_type_from_type_string(target_type):
+    def get_target_type_from_string(target_type):
         """
         Get the target type enum from the tag string
 
@@ -195,6 +200,62 @@ class Skill:
             return TargetTypes.ENTITY
         elif target_type == "tile":
             return TargetTypes.TILE
+
+    @staticmethod
+    def get_damage_type_from_string(damage_type):
+        """
+        Get the damage type enum from a string
+        Args:
+            damage_type:
+
+        Returns:
+
+        """
+        if damage_type == "pierce":
+            return DamageTypes.PIERCE
+        elif damage_type == "blunt":
+            return DamageTypes.BLUNT
+        elif damage_type == "elemental":
+            return DamageTypes.ELEMENTAL
+
+    @staticmethod
+    def get_primary_stat_from_string(primary_stat):
+        """
+        Get the primary stat enum from a string
+        Args:
+            primary_stat:
+
+        Returns:
+
+        """
+        if primary_stat == "vigour":
+            return PrimaryStatTypes.VIGOUR
+        elif primary_stat == "clout":
+            return PrimaryStatTypes.CLOUT
+        elif primary_stat == "subtlety":
+            return PrimaryStatTypes.SUBTLETY
+        elif primary_stat == "bustle":
+            return PrimaryStatTypes.BUSTLE
+        elif primary_stat == "exactitude":
+            return PrimaryStatTypes.EXACTITUDE
+
+
+    @staticmethod
+    def get_secondary_stat_from_string(secondary_stat):
+        """
+        Get the secondary stat enum from a string
+        Args:
+            secondary_stat:
+
+        Returns:
+            SecondaryStatTypes:
+        """
+        if secondary_stat == "dodge_speed":
+            return SecondaryStatTypes.DODGE_SPEED
+        elif secondary_stat == "dodge_toughness":
+            return SecondaryStatTypes.DODGE_TOUGHNESS
+        elif secondary_stat == "dodge_intelligence":
+            return SecondaryStatTypes.DODGE_INTELLIGENCE
 
     def get_target(self, target_pos):
         """
