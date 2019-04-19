@@ -16,12 +16,16 @@ class GameMap:
         self.height = height
 
         # populate map with floor tiles
-        # N.B. the inner list should be the height which would mean that the first referenced index in list[][] is y.
-        # Stop getting it wrong.
-        self.tiles = [[Floor(y, x) for y in range(0, self.height)] for x in range(0, self.width)]
+        for x in range(self.width):
+            # give each new row an empty list
+            self.tiles.append([])
+            for y in range(self.height):
+                # add to the column
+                self.tiles[x].append(Floor(x, y))
 
+        # TODO remove - only for test
         if self.width > 10 and self.height > 10:
-            self.tiles[0][5] = Wall(0, 5)  # TODO remove - only for test
+            self.tiles[0][5] = Wall(0, 5)
             self.tiles[10][2] = Wall(10, 2)
 
         # setup the panel
@@ -181,5 +185,4 @@ class GameMap:
         Returns:
             Tile: the tile at the location
         """
-        # NOTE: It should be Y then X. Do not change not matter how much you want to.
-        return self.tiles[tile_y][tile_x]
+        return self.tiles[tile_x][tile_y]

@@ -38,10 +38,11 @@ class WorldManager:
         """
         self.player_fov_map = tcod.map_new(self.game_map.width, self.game_map.height)
 
-        for y in range(self.game_map.height):
-            for x in range(self.game_map.width):
-                tcod.map_set_properties(self.player_fov_map, x, y, not self.game_map.tiles[x][y].blocks_sight,
-                                        not self.game_map.tiles[x][y].blocks_movement)
+        for x in range(self.game_map.width):
+            for y in range(self.game_map.height):
+                tile = self.game_map.get_tile(x,y)
+                tcod.map_set_properties(self.player_fov_map, x, y, not tile.blocks_sight,
+                                        not tile.blocks_movement)
 
         self.player_fov_is_dirty = True
 
