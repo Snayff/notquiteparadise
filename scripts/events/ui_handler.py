@@ -1,5 +1,5 @@
-from scripts.core.constants import LoggingEventTypes, EventTopics
-from scripts.core.global_data import game_manager, ui_manager
+from scripts.core.constants import LoggingEventTypes, EventTopics, GameEventTypes, GameStates
+from scripts.core.global_data import game_manager, ui_manager, world_manager, entity_manager
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
 
@@ -18,12 +18,33 @@ class UiHandler(Subscriber):
         """
 
         # log that event has been received
-        log_string = f"{self.name} received {event.type}"
+        log_string = f"{self.name} received {event.topic}:{event.type}"
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
+        # if an entity acts then hide the entity info
         if event.topic == EventTopics.ENTITY:
-            if ui_manager.entity_info.visible:
+            if "entity_info" in ui_manager.visible_elements:
                 self.hide_entity_info()
+
+        if event.topic == EventTopics.GAME:
+            if event.type == GameEventTypes.CHANGE_GAME_STATE:
+
+                # if changing to targeting mode then turn on targeting overlay
+                if event.new_game_state == GameStates.TARGETING_MODE:
+                    # get info for initial selected tile
+                    player = entity_manager.player
+                    tile = world_manager.game_map.get_tile(player.x, player.y)
+
+                    # set the info needed to draw the overlay
+                    ui_manager.targeting_overlay.set_skill_being_targeted(event.skill_to_be_used)
+                    ui_manager.targeting_overlay.set_selected_tile(tile)
+                    ui_manager.targeting_overlay.update_tiles_to_highlight()
+
+                    #show the overlay
+                    ui_manager.targeting_overlay.set_visibility(True)
+
+                elif game_manager.previous_game_state.TARGETING_MODE:
+                    ui_manager.targeting_overlay.set_visibility(False)
 
     @staticmethod
     def hide_entity_info():

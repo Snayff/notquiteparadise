@@ -18,7 +18,6 @@ class MessageLog:
         expressions  (Dict): Dictionary of expressions to look for and their colour to show.
         icons (Dict): Dictionary of icons to look for and the icon to show.
         hyperlinks (Dict): Dictionary of hyperlinks to look for and the linked info to show.
-        show
         is_dirty
         displayed_hyperlinks
         index_of_active_hyperlink
@@ -27,7 +26,7 @@ class MessageLog:
     def __init__(self):
         # log setup
         self.colour = Colour()
-        self.palette = Palette()
+        self.palette = Palette().message_log
         self.message_list = [(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise")]
         self.message_type_to_show = MessageEventTypes.BASIC
         self.expressions = self.create_expressions_list()
@@ -50,14 +49,14 @@ class MessageLog:
         panel_x = BASE_WINDOW_WIDTH - panel_width
         panel_y = BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
-        panel_background_colour = self.palette.message_log.background
-        panel_border_colour = self.palette.message_log.border
+        panel_background_colour = self.palette.background
+        panel_border_colour = self.palette.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
 
         # set panel to be rendered
         from scripts.core.global_data import ui_manager
-        ui_manager.update_panel_visibility("message_log", self.panel, True)
+        ui_manager.update_panel_visibility("message_log", self,  True)
 
         # log info
         self.edge_size = 1
@@ -124,7 +123,7 @@ class MessageLog:
                     if msg_to_render in self.hyperlinks:
 
                         link_already_logged = False
-                        msg_colour = self.palette.message_log.hyperlink
+                        msg_colour = self.palette.hyperlink
 
                         # check we havent already logged it
                         for link_counter in range(len(self.displayed_hyperlinks)):
@@ -151,7 +150,7 @@ class MessageLog:
                     # update x offset based on length of string just rendered
                     msg_length = len(msg_to_render)
                     current_msg_x_offset += (msg_length + 2) * (font_size / 2)  # Not sure about the formula, but it
-                                                                                # works.
+                                                                                # seems to works.
 
         # no longer dirty # TODO - uncomment when able to setup message log is dirty
         # self.is_dirty = False
@@ -170,7 +169,7 @@ class MessageLog:
         # TODO - extract tooltip method from message log
         # Message log tooltips
         font = self.font
-        font_colour = self.palette.message_log.tooltip_text
+        font_colour = self.palette.tooltip_text
 
         # update message log tooltip info
         self.check_mouse_over_link()
@@ -234,8 +233,8 @@ class MessageLog:
         """
         expressions = {}
 
-        expressions["fighter"] = self.palette.message_log.expressions_player
-        expressions["moved"] = self.palette.message_log.expressions_player
+        expressions["fighter"] = self.palette.expressions_player
+        expressions["moved"] = self.palette.expressions_player
 
         return expressions
 
@@ -390,7 +389,7 @@ class MessageLog:
         message_list = updated_message.split()
 
         parsed_message_list = []
-        default_colour = self.palette.message_log.default_text
+        default_colour = self.palette.default_text
         msg_in_progress = ""
 
         # check each word for inclusion in lists and rebuild as new list
@@ -434,7 +433,7 @@ class MessageLog:
                     msg_in_progress = ""
 
                 # amend the colour to indicate the message is a  hyperlink
-                parsed_message_list.append((self.palette.message_log.hyperlink, msg))
+                parsed_message_list.append((self.palette.hyperlink, msg))
 
             # NORMAL TEXT
             else:

@@ -1,17 +1,25 @@
 import tcod
 
+from scripts.core.constants import TILE_SIZE
 from scripts.world.game_map import GameMap
 
 
 class WorldManager:
+    """
+    Contains all world related functionality
+    """
     def __init__(self):
-        self.game_map = None
+        self.game_map = None # type: GameMap
         self.player_fov_map = None
         self.player_fov_is_dirty = False
         self.light_walls = True
         self.fov_algorithm = 0
 
     def update(self):
+        """
+        Update the world manager:
+            player fov
+        """
         if self.player_fov_is_dirty:
             from scripts.core.global_data import entity_manager
             player = entity_manager.player
@@ -25,7 +33,9 @@ class WorldManager:
         self.create_player_fov_map()
 
     def create_player_fov_map(self):
-
+        """
+        Create the fov map for the player
+        """
         self.player_fov_map = tcod.map_new(self.game_map.width, self.game_map.height)
 
         for y in range(self.game_map.height):
@@ -36,20 +46,46 @@ class WorldManager:
         self.player_fov_is_dirty = True
 
     def recompute_player_fov(self, x, y, radius):
+        """
+
+        Args:
+            x:
+            y:
+            radius:
+        """
         tcod.map_compute_fov(self.player_fov_map, x, y, radius, self.light_walls, self.fov_algorithm)
         self.game_map.update_tile_visibility(self.player_fov_map)
         self.player_fov_is_dirty = False
 
-    def is_tile_in_fov(self, target_tile):
+    def is_tile_in_fov(self, tile_x, tile_y):
         """
         Check if  target tile is in player's FOV
 
         Args:
-            target_tile(tuple): x y of tile
+            tile_x: x of tile
+            tile_y: y of tile
 
         Returns:
             bool: True if tile is in FOV
         """
 
-        return tcod.map_is_in_fov(self.player_fov_map , target_tile[0], target_tile[1])
+        return tcod.map_is_in_fov(self.player_fov_map, tile_x, tile_y)
+
+    @staticmethod
+    def convert_xy_to_tile(x, y):
+        """
+        Convert an x y position to a tile ref
+
+        Args:
+            x:
+            y:
+
+        Returns :
+
+
+        """
+        tile_x = int(x / TILE_SIZE)
+        tile_y = int(y / TILE_SIZE)
+
+        return tile_x, tile_y
 

@@ -14,6 +14,10 @@ class GameManager:
         self.internal_clock = pygame.time.Clock()
 
     def update(self):
+        """
+        Update the GameManager:
+            event_hub, internal_clock ticks
+        """
         self.event_hub.update()
 
         # set frame rate
@@ -21,7 +25,9 @@ class GameManager:
 
     def update_game_state(self, new_game_state):
         """
-        :type new_game_state: Code.Core.constants.GameStates
+
+        Args:
+            new_game_state:
         """
         self.previous_game_state = self.game_state
         self.game_state = new_game_state
@@ -30,5 +36,10 @@ class GameManager:
         self.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
     def create_event(self, event):
+        """
+
+        Args:
+            event:
+        """
         pub = Publisher(self.event_hub)
         pub.publish(event)

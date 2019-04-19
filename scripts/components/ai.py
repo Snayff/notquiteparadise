@@ -28,6 +28,10 @@ class BasicMonster:
         log_string = f"->{entity.name} is looking for a possible attack."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
+        #TESTING ONLY
+        game_manager.create_event(EndTurnEvent(10))  # TODO -remove when  ai needs to act
+        return
+
         for skill_key, skill_value in entity.actor.known_skills.items():
             # TODO - loop skills in priority order
 
@@ -35,13 +39,13 @@ class BasicMonster:
             attack_range = skill_value.range
 
             if distance_to_target <= attack_range:
-                log_string = f"->{entity.name} decided to use {skill_value.name}."
+                log_string = f"-> {entity.name} decided to use {skill_value.name}."
                 game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
                 game_manager.create_event(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value.name))
                 return None  # stop further processing in function
 
-        log_string = f"->{entity.name} found no possible attack."
+        log_string = f"-> {entity.name} found no possible attack."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # we can't attack so try to move closer
@@ -73,7 +77,7 @@ class BasicMonster:
         """
         target = entity_manager.player
 
-        log_string = f"->{self.owner.name} choose {target.name} as a target."
+        log_string = f"{self.owner.name} chose {target.name} as a target."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
         return target
 

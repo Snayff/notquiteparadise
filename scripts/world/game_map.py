@@ -3,7 +3,7 @@ import tcod
 from scripts.core.colours import Palette, Colour
 from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TILE_SIZE, TargetTags
 from scripts.ui_elements.templates.panel import Panel
-from scripts.world.tiles import Floor, Wall
+from scripts.world.tiles import Floor, Wall, Tile
 
 
 class GameMap:
@@ -18,11 +18,11 @@ class GameMap:
         # populate map with floor tiles
         # N.B. the inner list should be the height which would mean that the first referenced index in list[][] is y.
         # Stop getting it wrong.
-        self.tiles = [[Floor(y,x) for y in range(0, self.height)] for x in range(0, self.width)]
+        self.tiles = [[Floor(y, x) for y in range(0, self.height)] for x in range(0, self.width)]
 
         if self.width > 10 and self.height > 10:
-            self.tiles[0][5] = Wall(0,5)  # TODO remove - only for test
-            self.tiles[10][2] = Wall(10,2)
+            self.tiles[0][5] = Wall(0, 5)  # TODO remove - only for test
+            self.tiles[10][2] = Wall(10, 2)
 
         # setup the panel
         panel_x = 0
@@ -30,14 +30,14 @@ class GameMap:
         panel_width = int((BASE_WINDOW_WIDTH / 4) * 3)
         panel_height = BASE_WINDOW_HEIGHT
         panel_border = 2
-        panel_background_colour = Palette().map.background
-        panel_border_colour = Palette().map.border
+        panel_background_colour = Palette().game_map.background
+        panel_border_colour = Palette().game_map.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
 
         # set panel to be rendered
         from scripts.core.global_data import ui_manager
-        ui_manager.update_panel_visibility("game_map", self.panel, True)
+        ui_manager.update_panel_visibility("game_map", self,  True)
 
     def draw(self, entities, surface):
         """
@@ -175,10 +175,11 @@ class GameMap:
         Get the tile at the specified location
 
         Args:
-            tile_x(int): x position fo tile
+            tile_x(int): x position of tile
             tile_y(int): y position of tile
 
         Returns:
             Tile: the tile at the location
         """
-        return self.tiles[tile_x][tile_y]
+        # NOTE: It should be Y then X. Do not change not matter how much you want to.
+        return self.tiles[tile_y][tile_x]

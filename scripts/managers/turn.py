@@ -1,5 +1,6 @@
 from scripts.core import global_data
 from scripts.core.constants import LoggingEventTypes, GameStates
+from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
 
 
@@ -60,10 +61,10 @@ class TurnManager:
 
         # if turn holder is the player then update to player turn
         if self.turn_holder == global_data.entity_manager.player:
-            game_manager.update_game_state(GameStates.PLAYER_TURN)
+            game_manager.create_event(ChangeGameStateEvent(GameStates.PLAYER_TURN))
         # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
         elif game_manager.game_state != GameStates.ENEMY_TURN:
-            game_manager.update_game_state(GameStates.ENEMY_TURN)
+            game_manager.create_event(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
         log_string = f"It is now {self.turn_holder.name}'s turn."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))

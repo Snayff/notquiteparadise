@@ -21,6 +21,7 @@ def initialise_game():
     world_manager.create_new_map(50, 30)  # TODO remove magic numbers
     ui_manager.init_message_log()
     ui_manager.init_entity_info()
+    ui_manager.init_targeting_overlay()
 
     entity_manager.existence.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
     entity_manager.existence.create_actor_entity(0, 3, "orc_fighter")  # TODO - remove when actor gen is in load

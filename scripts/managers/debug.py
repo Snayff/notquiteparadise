@@ -1,4 +1,3 @@
-
 from scripts.core.colours import Palette, Colour
 from scripts.core.fonts import Font
 
@@ -11,6 +10,7 @@ class DebugManager:
         self.show_game_time = False
         self.show_fps = True
         self.show_mouse_pos = True
+        self.show_game_state = True
 
         self.font = Font().debug
 
@@ -74,6 +74,11 @@ class DebugManager:
             if current_rect:
                 msg2 = f"Rel mouse pos in {current_rect} : {relative_pos} "
                 self.messages.append(msg2)
+
+        if self.show_game_state:
+            from scripts.core.global_data import game_manager
+            msg = f"Game state: {game_manager.game_state}"
+            self.messages.append(msg)
 
     def set_visibility(self, visible):
         """

@@ -3,7 +3,7 @@ import pygame
 from scripts.core.constants import GameStates, TILE_SIZE, MessageEventTypes
 from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager, debug_manager
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
-from scripts.events.game_events import ExitEvent
+from scripts.events.game_events import ExitEvent, ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
 
 
@@ -41,7 +41,8 @@ def get_input():
         "cancel": False,
         "new_game": False,
         "load_game": False,
-        "debug_toggle": False
+        "debug_toggle": False,
+        "first_skill": False
 
     }
 
@@ -96,6 +97,8 @@ def get_input():
                 input_values["load_game"] = True
             elif input.key == pygame.K_TAB:
                 input_values["debug_toggle"] = True
+            elif input.key == pygame.K_1:
+                input_values["first_skill"] = True
 
     return input_values
 
@@ -120,91 +123,10 @@ def handle_input(values):
                 debug_manager.set_visibility(True)
 
     if game_state == GameStates.PLAYER_TURN:
+        handle_player_turn_input(values)
 
-        if values["right_click"]:
-            pos = values["mouse_xy"]
-            for key, rect in ui_manager.visible_panels.items():
-                if rect.collidepoint(pos):
-                    clicked_rect = key
-
-            # right clicked on the map so give the selected tile to the ui manager to display info
-            if clicked_rect == "game_map":
-                tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
-                tile_x = tile_pos[0] // TILE_SIZE
-                tile_y = tile_pos[1] // TILE_SIZE
-                entity = entity_manager.query.get_entity_in_fov_at_tile((tile_x, tile_y))
-
-                if entity:
-                    ui_manager.entity_info.set_selected_entity(entity)
-
-        direction_x = 0
-        direction_y = 0
-
-        if values["up"]:
-            direction_x = 0
-            direction_y = -1
-        elif values["down"]:
-            direction_x = 0
-            direction_y = 1
-        elif values["left"]:
-            direction_x = -1
-            direction_y = 0
-        elif values["right"]:
-            direction_x = 1
-            direction_y = 0
-        elif values["up_left"]:
-            direction_x = -1
-            direction_y = -1
-        elif values["up_right"]:
-            direction_x = 1
-            direction_y = -1
-        elif values["down_left"]:
-            direction_x = -1
-            direction_y = 1
-        elif values["down_right"]:
-            direction_x = 1
-            direction_y = 1
-
-        # if destination isn't 0 then we need to move player
-        if direction_x != 0 or direction_y != 0:
-            target_x, target_y = direction_x + player.x, direction_y + player.y
-
-            # is there something in the way?
-            in_bounds = world_manager.game_map.is_tile_in_bounds(target_x, target_y)
-            tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
-            entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
-
-            if in_bounds and not tile_blocking_movement:
-                if not entity_blocking_movement:
-                    # nothing in the way, time to move!
-                    game_manager.create_event(MoveEvent(player, (target_x, target_y)))
-                else:
-                    game_manager.create_event((UseSkillEvent(player, (target_x, target_y), "basic_attack")))
-            else:
-                msg = f"You can't do that there!"
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
-
-        if values["wait"]:
-            return {"wait": True}
-        elif values["inventory"]:
-            return {"show_inventory": True}
-        elif values["drop"]:
-            return {"drop_inventory": True}
-        elif values["interact"]:
-            # TODO check if item on same tile
-            return {"pickup": True}
-            # TODO check if stairs on same tile
-            return {"take_stairs": True}
-        elif values["character"]:
-            return {"show_character_screen": True}
-        elif values["fullscreen"]:
-            return {"fullscreen": True}
-        elif values["cancel"]:
-            game_manager.create_event(ExitEvent())
-
-    if game_state == GameStates.TARGETING:
-        if values["cancel"]:
-            return {"exit": True}
+    if game_state == GameStates.TARGETING_MODE:
+        handle_targeting_mode_input(values)
 
     if game_state == GameStates.PLAYER_DEAD:
         if values["inventory"]:
@@ -213,17 +135,6 @@ def handle_input(values):
             return {"fullscreen": True}
         elif values["cancel"]:
             return {"exit": True}
-
-    if game_state == GameStates.SHOW_INVENTORY:
-        # TODO add mouse and keyboard input
-        # TODO change to generic Menu state; will need a var to hold which menu
-        if values["fullscreen"]:
-            return {"fullscreen": True}
-        elif values["cancel"]:
-            return {"exit": True}
-
-    if game_state == GameStates.MAIN_MENU:
-        pass
 
 
 def check_mouse_input(input_values):
@@ -241,3 +152,108 @@ def check_mouse_input(input_values):
         input_values["right_click"] = True
 
     input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
+
+
+def handle_player_turn_input(input_values):
+    """
+
+    Args:
+        input_values:
+
+    """
+    values = input_values
+    player = entity_manager.player
+
+    if values["right_click"]:
+        pos = values["mouse_xy"]
+        for key, rect in ui_manager.visible_panels.items():
+            if rect.collidepoint(pos):
+                clicked_rect = key
+
+        # right clicked on the map so give the selected tile to the ui manager to display info
+        if clicked_rect == "game_map":
+            tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
+            tile_x = tile_pos[0] // TILE_SIZE
+            tile_y = tile_pos[1] // TILE_SIZE
+            entity = entity_manager.query.get_entity_in_fov_at_tile(tile_x, tile_y)
+
+            if entity:
+                ui_manager.entity_info.set_selected_entity(entity)
+
+    direction_x = 0
+    direction_y = 0
+
+    if values["up"]:
+        direction_x = 0
+        direction_y = -1
+    elif values["down"]:
+        direction_x = 0
+        direction_y = 1
+    elif values["left"]:
+        direction_x = -1
+        direction_y = 0
+    elif values["right"]:
+        direction_x = 1
+        direction_y = 0
+    elif values["up_left"]:
+        direction_x = -1
+        direction_y = -1
+    elif values["up_right"]:
+        direction_x = 1
+        direction_y = -1
+    elif values["down_left"]:
+        direction_x = -1
+        direction_y = 1
+    elif values["down_right"]:
+        direction_x = 1
+        direction_y = 1
+
+    # if destination isn't 0 then we need to move player
+    if direction_x != 0 or direction_y != 0:
+        target_x, target_y = direction_x + player.x, direction_y + player.y
+
+        # is there something in the way?
+        in_bounds = world_manager.game_map.is_tile_in_bounds(target_x, target_y)
+        tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
+        entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
+
+        if in_bounds and not tile_blocking_movement:
+            if not entity_blocking_movement:
+                # nothing in the way, time to move!
+                game_manager.create_event(MoveEvent(player, (target_x, target_y)))
+            else:
+                game_manager.create_event((UseSkillEvent(player, (target_x, target_y), "basic_attack")))
+        else:
+            msg = f"You can't do that there!"
+            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+
+    if values["first_skill"]:
+        mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
+        target_x, target_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
+
+        # if no entity on spot then pass empty target to skill
+        if entity_manager.query.get_blocking_entity_at_location(target_x, target_y) is None:
+            target_x, target_y = 0, 0
+
+        game_manager.create_event((UseSkillEvent(player, (target_x, target_y), "basic_attack")))
+        # TODO - update  to skill slot use, not specify basic skill
+
+    if values["wait"]:
+        # TODO - add wait
+        pass
+
+    elif values["cancel"]:
+        game_manager.create_event(ExitEvent())
+
+
+def handle_targeting_mode_input(input_values):
+    """
+
+    Args:
+        input_values:
+    """
+    values = input_values
+
+    if values["cancel"]:
+        previous_state = game_manager.previous_game_state
+        game_manager.create_event(ChangeGameStateEvent(previous_state))

@@ -1,5 +1,6 @@
 from scripts.core.constants import LoggingEventTypes, GameEventTypes, GameStates
 from scripts.core.global_data import game_manager, turn_manager
+from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
 
@@ -13,8 +14,11 @@ class GameHandler(Subscriber):
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.type == GameEventTypes.EXIT:
-            game_manager.update_game_state(GameStates.EXIT_GAME)
+            game_manager.create_event(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
         elif event.type == GameEventTypes.END_TURN:
             turn_manager.end_turn(event.time_spent)
+
+        elif event.type == GameEventTypes.CHANGE_GAME_STATE:
+            game_manager.update_game_state(event.new_game_state)
 

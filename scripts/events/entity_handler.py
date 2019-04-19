@@ -1,6 +1,6 @@
-from scripts.core.constants import EntityEventTypes, LoggingEventTypes, TargetTags
+from scripts.core.constants import EntityEventTypes, LoggingEventTypes, TargetTags, GameStates
 from scripts.core.global_data import world_manager, entity_manager, game_manager, turn_manager
-from scripts.events.game_events import EndTurnEvent
+from scripts.events.game_events import EndTurnEvent, ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber, Event
 
@@ -68,9 +68,11 @@ class EntityHandler(Subscriber):
         target_x, target_y = event.target_pos
 
         if skill:
+            # if no target go to target mode
             if target_x == 0 and target_y == 0:
-                # TODO - trigger targeting system and get new target
-                pass
+                game_manager.create_event(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+                return  # prevent further execution
+
 
             # confirm target type and resource cost
             tile_target_type = world_manager.game_map.get_target_type_from_tile(target_x, target_y)

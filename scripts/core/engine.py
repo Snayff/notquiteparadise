@@ -12,7 +12,7 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.intialisers import initialise_game
 
 # Project Wide to do list...
-# TODO - update combat to have damage types and target the correct resistances
+# TODO - targeting mode
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
@@ -23,12 +23,14 @@ from scripts.core.intialisers import initialise_game
 # TODO - check if in battle; once damage taken keep an eye on enemy states
 # TODO - change from use fps for timing to delta time
 # TODO - draw dirty for map section (use an array to store ref to dirty x,y)
+# TODO - remember window position and resume at that place
 
 
 def main():
     """
     The container for the game initialisation and game loop
     """
+
     # initialise profiling
     # TODO - set to turn off for production builds
     profiler = cProfile.Profile()

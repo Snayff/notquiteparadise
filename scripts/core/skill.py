@@ -239,7 +239,6 @@ class Skill:
         elif primary_stat == "exactitude":
             return PrimaryStatTypes.EXACTITUDE
 
-
     @staticmethod
     def get_secondary_stat_from_string(secondary_stat):
         """

@@ -15,12 +15,7 @@ class GameStates(Enum):
     PLAYER_TURN = auto()
     ENEMY_TURN = auto()
     PLAYER_DEAD = auto()
-    SHOW_INVENTORY = auto()
-    DROP_INVENTORY = auto()
-    TARGETING = auto()
-    LEVEL_UP = auto()
-    CHARACTER_SCREEN = auto()
-    MAIN_MENU = auto()
+    TARGETING_MODE = auto()
     EXIT_GAME = auto()
     GAME_INITIALISING = auto()
 
@@ -38,8 +33,8 @@ class EventTopics(Enum):
 class GameEventTypes(Enum):
     """Types of Game Events"""
     EXIT = auto()
-    NEW_GAME = auto()
     END_TURN = auto()
+    CHANGE_GAME_STATE = auto()
 
 
 class MessageEventTypes(Enum):

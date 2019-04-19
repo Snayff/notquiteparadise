@@ -10,7 +10,6 @@ class SelectedEntityInfo:
     """
     def __init__(self):
         self.selected_entity = None
-        self.visible = False
         self.font = Font().default
         self.gap_between_lines = int(self.font.size / 3)
 
@@ -46,7 +45,7 @@ class SelectedEntityInfo:
             visible (bool): Visible or not
         """
         from scripts.core.global_data import ui_manager
-        ui_manager.update_panel_visibility("entity_info", self.panel, visible)
+        ui_manager.update_panel_visibility("entity_info", self, visible)
 
     def draw(self, surface):
         """

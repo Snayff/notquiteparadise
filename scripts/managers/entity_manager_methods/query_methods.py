@@ -21,32 +21,36 @@ class EntityQuery:
         Returns:
             entity
         """
+        # TODO - update to use entity pos within array, instead of looping
+
         for entity in self.manager.entities:
             if entity.blocks_movement and entity.x == destination_x and entity.y == destination_y:
                 return entity
 
         return None
 
-    def get_entity_in_fov_at_tile(self, target_tile):
+    def get_entity_in_fov_at_tile(self, tile_x, tile_y):
         """
         Get the entity at a target tile
 
         Args:
-            target_tile(tuple): x y of tile
+            tile_x: x of tile
+            tile_y: y of tile
 
         Returns:
             entity: Entity or None if no entity found
         """
 
         for entity in self.manager.entities:
-            if entity.x == target_tile[0] and entity.y == target_tile[1]:
+            if entity.x == tile_x and entity.y == tile_y:
                 from scripts.core.global_data import world_manager
-                if world_manager.is_tile_in_fov(target_tile):
+                if world_manager.is_tile_in_fov(tile_x, tile_y):
                     return entity
 
         return None
 
-    def get_euclidean_distance_between_entities(self, start_entity, target_entity):
+    @staticmethod
+    def get_euclidean_distance_between_entities(start_entity, target_entity):
         """
         get distance from an entity towards another entity's location
 
@@ -62,7 +66,8 @@ class EntityQuery:
         dy = target_entity.y - start_entity.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    def get_chebyshev_distance_between_entities(self, start_entity, target_entity):
+    @staticmethod
+    def get_chebyshev_distance_between_entities(start_entity, target_entity):
         """
         get distance from an entity towards another entity's location
 
@@ -116,8 +121,17 @@ class EntityQuery:
 
             return start_entity.x, start_entity.y
 
-    def get_a_star_direction_between_entities(self, start_entity, target_entity):
+    @staticmethod
+    def get_a_star_direction_between_entities(start_entity, target_entity):
+        """
+        Use a* pathfinding to get a direction from one entity to another
+        Args:
+            start_entity:
+            target_entity:
 
+        Returns:
+
+        """
         max_path_length = 25
         from scripts.core.global_data import world_manager
         game_map = world_manager.game_map

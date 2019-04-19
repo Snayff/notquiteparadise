@@ -15,3 +15,5 @@ class Font:
         self.message_log.pad = True
         self.default = pygame.freetype.Font(font_dir + "Barlow-Regular.otf", 12)
         self.default.pad = True
+        self.targeting_overlay = pygame.freetype.Font(font_dir + "Barlow-Regular.otf", 10)
+        self.targeting_overlay.pad = True

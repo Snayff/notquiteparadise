@@ -16,8 +16,9 @@ class Palette:
         # debug
         self.debug_font_colour = colour.primary.lightest
         self.message_log = self.MessageLogPalette()
-        self.map = self.MapPalette()
+        self.game_map = self.GameMapPalette()
         self.entity_info = self.EntityInfoPalette()
+        self.targeting_overlay = self.TargetingOverlayPalette()
 
     class MessageLogPalette:
         """
@@ -41,12 +42,12 @@ class Palette:
             self.tooltip_text = colour.white
             self.tooltip_background = colour.black
 
-    class MapPalette:
+    class GameMapPalette:
         """
         The palette for the map
 
         Attributes:
-            border_colour (Colour): Colour of the Message Log background.
+            border (Colour): Colour of the game map border
         """
         def __init__(self):
             colour = Colour()
@@ -54,11 +55,22 @@ class Palette:
             self.border = colour.complement.darker
 
     class EntityInfoPalette:
-        """The Palette for the entity info panel"""
+        """
+        The palette for the entity info panel
+        """
         def __init__(self):
             colour = Colour()
             self.background = colour.black
             self.border = colour.complement.darker
+
+    class TargetingOverlayPalette:
+        """
+        The palette for the targeting overlay
+        """
+        def __init__(self):
+            colour = Colour()
+            self.selected_tile_border = colour.tertiary.neutral
+            self.highlighted_range_border = colour.complement.lighter
 
 
 class Colour:
