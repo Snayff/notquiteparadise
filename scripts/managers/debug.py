@@ -65,11 +65,12 @@ class DebugManager:
             offset_y = 0
             current_rect = ""
 
-            for key, rect in ui_manager.visible_panels.items():
-                if rect.collidepoint(pos):
-                    offset_x = rect.x
-                    offset_y = rect.y
-                    current_rect = key
+            for key, ui_object in ui_manager.visible_elements.items():
+                if ui_object.panel:
+                    if ui_object.panel.rect.collidepoint(pos):
+                        offset_x = ui_object.panel.x
+                        offset_y = ui_object.panel.y
+                        current_rect = key
             relative_pos = pos[0] - offset_x, pos[1] - offset_y
             if current_rect:
                 msg2 = f"Rel mouse pos in {current_rect} : {relative_pos} "

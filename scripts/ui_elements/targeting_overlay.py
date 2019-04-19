@@ -86,11 +86,12 @@ class TargetingOverlay:
 
     def set_selected_tile(self, tile):
         """
-        Update the tile currently selected
+        Update the tile currently selected. Must be one in the highlighted range
         Args:
             tile:
         """
-        self.selected_tile = tile
+        if tile in self.tiles_to_highlight:
+            self.selected_tile = tile
 
     def update_tiles_to_highlight(self):
         """
@@ -118,14 +119,7 @@ class TargetingOverlay:
 
                 if in_bounds and in_fov:
                     tile = game_map.get_tile(current_x, current_y)
-                    if current_x != tile.x or current_y != tile.y:
-                        tile2 = game_map.get_tile(current_x, current_y)
-
                     self.tiles_to_highlight.append(tile)
-
-                    from scripts.core.global_data import game_manager
-                    log_string = f"Added tile({tile.x}, {tile.y})."
-                    game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
     def set_visibility(self, visible):
         """

@@ -73,7 +73,6 @@ class EntityHandler(Subscriber):
                 game_manager.create_event(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
                 return  # prevent further execution
 
-
             # confirm target type and resource cost
             tile_target_type = world_manager.game_map.get_target_type_from_tile(target_x, target_y)
             entity_at_tile = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)

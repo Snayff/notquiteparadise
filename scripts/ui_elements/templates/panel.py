@@ -26,6 +26,7 @@ class Panel:
         self.background_colour = background_colour
         self.surface = pygame.Surface((self.width, self.height))
         self.border_colour = border_colour
+        self.rect = pygame.rect.Rect(x, y, width, height)
 
     def draw_background(self):
         """

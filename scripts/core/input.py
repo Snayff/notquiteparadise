@@ -24,6 +24,7 @@ def get_input():
         "right_click": False,
         "middle_click": False,
         "mouse_xy": (0, 0),
+        "mouse_moved": False,
         "up": False,
         "down": False,
         "left": False,
@@ -38,6 +39,7 @@ def get_input():
         "drop": False,
         "character": False,
         "fullscreen": False,
+        "confirm": False,
         "cancel": False,
         "new_game": False,
         "load_game": False,
@@ -50,9 +52,11 @@ def get_input():
     for input in input_events:
 
         # update MOUSE input values based on input
-        # TODO: move each set of event typ eto its own function
         if input.type == pygame.MOUSEBUTTONDOWN:
             check_mouse_input(input_values)
+
+        if input.type == pygame.MOUSEMOTION:
+            input_values["mouse_moved"] = True
 
         # is a key pressed?
         if input.type == pygame.KEYDOWN:
@@ -76,25 +80,13 @@ def get_input():
                 input_values["down_right"] = True
             elif input.key == pygame.K_z or input.key == pygame.K_KP5:
                 input_values["wait"] = True
-            elif input.key == pygame.K_i:
-                input_values["inventory"] = True
-            elif input.key == pygame.K_d:
-                input_values["drop"] = True
-            elif input.key == pygame.K_RETURN:
-                input_values["interact"] = True
-            elif input.key == pygame.K_c:
-                input_values["character"] = True
             elif input.key == pygame.K_RETURN and pygame.K_LALT:
                 # Alt+Enter: toggle full screen
                 input_values["fullscreen"] = True
+            elif input.key == pygame.K_RETURN:
+                input_values["confirm"] = True
             elif input.key == pygame.K_ESCAPE:
                 input_values["cancel"] = True
-            elif input.key == pygame.K_a:
-                # TODO remove this legacy when menu's can use kb+m
-                input_values["new_game"] = True
-            elif input.key == pygame.K_b:
-                # TODO remove this legacy when menu's can use kb+m
-                input_values["load_game"] = True
             elif input.key == pygame.K_TAB:
                 input_values["debug_toggle"] = True
             elif input.key == pygame.K_1:
@@ -112,7 +104,6 @@ def handle_input(values):
 
     """
     game_state = game_manager.game_state
-    player = entity_manager.player
 
     # game state agnostic
     if game_state:
@@ -166,9 +157,10 @@ def handle_player_turn_input(input_values):
 
     if values["right_click"]:
         pos = values["mouse_xy"]
-        for key, rect in ui_manager.visible_panels.items():
-            if rect.collidepoint(pos):
-                clicked_rect = key
+        for key, ui_object in ui_manager.visible_elements.items():
+            if ui_object.panel:
+                if ui_object.panel.rect.collidepoint(pos):
+                    clicked_rect = key
 
         # right clicked on the map so give the selected tile to the ui manager to display info
         if clicked_rect == "game_map":
@@ -253,7 +245,63 @@ def handle_targeting_mode_input(input_values):
         input_values:
     """
     values = input_values
+    player = entity_manager.player
+    mouse_x, mouse_y = values["mouse_xy"]
+    mouse_tile_x, mouse_tile_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
 
     if values["cancel"]:
         previous_state = game_manager.previous_game_state
         game_manager.create_event(ChangeGameStateEvent(previous_state))
+
+    direction_x = 0
+    direction_y = 0
+
+    if values["up"]:
+        direction_x = 0
+        direction_y = -1
+    elif values["down"]:
+        direction_x = 0
+        direction_y = 1
+    elif values["left"]:
+        direction_x = -1
+        direction_y = 0
+    elif values["right"]:
+        direction_x = 1
+        direction_y = 0
+    elif values["up_left"]:
+        direction_x = -1
+        direction_y = -1
+    elif values["up_right"]:
+        direction_x = 1
+        direction_y = -1
+    elif values["down_left"]:
+        direction_x = -1
+        direction_y = 1
+    elif values["down_right"]:
+        direction_x = 1
+        direction_y = 1
+
+    # get selected tile from ui
+    selected_tile = ui_manager.targeting_overlay.selected_tile
+
+    # if direction isn't 0 then we need to move selected_tile
+    if direction_x != 0 or direction_y != 0:
+        tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
+        tile = world_manager.game_map.get_tile(tile_x, tile_y)
+        ui_manager.targeting_overlay.set_selected_tile(tile)
+        entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
+        ui_manager.entity_info.set_selected_entity(entity)
+
+    # check if mouse is over a new tile
+    if values["mouse_moved"]:
+        if mouse_tile_x != selected_tile.x and mouse_tile_y != selected_tile.y:
+            tile = world_manager.game_map.get_tile(mouse_tile_x, mouse_tile_y)
+            ui_manager.targeting_overlay.set_selected_tile(tile)
+            entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
+            ui_manager.entity_info.set_selected_entity(entity)
+
+    if values["first_skill"] or values["confirm"]:
+        # if entity selected then use skill
+        if entity_manager.query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
+            game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y), "basic_attack")))
+            # TODO - update  to skill slot use, not specify basic skill

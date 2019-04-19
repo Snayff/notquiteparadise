@@ -37,10 +37,14 @@ class UiHandler(Subscriber):
 
                     # set the info needed to draw the overlay
                     ui_manager.targeting_overlay.set_skill_being_targeted(event.skill_to_be_used)
-                    ui_manager.targeting_overlay.set_selected_tile(tile)
                     ui_manager.targeting_overlay.update_tiles_to_highlight()
+                    ui_manager.targeting_overlay.set_selected_tile(tile)
 
-                    #show the overlay
+                    # show the entity info
+                    entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
+                    ui_manager.entity_info.set_selected_entity(entity)
+
+                    # show the overlay
                     ui_manager.targeting_overlay.set_visibility(True)
 
                 elif game_manager.previous_game_state.TARGETING_MODE:
