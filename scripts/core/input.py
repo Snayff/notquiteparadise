@@ -23,7 +23,6 @@ def get_input():
         "left_click": False,
         "right_click": False,
         "middle_click": False,
-        "mouse_xy": (0, 0),
         "mouse_moved": False,
         "up": False,
         "down": False,
@@ -60,8 +59,10 @@ def get_input():
 
         # is a key pressed?
         if input.type == pygame.KEYDOWN:
+            if input.key == pygame.K_DOWN:
+                print("you pressed down")
 
-            # update OTHER input values based on input
+            # movement
             if input.key == pygame.K_UP or input.key == pygame.K_KP8 or input.key == pygame.K_k:
                 input_values["up"] = True
             elif input.key == pygame.K_DOWN or input.key == pygame.K_KP2 or input.key == pygame.K_j:
@@ -80,17 +81,21 @@ def get_input():
                 input_values["down_right"] = True
             elif input.key == pygame.K_z or input.key == pygame.K_KP5:
                 input_values["wait"] = True
-            elif input.key == pygame.K_RETURN and pygame.K_LALT:
+
+            # interactions
+            if input.key == pygame.K_RETURN:
+                input_values["confirm"] = True
+            elif input.key == pygame.K_1:
+                input_values["first_skill"] = True
+
+            # game functions
+            if input.key == pygame.K_RETURN and pygame.K_LALT:
                 # Alt+Enter: toggle full screen
                 input_values["fullscreen"] = True
-            elif input.key == pygame.K_RETURN:
-                input_values["confirm"] = True
             elif input.key == pygame.K_ESCAPE:
                 input_values["cancel"] = True
             elif input.key == pygame.K_TAB:
                 input_values["debug_toggle"] = True
-            elif input.key == pygame.K_1:
-                input_values["first_skill"] = True
 
     return input_values
 
@@ -141,8 +146,6 @@ def check_mouse_input(input_values):
         input_values["middle_click"] = True
     elif pygame.mouse.get_pressed()[2]:
         input_values["right_click"] = True
-
-    input_values["mouse_xy"] = ui_manager.get_scaled_mouse_pos()
 
 
 def handle_player_turn_input(input_values):
@@ -246,7 +249,7 @@ def handle_targeting_mode_input(input_values):
     """
     values = input_values
     player = entity_manager.player
-    mouse_x, mouse_y = values["mouse_xy"]
+    mouse_x, mouse_y = ui_manager.get_scaled_mouse_pos()
     mouse_tile_x, mouse_tile_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
 
     if values["cancel"]:
@@ -292,15 +295,14 @@ def handle_targeting_mode_input(input_values):
         entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)
 
-    # check if mouse is over a new tile
+    # if mouse moved update selected tile
     if values["mouse_moved"]:
-        if mouse_tile_x != selected_tile.x and mouse_tile_y != selected_tile.y:
-            tile = world_manager.game_map.get_tile(mouse_tile_x, mouse_tile_y)
-            ui_manager.targeting_overlay.set_selected_tile(tile)
-            entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
-            ui_manager.entity_info.set_selected_entity(entity)
+        tile = world_manager.game_map.get_tile(mouse_tile_x, mouse_tile_y)
+        ui_manager.targeting_overlay.set_selected_tile(tile)
+        entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
+        ui_manager.entity_info.set_selected_entity(entity)
 
-    if values["first_skill"] or values["confirm"]:
+    if values["first_skill"] or values["confirm"] or values["left_click"]:
         # if entity selected then use skill
         if entity_manager.query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
             game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y), "basic_attack")))
