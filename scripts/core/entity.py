@@ -10,7 +10,7 @@ class Entity:
     """
 
     def __init__(self, x, y, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None,
-            race=None, trade=None, motive=None, ai=None, actor=None, sight_range=0, player=None, icon=None):
+            race=None, trade=None, homeland=None, ai=None, actor=None, sight_range=0, player=None, icon=None):
         """
         Args:
             x (int) : X position, in tiles.
@@ -22,7 +22,7 @@ class Entity:
             combatant (Combatant): Component.
             race (Race): Component.
             trade (Trade): Component.
-            motive (Motive): Component.
+            homeland (Homeland): Component.
             ai (AI): Component.
             actor(Actor) : Component.
             sight_range (int): How far the entity can see.
@@ -49,7 +49,7 @@ class Entity:
         self.race = race
         self.combatant = combatant
         self.trade = trade
-        self.motive = motive
+        self.homeland = homeland
         self.ai = ai
         self.actor = actor
         self.player = player
@@ -64,8 +64,8 @@ class Entity:
         if self.trade:
             self.trade.owner = self
 
-        if self.motive:
-            self.motive.owner = self
+        if self.homeland:
+            self.homeland.owner = self
 
         if self.ai:
             self.ai.owner = self
@@ -77,4 +77,4 @@ class Entity:
             self.player.owner = self
 
         if self.actor and self.combatant:
-            self.actor.learn_skill("basic_attack")
+            self.actor.learn_skill("basic_attack", "basic_attack")

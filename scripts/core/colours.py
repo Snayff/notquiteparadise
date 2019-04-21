@@ -19,6 +19,7 @@ class Palette:
         self.game_map = self.GameMapPalette()
         self.entity_info = self.EntityInfoPalette()
         self.targeting_overlay = self.TargetingOverlayPalette()
+        self.skill_bar = self.SkillBarPalette()
 
     class MessageLogPalette:
         """
@@ -71,6 +72,16 @@ class Palette:
             colour = Colour()
             self.selected_tile_border = colour.tertiary.neutral
             self.highlighted_range_border = colour.complement.lighter
+
+    class SkillBarPalette:
+        """
+        The palette for the skill bar
+        """
+        def __init__(self):
+            colour = Colour()
+            self.background = colour.black
+            self.border = colour.complement.darker
+            self.skill_border = colour.complement.lighter
 
 
 class Colour:

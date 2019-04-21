@@ -1,4 +1,4 @@
-from scripts.core.constants import LoggingEventTypes, EventTopics, GameEventTypes, GameStates
+from scripts.core.constants import LoggingEventTypes, EventTopics, GameEventTypes, GameStates, EntityEventTypes
 from scripts.core.global_data import game_manager, ui_manager, world_manager, entity_manager
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
@@ -25,6 +25,9 @@ class UiHandler(Subscriber):
         if event.topic == EventTopics.ENTITY:
             if "entity_info" in ui_manager.visible_elements:
                 self.hide_entity_info()
+
+            if event.type == EntityEventTypes.LEARN:
+                ui_manager.skill_bar.update_skill_icons_to_show()
 
         if event.topic == EventTopics.GAME:
             if event.type == GameEventTypes.CHANGE_GAME_STATE:

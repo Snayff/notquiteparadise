@@ -28,10 +28,11 @@ class BasicMonster:
         log_string = f"->{entity.name} is looking for a possible attack."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-        #TESTING ONLY
+        # !!!! TESTING ONLY!!!!!!!
         game_manager.create_event(EndTurnEvent(10))  # TODO -remove when  ai needs to act
         return
 
+        # FIXME - change to using the new list format
         for skill_key, skill_value in entity.actor.known_skills.items():
             # TODO - loop skills in priority order
 

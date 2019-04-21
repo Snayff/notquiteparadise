@@ -9,7 +9,7 @@ from scripts.core.constants import GameStates
 from scripts.core.global_data import world_manager, game_manager, entity_manager, turn_manager, ui_manager, \
     debug_manager
 from scripts.core.input import get_input, handle_input
-from scripts.core.intialisers import initialise_game
+from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
 # TODO - targeting mode

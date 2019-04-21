@@ -6,6 +6,7 @@ from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.message_log import MessageLog
 from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, TILE_SIZE
 from scripts.core.fonts import Font
+from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
 
 
@@ -35,6 +36,16 @@ class UIManager:
         self.message_log = None  # type: MessageLog
         self.entity_info = None  # type: SelectedEntityInfo
         self.targeting_overlay = None  # type: TargetingOverlay
+        self.skill_bar = None # type: SkillBar
+
+    def delayed_init(self):
+        """
+        init additional objects. Called late due to dependencies.
+        """
+        self.init_message_log()
+        self.init_entity_info()
+        self.init_targeting_overlay()
+        self.init_skill_bar()
 
     def init_message_log(self):
         """
@@ -62,6 +73,15 @@ class UIManager:
             Called late due to dependencies.
         """
         self.targeting_overlay = TargetingOverlay()
+
+    def init_skill_bar(self):
+        """
+        Initialise the selected skill bar
+
+        Notes:
+            Called late due to dependencies.
+        """
+        self.skill_bar = SkillBar()
 
     def draw_game(self, game_map=None, entities=None, debug_active=False):
         """
@@ -96,6 +116,9 @@ class UIManager:
 
         if "targeting_overlay" in self.visible_elements:
             self.targeting_overlay.draw(self.main_surface)
+
+        if "skill_bar" in self.visible_elements:
+            self.skill_bar.draw(self.main_surface)
 
         # resize the surface to the desired resolution
         scaled_surface = pygame.transform.smoothscale(self.main_surface, (self.desired_width, self.desired_height))

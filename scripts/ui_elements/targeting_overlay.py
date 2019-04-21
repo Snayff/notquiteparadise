@@ -60,8 +60,6 @@ class TargetingOverlay:
                 rect.x = tile.x * TILE_SIZE
                 rect.y = tile.y * TILE_SIZE
                 pygame.draw.rect(surface, tile_colour, rect, self.highlight_border_width)
-                # TODO - move to debug
-                self.font.render_to(surface, (rect.x, rect.y), f"{tile.x},{tile.y}", Palette().debug_font_colour)
 
     def draw_selected_tile(self, surface):
         """

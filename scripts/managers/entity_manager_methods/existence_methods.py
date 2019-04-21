@@ -1,7 +1,7 @@
 import pygame
 
 from scripts.components.actor import Actor
-from scripts.components.motive import Motive
+from scripts.components.homeland import Homeland
 from scripts.components.combatant import Combatant
 from scripts.components.player import Player
 from scripts.components.trade import Trade
@@ -9,22 +9,45 @@ from scripts.core.constants import TILE_SIZE
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.core.entity import Entity
 
+
 class EntityExistenceAmendment:
     def __init__(self, manager):
         self.manager = manager
 
     def add_entity(self, entity):
+        """
+
+        Args:
+            entity:
+        """
         self.manager.entities.append(entity)
 
     def add_player(self, entity):
+        """
+
+        Args:
+            entity:
+        """
         # TODO - fold into create actor, use player arg default to false
         self.manager.player = entity
         self.add_entity(entity)
 
     def remove_entity(self, entity):
+        """
+
+        Args:
+            entity:
+        """
         self.manager.entities.remove(entity)
 
     def create_actor_entity(self, x, y, actor_name):
+        """
+
+        Args:
+            x:
+            y:
+            actor_name:
+        """
         values = get_value_from_actor_json(actor_name)
 
         actor_name = values["name"]
@@ -38,7 +61,7 @@ class EntityExistenceAmendment:
 
         combatant_component = Combatant()
         youth_component = Trade(values["trade_component"])
-        adulthood_component = Motive(values["motive_component"])
+        adulthood_component = Homeland(values["homeland_component"])
         actor_component = Actor()
         sight_range = values["sight_range"]
 
@@ -58,7 +81,7 @@ class EntityExistenceAmendment:
             ai_component = None
 
         actor = Entity(x, y, sprite, actor_name, blocks_movement=True, combatant=combatant_component,
-                       trade=youth_component, motive=adulthood_component, ai=ai_component,
+                       trade=youth_component, homeland=adulthood_component, ai=ai_component,
                        actor=actor_component, sight_range=sight_range, player=player, icon=icon)
 
         actor.combatant.hp = actor.combatant.secondary_stats.max_hp

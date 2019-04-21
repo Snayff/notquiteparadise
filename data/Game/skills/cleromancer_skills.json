@@ -1,0 +1,25 @@
+{
+    "throw_dice": {
+        "name": "throw dice",
+        "description": "Time to throw the dice. It does damage.",
+        "icon": "placeholder/icon_29.png",
+        "target_type": "entity",
+        "target_tags": ["other_entity"],
+        "range": 3,
+        "resource_type": "mana",
+        "resource_cost": 10,
+        "time_cost": 20,
+        "cooldown": 2,
+        "effects": [
+                {
+                    "name": "damage",
+                    "target_type": "entity",
+                    "target_tags": ["other_entity"],
+                    "damage": 15,
+                    "damage_type": "blunt",
+                    "accuracy": 5,
+                    "stat_to_target": "subtlety"
+                }
+        ]
+    }
+}

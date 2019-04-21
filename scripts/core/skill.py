@@ -14,10 +14,11 @@ class Skill:
     Args:
             name(str):
     """
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, skill_tree_name, skill_name):
+        self.name = skill_name
+        self.skill_tree_name = skill_tree_name
 
-        skill_values = get_value_from_skill_json(name)
+        skill_values = get_value_from_skill_json(skill_tree_name, skill_name)
 
         # aesthetic info
         self.description = skill_values["description"]  # the description of the skill

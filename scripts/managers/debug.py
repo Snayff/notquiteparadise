@@ -1,4 +1,5 @@
 from scripts.core.colours import Palette, Colour
+from scripts.core.constants import TILE_SIZE
 from scripts.core.fonts import Font
 
 
@@ -11,6 +12,7 @@ class DebugManager:
         self.show_fps = True
         self.show_mouse_pos = True
         self.show_game_state = True
+        self.show_tile_xy = True
 
         self.font = Font().debug
 
@@ -30,11 +32,25 @@ class DebugManager:
         font = self.font
         font_size = font.size
 
+        # render tile coords
+        if self.show_tile_xy:
+            from scripts.core.global_data import world_manager
+            panel = world_manager.game_map.panel
+
+            for tile_x in range(0, panel.width, TILE_SIZE):
+                for tile_y in range(0, panel.height, TILE_SIZE):
+                    tile_row = int(tile_x / TILE_SIZE)
+                    tile_col = int(tile_y / TILE_SIZE)
+                    font.render_to(surface, (tile_x, tile_y), f"{tile_row},{tile_col}", Palette().debug_font_colour)
+
+        # render debug messages
         # loop all lines in message and use line index to amend msg position
         for line in range(len(self.messages)):
             y_pos = 0 + (line * font_size)  # 0 is starting y coord
             font.render_to(surface, (0, y_pos), self.messages[line], Palette().debug_font_colour,
                            Colour().black)
+
+
 
     def update_debug_message(self):
         """
@@ -80,6 +96,8 @@ class DebugManager:
             from scripts.core.global_data import game_manager
             msg = f"Game state: {game_manager.game_state}"
             self.messages.append(msg)
+
+
 
     def set_visibility(self, visible):
         """

@@ -7,6 +7,15 @@
 		"subtlety": 0,
         "bustle": 0,
         "exactitude": 0
+    },
+    "goblinn" : {
+    "name": "goblinn",
+    "description" : "A goblinn description",
+    "vigour": 0,
+    "clout": 0,
+    "subtlety": 0,
+    "bustle": 0,
+    "exactitude": 0
     }
 }
 

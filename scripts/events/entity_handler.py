@@ -64,7 +64,7 @@ class EntityHandler(Subscriber):
         log_string = f"-> Processing {event.entity.name}'s skill: {event.skill_name}."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-        skill = event.entity.actor.known_skills[event.skill_name]
+        skill = event.entity.actor.get_skill_from_known_skills(event.skill_name)
         target_x, target_y = event.target_pos
 
         if skill:

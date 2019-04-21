@@ -10,42 +10,20 @@ class SelectedEntityInfo:
     """
     def __init__(self):
         self.selected_entity = None
+        self.palette = Palette().entity_info
         self.font = Font().default
         self.gap_between_lines = int(self.font.size / 3)
 
-        # setup the panel
+        # panel info
         panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
         panel_height = int(BASE_WINDOW_HEIGHT / 2)
         panel_x = BASE_WINDOW_WIDTH - panel_width
         panel_y = BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
-        panel_background_colour = Palette().entity_info.background
-        panel_border_colour = Palette().entity_info.border
+        panel_background_colour = self.palette.background
+        panel_border_colour = self.palette.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
-
-    def set_selected_entity(self, entity):
-        """
-        Set the selected entity  and make panel visible
-
-        Args:
-            entity(tuple): x y position of tile in game map
-        """
-        self.selected_entity = entity
-        if entity is not None:
-            self.set_visibility(True)
-        else:
-            self.set_visibility(False)
-
-    def set_visibility(self, visible):
-        """
-        Set the visibility of the selected entity info
-
-        Args:
-            visible (bool): Visible or not
-        """
-        from scripts.core.global_data import ui_manager
-        ui_manager.update_panel_visibility("entity_info", self, visible)
 
     def draw(self, surface):
         """
@@ -164,7 +142,31 @@ class SelectedEntityInfo:
             adjusted_y += font_size + self.gap_between_lines
 
         # panel border
-        self.panel.draw_panel_border()
+        self.panel.draw_border()
 
         # draw all to provided surface
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
+
+    def set_selected_entity(self, entity):
+        """
+        Set the selected entity  and make panel visible
+
+        Args:
+            entity(tuple): x y position of tile in game map
+        """
+        self.selected_entity = entity
+        if entity is not None:
+            self.set_visibility(True)
+        else:
+            self.set_visibility(False)
+
+    def set_visibility(self, visible):
+        """
+        Set the visibility of the selected entity info
+
+        Args:
+            visible (bool): Visible or not
+        """
+        from scripts.core.global_data import ui_manager
+        ui_manager.update_panel_visibility("entity_info", self, visible)
+

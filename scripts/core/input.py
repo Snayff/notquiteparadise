@@ -59,8 +59,6 @@ def get_input():
 
         # is a key pressed?
         if input.type == pygame.KEYDOWN:
-            if input.key == pygame.K_DOWN:
-                print("you pressed down")
 
             # movement
             if input.key == pygame.K_UP or input.key == pygame.K_KP8 or input.key == pygame.K_k:
@@ -159,7 +157,7 @@ def handle_player_turn_input(input_values):
     player = entity_manager.player
 
     if values["right_click"]:
-        pos = values["mouse_xy"]
+        pos = ui_manager.get_scaled_mouse_pos()
         for key, ui_object in ui_manager.visible_elements.items():
             if ui_object.panel:
                 if ui_object.panel.rect.collidepoint(pos):

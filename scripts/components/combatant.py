@@ -30,8 +30,8 @@ class Combatant:
             if entity.trade:
                 stat_total += entity.trade.vigour
 
-            if entity.motive:
-                stat_total += entity.motive.vigour
+            if entity.homeland:
+                stat_total += entity.homeland.vigour
 
             return stat_total + base_amount
 
@@ -47,8 +47,8 @@ class Combatant:
             if entity.trade:
                 stat_total += entity.trade.clout
 
-            if entity.motive:
-                stat_total += entity.motive.clout
+            if entity.homeland:
+                stat_total += entity.homeland.clout
 
             return stat_total + base_amount
 
@@ -64,8 +64,8 @@ class Combatant:
             if entity.trade:
                 stat_total += entity.trade.subtlety
 
-            if entity.motive:
-                stat_total += entity.motive.subtlety
+            if entity.homeland:
+                stat_total += entity.homeland.subtlety
 
             return stat_total + base_amount
 
@@ -81,8 +81,8 @@ class Combatant:
             if entity.trade:
                 stat_total += entity.trade.bustle
 
-            if entity.motive:
-                stat_total += entity.motive.bustle
+            if entity.homeland:
+                stat_total += entity.homeland.bustle
 
             return stat_total + base_amount
 
@@ -98,8 +98,8 @@ class Combatant:
             if entity.trade:
                 stat_total += entity.trade.exactitude
 
-            if entity.motive:
-                stat_total += entity.motive.exactitude
+            if entity.homeland:
+                stat_total += entity.homeland.exactitude
 
             return stat_total + base_amount
 

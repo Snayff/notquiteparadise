@@ -27,6 +27,7 @@ class Panel:
         self.surface = pygame.Surface((self.width, self.height))
         self.border_colour = border_colour
         self.rect = pygame.rect.Rect(x, y, width, height)
+        self.centre = (width / 2, height / 2)
 
     def draw_background(self):
         """
@@ -37,7 +38,7 @@ class Panel:
         pygame.draw.rect(self.surface, self.background_colour,  [0 + offset,  0 + offset, self.width - offset,
                             self.height - offset], 0)
 
-    def draw_panel_border(self):
+    def draw_border(self):
         """
         Draw a panel's border if bordersize > 0
         """

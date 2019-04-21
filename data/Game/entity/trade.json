@@ -1,11 +1,20 @@
 {
-	"beggar" : {
-        "name": "beggar",
-        "description": "A beggar description",
+	"cleromancer" : {
+        "name": "cleromancer",
+        "description": "A cleromancer description",
         "vigour": 1,
         "clout": 1,
         "subtlety": 2,
         "bustle": 0,
         "exactitude": -1
+    },
+	"hired_hand" : {
+        "name": "hired hand",
+        "description": "A hired hand description",
+        "vigour": 2,
+        "clout": 2,
+        "subtlety": -1,
+        "bustle": 0,
+        "exactitude": 0
     }
 }

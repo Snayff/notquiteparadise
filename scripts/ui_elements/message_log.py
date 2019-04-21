@@ -25,6 +25,7 @@ class MessageLog:
 
     def __init__(self):
         # log setup
+        self.font = Font().message_log
         self.colour = Colour()
         self.palette = Palette().message_log
         self.message_list = [(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise")]
@@ -32,7 +33,7 @@ class MessageLog:
         self.expressions = self.create_expressions_list()
         self.icons = self.create_icons_list()
         self.hyperlinks = self.create_hyperlinks_list()
-        self.font = Font().message_log
+
 
         # hyperlink info
         self.is_dirty = True
@@ -156,7 +157,7 @@ class MessageLog:
         # self.is_dirty = False
 
         # panel border
-        self.panel.draw_panel_border()
+        self.panel.draw_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
     def draw_tooltips(self, surface):

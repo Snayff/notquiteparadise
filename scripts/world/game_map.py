@@ -82,7 +82,7 @@ class GameMap:
                 #                     str(entity.current_sprite_frame), self.colour.white)
 
         # panel border
-        self.panel.draw_panel_border()
+        self.panel.draw_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
     def is_tile_blocking_movement(self, tile_x, tile_y):
