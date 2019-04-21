@@ -28,6 +28,9 @@ class EntityHandler(Subscriber):
         if event.type == EntityEventTypes.DIE:
             self.process_die(event)
 
+        if event.type == EntityEventTypes.LEARN:
+            self.process_learn(event)
+
     @staticmethod
     def process_move(event):
         """
@@ -103,3 +106,13 @@ class EntityHandler(Subscriber):
         del turn_manager.turn_queue[entity]
         if turn_manager.turn_holder == entity:
             turn_manager.build_new_turn_queue()
+
+    @staticmethod
+    def process_learn(event):
+        """
+        Have an entity learn a skill.
+
+        Args:
+            event:
+        """
+        event.entity.actor.learn_skill(event.skill_tree_name, event.skill_name)

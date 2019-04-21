@@ -57,6 +57,7 @@ class EntityEventTypes(Enum):
     DIE = auto()
     SKILL = auto()
     MOVE = auto()
+    LEARN = auto()
 
 
 class TargetTypes(Enum):

@@ -1,3 +1,5 @@
+import pygame
+
 from scripts.core.constants import MessageEventTypes, TargetTags, LoggingEventTypes, TargetTypes, DamageTypes, \
     PrimaryStatTypes, SecondaryStatTypes
 from scripts.core.effects import MoveEffect, DamageEffect
@@ -22,7 +24,7 @@ class Skill:
 
         # aesthetic info
         self.description = skill_values["description"]  # the description of the skill
-        self.icon = skill_values["icon"]  # icon showing the skill
+        self.icon = pygame.image.load("assets/skills/" + skill_values["icon"]).convert_alpha()  # icon showing the skill
 
         # target info
         self.range = skill_values["range"]  # how far away the skill can be used

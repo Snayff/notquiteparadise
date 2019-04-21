@@ -38,3 +38,19 @@ class MoveEvent(Event):
         Event.__init__(self, EntityEventTypes.MOVE, EventTopics.ENTITY)
         self.entity = entity_to_move
         self.target_pos = target_pos
+
+
+class LearnEvent(Event):
+    """
+    Event for learning a new skill
+
+    Args:
+        entity_to_learn_skill:
+        skill_tree_name:
+        skill_name:
+    """
+    def __init__(self, entity_to_learn_skill, skill_tree_name,  skill_name):
+        Event.__init__(self, EntityEventTypes.LEARN, EventTopics.ENTITY)
+        self.entity = entity_to_learn_skill
+        self.skill_tree_name = skill_tree_name
+        self.skill_name = skill_name

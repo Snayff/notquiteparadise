@@ -1,3 +1,4 @@
+
 from scripts.ui_elements.templates.panel import Panel
 
 
@@ -12,7 +13,7 @@ class SkillContainer(Panel):
         Draw the skill icon
         """
         if self.skill_icon:
-            self.surface.blit(self.skill_icon, (self.x, self.y))
+            self.surface.blit(self.skill_icon, (0, 0))
 
     def draw_self_on_other_surface(self, surface):
         """
@@ -22,3 +23,5 @@ class SkillContainer(Panel):
             surface:
         """
         surface.blit(self.surface, (self.x, self.y))
+
+

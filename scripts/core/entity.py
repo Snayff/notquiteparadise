@@ -1,3 +1,6 @@
+from scripts.events.entity_events import LearnEvent
+
+
 class Entity:
     """
     Game object that is extended by the inclusion of components. Every component has the entity as an `owner`.
@@ -77,4 +80,5 @@ class Entity:
             self.player.owner = self
 
         if self.actor and self.combatant:
-            self.actor.learn_skill("basic_attack", "basic_attack")
+            from scripts.core.global_data import game_manager
+            game_manager.create_event(LearnEvent(self, "basic_attack", "basic_attack"))

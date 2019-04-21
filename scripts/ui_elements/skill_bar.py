@@ -1,3 +1,5 @@
+import pygame
+
 from scripts.core.colours import Palette, Colour
 from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
 from scripts.core.fonts import Font
@@ -14,25 +16,11 @@ class SkillBar:
         # setup info
         self.font = Font().skill_bar
         self.palette = Palette().skill_bar
-        self.skills_shown_in_skill_bar = 5
+        self.max_skills_in_bar = 5
         self.skill_icon_size = 64
-        self.icon_x = 10
-
-        # init the containers
-        self.skill_containers = []
-        x = self.icon_x
-        size = self.skill_icon_size
-        bg_colour = Colour().white
-        bor_colour = self.palette.skill_border
-        bor_size = 1
-
-        for y in range(0,self.skills_shown_in_skill_bar):
-            y *= size
-            skill_container = SkillContainer(x, y, size, size, bg_colour, bor_size, bor_colour, None)
-            self.skill_containers.append(skill_container)
 
         # panel info
-        panel_width = int(((BASE_WINDOW_WIDTH / 4) * 1) /2 ) # half the size of the message log
+        panel_width = int(self.skill_icon_size * 1.5)
         panel_height = int(BASE_WINDOW_HEIGHT / 2)
         panel_x = BASE_WINDOW_WIDTH - panel_width
         panel_y = 0
@@ -42,7 +30,25 @@ class SkillBar:
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
 
-        # set panel to be rendered
+        # init the containers
+        self.skill_containers = []
+        self.icon_x = int(panel_width / 4) - 5  # centre of the skill bar
+        self.gap_between_skill_icons = int((panel_height - (self.max_skills_in_bar * self.skill_icon_size)) /
+                                           self.max_skills_in_bar)
+
+        size = self.skill_icon_size
+        bg_colour = self.palette.background
+        bor_colour = self.palette.skill_border
+        bor_size = 1
+
+        for y in range(0, self.max_skills_in_bar):
+            # ensure gap between skills
+            y = 10 + ((size * y) + self.gap_between_skill_icons)
+
+            skill_container = SkillContainer(self.icon_x, y, size, size, bg_colour, bor_size, bor_colour, None)
+            self.skill_containers.append(skill_container)
+
+        # set self to be rendered
         from scripts.core.global_data import ui_manager
         ui_manager.update_panel_visibility("skill_bar", self, True)
 
@@ -53,18 +59,23 @@ class SkillBar:
         Args:
             surface:
         """
+        panel_surface = self.panel.surface
+
         # panel background
         self.panel.draw_background()
 
         # skill containers
-        for skill_container in self.skill_containers:
-            skill_container.draw_background()
-            skill_container.draw_skill_icon()
-            skill_container.draw_border()
-            skill_container.draw_self_on_other_surface(self.panel.surface)
+        for container in self.skill_containers:
+            # draw the panel as normal then move to the panel surface
+            container.draw_background()
+            container.draw_border()
+            container.draw_skill_icon()
+            container.draw_self_on_other_surface(panel_surface)
 
         # panel border
         self.panel.draw_border()
+
+        # draw everything to the passed in surface
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
     def update_skill_icons_to_show(self):
@@ -76,6 +87,13 @@ class SkillBar:
         from scripts.core.global_data import entity_manager
         player = entity_manager.player
 
+        # if the player has been init'd update skill bar
         if player:
             for counter, skill in enumerate(player.actor.known_skills):
-                self.skill_containers[counter].skill_icon = skill.icon
+                # catch any images not the right size and resize them
+                if skill.icon.get_size() != (self.skill_icon_size, self.skill_icon_size):
+                    icon = pygame.transform.smoothscale(skill.icon, (self.skill_icon_size, self.skill_icon_size))
+                else:
+                    icon = skill.icon
+
+                self.skill_containers[counter].skill_icon = icon
