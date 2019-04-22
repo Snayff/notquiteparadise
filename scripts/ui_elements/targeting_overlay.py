@@ -1,10 +1,10 @@
 import pygame
 
 from scripts.core.colours import Palette
-from scripts.core.constants import TILE_SIZE, LoggingEventTypes
+from scripts.core.constants import TILE_SIZE
 from scripts.core.fonts import Font
 from scripts.core.skill import Skill
-from scripts.events.logging_events import LoggingEvent
+
 
 
 class TargetingOverlay:
@@ -29,10 +29,6 @@ class TargetingOverlay:
         self.highlight_border_width = 3
 
         self.is_dirty = True
-
-    def update(self):
-        pass
-        # TODO - update the selected tile when mouse or controller or keyboard moves
 
     def draw(self, surface):
         """
@@ -95,29 +91,32 @@ class TargetingOverlay:
         """
         build list of valid tiles within range
         """
-        self.tiles_to_highlight = []
+        # if there is a skill being targeted
+        if self.skill_being_targeted:
 
-        from scripts.core.global_data import entity_manager
-        player = entity_manager.player
-        centre_x = player.x
-        centre_y = player.y
-        from scripts.core.global_data import world_manager
-        skill_range = self.skill_being_targeted.range
-        game_map = world_manager.game_map
+            self.tiles_to_highlight = []
 
-        # +1 to make the range inclusive
-        for x in range(-skill_range, skill_range + 1):
-            for y in range(-skill_range, skill_range + 1):
-                current_x = x + centre_x
-                current_y = y + centre_y
+            from scripts.core.global_data import entity_manager
+            player = entity_manager.player
+            centre_x = player.x
+            centre_y = player.y
+            from scripts.core.global_data import world_manager
+            skill_range = self.skill_being_targeted.range
+            game_map = world_manager.game_map
 
-                # check in bounds, in fov and is targetable
-                in_bounds = game_map.is_tile_in_bounds(current_x, current_y)
-                in_fov = world_manager.is_tile_in_fov(current_x, current_y)
+            # +1 to make the range inclusive
+            for x in range(-skill_range, skill_range + 1):
+                for y in range(-skill_range, skill_range + 1):
+                    current_x = x + centre_x
+                    current_y = y + centre_y
 
-                if in_bounds and in_fov:
-                    tile = game_map.get_tile(current_x, current_y)
-                    self.tiles_to_highlight.append(tile)
+                    # check in bounds, in fov and is targetable
+                    in_bounds = game_map.is_tile_in_bounds(current_x, current_y)
+                    in_fov = world_manager.is_tile_in_fov(current_x, current_y)
+
+                    if in_bounds and in_fov:
+                        tile = game_map.get_tile(current_x, current_y)
+                        self.tiles_to_highlight.append(tile)
 
     def set_visibility(self, visible):
         """

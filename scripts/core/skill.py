@@ -58,8 +58,10 @@ class Skill:
                 stat_to_target = self.get_secondary_stat_from_string(effect["stat_to_target"])
 
                 # add effect object to skill
-                self.effects.append(DamageEffect(effect["damage"], damage_type, target_type,
-                                                 target_tags, effect["accuracy"], stat_to_target))
+                created_effect = DamageEffect(effect["damage"], damage_type, target_type, target_tags,
+                                              effect["accuracy"], stat_to_target)
+                created_effect.owner = self
+                self.effects.append(created_effect)
 
     def is_valid_target_type(self, tile_target_type, entity_target_type):
         """

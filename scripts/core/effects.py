@@ -102,7 +102,7 @@ class DamageEffect(Effect):
         damage = 0
 
         from scripts.core.global_data import game_manager
-        log_string = f"Applying '{self.name}' effect..."
+        log_string = f"Applying '{self.name}' effect from {self.owner}..."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # store the base class type for comparison
@@ -136,7 +136,7 @@ class DamageEffect(Effect):
                 # TODO - add the explanation of the damage roll to a tooltip
 
             else:
-                msg = f"{attacker.name} deals no damage to {defender.name}."
+                msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
                 game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
 
         else:
@@ -232,8 +232,7 @@ class DamageEffect(Effect):
 
         return modified_damage
 
-    @staticmethod
-    def apply_damage(attacker, defender, damage):
+    def apply_damage(self, attacker, defender, damage):
         """
         Apply damage to an entity
 
@@ -244,5 +243,5 @@ class DamageEffect(Effect):
         """
         defender.combatant.hp -= damage
         from scripts.core.global_data import game_manager
-        msg = f"{attacker.name} deals {damage} damage to {defender.name}."
+        msg = f"{attacker.name} uses {self.owner.name}  and deals {damage} damage to {defender.name}."
         game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))

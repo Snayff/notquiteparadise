@@ -43,7 +43,7 @@ def get_input():
         "new_game": False,
         "load_game": False,
         "debug_toggle": False,
-        "first_skill": False
+        "skill": -1
 
     }
 
@@ -84,7 +84,15 @@ def get_input():
             if input.key == pygame.K_RETURN:
                 input_values["confirm"] = True
             elif input.key == pygame.K_1:
-                input_values["first_skill"] = True
+                input_values["skill"] = 0
+            elif input.key == pygame.K_2:
+                input_values["skill"] = 1
+            elif input.key == pygame.K_3:
+                input_values["skill"] = 2
+            elif input.key == pygame.K_4:
+                input_values["skill"] = 3
+            elif input.key == pygame.K_5:
+                input_values["skill"] = 4
 
             # game functions
             if input.key == pygame.K_RETURN and pygame.K_LALT:
@@ -96,6 +104,21 @@ def get_input():
                 input_values["debug_toggle"] = True
 
     return input_values
+
+
+def check_mouse_input(input_values):
+    """
+
+    Args:
+        input_values:
+    """
+
+    if pygame.mouse.get_pressed()[0]:
+        input_values["left_click"] = True
+    elif pygame.mouse.get_pressed()[1]:
+        input_values["middle_click"] = True
+    elif pygame.mouse.get_pressed()[2]:
+        input_values["right_click"] = True
 
 
 def handle_input(values):
@@ -131,21 +154,6 @@ def handle_input(values):
             return {"exit": True}
 
 
-def check_mouse_input(input_values):
-    """
-
-    Args:
-        input_values:
-    """
-
-    if pygame.mouse.get_pressed()[0]:
-        input_values["left_click"] = True
-    elif pygame.mouse.get_pressed()[1]:
-        input_values["middle_click"] = True
-    elif pygame.mouse.get_pressed()[2]:
-        input_values["right_click"] = True
-
-
 def handle_player_turn_input(input_values):
     """
 
@@ -156,13 +164,15 @@ def handle_player_turn_input(input_values):
     values = input_values
     player = entity_manager.player
 
-    if values["right_click"]:
+    # UI interactions
+    if values["right_click"] or values["left_click"]:
         pos = ui_manager.get_scaled_mouse_pos()
         for key, ui_object in ui_manager.visible_elements.items():
-            if ui_object.panel:
+            if hasattr(ui_object, "panel"):
                 if ui_object.panel.rect.collidepoint(pos):
                     clicked_rect = key
 
+    if values["right_click"]:
         # right clicked on the map so give the selected tile to the ui manager to display info
         if clicked_rect == "game_map":
             tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
@@ -173,6 +183,21 @@ def handle_player_turn_input(input_values):
             if entity:
                 ui_manager.entity_info.set_selected_entity(entity)
 
+    if values["left_click"]:
+
+        # if we clicked the skill bar
+        if clicked_rect == "skill_bar":
+            relative_mouse_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
+            skill_number = ui_manager.skill_bar.get_skill_index_from_skill_clicked(relative_mouse_pos[0],
+                                                                                   relative_mouse_pos[1])
+            # if we clicked a skill in the skill bar create the targeting overlay
+            if skill_number != -1:
+                if len(player.actor.known_skills) > skill_number:
+                    if player.actor.known_skills[skill_number]:
+                        skill_name = player.actor.known_skills[skill_number].name
+                        game_manager.create_event((UseSkillEvent(player, (0, 0), skill_name)))
+
+    # movement
     direction_x = 0
     direction_y = 0
 
@@ -215,21 +240,44 @@ def handle_player_turn_input(input_values):
                 # nothing in the way, time to move!
                 game_manager.create_event(MoveEvent(player, (target_x, target_y)))
             else:
-                game_manager.create_event((UseSkillEvent(player, (target_x, target_y), "basic_attack")))
+                skill_name = player.actor.known_skills[0].name
+                game_manager.create_event((UseSkillEvent(player, (target_x, target_y), skill_name)))
         else:
             msg = f"You can't do that there!"
             game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
 
-    if values["first_skill"]:
-        mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
-        target_x, target_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
+    # Skill usage
+    if values["skill"] != -1:
+        skill_number = values["skill"]
+        # check we actually have that skill
+        # Note: this might bite me later if we can assign to any skill slot and not have preceding ones filled
+        if len(player.actor.known_skills) > skill_number:
+            skill = player.actor.known_skills[skill_number]
+            if skill:
 
-        # if no entity on spot then pass empty target to skill
-        if entity_manager.query.get_blocking_entity_at_location(target_x, target_y) is None:
-            target_x, target_y = 0, 0
+                mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
+                target_x, target_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
+                blocking_entity_at_location = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
 
-        game_manager.create_event((UseSkillEvent(player, (target_x, target_y), "basic_attack")))
-        # TODO - update  to skill slot use, not specify basic skill
+                # is there an entity to target?
+                if blocking_entity_at_location:
+                    # is the entity within range?
+                    distance_to_entity = entity_manager.query.get_chebyshev_distance_between_entities(player,
+                        blocking_entity_at_location)
+                    if distance_to_entity <= skill.range:
+                        target_x = blocking_entity_at_location.x
+                        target_y = blocking_entity_at_location.y
+                    else:
+                        target_x, target_y = 0, 0
+                else:
+                    target_x, target_y = 0, 0
+                # create a skill with a target, or not
+                skill_name = player.actor.known_skills[skill_number].name
+                game_manager.create_event((UseSkillEvent(player, (target_x, target_y), skill_name)))
+            else:
+                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
+        else:
+            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "You haven't learnt that many skills yet."))
 
     if values["wait"]:
         # TODO - add wait
@@ -250,10 +298,12 @@ def handle_targeting_mode_input(input_values):
     mouse_x, mouse_y = ui_manager.get_scaled_mouse_pos()
     mouse_tile_x, mouse_tile_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
 
+    # cancel out
     if values["cancel"]:
         previous_state = game_manager.previous_game_state
         game_manager.create_event(ChangeGameStateEvent(previous_state))
 
+    # Selected tile
     direction_x = 0
     direction_y = 0
 
@@ -300,8 +350,26 @@ def handle_targeting_mode_input(input_values):
         entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)
 
-    if values["first_skill"] or values["confirm"] or values["left_click"]:
+    # confirm usage
+    skill_being_targeted = ui_manager.targeting_overlay.skill_being_targeted
+    skill_number = values["skill"]
+    # check the skill value has been set
+    if values["skill"] != -1:
+
+        if values["skill"] == player.actor.known_skills.index(skill_being_targeted) or values["confirm"]:
+
+            # if entity selected then use skill
+            if entity_manager.query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
+                skill_name = player.actor.known_skills[skill_number].name
+                game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_name)))
+
+        # pressed another skill so swap to that one
+        elif values["skill"] != player.actor.known_skills.index(skill_being_targeted) :
+            skill_name = player.actor.known_skills[skill_number].name
+            game_manager.create_event((UseSkillEvent(player, (0, 0), skill_name)))
+
+    if values["left_click"]:
         # if entity selected then use skill
         if entity_manager.query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
-            game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y), "basic_attack")))
-            # TODO - update  to skill slot use, not specify basic skill
+            game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
+                                                     skill_being_targeted.name)))

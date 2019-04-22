@@ -50,8 +50,6 @@ class DebugManager:
             font.render_to(surface, (0, y_pos), self.messages[line], Palette().debug_font_colour,
                            Colour().black)
 
-
-
     def update_debug_message(self):
         """
         Populate the debug messages/info
@@ -82,7 +80,7 @@ class DebugManager:
             current_rect = ""
 
             for key, ui_object in ui_manager.visible_elements.items():
-                if ui_object.panel:
+                if hasattr(ui_object, "panel"):
                     if ui_object.panel.rect.collidepoint(pos):
                         offset_x = ui_object.panel.x
                         offset_y = ui_object.panel.y
@@ -96,8 +94,6 @@ class DebugManager:
             from scripts.core.global_data import game_manager
             msg = f"Game state: {game_manager.game_state}"
             self.messages.append(msg)
-
-
 
     def set_visibility(self, visible):
         """
