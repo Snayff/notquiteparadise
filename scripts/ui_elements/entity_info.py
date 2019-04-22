@@ -1,4 +1,5 @@
-from scripts.core.colours import Palette, Colour
+from scripts.ui_elements.colours import Colour
+from scripts.ui_elements.palette import Palette
 from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel

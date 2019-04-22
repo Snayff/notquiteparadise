@@ -12,12 +12,13 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
-# TODO - targeting mode
+# TODO -  amend tiles to include an effect so that they can store additional effects (fire, steam etc.)
+# TODO - create global tooltip method
+#  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
+#  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
-# TODO - create global tooltip method
-# TODO - skill activation events (so that animation can listen and play)
 # TODO - effect activation events (so that world can update)
 # TODO - text wrapping, especially in message log
 # TODO - check if in battle; once damage taken keep an eye on enemy states

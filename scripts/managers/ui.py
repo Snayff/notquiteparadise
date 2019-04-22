@@ -1,11 +1,9 @@
 import pygame
-from pygame.rect import Rect
 
-from scripts.core.colours import Colour
+from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.message_log import MessageLog
-from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, TILE_SIZE
-from scripts.core.fonts import Font
+from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
 

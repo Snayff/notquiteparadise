@@ -1,9 +1,9 @@
 import pygame
 
-from scripts.core.colours import Palette
+from scripts.ui_elements.palette import Palette
 from scripts.core.constants import TILE_SIZE
 from scripts.core.fonts import Font
-from scripts.core.skill import Skill
+from scripts.skills.skill import Skill
 
 
 

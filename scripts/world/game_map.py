@@ -1,9 +1,11 @@
 import tcod
 
-from scripts.core.colours import Palette, Colour
+from scripts.ui_elements.colours import Colour
+from scripts.ui_elements.palette import Palette
 from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TILE_SIZE, TargetTags
 from scripts.ui_elements.templates.panel import Panel
-from scripts.world.tiles import Floor, Wall, Tile
+from scripts.world.tiles.floor import Floor
+from scripts.world.tiles.wall import Wall
 
 
 class GameMap:

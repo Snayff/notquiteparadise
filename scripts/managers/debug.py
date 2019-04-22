@@ -1,4 +1,5 @@
-from scripts.core.colours import Palette, Colour
+from scripts.ui_elements.colours import Colour
+from scripts.ui_elements.palette import Palette
 from scripts.core.constants import TILE_SIZE
 from scripts.core.fonts import Font
 

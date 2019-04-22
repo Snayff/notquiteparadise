@@ -1,5 +1,5 @@
 from scripts.core.constants import LoggingEventTypes
-from scripts.core.skill import Skill
+from scripts.skills.skill import Skill
 from scripts.events.logging_events import LoggingEvent
 
 

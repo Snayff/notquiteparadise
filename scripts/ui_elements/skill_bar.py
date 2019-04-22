@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.core.colours import Palette, Colour
+from scripts.ui_elements.palette import Palette
 from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
@@ -40,13 +40,19 @@ class SkillBar:
         bg_colour = self.palette.background
         bor_colour = self.palette.skill_border
         bor_size = 1
+        skill_number = 1
 
         for y in range(0, self.max_skills_in_bar):
             # ensure gap between skills
             y = 10 + ((size * y) + self.gap_between_skill_icons)
 
-            skill_container = SkillContainer(self.icon_x, y, size, size, bg_colour, bor_size, bor_colour, None)
+            skill_container = SkillContainer(self.icon_x, y, size, size, bg_colour, bor_size, bor_colour, None,
+                                             skill_number)
+            skill_container.owner = self
             self.skill_containers.append(skill_container)
+
+            # increment counter
+            skill_number += 1
 
         # set self to be rendered
         from scripts.core.global_data import ui_manager
@@ -70,6 +76,7 @@ class SkillBar:
             container.draw_background()
             container.draw_border()
             container.draw_skill_icon()
+            container.draw_skill_key()
             container.draw_self_on_other_surface(panel_surface)
 
         # panel border

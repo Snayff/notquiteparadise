@@ -1,6 +1,7 @@
 import pygame
 
-from scripts.core.colours import Palette, Colour
+from scripts.ui_elements.colours import Colour
+from scripts.ui_elements.palette import Palette
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, GAME_FPS, BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
