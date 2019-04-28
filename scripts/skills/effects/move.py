@@ -21,14 +21,14 @@ class MoveEffect(Effect):
         # get required info
         start_pos_x, start_pos_y = self.entity_to_move.x, self.entity_to_move.y
         target_tile_x, target_tile_y = self.target.x, self.target.y
-        direction_x, direction_y = entity_manager.query.get_a_star_direction_between_entities(self.entity_to_move,
+        direction_x, direction_y = world_manager.entity_query.get_a_star_direction_between_entities(self.entity_to_move,
                                                                                               self.target)
         # move towards target up to move_distance
         for move in range(1, self.move_distance):
             # check target tile is valid
             in_bounds = world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y)
             tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_tile_x, target_tile_y)
-            entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_tile_x,
+            entity_blocking_movement = world_manager.entity_query.get_blocking_entity_at_location(target_tile_x,
                                                                                             target_tile_y)
             if in_bounds and not tile_blocking_movement and not entity_blocking_movement:
                 # move the entity
@@ -36,9 +36,8 @@ class MoveEffect(Effect):
                 self.entity_to_move.y += direction_y
 
         # update the fov if player moved
-        from scripts.core.global_data import entity_manager
-        if self.entity_to_move == entity_manager.player:
-            from scripts.core.global_data import world_manager
+        from scripts.core.global_data import world_manager
+        if self.entity_to_move == world_manager.player:
             world_manager.player_fov_is_dirty = True
 
         # log the movement

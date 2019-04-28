@@ -91,8 +91,8 @@ class SkillBar:
         """
 
         # update info
-        from scripts.core.global_data import entity_manager
-        player = entity_manager.player
+        from scripts.core.global_data import world_manager
+        player = world_manager.player
 
         # if the player has been init'd update skill bar
         if player:

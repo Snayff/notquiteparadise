@@ -6,7 +6,7 @@ from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.skills.effects.effect import Effect
-from scripts.world.tiles.tile import Tile
+from scripts.world.terrain.tile import Tile
 
 
 class DamageEffect(Effect):

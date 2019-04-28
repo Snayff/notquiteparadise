@@ -1,7 +1,7 @@
-from scripts.managers.entity_manager_methods.action_methods import EntityAction
-from scripts.managers.entity_manager_methods.animation_methods import EntityAnimation
-from scripts.managers.entity_manager_methods.existence_methods import EntityExistenceAmendment
-from scripts.managers.entity_manager_methods.query_methods import EntityQuery
+from scripts.managers.world_methods.action_methods import EntityAction
+from scripts.managers.world_methods.animation_methods import EntityAnimation
+from scripts.managers.world_methods.existence_methods import EntityExistence
+from scripts.managers.world_methods.query_methods import EntityQuery
 
 
 class EntityManager:
@@ -9,7 +9,7 @@ class EntityManager:
         self.entities = []
         self.player = None
         self.query = EntityQuery(self)
-        self.existence = EntityExistenceAmendment(self)
+        self.existence = EntityExistence(self)
         self.animation = EntityAnimation(self)
         self.action = EntityAction(self)
         self.animation_enabled = False

@@ -1,6 +1,9 @@
 import tcod
 
 from scripts.core.constants import TILE_SIZE
+from scripts.managers.world_methods.action_methods import EntityAction
+from scripts.managers.world_methods.existence_methods import EntityExistence
+from scripts.managers.world_methods.query_methods import EntityQuery
 from scripts.world.game_map import GameMap
 
 
@@ -9,7 +12,13 @@ class WorldManager:
     Contains all world related functionality
     """
     def __init__(self):
-        self.game_map = None # type: GameMap
+
+        self.entity_query = EntityQuery(self)
+        self.entity_existence = EntityExistence(self)
+        self.entity_action = EntityAction(self)
+
+        self.game_map = None  # type: GameMap
+        self.player = None
         self.player_fov_map = None
         self.player_fov_is_dirty = False
         self.light_walls = True
@@ -21,8 +30,7 @@ class WorldManager:
             player fov
         """
         if self.player_fov_is_dirty:
-            from scripts.core.global_data import entity_manager
-            player = entity_manager.player
+            player = self.player
             self.recompute_player_fov(player.x, player.y, player.sight_range)
 
     def create_new_map(self, map_width, map_height):

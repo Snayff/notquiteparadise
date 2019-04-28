@@ -6,25 +6,31 @@ from scripts.core.constants import LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 
 
-
 class EntityQuery:
+    """
+    Queries relating to entities.
+
+    Attributes:
+        manager(WorldManager): the manager containing this class.
+    """
     def __init__(self, manager):
         self.manager = manager
 
-    def get_blocking_entity_at_location(self, destination_x, destination_y):
+    def get_blocking_entity_at_location(self, tile_x, tile_y):
         """
 
         Args:
-            destination_x:
-            destination_y:
+            tile_x:
+            tile_y:
 
         Returns:
-            entity
+            Entity: returns entity if there is one, else None.
         """
-        # TODO - update to use entity pos within array, instead of looping
+        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        entity = tile.entity
 
-        for entity in self.manager.entities:
-            if entity.blocks_movement and entity.x == destination_x and entity.y == destination_y:
+        if entity:
+            if entity.blocks_movement:
                 return entity
 
         return None
@@ -40,12 +46,12 @@ class EntityQuery:
         Returns:
             entity: Entity or None if no entity found
         """
+        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        entity = tile.entity
 
-        for entity in self.manager.entities:
-            if entity.x == tile_x and entity.y == tile_y:
-                from scripts.core.global_data import world_manager
-                if world_manager.is_tile_in_fov(tile_x, tile_y):
-                    return entity
+        if entity:
+            if self.manager.is_tile_in_fov(tile_x, tile_y):
+                return entity
 
         return None
 
@@ -76,7 +82,7 @@ class EntityQuery:
             target_entity (Entity):
 
         Returns:
-            int: distance in tiles
+            int: distance in terrain
 
         """
         start_entity_position = [start_entity.x, start_entity.y]
@@ -96,8 +102,7 @@ class EntityQuery:
         from scripts.core.global_data import game_manager
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-        from scripts.core.global_data import world_manager
-        game_map = world_manager.game_map
+        game_map = self.manager.game_map
 
         direction_x = target_entity.x - start_entity.x
         direction_y = target_entity.y - start_entity.y
@@ -135,8 +140,7 @@ class EntityQuery:
         max_path_length = 25
         from scripts.core.global_data import world_manager
         game_map = world_manager.game_map
-        from scripts.core.global_data import entity_manager
-        entities = entity_manager.entities
+        entities = world_manager.entity_existence.get_all_entities()
         entity_to_move = start_entity
         target = target_entity
 

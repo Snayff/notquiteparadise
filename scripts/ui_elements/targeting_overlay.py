@@ -49,7 +49,7 @@ class TargetingOverlay:
         tile_colour = self.palette.highlighted_range_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)
 
-        # draw highlight on all tiles listed, except the one selected
+        # draw highlight on all terrain listed, except the one selected
         for tile in self.tiles_to_highlight:
             if tile != self.selected_tile:
                 # amend rect position to reflect tile sizes
@@ -89,18 +89,17 @@ class TargetingOverlay:
 
     def update_tiles_to_highlight(self):
         """
-        build list of valid tiles within range
+        build list of valid terrain within range
         """
         # if there is a skill being targeted
         if self.skill_being_targeted:
 
             self.tiles_to_highlight = []
 
-            from scripts.core.global_data import entity_manager
-            player = entity_manager.player
+            from scripts.core.global_data import world_manager
+            player = world_manager.player
             centre_x = player.x
             centre_y = player.y
-            from scripts.core.global_data import world_manager
             skill_range = self.skill_being_targeted.range
             game_map = world_manager.game_map
 

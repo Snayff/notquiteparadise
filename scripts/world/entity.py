@@ -12,12 +12,10 @@ class Entity:
             delay_until_idle_animation (int): Seconds until the next idle animation is played
     """
 
-    def __init__(self, x, y, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None,
+    def __init__(self, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None,
             race=None, trade=None, homeland=None, ai=None, actor=None, sight_range=0, player=None, icon=None):
         """
         Args:
-            x (int) : X position, in tiles.
-            y (int) : Y position, in tiles.
             spritesheet (dict(list(pygame.image))) : dictionary of sprites
             name (str) : Name of the entity.
             blocks_movement (bool) : Does entity block movement?
@@ -31,9 +29,8 @@ class Entity:
             sight_range (int): How far the entity can see.
             player (Player): if the entity is controlled by the player
         """
+        self.owner = None
 
-        self.x = x
-        self.y = y
         self.spritesheet = spritesheet  # N.B. currently only taking a single image
         self.icon = icon
         self.name = name
@@ -82,3 +79,23 @@ class Entity:
         if self.actor and self.combatant:
             from scripts.core.global_data import game_manager
             game_manager.create_event(LearnEvent(self, "basic_attack", "basic_attack"))
+
+    @property
+    def x(self):
+        """
+        Get the tile_x of the Entity.
+
+        Returns:
+
+        """
+        return self.owner.x
+
+    @property
+    def y(self):
+        """
+        Get the tile_y of the Entity.
+
+        Returns:
+
+        """
+        return self.owner.y

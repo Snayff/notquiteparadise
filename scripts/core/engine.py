@@ -12,7 +12,9 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
-# TODO -  amend tiles to include an effect so that they can store additional effects (fire, steam etc.)
+# TODO -  amend terrain to include an effect so that they can store additional effects (fire, steam etc.)
+#  should entities be included in terrain, too?
+# TODO - change xy to row col to clarify use in array, or tile_x/y
 # TODO - create global tooltip method
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
@@ -72,10 +74,10 @@ def game_loop():
         game_manager.update()
         debug_manager.update()
         world_manager.update()
-        entity_manager.update(world_manager.game_map)
+        #entity_manager.update(world_manager.game_map)
 
         # DRAW
-        ui_manager.draw_game(world_manager.game_map, entity_manager.entities, debug_manager.visible)
+        ui_manager.draw_game(world_manager.game_map, debug_manager.visible)
 
 
 def dump_profiling_data(profiler):

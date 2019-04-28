@@ -5,7 +5,7 @@ from scripts.managers.turn import TurnManager
 from scripts.managers.ui import UIManager
 from scripts.managers.world import WorldManager
 
-entity_manager = EntityManager()
+entity_manager = False #EntityManager()
 world_manager = WorldManager()
 ui_manager = UIManager()
 turn_manager = TurnManager()

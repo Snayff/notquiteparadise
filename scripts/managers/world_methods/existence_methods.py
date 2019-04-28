@@ -7,45 +7,66 @@ from scripts.components.player import Player
 from scripts.components.trade import Trade
 from scripts.core.constants import TILE_SIZE
 from scripts.data_loaders.getters import get_value_from_actor_json
-from scripts.core.entity import Entity
+from scripts.world.entity import Entity
 
 
-class EntityExistenceAmendment:
+class EntityExistence:
+    """
+    Entity existence related methods and info.
+
+    Attributes:
+        manager(WorldManager): the containing manager
+        entities(List): list of entities
+    """
     def __init__(self, manager):
         self.manager = manager
 
-    def add_entity(self, entity):
+        self.entities = []
+
+    def add_entity(self, tile_x, tile_y, entity):
         """
 
         Args:
+            tile_x:
+            tile_y:
             entity:
         """
-        self.manager.entities.append(entity)
+        self.entities.append(entity)
+        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        tile.set_entity(entity)
 
-    def add_player(self, entity):
+    def add_player(self, tile_x, tile_y, entity):
         """
 
         Args:
+            tile_x:
+            tile_y:
             entity:
         """
         # TODO - fold into create actor, use player arg default to false
         self.manager.player = entity
-        self.add_entity(entity)
+        self.add_entity(tile_x, tile_y, entity)
 
     def remove_entity(self, entity):
         """
+        Remove entity from entities list and current tile.
 
         Args:
             entity:
         """
-        self.manager.entities.remove(entity)
+        # remove from tile
+        tile = self.manager.game_map.get_tile(entity.x, entity.y)
+        tile.remove_entity()
 
-    def create_actor_entity(self, x, y, actor_name):
+        # remove from entities list
+        self.entities.remove(entity)
+
+    def create_actor_entity(self, tile_x, tile_y, actor_name):
         """
 
         Args:
-            x:
-            y:
+            tile_x:
+            tile_y:
             actor_name:
         """
         values = get_value_from_actor_json(actor_name)
@@ -80,13 +101,24 @@ class EntityExistenceAmendment:
         else:
             ai_component = None
 
-        actor = Entity(x, y, sprite, actor_name, blocks_movement=True, combatant=combatant_component,
+        # create the Entity
+        actor = Entity(sprite, actor_name, blocks_movement=True, combatant=combatant_component,
                        trade=youth_component, homeland=adulthood_component, ai=ai_component,
                        actor=actor_component, sight_range=sight_range, player=player, icon=icon)
 
         actor.combatant.hp = actor.combatant.secondary_stats.max_hp
 
         if player:
-            self.add_player(actor)
+            self.add_player(tile_x, tile_y, actor)
         else:
-            self.add_entity(actor)
+            self.add_entity(tile_x, tile_y, actor)
+
+    def get_all_entities(self):
+        """
+        Get the list of all entities
+
+        Returns:
+            list: list of entities
+
+        """
+        return self.entities

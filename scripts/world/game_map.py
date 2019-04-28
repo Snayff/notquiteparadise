@@ -2,10 +2,11 @@ import tcod
 
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TILE_SIZE, TargetTags
+from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TargetTags
 from scripts.ui_elements.templates.panel import Panel
-from scripts.world.tiles.floor import Floor
-from scripts.world.tiles.wall import Wall
+from scripts.world.new_tile import NewTile
+from scripts.world.terrain.floor import Floor
+from scripts.world.terrain.wall import Wall
 
 
 class GameMap:
@@ -17,18 +18,18 @@ class GameMap:
         self.width = width
         self.height = height
 
-        # populate map with floor tiles
+        # populate map with floor terrain
         for x in range(self.width):
             # give each new row an empty list
             self.tiles.append([])
             for y in range(self.height):
                 # add to the column
-                self.tiles[x].append(Floor(x, y))
+                self.tiles[x].append(NewTile(x, y, terrain=Floor(x, y)))
 
         # TODO remove - only for test
         if self.width > 10 and self.height > 10:
-            self.tiles[0][5] = Wall(0, 5)
-            self.tiles[10][2] = Wall(10, 2)
+            self.tiles[0][5].terrain = Wall(0, 5)
+            self.tiles[10][2].terrain = Wall(10, 2)
 
         # setup the panel
         panel_x = 0
@@ -45,12 +46,11 @@ class GameMap:
         from scripts.core.global_data import ui_manager
         ui_manager.update_panel_visibility("game_map", self,  True)
 
-    def draw(self, entities, surface):
+    def draw(self, surface):
         """
         Draw the specified game_map
 
         Args:
-            entities(list[Entity]): List of entities
             surface(Surface): Surface to draw to
 
         """
@@ -58,30 +58,12 @@ class GameMap:
         self.panel.surface.fill(Colour().black)
         self.panel.draw_background()
 
-        # tiles
+        # terrain
         for x in range(0, self.width):
             for y in range(0, self.height):
 
                 if self.is_tile_visible_to_player(x, y):
-                    tile_position = (x * TILE_SIZE, y * TILE_SIZE)
-                    self.panel.surface.blit(self.tiles[x][y].sprite, tile_position)
-
-        # entities
-        for entity in entities:
-            if self.is_tile_visible_to_player(entity.x, entity.y):
-                from scripts.core.global_data import entity_manager
-                if entity_manager.animation_enabled:
-                    sprite = entity_manager.animation.get_entity_current_frame(entity)  # TODO - decouple link to
-                                                                                        #  entity_manager_methods
-                else:
-                    sprite = entity.icon
-
-                self.panel.surface.blit(sprite, (entity.x * TILE_SIZE, entity.y * TILE_SIZE))
-
-                # TESTING - show frames
-                # font = self.message_log.font
-                # font.render_to(self.main_surface, (entity.x * TILE_SIZE, entity.y * TILE_SIZE),
-                #                     str(entity.current_sprite_frame), self.colour.white)
+                    self.tiles[x][y].draw(self.panel.surface)
 
         # panel border
         self.panel.draw_border()

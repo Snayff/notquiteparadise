@@ -81,13 +81,12 @@ class UIManager:
         """
         self.skill_bar = SkillBar()
 
-    def draw_game(self, game_map=None, entities=None, debug_active=False):
+    def draw_game(self, game_map=None, debug_active=False):
         """
         Draw the entire game.
 
         Args:
             game_map (GameMap): the current game map
-            entities (list[Entity]): list of entities
             debug_active (bool): whether to show the debug messages
         """
         # TODO - draw dirty only
@@ -98,7 +97,7 @@ class UIManager:
         # draw new frame
         # TODO - change visible_elements to enum
         if "game_map" in self.visible_elements:
-            game_map.draw(entities, self.main_surface)
+            game_map.draw(self.main_surface)
 
         # debug doesnt use a panel so we check for the flag
         if debug_active:

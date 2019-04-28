@@ -162,7 +162,7 @@ def handle_player_turn_input(input_values):
 
     """
     values = input_values
-    player = entity_manager.player
+    player = world_manager.player
 
     # UI interactions
     if values["right_click"] or values["left_click"]:
@@ -178,7 +178,7 @@ def handle_player_turn_input(input_values):
             tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
             tile_x = tile_pos[0] // TILE_SIZE
             tile_y = tile_pos[1] // TILE_SIZE
-            entity = entity_manager.query.get_entity_in_fov_at_tile(tile_x, tile_y)
+            entity = world_manager.entity_query.get_entity_in_fov_at_tile(tile_x, tile_y)
 
             if entity:
                 ui_manager.entity_info.set_selected_entity(entity)
@@ -233,7 +233,7 @@ def handle_player_turn_input(input_values):
         # is there something in the way?
         in_bounds = world_manager.game_map.is_tile_in_bounds(target_x, target_y)
         tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
-        entity_blocking_movement = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
+        entity_blocking_movement = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
 
         if in_bounds and not tile_blocking_movement:
             if not entity_blocking_movement:
@@ -257,12 +257,12 @@ def handle_player_turn_input(input_values):
 
                 mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
                 target_x, target_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
-                blocking_entity_at_location = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
+                blocking_entity_at_location = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
 
                 # is there an entity to target?
                 if blocking_entity_at_location:
                     # is the entity within range?
-                    distance_to_entity = entity_manager.query.get_chebyshev_distance_between_entities(player,
+                    distance_to_entity = world_manager.entity_query.get_chebyshev_distance_between_entities(player,
                         blocking_entity_at_location)
                     if distance_to_entity <= skill.range:
                         target_x = blocking_entity_at_location.x
@@ -294,7 +294,7 @@ def handle_targeting_mode_input(input_values):
         input_values:
     """
     values = input_values
-    player = entity_manager.player
+    player = world_manager.player
     mouse_x, mouse_y = ui_manager.get_scaled_mouse_pos()
     mouse_tile_x, mouse_tile_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
 
@@ -340,14 +340,14 @@ def handle_targeting_mode_input(input_values):
         tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
         tile = world_manager.game_map.get_tile(tile_x, tile_y)
         ui_manager.targeting_overlay.set_selected_tile(tile)
-        entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
+        entity = world_manager.entity_query.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)
 
     # if mouse moved update selected tile
     if values["mouse_moved"]:
         tile = world_manager.game_map.get_tile(mouse_tile_x, mouse_tile_y)
         ui_manager.targeting_overlay.set_selected_tile(tile)
-        entity = entity_manager.query.get_blocking_entity_at_location(tile.x, tile.y)
+        entity = world_manager.entity_query.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)
 
     # confirm usage
@@ -359,7 +359,7 @@ def handle_targeting_mode_input(input_values):
         if values["skill"] == player.actor.known_skills.index(skill_being_targeted) or values["confirm"]:
 
             # if entity selected then use skill
-            if entity_manager.query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
+            if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
                 skill_name = player.actor.known_skills[skill_number].name
                 game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_name)))
 
@@ -370,6 +370,6 @@ def handle_targeting_mode_input(input_values):
 
     if values["left_click"]:
         # if entity selected then use skill
-        if entity_manager.query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
+        if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
             game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
                                                      skill_being_targeted.name)))

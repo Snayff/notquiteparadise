@@ -19,19 +19,31 @@ class TurnManager:
         self.time_of_last_turn = 0
 
     def build_new_turn_queue(self):
-        from scripts.core.global_data import game_manager, entity_manager
+        """
+        Build a new turn queue for all entities
+        """
+        from scripts.core.global_data import game_manager
         log_string = f"Building a new turn queue."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         # create a turn queue from the entities list
-        for entity in entity_manager.entities:
-            if entity.ai or entity == entity_manager.player:
+        from scripts.core.global_data import world_manager
+        entities = world_manager.entity_existence.get_all_entities()
+
+        for entity in entities:
+            if entity.ai or entity == world_manager.player:
                 self.turn_queue[entity] = entity.actor.time_of_next_action
 
         # get the next entity in the queue
         self.turn_holder = min(self.turn_queue, key=self.turn_queue.get)
 
     def end_turn(self, spent_time):
+        """
+        End the current turn and apply time spent
+
+        Args:
+            spent_time:
+        """
         from scripts.core.global_data import game_manager
         entity = self.turn_holder
 
@@ -44,6 +56,9 @@ class TurnManager:
         self.next_turn()
 
     def next_turn(self):
+        """
+        Proceed to the next turn setting the next entity to act as the turn holder.
+        """
         from scripts.core.global_data import game_manager
 
         if not self.turn_queue:
@@ -60,7 +75,8 @@ class TurnManager:
         self.time_of_last_turn = self.time
 
         # if turn holder is the player then update to player turn
-        if self.turn_holder == global_data.entity_manager.player:
+        from scripts.core.global_data import world_manager
+        if self.turn_holder == world_manager.player:
             game_manager.create_event(ChangeGameStateEvent(GameStates.PLAYER_TURN))
         # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
         elif game_manager.game_state != GameStates.ENEMY_TURN:

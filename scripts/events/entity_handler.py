@@ -45,10 +45,15 @@ class EntityHandler(Subscriber):
         # get info from event
         target_x, target_y = event.target_pos
         entity = event.entity
+        old_x, old_y = entity.x, entity.y
 
-        # move entity
-        entity.x = target_x
-        entity.y = target_y
+        # clean up old tile
+        old_tile = world_manager.game_map.get_tile(old_x, old_y)
+        old_tile.remove_entity()
+
+        # move entity to new tile
+        new_tile = world_manager.game_map.get_tile(target_x, target_y)
+        new_tile.set_entity(entity)
 
         # update fov if needed
         if entity.player:
@@ -78,7 +83,7 @@ class EntityHandler(Subscriber):
 
             # confirm target type and resource cost
             tile_target_type = world_manager.game_map.get_target_type_from_tile(target_x, target_y)
-            entity_at_tile = entity_manager.query.get_blocking_entity_at_location(target_x, target_y)
+            entity_at_tile = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
             if entity_at_tile != event.entity:
                 entity_target_type = TargetTags.OTHER_ENTITY
             else:
@@ -102,7 +107,9 @@ class EntityHandler(Subscriber):
         entity = event.dying_entity
         entity.ai = None
 
-        entity_manager.entities.remove(entity)
+        # TODO - create removal method
+        #entity_manager.entities.remove(entity)
+
         del turn_manager.turn_queue[entity]
         if turn_manager.turn_holder == entity:
             turn_manager.build_new_turn_queue()

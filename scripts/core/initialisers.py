@@ -22,14 +22,14 @@ def initialise_game():
     world_manager.create_new_map(50, 30)  # TODO remove magic numbers
     ui_manager.delayed_init()
 
-    entity_manager.existence.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
-    entity_manager.existence.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
+    world_manager.entity_existence.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
+    world_manager.entity_existence.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
-    game_manager.create_event(LearnEvent(entity_manager.player, "cleromancer", "throw_dice"))  # TODO - remove when
+    game_manager.create_event(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))  # TODO - remove when
                                                                                                 # skill learning is in
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
-    turn_manager.turn_holder = entity_manager.player
+    turn_manager.turn_holder = world_manager.player
 
 
 def initialise_event_handlers():
