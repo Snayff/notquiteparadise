@@ -24,12 +24,12 @@ class GameMap:
             self.tiles.append([])
             for y in range(self.height):
                 # add to the column
-                self.tiles[x].append(Tile(x, y, terrain=Floor(x, y)))
+                self.tiles[x].append(Tile(x, y, terrain=Floor()))
 
         # TODO remove - only for test
         if self.width > 10 and self.height > 10:
-            self.tiles[0][5].terrain = Wall(0, 5)
-            self.tiles[10][2].terrain = Wall(10, 2)
+            self.tiles[0][5].set_terrain(Wall())
+            self.tiles[10][2].set_terrain(Wall())
 
         # setup the panel
         panel_x = 0

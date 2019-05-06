@@ -25,8 +25,9 @@ def initialise_game():
     world_manager.entity_existence.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
     world_manager.entity_existence.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
-    game_manager.create_event(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))  # TODO - remove when
-                                                                                              #  skill learning is in
+    # TODO - remove when skill learning is in
+    game_manager.create_event(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))
+    game_manager.create_event(LearnEvent(world_manager.player, "cleromancer", "bring_down_the_mountain"))
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player

@@ -8,8 +8,8 @@ class Wall(Terrain):
     """
     Wall tile, blocks movement and sight.
     """
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self):
+        super().__init__()
         self.blocks_movement = True
         self.blocks_sight = True
         self.name = "wall tile"

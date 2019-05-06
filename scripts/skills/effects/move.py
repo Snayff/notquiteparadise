@@ -1,9 +1,9 @@
-from scripts.skills.effects.effect import Effect
+from scripts.skills.effects.skill_effect import SkillEffect
 
 
-class MoveEffect(Effect):
+class MoveSkillEffect(SkillEffect):
     """
-    Effect to move an entity towards target tile
+    SkillEffect to move an entity towards target tile
     """
 
     def __init__(self, target_type, tags, entity_to_move, target, move_distance):

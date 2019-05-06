@@ -8,8 +8,8 @@ class Floor(Terrain):
     """
     Floor tile, doesnt block movement or sight
     """
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self):
+        super().__init__()
         self.name = "floor tile"
         self.sprite = pygame.image.load("assets/world/placeholder/_test.png").convert_alpha()
 

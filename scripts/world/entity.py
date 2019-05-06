@@ -12,7 +12,7 @@ class Entity:
             delay_until_idle_animation (int): Seconds until the next idle animation is played
     """
 
-    def __init__(self, spritesheet, name, blocks_movement=True, blocks_sight=True, combatant=None,
+    def __init__(self, spritesheet=None, name="", blocks_movement=True, blocks_sight=True, combatant=None,
             race=None, trade=None, homeland=None, ai=None, actor=None, sight_range=0, player=None, icon=None):
         """
         Args:

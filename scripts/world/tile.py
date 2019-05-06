@@ -1,10 +1,12 @@
-
-from scripts.core.constants import TILE_SIZE
+from scripts.core.constants import TILE_SIZE, TargetTypes, TargetTags
+from scripts.world.entity import Entity
+from scripts.world.terrain.floor import Floor
+from scripts.world.terrain.wall import Wall
 
 
 class Tile:
     """
-    A Tile on the GameMap. Can contain an Entity, a Terrain and an Effect.
+    A Tile on the GameMap. Can contain an Entity, a Terrain and an SkillEffect.
 
     Attributes:
         x(int): tile_x
@@ -12,8 +14,9 @@ class Tile:
         is_visible(bool): if tile is visible to player
         entity(Entity): the entity on the tile
         terrain(Terrain): the terrain on the tile
-        effect(Effect): the effect on the tile
+        effect(SkillEffect): the effect on the tile
     """
+
     def __init__(self, x, y, entity=None, terrain=None, effect=None):
         self.x = x
         self.y = y
@@ -29,6 +32,79 @@ class Tile:
             self.terrain.owner = self
         if effect:
             self.effect.owner = self
+
+    def has_tag(self, target_tag, active_entity=None):
+        """
+        Check if a given tag applies to the tile
+
+        Args:
+            target_tag (TargetTags): tag to check
+            active_entity (Entity): entity using a skill
+
+        Returns:
+            bool: True if tag applies.
+        """
+        if target_tag == TargetTags.FLOOR:
+            return self.is_floor
+        elif target_tag == TargetTags.WALL:
+            return self.is_wall
+        elif target_tag == TargetTags.SELF:
+            # ensure active entity is the same as the targeted one
+            if active_entity == self.entity:
+                return True
+            else:
+                return False
+        elif target_tag == TargetTags.OTHER_ENTITY:
+            # ensure active entity is NOT the same as the targeted one
+            if active_entity != self.entity:
+                return True
+            else:
+                return False
+        elif target_tag == TargetTags.NO_ENTITY:
+            return self.has_no_entity
+        else:
+            return False  # catch all
+
+    @property
+    def is_floor(self):
+        """
+        Check if the tag is applicable
+
+        Returns:
+            bool: True if tag is applicable
+        """
+        if self.terrain:
+            if isinstance(self.terrain, Floor):
+                return True
+
+        return False
+
+    @property
+    def is_wall(self):
+        """
+        Check if the tag is applicable
+
+        Returns:
+            bool: True if tag is applicable
+        """
+        if self.terrain:
+            if isinstance(self.terrain, Wall):
+                return True
+
+        return False
+
+    @property
+    def has_no_entity(self):
+        """
+        Check if the tag is applicable
+
+        Returns:
+            bool: True if tag is applicable
+        """
+        if not self.entity:
+            return True
+
+        return False
 
     @property
     def blocks_movement(self):

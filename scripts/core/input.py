@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.core.constants import GameStates, TILE_SIZE, MessageEventTypes
+from scripts.core.constants import GameStates, TILE_SIZE, MessageEventTypes, TargetTypes
 from scripts.core.global_data import game_manager, ui_manager, world_manager, debug_manager
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ExitEvent, ChangeGameStateEvent
@@ -259,23 +259,35 @@ def handle_player_turn_input(input_values):
 
                 mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
                 target_x, target_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
-                blocking_entity_at_location = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
+                blocking_entity_at_location = world_manager.entity_query.get_blocking_entity_at_location(target_x,
+                                                                                                         target_y)
+                tile = world_manager.game_map.get_tile(target_x, target_y)
 
-                # is there an entity to target?
-                if blocking_entity_at_location:
-                    # is the entity within range?
-                    distance_to_entity = world_manager.entity_query.get_chebyshev_distance_between_entities(player,
-                        blocking_entity_at_location)
-                    if distance_to_entity <= skill.range:
-                        target_x = blocking_entity_at_location.x
-                        target_y = blocking_entity_at_location.y
+                # do we need an entity?
+                if skill.required_target_type == TargetTypes.ENTITY:
+                    # is there an entity to target?
+                    if blocking_entity_at_location:
+                        # is the entity within range?
+                        distance_to_entity = world_manager.entity_query.get_chebyshev_distance_between_entities(player,
+                            blocking_entity_at_location)
+                        if distance_to_entity <= skill.range:
+                            target_x = blocking_entity_at_location.x
+                            target_y = blocking_entity_at_location.y
+                        else:
+                            target_x, target_y = 0, 0
                     else:
                         target_x, target_y = 0, 0
-                else:
-                    target_x, target_y = 0, 0
+
+                # can we select terrain?
+                elif skill.required_target_type == TargetTypes.TERRAIN:
+                    # TODO - clean up so only selecting correct terrain, in range
+                    target_x = tile.x
+                    target_y = tile.y
+
                 # create a skill with a target, or not
                 skill_name = player.actor.known_skills[skill_number].name
                 game_manager.create_event((UseSkillEvent(player, (target_x, target_y), skill_name)))
+
             else:
                 game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
         else:

@@ -3,8 +3,8 @@
         "name": "basic_attack",
         "description": "This is the basic attack. It does damage.",
         "icon": "placeholder/icon_00.png",
-        "target_type": "entity",
-        "target_tags": ["other_entity"],
+        "required_target_type": "entity",
+        "required_tags": ["other_entity"],
         "range": 1,
         "resource_type": "mana",
         "resource_cost": 1,
@@ -13,8 +13,8 @@
         "effects": [
                 {
                     "name": "damage",
-                    "target_type": "entity",
-                    "target_tags": ["other_entity"],
+                    "required_target_type": "entity",
+                    "required_tags": ["other_entity"],
                     "damage": 15,
                     "damage_type": "pierce",
                     "accuracy": 10,

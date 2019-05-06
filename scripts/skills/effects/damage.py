@@ -5,25 +5,24 @@ from scripts.core.constants import LoggingEventTypes, TargetTypes, TargetTags, M
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
-from scripts.skills.effects.effect import Effect
-from scripts.world.terrain.terrain import Terrain
+from scripts.skills.effects.skill_effect import SkillEffect
 
 
-class DamageEffect(Effect):
+class DamageSkillEffect(SkillEffect):
     """
-    Effect to damage an entity
+    SkillEffect to damage an entity
 
     Attributes:
         damage(int):
         damage_type(int):
-        target_type(TargetTypes):
-        tags(list): list of TargetType enums
+        required_target_type(TargetTypes):
+        required_tags(list): list of TargetType enums
         accuracy(int):
         stat_to_target(PrimaryStatTypes):
     """
 
-    def __init__(self, damage, damage_type, target_type, tags, accuracy, stat_to_target):
-        super().__init__("Damage", "This is the damage effect", target_type, tags)
+    def __init__(self, damage, damage_type, required_target_type, required_tags, accuracy, stat_to_target):
+        super().__init__("Damage", "This is the damage effect", required_target_type, required_tags)
         self.base_damage = damage
         self.damage_type = damage_type
         self.base_accuracy = accuracy
@@ -37,25 +36,20 @@ class DamageEffect(Effect):
             attacking_entity:
             defending_entity:
         """
+        super().trigger()
+
+        from scripts.core.global_data import game_manager
+
         attacker = attacking_entity
         defender = defending_entity
         damage = 0
 
-        from scripts.core.global_data import game_manager
-        log_string = f"Applying '{self.name}' effect from {self.owner.name}..."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-        # store the base class type for comparison
-        target_type_for_comparison = None
-        if self.target_type == TargetTypes.TERRAIN:
-            target_type_for_comparison = type(Terrain(0, 0))
-        elif self.target_type == TargetTypes.ENTITY:
-            target_type_for_comparison = type(attacker)
+        target_type = self.get_target_type(defender)
 
         # check the type is correct, then that the tags match
-        if type(defender) == target_type_for_comparison:
+        if target_type == self.required_target_type:
             # if it needs to be another entity then it can't be looking at itself
-            if TargetTags.OTHER_ENTITY in self.target_tags:
+            if TargetTags.OTHER_ENTITY in self.required_tags:
                 if attacker != defender:
                     to_hit_score = self.calculate_to_hit_score(attacker, defender)
                     hit_type = self.get_hit_type(to_hit_score)
@@ -72,7 +66,7 @@ class DamageEffect(Effect):
                 elif hit_type == HitTypes.CRIT:
                     hit_type_desc = "crits"
                 else:
-                    hit_type_desc = "does something unknown"
+                    hit_type_desc = "does something unknown" # catch all
 
                 msg = f"{attacker.name} {hit_type_desc} {defender.name} for {damage}."
                 game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
@@ -90,6 +84,10 @@ class DamageEffect(Effect):
         else:
             msg = f"You can't do that there!"
             game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+
+            # log why
+            log_string = f"-> target type incorrect; selected:{target_type}, needed:{self.required_target_type}"
+            game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
     def calculate_to_hit_score(self, attacker, defender):
         """

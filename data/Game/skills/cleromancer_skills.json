@@ -3,8 +3,8 @@
         "name": "throw dice",
         "description": "Time to throw the dice. It does damage.",
         "icon": "placeholder/icon_29.png",
-        "target_type": "entity",
-        "target_tags": ["other_entity"],
+        "required_target_type": "entity",
+        "required_tags": ["other_entity"],
         "range": 3,
         "resource_type": "mana",
         "resource_cost": 10,
@@ -13,12 +13,32 @@
         "effects": [
                 {
                     "name": "damage",
-                    "target_type": "entity",
-                    "target_tags": ["other_entity"],
+                    "required_target_type": "entity",
+                    "required_tags": ["other_entity"],
                     "damage": 15,
                     "damage_type": "blunt",
                     "accuracy": 5,
                     "stat_to_target": "subtlety"
+                }
+        ]
+    },
+        "bring_down_the_mountain": {
+        "name": "bring down the mountain",
+        "description": "Turn a wall into a floor.",
+        "icon": "placeholder/icon_40.png",
+        "required_target_type": "terrain",
+        "required_tags": ["wall", "no_entity"],
+        "range": 6,
+        "resource_type": "mana",
+        "resource_cost": 10,
+        "time_cost": 40,
+        "cooldown": 3,
+        "effects": [
+                {
+                    "name": "change_terrain",
+                    "required_target_type": "terrain",
+                    "required_tags": ["wall", "no_entity"],
+                    "new_terrain": "floor"
                 }
         ]
     }
