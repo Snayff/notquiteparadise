@@ -15,11 +15,10 @@
           <file pinned="true" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="353">
+                <state relative-caret-position="874">
                   <caret line="70" selection-start-line="70" selection-end-line="70" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
-                    <element signature="e#1384#1913#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -28,11 +27,10 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/world/new_tile.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="709">
-                  <caret line="127" column="28" selection-start-line="127" selection-start-column="28" selection-end-line="127" selection-end-column="28" />
+                <state relative-caret-position="920">
+                  <caret line="143" column="26" lean-forward="true" selection-start-line="143" selection-start-column="26" selection-end-line="143" selection-end-column="26" />
                   <folding>
-                    <element signature="e#141#491#0" expanded="true" />
-                    <element signature="e#2747#2854#0" expanded="true" />
+                    <element signature="e#494#836#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -41,7 +39,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="207">
+                <state relative-caret-position="69">
                   <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
@@ -54,8 +52,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/world/terrain/tile.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="345">
-                  <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+                <state relative-caret-position="138">
+                  <caret line="15" selection-start-line="15" selection-end-line="15" />
                   <folding>
                     <element signature="e#17#48#1" expanded="true" />
                     <element signature="e#87#270#0" expanded="true" />
@@ -67,7 +65,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/world/terrain/floor.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="207">
+                <state relative-caret-position="138">
                   <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
@@ -79,11 +77,23 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/world/terrain/wall.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="230">
-                  <caret line="19" column="85" lean-forward="true" selection-start-line="19" selection-start-column="85" selection-end-line="19" selection-end-column="85" />
+                <state relative-caret-position="115">
+                  <caret line="19" column="85" selection-start-line="19" selection-start-column="85" selection-end-line="19" selection-end-column="85" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
-                    <element signature="e#126#179#1" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/world/game_map.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="919">
+                  <caret line="127" column="56" selection-start-line="127" selection-start-column="56" selection-end-line="127" selection-end-column="56" />
+                  <folding>
+                    <element signature="e#0#11#0" expanded="true" />
+                    <element signature="e#1729#2307#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -93,44 +103,53 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/world/game_map.py">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="215">
-                  <caret line="71" column="56" lean-forward="true" selection-start-line="71" selection-start-column="56" selection-end-line="71" selection-end-column="56" />
+                <state relative-caret-position="1204">
+                  <caret line="96" column="27" selection-start-line="96" selection-start-column="27" selection-end-line="96" selection-end-column="27" />
                   <folding>
-                    <element signature="e#0#11#0" expanded="true" />
-                    <element signature="e#456#1613#0" expanded="true" />
-                    <element signature="e#1662#3283#0" expanded="true" />
-                    <element signature="e#3350#3624#0" expanded="true" />
-                    <element signature="e#5453#5721#0" expanded="true" />
+                    <element signature="e#544#1089#0" expanded="true" />
+                    <element signature="e#2085#3409#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/existence_methods.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="391">
-                  <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
+                <state relative-caret-position="456">
+                  <caret line="104" selection-start-line="104" selection-end-line="104" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
-                    <element signature="e#473#523#0" expanded="true" />
-                    <element signature="e#838#1086#0" expanded="true" />
-                    <element signature="e#1133#1220#0" expanded="true" />
+                    <element signature="e#427#597#1" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
+            <entry file="file://$PROJECT_DIR$/scripts/core/input.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="374">
-                  <caret line="115" selection-start-line="115" selection-end-line="115" />
+                <state relative-caret-position="577">
+                  <caret line="248" column="82" selection-start-line="248" selection-start-column="82" selection-end-line="248" selection-end-column="82" />
                   <folding>
-                    <element signature="e#463#832#0" expanded="true" />
+                    <element signature="e#0#13#0" expanded="true" />
+                    <element signature="e#10791#14111#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="537">
+                  <caret line="278" column="62" selection-start-line="278" selection-start-column="62" selection-end-line="278" selection-end-column="62" />
+                  <folding>
+                    <element signature="e#0#13#0" expanded="true" />
+                    <element signature="e#5770#6361#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -150,9 +169,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Youth</find>
-      <find>choose</find>
-      <find>chose</find>
       <find>MoveEvent</find>
       <find>get_relative_scaled_mouse_pos</find>
       <find>tile</find>
@@ -179,6 +195,10 @@
       <find>entity_manager</find>
       <find>Entity</find>
       <find>remove_entity</find>
+      <find>attack</find>
+      <find>can</find>
+      <find>Applying</find>
+      <find>entity_manager.entities</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -213,15 +233,12 @@
         <option value="$PROJECT_DIR$/scripts/world/tiles.py" />
         <option value="$PROJECT_DIR$/scripts/world/tiles/wall.py" />
         <option value="$PROJECT_DIR$/scripts/world/tiles/floor.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/effects/damage.py" />
         <option value="$PROJECT_DIR$/scripts/skills/effects/effect.py" />
         <option value="$PROJECT_DIR$/scripts/skills/effects/manipulate_tile.py" />
         <option value="$PROJECT_DIR$/scripts/world/tiles/tile.py" />
         <option value="$PROJECT_DIR$/scripts/managers/entity_manager_methods/existence_methods.py" />
         <option value="$PROJECT_DIR$/scripts/managers/entity.py" />
-        <option value="$PROJECT_DIR$/scripts/core/input.py" />
         <option value="$PROJECT_DIR$/scripts/core/initialisers.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/skill.py" />
         <option value="$PROJECT_DIR$/scripts/events/ui_handler.py" />
         <option value="$PROJECT_DIR$/scripts/ui_elements/skill_bar.py" />
         <option value="$PROJECT_DIR$/scripts/skills/effects/move.py" />
@@ -230,14 +247,17 @@
         <option value="$PROJECT_DIR$/scripts/managers/turn.py" />
         <option value="$PROJECT_DIR$/scripts/core/engine.py" />
         <option value="$PROJECT_DIR$/scripts/managers/world_methods/query_methods.py" />
-        <option value="$PROJECT_DIR$/scripts/world/game_map.py" />
         <option value="$PROJECT_DIR$/scripts/core/global_data.py" />
         <option value="$PROJECT_DIR$/scripts/components/ai.py" />
         <option value="$PROJECT_DIR$/scripts/managers/ui.py" />
         <option value="$PROJECT_DIR$/scripts/world/entity.py" />
-        <option value="$PROJECT_DIR$/scripts/events/entity_handler.py" />
-        <option value="$PROJECT_DIR$/scripts/world/new_tile.py" />
         <option value="$PROJECT_DIR$/scripts/managers/world_methods/existence_methods.py" />
+        <option value="$PROJECT_DIR$/scripts/world/new_tile.py" />
+        <option value="$PROJECT_DIR$/scripts/world/game_map.py" />
+        <option value="$PROJECT_DIR$/scripts/core/input.py" />
+        <option value="$PROJECT_DIR$/scripts/skills/skill.py" />
+        <option value="$PROJECT_DIR$/scripts/skills/effects/damage.py" />
+        <option value="$PROJECT_DIR$/scripts/events/entity_handler.py" />
       </list>
     </option>
   </component>
@@ -319,7 +339,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/world" />
-    <property name="settings.editor.selected.configurable" value="preferences.toDoOptions" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -394,9 +414,9 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.48938224" visible="true" weight="0.2724359" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.47393823" weight="0.24439102" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.48552123" weight="0.2724359" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.48938224" weight="0.2724359" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.47972974" visible="true" weight="0.24439102" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4850386" weight="0.2724359" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -404,7 +424,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49927148" weight="0.21474358" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32932693" />
       <window_info anchor="bottom" id="Python Console" order="10" />
-      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.51061773" side_tool="true" visible="true" weight="0.2724359" />
+      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.5202703" side_tool="true" visible="true" weight="0.24439102" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -415,25 +435,7 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/scripts/managers/world_methods/existence_methods.py</url>
-          <line>104</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data/Game/skills/basic_attack.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="4" column="29" selection-start-line="4" selection-start-column="29" selection-end-line="4" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/Game/entity/race.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -551,16 +553,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/input.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="346" column="29" lean-forward="true" selection-start-line="346" selection-start-column="29" selection-end-line="346" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/core/fonts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -664,28 +656,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="63" column="51" selection-start-line="63" selection-start-column="51" selection-end-line="63" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#5770#6361#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/effects/damage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#1113#3707#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1265">
@@ -700,27 +670,6 @@
           <folding>
             <element signature="e#184#310#0" expanded="true" />
             <element signature="e#370#374#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/terrain/wall.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="19" column="85" lean-forward="true" selection-start-line="19" selection-start-column="85" selection-end-line="19" selection-end-column="85" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#126#179#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/terrain/floor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -778,17 +727,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#552#1377#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/components/ai.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -800,88 +738,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/terrain/tile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#17#48#1" expanded="true" />
-            <element signature="e#87#270#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/query_methods.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="529">
           <caret line="104" selection-start-line="104" selection-end-line="104" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="88" column="52" selection-start-line="88" selection-start-column="52" selection-end-line="88" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-            <element signature="e#1384#1913#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/game_map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="71" column="56" lean-forward="true" selection-start-line="71" selection-start-column="56" selection-end-line="71" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#456#1613#0" expanded="true" />
-            <element signature="e#1662#3283#0" expanded="true" />
-            <element signature="e#3350#3624#0" expanded="true" />
-            <element signature="e#5453#5721#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="115" selection-start-line="115" selection-end-line="115" />
-          <folding>
-            <element signature="e#463#832#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="50" column="62" selection-start-line="50" selection-start-column="62" selection-end-line="50" selection-end-column="62" />
-          <folding>
-            <element signature="e#544#1089#0" expanded="true" />
-            <element signature="e#1853#3177#0" expanded="true" />
-            <element signature="e#3886#4053#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/new_tile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="709">
-          <caret line="127" column="28" selection-start-line="127" selection-start-column="28" selection-end-line="127" selection-end-column="28" />
-          <folding>
-            <element signature="e#141#491#0" expanded="true" />
-            <element signature="e#2747#2854#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -922,15 +784,157 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/existence_methods.py">
+    <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
+        <state relative-caret-position="374">
+          <caret line="115" selection-start-line="115" selection-end-line="115" />
+          <folding>
+            <element signature="e#463#832#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="874">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#473#523#0" expanded="true" />
-            <element signature="e#838#1086#0" expanded="true" />
-            <element signature="e#1133#1220#0" expanded="true" />
+            <element signature="e#552#1377#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/terrain/tile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#17#48#1" expanded="true" />
+            <element signature="e#87#270#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/terrain/floor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/terrain/wall.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="19" column="85" selection-start-line="19" selection-start-column="85" selection-end-line="19" selection-end-column="85" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Game/skills/basic_attack.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" column="42" selection-start-line="3" selection-start-column="42" selection-end-line="3" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/input.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="577">
+          <caret line="248" column="82" selection-start-line="248" selection-start-column="82" selection-end-line="248" selection-end-column="82" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#10791#14111#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="537">
+          <caret line="278" column="62" selection-start-line="278" selection-start-column="62" selection-end-line="278" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#5770#6361#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/effects/damage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1296">
+          <caret line="177" column="40" selection-start-line="177" selection-start-column="40" selection-end-line="177" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1115#3709#0" expanded="true" />
+            <element signature="e#3777#4968#0" expanded="true" />
+            <element signature="e#5032#5396#0" expanded="true" />
+            <element signature="e#7152#7341#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/existence_methods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="104" selection-start-line="104" selection-end-line="104" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#427#597#1" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-92">
+          <caret line="88" column="52" selection-start-line="88" selection-start-column="52" selection-end-line="88" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/game_map.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="919">
+          <caret line="127" column="56" selection-start-line="127" selection-start-column="56" selection-end-line="127" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#1729#2307#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/new_tile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="920">
+          <caret line="143" column="26" lean-forward="true" selection-start-line="143" selection-start-column="26" selection-end-line="143" selection-end-column="26" />
+          <folding>
+            <element signature="e#494#836#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1204">
+          <caret line="96" column="27" selection-start-line="96" selection-start-column="27" selection-end-line="96" selection-end-column="27" />
+          <folding>
+            <element signature="e#544#1089#0" expanded="true" />
+            <element signature="e#2085#3409#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -138,9 +138,9 @@ class GameMap:
         if not self.is_tile_in_bounds(tile_x, tile_y):
             return TargetTags.OUT_OF_BOUNDS
 
-        if type(tile) is Wall:
+        if type(tile.terrain) is Wall:
             return TargetTags.WALL
-        elif type(tile) is Floor:
+        elif type(tile.terrain) is Floor:
             return TargetTags.FLOOR
 
     def is_tile_in_bounds(self, tile_x, tile_y):
@@ -170,3 +170,4 @@ class GameMap:
             Tile: the tile at the location
         """
         return self.tiles[tile_x][tile_y]
+

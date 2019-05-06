@@ -275,7 +275,7 @@ class Skill:
         target = None
 
         if self.target_type == TargetTypes.ENTITY:
-            from scripts.core.global_data import entity_manager
+            from scripts.core.global_data import world_manager
             target = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
 
         elif self.target_type == TargetTypes.TILE:

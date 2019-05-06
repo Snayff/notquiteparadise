@@ -105,11 +105,17 @@ class EntityHandler(Subscriber):
 
         # TODO add player death
         entity = event.dying_entity
-        entity.ai = None
 
-        # TODO - create removal method
-        #entity_manager.entities.remove(entity)
+        # just in case... remove the ai
+        if entity.ai:
+            entity.ai = None
 
+        # get the tile and remove the entity from it
+        tile_x, tile_y = entity.x, entity.y
+        tile = world_manager.game_map.get_tile(tile_x, tile_y)
+        tile.remove_entity()
+
+        # remove from turn queue
         del turn_manager.turn_queue[entity]
         if turn_manager.turn_holder == entity:
             turn_manager.build_new_turn_queue()

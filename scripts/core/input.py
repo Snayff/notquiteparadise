@@ -235,16 +235,18 @@ def handle_player_turn_input(input_values):
         tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
         entity_blocking_movement = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
 
-        if in_bounds and not tile_blocking_movement:
-            if not entity_blocking_movement:
-                # nothing in the way, time to move!
-                game_manager.create_event(MoveEvent(player, (target_x, target_y)))
-            else:
+        if in_bounds:
+            if not entity_blocking_movement and tile_blocking_movement:
+                # no entity in way but tile is blocked
+                msg = f"You can't do that there!"
+                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+            elif entity_blocking_movement:
+                # entity blocking tile so attack
                 skill_name = player.actor.known_skills[0].name
                 game_manager.create_event((UseSkillEvent(player, (target_x, target_y), skill_name)))
-        else:
-            msg = f"You can't do that there!"
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+            elif not entity_blocking_movement and not tile_blocking_movement:
+                # nothing in the way, time to move!
+                game_manager.create_event(MoveEvent(player, (target_x, target_y)))
 
     # Skill usage
     if values["skill"] != -1:

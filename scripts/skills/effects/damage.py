@@ -42,7 +42,7 @@ class DamageEffect(Effect):
         damage = 0
 
         from scripts.core.global_data import game_manager
-        log_string = f"Applying '{self.name}' effect from {self.owner}..."
+        log_string = f"Applying '{self.name}' effect from {self.owner.name}..."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # store the base class type for comparison
@@ -175,7 +175,7 @@ class DamageEffect(Effect):
 
         # log the info
         from scripts.core.global_data import game_manager
-        log_string = f"Initial:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}."
+        log_string = f"-> Initial damage:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return modified_damage

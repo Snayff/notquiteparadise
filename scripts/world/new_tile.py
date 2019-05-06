@@ -3,6 +3,17 @@ from scripts.core.constants import TILE_SIZE
 
 
 class NewTile:
+    """
+    A Tile on the GameMap. Can contain an Entity, a Terrain and an Effect.
+
+    Attributes:
+        x(int): tile_x
+        y(int): tile_y
+        is_visible(bool): if tile is visible to player
+        entity(Entity): the entity on the tile
+        terrain(Terrain): the terrain on the tile
+        effect(Effect): the effect on the tile
+    """
     def __init__(self, x, y, entity=None, terrain=None, effect=None):
         self.x = x
         self.y = y
