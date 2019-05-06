@@ -61,7 +61,7 @@ class EntityEventTypes(Enum):
 
 
 class TargetTypes(Enum):
-    TILE = auto()
+    TERRAIN = auto()
     ENTITY = auto()
 
 

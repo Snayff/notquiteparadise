@@ -1,12 +1,12 @@
 import pygame
 
-from scripts.core.constants import EventTopics, GameStates, EntityEventTypes
+from scripts.core.constants import EventTopics, GameStates
 from scripts.events.entity_events import LearnEvent
 from scripts.events.entity_handler import EntityHandler
 from scripts.events.logging_handler import LoggingHandler
 from scripts.events.message_handler import MessageHandler
 from scripts.events.game_handler import GameHandler
-from scripts.core.global_data import game_manager, world_manager, entity_manager, turn_manager, ui_manager
+from scripts.core.global_data import game_manager, world_manager, turn_manager, ui_manager
 from scripts.events.ui_handler import UiHandler
 
 
@@ -26,7 +26,7 @@ def initialise_game():
     world_manager.entity_existence.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
     game_manager.create_event(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))  # TODO - remove when
-                                                                                                # skill learning is in
+                                                                                              #  skill learning is in
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player

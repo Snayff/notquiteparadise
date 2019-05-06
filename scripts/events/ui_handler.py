@@ -1,5 +1,5 @@
 from scripts.core.constants import LoggingEventTypes, EventTopics, GameEventTypes, GameStates, EntityEventTypes
-from scripts.core.global_data import game_manager, ui_manager, world_manager, entity_manager
+from scripts.core.global_data import game_manager, ui_manager, world_manager
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
 

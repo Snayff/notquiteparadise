@@ -1,8 +1,10 @@
 
-class Tile:
+
+class Terrain:
     """
-    Base tile class
-    """
+        Base terrain class
+        """
+
     def __init__(self, x, y):
         self.blocks_movement = False
         self.blocks_sight = False
@@ -11,5 +13,3 @@ class Tile:
         self.x = x
         self.y = y
         self.name = ""
-
-

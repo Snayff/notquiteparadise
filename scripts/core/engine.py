@@ -6,7 +6,7 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.core.global_data import world_manager, game_manager, entity_manager, turn_manager, ui_manager, \
+from scripts.core.global_data import world_manager, game_manager, turn_manager, ui_manager, \
     debug_manager
 from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
@@ -74,7 +74,6 @@ def game_loop():
         game_manager.update()
         debug_manager.update()
         world_manager.update()
-        #entity_manager.update(world_manager.game_map)
 
         # DRAW
         ui_manager.draw_game(world_manager.game_map, debug_manager.visible)

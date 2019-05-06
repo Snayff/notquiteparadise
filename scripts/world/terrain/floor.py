@@ -1,10 +1,10 @@
 import pygame
 
 from scripts.core.constants import TILE_SIZE
-from scripts.world.terrain.tile import Tile
+from scripts.world.terrain.terrain import Terrain
 
 
-class Floor(Tile):
+class Floor(Terrain):
     """
     Floor tile, doesnt block movement or sight
     """

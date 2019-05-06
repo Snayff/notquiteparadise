@@ -1,7 +1,7 @@
 import pygame
 
 from scripts.core.constants import GameStates, TILE_SIZE, MessageEventTypes
-from scripts.core.global_data import entity_manager, game_manager, ui_manager, world_manager, debug_manager
+from scripts.core.global_data import game_manager, ui_manager, world_manager, debug_manager
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ExitEvent, ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent

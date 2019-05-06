@@ -4,7 +4,7 @@ from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TargetTags
 from scripts.ui_elements.templates.panel import Panel
-from scripts.world.new_tile import NewTile
+from scripts.world.tile import Tile
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 
@@ -24,7 +24,7 @@ class GameMap:
             self.tiles.append([])
             for y in range(self.height):
                 # add to the column
-                self.tiles[x].append(NewTile(x, y, terrain=Floor(x, y)))
+                self.tiles[x].append(Tile(x, y, terrain=Floor(x, y)))
 
         # TODO remove - only for test
         if self.width > 10 and self.height > 10:

@@ -1,10 +1,10 @@
 import pygame
 
 from scripts.core.constants import TILE_SIZE
-from scripts.world.terrain.tile import Tile
+from scripts.world.terrain.terrain import Terrain
 
 
-class Wall(Tile):
+class Wall(Terrain):
     """
     Wall tile, blocks movement and sight.
     """

@@ -100,7 +100,7 @@ class Skill:
                     log_string = f"Target type is OK!"
                     game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
                     return True
-            elif self.target_type == TargetTypes.TILE:
+            elif self.target_type == TargetTypes.TERRAIN:
                 if tile_target_ok:
                     log_string = f"Target type is OK!"
                     game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
@@ -203,8 +203,8 @@ class Skill:
         """
         if target_type == "entity":
             return TargetTypes.ENTITY
-        elif target_type == "tile":
-            return TargetTypes.TILE
+        elif target_type == "terrain":
+            return TargetTypes.TERRAIN
 
     @staticmethod
     def get_damage_type_from_string(damage_type):
@@ -278,7 +278,7 @@ class Skill:
             from scripts.core.global_data import world_manager
             target = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
 
-        elif self.target_type == TargetTypes.TILE:
+        elif self.target_type == TargetTypes.TERRAIN:
             from scripts.core.global_data import world_manager
             target = world_manager.get_tile(target_x, target_y)
 

@@ -16,7 +16,7 @@ class MoveEffect(Effect):
         """
         Trigger the effect
         """
-        from scripts.core.global_data import entity_manager, world_manager
+        from scripts.core.global_data import world_manager
 
         # get required info
         start_pos_x, start_pos_y = self.entity_to_move.x, self.entity_to_move.y

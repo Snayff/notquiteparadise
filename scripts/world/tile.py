@@ -2,7 +2,7 @@
 from scripts.core.constants import TILE_SIZE
 
 
-class NewTile:
+class Tile:
     """
     A Tile on the GameMap. Can contain an Entity, a Terrain and an Effect.
 

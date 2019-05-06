@@ -6,7 +6,7 @@ from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.skills.effects.effect import Effect
-from scripts.world.terrain.tile import Tile
+from scripts.world.terrain.terrain import Terrain
 
 
 class DamageEffect(Effect):
@@ -47,8 +47,8 @@ class DamageEffect(Effect):
 
         # store the base class type for comparison
         target_type_for_comparison = None
-        if self.target_type == TargetTypes.TILE:
-            target_type_for_comparison = type(Tile(0, 0))
+        if self.target_type == TargetTypes.TERRAIN:
+            target_type_for_comparison = type(Terrain(0, 0))
         elif self.target_type == TargetTypes.ENTITY:
             target_type_for_comparison = type(attacker)
 
