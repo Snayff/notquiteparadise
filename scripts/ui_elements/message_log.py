@@ -35,7 +35,6 @@ class MessageLog:
         self.icons = self.create_icons_list()
         self.hyperlinks = self.create_hyperlinks_list()
 
-
         # hyperlink info
         self.is_dirty = True
         self.displayed_hyperlinks = []
@@ -67,6 +66,9 @@ class MessageLog:
         self.first_message_to_show = 0
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
 
     def draw(self, surface):
         """

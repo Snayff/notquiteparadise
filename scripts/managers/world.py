@@ -1,9 +1,11 @@
 import tcod
 
-from scripts.core.constants import TILE_SIZE
+from scripts.core.constants import TILE_SIZE, LoggingEventTypes
+from scripts.events.logging_events import LoggingEvent
 from scripts.managers.world_methods.action_methods import EntityAction
 from scripts.managers.world_methods.existence_methods import EntityExistence
 from scripts.managers.world_methods.query_methods import EntityQuery
+from scripts.world.entity import Entity
 from scripts.world.game_map import GameMap
 
 
@@ -16,13 +18,17 @@ class WorldManager:
         self.entity_query = EntityQuery(self)
         self.entity_existence = EntityExistence(self)
         self.entity_action = EntityAction(self)
+        # TODO - create FOV container class
 
         self.game_map = None  # type: GameMap
-        self.player = None
+        self.player = None  # type: Entity
         self.player_fov_map = None
         self.player_fov_is_dirty = False
         self.light_walls = True
         self.fov_algorithm = 0
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"WorldManager initialised."))
 
     def update(self):
         """

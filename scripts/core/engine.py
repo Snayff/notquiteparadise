@@ -12,9 +12,7 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
-# TODO -  amend terrain to include an effect so that they can store additional effects (fire, steam etc.)
-#  should entities be included in terrain, too?
-# TODO - change xy to row col to clarify use in array, or tile_x/y
+# TODO - create message commands to allow passing of formatting, e.g. colours, to message log (#red text ##)?
 # TODO - create global tooltip method
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions

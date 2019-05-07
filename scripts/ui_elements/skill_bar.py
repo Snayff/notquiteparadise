@@ -1,7 +1,8 @@
 import pygame
 
+from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
+from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, LoggingEventTypes
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 from scripts.ui_elements.templates.skill_container import SkillContainer
@@ -57,6 +58,9 @@ class SkillBar:
         # set self to be rendered
         from scripts.core.global_data import ui_manager
         ui_manager.update_panel_visibility("skill_bar", self, True)
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"SkillBar initialised."))
 
     def draw(self, surface):
         """

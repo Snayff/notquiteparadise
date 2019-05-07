@@ -24,12 +24,9 @@ class BasicMonster:
         log_string = f"{entity.name} is starting to take their turn..."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
-        # try to attack first
-        log_string = f"->{entity.name} is looking for a possible attack."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
         # !!!! TESTING ONLY!!!!!!!
         game_manager.create_event(EndTurnEvent(10))  # TODO -remove when  ai needs to act
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"-> Passed their turn."))
         return
 
         # FIXME - change to using the new list format
@@ -76,6 +73,7 @@ class BasicMonster:
             Entity: the entity to pursue
 
         """
+        # TODO - actually get a target
         target = world_manager.player
 
         log_string = f"{self.owner.name} chose {target.name} as a target."

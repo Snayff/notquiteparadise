@@ -20,8 +20,7 @@ class EntityExistence:
     """
     def __init__(self, manager):
         self.manager = manager
-
-        self.entities = []
+        self.entities = [] # TODO - move to gamemap
 
     def add_entity(self, tile_x, tile_y, entity):
         """

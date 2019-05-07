@@ -37,7 +37,7 @@ class ChangeTerrainSkillEffect(SkillEffect):
         tile = terrain_to_change.owner
         terrain = terrain_to_change
         starting_terrain_name = terrain.name
-        target_type = self.get_target_type(terrain)
+        target_type = self.owner.get_target_type(terrain)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:

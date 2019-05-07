@@ -24,23 +24,4 @@ class SkillEffect:
         log_string = f"Applying '{self.name}' effect from {self.owner.name}..."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-    @staticmethod
-    def get_target_type(target):
-        """
-        Get the type of the required target
 
-        Args:
-            target: the target; terrain or entity
-
-        Returns:
-            TargetTypes:
-        """
-
-        # TODO - remove and point to owner's version
-
-        if isinstance(target, Terrain):
-            target_type = TargetTypes.TERRAIN
-        elif isinstance(target, Entity):
-            target_type = TargetTypes.ENTITY
-
-        return target_type

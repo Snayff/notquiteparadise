@@ -1,6 +1,7 @@
+from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT
+from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, LoggingEventTypes
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 
@@ -25,6 +26,9 @@ class SelectedEntityInfo:
         panel_border_colour = self.palette.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"EntityInfo initialised."))
 
     def draw(self, surface):
         """

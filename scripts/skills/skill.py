@@ -350,7 +350,6 @@ class Skill:
         # TODO - extend to target an area
         target_x, target_y = target_pos
 
-        from scripts.core.global_data import game_manager
         target = None
 
         if self.required_target_type == TargetTypes.ENTITY:
@@ -362,6 +361,7 @@ class Skill:
             target_tile = world_manager.game_map.get_tile(target_x, target_y)
             target = target_tile.terrain
 
+        from scripts.core.global_data import game_manager
         log_string = f"Got target '{target.name}' for {self.name}."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 

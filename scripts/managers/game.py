@@ -6,12 +6,17 @@ from scripts.events.pub_sub_hub import EventHub, Publisher
 
 
 class GameManager:
-
+    """
+    Manager of Game Functions
+    """
     def __init__(self):
         self.game_state = GameStates.GAME_INITIALISING
         self.previous_game_state = GameStates.GAME_INITIALISING
         self.event_hub = EventHub()
         self.internal_clock = pygame.time.Clock()
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
 
     def update(self):
         """
@@ -32,7 +37,7 @@ class GameManager:
         self.previous_game_state = self.game_state
         self.game_state = new_game_state
 
-        log_string = f"game_state updated to {self.game_state} from {self.previous_game_state}"
+        log_string = f"Game_state updated to {self.game_state} from {self.previous_game_state}"
         self.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
     def create_event(self, event):

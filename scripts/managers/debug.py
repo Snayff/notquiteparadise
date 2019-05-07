@@ -1,10 +1,14 @@
+from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import TILE_SIZE
+from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.core.fonts import Font
 
 
 class DebugManager:
+    """
+    Manager of Debug Functions
+    """
     def __init__(self):
         self.visible = False
         self.messages = []
@@ -16,6 +20,9 @@ class DebugManager:
         self.show_tile_xy = True
 
         self.font = Font().debug
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"DebugManager initialised."))
 
     def update(self):
         """

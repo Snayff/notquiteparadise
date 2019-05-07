@@ -1,7 +1,8 @@
 import pygame
 
+from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import TILE_SIZE
+from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.core.fonts import Font
 from scripts.skills.skill import Skill
 
@@ -29,6 +30,9 @@ class TargetingOverlay:
         self.highlight_border_width = 3
 
         self.is_dirty = True
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"TargetingOverlay initialised."))
 
     def draw(self, surface):
         """

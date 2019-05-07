@@ -44,7 +44,7 @@ class DamageSkillEffect(SkillEffect):
         defender = defending_entity
         damage = 0
 
-        target_type = self.get_target_type(defender)
+        target_type = self.owner.get_target_type(defender)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:
@@ -96,6 +96,9 @@ class DamageSkillEffect(SkillEffect):
             attacker:
             defender:
         """
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"Get to hit scores..."))
+
         roll = random.randint(1, 100)
         modified_to_hit_score = attacker.combatant.secondary_stats.chance_to_hit + self.base_accuracy + roll
 
@@ -112,7 +115,7 @@ class DamageSkillEffect(SkillEffect):
         mitigated_to_hit_score = modified_to_hit_score - dodge_value
 
         # log the info
-        from scripts.core.global_data import game_manager
+
         log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
@@ -145,6 +148,8 @@ class DamageSkillEffect(SkillEffect):
         Returns:
             int: damage to be dealt
         """
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"Calculate damage..."))
 
         initial_damage = self.base_damage  # TODO - add skill dmg modifier to allow dmg growth
 
@@ -172,7 +177,6 @@ class DamageSkillEffect(SkillEffect):
         modified_damage = int(modified_damage)
 
         # log the info
-        from scripts.core.global_data import game_manager
         log_string = f"-> Initial damage:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}."
         game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 

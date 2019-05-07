@@ -1,9 +1,10 @@
 import pygame
 
+from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.message_log import MessageLog
-from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
+from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, LoggingEventTypes
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
 
@@ -35,6 +36,9 @@ class UIManager:
         self.entity_info = None  # type: SelectedEntityInfo
         self.targeting_overlay = None  # type: TargetingOverlay
         self.skill_bar = None # type: SkillBar
+
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"UIManager initialised."))
 
     def delayed_init(self):
         """

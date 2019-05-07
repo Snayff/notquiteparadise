@@ -5,6 +5,9 @@ from scripts.events.logging_events import LoggingEvent
 
 
 class TurnManager:
+    """
+    Manager of turns functions.
+    """
     # TODO What do we need from the turn queue?
     #  Add all entities that are within X range of the player;
     #  Add new entities to the queue as they get into range;
@@ -18,13 +21,15 @@ class TurnManager:
         self.time = 0
         self.time_of_last_turn = 0
 
+        from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"TurnManager initialised."))
+
     def build_new_turn_queue(self):
         """
         Build a new turn queue for all entities
         """
         from scripts.core.global_data import game_manager
-        log_string = f"Building a new turn queue."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"Building a new turn queue..."))
 
         # create a turn queue from the entities list
         from scripts.core.global_data import world_manager
@@ -37,6 +42,9 @@ class TurnManager:
         # get the next entity in the queue
         self.turn_holder = min(self.turn_queue, key=self.turn_queue.get)
 
+        # log result
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"-> Queue built. {self.turn_queue}"))
+
     def end_turn(self, spent_time):
         """
         End the current turn and apply time spent
@@ -45,10 +53,9 @@ class TurnManager:
             spent_time:
         """
         from scripts.core.global_data import game_manager
-        entity = self.turn_holder
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"Ending {self.turn_holder.name}'s turn..."))
 
-        log_string = f"Ending {entity.name}'s turn."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        entity = self.turn_holder
 
         #  update actor's time spent
         entity.actor.spend_time(spent_time)
@@ -60,6 +67,7 @@ class TurnManager:
         Proceed to the next turn setting the next entity to act as the turn holder.
         """
         from scripts.core.global_data import game_manager
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"Moving to the next turn..."))
 
         if not self.turn_queue:
             self.build_new_turn_queue()
@@ -82,5 +90,5 @@ class TurnManager:
         elif game_manager.game_state != GameStates.ENEMY_TURN:
             game_manager.create_event(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
-        log_string = f"It is now {self.turn_holder.name}'s turn."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG,
+                                               f"-> It is now {self.turn_holder.name}'s turn."))
