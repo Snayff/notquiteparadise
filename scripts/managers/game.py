@@ -15,8 +15,7 @@ class GameManager:
         self.event_hub = EventHub()
         self.internal_clock = pygame.time.Clock()
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
+        self.create_event(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
 
     def update(self):
         """

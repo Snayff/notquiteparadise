@@ -12,6 +12,11 @@ from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
+# FIXME - skill use not working:
+#  - enter doesnt trigger skill
+#  -  3rd skill doesnt trigger overlay when targeting wrong target
+# TODO - implement skill handler (object, methods etc. (poss game man?))
+#  pass in skill and handle logic there. move creation of targeting overlay out of events.
 # TODO - create message commands to allow passing of formatting, e.g. colours, to message log (#red text ##)?
 # TODO - create global tooltip method
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer

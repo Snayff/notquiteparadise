@@ -43,7 +43,11 @@ class TurnManager:
         self.turn_holder = min(self.turn_queue, key=self.turn_queue.get)
 
         # log result
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"-> Queue built. {self.turn_queue}"))
+        queue = []
+        for entity, time in self.turn_queue.items():
+            queue.append((entity.name, time))
+
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"-> Queue built. {queue}"))
 
     def end_turn(self, spent_time):
         """

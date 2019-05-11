@@ -19,9 +19,9 @@ class MessageLog:
         expressions  (Dict): Dictionary of expressions to look for and their colour to show.
         icons (Dict): Dictionary of icons to look for and the icon to show.
         hyperlinks (Dict): Dictionary of hyperlinks to look for and the linked info to show.
-        is_dirty
-        displayed_hyperlinks
-        index_of_active_hyperlink
+        is_dirty:
+        displayed_hyperlinks:
+        index_of_active_hyperlink:
     """
 
     def __init__(self):
@@ -32,8 +32,8 @@ class MessageLog:
         self.message_list = [(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise")]
         self.message_type_to_show = MessageEventTypes.BASIC
         self.expressions = self.create_expressions_list()
-        self.icons = self.create_icons_list()
-        self.hyperlinks = self.create_hyperlinks_list()
+        self.icons = self.initialise_icons_list()
+        self.hyperlinks = self.initialise_hyperlinks_list()
 
         # hyperlink info
         self.is_dirty = True
@@ -197,13 +197,12 @@ class MessageLog:
             message_type(MessageEventTypes):
             message(str):
         """
-        log_string = f"{message} added to message log"
         from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"{message} added to message log"))
 
         self.message_list.append((message_type, message))
 
-        # if more mesaages than we can show at once then increment first message position
+        # if more messages than we can show at once then increment first message position
         if len(self.message_list) > self.number_of_messages_to_show:
             self.update_first_message_position(1)
 
@@ -220,7 +219,7 @@ class MessageLog:
         # ensure first message position cannot be less than the start of the message_list
         self.first_message_to_show = max(self.first_message_to_show, 0)
 
-    def change_message_type_to_show(self, message_type):
+    def set_message_type_to_show(self, message_type):
         """
 
         Args:
@@ -243,7 +242,7 @@ class MessageLog:
         return expressions
 
     @staticmethod
-    def create_icons_list():
+    def initialise_icons_list():
         """
         Create list of icons to look for in log and render
 
@@ -258,7 +257,7 @@ class MessageLog:
         return icons
 
     @staticmethod
-    def create_hyperlinks_list():
+    def initialise_hyperlinks_list():
         """
         Create list of hyperlinks to look for in log and render
 
@@ -451,32 +450,3 @@ class MessageLog:
         parsed_message_list.append((default_colour, msg_in_progress))
 
         return parsed_message_list
-
-# TODO - test below wrapping script
-# MESSAGE WRAP
-# import libtcodpy as libtcod
-# import textwrap
-# class Message:
-#     def __init__(self, text, color=libtcod.white):
-#         self.text = text
-#         self.color = color
-#
-#
-# class MessageLog:
-#     def __init__(self, x, width, height):
-#         self.messages = []
-#         self.x = x
-#         self.width = width
-#         self.height = height
-#
-#     def add_message(self, message):
-#         # Split the message if necessary, among multiple lines
-#         new_msg_lines = textwrap.wrap(message.text, self.width)
-#
-#         for line in new_msg_lines:
-#             # If the buffer is full, remove the first line to make room for the new one
-#             if len(self.messages) == self.height:
-#                 del self.messages[0]
-#
-#             # Add the new line as a Message object, with the text and the color
-#             self.messages.append(Message(line, message.color))

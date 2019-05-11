@@ -1,5 +1,5 @@
-from scripts.managers.debug import DebugManager
 
+from scripts.managers.debug import DebugManager
 from scripts.managers.game import GameManager
 from scripts.managers.turn import TurnManager
 from scripts.managers.ui import UIManager
