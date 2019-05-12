@@ -24,7 +24,7 @@ class SkillContainer(Panel):
         text_x = int(self.width - (font.size / 1.8))
         text_y = int(self.height - font.size * 1.2)
         text = str(self.skill_number)
-        text_colour = self.owner.palette.default_text
+        text_colour = self.owner.palette.text_default
 
         self.owner.font.render_to(self.surface, (text_x, text_y), text, text_colour)
 

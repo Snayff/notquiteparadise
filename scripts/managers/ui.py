@@ -42,6 +42,10 @@ class UIManager:
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"UIManager initialised."))
 
     def update(self):
+        """
+        Update UI elements, if required.
+
+        """
         if self.message_log:
             self.message_log.update()
 

@@ -392,7 +392,7 @@ class MessageLog:
         message_list = updated_message.split()
 
         parsed_message_list = []
-        default_colour = self.palette.default_text
+        default_colour = self.palette.text_default
         msg_in_progress = ""
 
         # check each word for inclusion in lists and rebuild as new list

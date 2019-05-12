@@ -32,6 +32,7 @@ class NewMessageLog:
         self.message_list = []
         self.messages_to_draw = []
         self.keywords = self.initialise_keywords()
+        self.icons = self.initialise_icons()
         self.is_dirty = True
 
         # panel info
@@ -165,15 +166,19 @@ class NewMessageLog:
             # add space back to the word
             word += " "
 
-            # get size
-            word_surface, world_rect = font.render(word, self.palette.default_text, self.palette.background)
-            word_width, word_height = word_surface.get_size()
+            # if next word is a command then don't add it to calculations
+            if word[0] != "#":
+                # get size
+                word_surface, world_rect = font.render(word, self.palette.text_default, self.palette.background)
+                word_width, word_height = word_surface.get_size()
 
-            # if word will run outside of size insert a break
-            if x + word_width >= max_width:
-                # start counting new line width
-                x = 0
-                wrapped_text += line_break
+                # if word will run outside of size insert a break
+                if x + word_width >= max_width:
+                    # start counting new line width
+                    x = 0
+                    wrapped_text += line_break
+            else:
+                word_width = 0
 
             # add current word to new string
             wrapped_text += word
@@ -207,46 +212,66 @@ class NewMessageLog:
             # break line into words
             word_list = line.split()
 
+            processed_indices = []
+
             # check each word in the line
             for word_count in range(len(word_list)):
                 word = word_list[word_count]
 
-                # check for COMMANDS
-                if word[0] == "[":
+                # check index hasn't been processed already (commands look forward...)
+                if word_count not in processed_indices:
 
-                    # if any words waiting to be converted to a surface then do so
-                    if outstanding_word_string != "":
-                        text_surface, text_rect = self.font.render(outstanding_word_string, self.palette.default_text)
+                    # check for COMMANDS
+                    if word[0] == "#":
+
+                        # if any words waiting to be converted to a surface then do so
+                        if outstanding_word_string != "":
+                            text_surface, text_rect = self.font.render(outstanding_word_string,
+                                                                       self.palette.text_default)
+                            line_list.append(text_surface)
+
+                            # we've used the outstanding word so clear it
+                            outstanding_word_string = ""
+
+                        # check there is a word to process after the command
+                        if len(word_list) > word_count + 1:
+                            # process the command
+                            command = word
+                            # get the next word (the one to process) and remove from the list
+                            word_to_process = word_list[word_count + 1]
+                            text_surface, text_rect = self.process_message_command(command, word_to_process)
+                            line_list.append(text_surface)
+
+                            # note that the next word has already been processed
+                            processed_indices.append(word_count + 1)
+                        else:
+                            from scripts.core.global_data import game_manager
+                            game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, f"Message log: Command "
+                            f"received {word} with no following word."))
+
+                    # check for KEYWORDS
+                    elif word.lower() in self.keywords:
+                        # if any words waiting to be converted to a surface then do so
+                        if outstanding_word_string != "":
+                            text_surface, text_rect = self.font.render(outstanding_word_string,
+                                                                       self.palette.text_default)
+                            line_list.append(text_surface)
+
+                            # we've used the outstanding word so clear it
+                            outstanding_word_string = ""
+
+                        # render the key word
+                        colour = self.keywords.get(word.lower())
+                        text_surface, text_rect = self.font.render(word + " ", colour)
                         line_list.append(text_surface)
 
-                    # check there is a word to process after the command
-                    if len(word_list) > word_count + 1:
-                        # process the command
-                        command = word
-                        # get the next word (the one to process) and remove from the list
-                        word_to_process = word_list.pop(word_count + 1)
-                        text_surface, text_rect = self.process_message_command(command, word_to_process)
-                        line_list.append(text_surface)
-
-                # check for KEYWORDS
-                elif word.lower() in self.keywords:
-                    # if any words waiting to be converted to a surface then do so
-                    if outstanding_word_string != "":
-                        text_surface, text_rect = self.font.render(outstanding_word_string, self.palette.default_text)
-                        line_list.append(text_surface)
-
-                    # render the key word
-                    colour = self.keywords.get(word.lower())
-                    text_surface, text_rect = self.font.render(word + " ", colour)
-                    line_list.append(text_surface)
-
-                # handle NORMAL WORDS
-                else:
-                    outstanding_word_string += word + " "
+                    # handle NORMAL WORDS
+                    else:
+                        outstanding_word_string += word + " "
 
             # handle any remaining word
             if outstanding_word_string != "":
-                text_surface, text_rect = self.font.render(outstanding_word_string, self.palette.default_text)
+                text_surface, text_rect = self.font.render(outstanding_word_string, self.palette.text_default)
                 line_list.append(text_surface)
 
             # add the line_list (of surfaces) to the parsed message list
@@ -255,19 +280,61 @@ class NewMessageLog:
         # return the parsed message list (a list, of lists, of surfaces)
         return parsed_message_list
 
-    def process_message_command(self, command, word_to_process):
+    def process_message_command(self, command, word_to_affect):
         """
         Process text formatting commands
 
         Args:
-            command (str):
-            word_to_process (str):
+            command (str): The command dictating the change. In format of #prefix.suffix
+            word_to_affect (str): The word that will be changed by the command
 
         Returns:
-            pygame.Surface
+            Tuple(pygame.Surface, pygame.Rect): tuple of surface then rect
         """
-        text_surface = ""
-        return text_surface
+        # remove the hash from the string
+        cleaned_command = command.replace("#", "")
+
+        # split command prefix
+        command_prefix, command_suffix = cleaned_command.split(".")
+
+        # check which command to execute
+        # COLOUR CHANGE
+        if command_prefix == "col":
+            # get the colour to apply to the text
+            if command_suffix == "negative":
+                colour = self.palette.text_negative
+            elif command_suffix == "positive":
+                colour = self.palette.text_positive
+            elif command_suffix == "info":
+                colour = self.palette.text_info
+            else:
+                colour = self.palette.text_default
+
+                from scripts.core.global_data import game_manager
+                log_string = f"Process message command: {cleaned_command} Suffix not understood."
+                game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+
+            # create the surface
+            new_surface = self.font.render(word_to_affect, colour)
+
+        # REPLACE WORD WITH AN ICON
+        elif command_prefix == "ico":
+            icon = self.icons.get(command_suffix)
+
+            # catch any images not resized and resize them
+            # TODO - remove magic numbers
+            if icon.get_size() != (16, 16):
+                import pygame
+                icon = pygame.transform.smoothscale(icon, (16, 16))
+
+            # return is expecting surface, rect
+            new_surface = icon, icon.get_rect()
+
+        # catch all; render as default
+        else:
+            new_surface = self.font.render(word_to_affect, self.palette.text_default)
+
+        return new_surface
 
     def initialise_keywords(self):
         """
@@ -279,6 +346,22 @@ class NewMessageLog:
         """
         keywords = {}
 
-        keywords["you"] = self.palette.keyword_player
+        keywords["grazes"] = self.palette.keyword_grazes
+        keywords["crits"] = self.palette.keyword_crits
 
         return keywords
+
+    def initialise_icons(self):
+        """
+        Load the list of icons
+
+        Returns:
+            Dict[str, pygame.Surface]
+        """
+        icons = {}
+
+        import pygame
+        icons["info"] = pygame.image.load("assets/icons/placeholder/book.PNG").convert_alpha()
+
+        return icons
+

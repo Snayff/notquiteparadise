@@ -31,7 +31,7 @@ class Palette:
         Attributes:
             background (Colour): Colour of the Message Log background.
             expressions_player (Colour): Colour of the  player's expression.
-            default_text (Colour): Colour of the default text.
+            text_default (Colour): Colour of the default text.
             hyperlink (Colour): Colour of hyperlinks .
             tooltip_background(Colour): Colour of the tooltip window background.
             tooltip_text(Colour): Colour of the tooltip text.
@@ -40,8 +40,16 @@ class Palette:
             colour = Colour()
             self.background = colour.tertiary.darker
             self.border = colour.complement.darker
+
             self.keyword_player = colour.complement.lightest
-            self.default_text = colour.white
+            self.keyword_grazes = colour.red
+            self.keyword_crits = colour.green
+
+            self.text_default = colour.white
+            self.text_negative = colour.red
+            self.text_info = colour.blue
+            self.text_positive = colour.green
+
             self.hyperlink = colour.black
             self.tooltip_text = colour.white
             self.tooltip_background = colour.black
@@ -66,7 +74,7 @@ class Palette:
             colour = Colour()
             self.background = colour.black
             self.border = colour.complement.darker
-            self.default_text = colour.white  # TODO - use
+            self.text_default = colour.white  # TODO - combine text palettes into one
 
     class TargetingOverlayPalette:
         """
@@ -86,4 +94,4 @@ class Palette:
             self.background = colour.black
             self.border = colour.complement.darker
             self.skill_border = colour.complement.lighter
-            self.default_text = colour.white
+            self.text_default = colour.white

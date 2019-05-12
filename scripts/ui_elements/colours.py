@@ -17,6 +17,9 @@ class Colour:
 
         self.black = (0, 0, 0)
         self.white = (255, 255, 255)
+        self.red = (180, 0, 0)
+        self.green = (60, 200, 40)
+        self.blue = (20, 100, 255)
 
     class PrimaryColour:
         """

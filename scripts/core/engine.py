@@ -17,18 +17,16 @@ from scripts.core.initialisers import initialise_game
 #  -  3rd skill doesnt trigger overlay when targeting wrong target
 # TODO - implement skill handler (object, methods etc. (poss game man?))
 #  pass in skill and handle logic there. move creation of targeting overlay out of events.
-# TODO - create message commands to allow passing of formatting, e.g. colours, to message log (#red text ##)?
-# TODO - create global tooltip method
+# TODO - create global tooltip method - some relevant code in old message log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
 # TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
 # TODO - effect activation events (so that world can update)
-# TODO - text wrapping, especially in message log
 # TODO - check if in battle; once damage taken keep an eye on enemy states
 # TODO - change from use fps for timing to delta time
-# TODO - draw dirty for map section (use an array to store ref to dirty x,y)
+# TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 
 
