@@ -15,7 +15,7 @@
     <splitter split-orientation="horizontal" split-proportion="0.5040043">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="true" current-in-tab="true">
+          <file pinned="true" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="561">
@@ -30,24 +30,25 @@
           <file pinned="true" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="644">
-                  <caret line="35" column="101" lean-forward="true" selection-start-line="35" selection-start-column="101" selection-end-line="35" selection-end-column="101" />
+                <state relative-caret-position="667">
+                  <caret line="36" column="115" selection-start-line="36" selection-start-column="115" selection-end-line="36" selection-end-column="115" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
-                    <element signature="e#518#1391#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/ui_elements/message_log.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="207">
-                  <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="87" />
+                <state relative-caret-position="-810">
+                  <caret line="229" column="8" selection-start-line="229" selection-start-column="8" selection-end-line="229" selection-end-column="8" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
+                    <element signature="e#1110#3084#0" expanded="true" />
                     <element signature="e#3123#7036#0" expanded="true" />
+                    <element signature="e#9460#9767#0" expanded="true" />
                     <element signature="e#14837#17780#0" expanded="true" />
                   </folding>
                 </state>
@@ -74,13 +75,13 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/ui_elements/new_message_log.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="207">
-                  <caret line="161" column="50" selection-start-line="161" selection-start-column="50" selection-end-line="161" selection-end-column="50" />
+                <state relative-caret-position="495">
+                  <caret line="79" column="51" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
                   <folding>
-                    <element signature="e#0#15#0" expanded="true" />
+                    <element signature="e#1#31#0" expanded="true" />
                     <element signature="e#1133#2651#0" expanded="true" />
-                    <element signature="e#2683#3214#0" expanded="true" />
-                    <element signature="e#2922#4136#0" expanded="true" />
+                    <element signature="e#2650#3407#0" expanded="true" />
+                    <element signature="e#5959#6330#0" />
                   </folding>
                 </state>
               </provider>
@@ -143,7 +144,6 @@
         <option value="$PROJECT_DIR$/scripts/core/colours.py" />
         <option value="$PROJECT_DIR$/scripts/ui_elements/templates/skill_container.py" />
         <option value="$PROJECT_DIR$/scripts/ui_elements/colours.py" />
-        <option value="$PROJECT_DIR$/scripts/ui_elements/palette.py" />
         <option value="$PROJECT_DIR$/scripts/skills/effects/move_effect.py" />
         <option value="$PROJECT_DIR$/scripts/skills/effects/damage_effect.py" />
         <option value="$PROJECT_DIR$/scripts/skills/effects/effects.py" />
@@ -188,6 +188,7 @@
         <option value="$PROJECT_DIR$/scripts/managers/ui.py" />
         <option value="$PROJECT_DIR$/scripts/core/engine.py" />
         <option value="$PROJECT_DIR$/scripts/core/initialisers.py" />
+        <option value="$PROJECT_DIR$/scripts/ui_elements/palette.py" />
         <option value="$PROJECT_DIR$/scripts/ui_elements/new_message_log.py" />
       </list>
     </option>
@@ -346,14 +347,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="335" y="0" width="2110" height="1407" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4994698" visible="true" weight="0.1023166" />
       <window_info id="Structure" order="1" sideWeight="0.50053024" side_tool="true" weight="0.1023166" />
       <window_info id="Favorites" order="2" sideWeight="0.50053024" side_tool="true" weight="0.1023166" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.484556" visible="true" weight="0.2724359" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4695946" visible="true" weight="0.24439102" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47972974" weight="0.2724359" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.484556" weight="0.2724359" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4662162" visible="true" weight="0.24439102" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47683397" weight="0.2724359" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4985521" weight="0.22916667" />
@@ -361,7 +363,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49758688" weight="0.21474358" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32932693" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49951738" weight="0.32932693" />
-      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.5304054" side_tool="true" visible="true" weight="0.24439102" />
+      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.5337838" side_tool="true" visible="true" weight="0.24439102" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -372,32 +374,7 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/scripts/ui_elements/new_message_log.py</url>
-          <line>75</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/scripts/ui_elements/new_message_log.py</url>
-          <line>97</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/ui_elements/_example_text.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/ui_elements/templates/menu.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -463,27 +440,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
           <caret line="5" column="15" lean-forward="true" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/ui_elements/palette.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="12" column="23" lean-forward="true" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
-          <folding>
-            <element signature="e#68#283#1" expanded="true" />
-            <element signature="e#316#740#0" expanded="true" />
-            <element signature="e#779#1263#1" expanded="true" />
-            <element signature="e#1304#1672#0" expanded="true" />
-            <element signature="e#1708#1835#1" expanded="true" />
-            <element signature="e#1876#1987#0" expanded="true" />
-            <element signature="e#2026#2087#1" expanded="true" />
-            <element signature="e#2128#2298#0" expanded="true" />
-            <element signature="e#2343#2404#1" expanded="true" />
-            <element signature="e#2445#2596#0" expanded="true" />
-            <element signature="e#2633#2686#1" expanded="true" />
-            <element signature="e#2727#2941#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -816,29 +772,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/ui_elements/message_log.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="87" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#3123#7036#0" expanded="true" />
-            <element signature="e#14837#17780#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="644">
-          <caret line="35" column="101" lean-forward="true" selection-start-line="35" selection-start-column="101" selection-end-line="35" selection-end-column="101" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#518#1391#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="460">
@@ -860,15 +793,73 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="667">
+          <caret line="36" column="115" selection-start-line="36" selection-start-column="115" selection-end-line="36" selection-end-column="115" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/textwrap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="145" column="8" selection-start-line="145" selection-start-column="8" selection-end-line="145" selection-end-column="8" />
+          <folding>
+            <element signature="e#5966#6395#0" expanded="true" />
+            <element signature="e#13903#13971#0" expanded="true" />
+            <element signature="e#14081#14605#0" expanded="true" />
+            <element signature="e#14641#14911#0" expanded="true" />
+            <element signature="e#15599#16078#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/ui_elements/message_log.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-810">
+          <caret line="229" column="8" selection-start-line="229" selection-start-column="8" selection-end-line="229" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1110#3084#0" expanded="true" />
+            <element signature="e#3123#7036#0" expanded="true" />
+            <element signature="e#9460#9767#0" expanded="true" />
+            <element signature="e#14837#17780#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/ui_elements/palette.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="42" column="60" selection-start-line="42" selection-start-column="60" selection-end-line="42" selection-end-column="60" />
+          <folding>
+            <element signature="e#68#283#1" expanded="true" />
+            <element signature="e#316#740#0" expanded="true" />
+            <element signature="e#779#1263#1" expanded="true" />
+            <element signature="e#1708#1835#1" expanded="true" />
+            <element signature="e#1876#1987#0" expanded="true" />
+            <element signature="e#2026#2087#1" expanded="true" />
+            <element signature="e#2128#2298#0" expanded="true" />
+            <element signature="e#2343#2404#1" expanded="true" />
+            <element signature="e#2445#2596#0" expanded="true" />
+            <element signature="e#2633#2686#1" expanded="true" />
+            <element signature="e#2727#2941#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/ui_elements/new_message_log.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="161" column="50" selection-start-line="161" selection-start-column="50" selection-end-line="161" selection-end-column="50" />
+        <state relative-caret-position="495">
+          <caret line="79" column="51" selection-start-line="79" selection-start-column="51" selection-end-line="79" selection-end-column="51" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#1#31#0" expanded="true" />
             <element signature="e#1133#2651#0" expanded="true" />
-            <element signature="e#2683#3214#0" expanded="true" />
-            <element signature="e#2922#4136#0" expanded="true" />
+            <element signature="e#2650#3407#0" expanded="true" />
+            <element signature="e#5959#6330#0" />
           </folding>
         </state>
       </provider>

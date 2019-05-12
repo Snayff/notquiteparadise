@@ -33,7 +33,8 @@ def initialise_game():
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player
 
-    game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise"))
+    game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise. Welcome to Not "
+                                                                    "Quite Paradise. Welcome to Not Quite Paradise."))
 
 
 def initialise_event_handlers():

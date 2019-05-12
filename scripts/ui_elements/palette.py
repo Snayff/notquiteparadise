@@ -40,7 +40,7 @@ class Palette:
             colour = Colour()
             self.background = colour.tertiary.darker
             self.border = colour.complement.darker
-            self.expressions_player = colour.complement.lighter
+            self.keyword_player = colour.complement.lightest
             self.default_text = colour.white
             self.hyperlink = colour.black
             self.tooltip_text = colour.white
