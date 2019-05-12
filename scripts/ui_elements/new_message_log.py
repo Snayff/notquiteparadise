@@ -63,9 +63,17 @@ class NewMessageLog:
 
     def update(self):
         if self.is_dirty:
-            pass
-        # update message log, including first message index
-        # for update move message from full list to render list (so render list only has active surfaces)
+            # update first message index
+            if len(self.message_list) > self.number_of_messages_to_show:
+                self.first_message_index = len(self.message_list) - self.number_of_messages_to_show
+
+            # clear messages to draw
+            self.messages_to_draw.clear()
+
+            # update message to draw
+            messages_to_show = min(self.number_of_messages_to_show, len(self.message_list))
+            for counter in range(0, messages_to_show):
+                self.messages_to_draw.append(self.message_list[counter + self.first_message_index])
 
     def draw(self, surface):
         """
@@ -79,27 +87,29 @@ class NewMessageLog:
         # panel background
         self.panel.draw_background()
 
-        # show only as many message_list as we can or have
-        messages_to_show = min(len(self.message_list), self.number_of_messages_to_show)
-        first_message_index = self.first_message_index
-
         # init info for message render
         msg_x = self.edge_size + self.message_indent
         msg_y = self.edge_size
         font = self.font
-        messages = self.message_list
         font_size = font.size
+        line_count = 0
 
-        # render the message_list
-        for message_count in range(messages_to_show):
+        # render the messages_to_draw
+        for line_list in self.messages_to_draw:
             # reset offset
-            current_msg_x_offset = 0
+            x_offset = 0
 
             # get y position of line to write to
-            adjusted_y = msg_y + (message_count * (font_size + self.gap_between_lines))
+            adjusted_y = msg_y + (line_count * (font_size + self.gap_between_lines))
+
+            # update  line count
+            line_count += 1
 
             # pull each surface from each line_list and render to the panel surface
-
+            for message in line_list:
+                panel_surface.blit(message, (msg_x + x_offset, adjusted_y))
+                message_width = message.get_width()
+                x_offset += message_width + 2  # 2 for space between words
 
         # panel border
         self.panel.draw_border()
@@ -149,10 +159,10 @@ class NewMessageLog:
 
             # check each word in the line
             for word_count in range(len(word_list)):
-                word = word_list[word_count]
+                word = word_list[word_count] + " "
 
                 # check for COMMANDS
-                if word.charAt(0) == "[":
+                if word[0] == "[":
 
                     # if any words waiting to be converted to a surface then do so
                     if outstanding_word_string != "":
@@ -165,24 +175,30 @@ class NewMessageLog:
                         command = word
                         # get the next word (the one to process) and remove from the list
                         word_to_process = word_list.pop(word_count + 1)
-                        text_surface = self.process_message_command(command, word_to_process)
+                        text_surface, text_bounding_rect = self.process_message_command(command, word_to_process)
                         line_list.append(text_surface)
 
                 # check for KEYWORDS
                 elif word in self.keywords:
                     # if any words waiting to be converted to a surface then do so
                     if outstanding_word_string != "":
-                        text_surface = self.font.render(outstanding_word_string, self.palette.default_text)
+                        text_surface, text_bounding_rect = self.font.render(outstanding_word_string,
+                                                                            self.palette.default_text)
                         line_list.append(text_surface)
 
                     # render the key word
                     colour = self.keywords.get(word)
-                    text_surface = self.font.render(word, colour)
+                    text_surface, text_bounding_rect = self.font.render(word, colour)
                     line_list.append(text_surface)
 
-                # normal word, add to
+                # handle NORMAL WORDS
                 else:
                     outstanding_word_string += word
+
+            # handle any remaining word
+            if outstanding_word_string != "":
+                text_surface, text_bounding_rect = self.font.render(outstanding_word_string, self.palette.default_text)
+                line_list.append(text_surface)
 
             # add the line_list (of surfaces) to the parsed message list
             parsed_message_list.append(line_list)

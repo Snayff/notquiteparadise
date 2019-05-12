@@ -77,6 +77,7 @@ def game_loop():
         game_manager.update()
         debug_manager.update()
         world_manager.update()
+        ui_manager.update()
 
         # DRAW
         ui_manager.draw_game(world_manager.game_map, debug_manager.visible)

@@ -5,6 +5,7 @@ from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.message_log import MessageLog
 from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, LoggingEventTypes
+from scripts.ui_elements.new_message_log import NewMessageLog
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
 
@@ -32,13 +33,17 @@ class UIManager:
         self.main_surface = pygame.Surface((BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT))
         self.visible_elements = {}  # dict of all elements that are currently being rendered
 
-        self.message_log = None  # type: MessageLog
+        self.message_log = None  # type: NewMessageLog
         self.entity_info = None  # type: SelectedEntityInfo
         self.targeting_overlay = None  # type: TargetingOverlay
         self.skill_bar = None # type: SkillBar
 
         from scripts.core.global_data import game_manager
         game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"UIManager initialised."))
+
+    def update(self):
+        if self.message_log:
+            self.message_log.update()
 
     def delayed_init(self):
         """
@@ -56,7 +61,7 @@ class UIManager:
         Notes:
             Called late due to dependencies.
         """
-        self.message_log = MessageLog()
+        self.message_log = NewMessageLog() # MessageLog()
 
     def init_entity_info(self):
         """
@@ -110,7 +115,7 @@ class UIManager:
 
         if "message_log" in self.visible_elements:
             self.message_log.draw(self.main_surface)
-            self.message_log.draw_tooltips(self.main_surface)
+            #self.message_log.draw_tooltips(self.main_surface)
 
         if "entity_info" in self.visible_elements:
             self.entity_info.draw(self.main_surface)

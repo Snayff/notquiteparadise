@@ -1,9 +1,10 @@
 import pygame
 
-from scripts.core.constants import EventTopics, GameStates
+from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
 from scripts.events.entity_events import LearnEvent
 from scripts.events.entity_handler import EntityHandler
 from scripts.events.logging_handler import LoggingHandler
+from scripts.events.message_events import MessageEvent
 from scripts.events.message_handler import MessageHandler
 from scripts.events.game_handler import GameHandler
 from scripts.core.global_data import game_manager, world_manager, turn_manager, ui_manager
@@ -31,6 +32,8 @@ def initialise_game():
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player
+
+    game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise"))
 
 
 def initialise_event_handlers():
