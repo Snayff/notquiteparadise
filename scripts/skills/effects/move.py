@@ -16,7 +16,7 @@ class MoveSkillEffect(SkillEffect):
         """
         Trigger the effect
         """
-        from scripts.core.global_data import world_manager
+        from scripts.global_instances.managers import world_manager
 
         # get required info
         start_pos_x, start_pos_y = self.entity_to_move.x, self.entity_to_move.y
@@ -36,14 +36,13 @@ class MoveSkillEffect(SkillEffect):
                 self.entity_to_move.y += direction_y
 
         # update the fov if player moved
-        from scripts.core.global_data import world_manager
+        from scripts.global_instances.managers import world_manager
         if self.entity_to_move == world_manager.player:
             world_manager.player_fov_is_dirty = True
 
         # log the movement
         log_string = f"{self.entity_to_move.name} moved from [{start_pos_x},{start_pos_y}] to " \
             f"[{self.entity_to_move.x},{self.entity_to_move.y}]"
-        from scripts.core.global_data import game_manager
         from scripts.events.logging_events import LoggingEvent
         from scripts.core.constants import LoggingEventTypes
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))

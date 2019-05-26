@@ -5,7 +5,6 @@ from scripts.skills.effects.skill_effect import SkillEffect
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.terrain import Terrain
 from scripts.world.terrain.wall import Wall
-from scripts.world.tile import Tile
 
 
 class ChangeTerrainSkillEffect(SkillEffect):
@@ -31,8 +30,6 @@ class ChangeTerrainSkillEffect(SkillEffect):
         """
         super().trigger()
 
-        from scripts.core.global_data import game_manager
-
         tags_checked = {}  # bool list of tags checked
         tile = terrain_to_change.owner
         terrain = terrain_to_change
@@ -53,17 +50,17 @@ class ChangeTerrainSkillEffect(SkillEffect):
                 # success message
                 entity = self.owner.owner.owner
                 msg = f"{entity.name} changed the {starting_terrain_name} to {tile.terrain.name}."
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
             else:
                 # log why
                 log_string = f"-> target tags incorrect; tag results:{tags_checked}"
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
         else:
             # confirm can't do it
             msg = f"You can't do that there!"
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
             # log why
             log_string = f"-> target type incorrect; selected:{target_type}, needed:{self.required_target_type}"
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))

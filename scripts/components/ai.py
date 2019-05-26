@@ -1,8 +1,9 @@
 import numpy
 
 from scripts.core.constants import LoggingEventTypes, MessageEventTypes
+from scripts.global_instances.event_hub import publisher
 from scripts.world.entity import Entity
-from scripts.core.global_data import game_manager, world_manager
+from scripts.global_instances.managers import world_manager
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent
@@ -22,11 +23,11 @@ class BasicMonster:
         target_tile_x, target_tile_y = entity.x + direction_x, entity.y + direction_y
 
         log_string = f"{entity.name} is starting to take their turn..."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         # !!!! TESTING ONLY!!!!!!!
-        game_manager.create_event(EndTurnEvent(10))  # TODO -remove when  ai needs to act
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"-> Passed their turn."))
+        publisher.publish(EndTurnEvent(10))  # TODO -remove when  ai needs to act
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"-> Passed their turn."))
         return
 
         # FIXME - change to using the new list format
@@ -38,13 +39,13 @@ class BasicMonster:
 
             if distance_to_target <= attack_range:
                 log_string = f"-> {entity.name} decided to use {skill_value.name}."
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-                game_manager.create_event(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value.name))
+                publisher.publish(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value.name))
                 return None  # stop further processing in function
 
         log_string = f"-> {entity.name} found no possible attack."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # we can't attack so try to move closer
         # check target tile is valid
@@ -55,16 +56,16 @@ class BasicMonster:
             if direction_x != 0 or direction_y != 0:
                 # limit to only moving one tile then move
                 target_x, target_y = int(numpy.sign(direction_x)) + entity.x, int(numpy.sign(direction_y)) + entity.y
-                game_manager.create_event(MoveEvent(entity, (target_x, target_y)))
+                publisher.publish(MoveEvent(entity, (target_x, target_y)))
             else:
                 # TODO - if they can't move where they want move in a random direction before deciding to pass.
                 msg_string = f"{entity.name} passed their turn."
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg_string))
-                game_manager.create_event(EndTurnEvent(10))  # TODO -replace with pass turn skill
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg_string))
+                publisher.publish(EndTurnEvent(10))  # TODO -replace with pass turn skill
         else:
             msg_string = f"{entity.name} passed their turn."
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg_string))
-            game_manager.create_event(EndTurnEvent(10))  # TODO -replace with pass turn skill
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg_string))
+            publisher.publish(EndTurnEvent(10))  # TODO -replace with pass turn skill
 
     def get_target(self):
         """
@@ -77,7 +78,7 @@ class BasicMonster:
         target = world_manager.player
 
         log_string = f"{self.owner.name} chose {target.name} as a target."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
         return target
 
     def get_target_direction(self, target):

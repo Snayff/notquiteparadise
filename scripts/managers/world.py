@@ -2,6 +2,7 @@ import tcod
 
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.managers.world_methods.action_methods import EntityAction
 from scripts.managers.world_methods.existence_methods import EntityExistence
 from scripts.managers.world_methods.query_methods import EntityQuery
@@ -27,8 +28,7 @@ class WorldManager:
         self.light_walls = True
         self.fov_algorithm = 0
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"WorldManager initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"WorldManager initialised."))
 
     def update(self):
         """

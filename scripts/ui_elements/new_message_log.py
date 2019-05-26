@@ -3,6 +3,7 @@ from typing import Dict, Tuple
 from scripts.core.constants import MessageEventTypes, BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, LoggingEventTypes
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.ui_elements.templates.panel import Panel
@@ -47,7 +48,7 @@ class NewMessageLog:
                            panel_border_colour)
 
         # set panel to be rendered
-        from scripts.core.global_data import ui_manager
+        from scripts.global_instances.managers import ui_manager
         ui_manager.update_panel_visibility("message_log", self, True)
 
         # log info
@@ -58,8 +59,7 @@ class NewMessageLog:
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
 
     def update(self):
         """
@@ -245,8 +245,7 @@ class NewMessageLog:
                             # note that the next word has already been processed
                             processed_indices.append(word_count + 1)
                         else:
-                            from scripts.core.global_data import game_manager
-                            game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, f"Message log: Command "
+                            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, f"Message log: Command "
                             f"received {word} with no following word."))
 
                     # check for KEYWORDS
@@ -310,9 +309,8 @@ class NewMessageLog:
             else:
                 colour = self.palette.text_default
 
-                from scripts.core.global_data import game_manager
                 log_string = f"Process message command: {cleaned_command} Suffix not understood."
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
             # create the surface
             new_surface = self.font.render(word_to_affect, colour)

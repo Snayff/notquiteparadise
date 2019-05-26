@@ -3,6 +3,7 @@ import pygame
 from scripts.core.constants import GameStates, LoggingEventTypes, GAME_FPS
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import EventHub, Publisher
+from scripts.global_instances.event_hub import publisher
 
 
 class GameManager:
@@ -15,14 +16,13 @@ class GameManager:
         self.event_hub = EventHub()
         self.internal_clock = pygame.time.Clock()
 
-        self.create_event(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
 
     def update(self):
         """
         Update the GameManager:
-            event_hub, internal_clock ticks
+            internal_clock ticks
         """
-        self.event_hub.update()
 
         # set frame rate
         self.internal_clock.tick(GAME_FPS)

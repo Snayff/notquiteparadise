@@ -1,4 +1,5 @@
 from scripts.events.entity_events import LearnEvent
+from scripts.global_instances.event_hub import publisher
 
 
 class Entity:
@@ -77,8 +78,7 @@ class Entity:
             self.player.owner = self
 
         if self.actor and self.combatant:
-            from scripts.core.global_data import game_manager
-            game_manager.create_event(LearnEvent(self, "basic_attack", "basic_attack"))
+            publisher.publish(LearnEvent(self, "basic_attack", "basic_attack"))
 
     @property
     def x(self):

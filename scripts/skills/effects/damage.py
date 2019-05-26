@@ -5,6 +5,7 @@ from scripts.core.constants import LoggingEventTypes, TargetTypes, TargetTags, M
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.skills.effects.skill_effect import SkillEffect
 
 
@@ -38,8 +39,6 @@ class DamageSkillEffect(SkillEffect):
         """
         super().trigger()
 
-        from scripts.core.global_data import game_manager
-
         attacker = attacking_entity
         defender = defending_entity
         damage = 0
@@ -69,25 +68,25 @@ class DamageSkillEffect(SkillEffect):
                     hit_type_desc = "does something unknown" # catch all
 
                 msg = f"{attacker.name} {hit_type_desc} {defender.name} for {damage}."
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                 # TODO - add the damage type to the message and replace the type with an icon
                 # TODO - add the explanation of the damage roll to a tooltip
 
                 # check if defender died
                 if defender.combatant.hp <= 0:
-                    game_manager.create_event(DieEvent(defender))
+                    publisher.publish(DieEvent(defender))
 
             else:
                 msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
         else:
             msg = f"You can't do that there!"
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
             # log why
             log_string = f"-> target type incorrect; selected:{target_type}, needed:{self.required_target_type}"
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
     def calculate_to_hit_score(self, attacker, defender):
         """
@@ -96,8 +95,7 @@ class DamageSkillEffect(SkillEffect):
             attacker:
             defender:
         """
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"Get to hit scores..."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Get to hit scores..."))
 
         roll = random.randint(1, 100)
         modified_to_hit_score = attacker.combatant.secondary_stats.chance_to_hit + self.base_accuracy + roll
@@ -117,7 +115,7 @@ class DamageSkillEffect(SkillEffect):
         # log the info
 
         log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return mitigated_to_hit_score
 
@@ -148,8 +146,7 @@ class DamageSkillEffect(SkillEffect):
         Returns:
             int: damage to be dealt
         """
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"Calculate damage..."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Calculate damage..."))
 
         initial_damage = self.base_damage  # TODO - add skill dmg modifier to allow dmg growth
 
@@ -178,7 +175,7 @@ class DamageSkillEffect(SkillEffect):
 
         # log the info
         log_string = f"-> Initial damage:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return modified_damage
 

@@ -1,7 +1,6 @@
-from scripts.core.constants import TargetTypes, LoggingEventTypes
+from scripts.core.constants import LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
-from scripts.world.entity import Entity
-from scripts.world.terrain.terrain import Terrain
+from scripts.global_instances.event_hub import publisher
 
 
 class SkillEffect:
@@ -20,8 +19,7 @@ class SkillEffect:
         """
         Trigger the effect
         """
-        from scripts.core.global_data import game_manager
         log_string = f"Applying '{self.name}' effect from {self.owner.name}..."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
 

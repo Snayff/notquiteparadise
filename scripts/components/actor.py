@@ -66,8 +66,7 @@ class Actor:
             if skill.name == skill_name:
                 return skill
 
-        from scripts.core.global_data import game_manager
         log_string = f"Looked in {self.owner.name}'s known skills to find {skill_name}, but found nothing. "
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.ERROR, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.ERROR, log_string))
 
         return None

@@ -1,5 +1,6 @@
-from scripts.core.constants import EntityEventTypes, LoggingEventTypes, TargetTags, GameStates
-from scripts.core.global_data import world_manager, game_manager, turn_manager
+from scripts.core.constants import EntityEventTypes, LoggingEventTypes, GameStates
+from scripts.global_instances.event_hub import publisher
+from scripts.global_instances.managers import world_manager, turn_manager
 from scripts.events.game_events import EndTurnEvent, ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber, Event
@@ -18,27 +19,27 @@ class EntityHandler(Subscriber):
         """
 
         log_string = f"{self.name} received {event.type}..."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.type == EntityEventTypes.MOVE:
             log_string = f"-> Processing {event.entity.name}'s move."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_move(event)
 
         if event.type == EntityEventTypes.SKILL:
             log_string = f"-> Processing {event.entity.name}'s skill: {event.skill_name}."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_skill(event)
 
         if event.type == EntityEventTypes.DIE:
             log_string = f"-> Processing {event.dying_entity.name}'s death."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_die(event)
 
         if event.type == EntityEventTypes.LEARN:
             log_string = f"-> Processing {event.entity.name}'s learning of {event.skill_name} from " \
                 f"{event.skill_tree_name}."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_learn(event)
 
     @staticmethod
@@ -67,7 +68,7 @@ class EntityHandler(Subscriber):
             world_manager.player_fov_is_dirty = True
 
         # end turn
-        game_manager.create_event(EndTurnEvent(10))  # TODO - replace magic number with cost to move
+        publisher.publish(EndTurnEvent(10))  # TODO - replace magic number with cost to move
 
     @staticmethod
     def process_skill(event):
@@ -84,9 +85,9 @@ class EntityHandler(Subscriber):
             # if no target go to target mode
             if target_x == 0 and target_y == 0:
                 log_string = f"Skill event has no target. Go to targeting mode."
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-                game_manager.create_event(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+                publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
                 return  # prevent further execution
 
             # get info about the tile and the skill requirements

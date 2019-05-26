@@ -4,6 +4,7 @@ import scipy.spatial
 
 from scripts.core.constants import LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 
 
 class EntityQuery:
@@ -99,8 +100,7 @@ class EntityQuery:
 
         """
         log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         game_map = self.manager.game_map
 
@@ -117,12 +117,12 @@ class EntityQuery:
         if not (tile_is_blocked or self.get_blocking_entity_at_location(start_entity.x + direction_x,
                                                                           start_entity.y + direction_y)):
             log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
             return direction_x, direction_y
         else:
             log_string = f"{start_entity.name} did NOT find a direct path to {target_entity.name}."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
             return start_entity.x, start_entity.y
 
@@ -138,15 +138,14 @@ class EntityQuery:
 
         """
         max_path_length = 25
-        from scripts.core.global_data import world_manager
+        from scripts.global_instances.managers import world_manager
         game_map = world_manager.game_map
         entities = world_manager.entity_existence.get_all_entities()
         entity_to_move = start_entity
         target = target_entity
 
         log_string = f"{entity_to_move.name} is looking for a path to {target.name} with a*"
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # Create a FOV map that has the dimensions of the map
         fov = tcod.map_new(game_map.width, game_map.height)
@@ -189,14 +188,14 @@ class EntityQuery:
             log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
             log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction "\
                 f"[{direction_x},{direction_y}]"
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string2))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string2))
 
         else:
             # no path found return no movement direction
             direction_x, direction_y = 0, 0
             log_string = f"{entity_to_move.name} did NOT find an a* path to {target.name}."
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # Delete the path to free memory
         tcod.path_delete(my_path)

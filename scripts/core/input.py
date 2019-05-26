@@ -1,7 +1,8 @@
 import pygame
 
 from scripts.core.constants import GameStates, TILE_SIZE, MessageEventTypes, TargetTypes
-from scripts.core.global_data import game_manager, ui_manager, world_manager, debug_manager
+from scripts.global_instances.managers import game_manager, ui_manager, world_manager, debug_manager
+from scripts.global_instances.event_hub import publisher
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ExitEvent, ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
@@ -195,7 +196,7 @@ def handle_player_turn_input(input_values):
                 if len(player.actor.known_skills) > skill_number:
                     if player.actor.known_skills[skill_number]:
                         skill_name = player.actor.known_skills[skill_number].name
-                        game_manager.create_event((UseSkillEvent(player, (0, 0), skill_name)))
+                        publisher.publish((UseSkillEvent(player, (0, 0), skill_name)))
 
     # movement
     direction_x = 0
@@ -239,14 +240,14 @@ def handle_player_turn_input(input_values):
             if not entity_blocking_movement and tile_blocking_movement:
                 # no entity in way but tile is blocked
                 msg = f"You can't do that there!"
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             elif entity_blocking_movement:
                 # entity blocking tile so attack
                 skill_name = player.actor.known_skills[0].name
-                game_manager.create_event((UseSkillEvent(player, (target_x, target_y), skill_name)))
+                publisher.publish((UseSkillEvent(player, (target_x, target_y), skill_name)))
             elif not entity_blocking_movement and not tile_blocking_movement:
                 # nothing in the way, time to move!
-                game_manager.create_event(MoveEvent(player, (target_x, target_y)))
+                publisher.publish(MoveEvent(player, (target_x, target_y)))
 
     # Skill usage
     if values["skill"] != -1:
@@ -286,19 +287,19 @@ def handle_player_turn_input(input_values):
 
                 # create a skill with a target, or not
                 skill_name = player.actor.known_skills[skill_number].name
-                game_manager.create_event((UseSkillEvent(player, (target_x, target_y), skill_name)))
+                publisher.publish((UseSkillEvent(player, (target_x, target_y), skill_name)))
 
             else:
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
         else:
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, "You haven't learnt that many skills yet."))
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, "You haven't learnt that many skills yet."))
 
     if values["wait"]:
         # TODO - add wait
         pass
 
     elif values["cancel"]:
-        game_manager.create_event(ExitEvent())
+        publisher.publish(ExitEvent())
 
 
 def handle_targeting_mode_input(input_values):
@@ -315,7 +316,7 @@ def handle_targeting_mode_input(input_values):
     # cancel out
     if values["cancel"]:
         previous_state = game_manager.previous_game_state
-        game_manager.create_event(ChangeGameStateEvent(previous_state))
+        publisher.publish(ChangeGameStateEvent(previous_state))
 
     # Selected tile
     direction_x = 0
@@ -375,15 +376,15 @@ def handle_targeting_mode_input(input_values):
             # if entity selected then use skill
             if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
                 skill_name = player.actor.known_skills[skill_number].name
-                game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_name)))
+                publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_name)))
 
         # pressed another skill so swap to that one
         elif values["skill"] != player.actor.known_skills.index(skill_being_targeted) :
             skill_name = player.actor.known_skills[skill_number].name
-            game_manager.create_event((UseSkillEvent(player, (0, 0), skill_name)))
+            publisher.publish((UseSkillEvent(player, (0, 0), skill_name)))
 
     if values["left_click"]:
         # if entity selected then use skill
         if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
-            game_manager.create_event((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
+            publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
                                                      skill_being_targeted.name)))

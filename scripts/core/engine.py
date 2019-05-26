@@ -2,12 +2,12 @@ import cProfile
 import io
 import logging
 import pstats
-
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.core.global_data import world_manager, game_manager, turn_manager, ui_manager, \
+from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, \
     debug_manager
+from scripts.global_instances.event_hub import event_hub
 from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
 
@@ -15,6 +15,7 @@ from scripts.core.initialisers import initialise_game
 # FIXME - skill use not working:
 #  - enter doesnt trigger skill
 #  -  3rd skill doesnt trigger overlay when targeting wrong target
+#  - can target self
 # TODO - implement skill handler (object, methods etc. (poss game man?))
 #  pass in skill and handle logic there. move creation of targeting overlay out of events.
 # TODO - create global tooltip method - some relevant code in old message log -
@@ -72,6 +73,7 @@ def game_loop():
             turn_manager.turn_holder.ai.take_turn()
 
         # HANDLE UPDATE
+        event_hub.update()
         game_manager.update()
         debug_manager.update()
         world_manager.update()

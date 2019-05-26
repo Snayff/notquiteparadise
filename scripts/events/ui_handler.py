@@ -1,5 +1,6 @@
 from scripts.core.constants import LoggingEventTypes, EventTopics, GameEventTypes, GameStates, EntityEventTypes
-from scripts.core.global_data import game_manager, ui_manager, world_manager
+from scripts.global_instances.event_hub import publisher
+from scripts.global_instances.managers import game_manager, ui_manager, world_manager
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
 
@@ -19,7 +20,7 @@ class UiHandler(Subscriber):
 
         # log that event has been received
         log_string = f"{self.name} received {event.topic}:{event.type}"
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         # if an entity acts then hide the entity info
         if event.topic == EventTopics.ENTITY:
@@ -60,4 +61,4 @@ class UiHandler(Subscriber):
         """
         ui_manager.entity_info.set_visibility(False)
         log_string = f"Entity info hidden."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))

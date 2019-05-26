@@ -1,4 +1,5 @@
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, LoggingEventTypes
@@ -27,8 +28,7 @@ class SelectedEntityInfo:
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"EntityInfo initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"EntityInfo initialised."))
 
     def draw(self, surface):
         """
@@ -172,6 +172,6 @@ class SelectedEntityInfo:
         Args:
             visible (bool): Visible or not
         """
-        from scripts.core.global_data import ui_manager
+        from scripts.global_instances.managers import ui_manager
         ui_manager.update_panel_visibility("entity_info", self, visible)
 

@@ -1,6 +1,7 @@
 import pygame
 
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.message_log import MessageLog
@@ -38,8 +39,7 @@ class UIManager:
         self.targeting_overlay = None  # type: TargetingOverlay
         self.skill_bar = None # type: SkillBar
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"UIManager initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"UIManager initialised."))
 
     def update(self):
         """
@@ -114,7 +114,7 @@ class UIManager:
 
         # debug doesnt use a panel so we check for the flag
         if debug_active:
-            from scripts.core.global_data import debug_manager
+            from scripts.global_instances.managers import debug_manager
             debug_manager.draw(self.main_surface)
 
         if "message_log" in self.visible_elements:

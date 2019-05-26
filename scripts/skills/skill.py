@@ -6,6 +6,7 @@ from scripts.data_loaders.getters import get_value_from_skill_json
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.skills.effects.change_terrain import ChangeTerrainSkillEffect
 from scripts.skills.effects.damage import DamageSkillEffect
 from scripts.world.entity import Entity
@@ -124,23 +125,22 @@ class Skill:
              bool: True if required target type found, else False.
 
         """
-        from scripts.core.global_data import game_manager
         log_string = f"Checking target for type '{self.required_target_type}'..."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # if we need a terrain type then pass the tiles terrain and get its type
         if self.required_target_type == TargetTypes.TERRAIN:
             target_type = self.get_target_type(tile.terrain)
             if target_type == TargetTypes.TERRAIN:
                 log_string = f"-> Target type OK! Type is '{target_type}'"
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
                 return True
             else:
                 log_string = f"-> Target type WRONG! Type is '{target_type}'"
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
                 msg = f"You can't do that there!"
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                 return False
 
         # if we need an entity type then pass the tiles entity and get its type
@@ -148,14 +148,14 @@ class Skill:
             target_type = self.get_target_type(tile.entity)
             if target_type == TargetTypes.ENTITY:
                 log_string = f"-> Target type OK! Type is '{target_type}'"
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
                 return True
             else:
                 log_string = f"-> Target type WRONG! Type is '{target_type}'"
-                game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
                 msg = f"You can't do that there!"
-                game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                 return False
 
         return False  # catch all
@@ -170,9 +170,8 @@ class Skill:
         Returns:
             bool: True if tile has all tags
         """
-        from scripts.core.global_data import game_manager
         log_string = f"Checking target for tags '{self.required_tags}'..."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         tags_checked = {}
 
@@ -183,14 +182,14 @@ class Skill:
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
             log_string = f"-> All tags OK! Tags checked are '{tags_checked}'"
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             return True
         else:
             log_string = f"-> Some tags WRONG! Tags checked are '{tags_checked}'"
-            game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
             msg = f"You can't do that there!"
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             return False
 
     def user_can_afford_cost(self):
@@ -207,9 +206,8 @@ class Skill:
         if entity.combatant.hp - self.resource_cost > 0:
             return True
         else:
-            from scripts.core.global_data import game_manager
             msg = f"It seems you're too poor to do that."
-            game_manager.create_event(MessageEvent(MessageEventTypes.BASIC, msg))
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             return False
 
     def use(self, target_pos):
@@ -233,8 +231,7 @@ class Skill:
                     effect.trigger(target)
 
         # end the turn
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(EndTurnEvent(self.time_cost))
+        publisher.publish(EndTurnEvent(self.time_cost))
 
     def pay_the_resource_cost(self):
         """
@@ -243,9 +240,8 @@ class Skill:
         entity = self.owner.owner  # owner is actor, actor's owner is entity
         entity.combatant.hp -= self.resource_cost
 
-        from scripts.core.global_data import game_manager
         log_string = f"{entity.name} paid {self.resource_cost} hp and has {entity.combatant.hp} left."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
     @staticmethod
     def get_target_tags_from_tag_string(tag):
@@ -353,17 +349,16 @@ class Skill:
         target = None
 
         if self.required_target_type == TargetTypes.ENTITY:
-            from scripts.core.global_data import world_manager
+            from scripts.global_instances.managers import world_manager
             target = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
 
         elif self.required_target_type == TargetTypes.TERRAIN:
-            from scripts.core.global_data import world_manager
+            from scripts.global_instances.managers import world_manager
             target_tile = world_manager.game_map.get_tile(target_x, target_y)
             target = target_tile.terrain
 
-        from scripts.core.global_data import game_manager
         log_string = f"Got target '{target.name}' for {self.name}."
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return target
 

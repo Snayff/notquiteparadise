@@ -1,4 +1,5 @@
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
@@ -21,8 +22,7 @@ class DebugManager:
 
         self.font = Font().debug
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"DebugManager initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"DebugManager initialised."))
 
     def update(self):
         """
@@ -42,7 +42,7 @@ class DebugManager:
 
         # render tile coords
         if self.show_tile_xy:
-            from scripts.core.global_data import world_manager
+            from scripts.global_instances.managers import world_manager
             panel = world_manager.game_map.panel
 
             for tile_x in range(0, panel.width, TILE_SIZE):
@@ -66,19 +66,19 @@ class DebugManager:
         self.messages = []
 
         if self.show_game_time:
-            from scripts.core.global_data import turn_manager
+            from scripts.global_instances.managers import turn_manager
             msg = f"The game time is: {turn_manager.time}"
             self.messages.append(msg)
 
         if self.show_fps:
-            from scripts.core.global_data import game_manager
+            from scripts.global_instances.managers import game_manager
             clock = game_manager.internal_clock
             fps = str(int(clock.get_fps()))
             msg = f"FPS : {fps}"
             self.messages.append(msg)
 
         if self.show_mouse_pos:
-            from scripts.core.global_data import ui_manager
+            from scripts.global_instances.managers import ui_manager
             pos = ui_manager.get_scaled_mouse_pos()
             msg = f"Abs mouse pos : {pos}"
             self.messages.append(msg)
@@ -99,7 +99,7 @@ class DebugManager:
                 self.messages.append(msg2)
 
         if self.show_game_state:
-            from scripts.core.global_data import game_manager
+            from scripts.global_instances.managers import game_manager
             msg = f"Game state: {game_manager.game_state}"
             self.messages.append(msg)
 

@@ -1,6 +1,7 @@
 import pygame
 
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, LoggingEventTypes
 from scripts.core.fonts import Font
@@ -56,11 +57,10 @@ class SkillBar:
             skill_number += 1
 
         # set self to be rendered
-        from scripts.core.global_data import ui_manager
+        from scripts.global_instances.managers import ui_manager
         ui_manager.update_panel_visibility("skill_bar", self, True)
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"SkillBar initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"SkillBar initialised."))
 
     def draw(self, surface):
         """
@@ -95,7 +95,7 @@ class SkillBar:
         """
 
         # update info
-        from scripts.core.global_data import world_manager
+        from scripts.global_instances.managers import world_manager
         player = world_manager.player
 
         # if the player has been init'd update skill bar

@@ -56,7 +56,7 @@ class MessageLog:
                            panel_border_colour)
 
         # set panel to be rendered
-        from scripts.core.global_data import ui_manager
+        from scripts.global_instances.managers import ui_manager
         ui_manager.update_panel_visibility("message_log", self,  True)
 
         # log info
@@ -67,8 +67,7 @@ class MessageLog:
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
 
     def draw(self, surface):
         """
@@ -197,8 +196,7 @@ class MessageLog:
             message_type(MessageEventTypes):
             message(str):
         """
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"{message} added to message log"))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"{message} added to message log"))
 
         self.message_list.append((message_type, message))
 
@@ -279,7 +277,7 @@ class MessageLog:
 
         for link in range(len(self.displayed_hyperlinks)):
 
-            from scripts.core.global_data import ui_manager
+            from scripts.global_instances.managers import ui_manager
             pos = ui_manager.get_relative_scaled_mouse_pos("message_log")
 
             # get the link rect

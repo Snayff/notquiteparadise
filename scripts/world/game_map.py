@@ -43,7 +43,7 @@ class GameMap:
                            panel_border_colour)
 
         # set panel to be rendered
-        from scripts.core.global_data import ui_manager
+        from scripts.global_instances.managers import ui_manager
         ui_manager.update_panel_visibility("game_map", self,  True)
 
     def draw(self, surface):

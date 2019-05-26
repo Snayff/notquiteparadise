@@ -1,7 +1,7 @@
-from scripts.core import global_data
 from scripts.core.constants import LoggingEventTypes, GameStates
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 
 
 class TurnManager:
@@ -21,18 +21,16 @@ class TurnManager:
         self.time = 0
         self.time_of_last_turn = 0
 
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"TurnManager initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"TurnManager initialised."))
 
     def build_new_turn_queue(self):
         """
         Build a new turn queue for all entities
         """
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"Building a new turn queue..."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Building a new turn queue..."))
 
         # create a turn queue from the entities list
-        from scripts.core.global_data import world_manager
+        from scripts.global_instances.managers import world_manager
         entities = world_manager.entity_existence.get_all_entities()
 
         for entity in entities:
@@ -47,7 +45,7 @@ class TurnManager:
         for entity, time in self.turn_queue.items():
             queue.append((entity.name, time))
 
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"-> Queue built. {queue}"))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"-> Queue built. {queue}"))
 
     def end_turn(self, spent_time):
         """
@@ -56,8 +54,7 @@ class TurnManager:
         Args:
             spent_time:
         """
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG, f"Ending {self.turn_holder.name}'s turn..."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Ending {self.turn_holder.name}'s turn..."))
 
         entity = self.turn_holder
 
@@ -70,8 +67,8 @@ class TurnManager:
         """
         Proceed to the next turn setting the next entity to act as the turn holder.
         """
-        from scripts.core.global_data import game_manager
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.INFO, f"Moving to the next turn..."))
+        from scripts.global_instances.managers import game_manager
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Moving to the next turn..."))
 
         if not self.turn_queue:
             self.build_new_turn_queue()
@@ -87,12 +84,12 @@ class TurnManager:
         self.time_of_last_turn = self.time
 
         # if turn holder is the player then update to player turn
-        from scripts.core.global_data import world_manager
+        from scripts.global_instances.managers import world_manager
         if self.turn_holder == world_manager.player:
-            game_manager.create_event(ChangeGameStateEvent(GameStates.PLAYER_TURN))
+            publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
         # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
         elif game_manager.game_state != GameStates.ENEMY_TURN:
-            game_manager.create_event(ChangeGameStateEvent(GameStates.ENEMY_TURN))
+            publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
-        game_manager.create_event(LoggingEvent(LoggingEventTypes.DEBUG,
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG,
                                                f"-> It is now {self.turn_holder.name}'s turn."))
