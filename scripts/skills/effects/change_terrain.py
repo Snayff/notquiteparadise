@@ -1,6 +1,7 @@
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, TargetTags
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.skills.effects.skill_effect import SkillEffect
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.terrain import Terrain
@@ -12,8 +13,9 @@ class ChangeTerrainSkillEffect(SkillEffect):
     SkillEffect to change the terrain of a tile
     """
 
-    def __init__(self, required_target, required_tags, new_terrain):
-        super().__init__("Manipulate Terrain", "This is the Manipulate Terrain effect", required_target, required_tags)
+    def __init__(self, owner,  required_target, required_tags, new_terrain):
+        super().__init__(owner, "Manipulate Terrain", "This is the Manipulate Terrain effect", required_target,
+                         required_tags)
 
         # get class from enum and store in self
         if new_terrain == TargetTags.FLOOR:
@@ -34,7 +36,9 @@ class ChangeTerrainSkillEffect(SkillEffect):
         tile = terrain_to_change.owner
         terrain = terrain_to_change
         starting_terrain_name = terrain.name
-        target_type = self.owner.get_target_type(terrain)
+
+        from scripts.global_instances.managers import game_manager
+        target_type = game_manager.skill_query.get_target_type(terrain)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:

@@ -1,6 +1,6 @@
 from scripts.core.constants import EntityEventTypes, LoggingEventTypes, GameStates
 from scripts.global_instances.event_hub import publisher
-from scripts.global_instances.managers import world_manager, turn_manager
+from scripts.global_instances.managers import world_manager, turn_manager, game_manager
 from scripts.events.game_events import EndTurnEvent, ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber, Event
@@ -79,7 +79,8 @@ class EntityHandler(Subscriber):
         """
 
         skill = event.skill
-        skill.pay_the_resource_cost()
+        world_manager.entity_action.pay_resource_cost(event.entity, event.skill.resource_type,
+                                                      event.skill.resource_cost)
         skill.use(event.target_pos)
 
     @staticmethod

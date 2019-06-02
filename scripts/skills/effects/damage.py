@@ -22,8 +22,8 @@ class DamageSkillEffect(SkillEffect):
         stat_to_target(PrimaryStatTypes):
     """
 
-    def __init__(self, damage, damage_type, required_target_type, required_tags, accuracy, stat_to_target):
-        super().__init__("Damage", "This is the damage effect", required_target_type, required_tags)
+    def __init__(self, owner, damage, damage_type, required_target_type, required_tags, accuracy, stat_to_target):
+        super().__init__(owner, "Damage", "This is the damage effect", required_target_type, required_tags)
         self.base_damage = damage
         self.damage_type = damage_type
         self.base_accuracy = accuracy
@@ -42,8 +42,8 @@ class DamageSkillEffect(SkillEffect):
         attacker = attacking_entity
         defender = defending_entity
         damage = 0
-
-        target_type = self.owner.get_target_type(defender)
+        from scripts.global_instances.managers import game_manager
+        target_type = game_manager.skill_query.get_target_type(defender)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:

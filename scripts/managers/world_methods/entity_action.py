@@ -5,8 +5,10 @@ from scripts.components.homeland import Homeland
 from scripts.components.combatant import Combatant
 from scripts.components.player import Player
 from scripts.components.trade import Trade
-from scripts.core.constants import TILE_SIZE
+from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.data_loaders.getters import get_value_from_actor_json
+from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.world.entity import Entity
 
 
@@ -110,3 +112,13 @@ class EntityAction:
             self.add_player(tile_x, tile_y, actor)
         else:
             self.add_entity(tile_x, tile_y, actor)
+
+    @staticmethod
+    def pay_resource_cost(entity, resource, cost):
+        """
+        Remove the resource cost from the using entity
+        """
+        entity.combatant.hp -= cost
+
+        log_string = f"{entity.name} paid {cost} hp and has {entity.combatant.hp} left."
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))

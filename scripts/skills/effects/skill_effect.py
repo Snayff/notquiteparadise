@@ -8,8 +8,8 @@ class SkillEffect:
     Base class for skill effects that make up the basis of skills.
     """
 
-    def __init__(self, name, description, required_target_type, required_tags):
-        self.owner = None
+    def __init__(self, owner, name, description, required_target_type, required_tags):
+        self.owner = owner
         self.name = name
         self.description = description
         self.required_target_type = required_target_type
