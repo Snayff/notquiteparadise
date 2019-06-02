@@ -24,8 +24,8 @@ def initialise_game():
     world_manager.create_new_map(50, 30)  # TODO remove magic numbers
     ui_manager.delayed_init()
 
-    world_manager.entity_existence.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
-    world_manager.entity_existence.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
+    world_manager.entity_action.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
+    world_manager.entity_action.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
     # TODO - remove when skill learning is in
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))

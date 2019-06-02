@@ -83,7 +83,7 @@ class EntityQuery:
             target_entity (Entity):
 
         Returns:
-            int: distance in terrain
+            int: distance in tiles
 
         """
         start_entity_position = [start_entity.x, start_entity.y]
@@ -102,8 +102,6 @@ class EntityQuery:
         log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-        game_map = self.manager.game_map
-
         direction_x = target_entity.x - start_entity.x
         direction_y = target_entity.y - start_entity.y
         distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
@@ -111,8 +109,8 @@ class EntityQuery:
         direction_x = int(round(direction_x / distance))
         direction_y = int(round(direction_y / distance))
 
-        tile_is_blocked = game_map.is_tile_blocking_movement(start_entity.x + direction_x, start_entity.y +
-                                                                                           direction_y)
+        tile_is_blocked = self.manager.game_map.is_tile_blocking_movement(start_entity.x + direction_x,
+                                                                                start_entity.y + direction_y)
 
         if not (tile_is_blocked or self.get_blocking_entity_at_location(start_entity.x + direction_x,
                                                                           start_entity.y + direction_y)):
@@ -140,7 +138,7 @@ class EntityQuery:
         max_path_length = 25
         from scripts.global_instances.managers import world_manager
         game_map = world_manager.game_map
-        entities = world_manager.entity_existence.get_all_entities()
+        entities = world_manager.entity_query.get_all_entities()
         entity_to_move = start_entity
         target = target_entity
 
@@ -200,3 +198,13 @@ class EntityQuery:
         # Delete the path to free memory
         tcod.path_delete(my_path)
         return direction_x, direction_y
+
+    def get_all_entities(self):
+        """
+        Get the list of all entities
+
+        Returns:
+            list: list of entities
+
+        """
+        return self.manager.entities

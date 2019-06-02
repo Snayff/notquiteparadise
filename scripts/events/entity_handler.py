@@ -27,7 +27,7 @@ class EntityHandler(Subscriber):
             self.process_move(event)
 
         if event.type == EntityEventTypes.SKILL:
-            log_string = f"-> Processing {event.entity.name}'s skill: {event.skill_name}."
+            log_string = f"-> Processing {event.entity.name}'s skill: {event.skill.name}."
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_skill(event)
 
@@ -78,28 +78,9 @@ class EntityHandler(Subscriber):
             event(EntityEvent): the event to process
         """
 
-        skill = event.entity.actor.get_skill_from_known_skills(event.skill_name)
-        target_x, target_y = event.target_pos
-
-        if skill:
-            # if no target go to target mode
-            if target_x == 0 and target_y == 0:
-                log_string = f"Skill event has no target. Go to targeting mode."
-                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-                publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
-                return  # prevent further execution
-
-            # get info about the tile and the skill requirements
-            tile = world_manager.game_map.get_tile(target_x, target_y)
-            is_required_type = skill.is_required_target_type(tile)
-            has_tags = skill.has_required_tags(tile)
-
-            # check we have everything we need and if so use the skill
-            if is_required_type and has_tags:
-                if skill.user_can_afford_cost():
-                    skill.pay_the_resource_cost()
-                    skill.use(event.target_pos)
+        skill = event.skill
+        skill.pay_the_resource_cost()
+        skill.use(event.target_pos)
 
     @staticmethod
     def process_die(event):

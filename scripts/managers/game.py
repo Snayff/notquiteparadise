@@ -2,8 +2,9 @@ import pygame
 
 from scripts.core.constants import GameStates, LoggingEventTypes, GAME_FPS
 from scripts.events.logging_events import LoggingEvent
-from scripts.events.pub_sub_hub import EventHub, Publisher
 from scripts.global_instances.event_hub import publisher
+from scripts.managers.game_methods.skill_action import SkillAction
+from scripts.managers.game_methods.skill_query import SkillQuery
 
 
 class GameManager:
@@ -13,8 +14,9 @@ class GameManager:
     def __init__(self):
         self.game_state = GameStates.GAME_INITIALISING
         self.previous_game_state = GameStates.GAME_INITIALISING
-        self.event_hub = EventHub()
         self.internal_clock = pygame.time.Clock()
+        self.skill_action = SkillAction(self)
+        self.skill_query = SkillQuery(self)
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
 
@@ -37,13 +39,4 @@ class GameManager:
         self.game_state = new_game_state
 
         log_string = f"Game_state updated to {self.game_state} from {self.previous_game_state}"
-        self.create_event(LoggingEvent(LoggingEventTypes.INFO, log_string))
-
-    def create_event(self, event):
-        """
-
-        Args:
-            event:
-        """
-        pub = Publisher(self.event_hub)
-        pub.publish(event)
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))

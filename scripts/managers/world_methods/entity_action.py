@@ -10,7 +10,7 @@ from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.world.entity import Entity
 
 
-class EntityExistence:
+class EntityAction:
     """
     Entity existence related methods and info.
 
@@ -20,7 +20,6 @@ class EntityExistence:
     """
     def __init__(self, manager):
         self.manager = manager
-        self.entities = [] # TODO - move to gamemap
 
     def add_entity(self, tile_x, tile_y, entity):
         """
@@ -30,7 +29,7 @@ class EntityExistence:
             tile_y:
             entity:
         """
-        self.entities.append(entity)
+        self.manager.entities.append(entity)
         tile = self.manager.game_map.get_tile(tile_x, tile_y)
         tile.set_entity(entity)
 
@@ -58,7 +57,7 @@ class EntityExistence:
         tile.remove_entity()
 
         # remove from entities list
-        self.entities.remove(entity)
+        self.manager.entities.remove(entity)
 
     def create_actor_entity(self, tile_x, tile_y, actor_name):
         """
@@ -111,13 +110,3 @@ class EntityExistence:
             self.add_player(tile_x, tile_y, actor)
         else:
             self.add_entity(tile_x, tile_y, actor)
-
-    def get_all_entities(self):
-        """
-        Get the list of all entities
-
-        Returns:
-            list: list of entities
-
-        """
-        return self.entities

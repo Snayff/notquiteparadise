@@ -8,7 +8,6 @@ from scripts.core.fonts import Font
 from scripts.skills.skill import Skill
 
 
-
 class TargetingOverlay:
     """
     The targeting overlay showing possible targets

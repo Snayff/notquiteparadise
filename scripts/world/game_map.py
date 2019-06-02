@@ -69,22 +69,6 @@ class GameMap:
         self.panel.draw_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
-    def is_tile_blocking_movement(self, tile_x, tile_y):
-        """
-
-        Args:
-            tile_x:
-            tile_y:
-
-        Returns:
-            bool:
-
-        """
-        if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
-            return self.tiles[tile_x][tile_y].blocks_movement
-        else:
-            return True
-
     def is_tile_blocking_sight(self, tile_x, tile_y):
         """
 
@@ -171,3 +155,18 @@ class GameMap:
         """
         return self.tiles[tile_x][tile_y]
 
+    def is_tile_blocking_movement(self, tile_x, tile_y):
+        """
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+
+        """
+        if 0 <= tile_x < self.width and 0 <= tile_y < self.height:
+            return self.tiles[tile_x][tile_y].blocks_movement
+        else:
+            return True

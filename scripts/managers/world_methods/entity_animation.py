@@ -4,6 +4,8 @@ import pygame
 from scripts.core.constants import TILE_SIZE, GAME_FPS, ENTITY_SPRITE_FRAME_DURATION
 
 class EntityAnimation:
+    # TODO - consider moving to UI manager and grouping all animations
+
     def __init__(self, manager):
         self.manager = manager
 

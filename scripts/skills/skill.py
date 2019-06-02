@@ -31,7 +31,7 @@ class Skill:
         self.description = skill_values["description"]  # the description of the skill
         self.icon = pygame.image.load("assets/skills/" + skill_values["icon"]).convert_alpha()  # icon showing theskill
 
-        # target info
+        # targeting info
         self.range = skill_values["range"]  # how far away the skill can be used
         self.required_target_type = self.get_target_type_from_string(skill_values["required_target_type"])
         required_tags = skill_values["required_tags"]

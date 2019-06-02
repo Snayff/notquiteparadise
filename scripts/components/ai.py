@@ -41,7 +41,7 @@ class BasicMonster:
                 log_string = f"-> {entity.name} decided to use {skill_value.name}."
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-                publisher.publish(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value.name))
+                publisher.publish(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value))
                 return None  # stop further processing in function
 
         log_string = f"-> {entity.name} found no possible attack."
@@ -50,7 +50,7 @@ class BasicMonster:
         # we can't attack so try to move closer
         # check target tile is valid
         in_bounds = world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y)
-        tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_tile_x, target_tile_y)
+        tile_blocking_movement = is_tile_blocking_movement(target_tile_x, target_tile_y)
         entity_blocking_movement = world_manager.entity_query.get_blocking_entity_at_location(target_tile_x, target_tile_y)
         if in_bounds and not tile_blocking_movement and not entity_blocking_movement:
             if direction_x != 0 or direction_y != 0:

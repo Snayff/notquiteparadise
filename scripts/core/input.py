@@ -195,8 +195,8 @@ def handle_player_turn_input(input_values):
             if skill_number != -1:
                 if len(player.actor.known_skills) > skill_number:
                     if player.actor.known_skills[skill_number]:
-                        skill_name = player.actor.known_skills[skill_number].name
-                        publisher.publish((UseSkillEvent(player, (0, 0), skill_name)))
+                        skill = player.actor.known_skills[skill_number]
+                        game_manager.skill_action.activate_targeting_mode(skill)
 
     # movement
     direction_x = 0
@@ -239,12 +239,12 @@ def handle_player_turn_input(input_values):
         if in_bounds:
             if not entity_blocking_movement and tile_blocking_movement:
                 # no entity in way but tile is blocked
-                msg = f"You can't do that there!"
+                msg = f"There's something in the way!"
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             elif entity_blocking_movement:
                 # entity blocking tile so attack
-                skill_name = player.actor.known_skills[0].name
-                publisher.publish((UseSkillEvent(player, (target_x, target_y), skill_name)))
+                skill = player.actor.known_skills[0]
+                publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
             elif not entity_blocking_movement and not tile_blocking_movement:
                 # nothing in the way, time to move!
                 publisher.publish(MoveEvent(player, (target_x, target_y)))
@@ -257,37 +257,15 @@ def handle_player_turn_input(input_values):
         if len(player.actor.known_skills) > skill_number:
             skill = player.actor.known_skills[skill_number]
             if skill:
-
                 mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
                 target_x, target_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
-                blocking_entity_at_location = world_manager.entity_query.get_blocking_entity_at_location(target_x,
-                                                                                                         target_y)
-                tile = world_manager.game_map.get_tile(target_x, target_y)
 
-                # do we need an entity?
-                if skill.required_target_type == TargetTypes.ENTITY:
-                    # is there an entity to target?
-                    if blocking_entity_at_location:
-                        # is the entity within range?
-                        distance_to_entity = world_manager.entity_query.get_chebyshev_distance_between_entities(player,
-                            blocking_entity_at_location)
-                        if distance_to_entity <= skill.range:
-                            target_x = blocking_entity_at_location.x
-                            target_y = blocking_entity_at_location.y
-                        else:
-                            target_x, target_y = 0, 0
-                    else:
-                        target_x, target_y = 0, 0
-
-                # can we select terrain?
-                elif skill.required_target_type == TargetTypes.TERRAIN:
-                    # TODO - clean up so only selecting correct terrain, in range
-                    target_x = tile.x
-                    target_y = tile.y
-
-                # create a skill with a target, or not
-                skill_name = player.actor.known_skills[skill_number].name
-                publisher.publish((UseSkillEvent(player, (target_x, target_y), skill_name)))
+                # create a skill with a target, or activate targeting mode
+                skill = player.actor.known_skills[skill_number]
+                if game_manager.skill_query.can_use_skill(player, (target_x, target_y), skill):
+                    publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
+                else:
+                    game_manager.skill_action.activate_targeting_mode(skill)
 
             else:
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
@@ -372,19 +350,19 @@ def handle_targeting_mode_input(input_values):
     if values["skill"] != -1:
 
         if values["skill"] == player.actor.known_skills.index(skill_being_targeted) or values["confirm"]:
+            # FIXME: confirm not triggering
 
             # if entity selected then use skill
             if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
-                skill_name = player.actor.known_skills[skill_number].name
-                publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_name)))
+                publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_being_targeted)))
 
         # pressed another skill so swap to that one
-        elif values["skill"] != player.actor.known_skills.index(skill_being_targeted) :
-            skill_name = player.actor.known_skills[skill_number].name
-            publisher.publish((UseSkillEvent(player, (0, 0), skill_name)))
+        elif values["skill"] != player.actor.known_skills.index(skill_being_targeted):
+            skill = player.actor.known_skills[skill_number]
+            game_manager.skill_action.activate_targeting_mode(skill)
 
     if values["left_click"]:
         # if entity selected then use skill
         if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
             publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                                     skill_being_targeted.name)))
+                                                     skill_being_targeted)))
