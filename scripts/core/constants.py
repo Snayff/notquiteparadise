@@ -108,7 +108,12 @@ class HitTypes(Enum):
     CRIT = auto()
     GRAZE_VALUE = 0
     HIT_VALUE = 100
-    CRIT_VALUE = 120
-    GRAZE_MODIFIER = 0.5
+    CRIT_VALUE = 130
+    GRAZE_MODIFIER = 0.6
     HIT_MODIFIER = 1
-    CRIT_MODIFIER = 1.3
+    CRIT_MODIFIER = 1.4
+
+
+class AfflictionTypes(Enum):
+    BANE = auto()
+    BOON = auto()

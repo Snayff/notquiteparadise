@@ -150,10 +150,10 @@ class SkillQuery():
         # Check if cost can be paid
         # TODO - take different resources for cost, not just hp
         if entity.combatant.hp - cost > 0:
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"{entity.name} can afford cost."))
             return True
         else:
-            msg = f"It seems you're too poor to do that."
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"{entity.name} cannot afford cost."))
             return False
 
     @staticmethod

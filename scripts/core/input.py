@@ -196,7 +196,7 @@ def handle_player_turn_input(input_values):
                 if len(player.actor.known_skills) > skill_number:
                     if player.actor.known_skills[skill_number]:
                         skill = player.actor.known_skills[skill_number]
-                        game_manager.skill_action.activate_targeting_mode(skill)
+                        publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
 
     # movement
     direction_x = 0
@@ -265,8 +265,12 @@ def handle_player_turn_input(input_values):
                 if game_manager.skill_query.can_use_skill(player, (target_x, target_y), skill):
                     publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
                 else:
-                    game_manager.skill_action.activate_targeting_mode(skill)
-
+                    # can't use skill, is it due to being too poor?
+                    if game_manager.skill_query.can_afford_cost(player, skill.resource_type, skill.resource_cost):
+                        publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+                    else:
+                        msg = f"It seems you're too poor to do that."
+                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             else:
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
         else:
@@ -364,5 +368,4 @@ def handle_targeting_mode_input(input_values):
     if values["left_click"]:
         # if entity selected then use skill
         if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
-            publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                                     skill_being_targeted)))
+            publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_being_targeted)))

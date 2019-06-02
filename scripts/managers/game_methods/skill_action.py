@@ -14,6 +14,7 @@ class SkillAction:
         Create the damage effect object
 
         Args:
+            skill ():
             effect (dict): dict of effect values, from json
 
         Returns:
@@ -62,13 +63,3 @@ class SkillAction:
 
         return created_effect
 
-    @staticmethod
-    def activate_targeting_mode(skill):
-        # TODO - should this be in UI manager?
-        """
-        Change game state to Targeting mode
-        Args:
-            skill ():
-        """
-
-        publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))

@@ -27,7 +27,8 @@ class Skill:
         # targeting info
         self.range = skill_values["range"]  # how far away the skill can be used
         from scripts.global_instances.managers import game_manager
-        self.required_target_type = game_manager.skill_query.get_target_type_from_string(skill_values["required_target_type"])
+        self.required_target_type = game_manager.skill_query.get_target_type_from_string(skill_values[
+                                                                                              "required_target_type"])
         required_tags = skill_values["required_tags"]
         self.required_tags = []
 
