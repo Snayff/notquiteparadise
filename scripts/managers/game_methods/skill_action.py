@@ -1,11 +1,18 @@
-from scripts.core.constants import GameStates
-from scripts.events.game_events import ChangeGameStateEvent
+import random
+
+from scripts.core.constants import LoggingEventTypes, SecondaryStatTypes
+from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
 from scripts.skills.effects.change_terrain import ChangeTerrainSkillEffect
 from scripts.skills.effects.damage import DamageSkillEffect
+from scripts.skills.skill import Skill
 
 
 class SkillAction:
+    """
+    Methods for taking actions with skills
+    """
     def __init__(self, manager):
         self.manager = manager
 
@@ -14,7 +21,7 @@ class SkillAction:
         Create the damage effect object
 
         Args:
-            skill ():
+            skill (Skill): the skill that will contain this effect
             effect (dict): dict of effect values, from json
 
         Returns:
@@ -32,7 +39,7 @@ class SkillAction:
         stat_to_target = query.get_secondary_stat_from_string(effect["stat_to_target"])
 
         # add effect object to skill
-        created_effect = DamageSkillEffect(skill, effect["damage"], damage_type, target_type, target_tags,
+        created_effect = DamageSkillEffect(skill, target_type, target_tags, effect["damage"], damage_type,
                                            effect["accuracy"], stat_to_target)
 
         return created_effect
@@ -42,7 +49,7 @@ class SkillAction:
         Create the change terrain effect object
 
         Args:
-            skill ():
+            skill (Skill): the skill that will contain this effect
             effect (dict): dict of effect values, from json
 
         Returns:
@@ -63,3 +70,60 @@ class SkillAction:
 
         return created_effect
 
+    def create_apply_affliction_effect(self, skill, effect):
+        """
+        Create the apply affliction effect object
+
+        Args:
+            skill (Skill): the skill that will contain this effect
+            effect (dict): dict of effect values, from json
+
+        Returns:
+            ApplyAfflictionEffect: The created effect object
+        """
+        query = self.manager.skill_query
+
+        # get tags from effects
+        target_tags = []
+        for tag in effect["required_tags"]:
+            target_tags.append(query.get_target_tags_from_tag_string(tag))
+
+        target_type = query.get_target_type_from_string(effect["required_target_type"])
+
+        # add effect object to skill
+        created_effect = ApplyAfflictionEffect(skill, target_type, target_tags)
+
+        return created_effect
+
+    @staticmethod
+    def calculate_to_hit_score(attacker, defender, skill_accuracy, stat_to_target):
+        """
+        Get the to hit score from the stats of both entities
+        Args:
+            attacker ():
+            defender ():
+            skill_accuracy ():
+            stat_to_target ():
+        """
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Get to hit scores..."))
+
+        roll = random.randint(1, 100)
+        modified_to_hit_score = attacker.combatant.secondary_stats.chance_to_hit + skill_accuracy + roll
+
+        # get dodge score
+        dodge_value = 0
+        if stat_to_target == SecondaryStatTypes.DODGE_SPEED:
+            dodge_value = defender.combatant.secondary_stats.dodge_speed
+        elif stat_to_target == SecondaryStatTypes.DODGE_TOUGHNESS:
+            dodge_value = defender.combatant.secondary_stats.dodge_toughness
+        elif stat_to_target == SecondaryStatTypes.DODGE_INTELLIGENCE:
+            dodge_value = defender.combatant.secondary_stats.dodge_intelligence
+
+        # mitigate the to hit
+        mitigated_to_hit_score = modified_to_hit_score - dodge_value
+
+        # log the info
+        log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        return mitigated_to_hit_score

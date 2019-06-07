@@ -55,6 +55,9 @@ class Skill:
             elif effect_name == "change_terrain":
                 created_effect = game_manager.skill_action.create_change_terrain_effect(self, effect)
 
+            elif effect_name == "apply_affliction":
+                created_effect = game_manager.skill_action.create_apply_affliction_effect(self, effect)
+
             # if we have an effect add it to internal list
             if created_effect:
                 self.effects.append(created_effect)

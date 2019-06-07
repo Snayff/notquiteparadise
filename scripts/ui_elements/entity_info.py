@@ -70,7 +70,7 @@ class SelectedEntityInfo:
         first_section_text.append(f"PRIMARY")
         first_section_text.append(f"Vigour: {entity.combatant.primary_stats.vigour}")
         first_section_text.append(f"Clout: {entity.combatant.primary_stats.clout}")
-        first_section_text.append(f"Subtlety: {entity.combatant.primary_stats.subtlety}")
+        first_section_text.append(f"skullduggery: {entity.combatant.primary_stats.skullduggery}")
         first_section_text.append(f"Bustle: {entity.combatant.primary_stats.bustle}")
         first_section_text.append(f"Exactitude: {entity.combatant.primary_stats.exactitude}")
 

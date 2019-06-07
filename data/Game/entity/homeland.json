@@ -4,7 +4,7 @@
         "description": "A aristo pirate description",
         "vigour": 1,
         "clout": 3,
-        "subtlety": 0,
+        "skullduggery": 0,
         "bustle": 1,
         "exactitude": -1
     },
@@ -13,7 +13,7 @@
         "description": "A bog refugee description",
         "vigour": -2,
         "clout": 1,
-        "subtlety": 2,
+        "skullduggery": 2,
         "bustle": 1,
         "exactitude": 1
     }

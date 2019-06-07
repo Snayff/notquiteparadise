@@ -22,7 +22,7 @@ class Homeland:
         self.description = values["description"]
         self.vigour = values["vigour"]
         self.clout = values["clout"]
-        self.subtlety = values["subtlety"]
+        self.skullduggery = values["skullduggery"]
         self.bustle = values["bustle"]
         self.exactitude = values["exactitude"]
 

@@ -1,5 +1,5 @@
 from scripts.core.constants import TargetTypes, LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
-    PrimaryStatTypes, SecondaryStatTypes
+    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
@@ -225,8 +225,8 @@ class SkillQuery():
             return PrimaryStatTypes.VIGOUR
         elif primary_stat == "clout":
             return PrimaryStatTypes.CLOUT
-        elif primary_stat == "subtlety":
-            return PrimaryStatTypes.SUBTLETY
+        elif primary_stat == "SKULLDUGGERY":
+            return PrimaryStatTypes.SKULLDUGGERY
         elif primary_stat == "bustle":
             return PrimaryStatTypes.BUSTLE
         elif primary_stat == "exactitude":
@@ -294,3 +294,20 @@ class SkillQuery():
             target_type = TargetTypes.ENTITY
 
         return target_type
+
+    @staticmethod
+    def get_hit_type(to_hit_score):
+        """
+        Get the hit type from the to hit score
+        Args:
+            to_hit_score:
+
+        Returns:
+            HitTypes:
+        """
+        if to_hit_score >= HitValues.CRIT.value:
+            return HitTypes.CRIT
+        elif to_hit_score >= HitValues.HIT.value:
+            return HitTypes.HIT
+        else:
+            return HitTypes.GRAZE

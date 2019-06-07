@@ -4,7 +4,7 @@
 		"description" : "A herraculen description",
 		"vigour": 0,
 		"clout": 0,
-		"subtlety": 0,
+		"skullduggery": 0,
         "bustle": 0,
         "exactitude": 0
     },
@@ -13,7 +13,7 @@
     "description" : "A goblinn description",
     "vigour": 0,
     "clout": 0,
-    "subtlety": 0,
+    "skullduggery": 0,
     "bustle": 0,
     "exactitude": 0
     }

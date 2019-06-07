@@ -85,7 +85,7 @@ class DamageTypes(Enum):
 class PrimaryStatTypes(Enum):
     VIGOUR = auto()
     CLOUT = auto()
-    SUBTLETY = auto()
+    SKULLDUGGERY = auto()
     BUSTLE = auto()
     EXACTITUDE = auto()
 
@@ -106,14 +106,48 @@ class HitTypes(Enum):
     GRAZE = auto()
     HIT = auto()
     CRIT = auto()
-    GRAZE_VALUE = 0
-    HIT_VALUE = 100
-    CRIT_VALUE = 130
-    GRAZE_MODIFIER = 0.6
-    HIT_MODIFIER = 1
-    CRIT_MODIFIER = 1.4
+
+
+class HitValues(Enum):
+    """
+    The value of each hit type. The value is the starting amount.
+    """
+    GRAZE = 0
+    HIT = 100
+    CRIT = 130
+
+
+class HitModifiers(Enum):
+    """
+    The modifier for each hit type
+    """
+    GRAZE = 0.6
+    HIT = 1
+    CRIT = 1.4
 
 
 class AfflictionTypes(Enum):
+    """
+    Boon or Bane
+    """
     BANE = auto()
     BOON = auto()
+
+
+class Afflictions(Enum):
+    """
+    Various types of afflictions
+    """
+    # BANES
+    MYOPIC = auto()
+    SLUGGISH = auto()
+    SHAKEN = auto()
+    EXPOSED = auto()
+    RUPTURED = auto()
+    FLAMING = auto()
+    EXHAUSTED = auto()
+    HOBBLED = auto()
+    DISTRACTED = auto()
+    TORMENTED = auto()
+
+    # BOONS

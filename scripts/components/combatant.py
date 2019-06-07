@@ -53,19 +53,19 @@ class Combatant:
             return stat_total + base_amount
 
         @property
-        def subtlety(self):
+        def skullduggery(self):
             base_amount = 5
             entity = self.owner.owner
             stat_total = 0
 
             if entity.race:
-                stat_total += entity.race.subtlety
+                stat_total += entity.race.skullduggery
 
             if entity.trade:
-                stat_total += entity.trade.subtlety
+                stat_total += entity.trade.skullduggery
 
             if entity.homeland:
-                stat_total += entity.homeland.subtlety
+                stat_total += entity.homeland.skullduggery
 
             return stat_total + base_amount
 
@@ -140,12 +140,12 @@ class Combatant:
         @property
         def dodge_intelligence(self):
             base_amount = 5
-            subtlety = self.owner.primary_stats.subtlety
+            skullduggery = self.owner.primary_stats.skullduggery
             subtlety_modifier = 3
             exactitude = self.owner.primary_stats.exactitude
             exactitude_modifier = 1
 
-            stat_total = (subtlety * subtlety_modifier) + (exactitude * exactitude_modifier) + base_amount
+            stat_total = (skullduggery * subtlety_modifier) + (exactitude * exactitude_modifier) + base_amount
             return stat_total
 
         @property
@@ -166,10 +166,10 @@ class Combatant:
 
         @property
         def resist_elemental(self):
-            subtlety = self.owner.primary_stats.subtlety
+            skullduggery = self.owner.primary_stats.skullduggery
             subtlety_modifier = 2
 
-            stat_total = (subtlety * subtlety_modifier)
+            stat_total = (skullduggery * subtlety_modifier)
             return stat_total
 
         @property
@@ -202,8 +202,8 @@ class Combatant:
 
         @property
         def status_length(self):
-            subtlety = self.owner.primary_stats.subtlety
+            skullduggery = self.owner.primary_stats.skullduggery
             subtlety_modifier = 3
 
-            stat_total = (subtlety * subtlety_modifier)
+            stat_total = (skullduggery * subtlety_modifier)
             return stat_total

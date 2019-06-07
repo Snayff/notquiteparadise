@@ -13,8 +13,8 @@ class ChangeTerrainSkillEffect(SkillEffect):
     SkillEffect to change the terrain of a tile
     """
 
-    def __init__(self, owner,  required_target, required_tags, new_terrain):
-        super().__init__(owner, "Manipulate Terrain", "This is the Manipulate Terrain effect", required_target,
+    def __init__(self, owner,  required_target_type, required_tags, new_terrain):
+        super().__init__(owner, "Manipulate Terrain", "This is the Manipulate Terrain effect", required_target_type,
                          required_tags)
 
         # get class from enum and store in self

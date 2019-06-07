@@ -17,7 +17,7 @@ class Race:
         self.description = values["description"]
         self.vigour = values["vigour"]
         self.clout = values["clout"]
-        self.subtlety = values["subtlety"]
+        self.skullduggery = values["SKULLDUGGERY"]
         self.bustle = values["bustle"]
         self.exactitude = values["exactitude"]
 

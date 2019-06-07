@@ -18,7 +18,7 @@
                     "damage": 15,
                     "damage_type": "blunt",
                     "accuracy": 5,
-                    "stat_to_target": "subtlety"
+                    "stat_to_target": "skullduggery"
                 }
         ]
     },
