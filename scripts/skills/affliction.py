@@ -1,54 +1,57 @@
-from scripts.core.constants import AfflictionTypes, Afflictions
+
+from scripts.core.constants import AfflictionCategory, AfflictionTypes
 
 
 class Affliction():
+    """
+    Affliction, either Bane or Boon. Applies a periodic effect to an entity.
+    """
     # TODO -
-    #  Attempt to apply and check if successful
-    #  Log the affliction on the entity
     #  Log the affliction on a central list
     #  create central method of managing afflictions
     #       Trigger the affliction's effects (skill effects) at required intervals
     #          decrement time remaining
     #          remove affliction if expired
 
-    def __init__(self, affliction_type, affliction, duration):
-        self.affliction_type = affliction_type  # type: AfflictionTypes
-        self.affliction = affliction
+    def __init__(self, affliction_category, affliction_type, duration):
+        self.affliction_category = affliction_category  # type: AfflictionCategory
+        self.affliction_type = affliction_type
         self.duration = duration
-        self.name = self.get_affliction_name(affliction)
+        self.name = self.get_affliction_name(affliction_type)
+        self.trigger_event = trigger_event
 
     @staticmethod
     def get_affliction_name(affliction):
         """
-        Get affliction name from Afflictions Enum
+        Get affliction name from AfflictionTypes
         Args:
-            affliction (Afflictions):
+            affliction (AfflictionTypes):
 
         Returns:
             string: Name of affliction
         """
         # TODO - add remaining types
-        if affliction == Afflictions.MYOPIC:
+        if affliction == AfflictionTypes.MYOPIC:
             name = "Myopic"
-        elif affliction == Afflictions.SLUGGISH:
+        elif affliction == AfflictionTypes.SLUGGISH:
             name = "Sluggish"
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
-        elif affliction == Afflictions:
+        elif affliction == AfflictionTypes:
             name = ""
 
         return name

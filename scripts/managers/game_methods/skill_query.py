@@ -1,3 +1,4 @@
+
 from scripts.core.constants import TargetTypes, LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
     PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes
 from scripts.events.logging_events import LoggingEvent
@@ -5,9 +6,13 @@ from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.world.entity import Entity
 from scripts.world.terrain.terrain import Terrain
+from scripts.world.tile import Tile
 
 
 class SkillQuery():
+    """
+    Methods for querying skills and skill related info.
+    """
     def __init__(self, manager):
         self.manager = manager
 
@@ -115,6 +120,7 @@ class SkillQuery():
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         tags_checked = {}
+
 
         # assess all tags
         for tag in required_tags:

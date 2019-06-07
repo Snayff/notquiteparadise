@@ -126,7 +126,7 @@ class HitModifiers(Enum):
     CRIT = 1.4
 
 
-class AfflictionTypes(Enum):
+class AfflictionCategory(Enum):
     """
     Boon or Bane
     """
@@ -134,7 +134,7 @@ class AfflictionTypes(Enum):
     BOON = auto()
 
 
-class Afflictions(Enum):
+class AfflictionTypes(Enum):
     """
     Various types of afflictions
     """

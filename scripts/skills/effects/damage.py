@@ -90,12 +90,12 @@ class DamageSkillEffect(SkillEffect):
             log_string = f"-> target type incorrect; selected:{target_type}, needed:{self.required_target_type}"
             publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
-    def calculate_damage(self, attacker, defender, hit_type):
+    def calculate_damage(self, attacking_entity, defending_entity, hit_type):
         """
         Work out the damage to be dealt
         Args:
-            attacker(Entity):
-            defender(Entity):
+            attacking_entity(Entity):
+            defending_entity(Entity):
             hit_type(HitTypes):
         Returns:
             int: damage to be dealt
@@ -107,11 +107,11 @@ class DamageSkillEffect(SkillEffect):
         # get resistance value
         resist_value = 0
         if self.damage_type == DamageTypes.PIERCE:
-            resist_value = defender.combatant.secondary_stats.resist_pierce
+            resist_value = defending_entity.combatant.secondary_stats.resist_pierce
         elif self.damage_type == DamageTypes.BLUNT:
-            resist_value = defender.combatant.secondary_stats.resist_blunt
+            resist_value = defending_entity.combatant.secondary_stats.resist_blunt
         elif self.damage_type == DamageTypes.ELEMENTAL:
-            resist_value = defender.combatant.secondary_stats.resist_elemental
+            resist_value = defending_entity.combatant.secondary_stats.resist_elemental
 
         # mitigate damage with defence
         mitigated_damage = initial_damage - resist_value
@@ -134,12 +134,12 @@ class DamageSkillEffect(SkillEffect):
         return modified_damage
 
     @staticmethod
-    def apply_damage(defender, damage):
+    def apply_damage(defending_entity, damage):
         """
         Apply damage to an entity
 
         Args:
-            defender(Entity):
+            defending_entity(Entity):
             damage(int):
         """
-        defender.combatant.hp -= damage
+        defending_entity.combatant.hp -= damage
