@@ -1,5 +1,6 @@
 
 from scripts.core.constants import AfflictionCategory, AfflictionTypes, AfflictionTriggers
+from scripts.data_loaders.getters import get_value_from_afflictions_json
 
 
 class Affliction:
@@ -16,7 +17,7 @@ class Affliction:
     def __init__(self, name, duration):
         from scripts.global_instances.managers import game_manager
         action = game_manager.affliction_action
-        values = action.get_value_from_afflictions_json(name)
+        values = get_value_from_afflictions_json(name)
         self.name = name
         self.description = values["description"]
         self.icon = values["icon"]
@@ -42,4 +43,12 @@ class Affliction:
             if created_effect:
                 self.affliction_effects.append(created_effect)
 
+    def trigger(self):
+        """
+        Trigger all affliction effects and decrement duration by 1
+        """
+        for effect in self.affliction_effects:
+            effect.trigger(self.affected_entity)
+
+        self.duration -= 1
 

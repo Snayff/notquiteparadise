@@ -8,7 +8,7 @@ from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.entity import Entity
 
 
-class ApplyAfflictionEffect(SkillEffect):
+class ApplyAfflictionSkillEffect(SkillEffect):
     """
     SkillEffect to apply an Affliction to an Entity
     """
@@ -62,6 +62,9 @@ class ApplyAfflictionEffect(SkillEffect):
                         if hit_type == HitTypes.CRIT:
                             self.affliction.duration *= HitModifiers.CRIT.value
 
+                        msg = f"{defender.name} succumbed to {self.affliction.name}."
+                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
                         self.apply_affliction(defender)
 
                 # Just apply the BOON
@@ -78,5 +81,9 @@ class ApplyAfflictionEffect(SkillEffect):
         log_string = f"Applying {self.affliction.name} affliction to {defending_entity.name}."
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
+        # indicate, in the affliction, who it is on
         self.affliction.affected_entity = defending_entity
-        defending_entity.afflictions.append(self.affliction)
+
+        # add affliction to the central list
+        from scripts.global_instances.managers import game_manager
+        game_manager.affliction_action.add_affliction(self.affliction)

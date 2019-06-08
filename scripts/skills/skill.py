@@ -3,6 +3,7 @@ import pygame
 from scripts.data_loaders.getters import get_value_from_skill_json
 from scripts.events.game_events import EndTurnEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
 from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
 from scripts.skills.skill_effects.damage import DamageSkillEffect
 
@@ -43,7 +44,7 @@ class Skill:
         self.cooldown = skill_values["cooldown"]  # how many rounds to wait between uses
 
         # skill_effects info
-        effects = skill_values["skill_effects"]  # list of skill_effects to process
+        effects = skill_values["effects"]  # list of skill_effects to process
         self.effects = []
 
         for effect in effects:
@@ -84,6 +85,9 @@ class Skill:
 
                 elif type(effect) is ChangeTerrainSkillEffect:
                     effect.trigger(target)
+
+                elif type(effect) is ApplyAfflictionSkillEffect:
+                    effect.trigger(entity, target)
 
         # end the turn
         publisher.publish(EndTurnEvent(self.time_cost))

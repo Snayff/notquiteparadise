@@ -4,8 +4,7 @@ import random
 from scripts.core.constants import LoggingEventTypes, SecondaryStatTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.managers.game import GameManager
-from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionEffect
+from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
 from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
 from scripts.skills.skill_effects.damage import DamageSkillEffect
 from scripts.skills.skill import Skill
@@ -81,7 +80,7 @@ class SkillAction:
             effect (dict): dict of effect values, from json
 
         Returns:
-            ApplyAfflictionEffect: The created effect object
+            ApplyAfflictionSkillEffect: The created effect object
         """
         query = self.manager.skill_query
 
@@ -102,7 +101,7 @@ class SkillAction:
         affliction = self.manager.affliction_action.create_affliction(affliction_name, duration)
 
         # add effect object to skill
-        created_effect = ApplyAfflictionEffect(skill, target_type, target_tags, affliction, accuracy, stat_to_target)
+        created_effect = ApplyAfflictionSkillEffect(skill, target_type, target_tags, affliction, accuracy, stat_to_target)
 
         return created_effect
 

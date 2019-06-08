@@ -95,6 +95,14 @@ class SelectedEntityInfo:
         second_section_column_two_text.append(f"Resist elemental: "
                                               f"{entity.combatant.secondary_stats.resist_elemental}")
 
+        from scripts.global_instances.managers import game_manager
+        afflictions = game_manager.affliction_action.get_afflictions_for_entity(entity)
+        affliction_names = []
+        for affliction in afflictions:
+            affliction_names.append(affliction.name)
+        second_section_column_two_text.append(f"Afflicted by: "
+                                              f"{affliction_names}")
+
         # panel background
         self.panel.draw_background()
 

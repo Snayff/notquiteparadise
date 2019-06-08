@@ -30,6 +30,7 @@ def initialise_game():
     # TODO - remove when skill learning is in
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "bring_down_the_mountain"))
+    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "burn_the_deck"))
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player
