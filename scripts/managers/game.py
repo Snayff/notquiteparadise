@@ -26,10 +26,14 @@ class GameManager:
         """
         Update the GameManager:
             internal_clock ticks
+            AfflictionAction update
         """
 
         # set frame rate
         self.internal_clock.tick(GAME_FPS)
+
+        # remove expired afflictions
+        self.affliction_action.cleanse_expired_afflictions()
 
     def update_game_state(self, new_game_state):
         """

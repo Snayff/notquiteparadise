@@ -53,9 +53,9 @@ class DamageAfflictionEffect(AfflictionEffect):
             if defender.combatant.hp <= 0:
                 publisher.publish(DieEvent(defender))
 
-            else:
-                msg = f" {defender.name} resists damage from {self.owner.name}."
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+        else:
+            msg = f" {defender.name} resists damage from {self.owner.name}."
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
     def calculate_damage(self, defending_entity, hit_type):
         """

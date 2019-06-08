@@ -78,6 +78,10 @@ class DamageSkillEffect(SkillEffect):
                         if defender.combatant.hp <= 0:
                             publisher.publish(DieEvent(defender))
 
+                    else:
+                        msg = f" {defender.name} resists damage from {self.owner.name}."
+                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
             else:
                 msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))

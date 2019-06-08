@@ -1,5 +1,7 @@
 
-from scripts.core.constants import AfflictionTypes, AfflictionCategory, AfflictionTriggers
+from scripts.core.constants import AfflictionTypes, AfflictionCategory, AfflictionTriggers, LoggingEventTypes
+from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 from scripts.skills.affliction import Affliction
 from scripts.skills.affliction_effects.damage import DamageAfflictionEffect
 
@@ -13,10 +15,12 @@ class AfflictionAction:
         self.active_afflictions = []
         self.expired_afflictions = []
 
-    def update(self):
+    def cleanse_expired_afflictions(self):
         """
         Delete expired afflictions
         """
+        removed_afflictions = []
+
         # check if affliction has expired
         for affliction in self.active_afflictions:
             if affliction.duration <= 0:
@@ -24,12 +28,26 @@ class AfflictionAction:
                 self.expired_afflictions.append(affliction)
 
         # remove all expired afflictions from the active list and delete each instance
-        # pop actually removes the element. So you keep looking at element 0 and popping it
+        # pop removes the element so we keep looking at element 0 and popping it
         index = 0
         while index < len(self.expired_afflictions):
+            # get the affliction
             affliction = self.expired_afflictions.pop(index)
+
+            # remove from active list
             self.active_afflictions.remove(affliction)
+
+            # add info to logging
+            removed_afflictions.append(f"{affliction.affected_entity}:{affliction.name}")
+
+            # delete the instance
             del affliction
+
+        # if we removed anything log it
+        if removed_afflictions:
+            log_string = f"Removed the following afflictions: {removed_afflictions}"
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
 
     def create_affliction(self, affliction_name, duration):
         affliction = Affliction(affliction_name, duration)
@@ -106,10 +124,10 @@ class AfflictionAction:
     def add_affliction(self, affliction):
         self.active_afflictions.append(affliction)
 
-    def trigger_afflictions(self, affliction_trigger):
+    def trigger_afflictions_on_entity(self, affliction_trigger, entity):
 
         for affliction in self.active_afflictions:
-            if affliction.trigger_event == affliction_trigger:
+            if affliction.trigger_event == affliction_trigger and affliction.affected_entity == entity:
                 affliction.trigger()
 
     def get_afflictions_for_entity(self, entity):

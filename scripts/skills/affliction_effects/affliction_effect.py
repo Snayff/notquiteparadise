@@ -2,6 +2,7 @@
 from scripts.core.constants import LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.skills.affliction import Affliction
 
 
 class AfflictionEffect:
@@ -11,7 +12,7 @@ class AfflictionEffect:
     """
 
     def __init__(self, owner, name, description):
-        self.owner = owner
+        self.owner = owner  # type: Affliction
         self.name = name
         self.description = description
 

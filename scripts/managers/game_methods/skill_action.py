@@ -101,7 +101,8 @@ class SkillAction:
         affliction = self.manager.affliction_action.create_affliction(affliction_name, duration)
 
         # add effect object to skill
-        created_effect = ApplyAfflictionSkillEffect(skill, target_type, target_tags, affliction, accuracy, stat_to_target)
+        created_effect = ApplyAfflictionSkillEffect(skill, target_type, target_tags, affliction, accuracy,
+                                                    stat_to_target)
 
         return created_effect
 

@@ -19,7 +19,8 @@ class LoggingHandler(Subscriber):
             # 'a' - open for writing, appending to the end of the file if it exists
 
         logging.basicConfig(filename=self.log_file_name, filemode=self.file_mode, level=self.log_level,
-                            format="%(asctime)s|%(levelname)s|%(message)s")
+                            format="%(asctime)s|%(levelname)-8s| %(message)s")
+                            #format = %(asctime)s - %(levelname)-8s - %(name)s - %(message)s
         logging.Formatter.converter = time.gmtime
 
 

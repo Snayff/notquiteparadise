@@ -50,15 +50,15 @@
         "required_tags": ["other_entity"],
         "range": 4,
         "resource_type": "mana",
-        "resource_cost": 10,
-        "time_cost": 20,
+        "resource_cost": 1,
+        "time_cost": 1,
         "cooldown": 2,
         "effects": [
                 {
                     "name": "damage",
                     "required_target_type": "entity",
                     "required_tags": ["other_entity"],
-                    "damage": 15,
+                    "damage": 5,
                     "damage_type": "blunt",
                     "accuracy": 5,
                     "stat_to_target": "skullduggery"
@@ -67,7 +67,7 @@
                     "name": "apply_affliction",
                     "required_target_type": "entity",
                     "required_tags": ["other_entity"],
-                    "accuracy": 5,
+                    "accuracy": 100,
                     "stat_to_target": "skullduggery",
                     "affliction_name": "flaming",
                     "duration": 3

@@ -58,11 +58,16 @@ class ApplyAfflictionSkillEffect(SkillEffect):
                         msg = f"{defender.name} resisted {self.affliction.name}."
                         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                     else:
+                        hit_msg = ""
+
                         # check if there was a crit and if so modify the duration of the affliction
                         if hit_type == HitTypes.CRIT:
-                            self.affliction.duration *= HitModifiers.CRIT.value
+                            duration = self.affliction.duration
+                            duration *= HitModifiers.CRIT.value
+                            self.affliction.duration = int(duration)
+                            hit_msg = f"a critical "
 
-                        msg = f"{defender.name} succumbed to {self.affliction.name}."
+                        msg = f"{defender.name} succumbed to {hit_msg}{self.affliction.name}."
                         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
                         self.apply_affliction(defender)
@@ -78,7 +83,8 @@ class ApplyAfflictionSkillEffect(SkillEffect):
         Args:
             defending_entity (Entity):
         """
-        log_string = f"Applying {self.affliction.name} affliction to {defending_entity.name}."
+        log_string = f"Applying '{self.affliction.name}' affliction to {defending_entity.name} with duration of " \
+            f"{self.affliction.duration}."
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         # indicate, in the affliction, who it is on

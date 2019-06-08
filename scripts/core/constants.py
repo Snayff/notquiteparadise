@@ -167,11 +167,11 @@ class AfflictionTriggers(Enum):
     """
     When to trigger the affliction
     """
-    PASSIVE = auto()
-    END_TURN = auto()
-    MOVE = auto()
-    DEAL_DAMAGE = auto()
-    END_ROUND = auto()
+    PASSIVE = auto()  # always applying effects
+    END_TURN = auto()  # apply at end of round turn
+    MOVE = auto()  # apply if afflicted entity moves
+    DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
+    END_ROUND = auto()  # apply at the end of the round
 
 
 class AfflictionEffectTypes(Enum):

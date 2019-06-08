@@ -8,7 +8,7 @@
         "affliction_effects": [
             {
                 "name": "damage",
-                "damage": 15,
+                "damage": 1,
                 "damage_type": "pierce",
                 "stat_to_target": "bustle"
             }

@@ -1,18 +1,14 @@
 
-from scripts.core.constants import AfflictionCategory, AfflictionTypes, AfflictionTriggers
+from scripts.core.constants import AfflictionCategory, AfflictionTypes, AfflictionTriggers, LoggingEventTypes
 from scripts.data_loaders.getters import get_value_from_afflictions_json
+from scripts.events.logging_events import LoggingEvent
+from scripts.global_instances.event_hub import publisher
 
 
 class Affliction:
     """
     Affliction, either Bane or Boon. Applies a periodic effect to an entity.
     """
-    # TODO -
-    #  Log the affliction on a central list
-    #  create central method of managing afflictions
-    #       Trigger the affliction's skill_effects (skill skill_effects) at required intervals
-    #          decrement time remaining
-    #          remove affliction if expired
 
     def __init__(self, name, duration):
         from scripts.global_instances.managers import game_manager
@@ -47,8 +43,13 @@ class Affliction:
         """
         Trigger all affliction effects and decrement duration by 1
         """
+        log_string = f"Triggering effects in {self.name}"
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+
         for effect in self.affliction_effects:
             effect.trigger(self.affected_entity)
 
         self.duration -= 1
+        log_string = f"Duration reduced to: {self.duration}"
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
