@@ -23,8 +23,8 @@ class Actor:
             skill_tree_name(str): Name of the skill tree the skill is in
             skill_name(str): Name of the skill to learn
         """
-        skill = Skill(skill_tree_name, skill_name)
-        skill.owner = self
+        from scripts.global_instances.managers import game_manager
+        skill = game_manager.skill_action.create_skill(self, skill_tree_name, skill_name)
 
         # place skill at next free slot
         self.known_skills.append(skill)

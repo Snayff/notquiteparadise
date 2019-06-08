@@ -1,0 +1,17 @@
+{
+    "flaming": {
+        "name": "flaming",
+        "description": "This is the flaming affliction. It does damage.",
+        "icon": "placeholder/icon_00.png",
+        "category": "bane",
+        "trigger_event": "end_turn",
+        "affliction_effects": [
+            {
+                "name": "damage",
+                "damage": 15,
+                "damage_type": "pierce",
+                "stat_to_target": "bustle"
+            }
+        ]
+    }
+}

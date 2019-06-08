@@ -104,10 +104,22 @@ def get_value_from_skill_json(skill_tree_name, skill_name):
     Returns:
 
     """
-    if skill_tree_name != "basic_attack":
-        skill_tree_name += '_skills'
     with open('Data/game/skills/' + skill_tree_name + '.json') as file:
         data = json.load(file)
 
         return data[skill_name]
 
+
+def get_value_from_afflictions_json(affliction_name):
+    """
+    Get all values for an affliction
+    Args:
+        affliction_name ():
+
+    Returns:
+
+    """
+    with open('Data/game/skills/afflictions.json') as file:
+        data = json.load(file)
+
+        return data[affliction_name]

@@ -1,5 +1,5 @@
 from scripts.managers.world_methods.game_map_query import is_tile_blocking_movement
-from scripts.skills.effects.skill_effect import SkillEffect
+from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.game_map import is_tile_blocking_movement
 
 

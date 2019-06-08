@@ -3,6 +3,7 @@ import pygame
 from scripts.core.constants import GameStates, LoggingEventTypes, GAME_FPS
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.managers.game_methods.affliction_action import AfflictionAction
 from scripts.managers.game_methods.skill_action import SkillAction
 from scripts.managers.game_methods.skill_query import SkillQuery
 
@@ -17,6 +18,7 @@ class GameManager:
         self.internal_clock = pygame.time.Clock()
         self.skill_action = SkillAction(self)
         self.skill_query = SkillQuery(self)
+        self.affliction_action = AfflictionAction(self)
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
 

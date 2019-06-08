@@ -3,8 +3,8 @@ import pygame
 from scripts.data_loaders.getters import get_value_from_skill_json
 from scripts.events.game_events import EndTurnEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.skills.effects.change_terrain import ChangeTerrainSkillEffect
-from scripts.skills.effects.damage import DamageSkillEffect
+from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
+from scripts.skills.skill_effects.damage import DamageSkillEffect
 
 
 class Skill:
@@ -14,8 +14,9 @@ class Skill:
     Args:
             name(str):
     """
-    def __init__(self, skill_tree_name, skill_name):
+    def __init__(self, owner,  skill_tree_name, skill_name):
         self.name = skill_name
+        self.owner = owner
         self.skill_tree_name = skill_tree_name
 
         skill_values = get_value_from_skill_json(skill_tree_name, skill_name)
@@ -33,7 +34,7 @@ class Skill:
         self.required_tags = []
 
         for tag in required_tags:
-            self.required_tags.append(game_manager.skill_query.get_target_tags_from_tag_string(tag))
+            self.required_tags.append(game_manager.skill_query.get_target_tags_from_string(tag))
 
         # resource info
         self.resource_type = skill_values["resource_type"]
@@ -41,8 +42,8 @@ class Skill:
         self.time_cost = skill_values["time_cost"]  # base value of time spent to complete action
         self.cooldown = skill_values["cooldown"]  # how many rounds to wait between uses
 
-        # effects info
-        effects = skill_values["effects"]  # list of effects to process
+        # skill_effects info
+        effects = skill_values["skill_effects"]  # list of skill_effects to process
         self.effects = []
 
         for effect in effects:
@@ -73,10 +74,11 @@ class Skill:
         from scripts.global_instances.managers import game_manager
         target = game_manager.skill_query.get_target(target_pos, self.required_target_type)  # get the tile or entity
 
-        # apply any effects
+        # apply any skill_effects
         if self.effects:
             for effect in self.effects:
 
+                # TODO - change to make use of the Enums
                 if type(effect) is DamageSkillEffect:
                     effect.trigger(entity, target)
 

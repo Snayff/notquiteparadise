@@ -126,6 +126,16 @@ class HitModifiers(Enum):
     CRIT = 1.4
 
 
+class SkillEffectTypes(Enum):
+    """
+    Types of skill_effects
+    """
+    APPLY_AFFLICTION = auto()
+    DAMAGE = auto()
+    MOVE = auto()
+    CHANGE_TERRAIN = auto()
+
+
 class AfflictionCategory(Enum):
     """
     Boon or Bane
@@ -151,3 +161,21 @@ class AfflictionTypes(Enum):
     TORMENTED = auto()
 
     # BOONS
+
+
+class AfflictionTriggers(Enum):
+    """
+    When to trigger the affliction
+    """
+    PASSIVE = auto()
+    END_TURN = auto()
+    MOVE = auto()
+    DEAL_DAMAGE = auto()
+    END_ROUND = auto()
+
+
+class AfflictionEffectTypes(Enum):
+    """
+    Types of Affliction effects
+    """
+    DAMAGE = auto()

@@ -14,7 +14,8 @@
                 {
                     "name": "damage",
                     "required_target_type": "entity",
-                    "required_tags": ["other_entity"],
+                    "required_tags": ["other_entity"
+                    ],
                     "damage": 15,
                     "damage_type": "pierce",
                     "accuracy": 10,

@@ -1,11 +1,13 @@
+
 import random
 
 from scripts.core.constants import LoggingEventTypes, SecondaryStatTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
-from scripts.skills.effects.change_terrain import ChangeTerrainSkillEffect
-from scripts.skills.effects.damage import DamageSkillEffect
+from scripts.managers.game import GameManager
+from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionEffect
+from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
+from scripts.skills.skill_effects.damage import DamageSkillEffect
 from scripts.skills.skill import Skill
 
 
@@ -14,7 +16,7 @@ class SkillAction:
     Methods for taking actions with skills
     """
     def __init__(self, manager):
-        self.manager = manager
+        self.manager = manager  # type: GameManager
 
     def create_damage_effect(self, skill, effect):
         """
@@ -29,10 +31,10 @@ class SkillAction:
         """
         query = self.manager.skill_query
 
-        # get tags from effects
+        # get tags from skill_effects
         target_tags = []
         for tag in effect["required_tags"]:
-            target_tags.append(query.get_target_tags_from_tag_string(tag))
+            target_tags.append(query.get_target_tags_from_string(tag))
 
         target_type = query.get_target_type_from_string(effect["required_target_type"])
         damage_type = query.get_damage_type_from_string(effect["damage_type"])
@@ -57,13 +59,13 @@ class SkillAction:
         """
         query = self.manager.skill_query
 
-        # get tags from effects
+        # get tags from skill_effects
         target_tags = []
         for tag in effect["required_tags"]:
-            target_tags.append(query.get_target_tags_from_tag_string(tag))
+            target_tags.append(query.get_target_tags_from_string(tag))
 
         target_type = query.get_target_type_from_string(effect["required_target_type"])
-        new_terrain = query.get_target_tags_from_tag_string(effect["new_terrain"])
+        new_terrain = query.get_target_tags_from_string(effect["new_terrain"])
 
         # add effect object to skill
         created_effect = ChangeTerrainSkillEffect(skill, target_type, target_tags, new_terrain)
@@ -83,15 +85,24 @@ class SkillAction:
         """
         query = self.manager.skill_query
 
-        # get tags from effects
-        target_tags = []
-        for tag in effect["required_tags"]:
-            target_tags.append(query.get_target_tags_from_tag_string(tag))
-
+        # get the info for the APPLICATION of the affliction
         target_type = query.get_target_type_from_string(effect["required_target_type"])
 
+        # get tags from skill_effects
+        target_tags = []
+        for tag in effect["required_tags"]:
+            target_tags.append(query.get_target_tags_from_string(tag))
+
+        accuracy = effect["accuracy"]
+        stat_to_target = query.get_secondary_stat_from_string(effect["stat_to_target"])
+
+        # get the info for the CREATION of the affliction
+        affliction_name = effect["affliction_name"]
+        duration = effect["duration"]
+        affliction = self.manager.affliction_action.create_affliction(affliction_name, duration)
+
         # add effect object to skill
-        created_effect = ApplyAfflictionEffect(skill, target_type, target_tags)
+        created_effect = ApplyAfflictionEffect(skill, target_type, target_tags, affliction, accuracy, stat_to_target)
 
         return created_effect
 
@@ -127,3 +138,19 @@ class SkillAction:
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return mitigated_to_hit_score
+
+    @staticmethod
+    def create_skill(actor, skill_tree_name, skill_name):
+        """
+        Create a SKill object
+        Args:
+            actor ():
+            skill_tree_name ():
+            skill_name ():
+
+        Returns:
+            Skill: The created skill
+        """
+        skill = Skill(actor, skill_tree_name, skill_name)
+
+        return skill

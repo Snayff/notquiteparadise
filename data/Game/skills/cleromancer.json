@@ -22,7 +22,7 @@
                 }
         ]
     },
-        "bring_down_the_mountain": {
+    "bring_down_the_mountain": {
         "name": "bring down the mountain",
         "description": "Turn a wall into a floor.",
         "icon": "placeholder/icon_40.png",
@@ -39,6 +39,38 @@
                     "required_target_type": "terrain",
                     "required_tags": ["wall", "no_entity"],
                     "new_terrain": "floor"
+                }
+        ]
+    },
+    "burn_the_deck": {
+        "name": "burn the deck",
+        "description": "Apply burning affliction",
+        "icon": "placeholder/icon_40.png",
+        "required_target_type": "entity",
+        "required_tags": ["other_entity"],
+        "range": 4,
+        "resource_type": "mana",
+        "resource_cost": 10,
+        "time_cost": 20,
+        "cooldown": 2,
+        "effects": [
+                {
+                    "name": "damage",
+                    "required_target_type": "entity",
+                    "required_tags": ["other_entity"],
+                    "damage": 15,
+                    "damage_type": "blunt",
+                    "accuracy": 5,
+                    "stat_to_target": "skullduggery"
+                },
+                {
+                    "name": "apply_affliction",
+                    "required_target_type": "entity",
+                    "required_tags": ["other_entity"],
+                    "accuracy": 5,
+                    "stat_to_target": "skullduggery",
+                    "affliction_name": "flaming",
+                    "duration": 3
                 }
         ]
     }

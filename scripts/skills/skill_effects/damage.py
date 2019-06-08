@@ -6,7 +6,7 @@ from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.skills.effects.skill_effect import SkillEffect
+from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.entity import Entity
 
 

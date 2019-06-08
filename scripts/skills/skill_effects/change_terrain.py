@@ -2,7 +2,7 @@ from scripts.core.constants import MessageEventTypes, LoggingEventTypes, TargetT
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.skills.effects.skill_effect import SkillEffect
+from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.terrain import Terrain
 from scripts.world.terrain.wall import Wall

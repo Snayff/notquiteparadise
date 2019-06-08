@@ -9,7 +9,7 @@ from scripts.world.terrain.terrain import Terrain
 from scripts.world.tile import Tile
 
 
-class SkillQuery():
+class SkillQuery:
     """
     Methods for querying skills and skill related info.
     """
@@ -163,7 +163,7 @@ class SkillQuery():
             return False
 
     @staticmethod
-    def get_target_tags_from_tag_string(tag):
+    def get_target_tags_from_string(tag):
         """
         Get the tag enum from the tag string
 

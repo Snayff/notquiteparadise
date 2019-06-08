@@ -16,8 +16,6 @@ from scripts.core.initialisers import initialise_game
 #  - enter doesnt trigger skill
 #  -  3rd skill doesnt trigger overlay when targeting wrong target
 #  - can target self
-# TODO - implement skill handler (object, methods etc. (poss game man?))
-#  pass in skill and handle logic there. move creation of targeting overlay out of events.
 # TODO - create global tooltip method - some relevant code in old message log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions

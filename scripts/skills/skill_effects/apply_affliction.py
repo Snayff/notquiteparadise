@@ -4,7 +4,7 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.skills.affliction import Affliction
-from scripts.skills.effects.skill_effect import SkillEffect
+from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.entity import Entity
 
 
@@ -19,7 +19,7 @@ class ApplyAfflictionEffect(SkillEffect):
                          required_tags)
         self.base_accuracy = accuracy
         self.stat_to_target = stat_to_target
-        self.affliction = affliction # type: Affliction
+        self.affliction = affliction  # type: Affliction
 
     def trigger(self, attacking_entity, defending_entity):
         """
@@ -78,4 +78,5 @@ class ApplyAfflictionEffect(SkillEffect):
         log_string = f"Applying {self.affliction.name} affliction to {defending_entity.name}."
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
+        self.affliction.affected_entity = defending_entity
         defending_entity.afflictions.append(self.affliction)

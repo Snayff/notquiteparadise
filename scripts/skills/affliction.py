@@ -1,57 +1,45 @@
 
-from scripts.core.constants import AfflictionCategory, AfflictionTypes
+from scripts.core.constants import AfflictionCategory, AfflictionTypes, AfflictionTriggers
 
 
-class Affliction():
+class Affliction:
     """
     Affliction, either Bane or Boon. Applies a periodic effect to an entity.
     """
     # TODO -
     #  Log the affliction on a central list
     #  create central method of managing afflictions
-    #       Trigger the affliction's effects (skill effects) at required intervals
+    #       Trigger the affliction's skill_effects (skill skill_effects) at required intervals
     #          decrement time remaining
     #          remove affliction if expired
 
-    def __init__(self, affliction_category, affliction_type, duration):
-        self.affliction_category = affliction_category  # type: AfflictionCategory
-        self.affliction_type = affliction_type
+    def __init__(self, name, duration):
+        from scripts.global_instances.managers import game_manager
+        action = game_manager.affliction_action
+        values = action.get_value_from_afflictions_json(name)
+        self.name = name
+        self.description = values["description"]
+        self.icon = values["icon"]
+        self.affliction_category = action.get_affliction_category_from_string(values["category"])
+        self.affliction_type = action.get_affliction_type_from_string(name)
         self.duration = duration
-        self.name = self.get_affliction_name(affliction_type)
-        self.trigger_event = trigger_event
+        self.trigger_event = action.get_trigger_event_from_string(values["trigger_event"])
+        self.affected_entity = None  # set at time of allocation to an entity
+        self.affliction_effects = []
 
-    @staticmethod
-    def get_affliction_name(affliction):
-        """
-        Get affliction name from AfflictionTypes
-        Args:
-            affliction (AfflictionTypes):
+        # get the affliction skill_effects
+        affliction_effects_values = values["affliction_effects"]
 
-        Returns:
-            string: Name of affliction
-        """
-        # TODO - add remaining types
-        if affliction == AfflictionTypes.MYOPIC:
-            name = "Myopic"
-        elif affliction == AfflictionTypes.SLUGGISH:
-            name = "Sluggish"
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
+        # unpack all affliction_effects
+        for effect in affliction_effects_values:
+            created_effect = None
+            effect_name = effect["name"]
 
-        return name
+            if effect_name == "damage":
+                created_effect = game_manager.affliction_action.create_damage_effect(self, effect)
+
+            # if we have an effect add it to internal list
+            if created_effect:
+                self.affliction_effects.append(created_effect)
+
+
