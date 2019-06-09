@@ -1,15 +1,21 @@
-
 from scripts.core.constants import AfflictionTypes, AfflictionCategory, AfflictionTriggers, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.skills.affliction import Affliction
 from scripts.skills.affliction_effects.damage import DamageAfflictionEffect
+from scripts.world.entity import Entity
 
 
 class AfflictionAction:
     """
     Methods for taking actions with Afflictions
+
+    Attributes:
+        manager ():
+        active_afflictions (): list of all active afflictions
+        expired_afflictions (): list containing the expired afflictions to be deleted. empties at end of GameLoop
     """
+
     def __init__(self, manager):
         self.manager = manager
         self.active_afflictions = []
@@ -48,13 +54,35 @@ class AfflictionAction:
             log_string = f"Removed the following afflictions: {removed_afflictions}"
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
+    @staticmethod
+    def create_affliction(affliction_name, duration, affected_entity):
+        """
+        Create an Affliction object
 
-    def create_affliction(self, affliction_name, duration, affected_entity):
+        Args:
+            affliction_name (str): the string name of the affliction
+            duration (int): amount of activations before expiry
+            affected_entity (Entity): the entity to be affected
+
+        Returns:
+            Affliction:
+        """
         affliction = Affliction(affliction_name, duration, affected_entity)
 
         return affliction
 
-    def create_damage_effect(self, affliction,  effect):
+    @staticmethod
+    def create_damage_effect(affliction, effect):
+        """
+        Create the Damage Affliction Effect for the Affliction
+
+        Args:
+            affliction (Affliction): the Affliction to contain the damage effect
+            effect (): affliction effect json data
+
+        Returns:
+            DamageAfflictionEffect
+        """
         owner = affliction
         damage = effect["damage"]
         damage_type = effect["damage_type"]
@@ -64,14 +92,32 @@ class AfflictionAction:
 
         return created_effect
 
-    def get_affliction_type_from_string(self, affliction_name):
+    @staticmethod
+    def get_affliction_type_from_string(affliction_name):
+        """
+        Convert a string to the appropriate AfflictionTypes (Enum) value
 
+        Args:
+            affliction_name (str): string name of affliction
+
+        Returns:
+            AfflictionTypes
+        """
         # TODO - add remaining afflictions
         if affliction_name == "flaming":
             return AfflictionTypes.FLAMING
 
-    def get_affliction_category_from_string(self, affliction_category):
+    @staticmethod
+    def get_affliction_category_from_string(affliction_category):
+        """
+        Convert a string to the appropriate AfflictionCategory (Enum) value
 
+        Args:
+            affliction_category (str): string name of affliction category
+
+        Returns:
+            AfflictionCategory
+        """
         if affliction_category == "bane":
             return AfflictionCategory.BANE
         elif affliction_category == "boon":
@@ -81,6 +127,7 @@ class AfflictionAction:
     def get_affliction_name(affliction):
         """
         Get affliction name from AfflictionTypes
+
         Args:
             affliction (AfflictionTypes):
 
@@ -113,8 +160,17 @@ class AfflictionAction:
 
         return name
 
-    def get_trigger_event_from_string(self, trigger_event):
+    @staticmethod
+    def get_trigger_event_from_string(trigger_event):
+        """
+        Convert a string to the appropriate AfflictionTriggers (Enum) value
 
+        Args:
+            trigger_event (str): string name of trigger event
+
+        Returns:
+            AfflictionTriggers
+        """
         # TODO - add remaining afflictions
         if trigger_event == "passive":
             return AfflictionTriggers.PASSIVE
@@ -122,15 +178,35 @@ class AfflictionAction:
             return AfflictionTriggers.END_TURN
 
     def register_active_affliction(self, affliction):
+        """
+        Register an affliction with the central list. Without this they exist in the ether and do nothing.
+
+        Args:
+            affliction (Affliction):
+        """
         self.active_afflictions.append(affliction)
 
     def trigger_afflictions_on_entity(self, affliction_trigger, entity):
-
+        """
+        Cause all afflictions of a specified AfflictionTrigger to trigger on an Entity
+        Args:
+            affliction_trigger (AfflictionTriggers):
+            entity (Entity):
+        """
         for affliction in self.active_afflictions:
             if affliction.trigger_event == affliction_trigger and affliction.affected_entity == entity:
                 affliction.trigger()
 
     def get_afflictions_for_entity(self, entity):
+        """
+        Get all Afflictions for an Entity
+
+        Args:
+            entity (Entity):
+
+        Returns:
+            list: list of Afflictions
+        """
         entitys_afflictions = []
 
         for affliction in self.active_afflictions:
@@ -140,6 +216,16 @@ class AfflictionAction:
         return entitys_afflictions
 
     def affliction_exists(self, entity, affliction_type):
+        """
+        Check if a specific Affliction exists on an Entity
+
+        Args:
+            entity (Entity):
+            affliction_type (AfflictionTypes):
+
+        Returns:
+            bool:
+        """
         for affliction in self.active_afflictions:
             if affliction.affected_entity == entity and affliction.affliction_type == affliction_type:
                 return True
@@ -147,6 +233,19 @@ class AfflictionAction:
         return False
 
     def get_affliction_type_for_entity(self, entity, affliction_type):
+        """
+        Get the specified Affliction for an Entity
+
+        Args:
+            entity (Entity):
+            affliction_type (AfflictionTypes):
+
+        Returns:
+            Affliction: the requested affliction, or None if nothing found
+
+        """
         for affliction in self.active_afflictions:
             if affliction.affected_entity == entity and affliction.affliction_type == affliction_type:
                 return affliction
+
+        return None

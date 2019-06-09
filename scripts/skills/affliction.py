@@ -3,11 +3,24 @@ from scripts.core.constants import AfflictionCategory, AfflictionTypes, Afflicti
 from scripts.data_loaders.getters import get_value_from_afflictions_json
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.skills.affliction_effects.affliction_effect import AfflictionEffect
+from scripts.world.entity import Entity
 
 
 class Affliction:
     """
-    Affliction, either Bane or Boon. Applies a periodic effect to an entity.
+    Affliction, either Bane or Boon. Applies a periodic effect to an Entity, dictated by its AfflictionTrigger.
+
+    Attributes:
+        name (str):  string name of the Affliction
+        description (str): description of the Affliction
+        icon (pygame.Image): pygame image to symbolise the Affliction
+        affliction_category (AfflictionCategory): Bane or Boon
+        affliction_type (AfflictionTypes): the Enum value of the Affliction Name
+        duration (int): amount of applications before expiry
+        trigger_event (AfflictionTriggers): the event that triggers the Affliction to activate
+        affected_entity (Entity): the Entity being impacted by the Affliction
+        affliction_effects (list(AfflictionEffect)): list of AfflictionEffects
     """
 
     def __init__(self, name, duration, affected_entity):
@@ -49,7 +62,9 @@ class Affliction:
         for effect in self.affliction_effects:
             effect.trigger(self.affected_entity)
 
-        self.duration -= 1
-        log_string = f"Duration reduced to: {self.duration}"
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        # reduce duration on all effects other than Passive
+        if self.trigger_event != AfflictionTriggers.PASSIVE:
+            self.duration -= 1
+            log_string = f"Duration reduced to: {self.duration}"
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
