@@ -38,7 +38,7 @@ class AfflictionAction:
             self.active_afflictions.remove(affliction)
 
             # add info to logging
-            removed_afflictions.append(f"{affliction.affected_entity}:{affliction.name}")
+            removed_afflictions.append(f"{affliction.affected_entity.name}:{affliction.name}")
 
             # delete the instance
             del affliction
@@ -49,8 +49,8 @@ class AfflictionAction:
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
 
-    def create_affliction(self, affliction_name, duration):
-        affliction = Affliction(affliction_name, duration)
+    def create_affliction(self, affliction_name, duration, affected_entity):
+        affliction = Affliction(affliction_name, duration, affected_entity)
 
         return affliction
 
@@ -121,7 +121,7 @@ class AfflictionAction:
         elif trigger_event == "end_turn":
             return AfflictionTriggers.END_TURN
 
-    def add_affliction(self, affliction):
+    def register_active_affliction(self, affliction):
         self.active_afflictions.append(affliction)
 
     def trigger_afflictions_on_entity(self, affliction_trigger, entity):
@@ -138,3 +138,15 @@ class AfflictionAction:
                 entitys_afflictions.append(affliction)
 
         return entitys_afflictions
+
+    def affliction_exists(self, entity, affliction_type):
+        for affliction in self.active_afflictions:
+            if affliction.affected_entity == entity and affliction.affliction_type == affliction_type:
+                return True
+
+        return False
+
+    def get_affliction_type_for_entity(self, entity, affliction_type):
+        for affliction in self.active_afflictions:
+            if affliction.affected_entity == entity and affliction.affliction_type == affliction_type:
+                return affliction

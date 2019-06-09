@@ -10,7 +10,7 @@ class Affliction:
     Affliction, either Bane or Boon. Applies a periodic effect to an entity.
     """
 
-    def __init__(self, name, duration):
+    def __init__(self, name, duration, affected_entity):
         from scripts.global_instances.managers import game_manager
         action = game_manager.affliction_action
         values = get_value_from_afflictions_json(name)
@@ -21,7 +21,7 @@ class Affliction:
         self.affliction_type = action.get_affliction_type_from_string(name)
         self.duration = duration
         self.trigger_event = action.get_trigger_event_from_string(values["trigger_event"])
-        self.affected_entity = None  # set at time of allocation to an entity
+        self.affected_entity = affected_entity  # set at time of allocation to an entity
         self.affliction_effects = []
 
         # get the affliction skill_effects

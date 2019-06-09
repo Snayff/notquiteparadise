@@ -18,6 +18,7 @@ class GameHandler(Subscriber):
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
         elif event.type == GameEventTypes.END_TURN:
+            # TODO - move to separate handler
             game_manager.affliction_action.trigger_afflictions_on_entity(AfflictionTriggers.END_TURN,
                                                                          turn_manager.turn_holder)
             turn_manager.end_turn(event.time_spent)

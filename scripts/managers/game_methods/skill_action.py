@@ -2,6 +2,7 @@
 import random
 
 from scripts.core.constants import LoggingEventTypes, SecondaryStatTypes
+from scripts.data_loaders.getters import get_value_from_afflictions_json
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
@@ -84,7 +85,7 @@ class SkillAction:
         """
         query = self.manager.skill_query
 
-        # get the info for the APPLICATION of the affliction
+        # get the info for the APPLICATION of the affliction N.B. only create affliction at point of application
         target_type = query.get_target_type_from_string(effect["required_target_type"])
 
         # get tags from skill_effects
@@ -94,15 +95,15 @@ class SkillAction:
 
         accuracy = effect["accuracy"]
         stat_to_target = query.get_secondary_stat_from_string(effect["stat_to_target"])
-
-        # get the info for the CREATION of the affliction
         affliction_name = effect["affliction_name"]
-        duration = effect["duration"]
-        affliction = self.manager.affliction_action.create_affliction(affliction_name, duration)
+        affliction_duration = effect["duration"]
+        affliction_values = get_value_from_afflictions_json(affliction_name)
+        from scripts.global_instances.managers import game_manager
+        affliction_category = game_manager.affliction_action.get_affliction_category_from_string(affliction_values["category"])
 
         # add effect object to skill
-        created_effect = ApplyAfflictionSkillEffect(skill, target_type, target_tags, affliction, accuracy,
-                                                    stat_to_target)
+        created_effect = ApplyAfflictionSkillEffect(skill, target_type, target_tags, accuracy, stat_to_target,
+                                                    affliction_name, affliction_category, affliction_duration)
 
         return created_effect
 
