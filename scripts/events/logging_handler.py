@@ -7,7 +7,7 @@ from scripts.events.pub_sub_hub import Subscriber
 
 class LoggingHandler(Subscriber):
     def __init__(self, event_hub):
-        Subscriber.__init__(self, "logging_handler", event_hub)
+        super().__init__("logging_handler", event_hub)
 
         self.log_file_name = "logs/" + "game.log"
         self.log_level = logging.DEBUG
