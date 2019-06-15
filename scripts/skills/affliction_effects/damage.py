@@ -13,9 +13,6 @@ class DamageAfflictionEffect(AfflictionEffect):
     Attributes:
         damage(int):
         damage_type(int):
-        required_target_type(TargetTypes):
-        required_tags(list): list of TargetType enums
-        accuracy(int):
         stat_to_target(PrimaryStatTypes):
     """
 

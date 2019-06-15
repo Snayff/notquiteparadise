@@ -150,7 +150,7 @@ class AfflictionTypes(Enum):
     """
     # BANES
     MYOPIC = auto()
-    SLUGGISH = auto()
+    BOGGED_DOWN = auto()
     SHAKEN = auto()
     EXPOSED = auto()
     RUPTURED = auto()
@@ -179,3 +179,12 @@ class AfflictionEffectTypes(Enum):
     Types of Affliction effects
     """
     DAMAGE = auto()
+
+class AspectTypes(Enum):
+    DIRT = auto()
+    LONG_GRASS = auto()
+    FROZEN = auto()
+    SMOKE = auto()
+    GAS = auto()
+    BOG = auto()
+    AFLAME = auto()

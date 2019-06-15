@@ -6,32 +6,33 @@ from scripts.world.terrain.wall import Wall
 
 class Tile:
     """
-    A Tile on the GameMap. Can contain an Entity, a Terrain and an SkillEffect.
+    A Tile on the GameMap. Can contain an Entity, a Terrain and an Effect.
 
     Attributes:
         x(int): tile_x
         y(int): tile_y
         is_visible(bool): if tile is visible to player
         entity(Entity): the entity on the tile
-        terrain(Terrain): the terrain on the tile
-        effect(SkillEffect): the effect on the tile
+        terrain(Terrain): the terrain on the tile, such as floor or wall
+        aspect(Aspect): the aspect of the tile, such as smoke or fire
     """
 
-    def __init__(self, x, y, entity=None, terrain=None, effect=None):
+    def __init__(self, x, y, entity=None, terrain=None, aspect=None):
         self.x = x
         self.y = y
         self.is_visible = False
-        self.entity = entity
-        self.terrain = terrain
-        self.effect = effect
+        self.entity = None
+        self.terrain = None
+        self.aspect = None
 
-        # set owners
         if entity:
-            self.entity.owner = self
+            self.set_entity(entity)
+
         if terrain:
-            self.terrain.owner = self
-        if effect:
-            self.effect.owner = self
+            self.set_terrain(terrain)
+
+        if aspect:
+            self.set_aspect(aspect)
 
     def has_tag(self, target_tag, active_entity=None):
         """
@@ -61,7 +62,7 @@ class Tile:
             else:
                 return False
         elif target_tag == TargetTags.NO_ENTITY:
-            return self.has_no_entity
+            return not self.has_entity
         else:
             return False  # catch all
 
@@ -94,14 +95,14 @@ class Tile:
         return False
 
     @property
-    def has_no_entity(self):
+    def has_entity(self):
         """
         Check if the tag is applicable
 
         Returns:
             bool: True if tag is applicable
         """
-        if not self.entity:
+        if self.entity:
             return True
 
         return False
@@ -122,8 +123,8 @@ class Tile:
         elif self.terrain:
             if self.terrain.blocks_movement:
                 tile_blocks_movement = True
-        elif self.effect:
-            if self.effect.blocks_movement:
+        elif self.aspect:
+            if self.aspect.blocks_movement:
                 tile_blocks_movement = True
 
         return tile_blocks_movement
@@ -144,8 +145,8 @@ class Tile:
         elif self.terrain:
             if self.terrain.blocks_sight:
                 tile_blocks_sight = True
-        elif self.effect:
-            if self.effect.blocks_sight:
+        elif self.aspect:
+            if self.aspect.blocks_sight:
                 tile_blocks_sight = True
 
         return tile_blocks_sight
@@ -165,8 +166,8 @@ class Tile:
         if self.entity:
             surface.blit(self.entity.icon, draw_position)
 
-        if self.effect:
-            surface.blit(self.effect.sprite, draw_position)
+        if self.aspect:
+            surface.blit(self.aspect.sprite, draw_position)
 
     def set_entity(self, entity):
         """
@@ -202,19 +203,29 @@ class Tile:
         self.terrain.owner = None
         self.terrain = None
 
-    def set_effect(self, effect):
+    def set_aspect(self, aspect):
         """
-        Set the new effect on the tile.
+        Set the new aspect on the tile.
 
         Args:
-            effect:
+            aspect:
         """
-        self.effect = effect
-        self.effect.owner = self
+        self.aspect = aspect
+        self.aspect.owner = self
 
-    def remove_effect(self):
+    def remove_aspect(self):
         """
-        Remove effect from tile
+        Remove aspect from tile
         """
-        self.effect.owner = None
-        self.effect = None
+        self.aspect.owner = None
+        self.aspect = None
+
+    def get_entity(self):
+        """
+        Get the entity from the Tile
+
+        Returns:
+            Entity: The Entity on the tile
+
+        """
+        return self.entity

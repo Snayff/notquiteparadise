@@ -125,7 +125,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             # create the affliction
-            affliction = action.create_affliction(self.affliction_name, modified_duration, defending_entity)
+            affliction = action.create_affliction(affliction_type, modified_duration, defending_entity)
 
             # add affliction to the central list
             action.register_active_affliction(affliction)

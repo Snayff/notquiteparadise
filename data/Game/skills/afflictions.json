@@ -13,5 +13,19 @@
                 "stat_to_target": "bustle"
             }
         ]
+    },
+    "bogged_down": {
+        "name": "bogged down",
+        "description": "This is the bogged down affliction. It makes actions take more time.",
+        "icon": "placeholder/icon_00.png",
+        "category": "bane",
+        "trigger_event": "passive",
+        "affliction_effects": [
+            {
+                "name": "affect_stat",
+                "stat_to_affect": "action_cost_change" ,
+                "amount": 25
+            }
+        ]
     }
 }

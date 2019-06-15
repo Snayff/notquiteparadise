@@ -203,7 +203,7 @@ class Combatant:
         @property
         def status_length(self):
             skullduggery = self.owner.primary_stats.skullduggery
-            subtlety_modifier = 3
+            skullduggery_modifier = 3
 
-            stat_total = (skullduggery * subtlety_modifier)
+            stat_total = (skullduggery * skullduggery_modifier)
             return stat_total

@@ -55,19 +55,19 @@ class AfflictionAction:
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
     @staticmethod
-    def create_affliction(affliction_name, duration, affected_entity):
+    def create_affliction(affliction_type, duration, affected_entity):
         """
         Create an Affliction object
 
         Args:
-            affliction_name (str): the string name of the affliction
+            affliction_type (AfflictionTypes): the type of the affliction
             duration (int): amount of activations before expiry
             affected_entity (Entity): the entity to be affected
 
         Returns:
             Affliction:
         """
-        affliction = Affliction(affliction_name, duration, affected_entity)
+        affliction = Affliction(affliction_type, duration, affected_entity)
 
         return affliction
 
@@ -108,6 +108,21 @@ class AfflictionAction:
             return AfflictionTypes.FLAMING
 
     @staticmethod
+    def get_affliction_string_from_type(affliction_type):
+        """
+        Convert an AfflictionTypes (Enum) to appropriate string
+
+        Args:
+            affliction_type (AfflictionTypes): type of affliction
+
+        Returns:
+            str: name of the affliction
+        """
+        # TODO - add remaining afflictions
+        if affliction_type == AfflictionTypes.FLAMING:
+            return "flaming"
+
+    @staticmethod
     def get_affliction_category_from_string(affliction_category):
         """
         Convert a string to the appropriate AfflictionCategory (Enum) value
@@ -137,7 +152,7 @@ class AfflictionAction:
         # TODO - add remaining types
         if affliction == AfflictionTypes.MYOPIC:
             name = "Myopic"
-        elif affliction == AfflictionTypes.SLUGGISH:
+        elif affliction == AfflictionTypes.BOGGED_DOWN:
             name = "Sluggish"
         elif affliction == AfflictionTypes:
             name = ""
