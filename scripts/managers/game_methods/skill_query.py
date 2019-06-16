@@ -1,6 +1,6 @@
 
 from scripts.core.constants import TargetTypes, LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
-    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes
+    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, SkillEffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
@@ -349,3 +349,25 @@ class SkillQuery:
             return HitTypes.HIT
         else:
             return HitTypes.GRAZE
+
+    @staticmethod
+    def get_skill_effect_type_from_string(skill_effect_name):
+        """
+        Get the skill effect type from a string
+        Args:
+            skill_effect_name ():
+
+        Returns:
+            SkillEffectTypes
+        """
+        if skill_effect_name == "damage":
+            return SkillEffectTypes.DAMAGE
+        elif skill_effect_name == "move":
+            return SkillEffectTypes.MOVE
+        elif skill_effect_name == "change_terrain":
+            return SkillEffectTypes.CHANGE_TERRAIN
+        elif skill_effect_name == "apply_affliction":
+            return SkillEffectTypes.APPLY_AFFLICTION
+
+        log_string = f"{skill_effect_name} not found in 'get_skill_effect_type_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))

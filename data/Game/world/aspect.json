@@ -1,13 +1,18 @@
 {
     "bog": {
-        "name": "apply_affliction",
-        "required_target_type": "entity",
-        "required_tags": [
-            "other_entity"
-        ],
-        "accuracy": 100,
-        "stat_to_target": "skullduggery",
-        "affliction_name": "bogged_down",
-        "duration": 1
+        "name": "bog",
+        "description": "This is the bog aspect. It slows entities down.",
+        "sprite": "placeholder/78.png",
+        "skill_effects": [
+                {
+                    "name": "apply_affliction",
+                    "required_target_type": "entity",
+                    "required_tags": ["other_entity"],
+                    "accuracy": 100,
+                    "stat_to_target": "skullduggery",
+                    "affliction_name": "bogged_down",
+                    "duration": 3
+                }
+        ]
     }
 }

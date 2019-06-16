@@ -46,7 +46,7 @@ class Skill:
         self.cooldown = skill_values["cooldown"]  # how many rounds to wait between uses
 
         # skill_effects info
-        effects = skill_values["effects"]  # list of skill_effects to process
+        effects = skill_values["skill_effects"]  # list of skill_effects to process
         self.effects = []
 
         for effect in effects:

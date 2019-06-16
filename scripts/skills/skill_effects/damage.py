@@ -24,7 +24,7 @@ class DamageSkillEffect(SkillEffect):
     """
 
     def __init__(self, owner, required_target_type, required_tags, damage, damage_type,  accuracy, stat_to_target):
-        super().__init__(owner, "Damage", "This is the damage effect", required_target_type, required_tags)
+        super().__init__(owner, "damage", "This is the damage effect", required_target_type, required_tags)
         self.base_damage = damage
         self.damage_type = damage_type
         self.base_accuracy = accuracy
@@ -54,7 +54,7 @@ class DamageSkillEffect(SkillEffect):
                     to_hit_score = game_manager.skill_action.calculate_to_hit_score(defender,
                                                             self.base_accuracy, self.stat_to_target, attacker)
                     hit_type = game_manager.skill_query.get_hit_type(to_hit_score)
-                    damage = self.calculate_damage(attacker, defender, hit_type)
+                    damage = self.calculate_damage(defender, hit_type, attacker)
 
                     # apply damage
                     if damage > 0:
@@ -94,9 +94,9 @@ class DamageSkillEffect(SkillEffect):
             log_string = f"-> target type incorrect; selected:{target_type}, needed:{self.required_target_type}"
             publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
-    def calculate_damage(self, attacking_entity, defending_entity, hit_type):
+    def calculate_damage(self, defending_entity, hit_type, attacking_entity=None):
         """
-        Work out the damage to be dealt
+        Work out the damage to be dealt. if attacking entity is None then value used is 0.
         Args:
             attacking_entity(Entity):
             defending_entity(Entity):

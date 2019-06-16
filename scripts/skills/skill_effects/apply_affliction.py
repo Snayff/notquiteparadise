@@ -15,7 +15,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
     def __init__(self, owner, required_target_type, required_tags, accuracy, stat_to_target, affliction_name,
             affliction_category, affliction_duration):
-        super().__init__(owner, "Apply_Affliction", "This is the affliction effect", required_target_type,
+        super().__init__(owner, "apply_affliction", "This is the affliction effect", required_target_type,
                          required_tags)
         self.base_accuracy = accuracy
         self.stat_to_target = stat_to_target

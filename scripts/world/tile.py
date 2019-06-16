@@ -236,3 +236,13 @@ class Tile:
         """
         if self.aspect:
             self.aspect.trigger()
+
+    def get_terrain(self):
+        """
+        Get the terrain from the Tile
+
+        Returns:
+            Terrain: The terrain on the tile
+
+        """
+        return self.terrain

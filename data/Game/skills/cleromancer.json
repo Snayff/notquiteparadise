@@ -10,7 +10,7 @@
         "resource_cost": 10,
         "time_cost": 20,
         "cooldown": 2,
-        "effects": [
+        "skill_effects": [
                 {
                     "name": "damage",
                     "required_target_type": "entity",
@@ -33,7 +33,7 @@
         "resource_cost": 10,
         "time_cost": 40,
         "cooldown": 3,
-        "effects": [
+        "skill_effects": [
                 {
                     "name": "change_terrain",
                     "required_target_type": "terrain",
@@ -53,7 +53,7 @@
         "resource_cost": 1,
         "time_cost": 1,
         "cooldown": 2,
-        "effects": [
+        "skill_effects": [
                 {
                     "name": "damage",
                     "required_target_type": "entity",

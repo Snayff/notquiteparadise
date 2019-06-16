@@ -1,4 +1,6 @@
 from scripts.managers.world_methods.game_map_query import is_tile_blocking_movement
+
+from scripts.global_instances.event_hub import publisher
 from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.game_map import is_tile_blocking_movement
 
@@ -9,7 +11,7 @@ class MoveSkillEffect(SkillEffect):
     """
 
     def __init__(self, target_type, tags, entity_to_move, target, move_distance):
-        super().__init__("Move", "This is the Move effect", target_type, tags)
+        super().__init__("move", "This is the Move effect", target_type, tags)
         self.entity_to_move = entity_to_move
         self.target = target
         self.move_distance = move_distance

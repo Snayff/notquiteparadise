@@ -10,7 +10,7 @@
         "resource_cost": 1,
         "time_cost": 15,
         "cooldown": 0,
-        "effects": [
+        "skill_effects": [
                 {
                     "name": "damage",
                     "required_target_type": "entity",
