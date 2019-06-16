@@ -45,10 +45,11 @@ class ChangeTerrainSkillEffect(SkillEffect):
 
             # assess all tags
             for tag in self.required_tags:
-                tags_checked[tag] = tile.has_tag(tag)
+                tags_checked[tag] = world_manager.Map.tile_has_tag(tile, tag)
 
             # if all tags came back true apply the change
             if all(value for value in tags_checked.values()):
+                world_manager.Map.set_terrain_on_tile(tile, terrain)
                 tile.set_terrain(self.new_terrain)
 
                 # success message

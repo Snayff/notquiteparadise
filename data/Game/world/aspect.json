@@ -3,6 +3,8 @@
         "name": "bog",
         "description": "This is the bog aspect. It slows entities down.",
         "sprite": "placeholder/78.png",
+        "block_sight": false,
+        "block_movement": false,
         "skill_effects": [
                 {
                     "name": "apply_affliction",

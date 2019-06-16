@@ -127,10 +127,10 @@ class SkillMethods:
 
         tags_checked = {}
 
-
         # assess all tags
+        from scripts.global_instances.managers import world_manager
         for tag in required_tags:
-            tags_checked[tag] = tile.has_tag(tag)
+            tags_checked[tag] = world_manager.Map.tile_has_tag(tile, tag)
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
@@ -524,3 +524,13 @@ class SkillMethods:
         skill = Skill(actor, skill_tree_name, skill_name)
 
         return skill
+
+    @staticmethod
+    def pay_resource_cost(entity, resource, cost):
+        """
+        Remove the resource cost from the using entity
+        """
+        entity.combatant.hp -= cost
+
+        log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))

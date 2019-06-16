@@ -23,7 +23,8 @@ class EntityMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        self.manager = manager
+        from scripts.managers.world import WorldManager
+        self.manager = manager  # type: WorldManager
 
     def get_blocking_entity_at_location(self, tile_x, tile_y):
         """
@@ -59,7 +60,7 @@ class EntityMethods:
         entity = tile.entity
 
         if entity:
-            if self.manager.is_tile_in_fov(tile_x, tile_y):
+            if self.manager.FOV.is_tile_in_fov(tile_x, tile_y):
                 return entity
 
         return None
@@ -237,7 +238,7 @@ class EntityMethods:
         """
         self.manager.entities.append(entity)
         tile = self.manager.Map.get_tile(tile_x, tile_y)
-        tile.set_entity(entity)
+        self.manager.Map.set_entity_on_tile(tile, entity)
 
     def add_player(self, tile_x, tile_y, entity):
         """
@@ -260,7 +261,7 @@ class EntityMethods:
         """
         # remove from tile
         tile = self.manager.Map.get_tile(entity.x, entity.y)
-        tile.remove_entity()
+        self.manager.Map.remove_entity(tile)
 
         # remove from entities list
         self.manager.entities.remove(entity)
@@ -317,12 +318,3 @@ class EntityMethods:
         else:
             self.manager.Entity.add_entity(tile_x, tile_y, actor)
 
-    @staticmethod
-    def pay_resource_cost(entity, resource, cost):
-        """
-        Remove the resource cost from the using entity
-        """
-        entity.combatant.hp -= cost
-
-        log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))

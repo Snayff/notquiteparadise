@@ -29,9 +29,10 @@ class GameMap:
 
         # TODO remove - only for test
         if self.width > 10 and self.height > 10:
-            self.tiles[0][5].set_terrain(Wall())
-            self.tiles[10][2].set_terrain(Wall())
-            self.tiles[0][2].set_aspect(Bog())
+            from scripts.global_instances.managers import world_manager
+            world_manager.Map.set_terrain_on_tile(self.tiles[0][5], Wall())
+            world_manager.Map.set_terrain_on_tile(self.tiles[10][2], Wall())
+            world_manager.Map.set_aspect_on_tile(self.tiles[0][2], Bog())
 
         # setup the panel
         panel_x = 0

@@ -363,7 +363,7 @@ def handle_targeting_mode_input(input_values):
         # pressed another skill so swap to that one
         elif values["skill"] != player.actor.known_skills.index(skill_being_targeted):
             skill = player.actor.known_skills[skill_number]
-            world_manager.Skill.activate_targeting_mode(skill)
+            publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
 
     if values["left_click"]:
         # if entity selected then use skill

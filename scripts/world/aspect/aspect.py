@@ -21,6 +21,8 @@ class Aspect:
         self.name = ""
         self.aspect_type = None
 
+
+
     @property
     def x(self):
         """

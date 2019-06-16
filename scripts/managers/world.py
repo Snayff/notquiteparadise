@@ -25,8 +25,6 @@ class WorldManager:
         self.Map = MapMethods(self)
         self.FOV = FOVMethods(self)
 
-        # TODO - create FOV container class
-
         self.game_map = None  # type: GameMap
         self.player = None  # type: Entity
         self.entities = []

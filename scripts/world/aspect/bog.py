@@ -27,7 +27,6 @@ class Bog(Aspect):
         self.aspect_type = AspectTypes.BOG
         self.effects = []
 
-
         # create effects
         effects = values["skill_effects"]
         for effect in effects:
@@ -50,8 +49,9 @@ class Bog(Aspect):
 
     def trigger(self):
         if self.owner.has_entity:
-            entity = self.owner.get_entity()
-            terrain = self.owner.get_terrain()
+            from scripts.global_instances.managers import world_manager
+            entity = world_manager.Map.get_entity_on_tile(self.owner)
+            terrain = world_manager.Map.get_terrain_on_tile(self.owner)
 
             # attempt to apply on entity
             for effect in self.effects:
