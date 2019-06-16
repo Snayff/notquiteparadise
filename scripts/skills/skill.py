@@ -12,8 +12,10 @@ class Skill:
     """
     A skill to be used by an actor
 
-    Args:
+    Attributes:
             name(str):
+            owner():
+            skill_tree_name():
     """
     def __init__(self, owner,  skill_tree_name, skill_name):
         self.name = skill_name
@@ -71,7 +73,7 @@ class Skill:
         Args:
             target_pos (tuple): x y of the target
         """
-        entity = self.owner.owner  # owner is actor, actor's owner is entity
+        entity = self.owner.owner  # owner is actor, actor`s owner is entity
         from scripts.global_instances.managers import game_manager
         target = game_manager.skill_query.get_target(target_pos, self.required_target_type)  # get the tile or entity
 

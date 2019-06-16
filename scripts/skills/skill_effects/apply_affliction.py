@@ -25,7 +25,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
     def trigger(self, attacking_entity, defending_entity):
         """
-        Trigger the effect
+        Trigger the effect. Attacking Entity can be None.
 
         Args:
             attacking_entity(Entity):
@@ -54,8 +54,8 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
                 # Roll for BANE application
                 if self.affliction_category == AfflictionCategory.BANE:
-                    to_hit_score = game_manager.skill_action.calculate_to_hit_score(attacker, defender,
-                                                                self.base_accuracy, self.stat_to_target)
+                    to_hit_score = game_manager.skill_action.calculate_to_hit_score(defender,
+                                                                self.base_accuracy, self.stat_to_target, attacker)
                     hit_type = game_manager.skill_query.get_hit_type(to_hit_score)
 
                     # check if affliction applied
@@ -120,7 +120,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
         # no current affliction of same type so apply new one
         else:
-            log_string = f"Applying '{self.affliction_name}' affliction to {defending_entity.name} with duration of " \
+            log_string = f"Applying {self.affliction_name} affliction to {defending_entity.name} with duration of " \
                 f"{modified_duration}."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 

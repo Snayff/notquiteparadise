@@ -6,7 +6,7 @@ class Homeland:
     [Component] Derives some stats from the Motive type.
 
     Attributes:
-        name (str): Motive type's name
+        name (str): Motive type`s name
         power (int) = Power value
         defence (int) = Defence value
         xp_given_on_death (int) = Amount of XP to give on death

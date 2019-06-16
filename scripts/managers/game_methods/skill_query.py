@@ -69,18 +69,18 @@ class SkillQuery:
              bool: True if required target type found, else False.
 
         """
-        log_string = f"Checking target for type '{required_target_type}'..."
+        log_string = f"Checking target for type {required_target_type}..."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # if we need a terrain type then pass the tiles terrain and get its type
         if required_target_type == TargetTypes.TERRAIN:
             target_type = self.get_target_type(tile.terrain)
             if target_type == TargetTypes.TERRAIN:
-                log_string = f"-> Target type OK! Type is '{target_type}'"
+                log_string = f"-> Target type OK! Type is {target_type}"
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
                 return True
             else:
-                log_string = f"-> Target type WRONG! Type is '{target_type}'"
+                log_string = f"-> Target type WRONG! Type is {target_type}"
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
                 msg = f"You can't do that there!"
@@ -91,11 +91,11 @@ class SkillQuery:
         elif required_target_type == TargetTypes.ENTITY:
             target_type = self.get_target_type(tile.entity)
             if target_type == TargetTypes.ENTITY:
-                log_string = f"-> Target type OK! Type is '{target_type}'"
+                log_string = f"-> Target type OK! Type is {target_type}"
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
                 return True
             else:
-                log_string = f"-> Target type WRONG! Type is '{target_type}'"
+                log_string = f"-> Target type WRONG! Type is {target_type}"
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
                 msg = f"You can't do that there!"
@@ -116,7 +116,7 @@ class SkillQuery:
         Returns:
             bool: True if tile has all tags
         """
-        log_string = f"Checking target for tags '{required_tags}'..."
+        log_string = f"Checking target for tags {required_tags}..."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         tags_checked = {}
@@ -128,11 +128,11 @@ class SkillQuery:
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
-            log_string = f"-> All tags OK! Tags checked are '{tags_checked}'"
+            log_string = f"-> All tags OK! Tags checked are {tags_checked}"
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             return True
         else:
-            log_string = f"-> Some tags WRONG! Tags checked are '{tags_checked}'"
+            log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
             msg = f"You can't do that there!"
@@ -156,10 +156,10 @@ class SkillQuery:
         # Check if cost can be paid
         # TODO - take different resources for cost, not just hp
         if entity.combatant.hp - cost > 0:
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"{entity.name} can afford cost."))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"'{entity.name}' can afford cost."))
             return True
         else:
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"{entity.name} cannot afford cost."))
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"'{entity.name}' cannot afford cost."))
             return False
 
     @staticmethod
@@ -226,6 +226,27 @@ class SkillQuery:
         log_string = f"{damage_type} not found in 'get_damage_type_from_string'"
         publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
+    def get_stat_from_string(self, stat):
+        """
+        Return PrimaryStatTypes or SecondaryStatTypes based on string name of stat
+        Args:
+            stat (str):
+
+        Returns:
+            The stat type
+        """
+        stat_enum = self.get_primary_stat_from_string(stat)
+        if stat_enum:
+            return stat_enum
+        else:
+            stat_enum = self.get_secondary_stat_from_string(stat)
+
+        if stat_enum:
+            return stat_enum
+
+        log_string = f"{stat} not found in 'get_stat_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
+
     @staticmethod
     def get_primary_stat_from_string(primary_stat):
         """
@@ -247,9 +268,6 @@ class SkillQuery:
         elif primary_stat == "exactitude":
             return PrimaryStatTypes.EXACTITUDE
 
-        log_string = f"{primary_stat} not found in 'get_primary_stat_from_string'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
-
     @staticmethod
     def get_secondary_stat_from_string(secondary_stat):
         """
@@ -268,9 +286,6 @@ class SkillQuery:
             return SecondaryStatTypes.DODGE_INTELLIGENCE
         elif secondary_stat == "action_cost_change":
             return SecondaryStatTypes.ACTION_COST_CHANGE
-
-        log_string = f"{secondary_stat} not found in 'get_secondary_stat_from_string'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_target(target_pos, required_target_type):
@@ -293,7 +308,7 @@ class SkillQuery:
             target_tile = world_manager.game_map.get_tile(target_x, target_y)
             target = target_tile.terrain
 
-        log_string = f"Got target '{target.name}' of type {required_target_type}."
+        log_string = f"Got target {target.name} of type {required_target_type}."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return target

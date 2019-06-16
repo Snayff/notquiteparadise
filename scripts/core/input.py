@@ -239,7 +239,7 @@ def handle_player_turn_input(input_values):
         if in_bounds:
             if not entity_blocking_movement and tile_blocking_movement:
                 # no entity in way but tile is blocked
-                msg = f"There's something in the way!"
+                msg = f"There`s something in the way!"
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             elif entity_blocking_movement:
                 # entity blocking tile so attack

@@ -31,8 +31,11 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="605">
-                  <caret line="174" column="55" selection-start-line="174" selection-start-column="55" selection-end-line="174" selection-end-column="55" />
+                <state relative-caret-position="437">
+                  <caret line="144" column="8" selection-start-line="144" selection-start-column="4" selection-end-line="144" selection-end-column="8" />
+                  <folding>
+                    <element signature="e#1553#1584#1" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -40,62 +43,83 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/skills/affliction.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="713">
+                <state relative-caret-position="698">
                   <caret line="31" selection-start-line="31" selection-end-line="31" />
                   <folding>
                     <element signature="e#1#110#0" expanded="true" />
                     <element signature="e#441#1216#1" expanded="true" />
+                    <element signature="e#2632#3244#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/skills/affliction_effects/affliction_effect.py">
+            <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/skill_action.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="345">
-                  <caret line="18" selection-start-line="18" selection-end-line="18" />
+                <state relative-caret-position="552">
+                  <caret line="111" column="88" selection-start-line="111" selection-start-column="88" selection-end-line="111" selection-end-column="88" />
                   <folding>
-                    <element signature="e#1#53#0" expanded="true" />
+                    <element signature="e#1#14#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/skills/affliction_effects/affect_stat.py">
+            <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/apply_affliction.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="161">
-                  <caret line="12" selection-start-line="12" selection-end-line="12" />
+                <state relative-caret-position="627">
+                  <caret line="80" selection-start-line="80" selection-end-line="80" />
                   <folding>
-                    <element signature="e#456#525#0" expanded="true" />
+                    <element signature="e#0#133#0" expanded="true" />
+                    <element signature="e#747#1125#0" expanded="true" />
+                    <element signature="e#3777#5992#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/skills/affliction_effects/damage.py">
+            <entry file="file://$PROJECT_DIR$/scripts/world/entity.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="322">
-                  <caret line="19" column="34" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
+                <state relative-caret-position="759">
+                  <caret line="80" column="36" lean-forward="true" selection-start-line="80" selection-start-column="36" selection-end-line="80" selection-end-column="36" />
                   <folding>
-                    <element signature="e#461#614#1" expanded="true" />
+                    <element signature="e#0#51#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="151">
+                  <caret line="63" column="30" lean-forward="true" selection-start-line="63" selection-start-column="30" selection-end-line="63" selection-end-column="30" />
+                  <folding>
+                    <element signature="e#582#1901#0" expanded="true" />
+                    <element signature="e#2823#3181#0" expanded="true" />
+                    <element signature="e#3934#4101#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/data/Game/world/aspects.json">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="276">
+                  <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
+            <entry file="file://$PROJECT_DIR$/data/Game/skills/general.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="675">
-                  <caret line="214" selection-start-line="214" selection-end-line="214" />
-                  <folding>
-                    <element signature="e#100#372#0" expanded="true" />
-                    <element signature="e#3216#3552#0" expanded="true" />
-                    <element signature="e#4407#4567#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="184">
+                  <caret line="8" column="30" lean-forward="true" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
                 </state>
               </provider>
             </entry>
@@ -105,37 +129,26 @@
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/apply_affliction.py">
+            <entry file="file://$PROJECT_DIR$/scripts/world/tile.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="483">
-                  <caret line="23" selection-start-line="23" selection-end-line="23" />
+                <state relative-caret-position="330">
+                  <caret line="105" selection-start-line="105" selection-end-line="105" />
                   <folding>
-                    <element signature="e#0#133#0" expanded="true" />
+                    <element signature="e#692#1018#0" expanded="true" />
+                    <element signature="e#5836#5885#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/skill_effect.py">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/scripts/world/aspect/bog.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="299">
-                  <caret line="15" selection-start-line="15" selection-end-line="15" />
+                <state relative-caret-position="215">
+                  <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
                   <folding>
-                    <element signature="e#0#52#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/skill_action.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="606">
-                  <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
-                  <folding>
-                    <element signature="e#1#14#0" expanded="true" />
-                    <element signature="e#2753#4359#0" expanded="true" />
+                    <element signature="e#0#13#0" expanded="true" />
+                    <element signature="e#1320#1545#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -144,24 +157,30 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="566">
-                  <caret line="63" column="30" lean-forward="true" selection-start-line="63" selection-start-column="30" selection-end-line="63" selection-end-column="30" />
+                <state relative-caret-position="-989">
+                  <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
+                    <element signature="e#592#2824#0" expanded="true" />
                     <element signature="e#2865#3796#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/affliction_action.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="479">
-                  <caret line="344" selection-start-line="344" selection-end-line="344" />
+                <state relative-caret-position="686">
+                  <caret line="348" selection-start-line="348" selection-end-line="348" />
                   <folding>
                     <element signature="e#0#109#0" expanded="true" />
-                    <element signature="e#4596#5206#0" expanded="true" />
+                    <element signature="e#7439#8026#0" expanded="true" />
+                    <element signature="e#6260#6485#0" expanded="true" />
+                    <element signature="e#7018#7404#0" expanded="true" />
+                    <element signature="e#7472#7877#0" expanded="true" />
+                    <element signature="e#9801#10424#0" expanded="true" />
+                    <element signature="e#9848#10482#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -170,42 +189,13 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/skill_query.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="437">
-                  <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
+                <state relative-caret-position="409">
+                  <caret line="228" column="28" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="28" />
                   <folding>
-                    <element signature="e#6970#7456#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/data/Game/skills/afflictions.json">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="184">
-                  <caret line="8" column="13" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/data/Game/skills/cleromancer.json">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="698">
-                  <caret line="71" column="47" lean-forward="true" selection-start-line="71" selection-start-column="47" selection-end-line="71" selection-end-column="47" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/scripts/data_loaders/getters.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="721">
-                  <caret line="124" selection-start-line="124" selection-end-line="124" />
-                  <folding>
-                    <element signature="e#414#676#0" expanded="true" />
-                    <element signature="e#1069#1332#0" expanded="true" />
-                    <element signature="e#1737#1955#0" expanded="true" />
+                    <element signature="e#2442#4442#0" expanded="true" />
+                    <element signature="e#4518#5608#0" expanded="true" />
+                    <element signature="e#8265#8675#0" expanded="true" />
+                    <element signature="e#8981#9834#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -225,17 +215,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&quot;tile&quot;</find>
-      <find>entity_manager</find>
-      <find>FLOOR</find>
-      <find>print</find>
-      <find>you can</find>
-      <find>can't</find>
-      <find>input</find>
-      <find>x</find>
-      <find>default_text</find>
-      <find>create_event</find>
-      <find>publisher.publish</find>
       <find>game_manager.create_event</find>
       <find>UseSkillEvent</find>
       <find>entity_existence</find>
@@ -255,6 +234,17 @@
       <find>=</find>
       <find>self.</find>
       <find>log</find>
+      <find>'s</find>
+      <find>new</find>
+      <find>game state</find>
+      <find>entity.name</find>
+      <find>{entity.name}</find>
+      <find>game_state</find>
+      <find>Game_state</find>
+      <find>'</find>
+      <find>'{</find>
+      <find>''</find>
+      <find>it is now</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -264,6 +254,8 @@
       <replace>world_manager.game_map_query.is_tile_blocking_movement</replace>
       <replace>skullduggery</replace>
       <replace>:</replace>
+      <replace>`s</replace>
+      <replace>'{entity.name}'</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -272,15 +264,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/scripts/managers/world_methods/game_map_action.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/effects/move.py" />
-        <option value="$PROJECT_DIR$/scripts/managers/world_methods/game_map_query.py" />
-        <option value="$PROJECT_DIR$/scripts/world/game_map.py" />
         <option value="$PROJECT_DIR$/scripts/managers/world_methods/entity_query.py" />
         <option value="$PROJECT_DIR$/scripts/components/ai.py" />
         <option value="$PROJECT_DIR$/scripts/managers/world.py" />
-        <option value="$PROJECT_DIR$/scripts/managers/world_methods/entity_action.py" />
-        <option value="$PROJECT_DIR$/scripts/events/entity_handler.py" />
         <option value="$PROJECT_DIR$/scripts/core/input.py" />
         <option value="$PROJECT_DIR$/scripts/events/logging_events.py" />
         <option value="$PROJECT_DIR$/scripts/components/trade.py" />
@@ -294,35 +280,41 @@
         <option value="$PROJECT_DIR$/scripts/skills/effects/apply_affliction.py" />
         <option value="$PROJECT_DIR$/data/Game/skills/cleromancer_skills.json" />
         <option value="$PROJECT_DIR$/scripts/data_loaders/getters.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/skill_effects/skill_effect.py" />
         <option value="$PROJECT_DIR$/scripts/components/actor.py" />
-        <option value="$PROJECT_DIR$/scripts/world/entity.py" />
         <option value="$PROJECT_DIR$/scripts/core/initialisers.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/skill.py" />
         <option value="$PROJECT_DIR$/scripts/ui_elements/entity_info.py" />
-        <option value="$PROJECT_DIR$/scripts/managers/game.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/skill_effects/damage.py" />
-        <option value="$PROJECT_DIR$/scripts/events/game_handler.py" />
-        <option value="$PROJECT_DIR$/scripts/managers/game_methods/skill_action.py" />
         <option value="$PROJECT_DIR$/assets/fix_png.py" />
         <option value="$PROJECT_DIR$/scripts/events/logging_handler.py" />
         <option value="$PROJECT_DIR$/scripts/world/terrain/floor.py" />
         <option value="$PROJECT_DIR$/scripts/world/terrain/terrain.py" />
         <option value="$PROJECT_DIR$/scripts/world/aspect/aspect.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/skill_effects/apply_affliction.py" />
-        <option value="$PROJECT_DIR$/scripts/world/aspect/bog.py" />
-        <option value="$PROJECT_DIR$/scripts/world/tile.py" />
         <option value="$PROJECT_DIR$/data/Game/skills/afflictions.json" />
         <option value="$PROJECT_DIR$/scripts/skills/affliction.py" />
-        <option value="$PROJECT_DIR$/scripts/skills/affliction_effects/affliction_effect.py" />
         <option value="$PROJECT_DIR$/scripts/components/combatant.py" />
         <option value="$PROJECT_DIR$/data/Game/skills/cleromancer.json" />
         <option value="$PROJECT_DIR$/scripts/ui_elements/message_log.py" />
-        <option value="$PROJECT_DIR$/scripts/managers/game_methods/skill_query.py" />
-        <option value="$PROJECT_DIR$/scripts/core/constants.py" />
         <option value="$PROJECT_DIR$/scripts/skills/affliction_effects/damage.py" />
         <option value="$PROJECT_DIR$/scripts/skills/affliction_effects/affect_stat.py" />
+        <option value="$PROJECT_DIR$/scripts/events/game_handler.py" />
+        <option value="$PROJECT_DIR$/scripts/managers/game.py" />
+        <option value="$PROJECT_DIR$/scripts/skills/skill_effects/skill_effect.py" />
+        <option value="$PROJECT_DIR$/scripts/skills/affliction_effects/affliction_effect.py" />
+        <option value="$PROJECT_DIR$/scripts/managers/game_methods/skill_query.py" />
+        <option value="$PROJECT_DIR$/scripts/managers/world_methods/entity_action.py" />
+        <option value="$PROJECT_DIR$/scripts/world/tile.py" />
+        <option value="$PROJECT_DIR$/scripts/events/entity_handler.py" />
+        <option value="$PROJECT_DIR$/scripts/world/game_map.py" />
         <option value="$PROJECT_DIR$/scripts/managers/game_methods/affliction_action.py" />
+        <option value="$PROJECT_DIR$/scripts/skills/skill.py" />
+        <option value="$PROJECT_DIR$/scripts/world/entity.py" />
+        <option value="$PROJECT_DIR$/scripts/core/constants.py" />
+        <option value="$PROJECT_DIR$/scripts/skills/skill_effects/damage.py" />
+        <option value="$PROJECT_DIR$/scripts/managers/game_methods/skill_action.py" />
+        <option value="$PROJECT_DIR$/scripts/skills/skill_effects/apply_affliction.py" />
+        <option value="$PROJECT_DIR$/scripts/world/aspect/bog.py" />
+        <option value="$PROJECT_DIR$/scripts/managers/turn.py" />
+        <option value="$PROJECT_DIR$/data/Game/world/aspects.json" />
+        <option value="$PROJECT_DIR$/data/Game/skills/general.json" />
       </list>
     </option>
   </component>
@@ -333,7 +325,7 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="335" />
     <option name="width" value="2110" />
     <option name="height" value="1407" />
@@ -394,6 +386,13 @@
             <path>
               <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
               <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="Game" type="462c0819:PsiDirectoryNode" />
+              <item name="world" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
+              <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -407,6 +406,12 @@
               <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
+              <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="events" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
@@ -446,6 +451,13 @@
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
               <item name="world" type="462c0819:PsiDirectoryNode" />
               <item name="aspect" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NotQuiteParadise" type="b2602c69:ProjectViewProjectNode" />
+              <item name="NotQuiteParadise" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="world" type="462c0819:PsiDirectoryNode" />
+              <item name="terrain" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -569,9 +581,9 @@
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.497921" visible="true" weight="0.1023166" />
       <window_info id="Favorites" order="1" sideWeight="0.50053024" side_tool="true" weight="0.1023166" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4753861" weight="0.2724359" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.47055984" weight="0.24439102" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.47007722" visible="true" weight="0.2724359" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.47297296" weight="0.2724359" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.46718147" visible="true" weight="0.24439102" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4695946" weight="0.2724359" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" content_ui="combo" id="TODO" order="6" sideWeight="0.49758688" weight="0.22916667" />
@@ -579,7 +591,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49517375" weight="0.20833333" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.2275641" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49951738" weight="0.32932693" />
-      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.5299228" side_tool="true" visible="true" weight="0.2724359" />
+      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.53281856" side_tool="true" visible="true" weight="0.24439102" />
       <window_info anchor="bottom" id="Structure" order="12" sideWeight="0.49710426" weight="0.23477565" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -591,6 +603,17 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/world/aspect/bog.py</url>
+          <line>36</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
@@ -601,14 +624,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/move.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="30" column="92" selection-start-line="30" selection-start-column="92" selection-end-line="30" selection-end-column="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/game_map_action.py" />
     <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/game_map_query.py" />
     <entry file="file://$PROJECT_DIR$/scripts/components/ai.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -629,17 +644,6 @@
             <element signature="e#0#11#0" expanded="true" />
             <element signature="e#406#428#0" expanded="true" />
             <element signature="e#7840#7992#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/entity_action.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="644">
-          <caret line="116" column="13" selection-start-line="116" selection-start-column="13" selection-end-line="116" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#636#658#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -668,38 +672,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/world.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/change_terrain.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
           <caret line="17" column="39" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/Game/skills/basic_attack.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/components/actor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="26" column="89" lean-forward="true" selection-start-line="26" selection-start-column="89" selection-end-line="26" selection-end-column="89" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-            <element signature="e#1556#2069#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -714,26 +690,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="112" column="11" lean-forward="true" selection-start-line="112" selection-start-column="11" selection-end-line="112" selection-end-column="11" />
-          <folding>
-            <element signature="e#2729#3087#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/events/entity_events.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="13" column="60" selection-start-line="13" selection-start-column="60" selection-end-line="13" selection-end-column="60" />
-          <folding>
-            <element signature="e#354#523#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/events/game_events.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23">
@@ -742,35 +698,6 @@
             <element signature="e#0#62#0" expanded="true" />
             <element signature="e#181#281#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/game.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="598">
-          <caret line="28" column="35" lean-forward="true" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#510#910#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/damage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="64" column="7" selection-start-line="64" selection-start-column="7" selection-end-line="64" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#970#1225#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/events/game_handler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -790,33 +717,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="32" column="84" selection-start-line="32" selection-start-column="84" selection-end-line="32" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/events/logging_handler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="427">
           <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/game_map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1288">
-          <caret line="156" selection-start-line="156" selection-end-line="156" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#485#1682#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -843,18 +749,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/tile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="34" column="12" selection-start-line="34" selection-start-column="12" selection-end-line="34" selection-end-column="12" />
-          <folding>
-            <element signature="e#218#571#1" expanded="true" />
-            <element signature="e#4601#4753#0" expanded="true" />
-            <element signature="e#5560#5578#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/events/logging_events.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
@@ -872,16 +766,6 @@
             <element signature="e#450#656#0" expanded="true" />
             <element signature="e#883#934#0" expanded="true" />
             <element signature="e#1157#1277#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/entity.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -907,16 +791,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/world/aspect/bog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="24" column="101" selection-start-line="24" selection-start-column="101" selection-end-line="24" selection-end-column="101" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/world/aspect/aspect.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
@@ -931,99 +805,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/Game/skills/cleromancer.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="698">
-          <caret line="71" column="47" lean-forward="true" selection-start-line="71" selection-start-column="47" selection-end-line="71" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/skill_effect.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/apply_affliction.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#133#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/data_loaders/getters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="721">
-          <caret line="124" selection-start-line="124" selection-end-line="124" />
-          <folding>
-            <element signature="e#414#676#0" expanded="true" />
-            <element signature="e#1069#1332#0" expanded="true" />
-            <element signature="e#1737#1955#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/ui_elements/message_log.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
           <caret line="199" column="8" selection-start-line="199" selection-start-column="8" selection-end-line="199" selection-end-column="98" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/skill_query.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
-          <folding>
-            <element signature="e#6970#7456#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="174" column="55" selection-start-line="174" selection-start-column="55" selection-end-line="174" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="566">
-          <caret line="63" column="30" lean-forward="true" selection-start-line="63" selection-start-column="30" selection-end-line="63" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#2865#3796#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/affliction.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
-          <folding>
-            <element signature="e#1#110#0" expanded="true" />
-            <element signature="e#441#1216#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/skill_action.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
-          <folding>
-            <element signature="e#1#14#0" expanded="true" />
-            <element signature="e#2753#4359#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1039,44 +824,310 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/skills/affliction_effects/affect_stat.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        <state relative-caret-position="253">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
           <folding>
             <element signature="e#456#525#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/affliction_effects/affliction_effect.py">
+    <entry file="file://$PROJECT_DIR$/scripts/events/game_handler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="552">
+          <caret line="30" column="59" selection-start-line="30" selection-start-column="59" selection-end-line="30" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/game.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="744">
+          <caret line="46" column="94" selection-start-line="46" selection-start-column="94" selection-end-line="46" selection-end-column="94" />
           <folding>
-            <element signature="e#1#53#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#510#910#0" expanded="true" />
+            <element signature="e#942#1226#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/components/combatant.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="214" selection-start-line="214" selection-end-line="214" />
+        <state relative-caret-position="192">
+          <caret line="179" column="34" lean-forward="true" selection-start-line="179" selection-start-column="34" selection-end-line="179" selection-end-column="34" />
           <folding>
             <element signature="e#100#372#0" expanded="true" />
             <element signature="e#3216#3552#0" expanded="true" />
             <element signature="e#4407#4567#0" expanded="true" />
+            <element signature="e#5744#6370#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/affliction_effects/affliction_effect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
+          <folding>
+            <element signature="e#1#53#0" expanded="true" />
+            <element signature="e#407#736#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/world.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="640">
+          <caret line="103" column="26" selection-start-line="103" selection-start-column="26" selection-end-line="103" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#527#1008#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/game_map.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="33" column="42" lean-forward="true" selection-start-line="33" selection-start-column="42" selection-end-line="33" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/entity_action.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="39" lean-forward="true" selection-start-line="6" selection-start-column="39" selection-end-line="6" selection-end-column="39" />
+          <folding>
+            <element signature="e#3709#3982#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/skill_query.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="228" column="28" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="28" />
+          <folding>
+            <element signature="e#2442#4442#0" expanded="true" />
+            <element signature="e#4518#5608#0" expanded="true" />
+            <element signature="e#8265#8675#0" expanded="true" />
+            <element signature="e#8981#9834#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/affliction_action.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="344" selection-start-line="344" selection-end-line="344" />
+        <state relative-caret-position="686">
+          <caret line="348" selection-start-line="348" selection-end-line="348" />
           <folding>
             <element signature="e#0#109#0" expanded="true" />
-            <element signature="e#4596#5206#0" expanded="true" />
+            <element signature="e#7439#8026#0" expanded="true" />
+            <element signature="e#6260#6485#0" expanded="true" />
+            <element signature="e#7018#7404#0" expanded="true" />
+            <element signature="e#7472#7877#0" expanded="true" />
+            <element signature="e#9801#10424#0" expanded="true" />
+            <element signature="e#9848#10482#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/data_loaders/getters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="106" selection-start-line="106" selection-end-line="106" />
+          <folding>
+            <element signature="e#414#676#0" expanded="true" />
+            <element signature="e#1069#1332#0" expanded="true" />
+            <element signature="e#2016#2246#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/initialisers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="23" column="23" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/components/actor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+            <element signature="e#381#474#0" expanded="true" />
+            <element signature="e#541#985#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/events/entity_events.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="529">
+          <caret line="51" column="8" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="8" />
+          <folding>
+            <element signature="e#354#523#0" expanded="true" />
+            <element signature="e#1339#1531#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/entity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="759">
+          <caret line="80" column="36" lean-forward="true" selection-start-line="80" selection-start-column="36" selection-end-line="80" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-989">
+          <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#592#2824#0" expanded="true" />
+            <element signature="e#2865#3796#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/affliction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="698">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+          <folding>
+            <element signature="e#1#110#0" expanded="true" />
+            <element signature="e#441#1216#1" expanded="true" />
+            <element signature="e#2632#3244#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Game/skills/cleromancer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1495">
+          <caret line="65" column="16" selection-start-line="65" selection-start-column="16" selection-end-line="73" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/skill_effect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+            <element signature="e#371#553#0" expanded="true" />
+            <element signature="e#586#789#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/damage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="54" column="109" selection-start-line="54" selection-start-column="109" selection-end-line="54" selection-end-column="109" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#970#1225#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/game_methods/skill_action.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="552">
+          <caret line="111" column="88" selection-start-line="111" selection-start-column="88" selection-end-line="111" selection-end-column="88" />
+          <folding>
+            <element signature="e#1#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/tile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="105" selection-start-line="105" selection-end-line="105" />
+          <folding>
+            <element signature="e#692#1018#0" expanded="true" />
+            <element signature="e#5836#5885#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/skill_effects/apply_affliction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="80" selection-start-line="80" selection-end-line="80" />
+          <folding>
+            <element signature="e#0#133#0" expanded="true" />
+            <element signature="e#747#1125#0" expanded="true" />
+            <element signature="e#3777#5992#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="144" column="8" selection-start-line="144" selection-start-column="4" selection-end-line="144" selection-end-column="8" />
+          <folding>
+            <element signature="e#1553#1584#1" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/managers/turn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="744">
+          <caret line="94" column="87" selection-start-line="94" selection-start-column="87" selection-end-line="94" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/world/aspect/bog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1320#1545#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/events/entity_handler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="63" column="30" lean-forward="true" selection-start-line="63" selection-start-column="30" selection-end-line="63" selection-end-column="30" />
+          <folding>
+            <element signature="e#582#1901#0" expanded="true" />
+            <element signature="e#2823#3181#0" expanded="true" />
+            <element signature="e#3934#4101#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Game/world/aspects.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="12" column="1" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Game/skills/general.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="30" lean-forward="true" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
         </state>
       </provider>
     </entry>

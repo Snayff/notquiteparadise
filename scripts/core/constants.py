@@ -66,8 +66,9 @@ class TargetTypes(Enum):
 
 
 class TargetTags(Enum):
-    """Types of target"""
-
+    """
+    Types of target
+    """
     FLOOR = auto()
     WALL = auto()
     SELF = auto()
@@ -173,6 +174,7 @@ class AfflictionTriggers(Enum):
     MOVE = auto()  # apply if afflicted entity moves
     DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
     END_ROUND = auto()  # apply at the end of the round
+    ACTION = auto()  # apply when an action is taken
 
 
 class AfflictionEffectTypes(Enum):

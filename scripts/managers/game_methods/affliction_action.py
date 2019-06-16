@@ -303,7 +303,7 @@ class AfflictionAction:
             if affliction.affected_entity == entity and affliction.affliction_type == affliction_type:
                 return affliction
 
-        log_string = f"{affliction_type} not found on {entity.name} in 'get_affliction_type_for_entity'"
+        log_string = f"{affliction_type} not found on '{entity.name}' in 'get_affliction_type_for_entity'"
         publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
     def get_affliction_effects_for_entity(self, entity, affliction_effect):
@@ -324,8 +324,8 @@ class AfflictionAction:
                     affliction_effects.append(effect)
 
         if not affliction_effects:
-            log_string = f"{affliction_effect} not found on {entity.name} in 'get_affliction_effects_for_entity'"
-            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+            log_string = f"{affliction_effect} not found on '{entity.name}' in 'get_affliction_effects_for_entity'"
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return affliction_effects
 
@@ -346,10 +346,5 @@ class AfflictionAction:
             for effect in affect_stat_effects:
                 if effect.stat_to_affect == stat:
                     modifier += effect.amount
-
-        if modifier == 0:
-            log_string = f"{stat} modifier not found on {entity.name} in  " \
-                f"'get_stat_modifier_from_afflictions_on_entity'"
-            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
         return modifier

@@ -25,14 +25,14 @@ class Tile:
         self.terrain = None
         self.aspect = None
 
-        if entity:
-            self.set_entity(entity)
-
         if terrain:
             self.set_terrain(terrain)
 
         if aspect:
             self.set_aspect(aspect)
+
+        if entity:
+            self.set_entity(entity)
 
     def has_tag(self, target_tag, active_entity=None):
         """
@@ -229,3 +229,10 @@ class Tile:
 
         """
         return self.entity
+
+    def trigger_aspect_effect(self):
+        """
+        Trigger the effect of the Aspect
+        """
+        if self.aspect:
+            self.aspect.trigger()

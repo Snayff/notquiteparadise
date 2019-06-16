@@ -19,7 +19,7 @@ class SkillEffect:
         """
         Trigger the effect
         """
-        log_string = f"Applying '{self.name}' skill effect from {self.owner.name}..."
+        log_string = f"Applying {self.name} skill effect from {self.owner.name}..."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
 

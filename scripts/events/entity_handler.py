@@ -22,22 +22,22 @@ class EntityHandler(Subscriber):
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         if event.type == EntityEventTypes.MOVE:
-            log_string = f"-> Processing {event.entity.name}'s move."
+            log_string = f"-> Processing '{event.entity.name}'`s move."
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_move(event)
 
         if event.type == EntityEventTypes.SKILL:
-            log_string = f"-> Processing {event.entity.name}'s skill: {event.skill.name}."
+            log_string = f"-> Processing '{event.entity.name}'`s skill: {event.skill.name}."
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_skill(event)
 
         if event.type == EntityEventTypes.DIE:
-            log_string = f"-> Processing {event.dying_entity.name}'s death."
+            log_string = f"-> Processing '{event.dying_entity.name}'`s death."
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_die(event)
 
         if event.type == EntityEventTypes.LEARN:
-            log_string = f"-> Processing {event.entity.name}'s learning of {event.skill_name} from " \
+            log_string = f"-> Processing '{event.entity.name}'`s learning of {event.skill_name} from " \
                 f"{event.skill_tree_name}."
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
             self.process_learn(event)
@@ -63,6 +63,9 @@ class EntityHandler(Subscriber):
         new_tile = world_manager.game_map.get_tile(target_x, target_y)
         new_tile.set_entity(entity)
 
+        # activate the tile's aspect affect
+        new_tile.trigger_aspect_effect()
+
         # update fov if needed
         if entity.player:
             world_manager.player_fov_is_dirty = True
@@ -73,7 +76,7 @@ class EntityHandler(Subscriber):
     @staticmethod
     def process_skill(event):
         """
-        Process the entity's skill
+        Process the entity`s skill
         Args:
             event(EntityEvent): the event to process
         """

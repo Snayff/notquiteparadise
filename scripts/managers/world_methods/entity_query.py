@@ -59,7 +59,7 @@ class EntityQuery:
     @staticmethod
     def get_euclidean_distance_between_entities(start_entity, target_entity):
         """
-        get distance from an entity towards another entity's location
+        get distance from an entity towards another entity`s location
 
         Args:
             start_entity (Entity):
@@ -76,7 +76,7 @@ class EntityQuery:
     @staticmethod
     def get_chebyshev_distance_between_entities(start_entity, target_entity):
         """
-        get distance from an entity towards another entity's location
+        get distance from an entity towards another entity`s location
 
         Args:
             start_entity (Entity):
@@ -92,7 +92,7 @@ class EntityQuery:
 
     def get_direct_direction_between_entities(self, start_entity, target_entity):
         """
-        get direction from an entity towards another entity's location
+        get direction from an entity towards another entity`s location
 
         Args:
             start_entity (Entity):
@@ -167,14 +167,14 @@ class EntityQuery:
         # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited
         my_path = tcod.path_new_using_map(fov, 1.41)
 
-        # Compute the path between self's coordinates and the target's coordinates
+        # Compute the path between self`s coordinates and the target`s coordinates
         tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)
 
         # Check if the path exists, and in this case, also the path is shorter than max_path_length
         # The path size matters if you want the monster to use alternative longer paths (for example through
         # other rooms) if for example the player is in a corridor
         # It makes sense to keep path size relatively low to keep the monsters from running around the map if
-        # there's an alternative path really far away
+        # there`s an alternative path really far away
         if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) < max_path_length:
             # Find the next coordinates in the computed full path
             x, y = tcod.path_walk(my_path, True)

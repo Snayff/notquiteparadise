@@ -70,7 +70,7 @@ class EntityAnimation:
         """
         Build a sprites dictionary for the actor. Spritesheet must be in assets/actor
         Args:
-            spritesheet_name (str): name of actor's spritesheet
+            spritesheet_name (str): name of actor`s spritesheet
 
         Returns:
             Dict: Contains all sprites animations.
@@ -123,7 +123,7 @@ class EntityAnimation:
 
     def get_entity_current_frame(self, entity):
         """
-        Get entity's current sprite frame
+        Get entity`s current sprite frame
 
         Args:
             entity (Entity): The entity to get the frame from

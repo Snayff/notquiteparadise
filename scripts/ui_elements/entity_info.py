@@ -106,7 +106,7 @@ class SelectedEntityInfo:
         # panel background
         self.panel.draw_background()
 
-        # render the entity's icon
+        # render the entity`s icon
         self.panel.surface.blit(icon, (icon_x, icon_y))
 
         # render header

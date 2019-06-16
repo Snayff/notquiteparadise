@@ -14,7 +14,7 @@ from scripts.events.ui_handler import UiHandler
 
 def initialise_game():
     """
-    Init the game's required info
+    Init the game`s required info
     """
 
     pygame.init()

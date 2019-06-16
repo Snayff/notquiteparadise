@@ -22,5 +22,5 @@ class AfflictionEffect:
         """
         Trigger the effect
         """
-        log_string = f"Applying '{self.name}' affliction effect from {self.owner.name}..."
+        log_string = f"Applying {self.name} affliction effect from {self.owner.name}..."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))

@@ -187,7 +187,7 @@ def example_code():
 # Targeting function from pygame tut
 # def menu_tile_select(coords_origin = None, max_range = None, radius = None,
 #     penetrate_walls = True, pierce_creature = True):
-#     ''' This menu let's the player select a tile.
+#     ''' This menu let`s the player select a tile.
 #
 #     This function pauses the game, produces an on screen rectangle and when the
 #     player presses the left mb, will return (message for now) the map address.

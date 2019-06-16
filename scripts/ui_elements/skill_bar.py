@@ -91,7 +91,7 @@ class SkillBar:
 
     def update_skill_icons_to_show(self):
         """
-        Get the player's known skills to show in the skill bar.
+        Get the player`s known skills to show in the skill bar.
         """
 
         # update info
@@ -121,7 +121,7 @@ class SkillBar:
             int: -1 if nothing, else 0-4.
 
         Notes:
-            The skills in the skill bar are pulled, in order, from the player's known skills.
+            The skills in the skill bar are pulled, in order, from the player`s known skills.
         """
         for container in self.skill_containers:
             if container.rect.collidepoint(relative_x, relative_y):

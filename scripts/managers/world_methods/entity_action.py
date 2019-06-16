@@ -120,5 +120,5 @@ class EntityAction:
         """
         entity.combatant.hp -= cost
 
-        log_string = f"{entity.name} paid {cost} hp and has {entity.combatant.hp} left."
+        log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
