@@ -2,7 +2,7 @@ from scripts.managers.world_methods.game_map_query import is_tile_blocking_movem
 
 from scripts.global_instances.event_hub import publisher
 from scripts.skills.skill_effects.skill_effect import SkillEffect
-from scripts.world.game_map import is_tile_blocking_movement
+from scripts.world.Map import is_tile_blocking_movement
 
 
 class MoveSkillEffect(SkillEffect):
@@ -30,7 +30,7 @@ class MoveSkillEffect(SkillEffect):
         # move towards target up to move_distance
         for move in range(1, self.move_distance):
             # check target tile is valid
-            in_bounds = world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y)
+            in_bounds = world_manager.Map.is_tile_in_bounds(target_tile_x, target_tile_y)
             tile_blocking_movement = is_tile_blocking_movement(target_tile_x,
                                                                target_tile_y)
             entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_tile_x,

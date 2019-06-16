@@ -232,8 +232,8 @@ def handle_player_turn_input(input_values):
         target_x, target_y = direction_x + player.x, direction_y + player.y
 
         # is there something in the way?
-        in_bounds = world_manager.game_map.is_tile_in_bounds(target_x, target_y)
-        tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
+        in_bounds = world_manager.Map.is_tile_in_bounds(target_x, target_y)
+        tile_blocking_movement = world_manager.Map.is_tile_blocking_movement(target_x, target_y)
         entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
 
         if in_bounds:
@@ -335,14 +335,14 @@ def handle_targeting_mode_input(input_values):
     # if direction isn't 0 then we need to move selected_tile
     if direction_x != 0 or direction_y != 0:
         tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
-        tile = world_manager.game_map.get_tile(tile_x, tile_y)
+        tile = world_manager.Map.get_tile(tile_x, tile_y)
         ui_manager.targeting_overlay.set_selected_tile(tile)
         entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)
 
     # if mouse moved update selected tile
     if values["mouse_moved"]:
-        tile = world_manager.game_map.get_tile(mouse_tile_x, mouse_tile_y)
+        tile = world_manager.Map.get_tile(mouse_tile_x, mouse_tile_y)
         ui_manager.targeting_overlay.set_selected_tile(tile)
         entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)

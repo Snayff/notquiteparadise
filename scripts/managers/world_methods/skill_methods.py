@@ -17,7 +17,7 @@ from scripts.world.tile import Tile
 
 class SkillMethods:
     """
-    Methods for querying skills and skill related info.
+    Methods for querying skills and skill related info and taking skill actions.
     """
     def __init__(self, manager):
         self.manager = manager
@@ -38,7 +38,7 @@ class SkillMethods:
         target_x, target_y = target_pos
         blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x,
                                                                                                  target_y)
-        tile = world_manager.game_map.get_tile(target_x, target_y)
+        tile = world_manager.Map.get_tile(target_x, target_y)
 
         # do we need an entity?
         if skill.required_target_type == TargetTypes.ENTITY:
@@ -311,7 +311,7 @@ class SkillMethods:
             target = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
 
         elif required_target_type == TargetTypes.TERRAIN:
-            target_tile = world_manager.game_map.get_tile(target_x, target_y)
+            target_tile = world_manager.Map.get_tile(target_x, target_y)
             target = target_tile.terrain
 
         log_string = f"Got target {target.name} of type {required_target_type}."

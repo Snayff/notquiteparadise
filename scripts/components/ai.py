@@ -49,7 +49,7 @@ class BasicMonster:
 
         # we can't attack so try to move closer
         # check target tile is valid
-        in_bounds = world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y)
+        in_bounds = world_manager.Map.is_tile_in_bounds(target_tile_x, target_tile_y)
         tile_blocking_movement = is_tile_blocking_movement(target_tile_x, target_tile_y)
         entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_tile_x, target_tile_y)
         if in_bounds and not tile_blocking_movement and not entity_blocking_movement:

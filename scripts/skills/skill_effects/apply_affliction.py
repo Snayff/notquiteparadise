@@ -48,7 +48,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
             # get the tile to check the tags
             from scripts.global_instances.managers import world_manager
-            tile = world_manager.game_map.get_tile(defender.x, defender.y)
+            tile = world_manager.Map.get_tile(defender.x, defender.y)
 
             if world_manager.Skill.has_required_tags(tile, self.required_tags):
 

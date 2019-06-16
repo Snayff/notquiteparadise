@@ -35,7 +35,7 @@ class EntityMethods:
         Returns:
             Entity: returns entity if there is one, else None.
         """
-        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile(tile_x, tile_y)
         entity = tile.entity
 
         if entity:
@@ -55,7 +55,7 @@ class EntityMethods:
         Returns:
             entity: Entity or None if no entity found
         """
-        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile(tile_x, tile_y)
         entity = tile.entity
 
         if entity:
@@ -117,7 +117,7 @@ class EntityMethods:
         direction_x = int(round(direction_x / distance))
         direction_y = int(round(direction_y / distance))
 
-        tile_is_blocked = self.manager.game_map.is_tile_blocking_movement(start_entity.x + direction_x,
+        tile_is_blocked = self.manager.Map.is_tile_blocking_movement(start_entity.x + direction_x,
                                                                                 start_entity.y + direction_y)
 
         if not (tile_is_blocked or self.get_blocking_entity_at_location(start_entity.x + direction_x,
@@ -236,7 +236,7 @@ class EntityMethods:
             entity:
         """
         self.manager.entities.append(entity)
-        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile(tile_x, tile_y)
         tile.set_entity(entity)
 
     def add_player(self, tile_x, tile_y, entity):
@@ -259,7 +259,7 @@ class EntityMethods:
             entity:
         """
         # remove from tile
-        tile = self.manager.game_map.get_tile(entity.x, entity.y)
+        tile = self.manager.Map.get_tile(entity.x, entity.y)
         tile.remove_entity()
 
         # remove from entities list

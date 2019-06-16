@@ -5,6 +5,7 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.managers.world_methods.affliction_methods import AfflictionMethods
 from scripts.managers.world_methods.entity_methods import EntityMethods
+from scripts.managers.world_methods.map_methods import MapMethods
 from scripts.managers.world_methods.skill_methods import SkillMethods
 
 from scripts.world.entity import Entity
@@ -20,6 +21,7 @@ class WorldManager:
         self.Entity = EntityMethods(self)
         self.Skill = SkillMethods(self)
         self.Affliction = AfflictionMethods(self)
+        self.Map = MapMethods(self)
 
         # TODO - create FOV container class
 
@@ -53,7 +55,7 @@ class WorldManager:
 
         for x in range(width):
             for y in range(height):
-                tile = self.game_map.get_tile(x,y)
+                tile = self.Map.get_tile(x,y)
                 tcod.map_set_properties(self.player_fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
 
         self.player_fov_is_dirty = True
@@ -67,7 +69,7 @@ class WorldManager:
             radius:
         """
         tcod.map_compute_fov(self.player_fov_map, x, y, radius, self.light_walls, self.fov_algorithm)
-        self.game_map.update_tile_visibility(self.player_fov_map)
+        self.Map.update_tile_visibility(self.player_fov_map)
         self.player_fov_is_dirty = False
 
     def is_tile_in_fov(self, tile_x, tile_y):

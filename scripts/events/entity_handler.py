@@ -56,11 +56,11 @@ class EntityHandler(Subscriber):
         old_x, old_y = entity.x, entity.y
 
         # clean up old tile
-        old_tile = world_manager.game_map.get_tile(old_x, old_y)
+        old_tile = world_manager.Map.get_tile(old_x, old_y)
         old_tile.remove_entity()
 
         # move entity to new tile
-        new_tile = world_manager.game_map.get_tile(target_x, target_y)
+        new_tile = world_manager.Map.get_tile(target_x, target_y)
         new_tile.set_entity(entity)
 
         # activate the tile's aspect affect
@@ -103,7 +103,7 @@ class EntityHandler(Subscriber):
 
         # get the tile and remove the entity from it
         tile_x, tile_y = entity.x, entity.y
-        tile = world_manager.game_map.get_tile(tile_x, tile_y)
+        tile = world_manager.Map.get_tile(tile_x, tile_y)
         tile.remove_entity()
 
         # remove from turn queue
