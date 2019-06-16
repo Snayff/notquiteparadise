@@ -69,7 +69,7 @@
                     "required_tags": ["other_entity"],
                     "accuracy": 100,
                     "stat_to_target": "skullduggery",
-                    "affliction_name": "flaming",
+                    "affliction_name": "bogged_down",
                     "duration": 3
                 }
         ]

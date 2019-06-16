@@ -66,8 +66,9 @@ class TargetTypes(Enum):
 
 
 class TargetTags(Enum):
-    """Types of target"""
-
+    """
+    Types of target
+    """
     FLOOR = auto()
     WALL = auto()
     SELF = auto()
@@ -97,6 +98,7 @@ class SecondaryStatTypes(Enum):
     RESIST_BLUNT = auto()
     RESIST_PIERCE = auto()
     RESIST_ELEMENTAL = auto()
+    ACTION_COST_CHANGE = auto()
 
 
 class HitTypes(Enum):
@@ -150,7 +152,7 @@ class AfflictionTypes(Enum):
     """
     # BANES
     MYOPIC = auto()
-    SLUGGISH = auto()
+    BOGGED_DOWN = auto()
     SHAKEN = auto()
     EXPOSED = auto()
     RUPTURED = auto()
@@ -172,6 +174,7 @@ class AfflictionTriggers(Enum):
     MOVE = auto()  # apply if afflicted entity moves
     DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
     END_ROUND = auto()  # apply at the end of the round
+    ACTION = auto()  # apply when an action is taken
 
 
 class AfflictionEffectTypes(Enum):
@@ -179,3 +182,13 @@ class AfflictionEffectTypes(Enum):
     Types of Affliction effects
     """
     DAMAGE = auto()
+    AFFECT_STAT = auto()
+
+class AspectTypes(Enum):
+    DIRT = auto()
+    LONG_GRASS = auto()
+    FROZEN = auto()
+    SMOKE = auto()
+    GAS = auto()
+    BOG = auto()
+    AFLAME = auto()

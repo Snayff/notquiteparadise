@@ -51,8 +51,8 @@ class DamageSkillEffect(SkillEffect):
             # if it needs to be another entity then it can't be looking at itself
             if TargetTags.OTHER_ENTITY in self.required_tags:
                 if attacker != defender:
-                    to_hit_score = game_manager.skill_action.calculate_to_hit_score(attacker, defender,
-                                                            self.base_accuracy, self.stat_to_target)
+                    to_hit_score = game_manager.skill_action.calculate_to_hit_score(defender,
+                                                            self.base_accuracy, self.stat_to_target, attacker)
                     hit_type = game_manager.skill_query.get_hit_type(to_hit_score)
                     damage = self.calculate_damage(attacker, defender, hit_type)
 

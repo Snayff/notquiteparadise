@@ -1,7 +1,9 @@
-from scripts.core.constants import AfflictionTypes, AfflictionCategory, AfflictionTriggers, LoggingEventTypes
+from scripts.core.constants import AfflictionTypes, AfflictionCategory, AfflictionTriggers, LoggingEventTypes, \
+    AfflictionEffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.skills.affliction import Affliction
+from scripts.skills.affliction_effects.affect_stat import AffectStatAfflictionEffect
 from scripts.skills.affliction_effects.damage import DamageAfflictionEffect
 from scripts.world.entity import Entity
 
@@ -55,19 +57,19 @@ class AfflictionAction:
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
     @staticmethod
-    def create_affliction(affliction_name, duration, affected_entity):
+    def create_affliction(affliction_type, duration, affected_entity):
         """
         Create an Affliction object
 
         Args:
-            affliction_name (str): the string name of the affliction
+            affliction_type (AfflictionTypes): the type of the affliction
             duration (int): amount of activations before expiry
             affected_entity (Entity): the entity to be affected
 
         Returns:
             Affliction:
         """
-        affliction = Affliction(affliction_name, duration, affected_entity)
+        affliction = Affliction(affliction_type, duration, affected_entity)
 
         return affliction
 
@@ -93,6 +95,26 @@ class AfflictionAction:
         return created_effect
 
     @staticmethod
+    def create_affect_stat_effect(affliction, effect):
+        """
+        Create the Affect Stat Affliction Effect for the Affliction
+
+        Args:
+            affliction (Affliction): the Affliction to contain the damage effect
+            effect (): affliction effect json data
+
+        Returns:
+            AffectStatAfflictionEffect
+        """
+        owner = affliction
+        stat_to_affect = effect["stat_to_affect"]
+        amount = effect["amount"]
+
+        created_effect = AffectStatAfflictionEffect(owner, stat_to_affect, amount)
+
+        return created_effect
+
+    @staticmethod
     def get_affliction_type_from_string(affliction_name):
         """
         Convert a string to the appropriate AfflictionTypes (Enum) value
@@ -106,6 +128,50 @@ class AfflictionAction:
         # TODO - add remaining afflictions
         if affliction_name == "flaming":
             return AfflictionTypes.FLAMING
+        elif affliction_name == "bogged_down":
+            return AfflictionTypes.BOGGED_DOWN
+
+        log_string = f"{affliction_name} not found in 'get_affliction_type_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
+
+    @staticmethod
+    def get_affliction_effect_type_from_string(affliction_effect_name):
+        """
+        Convert a string to the appropriate AfflictionEffectTypes (Enum) value
+
+        Args:
+            affliction_effect_name (str): string name of affliction effect
+
+        Returns:
+            AfflictionEffectTypes
+        """
+        if affliction_effect_name == "damage":
+            return AfflictionEffectTypes.DAMAGE
+        elif affliction_effect_name == "affect_stat":
+            return AfflictionEffectTypes.AFFECT_STAT
+
+        log_string = f"{affliction_effect_name} not found in 'get_affliction_effect_type_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
+
+    @staticmethod
+    def get_affliction_string_from_type(affliction_type):
+        """
+        Convert an AfflictionTypes (Enum) to appropriate string
+
+        Args:
+            affliction_type (AfflictionTypes): type of affliction
+
+        Returns:
+            str: name of the affliction
+        """
+        # TODO - add remaining afflictions
+        if affliction_type == AfflictionTypes.FLAMING:
+            return "flaming"
+        elif affliction_type == AfflictionTypes.BOGGED_DOWN:
+            return "bogged_down"
+
+        log_string = f"{affliction_type} not found in 'get_affliction_string_from_type'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_affliction_category_from_string(affliction_category):
@@ -123,6 +189,9 @@ class AfflictionAction:
         elif affliction_category == "boon":
             return AfflictionCategory.BOON
 
+        log_string = f"{affliction_category} not found in 'get_affliction_category_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
+
     @staticmethod
     def get_affliction_name(affliction):
         """
@@ -136,29 +205,12 @@ class AfflictionAction:
         """
         # TODO - add remaining types
         if affliction == AfflictionTypes.MYOPIC:
-            name = "Myopic"
-        elif affliction == AfflictionTypes.SLUGGISH:
-            name = "Sluggish"
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
-        elif affliction == AfflictionTypes:
-            name = ""
+            return "Myopic"
+        elif affliction == AfflictionTypes.BOGGED_DOWN:
+            return "Sluggish"
 
-        return name
+        log_string = f"{affliction} not found in 'get_affliction_name'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_trigger_event_from_string(trigger_event):
@@ -176,6 +228,9 @@ class AfflictionAction:
             return AfflictionTriggers.PASSIVE
         elif trigger_event == "end_turn":
             return AfflictionTriggers.END_TURN
+
+        log_string = f"{trigger_event} not found in 'get_trigger_event_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     def register_active_affliction(self, affliction):
         """
@@ -248,4 +303,48 @@ class AfflictionAction:
             if affliction.affected_entity == entity and affliction.affliction_type == affliction_type:
                 return affliction
 
-        return None
+        log_string = f"{affliction_type} not found on '{entity.name}' in 'get_affliction_type_for_entity'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+
+    def get_affliction_effects_for_entity(self, entity, affliction_effect):
+        """
+        Get all affliction effects of specified type from a specified entity
+
+        Args:
+            entity (Entity):
+            affliction_effect (AfflictionEffectTypes):
+        """
+        afflictions = self.get_afflictions_for_entity(entity)
+        affliction_effects = []
+
+        # loop all affliction effects in all afflictions and return specified type
+        for affliction in afflictions:
+            for effect in affliction.affliction_effects:
+                if effect.effect_type == affliction_effect:
+                    affliction_effects.append(effect)
+
+        if not affliction_effects:
+            log_string = f"{affliction_effect} not found on '{entity.name}' in 'get_affliction_effects_for_entity'"
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        return affliction_effects
+
+    def get_stat_modifier_from_afflictions_on_entity(self, entity, stat):
+        """
+        Get the modifier for a specified stat from all applied afflictions on an entity
+
+        Args:
+            entity (Entity):
+            stat (): primary or secondary stat
+        """
+        modifier = 0
+
+        affect_stat_effects = self.get_affliction_effects_for_entity(entity, AfflictionEffectTypes.AFFECT_STAT)
+
+        # if we have any afflictions get the modifiers to the specified stat
+        if affect_stat_effects:
+            for effect in affect_stat_effects:
+                if effect.stat_to_affect == stat:
+                    modifier += effect.amount
+
+        return modifier

@@ -18,7 +18,7 @@ class Actor:
 
     def learn_skill(self, skill_tree_name,  skill_name):
         """
-        Add a skill to the Actor's known skills
+        Add a skill to the Actor`s known skills
         Args:
             skill_tree_name(str): Name of the skill tree the skill is in
             skill_name(str): Name of the skill to learn
@@ -66,7 +66,7 @@ class Actor:
             if skill.name == skill_name:
                 return skill
 
-        log_string = f"Looked in {self.owner.name}'s known skills to find {skill_name}, but found nothing. "
+        log_string = f"Looked in {self.owner.name}`s known skills to find {skill_name}, but found nothing. "
         publisher.publish(LoggingEvent(LoggingEventTypes.ERROR, log_string))
 
         return None

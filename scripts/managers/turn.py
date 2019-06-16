@@ -54,11 +54,11 @@ class TurnManager:
         Args:
             spent_time:
         """
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Ending {self.turn_holder.name}'s turn..."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Ending {self.turn_holder.name}`s turn..."))
 
         entity = self.turn_holder
 
-        #  update actor's time spent
+        #  update actor`s time spent
         entity.actor.spend_time(spent_time)
 
         self.next_turn()
@@ -92,4 +92,4 @@ class TurnManager:
             publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG,
-                                               f"-> It is now {self.turn_holder.name}'s turn."))
+                                               f"-> It is now '{self.turn_holder.name}'`s turn."))

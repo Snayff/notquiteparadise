@@ -94,7 +94,7 @@ class SkillAction:
             target_tags.append(query.get_target_tags_from_string(tag))
 
         accuracy = effect["accuracy"]
-        stat_to_target = query.get_secondary_stat_from_string(effect["stat_to_target"])
+        stat_to_target = query.get_stat_from_string(effect["stat_to_target"])
         affliction_name = effect["affliction_name"]
         affliction_duration = effect["duration"]
         affliction_values = get_value_from_afflictions_json(affliction_name)
@@ -109,19 +109,27 @@ class SkillAction:
         return created_effect
 
     @staticmethod
-    def calculate_to_hit_score(attacker, defender, skill_accuracy, stat_to_target):
+    def calculate_to_hit_score(defender, skill_accuracy, stat_to_target, attacker=None):
         """
-        Get the to hit score from the stats of both entities
+        Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
         Args:
-            attacker ():
+
             defender ():
             skill_accuracy ():
             stat_to_target ():
+            attacker ():
         """
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Get to hit scores..."))
 
         roll = random.randint(1, 100)
-        modified_to_hit_score = attacker.combatant.secondary_stats.chance_to_hit + skill_accuracy + roll
+
+        # check if attacker provided
+        if attacker:
+            attacker_value = attacker.combatant.secondary_stats.chance_to_hit
+        else:
+            attacker_value = 0
+
+        modified_to_hit_score = attacker_value + skill_accuracy + roll
 
         # get dodge score
         dodge_value = 0

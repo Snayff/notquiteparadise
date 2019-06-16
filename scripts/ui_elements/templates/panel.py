@@ -41,7 +41,7 @@ class Panel:
 
     def draw_border(self, ):
         """
-        Draw a panel's border if bordersize > 0
+        Draw a panel`s border if bordersize > 0
         """
 
         if self.border_size > 0:

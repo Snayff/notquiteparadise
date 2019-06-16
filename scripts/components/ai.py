@@ -22,7 +22,7 @@ class BasicMonster:
         distance_to_target = world_manager.entity_query.get_chebyshev_distance_between_entities(entity, target)
         target_tile_x, target_tile_y = entity.x + direction_x, entity.y + direction_y
 
-        log_string = f"{entity.name} is starting to take their turn..."
+        log_string = f"'{entity.name}' is starting to take their turn..."
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
         # !!!! TESTING ONLY!!!!!!!
@@ -38,13 +38,13 @@ class BasicMonster:
             attack_range = skill_value.range
 
             if distance_to_target <= attack_range:
-                log_string = f"-> {entity.name} decided to use {skill_value.name}."
+                log_string = f"-> '{entity.name}' decided to use {skill_value.name}."
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
                 publisher.publish(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value))
                 return None  # stop further processing in function
 
-        log_string = f"-> {entity.name} found no possible attack."
+        log_string = f"-> '{entity.name}' found no possible attack."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         # we can't attack so try to move closer

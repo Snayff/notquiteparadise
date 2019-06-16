@@ -13,14 +13,11 @@ class DamageAfflictionEffect(AfflictionEffect):
     Attributes:
         damage(int):
         damage_type(int):
-        required_target_type(TargetTypes):
-        required_tags(list): list of TargetType enums
-        accuracy(int):
         stat_to_target(PrimaryStatTypes):
     """
 
     def __init__(self, owner, damage, damage_type, stat_to_target):
-        super().__init__(owner, "Damage", "This is the damage effect")
+        super().__init__(owner, "damage", "This is the damage effect")
         self.base_damage = damage
         self.damage_type = damage_type
         self.stat_to_target = stat_to_target

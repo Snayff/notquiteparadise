@@ -1,5 +1,6 @@
 import pygame
 
+from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, GAME_FPS, BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
@@ -401,7 +402,7 @@ class MessageLog:
             # EXPRESSIONS
             if msg in self.expressions:
 
-                # expression found so let's deal with any in progress message
+                # expression found so let`s deal with any in progress message
                 if msg_in_progress != "":
                     # apply currently built string and then increment line
                     parsed_message_list.append((default_colour, msg_in_progress))
@@ -414,7 +415,7 @@ class MessageLog:
             # ICONS
             elif msg in self.icons:
 
-                # icon found so let's deal with any in progress message
+                # icon found so let`s deal with any in progress message
                 if msg_in_progress != "":
                     # apply currently built string and then increment line
                     parsed_message_list.append((default_colour, msg_in_progress))
@@ -427,7 +428,7 @@ class MessageLog:
             # HYPERLINKS
             elif msg in self.hyperlinks:
 
-                # hyperlink found so let's deal with any in progress message
+                # hyperlink found so let`s deal with any in progress message
                 if msg_in_progress != "":
                     # apply currently built string and then increment line
                     parsed_message_list.append((default_colour, msg_in_progress))

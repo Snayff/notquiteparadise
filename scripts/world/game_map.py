@@ -4,6 +4,7 @@ from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TargetTags
 from scripts.ui_elements.templates.panel import Panel
+from scripts.world.aspect.bog import Bog
 from scripts.world.tile import Tile
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
@@ -30,6 +31,7 @@ class GameMap:
         if self.width > 10 and self.height > 10:
             self.tiles[0][5].set_terrain(Wall())
             self.tiles[10][2].set_terrain(Wall())
+            self.tiles[0][2].set_aspect(Bog())
 
         # setup the panel
         panel_x = 0
@@ -86,7 +88,7 @@ class GameMap:
 
     def update_tile_visibility(self, fov_map):
         """
-        Update the player's fov
+        Update the player`s fov
         Args:
             fov_map:
         """

@@ -67,7 +67,7 @@ class WorldManager:
 
     def is_tile_in_fov(self, tile_x, tile_y):
         """
-        Check if  target tile is in player's FOV
+        Check if  target tile is in player`s FOV
 
         Args:
             tile_x: x of tile

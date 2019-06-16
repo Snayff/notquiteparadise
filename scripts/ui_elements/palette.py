@@ -30,7 +30,7 @@ class Palette:
 
         Attributes:
             background (Colour): Colour of the Message Log background.
-            expressions_player (Colour): Colour of the  player's expression.
+            expressions_player (Colour): Colour of the  player`s expression.
             text_default (Colour): Colour of the default text.
             hyperlink (Colour): Colour of hyperlinks .
             tooltip_background(Colour): Colour of the tooltip window background.

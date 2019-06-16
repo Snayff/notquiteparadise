@@ -23,15 +23,17 @@ class Affliction:
         affliction_effects (list(AfflictionEffect)): list of AfflictionEffects
     """
 
-    def __init__(self, name, duration, affected_entity):
+    def __init__(self, affliction_type, duration, affected_entity):
         from scripts.global_instances.managers import game_manager
         action = game_manager.affliction_action
+        name = action.get_affliction_string_from_type(affliction_type)
         values = get_value_from_afflictions_json(name)
+
         self.name = name
         self.description = values["description"]
         self.icon = values["icon"]
         self.affliction_category = action.get_affliction_category_from_string(values["category"])
-        self.affliction_type = action.get_affliction_type_from_string(name)
+        self.affliction_type = affliction_type
         self.duration = duration
         self.trigger_event = action.get_trigger_event_from_string(values["trigger_event"])
         self.affected_entity = affected_entity  # set at time of allocation to an entity
@@ -47,6 +49,9 @@ class Affliction:
 
             if effect_name == "damage":
                 created_effect = game_manager.affliction_action.create_damage_effect(self, effect)
+
+            if effect_name == "affect_stat":
+                created_effect = game_manager.affliction_action.create_affect_stat_effect(self, effect)
 
             # if we have an effect add it to internal list
             if created_effect:
