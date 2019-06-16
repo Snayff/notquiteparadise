@@ -31,7 +31,7 @@ class TurnManager:
 
         # create a turn queue from the entities list
         from scripts.global_instances.managers import world_manager
-        entities = world_manager.entity_query.get_all_entities()
+        entities = world_manager.Entity.get_all_entities()
 
         for entity in entities:
             if entity.ai or entity == world_manager.player:

@@ -179,7 +179,7 @@ def handle_player_turn_input(input_values):
             tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
             tile_x = tile_pos[0] // TILE_SIZE
             tile_y = tile_pos[1] // TILE_SIZE
-            entity = world_manager.entity_query.get_entity_in_fov_at_tile(tile_x, tile_y)
+            entity = world_manager.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
 
             if entity:
                 ui_manager.entity_info.set_selected_entity(entity)
@@ -234,7 +234,7 @@ def handle_player_turn_input(input_values):
         # is there something in the way?
         in_bounds = world_manager.game_map.is_tile_in_bounds(target_x, target_y)
         tile_blocking_movement = world_manager.game_map.is_tile_blocking_movement(target_x, target_y)
-        entity_blocking_movement = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
+        entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
 
         if in_bounds:
             if not entity_blocking_movement and tile_blocking_movement:
@@ -337,14 +337,14 @@ def handle_targeting_mode_input(input_values):
         tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
         tile = world_manager.game_map.get_tile(tile_x, tile_y)
         ui_manager.targeting_overlay.set_selected_tile(tile)
-        entity = world_manager.entity_query.get_blocking_entity_at_location(tile.x, tile.y)
+        entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)
 
     # if mouse moved update selected tile
     if values["mouse_moved"]:
         tile = world_manager.game_map.get_tile(mouse_tile_x, mouse_tile_y)
         ui_manager.targeting_overlay.set_selected_tile(tile)
-        entity = world_manager.entity_query.get_blocking_entity_at_location(tile.x, tile.y)
+        entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.entity_info.set_selected_entity(entity)
 
     # confirm usage
@@ -357,7 +357,7 @@ def handle_targeting_mode_input(input_values):
             # FIXME: confirm not triggering
 
             # if entity selected then use skill
-            if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
+            if world_manager.Entity.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
                 publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_being_targeted)))
 
         # pressed another skill so swap to that one
@@ -367,5 +367,5 @@ def handle_targeting_mode_input(input_values):
 
     if values["left_click"]:
         # if entity selected then use skill
-        if world_manager.entity_query.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
+        if world_manager.Entity.get_blocking_entity_at_location(selected_tile.x, selected_tile.y):
             publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y), skill_being_targeted)))

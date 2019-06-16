@@ -3,9 +3,9 @@ import pygame
 from scripts.core.constants import GameStates, LoggingEventTypes, GAME_FPS
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.managers.game_methods.affliction_action import AfflictionAction
-from scripts.managers.game_methods.skill_action import SkillAction
-from scripts.managers.game_methods.skill_query import SkillQuery
+from scripts.managers.world_methods.affliction_action import AfflictionAction
+from scripts.managers.world_methods.skill_action import SkillAction
+from scripts.managers.world_methods.skill_query import SkillQuery
 
 
 class GameManager:

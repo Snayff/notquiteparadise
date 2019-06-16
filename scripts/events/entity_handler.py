@@ -82,7 +82,7 @@ class EntityHandler(Subscriber):
         """
 
         skill = event.skill
-        world_manager.entity_action.pay_resource_cost(event.entity, event.skill.resource_type,
+        world_manager.Entity.pay_resource_cost(event.entity, event.skill.resource_type,
                                                       event.skill.resource_cost)
         skill.use(event.target_pos)
 

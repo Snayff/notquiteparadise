@@ -3,8 +3,7 @@ import tcod
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.managers.world_methods.entity_action import EntityAction
-from scripts.managers.world_methods.entity_query import EntityQuery
+from scripts.managers.world_methods.entity_methods import EntityMethods
 
 from scripts.world.entity import Entity
 from scripts.world.game_map import GameMap
@@ -16,8 +15,7 @@ class WorldManager:
     """
     def __init__(self):
 
-        self.entity_query = EntityQuery(self)
-        self.entity_action = EntityAction(self)
+        self.Entity = EntityMethods(self)
 
         # TODO - create FOV container class
 

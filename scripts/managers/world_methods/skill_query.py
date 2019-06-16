@@ -30,7 +30,7 @@ class SkillQuery:
         from scripts.global_instances.managers import world_manager
 
         target_x, target_y = target_pos
-        blocking_entity_at_location = world_manager.entity_query.get_blocking_entity_at_location(target_x,
+        blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x,
                                                                                                  target_y)
         tile = world_manager.game_map.get_tile(target_x, target_y)
 
@@ -39,7 +39,7 @@ class SkillQuery:
             # is there an entity to target?
             if blocking_entity_at_location:
                 # is the entity within range?
-                distance_to_entity = world_manager.entity_query.get_chebyshev_distance_between_entities(entity,
+                distance_to_entity = world_manager.Entity.get_chebyshev_distance_between_entities(entity,
                                             blocking_entity_at_location)
                 if distance_to_entity > skill.range:
                     return False
@@ -302,7 +302,7 @@ class SkillQuery:
         target = None
 
         if required_target_type == TargetTypes.ENTITY:
-            target = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
+            target = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
 
         elif required_target_type == TargetTypes.TERRAIN:
             target_tile = world_manager.game_map.get_tile(target_x, target_y)

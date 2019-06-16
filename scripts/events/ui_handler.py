@@ -45,7 +45,7 @@ class UiHandler(Subscriber):
                     ui_manager.targeting_overlay.set_selected_tile(tile)
 
                     # show the entity info
-                    entity = world_manager.entity_query.get_blocking_entity_at_location(tile.x, tile.y)
+                    entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
                     ui_manager.entity_info.set_selected_entity(entity)
 
                     # show the overlay
