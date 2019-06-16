@@ -184,6 +184,9 @@ class SkillQuery:
         elif tag == "no_entity":
             return TargetTags.NO_ENTITY
 
+        log_string = f"{tag} not found in 'get_target_tags_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
+
     @staticmethod
     def get_target_type_from_string(target_type):
         """
@@ -199,6 +202,9 @@ class SkillQuery:
             return TargetTypes.ENTITY
         elif target_type == "terrain":
             return TargetTypes.TERRAIN
+
+        log_string = f"{target_type} not found in 'get_target_type_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_damage_type_from_string(damage_type):
@@ -216,6 +222,9 @@ class SkillQuery:
             return DamageTypes.BLUNT
         elif damage_type == "elemental":
             return DamageTypes.ELEMENTAL
+
+        log_string = f"{damage_type} not found in 'get_damage_type_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_primary_stat_from_string(primary_stat):
@@ -238,6 +247,9 @@ class SkillQuery:
         elif primary_stat == "exactitude":
             return PrimaryStatTypes.EXACTITUDE
 
+        log_string = f"{primary_stat} not found in 'get_primary_stat_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
+
     @staticmethod
     def get_secondary_stat_from_string(secondary_stat):
         """
@@ -254,6 +266,11 @@ class SkillQuery:
             return SecondaryStatTypes.DODGE_TOUGHNESS
         elif secondary_stat == "dodge_intelligence":
             return SecondaryStatTypes.DODGE_INTELLIGENCE
+        elif secondary_stat == "action_cost_change":
+            return SecondaryStatTypes.ACTION_COST_CHANGE
+
+        log_string = f"{secondary_stat} not found in 'get_secondary_stat_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_target(target_pos, required_target_type):
@@ -292,14 +309,14 @@ class SkillQuery:
         Returns:
             TargetTypes:
         """
-        target_type = None
 
         if isinstance(target, Terrain):
-            target_type = TargetTypes.TERRAIN
+            return TargetTypes.TERRAIN
         elif isinstance(target, Entity):
-            target_type = TargetTypes.ENTITY
+            return TargetTypes.ENTITY
 
-        return target_type
+        log_string = f"Type no found for {target} in 'get_target_type'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_hit_type(to_hit_score):

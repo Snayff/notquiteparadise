@@ -10,8 +10,13 @@ class AffectStatAfflictionEffect(AfflictionEffect):
     """
 
     def __init__(self, owner, stat_to_affect, amount):
-        super().__init__(owner, "Affect stat", "This is the Affect Stat effect")
-        self.stat_to_affect = stat_to_affect
+        super().__init__(owner, "affect_stat", "This is the Affect Stat effect")
+        from scripts.global_instances.managers import game_manager
+        stat = game_manager.skill_query.get_primary_stat_from_string(stat_to_affect)
+        if not stat:
+            stat = game_manager.skill_query.get_secondary_stat_from_string(stat_to_affect)
+
+        self.stat_to_affect = stat
         self.amount = amount
 
     def trigger(self):

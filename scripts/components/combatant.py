@@ -1,3 +1,5 @@
+from scripts.core.constants import AfflictionTypes, AfflictionEffectTypes, SecondaryStatTypes
+
 
 class Combatant:
     """
@@ -10,13 +12,15 @@ class Combatant:
         Args:
             hp (int): Starting health value.
         """
+        from scripts.world.entity import Entity
+        self.owner = None  # type: Entity
         self.hp = hp
-        self.primary_stats = self.PrimaryStats()
-        self.primary_stats.owner = self
-        self.secondary_stats = self.SecondaryStats()
-        self.secondary_stats.owner = self
+        self.primary_stats = self.PrimaryStats(self)
+        self.secondary_stats = self.SecondaryStats(self)
 
     class PrimaryStats:
+        def __init__(self, owner):
+            self.owner = owner
 
         @property
         def vigour(self):
@@ -33,7 +37,7 @@ class Combatant:
             if entity.homeland:
                 stat_total += entity.homeland.vigour
 
-            return stat_total + base_amount
+            return int(stat_total + base_amount)
 
         @property
         def clout(self):
@@ -50,7 +54,7 @@ class Combatant:
             if entity.homeland:
                 stat_total += entity.homeland.clout
 
-            return stat_total + base_amount
+            return int(stat_total + base_amount)
 
         @property
         def skullduggery(self):
@@ -67,7 +71,7 @@ class Combatant:
             if entity.homeland:
                 stat_total += entity.homeland.skullduggery
 
-            return stat_total + base_amount
+            return int(stat_total + base_amount)
 
         @property
         def bustle(self):
@@ -84,7 +88,7 @@ class Combatant:
             if entity.homeland:
                 stat_total += entity.homeland.bustle
 
-            return stat_total + base_amount
+            return int(stat_total + base_amount)
 
         @property
         def exactitude(self):
@@ -101,10 +105,13 @@ class Combatant:
             if entity.homeland:
                 stat_total += entity.homeland.exactitude
 
-            return stat_total + base_amount
+            return int(stat_total + base_amount)
 
     class SecondaryStats:
         # TODO - load the modifiers and base values from a json
+
+        def __init__(self, owner):
+            self.owner = owner
 
         @property
         def max_hp(self):
@@ -113,7 +120,7 @@ class Combatant:
             modifier = 4
 
             stat_total = (vigour * modifier) + base_amount
-            return stat_total
+            return int(stat_total)
 
         @property
         def dodge_speed(self):
@@ -124,7 +131,7 @@ class Combatant:
             bustle_modifier = 2
 
             stat_total = (exactitude * exactitude_modifier) + (bustle * bustle_modifier) + base_amount
-            return stat_total
+            return int(stat_total)
 
         @property
         def dodge_toughness(self):
@@ -135,7 +142,7 @@ class Combatant:
             vigour_modifier = 2
 
             stat_total = (clout * clout_modifier) + (vigour * vigour_modifier) + base_amount
-            return stat_total
+            return int(stat_total)
 
         @property
         def dodge_intelligence(self):
@@ -146,7 +153,7 @@ class Combatant:
             exactitude_modifier = 1
 
             stat_total = (skullduggery * subtlety_modifier) + (exactitude * exactitude_modifier) + base_amount
-            return stat_total
+            return int(stat_total)
 
         @property
         def resist_blunt(self):
@@ -154,7 +161,7 @@ class Combatant:
             vigour_modifier = 1
 
             stat_total = (vigour * vigour_modifier)
-            return stat_total
+            return int(stat_total)
 
         @property
         def resist_pierce(self):
@@ -162,7 +169,7 @@ class Combatant:
             bustle_modifier = 1
 
             stat_total = (bustle * bustle_modifier)
-            return stat_total
+            return int(stat_total)
 
         @property
         def resist_elemental(self):
@@ -170,7 +177,7 @@ class Combatant:
             subtlety_modifier = 2
 
             stat_total = (skullduggery * subtlety_modifier)
-            return stat_total
+            return int(stat_total)
 
         @property
         def chance_to_hit(self):
@@ -181,7 +188,7 @@ class Combatant:
             exactitude_modifier = 1
 
             stat_total = (clout * clout_modifier) + (exactitude * exactitude_modifier) + base_amount
-            return stat_total
+            return int(stat_total)
 
         @property
         def base_damage(self):
@@ -190,15 +197,22 @@ class Combatant:
             clout_modifier = 1
 
             stat_total = (clout * clout_modifier) + base_amount
-            return stat_total
+            return int(stat_total)
 
         @property
         def action_cost_change(self):
             bustle = self.owner.primary_stats.bustle
             bustle_modifier = 2
 
-            stat_total = (bustle * bustle_modifier)
-            return stat_total
+            entity = self.owner.owner
+            from scripts.global_instances.managers import game_manager
+            affliction_modifier = game_manager.affliction_action.get_stat_modifier_from_afflictions_on_entity(entity,
+                                        SecondaryStatTypes.ACTION_COST_CHANGE)
+            # convert to fraction to enable multiplication
+            affliction_modifier = 1 + (affliction_modifier / 100)
+
+            stat_total = (bustle * bustle_modifier) * affliction_modifier
+            return int(stat_total)
 
         @property
         def status_length(self):

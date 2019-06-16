@@ -97,6 +97,7 @@ class SecondaryStatTypes(Enum):
     RESIST_BLUNT = auto()
     RESIST_PIERCE = auto()
     RESIST_ELEMENTAL = auto()
+    ACTION_COST_CHANGE = auto()
 
 
 class HitTypes(Enum):
@@ -179,6 +180,7 @@ class AfflictionEffectTypes(Enum):
     Types of Affliction effects
     """
     DAMAGE = auto()
+    AFFECT_STAT = auto()
 
 class AspectTypes(Enum):
     DIRT = auto()

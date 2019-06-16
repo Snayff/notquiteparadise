@@ -17,7 +17,7 @@ class DamageAfflictionEffect(AfflictionEffect):
     """
 
     def __init__(self, owner, damage, damage_type, stat_to_target):
-        super().__init__(owner, "Damage", "This is the damage effect")
+        super().__init__(owner, "damage", "This is the damage effect")
         self.base_damage = damage
         self.damage_type = damage_type
         self.stat_to_target = stat_to_target

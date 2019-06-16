@@ -50,6 +50,9 @@ class Affliction:
             if effect_name == "damage":
                 created_effect = game_manager.affliction_action.create_damage_effect(self, effect)
 
+            if effect_name == "affect_stat":
+                created_effect = game_manager.affliction_action.create_affect_stat_effect(self, effect)
+
             # if we have an effect add it to internal list
             if created_effect:
                 self.affliction_effects.append(created_effect)

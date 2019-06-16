@@ -15,6 +15,8 @@ class AfflictionEffect:
         self.owner = owner  # type: Affliction
         self.name = name
         self.description = description
+        from scripts.global_instances.managers import game_manager
+        self.effect_type = game_manager.affliction_action.get_affliction_effect_type_from_string(name)
 
     def trigger(self):
         """
