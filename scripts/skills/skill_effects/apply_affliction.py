@@ -90,8 +90,8 @@ class ApplyAfflictionSkillEffect(SkillEffect):
             defending_entity (Entity):
         """
 
-        from scripts.global_instances.managers import game_manager
-        action = game_manager.affliction_action
+        from scripts.global_instances.managers import world_manager
+        action = world_manager.Affliction
 
         # check if entity already has the affliction
         affliction_type = action.get_affliction_type_from_string(self.affliction_name)

@@ -3,6 +3,7 @@ import tcod
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.managers.world_methods.affliction_methods import AfflictionMethods
 from scripts.managers.world_methods.entity_methods import EntityMethods
 from scripts.managers.world_methods.skill_methods import SkillMethods
 
@@ -18,6 +19,7 @@ class WorldManager:
 
         self.Entity = EntityMethods(self)
         self.Skill = SkillMethods(self)
+        self.Affliction = AfflictionMethods(self)
 
         # TODO - create FOV container class
 
@@ -39,6 +41,9 @@ class WorldManager:
         if self.player_fov_is_dirty:
             player = self.player
             self.recompute_player_fov(player.x, player.y, player.sight_range)
+
+        # remove expired afflictions
+        self.Affliction.cleanse_expired_afflictions()
 
     def create_player_fov_map(self, width, height):
         """

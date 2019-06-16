@@ -24,8 +24,8 @@ class Affliction:
     """
 
     def __init__(self, affliction_type, duration, affected_entity):
-        from scripts.global_instances.managers import game_manager
-        action = game_manager.affliction_action
+        from scripts.global_instances.managers import world_manager
+        action = world_manager.Affliction
         name = action.get_affliction_string_from_type(affliction_type)
         values = get_value_from_afflictions_json(name)
 
@@ -48,10 +48,10 @@ class Affliction:
             effect_name = effect["name"]
 
             if effect_name == "damage":
-                created_effect = game_manager.affliction_action.create_damage_effect(self, effect)
+                created_effect = world_manager.Affliction.create_damage_effect(self, effect)
 
             if effect_name == "affect_stat":
-                created_effect = game_manager.affliction_action.create_affect_stat_effect(self, effect)
+                created_effect = world_manager.Affliction.create_affect_stat_effect(self, effect)
 
             # if we have an effect add it to internal list
             if created_effect:

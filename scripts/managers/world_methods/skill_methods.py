@@ -458,8 +458,8 @@ class SkillMethods:
         affliction_name = effect["affliction_name"]
         affliction_duration = effect["duration"]
         affliction_values = get_value_from_afflictions_json(affliction_name)
-        from scripts.global_instances.managers import game_manager
-        affliction_category = game_manager.affliction_action.get_affliction_category_from_string(affliction_values[
+        from scripts.global_instances.managers import world_manager
+        affliction_category = world_manager.Affliction.get_affliction_category_from_string(affliction_values[
                                                                                                      "category"])
 
         # add effect object to skill
