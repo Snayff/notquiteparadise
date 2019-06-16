@@ -1,6 +1,7 @@
 import tcod
 
-from scripts.core.constants import TargetTags
+from scripts.core.constants import TargetTags, TILE_SIZE
+from scripts.world.game_map import GameMap
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 
@@ -139,3 +140,27 @@ class MapMethods:
             return game_map.tiles[tile_x][tile_y].blocks_movement
         else:
             return True
+
+    @staticmethod
+    def convert_xy_to_tile(x, y):
+        """
+        Convert an x y position to a tile ref
+
+        Args:
+            x:
+            y:
+
+        Returns :
+            Tuple[int, int]
+
+        """
+        tile_x = int(x / TILE_SIZE)
+        tile_y = int(y / TILE_SIZE)
+
+        return tile_x, tile_y
+
+    def create_new_map(self, width, height):
+        """
+        Create new GameMap and create player FOV
+        """
+        self.manager.game_map = GameMap(width, height)

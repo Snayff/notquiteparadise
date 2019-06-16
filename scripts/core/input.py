@@ -258,7 +258,7 @@ def handle_player_turn_input(input_values):
             skill = player.actor.known_skills[skill_number]
             if skill:
                 mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
-                target_x, target_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
+                target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
                 # create a skill with a target, or activate targeting mode
                 skill = player.actor.known_skills[skill_number]
@@ -293,7 +293,7 @@ def handle_targeting_mode_input(input_values):
     values = input_values
     player = world_manager.player
     mouse_x, mouse_y = ui_manager.get_scaled_mouse_pos()
-    mouse_tile_x, mouse_tile_y = world_manager.convert_xy_to_tile(mouse_x, mouse_y)
+    mouse_tile_x, mouse_tile_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
     # cancel out
     if values["cancel"]:
