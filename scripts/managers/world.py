@@ -4,6 +4,7 @@ from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.managers.world_methods.entity_methods import EntityMethods
+from scripts.managers.world_methods.skill_methods import SkillMethods
 
 from scripts.world.entity import Entity
 from scripts.world.game_map import GameMap
@@ -16,6 +17,7 @@ class WorldManager:
     def __init__(self):
 
         self.Entity = EntityMethods(self)
+        self.Skill = SkillMethods(self)
 
         # TODO - create FOV container class
 

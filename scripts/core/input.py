@@ -262,11 +262,11 @@ def handle_player_turn_input(input_values):
 
                 # create a skill with a target, or activate targeting mode
                 skill = player.actor.known_skills[skill_number]
-                if game_manager.skill_query.can_use_skill(player, (target_x, target_y), skill):
+                if world_manager.Skill.can_use_skill(player, (target_x, target_y), skill):
                     publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
                 else:
                     # can't use skill, is it due to being too poor?
-                    if game_manager.skill_query.can_afford_cost(player, skill.resource_type, skill.resource_cost):
+                    if world_manager.Skill.can_afford_cost(player, skill.resource_type, skill.resource_cost):
                         publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
                     else:
                         msg = f"It seems you're too poor to do that."
@@ -363,7 +363,7 @@ def handle_targeting_mode_input(input_values):
         # pressed another skill so swap to that one
         elif values["skill"] != player.actor.known_skills.index(skill_being_targeted):
             skill = player.actor.known_skills[skill_number]
-            game_manager.skill_action.activate_targeting_mode(skill)
+            world_manager.Skill.activate_targeting_mode(skill)
 
     if values["left_click"]:
         # if entity selected then use skill

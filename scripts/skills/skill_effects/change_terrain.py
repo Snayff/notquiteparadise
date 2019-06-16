@@ -37,8 +37,8 @@ class ChangeTerrainSkillEffect(SkillEffect):
         terrain = terrain_to_change
         starting_terrain_name = terrain.name
 
-        from scripts.global_instances.managers import game_manager
-        target_type = game_manager.skill_query.get_target_type(terrain)
+        from scripts.global_instances.managers import world_manager
+        target_type = world_manager.Skill.get_target_type(terrain)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:

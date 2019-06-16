@@ -30,14 +30,14 @@ class Skill:
 
         # targeting info
         self.range = skill_values["range"]  # how far away the skill can be used
-        from scripts.global_instances.managers import game_manager
-        self.required_target_type = game_manager.skill_query.get_target_type_from_string(skill_values[
+        from scripts.global_instances.managers import world_manager
+        self.required_target_type = world_manager.Skill.get_target_type_from_string(skill_values[
                                                                                               "required_target_type"])
         required_tags = skill_values["required_tags"]
         self.required_tags = []
 
         for tag in required_tags:
-            self.required_tags.append(game_manager.skill_query.get_target_tags_from_string(tag))
+            self.required_tags.append(world_manager.Skill.get_target_tags_from_string(tag))
 
         # resource info
         self.resource_type = skill_values["resource_type"]
@@ -54,13 +54,13 @@ class Skill:
             effect_name = effect["name"]
 
             if effect_name == "damage":
-                created_effect = game_manager.skill_action.create_damage_effect(self, effect)
+                created_effect = world_manager.Skill.create_damage_effect(self, effect)
 
             elif effect_name == "change_terrain":
-                created_effect = game_manager.skill_action.create_change_terrain_effect(self, effect)
+                created_effect = world_manager.Skill.create_change_terrain_effect(self, effect)
 
             elif effect_name == "apply_affliction":
-                created_effect = game_manager.skill_action.create_apply_affliction_effect(self, effect)
+                created_effect = world_manager.Skill.create_apply_affliction_effect(self, effect)
 
             # if we have an effect add it to internal list
             if created_effect:
@@ -74,8 +74,8 @@ class Skill:
             target_pos (tuple): x y of the target
         """
         entity = self.owner.owner  # owner is actor, actor`s owner is entity
-        from scripts.global_instances.managers import game_manager
-        target = game_manager.skill_query.get_target(target_pos, self.required_target_type)  # get the tile or entity
+        from scripts.global_instances.managers import world_manager
+        target = world_manager.Skill.get_target(target_pos, self.required_target_type)  # get the tile or entity
 
         # apply any skill_effects
         if self.effects:

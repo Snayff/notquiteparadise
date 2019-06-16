@@ -33,16 +33,16 @@ class Bog(Aspect):
         for effect in effects:
             created_effect = None
             effect_name = effect["name"]
-            from scripts.global_instances.managers import game_manager
+            from scripts.global_instances.managers import world_manager
 
             if effect_name == "damage":
-                created_effect = game_manager.skill_action.create_damage_effect(self, effect)
+                created_effect = world_manager.Skill.create_damage_effect(self, effect)
 
             elif effect_name == "change_terrain":
-                created_effect = game_manager.skill_action.create_change_terrain_effect(self, effect)
+                created_effect = world_manager.Skill.create_change_terrain_effect(self, effect)
 
             elif effect_name == "apply_affliction":
-                created_effect = game_manager.skill_action.create_apply_affliction_effect(self, effect)
+                created_effect = world_manager.Skill.create_apply_affliction_effect(self, effect)
 
             # if we have an effect add it to internal list
             if created_effect:

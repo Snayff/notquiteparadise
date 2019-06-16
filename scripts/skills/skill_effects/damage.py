@@ -43,17 +43,17 @@ class DamageSkillEffect(SkillEffect):
         attacker = attacking_entity
         defender = defending_entity
 
-        from scripts.global_instances.managers import game_manager
-        target_type = game_manager.skill_query.get_target_type(defender)
+        from scripts.global_instances.managers import world_manager
+        target_type = world_manager.Skill.get_target_type(defender)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:
             # if it needs to be another entity then it can't be looking at itself
             if TargetTags.OTHER_ENTITY in self.required_tags:
                 if attacker != defender:
-                    to_hit_score = game_manager.skill_action.calculate_to_hit_score(defender,
+                    to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
                                                             self.base_accuracy, self.stat_to_target, attacker)
-                    hit_type = game_manager.skill_query.get_hit_type(to_hit_score)
+                    hit_type = world_manager.Skill.get_hit_type(to_hit_score)
                     damage = self.calculate_damage(defender, hit_type, attacker)
 
                     # apply damage
