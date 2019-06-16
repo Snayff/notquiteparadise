@@ -1,5 +1,7 @@
 import tcod
 
+from scripts.core.constants import FOVInfo
+
 
 class FOVMethods:
     """
@@ -30,9 +32,9 @@ class FOVMethods:
             y:
             radius:
         """
-        tcod.map_compute_fov(self.get_player_fov(), x, y, radius, self.manager.light_walls,
-                             self.manager.fov_algorithm)
-        self.manager.Map.update_tile_visibility(self.manager.player_fov_map)
+        tcod.map_compute_fov(self.get_player_fov(), x, y, radius, FOVInfo.LIGHT_WALLS,
+                             FOVInfo.FOV_ALGORITHM)
+        self.manager.FOV.update_tile_visibility(self.get_player_fov())
         self.set_player_fov_state(False)
 
     def is_tile_in_fov(self, tile_x, tile_y):
@@ -66,3 +68,16 @@ class FOVMethods:
             tcod.map.Map
         """
         return self.manager.player_fov_map
+
+    def update_tile_visibility(self, fov_map):
+        """
+        Update the player`s fov
+
+        Args:
+            fov_map:
+        """
+        game_map = self.manager.Map.get_game_map()
+
+        for x in range(0, game_map.width):
+            for y in range(0, game_map.height):
+                game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)

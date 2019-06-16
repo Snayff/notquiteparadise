@@ -8,6 +8,14 @@ GAME_FPS = 60
 ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
 
 
+class FOVInfo:
+    """
+    Constant info about the FOV settings
+    """
+    LIGHT_WALLS = True
+    FOV_ALGORITHM = 0
+
+
 class GameStates(Enum):
     """
     States the Game can be in.

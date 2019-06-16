@@ -16,6 +16,8 @@ from scripts.core.initialisers import initialise_game
 #  - enter doesnt trigger skill
 #  -  3rd skill doesnt trigger overlay when targeting wrong target
 #  - can target self
+# FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
+# TODO - UI information should be pulled once then held
 # TODO - create global tooltip method - some relevant code in old message log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions

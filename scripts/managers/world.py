@@ -32,8 +32,6 @@ class WorldManager:
         self.entities = []
         self.player_fov_map = None  # type: tcod.map.Map
         self.player_fov_is_dirty = False
-        self.light_walls = True
-        self.fov_algorithm = 0
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"WorldManager initialised."))
 
@@ -41,6 +39,7 @@ class WorldManager:
         """
         Update the world manager:
             player fov
+            cleanse expired afflictions
         """
         if self.player_fov_is_dirty:
             player = self.player

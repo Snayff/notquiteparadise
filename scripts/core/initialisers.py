@@ -23,7 +23,7 @@ def initialise_game():
 
     map_width = 50
     map_height = 30
-    world_manager.Map.create_new_map(map_width, map_height) 
+    world_manager.Map.create_new_map(map_width, map_height)
     world_manager.FOV.create_player_fov_map(map_width, map_height)
     ui_manager.delayed_init()
 

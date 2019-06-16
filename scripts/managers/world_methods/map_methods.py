@@ -40,18 +40,7 @@ class MapMethods:
         else:
             return True
 
-    def update_tile_visibility(self, fov_map):
-        """
-        Update the player`s fov
 
-        Args:
-            fov_map:
-        """
-        game_map = self.get_game_map()
-
-        for x in range(0, game_map.width):
-            for y in range(0, game_map.height):
-                game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
     def is_tile_visible_to_player(self, tile_x, tile_y):
         """
