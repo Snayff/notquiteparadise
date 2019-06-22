@@ -3,7 +3,7 @@ import pygame
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, LoggingEventTypes
+from scripts.core.constants import LoggingEventTypes, VisualInfo
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 from scripts.ui_elements.templates.skill_container import SkillContainer
@@ -23,8 +23,8 @@ class SkillBar:
 
         # panel info
         panel_width = int(self.skill_icon_size * 1.5)
-        panel_height = int(BASE_WINDOW_HEIGHT / 2)
-        panel_x = BASE_WINDOW_WIDTH - panel_width
+        panel_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
         panel_y = 0
         panel_border = 2
         panel_background_colour = self.palette.background

@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.core.constants import GameStates, LoggingEventTypes, GAME_FPS
+from scripts.core.constants import GameStates, LoggingEventTypes, VisualInfo
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 
@@ -23,7 +23,7 @@ class GameManager:
         """
 
         # set frame rate
-        self.internal_clock.tick(GAME_FPS)
+        self.internal_clock.tick(VisualInfo.GAME_FPS)
 
     def update_game_state(self, new_game_state):
         """

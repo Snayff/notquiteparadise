@@ -1,7 +1,8 @@
 import random
 import pygame
 
-from scripts.core.constants import TILE_SIZE, GAME_FPS, ENTITY_SPRITE_FRAME_DURATION
+from scripts.core.constants import TILE_SIZE, GAME_FPS, ENTITY_SPRITE_FRAME_DURATION, VisualInfo
+
 
 class EntityAnimation:
     # TODO - consider moving to UI manager and grouping all animations
@@ -28,7 +29,7 @@ class EntityAnimation:
                     entity.animation_timer += time_increment
 
                     # is it time to move to a new frame?
-                    if entity.animation_timer > ENTITY_SPRITE_FRAME_DURATION:
+                    if entity.animation_timer > VisualInfo.ENTITY_SPRITE_FRAME_DURATION:
 
                         # reset the timer
                         entity.animation_timer = 0

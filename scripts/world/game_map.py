@@ -2,7 +2,7 @@ import tcod
 
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, TargetTags
+from scripts.core.constants import TargetTags, VisualInfo
 from scripts.ui_elements.templates.panel import Panel
 from scripts.world.aspect.bog import Bog
 from scripts.world.tile import Tile
@@ -37,8 +37,8 @@ class GameMap:
         # setup the panel
         panel_x = 0
         panel_y = 0
-        panel_width = int((BASE_WINDOW_WIDTH / 4) * 3)
-        panel_height = BASE_WINDOW_HEIGHT
+        panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 3)
+        panel_height = VisualInfo.BASE_WINDOW_HEIGHT
         panel_border = 2
         panel_background_colour = Palette().game_map.background
         panel_border_colour = Palette().game_map.border

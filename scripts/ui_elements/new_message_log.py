@@ -1,6 +1,6 @@
 from typing import Dict, Tuple
 
-from scripts.core.constants import MessageEventTypes, BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, LoggingEventTypes
+from scripts.core.constants import MessageEventTypes, LoggingEventTypes, VisualInfo
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
@@ -37,10 +37,10 @@ class NewMessageLog:
         self.is_dirty = True
 
         # panel info
-        panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
-        panel_height = int(BASE_WINDOW_HEIGHT / 2)
-        panel_x = BASE_WINDOW_WIDTH - panel_width
-        panel_y = BASE_WINDOW_HEIGHT - panel_height
+        panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
+        panel_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
+        panel_y = VisualInfo.BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
         panel_background_colour = self.palette.background
         panel_border_colour = self.palette.border

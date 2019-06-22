@@ -49,8 +49,7 @@ class ChangeTerrainSkillEffect(SkillEffect):
 
             # if all tags came back true apply the change
             if all(value for value in tags_checked.values()):
-                world_manager.Map.set_terrain_on_tile(tile, terrain)
-                tile.set_terrain(self.new_terrain)
+                world_manager.Map.set_terrain_on_tile(tile, self.new_terrain)
 
                 # success message
                 entity = self.owner.owner.owner

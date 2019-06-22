@@ -3,7 +3,7 @@ import pygame
 from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import MessageEventTypes, LoggingEventTypes, GAME_FPS, BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH
+from scripts.core.constants import MessageEventTypes, LoggingEventTypes, VisualInfo
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.templates.panel import Panel
@@ -46,10 +46,10 @@ class MessageLog:
         self.seconds_before_extended_text = 1
 
         # panel info
-        panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
-        panel_height = int(BASE_WINDOW_HEIGHT / 2)
-        panel_x = BASE_WINDOW_WIDTH - panel_width
-        panel_y = BASE_WINDOW_HEIGHT - panel_height
+        panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
+        panel_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
+        panel_y = VisualInfo.BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
         panel_background_colour = self.palette.background
         panel_border_colour = self.palette.border

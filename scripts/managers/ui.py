@@ -5,7 +5,7 @@ from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.message_log import MessageLog
-from scripts.core.constants import BASE_WINDOW_HEIGHT, BASE_WINDOW_WIDTH, LoggingEventTypes
+from scripts.core.constants import LoggingEventTypes, VisualInfo
 from scripts.ui_elements.new_message_log import NewMessageLog
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
@@ -25,13 +25,13 @@ class UIManager:
         self.focused_window = None
         self.colour = Colour()
 
-        self.desired_width = BASE_WINDOW_WIDTH#1920  # TODO - allow for selection by player but only multiples of
-                                                     #  base (16:9)
-        self.desired_height = BASE_WINDOW_HEIGHT#1080
-        self.screen_scaling_mod_x = self.desired_width // BASE_WINDOW_WIDTH
-        self.screen_scaling_mod_y = self.desired_height // BASE_WINDOW_HEIGHT
+        self.desired_width = VisualInfo.BASE_WINDOW_WIDTH  # TODO - allow for selection by player but only multiples of
+                                                #  base (16:9)
+        self.desired_height = VisualInfo.BASE_WINDOW_HEIGHT
+        self.screen_scaling_mod_x = self.desired_width // VisualInfo.BASE_WINDOW_WIDTH
+        self.screen_scaling_mod_y = self.desired_height // VisualInfo.BASE_WINDOW_HEIGHT
         self.screen = pygame.display.set_mode((self.desired_width, self.desired_height))
-        self.main_surface = pygame.Surface((BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT))
+        self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
         self.visible_elements = {}  # dict of all elements that are currently being rendered
 
         self.message_log = None  # type: NewMessageLog
