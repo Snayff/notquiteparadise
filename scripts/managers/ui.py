@@ -181,6 +181,23 @@ class UIManager:
         relative_mouse_pos = scaled_mouse_pos[0] - ui_object.x, scaled_mouse_pos[1] - ui_object.y
         return relative_mouse_pos
 
+    def get_clicked_panels_rect(self):
+        """
+        Determine which panel has been clicked based on current mouse position.
+
+        Returns:
+            rect: ui_element
+        """
+        clicked_rect = None
+
+        pos = self.get_scaled_mouse_pos()
+        for key, ui_object in self.visible_elements.items():
+            if hasattr(ui_object, "panel"):
+                if ui_object.panel.rect.collidepoint(pos):
+                    clicked_rect = key
+
+        return clicked_rect
+
 
 def example_code():
     pass

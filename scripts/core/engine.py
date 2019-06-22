@@ -5,9 +5,9 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager
+from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
+    input_manager
 from scripts.global_instances.event_hub import event_hub
-from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
@@ -68,20 +68,16 @@ def game_loop():
         # limit frames
         game_manager.internal_clock.tick(60)
 
-        # HANDLE INPUT
-        # determine the action to take from the input with the context of the game state
-        input_values = get_input()
-        handle_input(input_values)
-
         if game_manager.game_state == GameStates.ENEMY_TURN:
             turn_manager.turn_holder.ai.take_turn()
 
         # HANDLE UPDATE
-        event_hub.update()
+        input_manager.update()
         game_manager.update()
         debug_manager.update()
         world_manager.update()
         ui_manager.update()
+        event_hub.update()
 
         # DRAW
         ui_manager.draw_game(world_manager.game_map, debug_manager.visible)

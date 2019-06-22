@@ -200,6 +200,7 @@ class AfflictionEffectTypes(Enum):
     DAMAGE = auto()
     AFFECT_STAT = auto()
 
+
 class AspectTypes(Enum):
     DIRT = auto()
     LONG_GRASS = auto()
@@ -208,3 +209,8 @@ class AspectTypes(Enum):
     GAS = auto()
     BOG = auto()
     AFLAME = auto()
+
+
+class InputModes(Enum):
+    MOUSE_AND_KB = auto()
+    GAMEPAD = auto()
