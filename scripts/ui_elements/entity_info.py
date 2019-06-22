@@ -2,7 +2,7 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT, LoggingEventTypes
+from scripts.core.constants import LoggingEventTypes, VisualInfo
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 
@@ -18,10 +18,10 @@ class SelectedEntityInfo:
         self.gap_between_lines = int(self.font.size / 3)
 
         # panel info
-        panel_width = int((BASE_WINDOW_WIDTH / 4) * 1)
-        panel_height = int(BASE_WINDOW_HEIGHT / 2)
-        panel_x = BASE_WINDOW_WIDTH - panel_width
-        panel_y = BASE_WINDOW_HEIGHT - panel_height
+        panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
+        panel_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
+        panel_y = VisualInfo.BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
         panel_background_colour = self.palette.background
         panel_border_colour = self.palette.border
@@ -95,8 +95,8 @@ class SelectedEntityInfo:
         second_section_column_two_text.append(f"Resist elemental: "
                                               f"{entity.combatant.secondary_stats.resist_elemental}")
 
-        from scripts.global_instances.managers import game_manager
-        afflictions = game_manager.affliction_action.get_afflictions_for_entity(entity)
+        from scripts.global_instances.managers import world_manager
+        afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)
         affliction_names = []
         for affliction in afflictions:
             affliction_names.append(affliction.name)

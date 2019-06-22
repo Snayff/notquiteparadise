@@ -113,11 +113,11 @@ class TargetingOverlay:
                     current_y = y + centre_y
 
                     # check in bounds, in fov and is targetable
-                    in_bounds = game_map.is_tile_in_bounds(current_x, current_y)
-                    in_fov = world_manager.is_tile_in_fov(current_x, current_y)
+                    in_bounds = world_manager.Map.is_tile_in_bounds(current_x, current_y)
+                    in_fov = world_manager.FOV.is_tile_in_fov(current_x, current_y)
 
                     if in_bounds and in_fov:
-                        tile = game_map.get_tile(current_x, current_y)
+                        tile = world_manager.Map.get_tile(current_x, current_y)
                         self.tiles_to_highlight.append(tile)
 
     def set_visibility(self, visible):

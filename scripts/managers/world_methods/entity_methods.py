@@ -1,13 +1,21 @@
 import math
+import pygame
 import tcod
 import scipy.spatial
 
-from scripts.core.constants import LoggingEventTypes
+from scripts.components.actor import Actor
+from scripts.components.combatant import Combatant
+from scripts.components.homeland import Homeland
+from scripts.components.player import Player
+from scripts.components.trade import Trade
+from scripts.core.constants import LoggingEventTypes, TILE_SIZE
+from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.world.entity import Entity
 
 
-class EntityQuery:
+class EntityMethods:
     """
     Queries relating to entities.
 
@@ -15,7 +23,8 @@ class EntityQuery:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        self.manager = manager
+        from scripts.managers.world import WorldManager
+        self.manager = manager  # type: WorldManager
 
     def get_blocking_entity_at_location(self, tile_x, tile_y):
         """
@@ -27,7 +36,7 @@ class EntityQuery:
         Returns:
             Entity: returns entity if there is one, else None.
         """
-        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile(tile_x, tile_y)
         entity = tile.entity
 
         if entity:
@@ -47,11 +56,11 @@ class EntityQuery:
         Returns:
             entity: Entity or None if no entity found
         """
-        tile = self.manager.game_map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile(tile_x, tile_y)
         entity = tile.entity
 
         if entity:
-            if self.manager.is_tile_in_fov(tile_x, tile_y):
+            if self.manager.FOV.is_tile_in_fov(tile_x, tile_y):
                 return entity
 
         return None
@@ -109,7 +118,7 @@ class EntityQuery:
         direction_x = int(round(direction_x / distance))
         direction_y = int(round(direction_y / distance))
 
-        tile_is_blocked = self.manager.game_map.is_tile_blocking_movement(start_entity.x + direction_x,
+        tile_is_blocked = self.manager.Map.is_tile_blocking_movement(start_entity.x + direction_x,
                                                                                 start_entity.y + direction_y)
 
         if not (tile_is_blocked or self.get_blocking_entity_at_location(start_entity.x + direction_x,
@@ -138,7 +147,7 @@ class EntityQuery:
         max_path_length = 25
         from scripts.global_instances.managers import world_manager
         game_map = world_manager.game_map
-        entities = world_manager.entity_query.get_all_entities()
+        entities = world_manager.Entity.get_all_entities()
         entity_to_move = start_entity
         target = target_entity
 
@@ -208,3 +217,104 @@ class EntityQuery:
 
         """
         return self.manager.entities
+
+    def get_player(self):
+        """
+        Get the player.
+
+        Returns:
+            Entity
+        """
+        return self.manager.player
+
+    def add_entity(self, tile_x, tile_y, entity):
+        """
+        Add entity to game map
+
+        Args:
+            tile_x:
+            tile_y:
+            entity:
+        """
+        self.manager.entities.append(entity)
+        tile = self.manager.Map.get_tile(tile_x, tile_y)
+        self.manager.Map.set_entity_on_tile(tile, entity)
+
+    def add_player(self, tile_x, tile_y, entity):
+        """
+
+        Args:
+            tile_x:
+            tile_y:
+            entity:
+        """
+        # TODO - fold into create actor, use player arg default to false
+        self.manager.player = entity
+        self.manager.Entity.add_entity(tile_x, tile_y, entity)
+
+    def remove_entity(self, entity):
+        """
+        Remove entity from entities list and current tile.
+
+        Args:
+            entity:
+        """
+        # remove from tile
+        tile = self.manager.Map.get_tile(entity.x, entity.y)
+        self.manager.Map.remove_entity(tile)
+
+        # remove from entities list
+        self.manager.entities.remove(entity)
+
+    def create_actor_entity(self, tile_x, tile_y, actor_name):
+        """
+
+        Args:
+            tile_x:
+            tile_y:
+            actor_name:
+        """
+        values = get_value_from_actor_json(actor_name)
+
+        actor_name = values["name"]
+
+        sprite = pygame.image.load("assets/actor/" + values["spritesheet"]).convert_alpha()
+        icon = pygame.image.load("assets/actor/" + values["icon"]).convert_alpha()
+
+        # catch any images not resized and resize them
+        if icon.get_size() != (TILE_SIZE, TILE_SIZE):
+            icon = pygame.transform.smoothscale(icon, (TILE_SIZE, TILE_SIZE))
+
+        combatant_component = Combatant()
+        youth_component = Trade(values["trade_component"])
+        adulthood_component = Homeland(values["homeland_component"])
+        actor_component = Actor()
+        sight_range = values["sight_range"]
+
+        # get then player value and convert to class if needed
+        player_value = values["player_component"]
+        if player_value:
+            player = Player()
+        else:
+            player = None
+
+        # get the AI value and convert to relevant class
+        ai_value = values["ai_component"]
+        from scripts.components.ai import BasicMonster
+        if ai_value == "basic_monster":
+            ai_component = BasicMonster()
+        else:
+            ai_component = None
+
+        # create the Entity
+        actor = Entity(sprite, actor_name, blocks_movement=True, combatant=combatant_component,
+                       trade=youth_component, homeland=adulthood_component, ai=ai_component,
+                       actor=actor_component, sight_range=sight_range, player=player, icon=icon)
+
+        actor.combatant.hp = actor.combatant.secondary_stats.max_hp
+
+        if player:
+            self.add_player(tile_x, tile_y, actor)
+        else:
+            self.manager.Entity.add_entity(tile_x, tile_y, actor)
+

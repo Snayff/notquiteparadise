@@ -15,7 +15,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
     def __init__(self, owner, required_target_type, required_tags, accuracy, stat_to_target, affliction_name,
             affliction_category, affliction_duration):
-        super().__init__(owner, "Apply_Affliction", "This is the affliction effect", required_target_type,
+        super().__init__(owner, "apply_affliction", "This is the affliction effect", required_target_type,
                          required_tags)
         self.base_accuracy = accuracy
         self.stat_to_target = stat_to_target
@@ -37,8 +37,8 @@ class ApplyAfflictionSkillEffect(SkillEffect):
         attacker = attacking_entity
         defender = defending_entity
 
-        from scripts.global_instances.managers import game_manager
-        target_type = game_manager.skill_query.get_target_type(defender)
+        from scripts.global_instances.managers import world_manager
+        target_type = world_manager.Skill.get_target_type(defender)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:
@@ -48,15 +48,15 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
             # get the tile to check the tags
             from scripts.global_instances.managers import world_manager
-            tile = world_manager.game_map.get_tile(defender.x, defender.y)
+            tile = world_manager.Map.get_tile(defender.x, defender.y)
 
-            if game_manager.skill_query.has_required_tags(tile, self.required_tags):
+            if world_manager.Skill.has_required_tags(tile, self.required_tags):
 
                 # Roll for BANE application
                 if self.affliction_category == AfflictionCategory.BANE:
-                    to_hit_score = game_manager.skill_action.calculate_to_hit_score(defender,
+                    to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
                                                                 self.base_accuracy, self.stat_to_target, attacker)
-                    hit_type = game_manager.skill_query.get_hit_type(to_hit_score)
+                    hit_type = world_manager.Skill.get_hit_type(to_hit_score)
 
                     # check if affliction applied
                     if hit_type == HitTypes.GRAZE:
@@ -90,8 +90,8 @@ class ApplyAfflictionSkillEffect(SkillEffect):
             defending_entity (Entity):
         """
 
-        from scripts.global_instances.managers import game_manager
-        action = game_manager.affliction_action
+        from scripts.global_instances.managers import world_manager
+        action = world_manager.Affliction
 
         # check if entity already has the affliction
         affliction_type = action.get_affliction_type_from_string(self.affliction_name)

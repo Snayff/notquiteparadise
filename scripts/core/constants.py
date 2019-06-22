@@ -1,11 +1,27 @@
+
 from enum import Enum, auto
 
-# game info
-BASE_WINDOW_WIDTH = 1280
-BASE_WINDOW_HEIGHT = 720
 TILE_SIZE = 64
-GAME_FPS = 60
-ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
+
+
+class VisualInfo:
+    """
+    Constant info about visual aspects such as resolution and frame rate
+    """
+    # TODO -  should this be in game manager?
+    BASE_WINDOW_WIDTH = 1280
+    BASE_WINDOW_HEIGHT = 720
+
+    GAME_FPS = 60
+    ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
+
+
+class FOVInfo:
+    """
+    Constant info about the FOV settings
+    """
+    LIGHT_WALLS = True
+    FOV_ALGORITHM = 0
 
 
 class GameStates(Enum):

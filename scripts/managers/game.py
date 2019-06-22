@@ -1,11 +1,8 @@
 import pygame
 
-from scripts.core.constants import GameStates, LoggingEventTypes, GAME_FPS
+from scripts.core.constants import GameStates, LoggingEventTypes, VisualInfo
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_instances.event_hub import publisher
-from scripts.managers.game_methods.affliction_action import AfflictionAction
-from scripts.managers.game_methods.skill_action import SkillAction
-from scripts.managers.game_methods.skill_query import SkillQuery
 
 
 class GameManager:
@@ -16,9 +13,6 @@ class GameManager:
         self.game_state = GameStates.GAME_INITIALISING
         self.previous_game_state = GameStates.GAME_INITIALISING
         self.internal_clock = pygame.time.Clock()
-        self.skill_action = SkillAction(self)
-        self.skill_query = SkillQuery(self)
-        self.affliction_action = AfflictionAction(self)
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
 
@@ -26,14 +20,10 @@ class GameManager:
         """
         Update the GameManager:
             internal_clock ticks
-            AfflictionAction update
         """
 
         # set frame rate
-        self.internal_clock.tick(GAME_FPS)
-
-        # remove expired afflictions
-        self.affliction_action.cleanse_expired_afflictions()
+        self.internal_clock.tick(VisualInfo.GAME_FPS)
 
     def update_game_state(self, new_game_state):
         """

@@ -1,6 +1,6 @@
 from scripts.core.constants import LoggingEventTypes, GameEventTypes, GameStates, AfflictionTriggers
 from scripts.global_instances.event_hub import publisher
-from scripts.global_instances.managers import game_manager, turn_manager
+from scripts.global_instances.managers import game_manager, turn_manager, world_manager
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
@@ -19,7 +19,7 @@ class GameHandler(Subscriber):
 
         elif event.type == GameEventTypes.END_TURN:
             # TODO - move to separate handler
-            game_manager.affliction_action.trigger_afflictions_on_entity(AfflictionTriggers.END_TURN,
+            world_manager.Affliction.trigger_afflictions_on_entity(AfflictionTriggers.END_TURN,
                                                                          turn_manager.turn_holder)
             turn_manager.end_turn(event.time_spent)
 

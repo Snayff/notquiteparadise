@@ -1,17 +1,23 @@
+import random
 
 from scripts.core.constants import TargetTypes, LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
-    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes
+    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, SkillEffectTypes
+from scripts.data_loaders.getters import get_value_from_afflictions_json
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
+from scripts.skills.skill import Skill
+from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
+from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
+from scripts.skills.skill_effects.damage import DamageSkillEffect
 from scripts.world.entity import Entity
 from scripts.world.terrain.terrain import Terrain
 from scripts.world.tile import Tile
 
 
-class SkillQuery:
+class SkillMethods:
     """
-    Methods for querying skills and skill related info.
+    Methods for querying skills and skill related info and taking skill actions.
     """
     def __init__(self, manager):
         self.manager = manager
@@ -30,16 +36,16 @@ class SkillQuery:
         from scripts.global_instances.managers import world_manager
 
         target_x, target_y = target_pos
-        blocking_entity_at_location = world_manager.entity_query.get_blocking_entity_at_location(target_x,
+        blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x,
                                                                                                  target_y)
-        tile = world_manager.game_map.get_tile(target_x, target_y)
+        tile = world_manager.Map.get_tile(target_x, target_y)
 
         # do we need an entity?
         if skill.required_target_type == TargetTypes.ENTITY:
             # is there an entity to target?
             if blocking_entity_at_location:
                 # is the entity within range?
-                distance_to_entity = world_manager.entity_query.get_chebyshev_distance_between_entities(entity,
+                distance_to_entity = world_manager.Entity.get_chebyshev_distance_between_entities(entity,
                                             blocking_entity_at_location)
                 if distance_to_entity > skill.range:
                     return False
@@ -121,10 +127,10 @@ class SkillQuery:
 
         tags_checked = {}
 
-
         # assess all tags
+        from scripts.global_instances.managers import world_manager
         for tag in required_tags:
-            tags_checked[tag] = tile.has_tag(tag)
+            tags_checked[tag] = world_manager.Map.tile_has_tag(tile, tag)
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
@@ -302,10 +308,10 @@ class SkillQuery:
         target = None
 
         if required_target_type == TargetTypes.ENTITY:
-            target = world_manager.entity_query.get_blocking_entity_at_location(target_x, target_y)
+            target = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
 
         elif required_target_type == TargetTypes.TERRAIN:
-            target_tile = world_manager.game_map.get_tile(target_x, target_y)
+            target_tile = world_manager.Map.get_tile(target_x, target_y)
             target = target_tile.terrain
 
         log_string = f"Got target {target.name} of type {required_target_type}."
@@ -349,3 +355,182 @@ class SkillQuery:
             return HitTypes.HIT
         else:
             return HitTypes.GRAZE
+
+    @staticmethod
+    def get_skill_effect_type_from_string(skill_effect_name):
+        """
+        Get the skill effect type from a string
+        Args:
+            skill_effect_name ():
+
+        Returns:
+            SkillEffectTypes
+        """
+        if skill_effect_name == "damage":
+            return SkillEffectTypes.DAMAGE
+        elif skill_effect_name == "move":
+            return SkillEffectTypes.MOVE
+        elif skill_effect_name == "change_terrain":
+            return SkillEffectTypes.CHANGE_TERRAIN
+        elif skill_effect_name == "apply_affliction":
+            return SkillEffectTypes.APPLY_AFFLICTION
+
+        log_string = f"{skill_effect_name} not found in 'get_skill_effect_type_from_string'"
+        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
+
+    def create_damage_effect(self, skill, effect):
+        """
+        Create the damage effect object
+
+        Args:
+            skill (Skill): the skill that will contain this effect
+            effect (dict): dict of effect values, from json
+
+        Returns:
+            DamageSkillEffect: The created effect object
+        """
+        query = self.manager.Skill
+
+        # get tags from skill_effects
+        target_tags = []
+        for tag in effect["required_tags"]:
+            target_tags.append(query.get_target_tags_from_string(tag))
+
+        target_type = query.get_target_type_from_string(effect["required_target_type"])
+        damage_type = query.get_damage_type_from_string(effect["damage_type"])
+        stat_to_target = query.get_secondary_stat_from_string(effect["stat_to_target"])
+
+        # add effect object to skill
+        created_effect = DamageSkillEffect(skill, target_type, target_tags, effect["damage"], damage_type,
+                                           effect["accuracy"], stat_to_target)
+
+        return created_effect
+
+    def create_change_terrain_effect(self, skill, effect):
+        """
+        Create the change terrain effect object
+
+        Args:
+            skill (Skill): the skill that will contain this effect
+            effect (dict): dict of effect values, from json
+
+        Returns:
+            ChangeTerrainSkillEffect: The created effect object
+        """
+        query = self.manager.Skill
+
+        # get tags from skill_effects
+        target_tags = []
+        for tag in effect["required_tags"]:
+            target_tags.append(query.get_target_tags_from_string(tag))
+
+        target_type = query.get_target_type_from_string(effect["required_target_type"])
+        new_terrain = query.get_target_tags_from_string(effect["new_terrain"])
+
+        # add effect object to skill
+        created_effect = ChangeTerrainSkillEffect(skill, target_type, target_tags, new_terrain)
+
+        return created_effect
+
+    def create_apply_affliction_effect(self, skill, effect):
+        """
+        Create the apply affliction effect object
+
+        Args:
+            skill (Skill): the skill that will contain this effect
+            effect (dict): dict of effect values, from json
+
+        Returns:
+            ApplyAfflictionSkillEffect: The created effect object
+        """
+        query = self.manager.Skill
+
+        # get the info for the APPLICATION of the affliction N.B. only create affliction at point of application
+        target_type = query.get_target_type_from_string(effect["required_target_type"])
+
+        # get tags from skill_effects
+        target_tags = []
+        for tag in effect["required_tags"]:
+            target_tags.append(query.get_target_tags_from_string(tag))
+
+        accuracy = effect["accuracy"]
+        stat_to_target = query.get_stat_from_string(effect["stat_to_target"])
+        affliction_name = effect["affliction_name"]
+        affliction_duration = effect["duration"]
+        affliction_values = get_value_from_afflictions_json(affliction_name)
+        from scripts.global_instances.managers import world_manager
+        affliction_category = world_manager.Affliction.get_affliction_category_from_string(affliction_values[
+                                                                                                     "category"])
+
+        # add effect object to skill
+        created_effect = ApplyAfflictionSkillEffect(skill, target_type, target_tags, accuracy, stat_to_target,
+                                                    affliction_name, affliction_category, affliction_duration)
+
+        return created_effect
+
+    @staticmethod
+    def calculate_to_hit_score(defender, skill_accuracy, stat_to_target, attacker=None):
+        """
+        Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
+        Args:
+
+            defender ():
+            skill_accuracy ():
+            stat_to_target ():
+            attacker ():
+        """
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Get to hit scores..."))
+
+        roll = random.randint(1, 100)
+
+        # check if attacker provided
+        if attacker:
+            attacker_value = attacker.combatant.secondary_stats.chance_to_hit
+        else:
+            attacker_value = 0
+
+        modified_to_hit_score = attacker_value + skill_accuracy + roll
+
+        # get dodge score
+        dodge_value = 0
+        if stat_to_target == SecondaryStatTypes.DODGE_SPEED:
+            dodge_value = defender.combatant.secondary_stats.dodge_speed
+        elif stat_to_target == SecondaryStatTypes.DODGE_TOUGHNESS:
+            dodge_value = defender.combatant.secondary_stats.dodge_toughness
+        elif stat_to_target == SecondaryStatTypes.DODGE_INTELLIGENCE:
+            dodge_value = defender.combatant.secondary_stats.dodge_intelligence
+
+        # mitigate the to hit
+        mitigated_to_hit_score = modified_to_hit_score - dodge_value
+
+        # log the info
+        log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+        return mitigated_to_hit_score
+
+    @staticmethod
+    def create_skill(actor, skill_tree_name, skill_name):
+        """
+        Create a SKill object
+        Args:
+            actor ():
+            skill_tree_name ():
+            skill_name ():
+
+        Returns:
+            Skill: The created skill
+        """
+        skill = Skill(actor, skill_tree_name, skill_name)
+
+        return skill
+
+    @staticmethod
+    def pay_resource_cost(entity, resource, cost):
+        """
+        Remove the resource cost from the using entity
+        """
+        entity.combatant.hp -= cost
+
+        log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))

@@ -8,7 +8,7 @@ from scripts.skills.affliction_effects.damage import DamageAfflictionEffect
 from scripts.world.entity import Entity
 
 
-class AfflictionAction:
+class AfflictionMethods:
     """
     Methods for taking actions with Afflictions
 

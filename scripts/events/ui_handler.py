@@ -37,7 +37,7 @@ class UiHandler(Subscriber):
                 if event.new_game_state == GameStates.TARGETING_MODE:
                     # get info for initial selected tile
                     player = world_manager.player
-                    tile = world_manager.game_map.get_tile(player.x, player.y)
+                    tile = world_manager.Map.get_tile(player.x, player.y)
 
                     # set the info needed to draw the overlay
                     ui_manager.targeting_overlay.set_skill_being_targeted(event.skill_to_be_used)
@@ -45,7 +45,7 @@ class UiHandler(Subscriber):
                     ui_manager.targeting_overlay.set_selected_tile(tile)
 
                     # show the entity info
-                    entity = world_manager.entity_query.get_blocking_entity_at_location(tile.x, tile.y)
+                    entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
                     ui_manager.entity_info.set_selected_entity(entity)
 
                     # show the overlay

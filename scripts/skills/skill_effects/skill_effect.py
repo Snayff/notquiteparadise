@@ -15,6 +15,9 @@ class SkillEffect:
         self.required_target_type = required_target_type
         self.required_tags = required_tags
 
+        from scripts.global_instances.managers import world_manager
+        self.effect_type = world_manager.Skill.get_skill_effect_type_from_string(self.name)
+
     def trigger(self):
         """
         Trigger the effect

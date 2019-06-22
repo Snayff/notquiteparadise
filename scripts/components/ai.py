@@ -19,7 +19,7 @@ class BasicMonster:
         entity = self.owner
         target = self.get_target()
         direction_x, direction_y = self.get_target_direction(target)
-        distance_to_target = world_manager.entity_query.get_chebyshev_distance_between_entities(entity, target)
+        distance_to_target = world_manager.Entity.get_chebyshev_distance_between_entities(entity, target)
         target_tile_x, target_tile_y = entity.x + direction_x, entity.y + direction_y
 
         log_string = f"'{entity.name}' is starting to take their turn..."
@@ -49,9 +49,9 @@ class BasicMonster:
 
         # we can't attack so try to move closer
         # check target tile is valid
-        in_bounds = world_manager.game_map.is_tile_in_bounds(target_tile_x, target_tile_y)
+        in_bounds = world_manager.Map.is_tile_in_bounds(target_tile_x, target_tile_y)
         tile_blocking_movement = is_tile_blocking_movement(target_tile_x, target_tile_y)
-        entity_blocking_movement = world_manager.entity_query.get_blocking_entity_at_location(target_tile_x, target_tile_y)
+        entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_tile_x, target_tile_y)
         if in_bounds and not tile_blocking_movement and not entity_blocking_movement:
             if direction_x != 0 or direction_y != 0:
                 # limit to only moving one tile then move
@@ -91,10 +91,10 @@ class BasicMonster:
             tuple: x,y to aim towards
         """
         entity = self.owner
-        direction = world_manager.entity_query.get_a_star_direction_between_entities(entity, target)
+        direction = world_manager.Entity.get_a_star_direction_between_entities(entity, target)
 
         # if direction == 0 then we aren't intending to move, did something fail?
         if direction[0] == 0 and direction[1] == 0:
-            direction = world_manager.entity_query.get_direct_direction_between_entities(entity, target)
+            direction = world_manager.Entity.get_direct_direction_between_entities(entity, target)
 
         return direction

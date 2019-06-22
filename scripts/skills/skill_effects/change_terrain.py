@@ -14,7 +14,7 @@ class ChangeTerrainSkillEffect(SkillEffect):
     """
 
     def __init__(self, owner,  required_target_type, required_tags, new_terrain):
-        super().__init__(owner, "Manipulate Terrain", "This is the Manipulate Terrain effect", required_target_type,
+        super().__init__(owner, "change_terrain", "This is the Manipulate Terrain effect", required_target_type,
                          required_tags)
 
         # get class from enum and store in self
@@ -37,19 +37,19 @@ class ChangeTerrainSkillEffect(SkillEffect):
         terrain = terrain_to_change
         starting_terrain_name = terrain.name
 
-        from scripts.global_instances.managers import game_manager
-        target_type = game_manager.skill_query.get_target_type(terrain)
+        from scripts.global_instances.managers import world_manager
+        target_type = world_manager.Skill.get_target_type(terrain)
 
         # check the type is correct, then that the tags match
         if target_type == self.required_target_type:
 
             # assess all tags
             for tag in self.required_tags:
-                tags_checked[tag] = tile.has_tag(tag)
+                tags_checked[tag] = world_manager.Map.tile_has_tag(tile, tag)
 
             # if all tags came back true apply the change
             if all(value for value in tags_checked.values()):
-                tile.set_terrain(self.new_terrain)
+                world_manager.Map.set_terrain_on_tile(tile, self.new_terrain)
 
                 # success message
                 entity = self.owner.owner.owner

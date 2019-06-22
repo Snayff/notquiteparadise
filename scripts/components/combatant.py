@@ -205,8 +205,8 @@ class Combatant:
             bustle_modifier = 2
 
             entity = self.owner.owner
-            from scripts.global_instances.managers import game_manager
-            affliction_modifier = game_manager.affliction_action.get_stat_modifier_from_afflictions_on_entity(entity,
+            from scripts.global_instances.managers import world_manager
+            affliction_modifier = world_manager.Affliction.get_stat_modifier_from_afflictions_on_entity(entity,
                                         SecondaryStatTypes.ACTION_COST_CHANGE)
             # convert to fraction to enable multiplication
             affliction_modifier = 1 + (affliction_modifier / 100)

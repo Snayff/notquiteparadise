@@ -25,46 +25,18 @@ class Tile:
         self.terrain = None
         self.aspect = None
 
+        from scripts.global_instances.managers import world_manager
+
         if terrain:
-            self.set_terrain(terrain)
+            world_manager.Map.set_terrain_on_tile(self, terrain)
 
         if aspect:
-            self.set_aspect(aspect)
+            world_manager.Map.set_aspect_on_tile(self, aspect)
 
         if entity:
-            self.set_entity(entity)
+            world_manager.Map.set_entity_on_tile(self, entity)
 
-    def has_tag(self, target_tag, active_entity=None):
-        """
-        Check if a given tag applies to the tile
 
-        Args:
-            target_tag (TargetTags): tag to check
-            active_entity (Entity): entity using a skill
-
-        Returns:
-            bool: True if tag applies.
-        """
-        if target_tag == TargetTags.FLOOR:
-            return self.is_floor
-        elif target_tag == TargetTags.WALL:
-            return self.is_wall
-        elif target_tag == TargetTags.SELF:
-            # ensure active entity is the same as the targeted one
-            if active_entity == self.entity:
-                return True
-            else:
-                return False
-        elif target_tag == TargetTags.OTHER_ENTITY:
-            # ensure active entity is NOT the same as the targeted one
-            if active_entity != self.entity:
-                return True
-            else:
-                return False
-        elif target_tag == TargetTags.NO_ENTITY:
-            return not self.has_entity
-        else:
-            return False  # catch all
 
     @property
     def is_floor(self):
@@ -169,70 +141,4 @@ class Tile:
         if self.aspect:
             surface.blit(self.aspect.sprite, draw_position)
 
-    def set_entity(self, entity):
-        """
-        Set the new entity on the tile.
 
-        Args:
-            entity:
-        """
-        self.entity = entity
-        self.entity.owner = self
-
-    def remove_entity(self):
-        """
-        Remove entity from tile
-        """
-        self.entity.owner = None
-        self.entity = None
-
-    def set_terrain(self, terrain):
-        """
-        Set the new terrain on the tile.
-
-        Args:
-            terrain:
-        """
-        self.terrain = terrain
-        self.terrain.owner = self
-
-    def remove_terrain(self):
-        """
-        Remove terrain from tile
-        """
-        self.terrain.owner = None
-        self.terrain = None
-
-    def set_aspect(self, aspect):
-        """
-        Set the new aspect on the tile.
-
-        Args:
-            aspect:
-        """
-        self.aspect = aspect
-        self.aspect.owner = self
-
-    def remove_aspect(self):
-        """
-        Remove aspect from tile
-        """
-        self.aspect.owner = None
-        self.aspect = None
-
-    def get_entity(self):
-        """
-        Get the entity from the Tile
-
-        Returns:
-            Entity: The Entity on the tile
-
-        """
-        return self.entity
-
-    def trigger_aspect_effect(self):
-        """
-        Trigger the effect of the Aspect
-        """
-        if self.aspect:
-            self.aspect.trigger()

@@ -5,8 +5,7 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, \
-    debug_manager
+from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager
 from scripts.global_instances.event_hub import event_hub
 from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
@@ -16,18 +15,24 @@ from scripts.core.initialisers import initialise_game
 #  - enter doesnt trigger skill
 #  -  3rd skill doesnt trigger overlay when targeting wrong target
 #  - can target self
-# TODO - create global tooltip method - some relevant code in old message log -
+# FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
+# TODO - UI information should be pulled once then held
+# TODO - set terrain/aspect to use the appropriate type (enum) to load the values, rather than adding as instances
+# TODO - move info from bog to aspect to remove need to subclass
+# TODO - create global tooltip method - some relevant code in old message `log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
-# TODO - setup README, setup.py and requirements.txt
 # TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
+#  all skills etc. then only hold what they are and refer to the central data to act
 # TODO - effect activation events (so that world can update)
 # TODO - check if in battle; once damage taken keep an eye on enemy states
 # TODO - change from use fps for timing to delta time
 # TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
+# TODO - review what other info can be externalised
+# TODO - update combat in line with new standards
 
 
 def main():

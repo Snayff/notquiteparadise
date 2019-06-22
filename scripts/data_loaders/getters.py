@@ -123,3 +123,18 @@ def get_value_from_afflictions_json(affliction_name):
         data = json.load(file)
 
         return data[affliction_name]
+
+
+def get_value_from_aspects_json(aspect_name):
+    """
+    Get all values for an aspect
+    Args:
+        aspect_name ():
+
+    Returns:
+
+    """
+    with open('Data/game/world/aspect.json') as file:
+        data = json.load(file)
+
+        return data[aspect_name]
