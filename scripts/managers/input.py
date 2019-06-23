@@ -48,8 +48,9 @@ class InputManager:
         # log input for debug
         input_received = ""
         for key, value in self.input_values.items():
-            if value:
-                input_received += key + ", "
+            if key != "mouse_moved":
+                if value:
+                    input_received += key + ", "
 
         if input_received != "":
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Input received: {input_received}"))
@@ -186,12 +187,6 @@ class InputManager:
             else:
                 debug_manager.set_visibility(True)
 
-        # UI interactions
-        mouse_button = self.get_pressed_mouse_button()
-
-        if mouse_button:
-            publisher.publish(ClickUIEvent(mouse_button))
-
     def process_player_turn_input(self):
         """
         Interpret Player Turn actions
@@ -209,74 +204,18 @@ class InputManager:
         if mouse_button:
             publisher.publish(ClickUIEvent(mouse_button))
 
-
-
         # movement
-        direction_x = 0
-        direction_y = 0
-
-        if self.input_values["up"]:
-            direction_x = 0
-            direction_y = -1
-        elif self.input_values["down"]:
-            direction_x = 0
-            direction_y = 1
-        elif self.input_values["left"]:
-            direction_x = -1
-            direction_y = 0
-        elif self.input_values["right"]:
-            direction_x = 1
-            direction_y = 0
-        elif self.input_values["up_left"]:
-            direction_x = -1
-            direction_y = -1
-        elif self.input_values["up_right"]:
-            direction_x = 1
-            direction_y = -1
-        elif self.input_values["down_left"]:
-            direction_x = -1
-            direction_y = 1
-        elif self.input_values["down_right"]:
-            direction_x = 1
-            direction_y = 1
+        direction_x, direction_y = self.get_pressed_direction()
 
         # if destination isn't 0 then we need to move player
         if direction_x != 0 or direction_y != 0:
             target_x, target_y = direction_x + player.x, direction_y + player.y
-
-            # is there something in the way?
-            in_bounds = world_manager.Map.is_tile_in_bounds(target_x, target_y)
-            tile_blocking_movement = world_manager.Map.is_tile_blocking_movement(target_x, target_y)
-            entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
-
-            if in_bounds:
-                if not entity_blocking_movement and tile_blocking_movement:
-                    # no entity in way but tile is blocked
-                    msg = f"There`s something in the way!"
-                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-                elif entity_blocking_movement:
-                    # entity blocking tile so attack
-                    skill = player.actor.known_skills[0]
-                    publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
-                elif not entity_blocking_movement and not tile_blocking_movement:
-                    # nothing in the way, time to move!
-                    publisher.publish(MoveEvent(player, (target_x, target_y)))
+            publisher.publish(MoveEvent(player, (target_x, target_y)))
 
         # SKILLS usage
-        skill_number = -1
+        skill_number = self.get_pressed_skill_number()
 
-        if self.input_values["skill0"]:
-            skill_number = 0
-        elif self.input_values["skill1"]:
-            skill_number = 1
-        elif self.input_values["skill2"]:
-            skill_number = 2
-        elif self.input_values["skill3"]:
-            skill_number = 3
-        elif self.input_values["skill4"]:
-            skill_number = 4
-
-        # has a skill input been pressed?>
+        # has a skill input been pressed?
         if skill_number != -1:
 
             # get the skill at the relevant number
@@ -307,6 +246,9 @@ class InputManager:
         """
         Interpret Targeting Mode actions
         """
+        # FIXME - cant use bring_down_the_mountain when in targeting mode
+        # FIXME - if clicking another skill it doesnt swap to using that skill.
+
         from scripts.global_instances.managers import world_manager
         player = world_manager.player
 
@@ -315,39 +257,13 @@ class InputManager:
         mouse_tile_x, mouse_tile_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
         # cancel out
-        if self.input_values["cancel"]:
+        if self.input_values["cancel"] or self.input_values["right_click"]:
             from scripts.global_instances.managers import game_manager
             previous_state = game_manager.previous_game_state
             publisher.publish(ChangeGameStateEvent(previous_state))
 
         # Selected tile
-        direction_x = 0
-        direction_y = 0
-
-        if self.input_values["up"]:
-            direction_x = 0
-            direction_y = -1
-        elif self.input_values["down"]:
-            direction_x = 0
-            direction_y = 1
-        elif self.input_values["left"]:
-            direction_x = -1
-            direction_y = 0
-        elif self.input_values["right"]:
-            direction_x = 1
-            direction_y = 0
-        elif self.input_values["up_left"]:
-            direction_x = -1
-            direction_y = -1
-        elif self.input_values["up_right"]:
-            direction_x = 1
-            direction_y = -1
-        elif self.input_values["down_left"]:
-            direction_x = -1
-            direction_y = 1
-        elif self.input_values["down_right"]:
-            direction_x = 1
-            direction_y = 1
+        direction_x, direction_y = self.get_pressed_direction()
 
         # get selected tile from ui
         selected_tile = ui_manager.targeting_overlay.selected_tile
@@ -368,18 +284,7 @@ class InputManager:
             ui_manager.entity_info.set_selected_entity(entity)
 
         #  SKILL USAGE
-        skill_number = -1
-
-        if self.input_values["skill0"]:
-            skill_number = 0
-        elif self.input_values["skill1"]:
-            skill_number = 1
-        elif self.input_values["skill2"]:
-            skill_number = 2
-        elif self.input_values["skill3"]:
-            skill_number = 3
-        elif self.input_values["skill4"]:
-            skill_number = 4
+        skill_number = self.get_pressed_skill_number()
 
         # has a skill input been pressed?
         if skill_number != -1 or self.input_values["confirm"] or self.input_values["left_click"]:
@@ -417,3 +322,60 @@ class InputManager:
             return MouseButtons.MIDDLE_BUTTON
         else:
             return None
+
+    def get_pressed_direction(self):
+        """
+        Get the intended direction based on input values.
+
+        Returns:
+            tuple: tuple of ints showing direction as (dir_x, dir_y). (0,0) if nothing pressed.
+        """
+        direction_x = 0
+        direction_y = 0
+
+        if self.input_values["up"]:
+            direction_x = 0
+            direction_y = -1
+        elif self.input_values["down"]:
+            direction_x = 0
+            direction_y = 1
+        elif self.input_values["left"]:
+            direction_x = -1
+            direction_y = 0
+        elif self.input_values["right"]:
+            direction_x = 1
+            direction_y = 0
+        elif self.input_values["up_left"]:
+            direction_x = -1
+            direction_y = -1
+        elif self.input_values["up_right"]:
+            direction_x = 1
+            direction_y = -1
+        elif self.input_values["down_left"]:
+            direction_x = -1
+            direction_y = 1
+        elif self.input_values["down_right"]:
+            direction_x = 1
+            direction_y = 1
+
+        return direction_x, direction_y
+
+    def get_pressed_skill_number(self):
+        """
+        Get the pressed skill number based on input values.
+
+        Returns:
+            int: value of skill number pressed. Returns -1 if none.
+        """
+        if self.input_values["skill0"]:
+            return 0
+        elif self.input_values["skill1"]:
+            return 1
+        elif self.input_values["skill2"]:
+            return 2
+        elif self.input_values["skill3"]:
+            return 3
+        elif self.input_values["skill4"]:
+            return 4
+        else:
+            return -1

@@ -143,8 +143,9 @@ class UiHandler(Subscriber):
         player = world_manager.player
 
         # if we clicked a skill in the skill bar create the targeting overlay
-        if player.actor.known_skills[skill_number]:
-            skill = player.actor.known_skills[skill_number]
+        skill = player.actor.known_skills[skill_number]
+
+        if skill:
             publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
         else:
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Left clicked skill bar but no skill found."))
