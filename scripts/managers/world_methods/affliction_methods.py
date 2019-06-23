@@ -303,9 +303,6 @@ class AfflictionMethods:
             if affliction.affected_entity == entity and affliction.affliction_type == affliction_type:
                 return affliction
 
-        log_string = f"{affliction_type} not found on '{entity.name}' in 'get_affliction_type_for_entity'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
-
     def get_affliction_effects_for_entity(self, entity, affliction_effect):
         """
         Get all affliction effects of specified type from a specified entity
@@ -322,10 +319,6 @@ class AfflictionMethods:
             for effect in affliction.affliction_effects:
                 if effect.effect_type == affliction_effect:
                     affliction_effects.append(effect)
-
-        if not affliction_effects:
-            log_string = f"{affliction_effect} not found on '{entity.name}' in 'get_affliction_effects_for_entity'"
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         return affliction_effects
 

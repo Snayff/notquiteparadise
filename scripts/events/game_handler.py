@@ -28,6 +28,6 @@ class GameHandler(Subscriber):
                 game_manager.update_game_state(event.new_game_state)
             else:
                 log_string = f"-> new game state {event.new_game_state} is same " \
-                    f"as current {game_manager.game_state}'so state not updated."
+                    f"as current {game_manager.game_state} so state not updated."
                 publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
