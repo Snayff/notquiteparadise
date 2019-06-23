@@ -65,11 +65,12 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/events/ui_handler.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="652">
-                  <caret line="120" column="18" lean-forward="true" selection-start-line="120" selection-start-column="18" selection-end-line="120" selection-end-column="18" />
+                <state relative-caret-position="490">
+                  <caret line="137" column="26" lean-forward="true" selection-start-line="137" selection-start-column="26" selection-end-line="137" selection-end-column="26" />
                   <folding>
                     <element signature="e#1598#1821#0" expanded="true" />
-                    <element signature="e#3105#3607#0" expanded="true" />
+                    <element signature="e#3129#3817#0" expanded="true" />
+                    <element signature="e#3723#4296#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -78,11 +79,12 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="554">
-                  <caret line="200" column="12" lean-forward="true" selection-start-line="200" selection-start-column="12" selection-end-line="200" selection-end-column="45" />
+                <state relative-caret-position="662">
+                  <caret line="184" lean-forward="true" selection-start-line="184" selection-end-line="184" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                     <element signature="e#893#1977#0" expanded="true" />
+                    <element signature="e#6412#6857#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -107,8 +109,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/managers/input.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="560">
-                  <caret line="196" lean-forward="true" selection-start-line="196" selection-end-line="196" />
+                <state relative-caret-position="494">
+                  <caret line="205" column="25" selection-start-line="205" selection-start-column="25" selection-end-line="205" selection-end-column="25" />
                   <folding>
                     <element signature="e#583#1081#0" />
                     <element signature="e#1113#1165#1" />
@@ -120,14 +122,8 @@
                     <element signature="e#3938#4068#1" />
                     <element signature="e#4556#4693#1" />
                     <element signature="e#5004#5119#1" />
+                    <element signature="e#6102#6871#0" expanded="true" />
                     <element signature="e#7100#7116#1" />
-                    <element signature="e#7317#8979#0" />
-                    <element signature="e#7504#8110#0" />
-                    <element signature="e#7658#8110#0" />
-                    <element signature="e#8177#8979#0" />
-                    <element signature="e#8275#8979#0" />
-                    <element signature="e#8758#8979#0" />
-                    <element signature="e#8830#8979#0" />
                     <element signature="e#9097#9141#0" />
                     <element signature="e#9194#9237#0" />
                     <element signature="e#9290#9334#0" />
@@ -288,9 +284,9 @@
         <option value="$PROJECT_DIR$/scripts/events/entity_events.py" />
         <option value="$PROJECT_DIR$/scripts/core/constants.py" />
         <option value="$PROJECT_DIR$/scripts/core/initialisers.py" />
+        <option value="$PROJECT_DIR$/scripts/events/ui_events.py" />
         <option value="$PROJECT_DIR$/scripts/managers/ui.py" />
         <option value="$PROJECT_DIR$/scripts/managers/input.py" />
-        <option value="$PROJECT_DIR$/scripts/events/ui_events.py" />
         <option value="$PROJECT_DIR$/scripts/events/ui_handler.py" />
       </list>
     </option>
@@ -482,7 +478,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="335" y="0" width="2110" height="1407" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.497921" visible="true" weight="0.1023166" />
       <window_info id="Favorites" order="1" sideWeight="0.50053024" side_tool="true" weight="0.1023166" />
@@ -969,17 +964,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="554">
-          <caret line="200" column="12" lean-forward="true" selection-start-line="200" selection-start-column="12" selection-end-line="200" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#893#1977#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/events/ui_events.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
@@ -987,21 +971,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/events/ui_handler.py">
+    <entry file="file://$PROJECT_DIR$/scripts/managers/ui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="652">
-          <caret line="120" column="18" lean-forward="true" selection-start-line="120" selection-start-column="18" selection-end-line="120" selection-end-column="18" />
+        <state relative-caret-position="662">
+          <caret line="184" lean-forward="true" selection-start-line="184" selection-end-line="184" />
           <folding>
-            <element signature="e#1598#1821#0" expanded="true" />
-            <element signature="e#3105#3607#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#893#1977#0" expanded="true" />
+            <element signature="e#6412#6857#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/managers/input.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="196" lean-forward="true" selection-start-line="196" selection-end-line="196" />
+        <state relative-caret-position="494">
+          <caret line="205" column="25" selection-start-line="205" selection-start-column="25" selection-end-line="205" selection-end-column="25" />
           <folding>
             <element signature="e#583#1081#0" />
             <element signature="e#1113#1165#1" />
@@ -1013,14 +998,8 @@
             <element signature="e#3938#4068#1" />
             <element signature="e#4556#4693#1" />
             <element signature="e#5004#5119#1" />
+            <element signature="e#6102#6871#0" expanded="true" />
             <element signature="e#7100#7116#1" />
-            <element signature="e#7317#8979#0" />
-            <element signature="e#7504#8110#0" />
-            <element signature="e#7658#8110#0" />
-            <element signature="e#8177#8979#0" />
-            <element signature="e#8275#8979#0" />
-            <element signature="e#8758#8979#0" />
-            <element signature="e#8830#8979#0" />
             <element signature="e#9097#9141#0" />
             <element signature="e#9194#9237#0" />
             <element signature="e#9290#9334#0" />
@@ -1054,6 +1033,18 @@
             <element signature="e#16457#16769#0" />
             <element signature="e#16688#16843#0" />
             <element signature="e#16536#16676#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/events/ui_handler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="137" column="26" lean-forward="true" selection-start-line="137" selection-start-column="26" selection-end-line="137" selection-end-column="26" />
+          <folding>
+            <element signature="e#1598#1821#0" expanded="true" />
+            <element signature="e#3129#3817#0" expanded="true" />
+            <element signature="e#3723#4296#0" expanded="true" />
           </folding>
         </state>
       </provider>

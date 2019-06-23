@@ -1,5 +1,6 @@
 from scripts.core.constants import LoggingEventTypes, EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MouseButtons, TILE_SIZE
+from scripts.events.game_events import ChangeGameStateEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.global_instances.managers import game_manager, ui_manager, world_manager
 from scripts.events.logging_events import LoggingEvent
@@ -103,8 +104,11 @@ class UiHandler(Subscriber):
             clicked_rect = ui_manager.get_clicked_panels_rect(mouse_x, mouse_y)
 
             # handle right click actions
+            # TODO - replace strings with enum
             if button == MouseButtons.RIGHT_BUTTON and clicked_rect == "game_map":
                 self.attempt_to_set_selected_entity(clicked_rect)
+            elif button == MouseButtons.LEFT_BUTTON and clicked_rect == "skill_bar":
+                self.attempt_to_trigger_targeting_mode(clicked_rect, mouse_x, mouse_y)
 
     def attempt_to_set_selected_entity(self, clicked_rect):
         """
@@ -122,3 +126,25 @@ class UiHandler(Subscriber):
             ui_manager.entity_info.set_selected_entity(entity)
         else:
             self.hide_entity_info()
+
+    @staticmethod
+    def attempt_to_trigger_targeting_mode(clicked_rect, mouse_x, mouse_y):
+        """
+        Check if a skill was clicked in the skill bar and set targeting mode.
+
+        Args:
+            clicked_rect (Rect): The clicked rect, from ui_elements.
+            mouse_x (int):
+            mouse_y (int):
+        """
+        relative_mouse_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect, mouse_x, mouse_y)
+        skill_number = ui_manager.skill_bar.get_skill_index_from_skill_clicked(relative_mouse_pos[0],
+                                                                               relative_mouse_pos[1])
+        player = world_manager.player
+
+        # if we clicked a skill in the skill bar create the targeting overlay
+        if player.actor.known_skills[skill_number]:
+            skill = player.actor.known_skills[skill_number]
+            publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+        else:
+            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Left clicked skill bar but no skill found."))

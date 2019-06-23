@@ -187,17 +187,10 @@ class InputManager:
                 debug_manager.set_visibility(True)
 
         # UI interactions
-        mouse_button = -1
-        if self.input_values["right_click"]:
-            mouse_button = MouseButtons.RIGHT_BUTTON
-        elif self.input_values["left_click"]:
-            mouse_button = MouseButtons.LEFT_BUTTON
-        elif self.input_values["middle_click"]:
-            mouse_button = MouseButtons.MIDDLE_BUTTON
+        mouse_button = self.get_pressed_mouse_button()
 
-        if mouse_button != -1:
+        if mouse_button:
             publisher.publish(ClickUIEvent(mouse_button))
-
 
     def process_player_turn_input(self):
         """
@@ -211,34 +204,12 @@ class InputManager:
             publisher.publish(ExitEvent())
 
         # UI interactions
-        if self.input_values["right_click"] or self.input_values["left_click"]:
-            from scripts.global_instances.managers import ui_manager
-            clicked_rect = ui_manager.get_clicked_panels_rect()
+        mouse_button = self.get_pressed_mouse_button()
 
-            if self.input_values["right_click"]:
-                # right clicked on the map so give the selected tile to the ui manager to display info
-                if clicked_rect == "game_map":
-                    tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
-                    tile_x = tile_pos[0] // TILE_SIZE
-                    tile_y = tile_pos[1] // TILE_SIZE
-                    from scripts.global_instances.managers import world_manager
-                    entity = world_manager.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
+        if mouse_button:
+            publisher.publish(ClickUIEvent(mouse_button))
 
-                    if entity:
-                        ui_manager.entity_info.set_selected_entity(entity)
 
-            if self.input_values["left_click"]:
-
-                # if we clicked the skill bar
-                if clicked_rect == "skill_bar":
-                    relative_mouse_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
-                    skill_number = ui_manager.skill_bar.get_skill_index_from_skill_clicked(relative_mouse_pos[0],
-                                                                                           relative_mouse_pos[1])
-                    # if we clicked a skill in the skill bar create the targeting overlay
-                    if self.input_values["skill"][skill_number]:
-                        if player.actor.known_skills[skill_number]:
-                            skill = player.actor.known_skills[skill_number]
-                            publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
 
         # movement
         direction_x = 0
@@ -429,3 +400,20 @@ class InputManager:
             elif skill_selected != player.actor.known_skills.index(skill_being_targeted):
                 skill = player.actor.known_skills[skill_number]
                 publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+
+    def get_pressed_mouse_button(self):
+        """
+        Get which mouse button has been pressed.
+
+        Returns:
+            MouseButtons: Mouse buttons enum or None if no button pressed.
+
+        """
+        if self.input_values["right_click"]:
+            return MouseButtons.RIGHT_BUTTON
+        elif self.input_values["left_click"]:
+            return MouseButtons.LEFT_BUTTON
+        elif self.input_values["middle_click"]:
+            return MouseButtons.MIDDLE_BUTTON
+        else:
+            return None
