@@ -1,10 +1,11 @@
 import pygame
 
-from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, LoggingEventTypes
+from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, LoggingEventTypes, MouseButtons
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
+from scripts.events.ui_events import ClickUIEvent
 from scripts.global_instances.event_hub import publisher
 
 
@@ -169,7 +170,6 @@ class InputManager:
             self.process_player_turn_input()
 
         elif game_state == GameStates.TARGETING_MODE:
-            # handle_targeting_mode_input()
             self.process_targeting_mode_input()
 
         elif game_state == GameStates.PLAYER_DEAD:
@@ -187,22 +187,17 @@ class InputManager:
                 debug_manager.set_visibility(True)
 
         # UI interactions
-        if self.input_values["right_click"] or self.input_values["left_click"]:
-            from scripts.global_instances.managers import ui_manager
-            clicked_rect = ui_manager.get_clicked_panels_rect()
+        mouse_button = -1
+        if self.input_values["right_click"]:
+            mouse_button = MouseButtons.RIGHT_BUTTON
+        elif self.input_values["left_click"]:
+            mouse_button = MouseButtons.LEFT_BUTTON
+        elif self.input_values["middle_click"]:
+            mouse_button = MouseButtons.MIDDLE_BUTTON
 
-            if self.input_values["right_click"]:
-                # right clicked on the map so give the selected tile to the ui manager to display info
-                if clicked_rect == "game_map":
-                    # TODO - convert to input event and move logic to event processing
-                    tile_pos = ui_manager.get_relative_scaled_mouse_pos(clicked_rect)
-                    tile_x = tile_pos[0] // TILE_SIZE
-                    tile_y = tile_pos[1] // TILE_SIZE
-                    from scripts.global_instances.managers import world_manager
-                    entity = world_manager.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
+        if mouse_button != -1:
+            publisher.publish(ClickUIEvent(mouse_button))
 
-                    if entity:
-                        ui_manager.entity_info.set_selected_entity(entity)
 
     def process_player_turn_input(self):
         """
@@ -415,7 +410,7 @@ class InputManager:
         elif self.input_values["skill4"]:
             skill_number = 4
 
-        # has a skill input been pressed?>
+        # has a skill input been pressed?
         if skill_number != -1 or self.input_values["confirm"] or self.input_values["left_click"]:
 
             skill_being_targeted = ui_manager.targeting_overlay.skill_being_targeted

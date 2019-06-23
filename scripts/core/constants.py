@@ -44,7 +44,7 @@ class EventTopics(Enum):
     MESSAGE = auto()
     LOGGING = auto()
     ENTITY = auto()
-
+    UI = auto()
 
 class GameEventTypes(Enum):
     """Types of Game Events"""
@@ -74,6 +74,9 @@ class EntityEventTypes(Enum):
     SKILL = auto()
     MOVE = auto()
     LEARN = auto()
+
+class UIEventTypes(Enum):
+    CLICK_UI = auto()
 
 
 class TargetTypes(Enum):
@@ -214,3 +217,8 @@ class AspectTypes(Enum):
 class InputModes(Enum):
     MOUSE_AND_KB = auto()
     GAMEPAD = auto()
+
+class MouseButtons(Enum):
+    LEFT_BUTTON = auto()
+    RIGHT_BUTTON = auto()
+    MIDDLE_BUTTON = auto()
