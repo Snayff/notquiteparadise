@@ -1,3 +1,4 @@
+
 import cProfile
 import io
 import logging
@@ -11,10 +12,7 @@ from scripts.global_instances.event_hub import event_hub
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
-# FIXME - skill use not working:
-#  - enter doesnt trigger skill
-#  -  3rd skill doesnt trigger overlay when targeting wrong target
-#  - can target self
+# FIXME - can target self
 # FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
 # TODO - UI information should be pulled once then held
 # TODO - set terrain/aspect to use the appropriate type (enum) to load the values, rather than adding as instances
@@ -31,7 +29,8 @@ from scripts.core.initialisers import initialise_game
 # TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
-# TODO - review what other info can be externalised
+# TODO - review what other info can be externalised.
+# TODO - All external info should not be converted to enum but passed as strings.
 # TODO - update combat in line with new standards
 
 

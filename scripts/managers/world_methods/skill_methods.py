@@ -25,6 +25,7 @@ class SkillMethods:
     def can_use_skill(self, entity, target_pos, skill):
         """
         Confirm entity can use skill on targeted position
+
         Args:
             entity (Entity):
             target_pos (tuple(int, int)):
@@ -36,8 +37,7 @@ class SkillMethods:
         from scripts.global_instances.managers import world_manager
 
         target_x, target_y = target_pos
-        blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x,
-                                                                                                 target_y)
+        blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
         tile = world_manager.Map.get_tile(target_x, target_y)
 
         # do we need an entity?
@@ -89,8 +89,6 @@ class SkillMethods:
                 log_string = f"-> Target type WRONG! Type is {target_type}"
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-                msg = f"You can't do that there!"
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                 return False
 
         # if we need an entity type then pass the tiles entity and get its type
@@ -104,8 +102,6 @@ class SkillMethods:
                 log_string = f"-> Target type WRONG! Type is {target_type}"
                 publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-                msg = f"You can't do that there!"
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                 return False
 
         return False  # catch all

@@ -20,7 +20,7 @@ class GameHandler(Subscriber):
         elif event.type == GameEventTypes.END_TURN:
             # TODO - move to separate handler
             world_manager.Affliction.trigger_afflictions_on_entity(AfflictionTriggers.END_TURN,
-                                                                         turn_manager.turn_holder)
+                                                                   turn_manager.turn_holder)
             turn_manager.end_turn(event.time_spent)
 
         elif event.type == GameEventTypes.CHANGE_GAME_STATE:
