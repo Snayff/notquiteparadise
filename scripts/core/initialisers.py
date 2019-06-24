@@ -61,4 +61,5 @@ def initialise_event_handlers():
     ui_handler = UiHandler(event_hub)
     ui_handler.subscribe(EventTopics.ENTITY)
     ui_handler.subscribe(EventTopics.GAME)
+    ui_handler.subscribe(EventTopics.UI)
 

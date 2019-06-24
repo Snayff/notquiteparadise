@@ -20,7 +20,7 @@ class GameHandler(Subscriber):
         elif event.type == GameEventTypes.END_TURN:
             # TODO - move to separate handler
             world_manager.Affliction.trigger_afflictions_on_entity(AfflictionTriggers.END_TURN,
-                                                                         turn_manager.turn_holder)
+                                                                   turn_manager.turn_holder)
             turn_manager.end_turn(event.time_spent)
 
         elif event.type == GameEventTypes.CHANGE_GAME_STATE:
@@ -28,6 +28,6 @@ class GameHandler(Subscriber):
                 game_manager.update_game_state(event.new_game_state)
             else:
                 log_string = f"-> new game state {event.new_game_state} is same " \
-                    f"as current {game_manager.game_state}'so state not updated."
+                    f"as current {game_manager.game_state} so state not updated."
                 publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 

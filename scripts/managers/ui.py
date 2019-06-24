@@ -163,23 +163,55 @@ class UIManager:
         scaled_mouse_pos = mouse_pos[0] // self.screen_scaling_mod_x, mouse_pos[1] // self.screen_scaling_mod_y
         return scaled_mouse_pos
 
-    def get_relative_scaled_mouse_pos(self, visible_panel_name):
+    def get_relative_scaled_mouse_pos(self, visible_panel_name, mouse_x=-1, mouse_y=-1):
         """
-        Get the scaled mouse position relative to the visible panel
+        Get the scaled mouse position relative to the visible panel. Current position used if one not provided.
 
         Args:
             visible_panel_name (str): name of the visible panel
+            mouse_x(int): Optional. Mouses x coord
+            mouse_y(int):  Optional. Mouses y coord.
 
-        Returns(tuple): Returns mouse position scaled to screen size
-
-
-
+        Returns:
+            tuple: Returns mouse position scaled to screen size
         """
+        # if mouse pos was provided use it, else get it
+        if mouse_x != -1 and mouse_y != -1:
+            mouse_pos = (mouse_x, mouse_y)
+        else:
+            mouse_pos = self.get_scaled_mouse_pos()
+
         ui_object = self.visible_elements.get(visible_panel_name).panel
-        mouse_pos = pygame.mouse.get_pos()
-        scaled_mouse_pos = mouse_pos[0] // self.screen_scaling_mod_x, mouse_pos[1] // self.screen_scaling_mod_y
-        relative_mouse_pos = scaled_mouse_pos[0] - ui_object.x, scaled_mouse_pos[1] - ui_object.y
+
+        relative_mouse_pos = mouse_pos[0] - ui_object.x, mouse_pos[1] - ui_object.y
+
         return relative_mouse_pos
+
+    def get_clicked_panels_rect(self, mouse_x=-1, mouse_y=-1):
+        """
+        Determine which panel has been clicked based on mouse position. Current position used if one not provided.
+
+        Args:
+            mouse_x(int): Optional. Mouses x coord
+            mouse_y(int):  Optional. Mouses y coord.
+
+        Returns:
+            rect: ui_element
+        """
+        clicked_rect = None
+
+        # if mouse pos was provided use it, else get it
+        if mouse_x != -1 and mouse_y != -1:
+            mouse_pos = (mouse_x, mouse_y)
+        else:
+            mouse_pos = self.get_scaled_mouse_pos()
+
+        for key, ui_object in self.visible_elements.items():
+            if hasattr(ui_object, "panel"):
+                if ui_object.panel.rect.collidepoint(mouse_pos):
+                    clicked_rect = key
+
+        return clicked_rect
 
 
 def example_code():

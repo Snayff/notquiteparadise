@@ -1,4 +1,7 @@
-from scripts.core.constants import EntityEventTypes, LoggingEventTypes, GameStates
+from scripts.components import player
+from scripts.core.constants import EntityEventTypes, LoggingEventTypes, GameStates, MessageEventTypes
+from scripts.events.entity_events import UseSkillEvent
+from scripts.events.message_events import MessageEvent
 from scripts.global_instances.event_hub import publisher
 from scripts.global_instances.managers import world_manager, turn_manager, game_manager
 from scripts.events.game_events import EndTurnEvent, ChangeGameStateEvent
@@ -45,33 +48,54 @@ class EntityHandler(Subscriber):
     @staticmethod
     def process_move(event):
         """
-        Process the move event
+        Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
+        target tile has entity) or move.
 
         Args:
-            event:
+            event(MoveEvent):
         """
         # get info from event
         target_x, target_y = event.target_pos
         entity = event.entity
         old_x, old_y = entity.x, entity.y
 
-        # clean up old tile
-        old_tile = world_manager.Map.get_tile(old_x, old_y)
-        world_manager.Map.remove_entity_on_tile(old_tile)
+        # is there something in the way?
+        in_bounds = world_manager.Map.is_tile_in_bounds(target_x, target_y)
+        tile_blocking_movement = world_manager.Map.is_tile_blocking_movement(target_x, target_y)
+        entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
 
-        # move entity to new tile
-        new_tile = world_manager.Map.get_tile(target_x, target_y)
-        world_manager.Map.set_entity_on_tile(new_tile, entity)
+        if in_bounds:
 
-        # activate the tile's aspect affect
-        world_manager.Map.trigger_aspect_effect_on_tile(new_tile)
+            # check for no entity in way but tile is blocked
+            if not entity_blocking_movement and tile_blocking_movement:
+                msg = f"There`s something in the way!"
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
-        # update fov if needed
-        if entity.player:
-            world_manager.player_fov_is_dirty = True
+            # check if entity blocking tile to attack
+            elif entity_blocking_movement:
+                skill = entity.actor.known_skills[0]
+                publisher.publish((UseSkillEvent(entity, (target_x, target_y), skill)))
 
-        # end turn
-        publisher.publish(EndTurnEvent(10))  # TODO - replace magic number with cost to move
+            # if nothing in the way, time to move!
+            elif not entity_blocking_movement and not tile_blocking_movement:
+
+                # clean up old tile
+                old_tile = world_manager.Map.get_tile(old_x, old_y)
+                world_manager.Map.remove_entity_on_tile(old_tile)
+
+                # move entity to new tile
+                new_tile = world_manager.Map.get_tile(target_x, target_y)
+                world_manager.Map.set_entity_on_tile(new_tile, entity)
+
+                # activate the tile's aspect affect
+                world_manager.Map.trigger_aspect_effect_on_tile(new_tile)
+
+                # update fov if needed
+                if entity.player:
+                    world_manager.player_fov_is_dirty = True
+
+                # end turn
+                publisher.publish(EndTurnEvent(10))  # TODO - replace magic number with cost to move
 
     @staticmethod
     def process_skill(event):

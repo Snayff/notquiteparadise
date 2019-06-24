@@ -7,7 +7,7 @@ from scripts.global_instances.event_hub import publisher
 
 class GameManager:
     """
-    Manager of Game Functions
+    Manager of Game Functions and data, such as the window details
     """
     def __init__(self):
         self.game_state = GameStates.GAME_INITIALISING

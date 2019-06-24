@@ -9,7 +9,7 @@ class UseSkillEvent(Event):
     Args:
         entity_using_skill(Entity):
         target_pos (tuple): x, y
-        skill_name:
+        skill (Skill):
     """
     def __init__(self, entity_using_skill, target_pos, skill):
         Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)

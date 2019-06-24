@@ -1,3 +1,4 @@
+
 import cProfile
 import io
 import logging
@@ -5,16 +6,13 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager
+from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
+    input_manager
 from scripts.global_instances.event_hub import event_hub
-from scripts.core.input import get_input, handle_input
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
-# FIXME - skill use not working:
-#  - enter doesnt trigger skill
-#  -  3rd skill doesnt trigger overlay when targeting wrong target
-#  - can target self
+# FIXME - can target self
 # FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
 # TODO - UI information should be pulled once then held
 # TODO - set terrain/aspect to use the appropriate type (enum) to load the values, rather than adding as instances
@@ -31,7 +29,8 @@ from scripts.core.initialisers import initialise_game
 # TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
-# TODO - review what other info can be externalised
+# TODO - review what other info can be externalised.
+# TODO - All external info should not be converted to enum but passed as strings.
 # TODO - update combat in line with new standards
 
 
@@ -68,20 +67,16 @@ def game_loop():
         # limit frames
         game_manager.internal_clock.tick(60)
 
-        # HANDLE INPUT
-        # determine the action to take from the input with the context of the game state
-        input_values = get_input()
-        handle_input(input_values)
-
         if game_manager.game_state == GameStates.ENEMY_TURN:
             turn_manager.turn_holder.ai.take_turn()
 
         # HANDLE UPDATE
-        event_hub.update()
+        input_manager.update()
         game_manager.update()
         debug_manager.update()
         world_manager.update()
         ui_manager.update()
+        event_hub.update()
 
         # DRAW
         ui_manager.draw_game(world_manager.game_map, debug_manager.visible)
