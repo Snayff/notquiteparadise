@@ -12,7 +12,7 @@ from scripts.global_instances.event_hub import event_hub
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
-# FIXME - can target self
+# FIXME - can target self when shouldnt be able to
 # FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
 # TODO - UI information should be pulled once then held
 # TODO - set terrain/aspect to use the appropriate type (enum) to load the values, rather than adding as instances
@@ -43,6 +43,9 @@ def main():
     # TODO - set to turn off for production builds
     profiler = cProfile.Profile()
     profiler.enable()
+
+    from scripts.core.data_library import LibraryOfAlexandria
+    data = LibraryOfAlexandria()
 
     # load the game
     initialise_game()

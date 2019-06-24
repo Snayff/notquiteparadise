@@ -138,3 +138,4 @@ def get_value_from_aspects_json(aspect_name):
         data = json.load(file)
 
         return data[aspect_name]
+
