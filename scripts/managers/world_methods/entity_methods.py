@@ -11,7 +11,7 @@ from scripts.components.trade import Trade
 from scripts.core.constants import LoggingEventTypes, TILE_SIZE
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
 
 
@@ -145,7 +145,7 @@ class EntityMethods:
 
         """
         max_path_length = 25
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         game_map = world_manager.game_map
         entities = world_manager.Entity.get_all_entities()
         entity_to_move = start_entity

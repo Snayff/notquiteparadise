@@ -2,7 +2,7 @@ import tcod
 
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.managers.world_methods.affliction_methods import AfflictionMethods
 from scripts.managers.world_methods.entity_methods import EntityMethods
 from scripts.managers.world_methods.fov_methods import FOVMethods

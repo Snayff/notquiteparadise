@@ -1,7 +1,7 @@
 
 from scripts.core.constants import LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 
 
 class AfflictionEffect:
@@ -15,7 +15,7 @@ class AfflictionEffect:
         self.owner = owner  # type: Affliction
         self.name = name
         self.description = description
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         self.effect_type = world_manager.Affliction.get_affliction_effect_type_from_string(name)
 
     def trigger(self):

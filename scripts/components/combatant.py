@@ -205,7 +205,7 @@ class Combatant:
             bustle_modifier = 2
 
             entity = self.owner.owner
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
             affliction_modifier = world_manager.Affliction.get_stat_modifier_from_afflictions_on_entity(entity,
                                         SecondaryStatTypes.ACTION_COST_CHANGE)
             # convert to fraction to enable multiplication

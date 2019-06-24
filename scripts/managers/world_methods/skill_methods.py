@@ -5,7 +5,7 @@ from scripts.core.constants import TargetTypes, LoggingEventTypes, MessageEventT
 from scripts.data_loaders.getters import get_value_from_afflictions_json
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill import Skill
 from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
 from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
@@ -34,7 +34,7 @@ class SkillMethods:
         Returns:
             bool: True if can use the skill. Else False.
         """
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
 
         target_x, target_y = target_pos
         blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
@@ -124,7 +124,7 @@ class SkillMethods:
         tags_checked = {}
 
         # assess all tags
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         for tag in required_tags:
             tags_checked[tag] = world_manager.Map.tile_has_tag(tile, tag)
 
@@ -263,7 +263,7 @@ class SkillMethods:
             return PrimaryStatTypes.VIGOUR
         elif primary_stat == "clout":
             return PrimaryStatTypes.CLOUT
-        elif primary_stat == "SKULLDUGGERY":
+        elif primary_stat == "skullduggery":
             return PrimaryStatTypes.SKULLDUGGERY
         elif primary_stat == "bustle":
             return PrimaryStatTypes.BUSTLE
@@ -299,7 +299,7 @@ class SkillMethods:
             target_pos (tuple): x y of the target
         """
         # TODO - extend to target an area
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         target_x, target_y = target_pos
         target = None
 
@@ -454,7 +454,7 @@ class SkillMethods:
         affliction_name = effect["affliction_name"]
         affliction_duration = effect["duration"]
         affliction_values = get_value_from_afflictions_json(affliction_name)
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         affliction_category = world_manager.Affliction.get_affliction_category_from_string(affliction_values[
                                                                                                      "category"])
 

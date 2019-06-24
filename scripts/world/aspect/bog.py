@@ -4,7 +4,7 @@ from scripts.core.constants import TILE_SIZE, AspectTypes, AfflictionTypes, Targ
     AfflictionCategory, SkillEffectTypes, LoggingEventTypes
 from scripts.data_loaders.getters import get_value_from_aspects_json
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.world.aspect.aspect import Aspect
 
 
@@ -32,7 +32,7 @@ class Bog(Aspect):
         for effect in effects:
             created_effect = None
             effect_name = effect["name"]
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
 
             if effect_name == "damage":
                 created_effect = world_manager.Skill.create_damage_effect(self, effect)
@@ -49,7 +49,7 @@ class Bog(Aspect):
 
     def trigger(self):
         if self.owner.has_entity:
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
             entity = world_manager.Map.get_entity_on_tile(self.owner)
             terrain = world_manager.Map.get_terrain_on_tile(self.owner)
 

@@ -2,7 +2,7 @@ import pygame
 
 from scripts.data_loaders.getters import get_value_from_skill_json
 from scripts.events.game_events import EndTurnEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
 from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
 from scripts.skills.skill_effects.damage import DamageSkillEffect
@@ -30,7 +30,7 @@ class Skill:
 
         # targeting info
         self.range = skill_values["range"]  # how far away the skill can be used
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         self.required_target_type = world_manager.Skill.get_target_type_from_string(skill_values[
                                                                                               "required_target_type"])
         required_tags = skill_values["required_tags"]
@@ -74,7 +74,7 @@ class Skill:
             target_pos (tuple): x y of the target
         """
         entity = self.owner.owner  # owner is actor, actor`s owner is entity
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         target = world_manager.Skill.get_target(target_pos, self.required_target_type)  # get the tile or entity
 
         # apply any skill_effects

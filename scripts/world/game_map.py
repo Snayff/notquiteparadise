@@ -29,7 +29,7 @@ class GameMap:
 
         # TODO remove - only for test
         if self.width > 10 and self.height > 10:
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
             world_manager.Map.set_terrain_on_tile(self.tiles[0][5], Wall())
             world_manager.Map.set_terrain_on_tile(self.tiles[10][2], Wall())
             world_manager.Map.set_aspect_on_tile(self.tiles[0][2], Bog())
@@ -46,7 +46,7 @@ class GameMap:
                            panel_border_colour)
 
         # set panel to be rendered
-        from scripts.global_instances.managers import ui_manager
+        from scripts.global_singletons.managers import ui_manager
         ui_manager.update_panel_visibility("game_map", self,  True)
 
     def draw(self, surface):
@@ -65,7 +65,7 @@ class GameMap:
         for x in range(0, self.width):
             for y in range(0, self.height):
 
-                from scripts.global_instances.managers import world_manager
+                from scripts.global_singletons.managers import world_manager
                 if world_manager.Map.is_tile_visible_to_player(x, y):
                     self.tiles[x][y].draw(self.panel.surface)
 

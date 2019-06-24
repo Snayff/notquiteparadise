@@ -2,8 +2,8 @@ from scripts.components import player
 from scripts.core.constants import EntityEventTypes, LoggingEventTypes, GameStates, MessageEventTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_instances.event_hub import publisher
-from scripts.global_instances.managers import world_manager, turn_manager, game_manager
+from scripts.global_singletons.event_hub import publisher
+from scripts.global_singletons.managers import world_manager, turn_manager, game_manager
 from scripts.events.game_events import EndTurnEvent, ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber, Event

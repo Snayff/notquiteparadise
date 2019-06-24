@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, VisualInfo
@@ -57,7 +57,7 @@ class MessageLog:
                            panel_border_colour)
 
         # set panel to be rendered
-        from scripts.global_instances.managers import ui_manager
+        from scripts.global_singletons.managers import ui_manager
         ui_manager.update_panel_visibility("message_log", self,  True)
 
         # log info
@@ -278,7 +278,7 @@ class MessageLog:
 
         for link in range(len(self.displayed_hyperlinks)):
 
-            from scripts.global_instances.managers import ui_manager
+            from scripts.global_singletons.managers import ui_manager
             pos = ui_manager.get_relative_scaled_mouse_pos("message_log")
 
             # get the link rect

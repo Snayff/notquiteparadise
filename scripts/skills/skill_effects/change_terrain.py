@@ -1,7 +1,7 @@
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, TargetTags
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.terrain import Terrain
@@ -37,7 +37,7 @@ class ChangeTerrainSkillEffect(SkillEffect):
         terrain = terrain_to_change
         starting_terrain_name = terrain.name
 
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         target_type = world_manager.Skill.get_target_type(terrain)
 
         # check the type is correct, then that the tags match

@@ -1,6 +1,6 @@
 from scripts.core.constants import LoggingEventTypes
-from scripts.global_instances.event_hub import publisher
-from scripts.global_instances.managers import ui_manager
+from scripts.global_singletons.event_hub import publisher
+from scripts.global_singletons.managers import ui_manager
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.pub_sub_hub import Subscriber
 

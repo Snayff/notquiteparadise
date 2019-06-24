@@ -3,7 +3,7 @@ from typing import Dict, Tuple
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, VisualInfo
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.ui_elements.templates.panel import Panel
@@ -48,7 +48,7 @@ class NewMessageLog:
                            panel_border_colour)
 
         # set panel to be rendered
-        from scripts.global_instances.managers import ui_manager
+        from scripts.global_singletons.managers import ui_manager
         ui_manager.update_panel_visibility("message_log", self, True)
 
         # log info

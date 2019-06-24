@@ -1,3 +1,4 @@
+
 import pygame
 
 from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
@@ -7,8 +8,8 @@ from scripts.events.logging_handler import LoggingHandler
 from scripts.events.message_events import MessageEvent
 from scripts.events.message_handler import MessageHandler
 from scripts.events.game_handler import GameHandler
-from scripts.global_instances.event_hub import publisher, event_hub
-from scripts.global_instances.managers import game_manager, world_manager, turn_manager, ui_manager
+from scripts.global_singletons.event_hub import publisher, event_hub
+from scripts.global_singletons.managers import game_manager, world_manager, turn_manager, ui_manager
 from scripts.events.ui_handler import UiHandler
 
 

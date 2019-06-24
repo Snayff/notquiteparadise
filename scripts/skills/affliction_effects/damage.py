@@ -2,7 +2,7 @@ from scripts.core.constants import HitTypes, LoggingEventTypes, DamageTypes, Hit
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction_effects.affliction_effect import AfflictionEffect
 
 

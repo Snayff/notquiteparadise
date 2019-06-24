@@ -12,7 +12,7 @@ class AffectStatAfflictionEffect(AfflictionEffect):
     def __init__(self, owner, stat_to_affect, amount):
         super().__init__(owner, "affect_stat", "This is the Affect Stat effect")
 
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         stat = world_manager.Skill.get_stat_from_string(stat_to_affect)
 
         self.stat_to_affect = stat

@@ -1,7 +1,7 @@
 from scripts.core.constants import LoggingEventTypes, GameStates
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 
 
 class TurnManager:
@@ -30,7 +30,7 @@ class TurnManager:
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Building a new turn queue..."))
 
         # create a turn queue from the entities list
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         entities = world_manager.Entity.get_all_entities()
 
         for entity in entities:
@@ -67,7 +67,7 @@ class TurnManager:
         """
         Proceed to the next turn setting the next entity to act as the turn holder.
         """
-        from scripts.global_instances.managers import game_manager
+        from scripts.global_singletons.managers import game_manager
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Moving to the next turn..."))
 
         if not self.turn_queue:
@@ -84,7 +84,7 @@ class TurnManager:
         self.time_of_last_turn = self.time
 
         # if turn holder is the player then update to player turn
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         if self.turn_holder == world_manager.player:
             publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
         # if turn holder is not player and we aren't already in enemy turn then update to enemy turn

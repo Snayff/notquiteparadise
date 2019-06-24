@@ -6,9 +6,9 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
+from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager
-from scripts.global_instances.event_hub import event_hub
+from scripts.global_singletons.event_hub import event_hub
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
@@ -43,9 +43,6 @@ def main():
     # TODO - set to turn off for production builds
     profiler = cProfile.Profile()
     profiler.enable()
-
-    from scripts.core.data_library import LibraryOfAlexandria
-    data = LibraryOfAlexandria()
 
     # load the game
     initialise_game()

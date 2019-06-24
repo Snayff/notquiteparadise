@@ -2,7 +2,7 @@
 from scripts.core.constants import AfflictionCategory, AfflictionTypes, AfflictionTriggers, LoggingEventTypes
 from scripts.data_loaders.getters import get_value_from_afflictions_json
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction_effects.affliction_effect import AfflictionEffect
 from scripts.world.entity import Entity
 
@@ -24,7 +24,7 @@ class Affliction:
     """
 
     def __init__(self, affliction_type, duration, affected_entity):
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         action = world_manager.Affliction
         name = action.get_affliction_string_from_type(affliction_type)
         values = get_value_from_afflictions_json(name)

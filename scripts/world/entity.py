@@ -1,5 +1,5 @@
 from scripts.events.entity_events import LearnEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 
 
 class Entity:

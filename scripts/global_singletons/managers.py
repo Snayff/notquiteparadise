@@ -1,3 +1,4 @@
+
 from scripts.managers.debug import DebugManager
 from scripts.managers.game import GameManager
 from scripts.managers.input import InputManager
