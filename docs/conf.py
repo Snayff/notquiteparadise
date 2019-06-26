@@ -15,8 +15,8 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath(".."))
-sys.path.insert(1, os.path.abspath("../scripts/core/"))
-sys.path.insert(2, os.path.abspath("../scripts/managers/"))
+# sys.path.insert(1, os.path.abspath("../scripts/"))
+
 
 
 

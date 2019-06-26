@@ -6,7 +6,7 @@ from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.global_singletons.managers import game_manager, ui_manager, world_manager
 from scripts.events.logging_events import LoggingEvent
-from scripts.events.pub_sub_hub import Subscriber
+from scripts.event_handlers.pub_sub_hub import Subscriber
 
 
 class UiHandler(Subscriber):

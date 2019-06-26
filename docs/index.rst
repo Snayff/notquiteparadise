@@ -7,11 +7,23 @@ Welcome to Not Quite Paradise's documentation!
 ==================================================
 
 ..  toctree::
-    :maxdepth: 2
-    :caption: Contents:
+    :maxdepth: 1
 
     core
+    event_handlers
+    events
     managers
+    skills
+    ui_elements
+    world
+
+
+
+
+
+
+
+
 
 
 Indices and tables

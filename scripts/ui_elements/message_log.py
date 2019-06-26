@@ -1,15 +1,15 @@
-import pygame
+from typing import Dict, Tuple
 
-from scripts.global_singletons.event_hub import publisher
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.palette import Palette
 from scripts.core.constants import MessageEventTypes, LoggingEventTypes, VisualInfo
 from scripts.core.fonts import Font
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_singletons.event_hub import publisher
+from scripts.ui_elements.colours import Colour
+from scripts.ui_elements.palette import Palette
 from scripts.ui_elements.templates.panel import Panel
 
 
-class MessageLog:
+class NewMessageLog:
     """
     Store messages, and related functionality, to be shown in the message log.
 
@@ -20,9 +20,9 @@ class MessageLog:
         expressions  (Dict): Dictionary of expressions to look for and their colour to show.
         icons (Dict): Dictionary of icons to look for and the icon to show.
         hyperlinks (Dict): Dictionary of hyperlinks to look for and the linked info to show.
-        is_dirty:
-        displayed_hyperlinks:
-        index_of_active_hyperlink:
+        is_dirty
+        displayed_hyperlinks
+        index_of_active_hyperlink
     """
 
     def __init__(self):
@@ -30,20 +30,11 @@ class MessageLog:
         self.font = Font().message_log
         self.colour = Colour()
         self.palette = Palette().message_log
-        self.message_list = [(MessageEventTypes.BASIC, "Welcome to Not Quite Paradise")]
-        self.message_type_to_show = MessageEventTypes.BASIC
-        self.expressions = self.create_expressions_list()
-        self.icons = self.initialise_icons_list()
-        self.hyperlinks = self.initialise_hyperlinks_list()
-
-        # hyperlink info
+        self.message_list = []
+        self.messages_to_draw = []
+        self.keywords = self.initialise_keywords()
+        self.icons = self.initialise_icons()
         self.is_dirty = True
-        self.displayed_hyperlinks = []
-        self.index_of_active_hyperlink = -1
-
-        # tooltip info # TODO - move to tooltip class when there is one
-        self.seconds_before_tooltip = 0.2
-        self.seconds_before_extended_text = 1
 
         # panel info
         panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
@@ -58,17 +49,36 @@ class MessageLog:
 
         # set panel to be rendered
         from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("message_log", self,  True)
+        ui_manager.update_panel_visibility("message_log", self, True)
 
         # log info
         self.edge_size = 1
         self.message_indent = 5
         self.gap_between_lines = int(self.font.size / 3)
-        self.first_message_to_show = 0
+        self.first_message_index = 0
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
+
+    def update(self):
+        """
+        Update the message log, ensuring correct messages are shown
+        """
+        if self.is_dirty:
+            # update first message index
+            if len(self.message_list) > self.number_of_messages_to_show:
+                self.first_message_index = len(self.message_list) - self.number_of_messages_to_show
+
+            # clear messages to draw
+            self.messages_to_draw.clear()
+
+            # update message to draw
+            messages_to_show = min(self.number_of_messages_to_show, len(self.message_list))
+            for counter in range(0, messages_to_show):
+                self.messages_to_draw.append(self.message_list[counter + self.first_message_index])
+
+            # TODO - register / unregister tooltips
 
     def draw(self, surface):
         """
@@ -82,370 +92,274 @@ class MessageLog:
         # panel background
         self.panel.draw_background()
 
-        # show only as many message_list as we can or have
-        messages_to_show = min(len(self.message_list), self.number_of_messages_to_show)
-        first_message_index = self.first_message_to_show
-
         # init info for message render
         msg_x = self.edge_size + self.message_indent
         msg_y = self.edge_size
         font = self.font
-        messages = self.message_list
         font_size = font.size
+        line_count = 0
 
-        # render the message_list
-        for message_count in range(messages_to_show):
+        # render the messages_to_draw
+        for line_list in self.messages_to_draw:
             # reset offset
-            current_msg_x_offset = 0
+            x_offset = 0
 
             # get y position of line to write to
-            adjusted_y = msg_y + (message_count * (font_size + self.gap_between_lines))
+            adjusted_y = msg_y + (line_count * (font_size + self.gap_between_lines))
 
-            # parse message for expressions
-            parsed_message = self.parse_message(messages[message_count + first_message_index][1])
+            # update  line count
+            line_count += 1
 
-            # render all parsed messages
-            for counter in range(len(parsed_message)):
-
-                # get the message to render and position to render to
-                msg_to_render = parsed_message[counter][1]
-                adjusted_x = msg_x + current_msg_x_offset
-
-                # check if it exists in the icon list
-                if msg_to_render == "icon":
-                    icon = parsed_message[counter][0]
-                    panel_surface.blit(icon, (adjusted_x, adjusted_y))
-
-                    # update x offset based on width of image
-                    image_size = icon.get_width()
-
-                    current_msg_x_offset += image_size + (font_size / 3)
-
-                # its not an icon so must be text.
-                else:
-                    #  Check for a hyperlink
-                    if msg_to_render in self.hyperlinks:
-
-                        link_already_logged = False
-                        msg_colour = self.palette.hyperlink
-
-                        # check we havent already logged it
-                        for link_counter in range(len(self.displayed_hyperlinks)):
-                            if msg_to_render == self.displayed_hyperlinks[link_counter][1]:
-                                link_already_logged = True
-
-                        if not link_already_logged:
-                            # get the hyperlink rect
-                            hyperlink_rect = font.render_to(panel_surface, (adjusted_x, adjusted_y),
-                                                            msg_to_render, msg_colour)
-
-                            # update the rect to reflect current position
-                            hyperlink_rect.x = adjusted_x
-                            hyperlink_rect.y = adjusted_y
-
-                            # add rect of hyperlink to active list
-                            self.displayed_hyperlinks.append((hyperlink_rect, msg_to_render, 0))
-                            # 0 is mouse over timer
-                    else:
-                        msg_colour = parsed_message[counter][0]
-
-                    font.render_to(panel_surface, (adjusted_x, adjusted_y), msg_to_render, msg_colour)
-
-                    # update x offset based on length of string just rendered
-                    msg_length = len(msg_to_render)
-                    current_msg_x_offset += (msg_length + 2) * (font_size / 2)  # Not sure about the formula, but it
-                                                                                # seems to works.
-
-        # no longer dirty # TODO - uncomment when able to setup message log is dirty
-        # self.is_dirty = False
+            # pull each surface from each line_list and render to the panel surface
+            for message in line_list:
+                panel_surface.blit(message, (msg_x + x_offset, adjusted_y))
+                message_width = message.get_width()
+                x_offset += message_width + 2  # 2 for space between words
 
         # panel border
         self.panel.draw_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
-    def draw_tooltips(self, surface):
-        """
-        draw the tooltips and  their text
-
-        Args:
-            surface (Surface): Main surface to draw to.
-        """
-        # TODO - extract tooltip method from message log
-        # Message log tooltips
-        font = self.font
-        font_colour = self.palette.tooltip_text
-
-        # update message log tooltip info
-        self.check_mouse_over_link()
-
-        tooltip_info = self.get_active_tooltip()
-
-        if tooltip_info:
-            text_rect, tooltip_text, extended_text_x, extended_text_y, extended_tooltip_text = tooltip_info
-
-            pygame.draw.rect(surface, self.colour.black, text_rect)
-            font.render_to(surface, (text_rect.x, text_rect.y), tooltip_text, font_colour)
-
-            if extended_text_x != -1:
-                font.render_to(surface, (extended_text_x, extended_text_y), extended_tooltip_text,
-                               font_colour)
-
     def add_message(self, message_type, message):
         """
-        Add a message to the MessageLog
-        Args:
-            message_type(MessageEventTypes):
-            message(str):
-        """
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"{message} added to message log"))
-
-        self.message_list.append((message_type, message))
-
-        # if more messages than we can show at once then increment first message position
-        if len(self.message_list) > self.number_of_messages_to_show:
-            self.update_first_message_position(1)
-
-    def update_first_message_position(self, increment):
-        """
+        Add a message to the message log
 
         Args:
-            increment:
+            message_type (MessageEventTypes):
+            message (str):
         """
-        #  prevent the first message going too far and showing less than max number of message_list to show
-        self.first_message_to_show = min(self.first_message_to_show + increment, len(self.message_list) -
-                                                                                 self.number_of_messages_to_show)
+        # TODO - remove message_type
 
-        # ensure first message position cannot be less than the start of the message_list
-        self.first_message_to_show = max(self.first_message_to_show, 0)
+        # text wrap message
+        wrapped_message = self.text_wrap_message(message)
 
-    def set_message_type_to_show(self, message_type):
+        # parse message
+        parsed_message_list = self.parse_message_and_convert_to_surface(wrapped_message)
+
+        # add each line to the main message list
+        for message in parsed_message_list:
+            self.message_list.append(message)
+
+        # flag need to update
+        self.is_dirty = True
+
+    def text_wrap_message(self, message):
         """
+        Break a message into lines based on panel width
 
         Args:
-            message_type(MessageEventTypes):
-        """
-        self.message_type_to_show = message_type
-
-    def create_expressions_list(self):
-        """
-        Create list of expressions to look for in log and apply formatting
+            message (str): message to wrap
 
         Returns:
-            Dict
+            list: list of wrapped lines
+
         """
-        expressions = {}
+        font = self.font
+        words = message.split()
+        line_break = " \n "
+        max_width = self.panel.width - (self.message_indent * 2)  # *2 to offer border on each side
+        x = 0
+        wrapped_text = ""
 
-        expressions["fighter"] = self.palette.expressions_player
-        expressions["moved"] = self.palette.expressions_player
+        # check size of each word and if it extends past total width
+        for word in words:
+            # add space back to the word
+            word += " "
 
-        return expressions
+            # if next word is a command then don't add it to calculations
+            if word[0] != "#":
+                # get size
+                word_surface, world_rect = font.render(word, self.palette.text_default, self.palette.background)
+                word_width, word_height = word_surface.get_size()
 
-    @staticmethod
-    def initialise_icons_list():
+                # if word will run outside of size insert a break
+                if x + word_width >= max_width:
+                    # start counting new line width
+                    x = 0
+                    wrapped_text += line_break
+            else:
+                word_width = 0
+
+            # add current word to new string
+            wrapped_text += word
+            x += word_width
+
+        return wrapped_text
+
+    def parse_message_and_convert_to_surface(self, message):
         """
-        Create list of icons to look for in log and render
+        Check for keywords and commands and apply skill_effects as required.
+
+        Args:
+            message ():
 
         Returns:
-            Dict
+            List[List[pygame.Surface]] : A list (one per line) containing lists of surfaces for each set of words
+        """
+        parsed_message_list = []
+
+        # check for new lines
+        message_list = message.split("\n")
+
+        # now we have a list of strings, one string per line
+        for line_count in range(len(message_list)):
+            line_list = []
+            outstanding_word_string = ""
+
+            # get the line to work on
+            line = message_list[line_count]
+
+            # break line into words
+            word_list = line.split()
+
+            processed_indices = []
+
+            # check each word in the line
+            for word_count in range(len(word_list)):
+                word = word_list[word_count]
+
+                # check index hasn't been processed already (commands look forward...)
+                if word_count not in processed_indices:
+
+                    # check for COMMANDS
+                    if word[0] == "#":
+
+                        # if any words waiting to be converted to a surface then do so
+                        if outstanding_word_string != "":
+                            text_surface, text_rect = self.font.render(outstanding_word_string,
+                                                                       self.palette.text_default)
+                            line_list.append(text_surface)
+
+                            # we've used the outstanding word so clear it
+                            outstanding_word_string = ""
+
+                        # check there is a word to process after the command
+                        if len(word_list) > word_count + 1:
+                            # process the command
+                            command = word
+                            # get the next word (the one to process) and remove from the list
+                            word_to_process = word_list[word_count + 1]
+                            text_surface, text_rect = self.process_message_command(command, word_to_process)
+                            line_list.append(text_surface)
+
+                            # note that the next word has already been processed
+                            processed_indices.append(word_count + 1)
+                        else:
+                            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, f"Message log: Command "
+                            f"received {word} with no following word."))
+
+                    # check for KEYWORDS
+                    elif word.lower() in self.keywords:
+                        # if any words waiting to be converted to a surface then do so
+                        if outstanding_word_string != "":
+                            text_surface, text_rect = self.font.render(outstanding_word_string,
+                                                                       self.palette.text_default)
+                            line_list.append(text_surface)
+
+                            # we've used the outstanding word so clear it
+                            outstanding_word_string = ""
+
+                        # render the key word
+                        colour = self.keywords.get(word.lower())
+                        text_surface, text_rect = self.font.render(word + " ", colour)
+                        line_list.append(text_surface)
+
+                    # handle NORMAL WORDS
+                    else:
+                        outstanding_word_string += word + " "
+
+            # handle any remaining word
+            if outstanding_word_string != "":
+                text_surface, text_rect = self.font.render(outstanding_word_string, self.palette.text_default)
+                line_list.append(text_surface)
+
+            # add the line_list (of surfaces) to the parsed message list
+            parsed_message_list.append(line_list)
+
+        # return the parsed message list (a list, of lists, of surfaces)
+        return parsed_message_list
+
+    def process_message_command(self, command, word_to_affect):
+        """
+        Process text formatting commands
+
+        Args:
+            command (str): The command dictating the change. In format of #prefix.suffix
+            word_to_affect (str): The word that will be changed by the command
+
+        Returns:
+            Tuple(pygame.Surface, pygame.Rect): tuple of surface then rect
+        """
+        # remove the hash from the string
+        cleaned_command = command.replace("#", "")
+
+        # split command prefix
+        command_prefix, command_suffix = cleaned_command.split(".")
+
+        # check which command to execute
+        # COLOUR CHANGE
+        if command_prefix == "col":
+            # get the colour to apply to the text
+            if command_suffix == "negative":
+                colour = self.palette.text_negative
+            elif command_suffix == "positive":
+                colour = self.palette.text_positive
+            elif command_suffix == "info":
+                colour = self.palette.text_info
+            else:
+                colour = self.palette.text_default
+
+                log_string = f"Process message command: {cleaned_command} Suffix not understood."
+                publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+
+            # create the surface
+            new_surface = self.font.render(word_to_affect, colour)
+
+        # REPLACE WORD WITH AN ICON
+        elif command_prefix == "ico":
+            icon = self.icons.get(command_suffix)
+
+            # catch any images not resized and resize them
+            # TODO - remove magic numbers
+            if icon.get_size() != (16, 16):
+                import pygame
+                icon = pygame.transform.smoothscale(icon, (16, 16))
+
+            # return is expecting surface, rect
+            new_surface = icon, icon.get_rect()
+
+        # catch all; render as default
+        else:
+            new_surface = self.font.render(word_to_affect, self.palette.text_default)
+
+        return new_surface
+
+    def initialise_keywords(self):
+        """
+        Initialise the keywords for highlighting in the message log
+
+        Returns:
+            Dict[str, Tuple[int, int, int]]: keyword: colour
+
+        """
+        keywords = {}
+
+        keywords["grazes"] = self.palette.keyword_grazes
+        keywords["crits"] = self.palette.keyword_crits
+
+        return keywords
+
+    def initialise_icons(self):
+        """
+        Load the list of icons
+
+        Returns:
+            Dict[str, pygame.Surface]
         """
         icons = {}
 
-        #icons["player"] = pygame.image.load("assets/actor/player.png").convert_alpha()
-        #icons["orc"] = pygame.image.load("assets/actor/enemy.png").convert_alpha()
+        import pygame
+        icons["info"] = pygame.image.load("assets/icons/placeholder/book.PNG").convert_alpha()
 
         return icons
 
-    @staticmethod
-    def initialise_hyperlinks_list():
-        """
-        Create list of hyperlinks to look for in log and render
-
-        Returns:
-            Dict
-        """
-        hyperlinks = {}
-
-        hyperlinks["Welcome"] = ("This is linked text", "This is the extended linked text")
-        hyperlinks["damage"] = ("2nd linked text", "2nd extended")
-
-        return hyperlinks
-
-    def check_mouse_over_link(self):
-        """
-
-        """
-        # TODO - increment displayed_hyperlinks rect positions when new lines added
-
-        for link in range(len(self.displayed_hyperlinks)):
-
-            from scripts.global_singletons.managers import ui_manager
-            pos = ui_manager.get_relative_scaled_mouse_pos("message_log")
-
-            # get the link rect
-            link_rect = self.displayed_hyperlinks[link][0]
-            link_text = self.displayed_hyperlinks[link][1]
-            link_mouse_over_timer = self.displayed_hyperlinks[link][2]
-
-            # check mouse is over the link
-            if link_rect.collidepoint(pos):
-                # replace tuple with new one that has updated timer value
-                self.displayed_hyperlinks[link] = (link_rect, link_text, link_mouse_over_timer + 1)
-                self.index_of_active_hyperlink = link
-                # TESTING TIMING OVER HOVER OVER  # FIXME - timing isnt working, ~30 frames is 1 sec. Use Delta time?
-                # print(f"{link_mouse_over_timer + 1}")
-                # from datetime import datetime
-                # print(datetime.now().time())
-            else:
-                self.displayed_hyperlinks[link] = (link_rect, link_text, 0)
-
-    def get_active_tooltip(self):
-        """
-        Get the info from the active tooltip, if there is one
-
-        Returns:
-            List: Either empty or contains text_rect, tooltip_text, extended_text_x, extended_text_y,
-            extended_tooltip_text
-
-        """
-        font_size = self.font.size
-
-        # is there an active link?
-        if self.index_of_active_hyperlink >= 0:
-
-            # init extended info, in case we don't load the real stuff
-            text_rect = -1
-            tooltip_text = ""
-            extended_text_x = -1
-            extended_text_y = -1
-            extended_tooltip_text = ""
-
-            # how long have we been hovering over it?
-            seconds_hovering = self.displayed_hyperlinks[self.index_of_active_hyperlink][2] / GAME_FPS
-
-            # is it long enough?
-            if seconds_hovering > self.seconds_before_tooltip:
-                # get linked text
-                active_link = self.displayed_hyperlinks[self.index_of_active_hyperlink]
-                hyperlink_strings = self.hyperlinks.get(active_link[1])
-                tooltip_text = hyperlink_strings[0]
-
-                # get location to show message
-                text_x = active_link[0].x + 10
-                text_y = active_link[0].y
-
-                # create the text on a surface to get dimensions
-                text_rect = self.font.render(tooltip_text, self.colour.white)[1]
-
-                # move tooltip_rect to the place in the message_log
-                text_rect.x = text_x + self.panel.x
-                text_rect.y = text_y + self.panel.y - (text_rect.height * 1.5)
-
-                # is it time for the extended text?
-                if seconds_hovering > self.seconds_before_extended_text:
-                    extended_tooltip_text = hyperlink_strings[1]
-
-                    # create the text on a surface to get dimensions
-                    extended_text_rect = self.font.render(extended_tooltip_text, self.colour.white)[1]
-
-                    # move tooltip_rect to the place in the message_log, adjusting to be below first tooltip
-                    extended_text_x = text_x + self.panel.x
-                    extended_text_y = text_y + (font_size / 2) + self.panel.y
-
-                    # resize the original rect to encompass both tooltips
-                    width_of_widest_rect = max(text_rect.width, extended_text_rect.width)
-                    text_rect.width = width_of_widest_rect
-                    text_rect.height = text_rect.height + extended_text_rect.height
-
-                    # adjust the rects for new height
-                    text_rect.y -= extended_text_rect.height
-                    extended_text_y -= (extended_text_rect.height + font_size)
-
-                # resize the rect in place
-                text_rect.inflate_ip(5, 10)
-
-                return [text_rect, tooltip_text, extended_text_x, extended_text_y, extended_tooltip_text]
-            else:
-                return []
-        else:
-            return []
-
-    def parse_message(self, message):
-        """
-        Parse for colours, tags and formatting
-
-        Args:
-             message (str): The message string that needs parsing.
-
-        Returns:
-             List[Tuple[Colour, str]]: List of Tuples containing message and colour
-        """
-
-        updated_message = message
-
-        # add spaces around special chars
-        for char in ['\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '>', '#', '+', '-', '.', '!', '$', '\'']:
-            if char in message:
-                updated_message = message.replace(char, " " + char)
-
-        # break message out by spaces
-        message_list = updated_message.split()
-
-        parsed_message_list = []
-        default_colour = self.palette.text_default
-        msg_in_progress = ""
-
-        # check each word for inclusion in lists and rebuild as new list
-        for message_count in range(len(message_list)):
-
-            msg = message_list[message_count]
-
-            # EXPRESSIONS
-            if msg in self.expressions:
-
-                # expression found so let`s deal with any in progress message
-                if msg_in_progress != "":
-                    # apply currently built string and then increment line
-                    parsed_message_list.append((default_colour, msg_in_progress))
-                    msg_in_progress = ""
-
-                # create the expression as a new message
-                colour = self.expressions.get(msg)
-                parsed_message_list.append((colour, msg))
-
-            # ICONS
-            elif msg in self.icons:
-
-                # icon found so let`s deal with any in progress message
-                if msg_in_progress != "":
-                    # apply currently built string and then increment line
-                    parsed_message_list.append((default_colour, msg_in_progress))
-                    msg_in_progress = ""
-
-                # create the icon as a new message
-                icon = self.icons.get(msg)
-                parsed_message_list.append((icon, "icon"))
-
-            # HYPERLINKS
-            elif msg in self.hyperlinks:
-
-                # hyperlink found so let`s deal with any in progress message
-                if msg_in_progress != "":
-                    # apply currently built string and then increment line
-                    parsed_message_list.append((default_colour, msg_in_progress))
-                    msg_in_progress = ""
-
-                # amend the colour to indicate the message is a  hyperlink
-                parsed_message_list.append((self.palette.hyperlink, msg))
-
-            # NORMAL TEXT
-            else:
-                # No match so extend current message line
-                if msg_in_progress != "":
-                    msg_in_progress += " " + msg
-                else:
-                    msg_in_progress += msg
-
-        # add any remaining "in progress" messages
-        parsed_message_list.append((default_colour, msg_in_progress))
-
-        return parsed_message_list

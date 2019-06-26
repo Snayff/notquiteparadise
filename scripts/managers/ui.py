@@ -4,9 +4,9 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
-from scripts.ui_elements.message_log import MessageLog
+from scripts.ui_elements.OLD_message_log import MessageLog
 from scripts.core.constants import LoggingEventTypes, VisualInfo
-from scripts.ui_elements.new_message_log import NewMessageLog
+from scripts.ui_elements.message_log import NewMessageLog
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
 

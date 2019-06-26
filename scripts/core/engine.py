@@ -6,6 +6,7 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager
 from scripts.global_singletons.event_hub import event_hub
@@ -43,6 +44,11 @@ def main():
     # TODO - set to turn off for production builds
     profiler = cProfile.Profile()
     profiler.enable()
+
+    # TODO - remove once data points to library
+    skill = library.get_skill("cleromancer", "throw_dice")
+    desc = skill.description
+
 
     # load the game
     initialise_game()

@@ -1,0 +1,95 @@
+{
+    "cleromancer": {
+        "throw_dice": {
+            "name": "throw dice",
+            "description": "Time to throw the dice. It does damage.",
+            "icon": "placeholder/icon_29.png",
+            "required_target_type": "entity",
+            "required_tags": [
+                "other_entity"
+            ],
+            "range": 3,
+            "resource_type": "mana",
+            "resource_cost": 10,
+            "time_cost": 20,
+            "cooldown": 2,
+            "skill_effects": [
+                {
+                    "name": "damage",
+                    "required_target_type": "entity",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "damage": 15,
+                    "damage_type": "blunt",
+                    "accuracy": 5,
+                    "stat_to_target": "skullduggery"
+                }
+            ]
+        },
+        "bring_down_the_mountain": {
+            "name": "bring down the mountain",
+            "description": "Turn a wall into a floor.",
+            "icon": "placeholder/icon_40.png",
+            "required_target_type": "terrain",
+            "required_tags": [
+                "wall",
+                "no_entity"
+            ],
+            "range": 6,
+            "resource_type": "mana",
+            "resource_cost": 10,
+            "time_cost": 40,
+            "cooldown": 3,
+            "skill_effects": [
+                {
+                    "name": "change_terrain",
+                    "required_target_type": "terrain",
+                    "required_tags": [
+                        "wall",
+                        "no_entity"
+                    ],
+                    "new_terrain": "floor"
+                }
+            ]
+        },
+        "burn_the_deck": {
+            "name": "burn the deck",
+            "description": "Apply burning affliction",
+            "icon": "placeholder/icon_40.png",
+            "required_target_type": "entity",
+            "required_tags": [
+                "other_entity"
+            ],
+            "range": 4,
+            "resource_type": "mana",
+            "resource_cost": 1,
+            "time_cost": 1,
+            "cooldown": 2,
+            "skill_effects": [
+                {
+                    "name": "damage",
+                    "required_target_type": "entity",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "damage": 5,
+                    "damage_type": "blunt",
+                    "accuracy": 5,
+                    "stat_to_target": "skullduggery"
+                },
+                {
+                    "name": "apply_affliction",
+                    "required_target_type": "entity",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "accuracy": 100,
+                    "stat_to_target": "skullduggery",
+                    "affliction_name": "bogged_down",
+                    "duration": 3
+                }
+            ]
+        }
+    }
+}
