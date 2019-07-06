@@ -7,7 +7,7 @@ from scripts.components.actor import Actor
 from scripts.components.combatant import Combatant
 from scripts.components.homeland import Homeland
 from scripts.components.player import Player
-from scripts.components.trade import Trade
+from scripts.components.savvy import Savvy
 from scripts.core.constants import LoggingEventTypes, TILE_SIZE
 from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.events.logging_events import LoggingEvent
@@ -286,7 +286,7 @@ class EntityMethods:
             icon = pygame.transform.smoothscale(icon, (TILE_SIZE, TILE_SIZE))
 
         combatant_component = Combatant()
-        youth_component = Trade(values["trade_component"])
+        youth_component = Savvy(values["trade_component"])
         adulthood_component = Homeland(values["homeland_component"])
         actor_component = Actor()
         sight_range = values["sight_range"]

@@ -77,9 +77,6 @@ class Entity:
         if self.player:
             self.player.owner = self
 
-        if self.actor and self.combatant:
-            publisher.publish(LearnEvent(self, "general", "basic_attack"))
-
     @property
     def x(self):
         """

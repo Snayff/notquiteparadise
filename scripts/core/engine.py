@@ -45,22 +45,6 @@ def main():
     profiler = cProfile.Profile()
     profiler.enable()
 
-    # TODO - remove once data points to library
-    skill = library.get_skill_data("cleromancer", "throw_dice")
-    desc = skill.description
-    homeland = library.get_homeland_data("aristo_pirate")
-    h_desc = homeland.name
-    race = library.get_race_data("herraculen")
-    r_bustle = race.bustle
-    savvy = library.get_savvy_data("hired_hand")
-    s_exa = savvy.skullduggery
-    general = library.get_general_data("basic_attack")
-    g_icon = general.icon
-    affliction = library.get_affliction_data("flaming")
-    a_effects = affliction.affliction_effects
-    aspect = library.get_aspect_data("bog")
-    as_block_mo = aspect.block_movement
-
     # load the game
     initialise_game()
 

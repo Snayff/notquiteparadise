@@ -30,7 +30,6 @@ class LibraryOfAlexandria:
         self.homeland = self.get_values_from_homeland_json()
         self.race = self.get_values_from_race_json()
         self.savvy = self.get_values_from_savvy_json()
-        self.general = self.get_values_from_general_json()
         self.affliction = self.get_values_from_affliction_json()
         self.aspect = self.get_values_from_aspect_json()
         self.terrain = self.get_values_from_terrain_json()
@@ -83,23 +82,6 @@ class LibraryOfAlexandria:
         from collections import namedtuple
         named_tuple = namedtuple(affliction_name, self.affliction[affliction_name])
         data = named_tuple(**self.affliction[affliction_name])
-
-        return data
-    
-    def get_general_data(self, general_name):
-        """
-        Get data for a general from the central library
-
-        Args:
-            general_name (str):
-
-        Returns:
-            tuple: named tuple of values.
-        """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(general_name, self.general[general_name])
-        data = named_tuple(**self.general[general_name])
 
         return data
 
@@ -181,18 +163,6 @@ class LibraryOfAlexandria:
         """
         # TODO - move general into skills and create rules to confirm every tree has a basic attack
         with open('Data/game/skills/skill_trees.json') as file:
-            data = json.load(file)
-
-        return data
-
-    @staticmethod
-    def get_values_from_general_json():
-        """
-
-        Returns:
-
-        """
-        with open('Data/game/skills/general.json') as file:
             data = json.load(file)
 
         return data

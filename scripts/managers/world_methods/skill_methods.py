@@ -2,9 +2,9 @@ import random
 
 from scripts.core.constants import TargetTypes, LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
     PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, SkillEffectTypes
-from scripts.data_loaders.getters import get_value_from_afflictions_json
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill import Skill
 from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
@@ -453,10 +453,9 @@ class SkillMethods:
         stat_to_target = query.get_stat_from_string(effect["stat_to_target"])
         affliction_name = effect["affliction_name"]
         affliction_duration = effect["duration"]
-        affliction_values = get_value_from_afflictions_json(affliction_name)
+        affliction_values = library.get_affliction_data(affliction_name)
         from scripts.global_singletons.managers import world_manager
-        affliction_category = world_manager.Affliction.get_affliction_category_from_string(affliction_values[
-                                                                                                     "category"])
+        affliction_category = world_manager.Affliction.get_affliction_category_from_string(affliction_values.category)
 
         # add effect object to skill
         created_effect = ApplyAfflictionSkillEffect(skill, target_type, target_tags, accuracy, stat_to_target,

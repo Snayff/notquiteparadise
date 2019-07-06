@@ -32,6 +32,7 @@ def initialise_game():
     world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
     # TODO - remove when skill learning is in
+    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic_attack"))
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "bring_down_the_mountain"))
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "burn_the_deck"))
