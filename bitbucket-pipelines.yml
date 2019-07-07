@@ -12,7 +12,7 @@ pipelines:
         script: # Modify the commands below to build your repository.
           - echo "Deploying to develop environment"
           - apt-get update
-          - apt-get install libsdl2-dev
+          - apt-get install -y libsdl2-dev
           - pip install -r requirements.txt
           - cd docs
           - make html
