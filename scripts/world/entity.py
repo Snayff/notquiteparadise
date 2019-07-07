@@ -14,7 +14,7 @@ class Entity:
     """
 
     def __init__(self, spritesheet=None, name="", blocks_movement=True, blocks_sight=True, combatant=None,
-            race=None, trade=None, homeland=None, ai=None, actor=None, sight_range=0, player=None, icon=None):
+            race=None, savvy=None, homeland=None, ai=None, actor=None, player=None, icon=None):
         """
         Args:
             spritesheet (dict(list(pygame.image))) : dictionary of sprites
@@ -23,12 +23,11 @@ class Entity:
             blocks_sight (bool) : Does entity block sight?
             combatant (Combatant): Component.
             race (Race): Component.
-            trade (Trade): Component.
+            savvy (savvy): Component.
             homeland (Homeland): Component.
             ai (AI): Component.
             actor(Actor) : Component.
-            sight_range (int): How far the entity can see.
-            player (Player): if the entity is controlled by the player
+            player (bool): if the entity is controlled by the player
         """
         self.owner = None
 
@@ -37,7 +36,6 @@ class Entity:
         self.name = name
         self.blocks_movement = blocks_movement
         self.blocks_sight = blocks_sight
-        self.sight_range = sight_range
 
         # animation config
         self.current_sprite = ""  # self.spritesheet.get("still")  # start using still
@@ -49,7 +47,7 @@ class Entity:
         # components
         self.race = race
         self.combatant = combatant
-        self.trade = trade
+        self.savvy = savvy
         self.homeland = homeland
         self.ai = ai
         self.actor = actor
@@ -62,8 +60,8 @@ class Entity:
         if self.race:
             self.race.owner = self
 
-        if self.trade:
-            self.trade.owner = self
+        if self.savvy:
+            self.savvy.owner = self
 
         if self.homeland:
             self.homeland.owner = self
@@ -74,13 +72,10 @@ class Entity:
         if self.actor:
             self.actor.owner = self
 
-        if self.player:
-            self.player.owner = self
-
     @property
     def x(self):
         """
-        Get the tile_x of the Entity.
+        The tile_x of the Entity.
 
         Returns:
 
@@ -90,9 +85,18 @@ class Entity:
     @property
     def y(self):
         """
-        Get the tile_y of the Entity.
+        The tile_y of the Entity.
 
         Returns:
 
         """
         return self.owner.y
+
+    @property
+    def sight_range(self):
+        """
+
+        Returns:
+
+        """
+        return self.race.sight_range

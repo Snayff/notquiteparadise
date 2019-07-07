@@ -6,11 +6,11 @@ import scipy.spatial
 from scripts.components.actor import Actor
 from scripts.components.combatant import Combatant
 from scripts.components.homeland import Homeland
-from scripts.components.player import Player
+from scripts.components.race import Race
 from scripts.components.savvy import Savvy
 from scripts.core.constants import LoggingEventTypes, TILE_SIZE
-from scripts.data_loaders.getters import get_value_from_actor_json
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
 
@@ -266,40 +266,34 @@ class EntityMethods:
         # remove from entities list
         self.manager.entities.remove(entity)
 
-    def create_actor_entity(self, tile_x, tile_y, actor_name):
+    def create_actor_entity(self, tile_x, tile_y, actor_name, player=False):
         """
 
         Args:
             tile_x:
             tile_y:
             actor_name:
+            player (bool):
         """
-        values = get_value_from_actor_json(actor_name)
+        actor_template = library.get_actor_template_data(actor_name)
 
-        actor_name = values["name"]
+        actor_name = actor_template.name
 
-        sprite = pygame.image.load("assets/actor/" + values["spritesheet"]).convert_alpha()
-        icon = pygame.image.load("assets/actor/" + values["icon"]).convert_alpha()
+        sprite = pygame.image.load("assets/actor/" + actor_template.spritesheet).convert_alpha()
+        icon = pygame.image.load("assets/actor/" + actor_template.icon).convert_alpha()
 
         # catch any images not resized and resize them
         if icon.get_size() != (TILE_SIZE, TILE_SIZE):
             icon = pygame.transform.smoothscale(icon, (TILE_SIZE, TILE_SIZE))
 
         combatant_component = Combatant()
-        youth_component = Savvy(values["trade_component"])
-        adulthood_component = Homeland(values["homeland_component"])
+        savvy_component = Savvy(actor_template.savvy_component)
+        homeland_component = Homeland(actor_template.homeland_component)
+        race_component = Race(actor_template.race_component)
         actor_component = Actor()
-        sight_range = values["sight_range"]
-
-        # get then player value and convert to class if needed
-        player_value = values["player_component"]
-        if player_value:
-            player = Player()
-        else:
-            player = None
 
         # get the AI value and convert to relevant class
-        ai_value = values["ai_component"]
+        ai_value = actor_template.ai_component
         from scripts.components.ai import BasicMonster
         if ai_value == "basic_monster":
             ai_component = BasicMonster()
@@ -307,9 +301,9 @@ class EntityMethods:
             ai_component = None
 
         # create the Entity
-        actor = Entity(sprite, actor_name, blocks_movement=True, combatant=combatant_component,
-                       trade=youth_component, homeland=adulthood_component, ai=ai_component,
-                       actor=actor_component, sight_range=sight_range, player=player, icon=icon)
+        actor = Entity(sprite, actor_name, blocks_movement=True, combatant=combatant_component, race=race_component,
+                       savvy=savvy_component, homeland=homeland_component, ai=ai_component,
+                       actor=actor_component, player=player, icon=icon)
 
         actor.combatant.hp = actor.combatant.secondary_stats.max_hp
 

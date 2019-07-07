@@ -28,7 +28,7 @@ def initialise_game():
     world_manager.FOV.create_player_fov_map(map_width, map_height)
     ui_manager.delayed_init()
 
-    world_manager.Entity.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
+    world_manager.Entity.create_actor_entity(0, 0, "player", True)  # TODO - remove when proper load is in
     world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
     # TODO - remove when skill learning is in

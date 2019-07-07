@@ -1,3 +1,4 @@
+
 import json
 
 
@@ -19,6 +20,7 @@ class LibraryOfAlexandria:
         self.affliction = {}
         self.aspect = {}
         self.terrain = {}
+        self.actor_template = {}
 
         self.load_data_into_library()
 
@@ -33,6 +35,7 @@ class LibraryOfAlexandria:
         self.affliction = self.get_values_from_affliction_json()
         self.aspect = self.get_values_from_aspect_json()
         self.terrain = self.get_values_from_terrain_json()
+        self.actor_template = self.get_values_from_actor_json()
     
     def get_terrain_data(self, terrain_name):
         """
@@ -48,6 +51,23 @@ class LibraryOfAlexandria:
         from collections import namedtuple
         named_tuple = namedtuple(terrain_name, self.terrain[terrain_name])
         data = named_tuple(**self.terrain[terrain_name])
+
+        return data
+    
+    def get_actor_template_data(self, actor_template_name):
+        """
+        Get data for a actor_templates from the central library
+
+        Args:
+            actor_template_name (str):
+
+        Returns:
+            tuple: named tuple of values.
+        """
+        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
+        from collections import namedtuple
+        named_tuple = namedtuple(actor_template_name, self.actor_template[actor_template_name])
+        data = named_tuple(**self.actor_template[actor_template_name])
 
         return data
     
@@ -237,4 +257,16 @@ class LibraryOfAlexandria:
         with open('Data/game/entity/race.json') as file:
             data = json.load(file)
 
+        return data
+
+    @staticmethod
+    def get_values_from_actor_json():
+        """
+
+        Returns:
+
+        """
+        with open('Data/game/entity/actor_template.json') as file:
+            data = json.load(file)
+        
         return data

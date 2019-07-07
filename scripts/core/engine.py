@@ -33,6 +33,7 @@ from scripts.core.initialisers import initialise_game
 # TODO - review what other info can be externalised.
 # TODO - All external info should not be converted to enum but passed as strings.
 # TODO - update combat in line with new standards
+# TODO - data validation of jsons on init
 
 
 def main():

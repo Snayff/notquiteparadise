@@ -39,7 +39,7 @@ class WorldManager:
             player fov
             cleanse expired afflictions
         """
-        if self.player_fov_is_dirty:
+        if self.player_fov_is_dirty and self.player:
             player = self.player
             self.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
 

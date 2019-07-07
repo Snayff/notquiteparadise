@@ -2,26 +2,20 @@
 	"player" : {
 		"name" : "player",
 		"description" : "Player description",
-		"spawn_weight" : 0,
 		"race_component" : "herraculen",
-		"trade_component": "cleromancer",
+		"savvy_component": "cleromancer",
 		"homeland_component": "aristo_pirate",
 		"ai_component" : "none",
-        "player_component": true,
-        "sight_range": 5,
         "spritesheet" : "placeholder/Mobs_skeleton_06.png",
         "icon": "placeholder/Mobs_skeleton_06.png"
     },
         "goblinn_hand" : {
 		"name" : "goblinn hired hand",
 		"description" : "goblinn hired hand description",
-		"spawn_weight" : 50,
 		"race_component" : "goblinn",
-		"trade_component": "hired_hand",
+		"savvy_component": "hired_hand",
 		"homeland_component": "bog_refugee",
 		"ai_component" : "basic_monster",
-        "player_component": false,
-        "sight_range": 3,
         "spritesheet" : "placeholder/Mobs_goblin_02.png",
         "icon": "placeholder/Mobs_goblin_02.png"
 	}

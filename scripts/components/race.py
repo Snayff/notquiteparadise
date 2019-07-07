@@ -21,4 +21,5 @@ class Race:
         self.skullduggery = race.skullduggery
         self.bustle = race.bustle
         self.exactitude = race.exactitude
+        self.sight_range = race.sight_range
 

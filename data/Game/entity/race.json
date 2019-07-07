@@ -2,6 +2,7 @@
 	"herraculen" : {
 		"name": "herraculen",
 		"description" : "A herraculen description",
+        "sight_range": 5,
 		"vigour": 0,
 		"clout": 0,
 		"skullduggery": 0,
@@ -11,6 +12,7 @@
     "goblinn" : {
     "name": "goblinn",
     "description" : "A goblinn description",
+    "sight_range": 3,
     "vigour": 0,
     "clout": 0,
     "skullduggery": 0,
