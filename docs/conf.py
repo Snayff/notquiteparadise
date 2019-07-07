@@ -12,13 +12,13 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
 import os
 import sys
+
+os.environ["GENERATING_SPHINX_DOCS"] = ""
+
 sys.path.insert(0, os.path.abspath(".."))
-# sys.path.insert(1, os.path.abspath("../scripts/"))
-
-
-
 
 
 # -- Project information -----------------------------------------------------
@@ -28,7 +28,7 @@ copyright = '2019, Snayff'
 author = 'Snayff'
 
 # The short X.Y version
-version = ''
+version = '0.0.1'
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'
 

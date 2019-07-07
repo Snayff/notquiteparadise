@@ -32,14 +32,16 @@ class LibraryOfAlexandria:
         """
         Load data from all external jsons to this central data library
         """
-        self.skills = self.get_values_from_skill_json()
-        self.homeland = self.get_values_from_homeland_json()
-        self.race = self.get_values_from_race_json()
-        self.savvy = self.get_values_from_savvy_json()
-        self.affliction = self.get_values_from_affliction_json()
-        self.aspect = self.get_values_from_aspect_json()
-        self.terrain = self.get_values_from_terrain_json()
-        self.actor_template = self.get_values_from_actor_json()
+        import os
+        if "GENERATING_SPHINX_DOCS" not in os.environ:
+            self.skills = self.get_values_from_skill_json()
+            self.homeland = self.get_values_from_homeland_json()
+            self.race = self.get_values_from_race_json()
+            self.savvy = self.get_values_from_savvy_json()
+            self.affliction = self.get_values_from_affliction_json()
+            self.aspect = self.get_values_from_aspect_json()
+            self.terrain = self.get_values_from_terrain_json()
+            self.actor_template = self.get_values_from_actor_json()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
     
@@ -187,8 +189,8 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        # TODO - move general into skills and create rules to confirm every tree has a basic attack
-        with open('Data/game/skills/skill_trees.json') as file:
+        # TODO - create rules to confirm every tree has a basic attack
+        with open('data/game/skills/skill_trees.json') as file:
             data = json.load(file)
 
         return data
@@ -200,7 +202,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/skills/afflictions.json') as file:
+        with open('data/game/skills/afflictions.json') as file:
             data = json.load(file)
 
         return data
@@ -212,7 +214,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/world/aspect.json') as file:
+        with open('data/game/world/aspect.json') as file:
             data = json.load(file)
 
         return data
@@ -224,7 +226,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/world/terrain.json') as file:
+        with open('data/game/world/terrain.json') as file:
             data = json.load(file)
 
         return data
@@ -236,7 +238,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/homeland.json') as file:
+        with open('data/game/entity/homeland.json') as file:
             data = json.load(file)
 
         return data
@@ -248,7 +250,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/savvy.json') as file:
+        with open('data/game/entity/savvy.json') as file:
             data = json.load(file)
 
         return data
@@ -260,7 +262,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/race.json') as file:
+        with open('data/game/entity/race.json') as file:
             data = json.load(file)
 
         return data
@@ -272,7 +274,8 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/actor_template.json') as file:
+
+        with open('data/game/entity/actor_template.json') as file:
             data = json.load(file)
-        
+
         return data

@@ -6,7 +6,6 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_singletons.data_library import library
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager
 from scripts.global_singletons.event_hub import event_hub
@@ -31,7 +30,6 @@ from scripts.core.initialisers import initialise_game
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
 # TODO - review what other info can be externalised.
-# TODO - All external info should not be converted to enum but passed as strings.
 # TODO - update combat in line with new standards
 # TODO - data validation of jsons on init
 
