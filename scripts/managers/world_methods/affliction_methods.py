@@ -1,7 +1,7 @@
 from scripts.core.constants import AfflictionTypes, AfflictionCategory, AfflictionTriggers, LoggingEventTypes, \
     AfflictionEffectTypes
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction import Affliction
 from scripts.skills.affliction_effects.affect_stat import AffectStatAfflictionEffect
 from scripts.skills.affliction_effects.damage import DamageAfflictionEffect

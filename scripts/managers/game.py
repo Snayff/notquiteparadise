@@ -2,7 +2,7 @@ import pygame
 
 from scripts.core.constants import GameStates, LoggingEventTypes, VisualInfo
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 
 
 class GameManager:

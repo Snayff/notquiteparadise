@@ -1,15 +1,16 @@
+
 import pygame
 
 from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
 from scripts.events.entity_events import LearnEvent
-from scripts.events.entity_handler import EntityHandler
-from scripts.events.logging_handler import LoggingHandler
+from scripts.event_handlers.entity_handler import EntityHandler
+from scripts.event_handlers.logging_handler import LoggingHandler
 from scripts.events.message_events import MessageEvent
-from scripts.events.message_handler import MessageHandler
-from scripts.events.game_handler import GameHandler
-from scripts.global_instances.event_hub import publisher, event_hub
-from scripts.global_instances.managers import game_manager, world_manager, turn_manager, ui_manager
-from scripts.events.ui_handler import UiHandler
+from scripts.event_handlers.message_handler import MessageHandler
+from scripts.event_handlers.game_handler import GameHandler
+from scripts.global_singletons.event_hub import publisher, event_hub
+from scripts.global_singletons.managers import game_manager, world_manager, turn_manager, ui_manager
+from scripts.event_handlers.ui_handler import UiHandler
 
 
 def initialise_game():
@@ -27,10 +28,11 @@ def initialise_game():
     world_manager.FOV.create_player_fov_map(map_width, map_height)
     ui_manager.delayed_init()
 
-    world_manager.Entity.create_actor_entity(0, 0, "player")  # TODO - remove when proper load is in
+    world_manager.Entity.create_actor_entity(0, 0, "player", True)  # TODO - remove when proper load is in
     world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
     # TODO - remove when skill learning is in
+    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic_attack"))
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "bring_down_the_mountain"))
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "burn_the_deck"))

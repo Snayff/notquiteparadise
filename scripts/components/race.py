@@ -1,4 +1,5 @@
-from scripts.data_loaders.getters import get_value_from_race_json
+
+from scripts.global_singletons.data_library import library
 
 
 class Race:
@@ -11,13 +12,14 @@ class Race:
         Args:
             race_name (str): Name of the Race type.
         """
-        values = get_value_from_race_json(race_name)
+        race = library.get_race_data(race_name)
 
-        self.name = values["name"]
-        self.description = values["description"]
-        self.vigour = values["vigour"]
-        self.clout = values["clout"]
-        self.skullduggery = values["SKULLDUGGERY"]
-        self.bustle = values["bustle"]
-        self.exactitude = values["exactitude"]
+        self.name = race.name
+        self.description = race.description
+        self.vigour = race.vigour
+        self.clout = race.clout
+        self.skullduggery = race.skullduggery
+        self.bustle = race.bustle
+        self.exactitude = race.exactitude
+        self.sight_range = race.sight_range
 

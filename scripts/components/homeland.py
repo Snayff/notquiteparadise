@@ -1,4 +1,5 @@
-from scripts.data_loaders.getters import get_value_from_homeland_json
+
+from scripts.global_singletons.data_library import library
 
 
 class Homeland:
@@ -16,13 +17,13 @@ class Homeland:
         Args:
             homeland_name (str): Name of the Motive type.
         """
-        values = get_value_from_homeland_json(homeland_name)
+        homeland = library.get_homeland_data(homeland_name)
 
-        self.name = values["name"]
-        self.description = values["description"]
-        self.vigour = values["vigour"]
-        self.clout = values["clout"]
-        self.skullduggery = values["skullduggery"]
-        self.bustle = values["bustle"]
-        self.exactitude = values["exactitude"]
+        self.name = homeland.name
+        self.description = homeland.description
+        self.vigour = homeland.vigour
+        self.clout = homeland.clout
+        self.skullduggery = homeland.skullduggery
+        self.bustle = homeland.bustle
+        self.exactitude = homeland.exactitude
 

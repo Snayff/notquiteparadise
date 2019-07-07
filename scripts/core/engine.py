@@ -6,13 +6,14 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_instances.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
+from scripts.global_singletons.data_library import library
+from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager
-from scripts.global_instances.event_hub import event_hub
+from scripts.global_singletons.event_hub import event_hub
 from scripts.core.initialisers import initialise_game
 
 # Project Wide to do list...
-# FIXME - can target self
+# FIXME - can target self when shouldnt be able to
 # FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
 # TODO - UI information should be pulled once then held
 # TODO - set terrain/aspect to use the appropriate type (enum) to load the values, rather than adding as instances
@@ -32,6 +33,7 @@ from scripts.core.initialisers import initialise_game
 # TODO - review what other info can be externalised.
 # TODO - All external info should not be converted to enum but passed as strings.
 # TODO - update combat in line with new standards
+# TODO - data validation of jsons on init
 
 
 def main():

@@ -1,9 +1,8 @@
 
 from scripts.core.constants import AfflictionCategory, AfflictionTypes, AfflictionTriggers, LoggingEventTypes
-from scripts.data_loaders.getters import get_value_from_afflictions_json
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
-from scripts.skills.affliction_effects.affliction_effect import AfflictionEffect
+from scripts.global_singletons.data_library import library
+from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
 
 
@@ -24,23 +23,23 @@ class Affliction:
     """
 
     def __init__(self, affliction_type, duration, affected_entity):
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         action = world_manager.Affliction
         name = action.get_affliction_string_from_type(affliction_type)
-        values = get_value_from_afflictions_json(name)
+        affliction = library.get_affliction_data(name)
 
         self.name = name
-        self.description = values["description"]
-        self.icon = values["icon"]
-        self.affliction_category = action.get_affliction_category_from_string(values["category"])
+        self.description = affliction.description
+        self.icon = affliction.icon
+        self.affliction_category = action.get_affliction_category_from_string(affliction.category)
         self.affliction_type = affliction_type
         self.duration = duration
-        self.trigger_event = action.get_trigger_event_from_string(values["trigger_event"])
+        self.trigger_event = action.get_trigger_event_from_string(affliction.trigger_event)
         self.affected_entity = affected_entity  # set at time of allocation to an entity
         self.affliction_effects = []
 
         # get the affliction skill_effects
-        affliction_effects_values = values["affliction_effects"]
+        affliction_effects_values = affliction.affliction_effects
 
         # unpack all affliction_effects
         for effect in affliction_effects_values:

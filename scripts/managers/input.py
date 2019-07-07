@@ -6,7 +6,7 @@ from scripts.events.game_events import ChangeGameStateEvent, ExitEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 
 
 class InputManager:
@@ -162,7 +162,7 @@ class InputManager:
         """
         Process all input from input_values. Calls multiple sub methods based on current GameState.
         """
-        from scripts.global_instances.managers import game_manager
+        from scripts.global_singletons.managers import game_manager
         game_state = game_manager.game_state
 
         self.process_generic_input()
@@ -181,7 +181,7 @@ class InputManager:
         Interpret none GameState-specific actions
         """
         if self.input_values["debug_toggle"]:
-            from scripts.global_instances.managers import debug_manager
+            from scripts.global_singletons.managers import debug_manager
             if debug_manager.visible:
                 debug_manager.set_visibility(False)
             else:
@@ -191,7 +191,7 @@ class InputManager:
         """
         Interpret Player Turn actions
         """
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         player = world_manager.player
 
         # general actions
@@ -225,7 +225,7 @@ class InputManager:
             if skill:
 
                 # check who we are moused over
-                from scripts.global_instances.managers import ui_manager
+                from scripts.global_singletons.managers import ui_manager
                 mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
                 target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
@@ -251,10 +251,10 @@ class InputManager:
         """
         Interpret Targeting Mode actions
         """
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         player = world_manager.player
 
-        from scripts.global_instances.managers import ui_manager
+        from scripts.global_singletons.managers import ui_manager
         selected_tile = ui_manager.targeting_overlay.selected_tile
 
         # UI interactions
@@ -268,7 +268,7 @@ class InputManager:
 
         # cancel out
         if self.input_values["cancel"] or self.input_values["right_click"]:
-            from scripts.global_instances.managers import game_manager
+            from scripts.global_singletons.managers import game_manager
             previous_state = game_manager.previous_game_state
             publisher.publish(ChangeGameStateEvent(previous_state))
 

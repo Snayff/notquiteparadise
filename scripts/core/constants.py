@@ -46,6 +46,7 @@ class EventTopics(Enum):
     ENTITY = auto()
     UI = auto()
 
+
 class GameEventTypes(Enum):
     """Types of Game Events"""
     EXIT = auto()
@@ -169,6 +170,8 @@ class AfflictionTypes(Enum):
     """
     Various types of afflictions
     """
+
+    # TODO - replace with strings from json (as it is all defined in the json)
     # BANES
     MYOPIC = auto()
     BOGGED_DOWN = auto()
@@ -205,6 +208,7 @@ class AfflictionEffectTypes(Enum):
 
 
 class AspectTypes(Enum):
+    # TODO - replace with strings from json (as it is all defined in the json)
     DIRT = auto()
     LONG_GRASS = auto()
     FROZEN = auto()

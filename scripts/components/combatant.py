@@ -31,8 +31,8 @@ class Combatant:
             if entity.race:
                 stat_total += entity.race.vigour
 
-            if entity.trade:
-                stat_total += entity.trade.vigour
+            if entity.savvy:
+                stat_total += entity.savvy.vigour
 
             if entity.homeland:
                 stat_total += entity.homeland.vigour
@@ -48,8 +48,8 @@ class Combatant:
             if entity.race:
                 stat_total += entity.race.clout
 
-            if entity.trade:
-                stat_total += entity.trade.clout
+            if entity.savvy:
+                stat_total += entity.savvy.clout
 
             if entity.homeland:
                 stat_total += entity.homeland.clout
@@ -65,8 +65,8 @@ class Combatant:
             if entity.race:
                 stat_total += entity.race.skullduggery
 
-            if entity.trade:
-                stat_total += entity.trade.skullduggery
+            if entity.savvy:
+                stat_total += entity.savvy.skullduggery
 
             if entity.homeland:
                 stat_total += entity.homeland.skullduggery
@@ -82,8 +82,8 @@ class Combatant:
             if entity.race:
                 stat_total += entity.race.bustle
 
-            if entity.trade:
-                stat_total += entity.trade.bustle
+            if entity.savvy:
+                stat_total += entity.savvy.bustle
 
             if entity.homeland:
                 stat_total += entity.homeland.bustle
@@ -99,8 +99,8 @@ class Combatant:
             if entity.race:
                 stat_total += entity.race.exactitude
 
-            if entity.trade:
-                stat_total += entity.trade.exactitude
+            if entity.savvy:
+                stat_total += entity.savvy.exactitude
 
             if entity.homeland:
                 stat_total += entity.homeland.exactitude
@@ -205,7 +205,7 @@ class Combatant:
             bustle_modifier = 2
 
             entity = self.owner.owner
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
             affliction_modifier = world_manager.Affliction.get_stat_modifier_from_afflictions_on_entity(entity,
                                         SecondaryStatTypes.ACTION_COST_CHANGE)
             # convert to fraction to enable multiplication

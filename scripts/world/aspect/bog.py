@@ -2,9 +2,9 @@ import pygame
 
 from scripts.core.constants import TILE_SIZE, AspectTypes, AfflictionTypes, TargetTypes, TargetTags, PrimaryStatTypes, \
     AfflictionCategory, SkillEffectTypes, LoggingEventTypes
-from scripts.data_loaders.getters import get_value_from_aspects_json
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.data_library import library
+from scripts.global_singletons.event_hub import publisher
 from scripts.world.aspect.aspect import Aspect
 
 
@@ -16,9 +16,9 @@ class Bog(Aspect):
         super().__init__()
         self.name = "bog"
 
-        values = get_value_from_aspects_json(self.name)
+        aspect = library.get_aspect_data(self.name)
 
-        self.sprite = pygame.image.load("assets/world/" + values["sprite"]).convert_alpha()
+        self.sprite = pygame.image.load("assets/world/" + aspect.sprite).convert_alpha()
 
         # catch any images not resized and resize them
         if self.sprite.get_size() != (TILE_SIZE, TILE_SIZE):
@@ -28,11 +28,11 @@ class Bog(Aspect):
         self.effects = []
 
         # create effects
-        effects = values["skill_effects"]
+        effects = aspect.skill_effects
         for effect in effects:
             created_effect = None
             effect_name = effect["name"]
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
 
             if effect_name == "damage":
                 created_effect = world_manager.Skill.create_damage_effect(self, effect)
@@ -49,7 +49,7 @@ class Bog(Aspect):
 
     def trigger(self):
         if self.owner.has_entity:
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
             entity = world_manager.Map.get_entity_on_tile(self.owner)
             terrain = world_manager.Map.get_terrain_on_tile(self.owner)
 

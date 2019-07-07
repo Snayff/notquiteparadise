@@ -1,12 +1,12 @@
 import pygame
 
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
-from scripts.ui_elements.message_log import MessageLog
+from scripts.ui_elements.OLD_message_log import MessageLog
 from scripts.core.constants import LoggingEventTypes, VisualInfo
-from scripts.ui_elements.new_message_log import NewMessageLog
+from scripts.ui_elements.message_log import NewMessageLog
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
 
@@ -114,7 +114,7 @@ class UIManager:
 
         # debug doesnt use a panel so we check for the flag
         if debug_active:
-            from scripts.global_instances.managers import debug_manager
+            from scripts.global_singletons.managers import debug_manager
             debug_manager.draw(self.main_surface)
 
         if "message_log" in self.visible_elements:

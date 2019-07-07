@@ -1,8 +1,10 @@
+
 import pygame
 
-from scripts.data_loaders.getters import get_value_from_skill_json
+
 from scripts.events.game_events import EndTurnEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.data_library import library
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
 from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
 from scripts.skills.skill_effects.damage import DamageSkillEffect
@@ -22,31 +24,30 @@ class Skill:
         self.owner = owner
         self.skill_tree_name = skill_tree_name
 
-        skill_values = get_value_from_skill_json(skill_tree_name, skill_name)
+        skill = library.get_skill_data(skill_tree_name, skill_name)
 
         # aesthetic info
-        self.description = skill_values["description"]  # the description of the skill
-        self.icon = pygame.image.load("assets/skills/" + skill_values["icon"]).convert_alpha()  # icon showing theskill
+        self.description = skill.description  # the description of the skill
+        self.icon = pygame.image.load("assets/skills/" + skill.icon).convert_alpha()  # icon showing the skill
 
         # targeting info
-        self.range = skill_values["range"]  # how far away the skill can be used
-        from scripts.global_instances.managers import world_manager
-        self.required_target_type = world_manager.Skill.get_target_type_from_string(skill_values[
-                                                                                              "required_target_type"])
-        required_tags = skill_values["required_tags"]
+        self.range = skill.range  # how far away the skill can be used
+        from scripts.global_singletons.managers import world_manager
+        self.required_target_type = world_manager.Skill.get_target_type_from_string(skill.required_target_type)
+        required_tags = skill.required_tags
         self.required_tags = []
 
         for tag in required_tags:
             self.required_tags.append(world_manager.Skill.get_target_tags_from_string(tag))
 
         # resource info
-        self.resource_type = skill_values["resource_type"]
-        self.resource_cost = skill_values["resource_cost"]  # base value of resource spent to complete action
-        self.time_cost = skill_values["time_cost"]  # base value of time spent to complete action
-        self.cooldown = skill_values["cooldown"]  # how many rounds to wait between uses
+        self.resource_type = skill.resource_type
+        self.resource_cost = skill.resource_cost  # base value of resource spent to complete action
+        self.time_cost = skill.time_cost  # base value of time spent to complete action
+        self.cooldown = skill.cooldown  # how many rounds to wait between uses
 
         # skill_effects info
-        effects = skill_values["skill_effects"]  # list of skill_effects to process
+        effects = skill.skill_effects  # list of skill_effects to process
         self.effects = []
 
         for effect in effects:
@@ -74,7 +75,7 @@ class Skill:
             target_pos (tuple): x y of the target
         """
         entity = self.owner.owner  # owner is actor, actor`s owner is entity
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         target = world_manager.Skill.get_target(target_pos, self.required_target_type)  # get the tile or entity
 
         # apply any skill_effects

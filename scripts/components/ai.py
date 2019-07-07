@@ -1,9 +1,9 @@
 import numpy
 
 from scripts.core.constants import LoggingEventTypes, MessageEventTypes
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
-from scripts.global_instances.managers import world_manager
+from scripts.global_singletons.managers import world_manager
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.logging_events import LoggingEvent

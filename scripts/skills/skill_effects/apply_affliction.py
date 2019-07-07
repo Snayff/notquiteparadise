@@ -2,7 +2,7 @@ from scripts.core.constants import TargetTags, AfflictionCategory, HitTypes, Mes
     LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction import Affliction
 from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.entity import Entity
@@ -37,7 +37,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
         attacker = attacking_entity
         defender = defending_entity
 
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         target_type = world_manager.Skill.get_target_type(defender)
 
         # check the type is correct, then that the tags match
@@ -47,7 +47,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
             modified_duration = self.affliction_duration
 
             # get the tile to check the tags
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
             tile = world_manager.Map.get_tile(defender.x, defender.y)
 
             if world_manager.Skill.has_required_tags(tile, self.required_tags):
@@ -90,7 +90,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
             defending_entity (Entity):
         """
 
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         action = world_manager.Affliction
 
         # check if entity already has the affliction

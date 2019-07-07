@@ -1,6 +1,6 @@
 from scripts.managers.world_methods.game_map_query import is_tile_blocking_movement
 
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.Map import is_tile_blocking_movement
 
@@ -20,7 +20,7 @@ class MoveSkillEffect(SkillEffect):
         """
         Trigger the effect
         """
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
 
         # get required info
         start_pos_x, start_pos_y = self.entity_to_move.x, self.entity_to_move.y
@@ -41,7 +41,7 @@ class MoveSkillEffect(SkillEffect):
                 self.entity_to_move.y += direction_y
 
         # update the fov if player moved
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         if self.entity_to_move == world_manager.player:
             world_manager.player_fov_is_dirty = True
 

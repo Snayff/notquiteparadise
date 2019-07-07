@@ -25,7 +25,7 @@ class Tile:
         self.terrain = None
         self.aspect = None
 
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
 
         if terrain:
             world_manager.Map.set_terrain_on_tile(self, terrain)

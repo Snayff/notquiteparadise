@@ -1,5 +1,5 @@
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import LoggingEventTypes, VisualInfo
@@ -95,7 +95,7 @@ class SelectedEntityInfo:
         second_section_column_two_text.append(f"Resist elemental: "
                                               f"{entity.combatant.secondary_stats.resist_elemental}")
 
-        from scripts.global_instances.managers import world_manager
+        from scripts.global_singletons.managers import world_manager
         afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)
         affliction_names = []
         for affliction in afflictions:
@@ -180,6 +180,6 @@ class SelectedEntityInfo:
         Args:
             visible (bool): Visible or not
         """
-        from scripts.global_instances.managers import ui_manager
+        from scripts.global_singletons.managers import ui_manager
         ui_manager.update_panel_visibility("entity_info", self, visible)
 

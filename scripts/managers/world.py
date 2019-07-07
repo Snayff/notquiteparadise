@@ -2,7 +2,7 @@ import tcod
 
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.managers.world_methods.affliction_methods import AfflictionMethods
 from scripts.managers.world_methods.entity_methods import EntityMethods
 from scripts.managers.world_methods.fov_methods import FOVMethods
@@ -39,7 +39,7 @@ class WorldManager:
             player fov
             cleanse expired afflictions
         """
-        if self.player_fov_is_dirty:
+        if self.player_fov_is_dirty and self.player:
             player = self.player
             self.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
 

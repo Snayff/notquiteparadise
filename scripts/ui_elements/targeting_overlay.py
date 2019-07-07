@@ -1,7 +1,7 @@
 import pygame
 
 from scripts.events.logging_events import LoggingEvent
-from scripts.global_instances.event_hub import publisher
+from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
 from scripts.core.fonts import Font
@@ -99,7 +99,7 @@ class TargetingOverlay:
 
             self.tiles_to_highlight = []
 
-            from scripts.global_instances.managers import world_manager
+            from scripts.global_singletons.managers import world_manager
             player = world_manager.player
             centre_x = player.x
             centre_y = player.y
@@ -127,5 +127,5 @@ class TargetingOverlay:
         Args:
             visible (bool): Visible or not
         """
-        from scripts.global_instances.managers import ui_manager
+        from scripts.global_singletons.managers import ui_manager
         ui_manager.update_panel_visibility("targeting_overlay", self,  visible)
