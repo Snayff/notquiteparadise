@@ -12,9 +12,7 @@ class LibraryOfAlexandria:
     """
 
     def __init__(self):
-        # TODO -
-        #  point all data references here
-        #  where we are converting string to enum revert to string use. Enums are internal only. 
+        # TODO - Enums are internal only. Where we have an external string for internal value convert to Enum on load.
 
         self.skills = {}
         self.homeland = {}

@@ -1,6 +1,7 @@
 from scripts.core.constants import EntityEventTypes, LoggingEventTypes, MessageEventTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.message_events import MessageEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.global_singletons.managers import world_manager, turn_manager
 from scripts.events.game_events import EndTurnEvent
@@ -104,9 +105,9 @@ class EntityHandler(Subscriber):
             event(EntityEvent): the event to process
         """
 
-        skill = event.skill
-        world_manager.Skill.pay_resource_cost(event.entity, event.skill.resource_type, event.skill.resource_cost)
-        skill.use(event.target_pos)
+        skill_data = library.get_skill_data(event.skill.skill_tree_name, event.skill.name)
+        world_manager.Skill.pay_resource_cost(event.entity, skill_data.resource_type, skill_data.resource_cost)
+        event.skill.use(event.target_pos)
 
     @staticmethod
     def process_die(event):

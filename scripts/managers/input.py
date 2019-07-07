@@ -195,6 +195,8 @@ class InputManager:
 
         if self.input_values["refresh_data"]:
             library.load_data_into_library()
+            from scripts.global_singletons.managers import ui_manager
+            ui_manager.skill_bar.update_skill_icons_to_show()
 
     def process_player_turn_input(self):
         """
@@ -232,6 +234,7 @@ class InputManager:
 
             # do we have a skill in the slot?
             if skill:
+                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
                 # check who we are moused over
                 from scripts.global_singletons.managers import ui_manager
@@ -243,7 +246,7 @@ class InputManager:
                     publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
                 else:
                     # can't use skill, is it due to being too poor?
-                    if world_manager.Skill.can_afford_cost(player, skill.resource_type, skill.resource_cost):
+                    if world_manager.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
                         # can afford so must be picking wrong target
                         msg = f"You can't do that there!"
                         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
@@ -319,7 +322,9 @@ class InputManager:
             skill_selected = player.actor.known_skills[skill_number]
 
             # if we chose a skill check if it is same one, or if we otherwise confirmed
-            if skill_being_targeted == skill_selected :
+            if skill_being_targeted == skill_selected:
+
+                skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
 
                 # confirm can use skill
                 if world_manager.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
@@ -327,8 +332,8 @@ class InputManager:
                                                      skill_being_targeted)))
                 else:
                     # can't use skill, is it due to being too poor?
-                    if world_manager.Skill.can_afford_cost(player, skill_being_targeted.resource_type,
-                                                           skill_being_targeted.resource_cost):
+                    if world_manager.Skill.can_afford_cost(player, skill_data.resource_type,
+                                                           skill_data.resource_cost):
                         publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_being_targeted))
                     else:
                         # we already checked player can afford when triggering targeting mode so must be wrong target
@@ -338,12 +343,13 @@ class InputManager:
             # pressed another skill so should we swap to that one?
             elif skill_selected != player.actor.known_skills.index(skill_being_targeted):
 
+                skill_data = library.get_skill_data(skill_selected.skill_tree_name, skill_selected.name)
+
                 # can we afford the new skill selected?
-                if world_manager.Skill.can_afford_cost(player, skill_being_targeted.resource_type,
-                                                       skill_being_targeted.resource_cost):
+                if world_manager.Skill.can_afford_cost(player, skill_data.resource_type,
+                                                       skill_data.resource_cost):
                     # can afford so swap
-                    skill = player.actor.known_skills[skill_number]
-                    publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+                    publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_selected))
 
                 # can't afford so cancel targeting?
                 else:
