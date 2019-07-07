@@ -1,6 +1,10 @@
 
 import json
 
+from scripts.core.constants import LoggingEventTypes
+from scripts.events.logging_events import LoggingEvent
+from scripts.global_singletons.event_hub import publisher
+
 
 class LibraryOfAlexandria:
     """
@@ -24,6 +28,8 @@ class LibraryOfAlexandria:
 
         self.load_data_into_library()
 
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
+
     def load_data_into_library(self):
         """
         Load data from all external jsons to this central data library
@@ -36,6 +42,8 @@ class LibraryOfAlexandria:
         self.aspect = self.get_values_from_aspect_json()
         self.terrain = self.get_values_from_terrain_json()
         self.actor_template = self.get_values_from_actor_json()
+
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
     
     def get_terrain_data(self, terrain_name):
         """

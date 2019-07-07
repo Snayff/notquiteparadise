@@ -20,7 +20,7 @@ class SkillMethods:
     Methods for querying skills and skill related info and taking skill actions.
     """
     def __init__(self, manager):
-        self.manager = manager
+        self.manager = manager  # type: WorldManager
 
     def can_use_skill(self, entity, target_pos, skill):
         """
@@ -40,25 +40,35 @@ class SkillMethods:
         blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
         tile = world_manager.Map.get_tile(target_x, target_y)
 
+        skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+        required_target = self.get_target_type_from_string(skill_data.required_target_type)
+        skill_range = skill_data.range
+        resource_type = skill_data.resource_type
+        resource_cost = skill_data.resource_cost
+        required_tags = []
+
+        for tag in skill_data.required_tags:
+            required_tags.append(self.get_target_tags_from_string(tag))
+
         # do we need an entity?
-        if skill.required_target_type == TargetTypes.ENTITY:
+        if required_target == TargetTypes.ENTITY:
             # is there an entity to target?
             if blocking_entity_at_location:
                 # is the entity within range?
                 distance_to_entity = world_manager.Entity.get_chebyshev_distance_between_entities(entity,
                                             blocking_entity_at_location)
-                if distance_to_entity > skill.range:
+                if distance_to_entity > skill_range:
                     return False
             else:
                 return False
 
         # get info about the tile and the skill requirements
-        is_required_type = self.is_required_target_type(tile, skill.required_target_type)
-        has_tags = self.has_required_tags(tile, skill.required_tags)
+        is_required_type = self.is_required_target_type(tile, required_target)
+        has_tags = self.has_required_tags(tile, required_tags)
 
         # check we have everything we need and if so use the skill
         if is_required_type and has_tags:
-            if self.can_afford_cost(skill.owner.owner, skill.resource_type, skill.resource_cost):
+            if self.can_afford_cost(entity, resource_type, resource_cost):
                 return True
 
         return False
@@ -106,8 +116,7 @@ class SkillMethods:
 
         return False  # catch all
 
-    @staticmethod
-    def has_required_tags(tile, required_tags):
+    def has_required_tags(self, tile, required_tags):
         """
         Check a tile has all required tags
 
@@ -124,9 +133,9 @@ class SkillMethods:
         tags_checked = {}
 
         # assess all tags
-        from scripts.global_singletons.managers import world_manager
+
         for tag in required_tags:
-            tags_checked[tag] = world_manager.Map.tile_has_tag(tile, tag)
+            tags_checked[tag] = self.manager.Map.tile_has_tag(tile, tag)
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):

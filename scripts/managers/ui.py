@@ -4,9 +4,8 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
-from scripts.ui_elements.OLD_message_log import MessageLog
 from scripts.core.constants import LoggingEventTypes, VisualInfo
-from scripts.ui_elements.message_log import NewMessageLog
+from scripts.ui_elements.message_log import MessageLog
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
 
@@ -34,7 +33,7 @@ class UIManager:
         self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
         self.visible_elements = {}  # dict of all elements that are currently being rendered
 
-        self.message_log = None  # type: NewMessageLog
+        self.message_log = None  # type: MessageLog
         self.entity_info = None  # type: SelectedEntityInfo
         self.targeting_overlay = None  # type: TargetingOverlay
         self.skill_bar = None # type: SkillBar
@@ -65,7 +64,7 @@ class UIManager:
         Notes:
             Called late due to dependencies.
         """
-        self.message_log = NewMessageLog() # MessageLog()
+        self.message_log = MessageLog() # OLD_MessageLog()
 
     def init_entity_info(self):
         """

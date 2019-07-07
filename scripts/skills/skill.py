@@ -20,9 +20,9 @@ class Skill:
             skill_tree_name():
     """
     def __init__(self, owner,  skill_tree_name, skill_name):
-        self.name = skill_name
         self.owner = owner
         self.skill_tree_name = skill_tree_name
+        self.name = skill_name
 
         skill = library.get_skill_data(skill_tree_name, skill_name)
 
@@ -82,7 +82,6 @@ class Skill:
         if self.effects:
             for effect in self.effects:
 
-                # TODO - change to make use of the Enums
                 if type(effect) is DamageSkillEffect:
                     effect.trigger(entity, target)
 

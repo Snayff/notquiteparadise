@@ -9,7 +9,7 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.templates.panel import Panel
 
 
-class MessageLog:
+class OLD_MessageLog:
     """
     Store messages, and related functionality, to be shown in the message log.
 
@@ -68,7 +68,7 @@ class MessageLog:
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"OLD_MessageLog initialised."))
 
     def draw(self, surface):
         """
@@ -192,7 +192,7 @@ class MessageLog:
 
     def add_message(self, message_type, message):
         """
-        Add a message to the MessageLog
+        Add a message to the OLD_MessageLog
         Args:
             message_type(MessageEventTypes):
             message(str):

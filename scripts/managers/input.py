@@ -6,6 +6,7 @@ from scripts.events.game_events import ChangeGameStateEvent, ExitEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 
 
@@ -35,9 +36,12 @@ class InputManager:
             "skill1": False,
             "skill2": False,
             "skill3": False,
-            "skill4": False
+            "skill4": False,
+            "refresh_data": False
 
         }
+
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"InputManager initialised."))
 
     def update(self):
         """
@@ -157,6 +161,8 @@ class InputManager:
             self.input_values["cancel"] = True
         elif event.key == pygame.K_TAB:
             self.input_values["debug_toggle"] = True
+        elif event.key == pygame.K_F5:
+            self.input_values["refresh_data"] = True
 
     def process_input(self):
         """
@@ -186,6 +192,9 @@ class InputManager:
                 debug_manager.set_visibility(False)
             else:
                 debug_manager.set_visibility(True)
+
+        if self.input_values["refresh_data"]:
+            library.load_data_into_library()
 
     def process_player_turn_input(self):
         """
@@ -342,8 +351,6 @@ class InputManager:
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
                     publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
-
-
 
     def get_pressed_mouse_button(self):
         """
