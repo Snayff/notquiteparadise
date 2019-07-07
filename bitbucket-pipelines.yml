@@ -11,6 +11,7 @@ pipelines:
         deployment: develop
         script: # Modify the commands below to build your repository.
           - echo "Deploying to develop environment"
+          - apt-get install libsdl2-dev
           - pip install -r requirements.txt
           - cd docs
           - make html
