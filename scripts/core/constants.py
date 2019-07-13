@@ -1,4 +1,3 @@
-
 from enum import Enum, auto
 
 TILE_SIZE = 64
@@ -77,11 +76,18 @@ class EntityEventTypes(Enum):
     MOVE = auto()
     LEARN = auto()
 
+
 class UIEventTypes(Enum):
+    """
+    Types of UI events
+    """
     CLICK_UI = auto()
 
 
 class TargetTypes(Enum):
+    """
+    Types of targets
+    """
     TERRAIN = auto()
     ENTITY = auto()
 
@@ -99,12 +105,18 @@ class TargetTags(Enum):
 
 
 class DamageTypes(Enum):
+    """
+    Damage types
+    """
     PIERCE = auto()
     BLUNT = auto()
     ELEMENTAL = auto()
 
 
 class PrimaryStatTypes(Enum):
+    """
+    Primary stats
+    """
     VIGOUR = auto()
     CLOUT = auto()
     SKULLDUGGERY = auto()
@@ -113,6 +125,9 @@ class PrimaryStatTypes(Enum):
 
 
 class SecondaryStatTypes(Enum):
+    """
+    Secondary stats
+    """
     DODGE_SPEED = auto()
     DODGE_TOUGHNESS = auto()
     DODGE_INTELLIGENCE = auto()
@@ -167,27 +182,6 @@ class AfflictionCategory(Enum):
     BOON = auto()
 
 
-class AfflictionTypes(Enum):
-    """
-    Various types of afflictions
-    """
-
-    # TODO - replace with strings from json (as it is all defined in the json)
-    # BANES
-    MYOPIC = auto()
-    BOGGED_DOWN = auto()
-    SHAKEN = auto()
-    EXPOSED = auto()
-    RUPTURED = auto()
-    FLAMING = auto()
-    EXHAUSTED = auto()
-    HOBBLED = auto()
-    DISTRACTED = auto()
-    TORMENTED = auto()
-
-    # BOONS
-
-
 class AfflictionTriggers(Enum):
     """
     When to trigger the affliction
@@ -222,6 +216,7 @@ class AspectTypes(Enum):
 class InputModes(Enum):
     MOUSE_AND_KB = auto()
     GAMEPAD = auto()
+
 
 class MouseButtons(Enum):
     LEFT_BUTTON = auto()

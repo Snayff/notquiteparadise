@@ -5,6 +5,7 @@
 
 Welcome to Not Quite Paradise's documentation!
 ==================================================
+Last updated on |today| for v|version|.
 
 ..  toctree::
     :maxdepth: 1
@@ -16,13 +17,6 @@ Welcome to Not Quite Paradise's documentation!
     skills
     ui_elements
     world
-
-
-
-
-
-
-
 
 
 

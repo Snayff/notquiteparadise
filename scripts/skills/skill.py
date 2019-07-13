@@ -87,6 +87,7 @@ class Skill:
         if self.effects:
             for effect in self.effects:
 
+                # TODO - change to compare strings
                 if type(effect) is DamageSkillEffect:
                     effect.trigger(entity, target)
 

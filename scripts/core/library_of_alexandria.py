@@ -1,7 +1,7 @@
 
 import json
 
-from scripts.core.constants import LoggingEventTypes
+from scripts.core.constants import LoggingEventTypes, TargetTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 
@@ -12,8 +12,6 @@ class LibraryOfAlexandria:
     """
 
     def __init__(self):
-        # TODO - Enums are internal only. Where we have an external string for internal value convert to Enum on load.
-
         self.skills = {}
         self.homeland = {}
         self.race = {}
@@ -25,6 +23,7 @@ class LibraryOfAlexandria:
         self.actor_template = {}
 
         self.load_data_into_library()
+        self.convert_strings_to_enums()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
 
@@ -44,6 +43,49 @@ class LibraryOfAlexandria:
             self.actor_template = self.get_values_from_actor_json()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
+
+    def convert_strings_to_enums(self):
+        # Update skills
+        # Skills:TargetTags
+        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "other_entity",
+                                                  TargetTags.OTHER_ENTITY)
+        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "no_entity",
+                                                  TargetTags.NO_ENTITY)
+        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "floor",
+                                                  TargetTags.FLOOR)
+        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "wall",
+                                                  TargetTags.WALL)
+        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "self",
+                                                  TargetTags.SELF)
+
+        # Skills:SkillEffects:Name
+        self.change_value_of_key_if_value_matches(self.skills, "name", "damage", SkillEffectTypes.DAMAGE)
+        self.change_value_of_key_if_value_matches(self.skills, "name", "apply_affliction",
+                                                  SkillEffectTypes.APPLY_AFFLICTION)
+        self.change_value_of_key_if_value_matches(self.skills, "name", "move",
+                                                  SkillEffectTypes.MOVE)
+        self.change_value_of_key_if_value_matches(self.skills, "name", "change_terrain",
+                                                  SkillEffectTypes.CHANGE_TERRAIN)
+
+        # Skills:SkillEffects:Name
+        self.change_value_of_key_if_value_matches(self.skills, "stat_to_target", "bustle",
+                                                  PrimaryStatTypes.BUSTLE)
+
+
+
+
+
+    def change_value_of_key_if_value_matches(self, dict_to_look_in, key_to_look_for, value_to_check, new_value):
+        for k, v in dict_to_look_in.items():
+            if isinstance(v, dict):
+                self.change_value_of_key_if_value_matches(v, key_to_look_for, value_to_check, new_value)
+            if k == key_to_look_for:
+                value_for_key = dict_to_look_in[k]
+                print(f"compared {value_for_key} to {value_to_check}")
+                if value_for_key == value_to_check:
+                    dict_to_look_in[k] = new_value
+
+
     
     def get_terrain_data(self, terrain_name):
         """

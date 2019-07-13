@@ -92,14 +92,11 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
         from scripts.global_singletons.managers import world_manager
         action = world_manager.Affliction
+        active_affliction = action.get_affliction_for_entity(defending_entity, self.affliction_name)
 
         # check if entity already has the affliction
-        affliction_type = action.get_affliction_type_from_string(self.affliction_name)
-        has_affliction = action.affliction_exists(defending_entity, affliction_type)
-
-        if has_affliction:
-            # if so compare durations and
-            active_affliction = action.get_affliction_type_for_entity(defending_entity, affliction_type)
+        if active_affliction:
+            # if so compare durations
             active_duration = active_affliction.duration
 
             log_string = f"{defending_entity.name} already has {self.affliction_name}:{active_duration}..."
@@ -125,7 +122,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             # create the affliction
-            affliction = action.create_affliction(affliction_type, modified_duration, defending_entity)
+            affliction = action.create_affliction(self.affliction_name, modified_duration, defending_entity)
 
             # add affliction to the central list
             action.register_active_affliction(affliction)

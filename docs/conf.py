@@ -80,6 +80,11 @@ exclude_patterns = []
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+# There are two options for replacing |today|: either, you set today to some
+# non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+today_fmt = '%d %b %y at %H:%M'
 
 # -- Options for HTML output -------------------------------------------------
 

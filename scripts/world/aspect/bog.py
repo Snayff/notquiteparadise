@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.core.constants import TILE_SIZE, AspectTypes, AfflictionTypes, TargetTypes, TargetTags, PrimaryStatTypes, \
+from scripts.core.constants import TILE_SIZE, AspectTypes, TargetTypes, TargetTags, PrimaryStatTypes, \
     AfflictionCategory, SkillEffectTypes, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.data_library import library

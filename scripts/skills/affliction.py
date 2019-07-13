@@ -1,5 +1,5 @@
 
-from scripts.core.constants import AfflictionCategory, AfflictionTypes, AfflictionTriggers, LoggingEventTypes
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -15,24 +15,21 @@ class Affliction:
         description (str): description of the Affliction
         icon (pygame.Image): pygame image to symbolise the Affliction
         affliction_category (AfflictionCategory): Bane or Boon
-        affliction_type (AfflictionTypes): the Enum value of the Affliction Name
         duration (int): amount of applications before expiry
         trigger_event (AfflictionTriggers): the event that triggers the Affliction to activate
         affected_entity (Entity): the Entity being impacted by the Affliction
         affliction_effects (list(AfflictionEffect)): list of AfflictionEffects
     """
 
-    def __init__(self, affliction_type, duration, affected_entity):
+    def __init__(self, affliction_name, duration, affected_entity):
         from scripts.global_singletons.managers import world_manager
         action = world_manager.Affliction
-        name = action.get_affliction_string_from_type(affliction_type)
-        affliction = library.get_affliction_data(name)
+        affliction = library.get_affliction_data(affliction_name)
 
-        self.name = name
+        self.name = affliction_name
         self.description = affliction.description
         self.icon = affliction.icon
         self.affliction_category = action.get_affliction_category_from_string(affliction.category)
-        self.affliction_type = affliction_type
         self.duration = duration
         self.trigger_event = action.get_trigger_event_from_string(affliction.trigger_event)
         self.affected_entity = affected_entity  # set at time of allocation to an entity
@@ -45,6 +42,8 @@ class Affliction:
         for effect in affliction_effects_values:
             created_effect = None
             effect_name = effect["name"]
+
+            created_effect = world_manager.Affliction.create_affliction_effect(self, effect["type"])
 
             if effect_name == "damage":
                 created_effect = world_manager.Affliction.create_damage_effect(self, effect)
