@@ -197,6 +197,8 @@ class InputManager:
             library.load_data_into_library()
             from scripts.global_singletons.managers import ui_manager
             ui_manager.skill_bar.update_skill_icons_to_show()
+            publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
+                                                                     "reloaded~~"))
 
     def process_player_turn_input(self):
         """

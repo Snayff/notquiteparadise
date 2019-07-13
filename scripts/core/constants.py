@@ -57,6 +57,7 @@ class GameEventTypes(Enum):
 class MessageEventTypes(Enum):
     """Types of Message Events"""
     BASIC = auto()
+    SYSTEM = auto()
 
 
 class LoggingEventTypes(Enum):

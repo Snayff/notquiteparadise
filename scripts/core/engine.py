@@ -7,7 +7,7 @@ import pygame
 
 from scripts.core.constants import GameStates
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
-    input_manager
+    input_manager, start
 from scripts.global_singletons.event_hub import event_hub
 from scripts.core.initialisers import initialise_game
 
@@ -43,6 +43,10 @@ def main():
     # TODO - set to turn off for production builds
     profiler = cProfile.Profile()
     profiler.enable()
+
+    start()
+    from scripts.global_singletons import managers
+    managers.game_manager2.update_game_state(GameStates.PLAYER_TURN)
 
     # load the game
     initialise_game()
