@@ -20,31 +20,31 @@ class Skill:
             skill_tree_name():
     """
     def __init__(self, owner,  skill_tree_name, skill_name):
-        self.name = skill_name
         self.owner = owner
         self.skill_tree_name = skill_tree_name
+        self.name = skill_name
 
         skill = library.get_skill_data(skill_tree_name, skill_name)
 
-        # aesthetic info
-        self.description = skill.description  # the description of the skill
-        self.icon = pygame.image.load("assets/skills/" + skill.icon).convert_alpha()  # icon showing the skill
-
-        # targeting info
-        self.range = skill.range  # how far away the skill can be used
-        from scripts.global_singletons.managers import world_manager
-        self.required_target_type = world_manager.Skill.get_target_type_from_string(skill.required_target_type)
-        required_tags = skill.required_tags
-        self.required_tags = []
-
-        for tag in required_tags:
-            self.required_tags.append(world_manager.Skill.get_target_tags_from_string(tag))
-
-        # resource info
-        self.resource_type = skill.resource_type
-        self.resource_cost = skill.resource_cost  # base value of resource spent to complete action
-        self.time_cost = skill.time_cost  # base value of time spent to complete action
-        self.cooldown = skill.cooldown  # how many rounds to wait between uses
+        # # aesthetic info
+        # self.description = skill.description  # the description of the skill
+        # self.icon = pygame.image.load("assets/skills/" + skill.icon).convert_alpha()  # icon showing the skill
+        #
+        # # targeting info
+        # self.range = skill.range  # how far away the skill can be used
+        # from scripts.global_singletons.managers import world_manager
+        # self.required_target_type = world_manager.Skill.get_target_type_from_string(skill.required_target_type)
+        # required_tags = skill.required_tags
+        # self.required_tags = []
+        #
+        # for tag in required_tags:
+        #     self.required_tags.append(world_manager.Skill.get_target_tags_from_string(tag))
+        #
+        # # resource info
+        # self.resource_type = skill.resource_type
+        # self.resource_cost = skill.resource_cost  # base value of resource spent to complete action
+        # self.time_cost = skill.time_cost  # base value of time spent to complete action
+        # self.cooldown = skill.cooldown  # how many rounds to wait between uses
 
         # skill_effects info
         effects = skill.skill_effects  # list of skill_effects to process
@@ -53,8 +53,10 @@ class Skill:
         for effect in effects:
             created_effect = None
             effect_name = effect["name"]
+            from scripts.global_singletons.managers import world_manager
 
             if effect_name == "damage":
+
                 created_effect = world_manager.Skill.create_damage_effect(self, effect)
 
             elif effect_name == "change_terrain":
@@ -76,13 +78,15 @@ class Skill:
         """
         entity = self.owner.owner  # owner is actor, actor`s owner is entity
         from scripts.global_singletons.managers import world_manager
-        target = world_manager.Skill.get_target(target_pos, self.required_target_type)  # get the tile or entity
+        skill_data = library.get_skill_data(self.skill_tree_name, self.name)
+        required_target = world_manager.Skill.get_target_type_from_string(skill_data.required_target_type)
+
+        target = world_manager.Skill.get_target(target_pos, required_target)  # get the tile or entity
 
         # apply any skill_effects
         if self.effects:
             for effect in self.effects:
 
-                # TODO - change to make use of the Enums
                 if type(effect) is DamageSkillEffect:
                     effect.trigger(entity, target)
 
@@ -93,7 +97,7 @@ class Skill:
                     effect.trigger(entity, target)
 
         # end the turn
-        publisher.publish(EndTurnEvent(self.time_cost))
+        publisher.publish(EndTurnEvent(skill_data.time_cost))
 
 
 

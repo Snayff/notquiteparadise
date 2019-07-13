@@ -9,7 +9,7 @@ from scripts.ui_elements.palette import Palette
 from scripts.ui_elements.templates.panel import Panel
 
 
-class NewMessageLog:
+class MessageLog:
     """
     Store messages, and related functionality, to be shown in the message log.
 
@@ -59,7 +59,7 @@ class NewMessageLog:
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"MessageLog initialised."))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"OLD_MessageLog initialised."))
 
     def update(self):
         """

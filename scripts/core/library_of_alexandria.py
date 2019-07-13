@@ -1,6 +1,10 @@
 
 import json
 
+from scripts.core.constants import LoggingEventTypes
+from scripts.events.logging_events import LoggingEvent
+from scripts.global_singletons.event_hub import publisher
+
 
 class LibraryOfAlexandria:
     """
@@ -8,9 +12,7 @@ class LibraryOfAlexandria:
     """
 
     def __init__(self):
-        # TODO -
-        #  point all data references here
-        #  where we are converting string to enum revert to string use. Enums are internal only. 
+        # TODO - Enums are internal only. Where we have an external string for internal value convert to Enum on load.
 
         self.skills = {}
         self.homeland = {}
@@ -24,18 +26,24 @@ class LibraryOfAlexandria:
 
         self.load_data_into_library()
 
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
+
     def load_data_into_library(self):
         """
         Load data from all external jsons to this central data library
         """
-        self.skills = self.get_values_from_skill_json()
-        self.homeland = self.get_values_from_homeland_json()
-        self.race = self.get_values_from_race_json()
-        self.savvy = self.get_values_from_savvy_json()
-        self.affliction = self.get_values_from_affliction_json()
-        self.aspect = self.get_values_from_aspect_json()
-        self.terrain = self.get_values_from_terrain_json()
-        self.actor_template = self.get_values_from_actor_json()
+        import os
+        if "GENERATING_SPHINX_DOCS" not in os.environ:
+            self.skills = self.get_values_from_skill_json()
+            self.homeland = self.get_values_from_homeland_json()
+            self.race = self.get_values_from_race_json()
+            self.savvy = self.get_values_from_savvy_json()
+            self.affliction = self.get_values_from_affliction_json()
+            self.aspect = self.get_values_from_aspect_json()
+            self.terrain = self.get_values_from_terrain_json()
+            self.actor_template = self.get_values_from_actor_json()
+
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
     
     def get_terrain_data(self, terrain_name):
         """
@@ -181,8 +189,8 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        # TODO - move general into skills and create rules to confirm every tree has a basic attack
-        with open('Data/game/skills/skill_trees.json') as file:
+        # TODO - create rules to confirm every tree has a basic attack
+        with open('data/game/skills/skill_trees.json') as file:
             data = json.load(file)
 
         return data
@@ -194,7 +202,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/skills/afflictions.json') as file:
+        with open('data/game/skills/afflictions.json') as file:
             data = json.load(file)
 
         return data
@@ -206,7 +214,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/world/aspect.json') as file:
+        with open('data/game/world/aspect.json') as file:
             data = json.load(file)
 
         return data
@@ -218,7 +226,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/world/terrain.json') as file:
+        with open('data/game/world/terrain.json') as file:
             data = json.load(file)
 
         return data
@@ -230,7 +238,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/homeland.json') as file:
+        with open('data/game/entity/homeland.json') as file:
             data = json.load(file)
 
         return data
@@ -242,7 +250,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/savvy.json') as file:
+        with open('data/game/entity/savvy.json') as file:
             data = json.load(file)
 
         return data
@@ -254,7 +262,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/race.json') as file:
+        with open('data/game/entity/race.json') as file:
             data = json.load(file)
 
         return data
@@ -266,7 +274,8 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('Data/game/entity/actor_template.json') as file:
+
+        with open('data/game/entity/actor_template.json') as file:
             data = json.load(file)
-        
+
         return data

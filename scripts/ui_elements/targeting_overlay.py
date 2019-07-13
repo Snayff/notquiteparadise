@@ -1,6 +1,7 @@
 import pygame
 
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import TILE_SIZE, LoggingEventTypes
@@ -103,8 +104,9 @@ class TargetingOverlay:
             player = world_manager.player
             centre_x = player.x
             centre_y = player.y
-            skill_range = self.skill_being_targeted.range
-            game_map = world_manager.game_map
+            skill_data = library.get_skill_data(self.skill_being_targeted.skill_tree_name,
+                                                self.skill_being_targeted.name)
+            skill_range = skill_data.range
 
             # +1 to make the range inclusive
             for x in range(-skill_range, skill_range + 1):
@@ -128,4 +130,4 @@ class TargetingOverlay:
             visible (bool): Visible or not
         """
         from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("targeting_overlay", self,  visible)
+        ui_manager.update_panel_visibility("targeting_overlay", self, visible)

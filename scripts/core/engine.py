@@ -6,9 +6,8 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_singletons.data_library import library
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
-    input_manager
+    input_manager, start
 from scripts.global_singletons.event_hub import event_hub
 from scripts.core.initialisers import initialise_game
 
@@ -31,7 +30,6 @@ from scripts.core.initialisers import initialise_game
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
 # TODO - review what other info can be externalised.
-# TODO - All external info should not be converted to enum but passed as strings.
 # TODO - update combat in line with new standards
 # TODO - data validation of jsons on init
 
@@ -45,6 +43,10 @@ def main():
     # TODO - set to turn off for production builds
     profiler = cProfile.Profile()
     profiler.enable()
+
+    start()
+    from scripts.global_singletons import managers
+    managers.game_manager2.update_game_state(GameStates.PLAYER_TURN)
 
     # load the game
     initialise_game()

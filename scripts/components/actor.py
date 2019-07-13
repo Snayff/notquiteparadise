@@ -1,4 +1,5 @@
 from scripts.core.constants import LoggingEventTypes
+from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill import Skill
 from scripts.events.logging_events import LoggingEvent
 

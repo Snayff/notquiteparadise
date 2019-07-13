@@ -1,6 +1,7 @@
 import pygame
 
 from scripts.events.logging_events import LoggingEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import LoggingEventTypes, VisualInfo
@@ -101,11 +102,15 @@ class SkillBar:
         # if the player has been init'd update skill bar
         if player:
             for counter, skill in enumerate(player.actor.known_skills):
+
+                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                skill_icon = pygame.image.load("assets/skills/" + skill_data.icon).convert_alpha()
+
                 # catch any images not the right size and resize them
-                if skill.icon.get_size() != (self.skill_icon_size, self.skill_icon_size):
-                    icon = pygame.transform.smoothscale(skill.icon, (self.skill_icon_size, self.skill_icon_size))
+                if skill_icon.get_size() != (self.skill_icon_size, self.skill_icon_size):
+                    icon = pygame.transform.smoothscale(skill_icon, (self.skill_icon_size, self.skill_icon_size))
                 else:
-                    icon = skill.icon
+                    icon = skill_icon
 
                 self.skill_containers[counter].skill_icon = icon
 
