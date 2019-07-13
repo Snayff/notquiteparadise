@@ -1,7 +1,7 @@
-
 import json
 
-from scripts.core.constants import LoggingEventTypes, TargetTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes
+from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
+    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 
@@ -23,7 +23,7 @@ class LibraryOfAlexandria:
         self.actor_template = {}
 
         self.load_data_into_library()
-        self.convert_strings_to_enums()
+        self.convert_external_strings_to_internal_enums()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
 
@@ -44,49 +44,78 @@ class LibraryOfAlexandria:
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
 
-    def convert_strings_to_enums(self):
-        # Update skills
+    def convert_external_strings_to_internal_enums(self):
+        """
+        Where there are external values that are utilised internally convert them to the internal constant.
+        """
+        # Update Skills
         # Skills:TargetTags
-        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "other_entity",
-                                                  TargetTags.OTHER_ENTITY)
-        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "no_entity",
-                                                  TargetTags.NO_ENTITY)
-        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "floor",
-                                                  TargetTags.FLOOR)
-        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "wall",
-                                                  TargetTags.WALL)
-        self.change_value_of_key_if_value_matches(self.skills, "required_tags", "self",
-                                                  TargetTags.SELF)
+        self.recursive_replace(self.skills, "required_tags", "other_entity", TargetTags.OTHER_ENTITY)
+        self.recursive_replace(self.skills, "required_tags", "no_entity", TargetTags.NO_ENTITY)
+        self.recursive_replace(self.skills, "required_tags", "floor", TargetTags.FLOOR)
+        self.recursive_replace(self.skills, "required_tags", "wall", TargetTags.WALL)
+        self.recursive_replace(self.skills, "required_tags", "self", TargetTags.SELF)
 
         # Skills:SkillEffects:Name
-        self.change_value_of_key_if_value_matches(self.skills, "name", "damage", SkillEffectTypes.DAMAGE)
-        self.change_value_of_key_if_value_matches(self.skills, "name", "apply_affliction",
-                                                  SkillEffectTypes.APPLY_AFFLICTION)
-        self.change_value_of_key_if_value_matches(self.skills, "name", "move",
-                                                  SkillEffectTypes.MOVE)
-        self.change_value_of_key_if_value_matches(self.skills, "name", "change_terrain",
-                                                  SkillEffectTypes.CHANGE_TERRAIN)
+        self.recursive_replace(self.skills, "name", "damage", SkillEffectTypes.DAMAGE)
+        self.recursive_replace(self.skills, "name", "apply_affliction", SkillEffectTypes.APPLY_AFFLICTION)
+        self.recursive_replace(self.skills, "name", "move", SkillEffectTypes.MOVE)
+        self.recursive_replace(self.skills, "name", "change_terrain", SkillEffectTypes.CHANGE_TERRAIN)
 
-        # Skills:SkillEffects:Name
-        self.change_value_of_key_if_value_matches(self.skills, "stat_to_target", "bustle",
-                                                  PrimaryStatTypes.BUSTLE)
+        # Skills:SkillEffects:stat_to_target
+        self.recursive_replace(self.skills, "stat_to_target", "bustle", PrimaryStatTypes.BUSTLE)
+        self.recursive_replace(self.skills, "stat_to_target", "vigour", PrimaryStatTypes.VIGOUR)
+        self.recursive_replace(self.skills, "stat_to_target", "clout", PrimaryStatTypes.CLOUT)
+        self.recursive_replace(self.skills, "stat_to_target", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
+        self.recursive_replace(self.skills, "stat_to_target", "exactitude", PrimaryStatTypes.EXACTITUDE)
 
+        # Update Afflictions
+        # Affliction:AfflictionEffects:Name
+        self.recursive_replace(self.affliction, "name", "damage", AfflictionEffectTypes.DAMAGE)
+        self.recursive_replace(self.affliction, "name", "affect_stat", AfflictionEffectTypes.AFFECT_STAT)
 
+        # Affliction:category
+        self.recursive_replace(self.affliction, "category", "bane", AfflictionCategory.BANE)
+        self.recursive_replace(self.affliction, "category", "boon", AfflictionCategory.BOON)
 
+        # Affliction:trigger_event
+        self.recursive_replace(self.affliction, "trigger_event", "end_turn", AfflictionTriggers.END_TURN)
+        self.recursive_replace(self.affliction, "trigger_event", "passive", AfflictionTriggers.PASSIVE)
+        self.recursive_replace(self.affliction, "trigger_event", "move", AfflictionTriggers.MOVE)
+        self.recursive_replace(self.affliction, "trigger_event", "deal_damage", AfflictionTriggers.DEAL_DAMAGE)
+        self.recursive_replace(self.affliction, "trigger_event", "end_round", AfflictionTriggers.END_ROUND)
+        self.recursive_replace(self.affliction, "trigger_event", "action", AfflictionTriggers.ACTION)
 
+    def recursive_replace(self, obj, key, value_to_replace, new_value):
+        """
+        Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
 
-    def change_value_of_key_if_value_matches(self, dict_to_look_in, key_to_look_for, value_to_check, new_value):
-        for k, v in dict_to_look_in.items():
-            if isinstance(v, dict):
-                self.change_value_of_key_if_value_matches(v, key_to_look_for, value_to_check, new_value)
-            if k == key_to_look_for:
-                value_for_key = dict_to_look_in[k]
-                print(f"compared {value_for_key} to {value_to_check}")
-                if value_for_key == value_to_check:
-                    dict_to_look_in[k] = new_value
+        Args:
+            obj (object): dict, list, string, or anything else to be checked.
+            key (str): The key to look for in the object
+            value_to_replace (): The value to look for, stored against the key.
+            new_value (): The value to set.
+        """
+        if isinstance(obj, dict):
+            # Break the dict out and run recursively against the elements
+            for k, v in obj.items():
+                if k == key:
+                    # The value may be a list so handle it if so
+                    if isinstance(v, list):
+                        # Loop the list and replace the required value
+                        for index, item in enumerate(v):
+                            if item == value_to_replace:
+                                v[index] = new_value
+                    elif v == value_to_replace:
+                        obj[key] = new_value
+                else:
+                    self.recursive_replace(v, key, value_to_replace, new_value)
 
+        elif isinstance(obj, list):
+            # Break the list out and run recursively against the elements
+            for element in obj:
+                self.recursive_replace(element, key, value_to_replace, new_value)
 
-    
     def get_terrain_data(self, terrain_name):
         """
         Get data for a terrains from the central library
@@ -103,7 +132,7 @@ class LibraryOfAlexandria:
         data = named_tuple(**self.terrain[terrain_name])
 
         return data
-    
+
     def get_actor_template_data(self, actor_template_name):
         """
         Get data for a actor_templates from the central library
@@ -120,7 +149,7 @@ class LibraryOfAlexandria:
         data = named_tuple(**self.actor_template[actor_template_name])
 
         return data
-    
+
     def get_aspect_data(self, aspect_name):
         """
         Get data for a aspects from the central library
@@ -137,7 +166,7 @@ class LibraryOfAlexandria:
         data = named_tuple(**self.aspect[aspect_name])
 
         return data
-    
+
     def get_affliction_data(self, affliction_name):
         """
         Get data for a afflictions from the central library
@@ -188,7 +217,7 @@ class LibraryOfAlexandria:
         data = named_tuple(**self.race[race_name])
 
         return data
-    
+
     def get_homeland_data(self, homeland_name):
         """
         Get data for a homeland from the central library
