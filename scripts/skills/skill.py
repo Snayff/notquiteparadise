@@ -56,7 +56,6 @@ class Skill:
             from scripts.global_singletons.managers import world_manager
 
             if effect_name == "damage":
-
                 created_effect = world_manager.Skill.create_damage_effect(self, effect)
 
             elif effect_name == "change_terrain":

@@ -1,7 +1,7 @@
 import json
 
 from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
-    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers
+    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 
@@ -56,11 +56,16 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "required_tags", "wall", TargetTags.WALL)
         self.recursive_replace(self.skills, "required_tags", "self", TargetTags.SELF)
 
-        # Skills:SkillEffects:Name
+        # Skills:SkillEffects:name
         self.recursive_replace(self.skills, "name", "damage", SkillEffectTypes.DAMAGE)
         self.recursive_replace(self.skills, "name", "apply_affliction", SkillEffectTypes.APPLY_AFFLICTION)
         self.recursive_replace(self.skills, "name", "move", SkillEffectTypes.MOVE)
         self.recursive_replace(self.skills, "name", "change_terrain", SkillEffectTypes.CHANGE_TERRAIN)
+
+        # Skills:SkillEffects:damage_type
+        self.recursive_replace(self.skills, "damage_type", "pierce", DamageTypes.PIERCE)
+        self.recursive_replace(self.skills, "damage_type", "blunt", DamageTypes.BLUNT)
+        self.recursive_replace(self.skills, "damage_type", "elemental", DamageTypes.ELEMENTAL)
 
         # Skills:SkillEffects:stat_to_target
         self.recursive_replace(self.skills, "stat_to_target", "bustle", PrimaryStatTypes.BUSTLE)
@@ -70,9 +75,14 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "stat_to_target", "exactitude", PrimaryStatTypes.EXACTITUDE)
 
         # Update Afflictions
-        # Affliction:AfflictionEffects:Name
+        # Affliction:AfflictionEffects:name
         self.recursive_replace(self.affliction, "name", "damage", AfflictionEffectTypes.DAMAGE)
         self.recursive_replace(self.affliction, "name", "affect_stat", AfflictionEffectTypes.AFFECT_STAT)
+
+        # Affliction:AfflictionEffects:damage_type
+        self.recursive_replace(self.affliction, "damage_type", "pierce", DamageTypes.PIERCE)
+        self.recursive_replace(self.affliction, "damage_type", "blunt", DamageTypes.BLUNT)
+        self.recursive_replace(self.affliction, "damage_type", "elemental", DamageTypes.ELEMENTAL)
 
         # Affliction:category
         self.recursive_replace(self.affliction, "category", "bane", AfflictionCategory.BANE)

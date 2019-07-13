@@ -8,19 +8,16 @@ from scripts.skills.affliction_effects.affliction_effect import AfflictionEffect
 
 class DamageAfflictionEffect(AfflictionEffect):
     """
-    SkillEffect to damage an Entity
+    AfflictionEffect to damage an Entity
 
     Attributes:
-        damage(int):
-        damage_type(int):
-        stat_to_target(PrimaryStatTypes):
+        owner(Affliction): The Affliction containing this effect
+        affliction_type(AfflictionEffectTypes): The type of affliction
     """
 
-    def __init__(self, owner, damage, damage_type, stat_to_target):
+    def __init__(self, owner, affliction_type):
         super().__init__(owner, "damage", "This is the damage effect")
-        self.base_damage = damage
-        self.damage_type = damage_type
-        self.stat_to_target = stat_to_target
+        self.affliction_type = affliction_type
 
     def trigger(self, defending_entity):
         """

@@ -75,11 +75,15 @@ class AfflictionMethods:
 
     def create_affliction_effect(self, affliction, affliction_effect_type):
         owner = affliction
+        created_effect = None
 
         if affliction_effect_type == AfflictionEffectTypes.DAMAGE:
             created_effect = DamageAfflictionEffect(owner, affliction_effect_type)
 
-            return created_effect
+        elif affliction_effect_type == AfflictionEffectTypes.AFFECT_STAT:
+            created_effect = AffectStatAfflictionEffect(owner, affliction_effect_type)
+
+        return created_effect
 
     @staticmethod
     def create_damage_effect(affliction, effect):
