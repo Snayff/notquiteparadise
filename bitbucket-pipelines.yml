@@ -1,4 +1,3 @@
-# This is a sample build configuration for Python.
 # Check our guides at https://confluence.atlassian.com/x/x4UWN for more examples.
 # Only use spaces to indent your .yml configuration.
 # -----
@@ -10,11 +9,25 @@ pipelines:
     - step:
         name: Deploy to develop
         deployment: develop
-        caches:
+        caches: 
           - pip
         script: # Modify the commands below to build your repository.
           - echo "Deploying to develop environment"
+          - apt-get update
+          - apt-get install -y libsdl2-dev
           - pip install -r requirements.txt
+          
+          # code analysis
+          - echo "Code Metrics"
+          # radon giving no results.
+          - radon cc -n C -s  scripts\
+          - radon  mi -m -s --min B -j  scripts\
+          - radon  raw -s  scripts\
+          - echo "Unused scripts"
+          # vulture errors
+          # - vulture --sort-by-size  scripts\
+          
+          # documentation
           - cd docs
           - make html
           
