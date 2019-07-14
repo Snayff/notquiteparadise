@@ -74,6 +74,15 @@ class AfflictionMethods:
         return affliction
 
     def create_affliction_effect(self, affliction, affliction_effect_type):
+        """
+                Create the Damage Affliction Effect for the Affliction
+
+                Args:
+                    affliction (Affliction): the Affliction to contain the damage effect
+                    effect (): affliction effect json data
+
+                Returns:
+        """
         owner = affliction
         created_effect = None
 
@@ -84,66 +93,6 @@ class AfflictionMethods:
             created_effect = AffectStatAfflictionEffect(owner, affliction_effect_type)
 
         return created_effect
-
-    @staticmethod
-    def create_damage_effect(affliction, effect):
-        """
-        Create the Damage Affliction Effect for the Affliction
-
-        Args:
-            affliction (Affliction): the Affliction to contain the damage effect
-            effect (): affliction effect json data
-
-        Returns:
-            DamageAfflictionEffect
-        """
-        owner = affliction
-        damage = effect["damage"]
-        damage_type = effect["damage_type"]
-        stat_to_target = effect["stat_to_target"]
-
-        created_effect = DamageAfflictionEffect(owner, damage, damage_type, stat_to_target)
-
-        return created_effect
-
-    @staticmethod
-    def create_affect_stat_effect(affliction, effect):
-        """
-        Create the Affect Stat Affliction Effect for the Affliction
-
-        Args:
-            affliction (Affliction): the Affliction to contain the damage effect
-            effect (): affliction effect json data
-
-        Returns:
-            AffectStatAfflictionEffect
-        """
-        owner = affliction
-        stat_to_affect = effect["stat_to_affect"]
-        amount = effect["amount"]
-
-        created_effect = AffectStatAfflictionEffect(owner, stat_to_affect, amount)
-
-        return created_effect
-
-    @staticmethod
-    def get_affliction_effect_type_from_string(affliction_effect_name):
-        """
-        Convert a string to the appropriate AfflictionEffectTypes (Enum) value
-
-        Args:
-            affliction_effect_name (str): string name of affliction effect
-
-        Returns:
-            AfflictionEffectTypes
-        """
-        if affliction_effect_name == "damage":
-            return AfflictionEffectTypes.DAMAGE
-        elif affliction_effect_name == "affect_stat":
-            return AfflictionEffectTypes.AFFECT_STAT
-
-        log_string = f"{affliction_effect_name} not found in 'get_affliction_effect_type_from_string'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_affliction_category_from_string(affliction_category):

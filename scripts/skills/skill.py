@@ -24,30 +24,10 @@ class Skill:
         self.skill_tree_name = skill_tree_name
         self.name = skill_name
 
-        skill = library.get_skill_data(skill_tree_name, skill_name)
-
-        # # aesthetic info
-        # self.description = skill.description  # the description of the skill
-        # self.icon = pygame.image.load("assets/skills/" + skill.icon).convert_alpha()  # icon showing the skill
-        #
-        # # targeting info
-        # self.range = skill.range  # how far away the skill can be used
-        # from scripts.global_singletons.managers import world_manager
-        # self.required_target_type = world_manager.Skill.get_target_type_from_string(skill.required_target_type)
-        # required_tags = skill.required_tags
-        # self.required_tags = []
-        #
-        # for tag in required_tags:
-        #     self.required_tags.append(world_manager.Skill.get_target_tags_from_string(tag))
-        #
-        # # resource info
-        # self.resource_type = skill.resource_type
-        # self.resource_cost = skill.resource_cost  # base value of resource spent to complete action
-        # self.time_cost = skill.time_cost  # base value of time spent to complete action
-        # self.cooldown = skill.cooldown  # how many rounds to wait between uses
+        data = library.get_skill_data(skill_tree_name, skill_name)
 
         # skill_effects info
-        effects = skill.skill_effects  # list of skill_effects to process
+        effects = data.skill_effects  # list of skill_effects to process
         self.effects = []
 
         for effect in effects:

@@ -9,14 +9,8 @@ class AffectStatAfflictionEffect(AfflictionEffect):
 
     """
 
-    def __init__(self, owner, stat_to_affect, amount):
-        super().__init__(owner, "affect_stat", "This is the Affect Stat effect")
-
-        from scripts.global_singletons.managers import world_manager
-        stat = world_manager.Skill.get_stat_from_string(stat_to_affect)
-
-        self.stat_to_affect = stat
-        self.amount = amount
+    def __init__(self, owner, affliction_effect_type):
+        super().__init__(owner, "affect_stat", "This is the Affect Stat effect", affliction_effect_type)
 
     def trigger(self):
         """
@@ -24,3 +18,5 @@ class AffectStatAfflictionEffect(AfflictionEffect):
 
         """
         super().trigger()
+
+        # TODO - implement stat change (is this already held in the stat, under the entity? if so confirm here)

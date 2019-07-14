@@ -2,6 +2,7 @@ from scripts.core.constants import HitTypes, LoggingEventTypes, DamageTypes, Hit
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction_effects.affliction_effect import AfflictionEffect
 
@@ -12,12 +13,11 @@ class DamageAfflictionEffect(AfflictionEffect):
 
     Attributes:
         owner(Affliction): The Affliction containing this effect
-        affliction_type(AfflictionEffectTypes): The type of affliction
+        affliction_effect_type(AfflictionEffectTypes): The type of affliction
     """
 
-    def __init__(self, owner, affliction_type):
-        super().__init__(owner, "damage", "This is the damage effect")
-        self.affliction_type = affliction_type
+    def __init__(self, owner, affliction_effect_type):
+        super().__init__(owner, "damage", affliction_effect_type,  "This is the damage effect")
 
     def trigger(self, defending_entity):
         """
@@ -62,15 +62,17 @@ class DamageAfflictionEffect(AfflictionEffect):
         """
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Calculate damage..."))
 
-        initial_damage = self.base_damage
+        data = library.get_affliction_effect_data(self.owner.name, self.affliction_effect_type)
+        damage_type = data.damage_type
+        initial_damage = data.damage
 
         # get resistance value
         resist_value = 0
-        if self.damage_type == DamageTypes.PIERCE:
+        if damage_type == DamageTypes.PIERCE:
             resist_value = defending_entity.combatant.secondary_stats.resist_pierce
-        elif self.damage_type == DamageTypes.BLUNT:
+        elif damage_type == DamageTypes.BLUNT:
             resist_value = defending_entity.combatant.secondary_stats.resist_blunt
-        elif self.damage_type == DamageTypes.ELEMENTAL:
+        elif damage_type == DamageTypes.ELEMENTAL:
             resist_value = defending_entity.combatant.secondary_stats.resist_elemental
 
         # mitigate damage with defence

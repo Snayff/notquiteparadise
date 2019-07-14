@@ -8,15 +8,11 @@ class SkillEffect:
     Base class for skill skill_effects that make up the basis of skills.
     """
 
-    def __init__(self, owner, name, description, required_target_type, required_tags):
+    def __init__(self, owner, name, description, skill_effect_type):
         self.owner = owner
         self.name = name
         self.description = description
-        self.required_target_type = required_target_type
-        self.required_tags = required_tags
-
-        from scripts.global_singletons.managers import world_manager
-        self.effect_type = world_manager.Skill.get_skill_effect_type_from_string(self.name)
+        self.skill_effect_type = skill_effect_type
 
     def trigger(self):
         """

@@ -22,34 +22,21 @@ class Affliction:
     """
 
     def __init__(self, affliction_name, duration, affected_entity):
-        from scripts.global_singletons.managers import world_manager
-        action = world_manager.Affliction
-        affliction = library.get_affliction_data(affliction_name)
+
+        data = library.get_affliction_data(affliction_name)
 
         self.name = affliction_name
-        self.description = affliction.description
-        self.icon = affliction.icon
-        self.affliction_category = action.get_affliction_category_from_string(affliction.category)
         self.duration = duration
-        self.trigger_event = action.get_trigger_event_from_string(affliction.trigger_event)
         self.affected_entity = affected_entity  # set at time of allocation to an entity
         self.affliction_effects = []
 
         # get the affliction skill_effects
-        affliction_effects_values = affliction.affliction_effects
+        affliction_effects = data.affliction_effects
 
         # unpack all affliction_effects
-        for effect in affliction_effects_values:
-            created_effect = None
-            effect_name = effect["name"]
-
+        for effect in affliction_effects:
+            from scripts.global_singletons.managers import world_manager
             created_effect = world_manager.Affliction.create_affliction_effect(self, effect["type"])
-
-            if effect_name == "damage":
-                created_effect = world_manager.Affliction.create_damage_effect(self, effect)
-
-            if effect_name == "affect_stat":
-                created_effect = world_manager.Affliction.create_affect_stat_effect(self, effect)
 
             # if we have an effect add it to internal list
             if created_effect:
@@ -65,8 +52,10 @@ class Affliction:
         for effect in self.affliction_effects:
             effect.trigger(self.affected_entity)
 
+        data = library.get_affliction_data(self.name)
+
         # reduce duration on all effects other than Passive
-        if self.trigger_event != AfflictionTriggers.PASSIVE:
+        if data.trigger_event != AfflictionTriggers.PASSIVE:
             self.duration -= 1
             log_string = f"Duration reduced to: {self.duration}"
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))

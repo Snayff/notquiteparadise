@@ -10,13 +10,12 @@ class AfflictionEffect:
     version of skill_effects
     """
 
-    def __init__(self, owner, name, description):
+    def __init__(self, owner, name, description, affliction_effect_type):
         from scripts.skills.affliction import Affliction
         self.owner = owner  # type: Affliction
         self.name = name
         self.description = description
-        from scripts.global_singletons.managers import world_manager
-        self.effect_type = world_manager.Affliction.get_affliction_effect_type_from_string(name)
+        self.affliction_effect_type = affliction_effect_type
 
     def trigger(self):
         """

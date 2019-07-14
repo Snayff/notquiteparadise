@@ -74,6 +74,10 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "stat_to_target", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
         self.recursive_replace(self.skills, "stat_to_target", "exactitude", PrimaryStatTypes.EXACTITUDE)
 
+        # Skills:SkillEffects:stat_to_target
+        self.recursive_replace(self.skills, "new_terrain", "floor", TargetTags.FLOOR)
+        self.recursive_replace(self.skills, "new_terrain", "wall", TargetTags.WALL)
+
         # Update Afflictions
         # Affliction:AfflictionEffects:name
         self.recursive_replace(self.affliction, "name", "damage", AfflictionEffectTypes.DAMAGE)
@@ -194,6 +198,24 @@ class LibraryOfAlexandria:
 
         return data
 
+    def get_affliction_effect_data(self, affliction_name, affliction_effect_name):
+        """
+        Get data for a afflictions from the central library
+
+        Args:
+            affliction_name (str):
+            affliction_effect_name(str)
+
+        Returns:
+            tuple: named tuple of values.
+        """
+        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
+        from collections import namedtuple
+        named_tuple = namedtuple(affliction_name, self.affliction[affliction_name][affliction_effect_name])
+        data = named_tuple(**self.affliction[affliction_name][affliction_effect_name])
+
+        return data
+
     def get_savvy_data(self, savvy_name):
         """
         Get data for a savvy from the central library
@@ -260,6 +282,25 @@ class LibraryOfAlexandria:
         from collections import namedtuple
         named_tuple = namedtuple(skill_name, list(self.skills[skill_tree][skill_name]))
         data = named_tuple(**self.skills[skill_tree][skill_name])
+
+        return data
+
+    def get_skill_effect_data(self, skill_tree, skill_name, skill_effect):
+        """
+        Get data for a skill from the central library
+
+        Args:
+            skill_tree(str):
+            skill_name(str):
+            skill_effect(str):
+
+        Returns:
+            tuple: named tuple of values.
+        """
+        # NOTE: I do not know how any of this works.  Let's live in hope that never causes a problem.
+        from collections import namedtuple
+        named_tuple = namedtuple(skill_name, list(self.skills[skill_tree][skill_name][skill_effect]))
+        data = named_tuple(**self.skills[skill_tree][skill_name][skill_effect])
 
         return data
 
