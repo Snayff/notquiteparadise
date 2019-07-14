@@ -32,6 +32,14 @@ from scripts.core.initialisers import initialise_game
 # TODO - review what other info can be externalised.
 # TODO - update combat in line with new standards
 # TODO - data validation of jsons on init
+# TODO - Review closure
+#  https://en.wikipedia.org/wiki/Closure_(computer_programming)
+# TODO - Review compression example
+#  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
+# TODO - Review data classes example
+#  https://gist.github.com/brianbruggeman/978f0b9ff77a74f1e51fbdb5e310d67f
+# TODO - rename scripts to notquiteparadise
+# TODO - move the docstring annotations to the function line, then install mypy
 
 
 def main():

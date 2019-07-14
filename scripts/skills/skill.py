@@ -1,7 +1,7 @@
 
 import pygame
 
-
+from scripts.core.constants import SkillEffectTypes
 from scripts.events.game_events import EndTurnEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -31,18 +31,8 @@ class Skill:
         self.effects = []
 
         for effect in effects:
-            created_effect = None
-            effect_name = effect["name"]
             from scripts.global_singletons.managers import world_manager
-
-            if effect_name == "damage":
-                created_effect = world_manager.Skill.create_damage_effect(self, effect)
-
-            elif effect_name == "change_terrain":
-                created_effect = world_manager.Skill.create_change_terrain_effect(self, effect)
-
-            elif effect_name == "apply_affliction":
-                created_effect = world_manager.Skill.create_apply_affliction_effect(self, effect)
+            created_effect = world_manager.Skill.create_skill_effect(self, effect["name"])
 
             # if we have an effect add it to internal list
             if created_effect:
@@ -65,17 +55,17 @@ class Skill:
         # apply any skill_effects
         if self.effects:
             for effect in self.effects:
-
-                # TODO - change to compare strings
-                if type(effect) is DamageSkillEffect:
+                if effect.name is SkillEffectTypes.DAMAGE:
                     effect.trigger(entity, target)
 
-                elif type(effect) is ChangeTerrainSkillEffect:
+                elif effect.name is SkillEffectTypes.MOVE:
+                    effect.trigger(entity, target)
+
+                elif effect.name is SkillEffectTypes.APPLY_AFFLICTION:
+                    effect.trigger(entity, target)
+
+                elif effect.name is SkillEffectTypes.CHANGE_TERRAIN:
                     effect.trigger(target)
-
-                elif type(effect) is ApplyAfflictionSkillEffect:
-                    effect.trigger(entity, target)
-
         # end the turn
         publisher.publish(EndTurnEvent(skill_data.time_cost))
 

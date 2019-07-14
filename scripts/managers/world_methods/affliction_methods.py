@@ -73,13 +73,14 @@ class AfflictionMethods:
 
         return affliction
 
-    def create_affliction_effect(self, affliction, affliction_effect_type):
+    @staticmethod
+    def create_affliction_effect(affliction, affliction_effect_type):
         """
-                Create the Damage Affliction Effect for the Affliction
+                Create an Affliction Effect for the Affliction
 
                 Args:
                     affliction (Affliction): the Affliction to contain the damage effect
-                    effect (): affliction effect json data
+                    affliction_effect_type (AfflictionEffectTypes): affliction effect type
 
                 Returns:
         """
@@ -87,10 +88,10 @@ class AfflictionMethods:
         created_effect = None
 
         if affliction_effect_type == AfflictionEffectTypes.DAMAGE:
-            created_effect = DamageAfflictionEffect(owner, affliction_effect_type)
+            created_effect = DamageAfflictionEffect(owner)
 
         elif affliction_effect_type == AfflictionEffectTypes.AFFECT_STAT:
-            created_effect = AffectStatAfflictionEffect(owner, affliction_effect_type)
+            created_effect = AffectStatAfflictionEffect(owner)
 
         return created_effect
 

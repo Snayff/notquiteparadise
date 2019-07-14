@@ -1,7 +1,7 @@
 import random
 
 from scripts.core.constants import LoggingEventTypes, TargetTypes, TargetTags, MessageEventTypes, SecondaryStatTypes, \
-    HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers
+    HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, SkillEffectTypes
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
@@ -17,8 +17,8 @@ class DamageSkillEffect(SkillEffect):
 
     """
 
-    def __init__(self, owner, skill_effect_type):
-        super().__init__(owner, "damage", "This is the damage effect", skill_effect_type)
+    def __init__(self, owner):
+        super().__init__(owner, "damage", "This is the damage effect", SkillEffectTypes.DAMAGE)
 
     def trigger(self, attacking_entity, defending_entity):
         """

@@ -1,4 +1,4 @@
-from scripts.core.constants import MessageEventTypes, LoggingEventTypes, TargetTags
+from scripts.core.constants import MessageEventTypes, LoggingEventTypes, TargetTags, SkillEffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
@@ -14,10 +14,9 @@ class ChangeTerrainSkillEffect(SkillEffect):
     SkillEffect to change the terrain of a tile
     """
 
-    def __init__(self, owner,  skill_effect_type, new_terrain):
-        super().__init__(owner, "change_terrain", "This is the Manipulate Terrain effect", skill_effect_type)
-
-        self.new_terrain = new_terrain
+    def __init__(self, owner):
+        super().__init__(owner, "change_terrain", "This is the Manipulate Terrain effect",
+                         SkillEffectTypes.CHANGE_TERRAIN)
 
     def trigger(self, terrain_to_change):
         """
@@ -47,7 +46,7 @@ class ChangeTerrainSkillEffect(SkillEffect):
 
             # if all tags came back true apply the change
             if all(value for value in tags_checked.values()):
-                world_manager.Map.set_terrain_on_tile(tile, self.new_terrain)
+                world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
 
                 # success message
                 entity = self.owner.owner.owner

@@ -1,5 +1,5 @@
 from scripts.core.constants import TargetTags, AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
-    LoggingEventTypes
+    LoggingEventTypes, SkillEffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
@@ -14,10 +14,8 @@ class ApplyAfflictionSkillEffect(SkillEffect):
     SkillEffect to apply an Affliction to an Entity
     """
 
-    def __init__(self, owner, skill_effect_type, affliction_name):
-        super().__init__(owner, "apply affliction", "This is the affliction effect", skill_effect_type)
-
-        self.affliction_name = affliction_name
+    def __init__(self, owner):
+        super().__init__(owner, "apply affliction", "This is the affliction effect", SkillEffectTypes.APPLY_AFFLICTION)
 
     def trigger(self, attacking_entity, defending_entity):
         """
@@ -31,7 +29,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
         super().trigger()
 
         skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
-        affliction_data = library.get_affliction_data(self.affliction_name)
+        affliction_data = library.get_affliction_data(skill_data.affliction_name)
 
         attacker = attacking_entity
         defender = defending_entity
@@ -61,7 +59,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
                     # check if affliction applied
                     if hit_type == HitTypes.GRAZE:
-                        msg = f"{defender.name} resisted {self.affliction_name}."
+                        msg = f"{defender.name} resisted {skill_data.affliction_name}."
                         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                     else:
                         hit_msg = ""
@@ -71,7 +69,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
                             modified_duration = int(base_duration * HitModifiers.CRIT.value)
                             hit_msg = f"a critical "
 
-                        msg = f"{defender.name} succumbed to {hit_msg}{self.affliction_name}."
+                        msg = f"{defender.name} succumbed to {hit_msg}{skill_data.affliction_name}."
                         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
                         self.apply_affliction(defender, modified_duration)
@@ -88,17 +86,18 @@ class ApplyAfflictionSkillEffect(SkillEffect):
             modified_duration (int):
             defending_entity (Entity):
         """
+        skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
 
         from scripts.global_singletons.managers import world_manager
         action = world_manager.Affliction
-        active_affliction = action.get_affliction_for_entity(defending_entity, self.affliction_name)
+        active_affliction = action.get_affliction_for_entity(defending_entity, skill_data.affliction_name)
 
         # check if entity already has the affliction
         if active_affliction:
             # if so compare durations
             active_duration = active_affliction.duration
 
-            log_string = f"{defending_entity.name} already has {self.affliction_name}:{active_duration}..."
+            log_string = f"{defending_entity.name} already has {skill_data.affliction_name}:{active_duration}..."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             # alter the duration of the current affliction if the new one will last longer
@@ -116,12 +115,12 @@ class ApplyAfflictionSkillEffect(SkillEffect):
 
         # no current affliction of same type so apply new one
         else:
-            log_string = f"Applying {self.affliction_name} affliction to {defending_entity.name} with duration of " \
-                f"{modified_duration}."
+            log_string = f"Applying {skill_data.affliction_name} affliction to {defending_entity.name} with duration " \
+                f"of {modified_duration}."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             # create the affliction
-            affliction = action.create_affliction(self.affliction_name, modified_duration, defending_entity)
+            affliction = action.create_affliction(skill_data.affliction_name, modified_duration, defending_entity)
 
             # add affliction to the central list
             action.register_active_affliction(affliction)

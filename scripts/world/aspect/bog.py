@@ -30,18 +30,8 @@ class Bog(Aspect):
         # create effects
         effects = aspect.skill_effects
         for effect in effects:
-            created_effect = None
-            effect_name = effect["name"]
             from scripts.global_singletons.managers import world_manager
-
-            if effect_name == "damage":
-                created_effect = world_manager.Skill.create_damage_effect(self, effect)
-
-            elif effect_name == "change_terrain":
-                created_effect = world_manager.Skill.create_change_terrain_effect(self, effect)
-
-            elif effect_name == "apply_affliction":
-                created_effect = world_manager.Skill.create_apply_affliction_effect(self, effect)
+            created_effect = world_manager.Skill.create_skill_effect(self, effect["name"])
 
             # if we have an effect add it to internal list
             if created_effect:

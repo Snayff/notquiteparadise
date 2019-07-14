@@ -1,4 +1,5 @@
-from scripts.core.constants import HitTypes, LoggingEventTypes, DamageTypes, HitModifiers, MessageEventTypes
+from scripts.core.constants import HitTypes, LoggingEventTypes, DamageTypes, HitModifiers, MessageEventTypes, \
+    AfflictionEffectTypes
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
@@ -16,8 +17,8 @@ class DamageAfflictionEffect(AfflictionEffect):
         affliction_effect_type(AfflictionEffectTypes): The type of affliction
     """
 
-    def __init__(self, owner, affliction_effect_type):
-        super().__init__(owner, "damage", affliction_effect_type,  "This is the damage effect")
+    def __init__(self, owner):
+        super().__init__(owner, "damage", "This is the damage effect", AfflictionEffectTypes.DAMAGE)
 
     def trigger(self, defending_entity):
         """

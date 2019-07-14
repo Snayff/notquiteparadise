@@ -1,3 +1,4 @@
+from scripts.core.constants import AfflictionEffectTypes
 from scripts.skills.affliction_effects.affliction_effect import AfflictionEffect
 
 
@@ -9,8 +10,8 @@ class AffectStatAfflictionEffect(AfflictionEffect):
 
     """
 
-    def __init__(self, owner, affliction_effect_type):
-        super().__init__(owner, "affect_stat", "This is the Affect Stat effect", affliction_effect_type)
+    def __init__(self, owner):
+        super().__init__(owner, "affect_stat", "This is the Affect Stat effect", AfflictionEffectTypes.AFFECT_STAT)
 
     def trigger(self):
         """
@@ -19,4 +20,4 @@ class AffectStatAfflictionEffect(AfflictionEffect):
         """
         super().trigger()
 
-        # TODO - implement stat change (is this already held in the stat, under the entity? if so confirm here)
+        # TODO - implement stat change (?is this already held in the stat, under the entity? if so confirm here)
