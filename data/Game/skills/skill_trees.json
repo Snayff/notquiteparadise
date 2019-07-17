@@ -115,5 +115,34 @@
                 }
             ]
         }
+    },
+    "another_skill_tree": {
+        "basic_attack": {
+            "name": "basic_attack",
+            "description": "This is the basic attack. It does damage.",
+            "icon": "placeholder/icon_00.png",
+            "required_target_type": "entity",
+            "required_tags": [
+                "other_entity"
+            ],
+            "range": 1,
+            "resource_type": "mana",
+            "resource_cost": 1,
+            "time_cost": 15,
+            "cooldown": 0,
+            "skill_effects": [
+                {
+                    "name": "damage",
+                    "required_target_type": "entity",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "damage": 15,
+                    "damage_type": "pierce",
+                    "accuracy": 10,
+                    "stat_to_target": "bustle"
+                }
+            ]
+        }
     }
 }

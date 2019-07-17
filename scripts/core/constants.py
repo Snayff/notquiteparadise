@@ -34,6 +34,13 @@ class GameStates(Enum):
     EXIT_GAME = auto()
     GAME_INITIALISING = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class EventTopics(Enum):
     """
@@ -52,11 +59,25 @@ class GameEventTypes(Enum):
     END_TURN = auto()
     CHANGE_GAME_STATE = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class MessageEventTypes(Enum):
     """Types of Message Events"""
     BASIC = auto()
     SYSTEM = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class LoggingEventTypes(Enum):
@@ -68,6 +89,13 @@ class LoggingEventTypes(Enum):
     INFO = auto()  # Confirmation that things are working as expected.
     DEBUG = auto()  # Detailed information, typically of interest only when diagnosing problems
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class EntityEventTypes(Enum):
     """Types of Entity Events"""
@@ -76,12 +104,26 @@ class EntityEventTypes(Enum):
     MOVE = auto()
     LEARN = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class UIEventTypes(Enum):
     """
     Types of UI events
     """
     CLICK_UI = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class TargetTypes(Enum):
@@ -90,6 +132,13 @@ class TargetTypes(Enum):
     """
     TERRAIN = auto()
     ENTITY = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class TargetTags(Enum):
@@ -103,6 +152,13 @@ class TargetTags(Enum):
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class DamageTypes(Enum):
     """
@@ -111,6 +167,13 @@ class DamageTypes(Enum):
     PIERCE = auto()
     BLUNT = auto()
     ELEMENTAL = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class PrimaryStatTypes(Enum):
@@ -122,6 +185,13 @@ class PrimaryStatTypes(Enum):
     SKULLDUGGERY = auto()
     BUSTLE = auto()
     EXACTITUDE = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class SecondaryStatTypes(Enum):
@@ -136,6 +206,13 @@ class SecondaryStatTypes(Enum):
     RESIST_ELEMENTAL = auto()
     ACTION_COST_CHANGE = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class HitTypes(Enum):
     """
@@ -144,6 +221,13 @@ class HitTypes(Enum):
     GRAZE = auto()
     HIT = auto()
     CRIT = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class HitValues(Enum):
@@ -173,6 +257,13 @@ class SkillEffectTypes(Enum):
     MOVE = auto()
     CHANGE_TERRAIN = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class AfflictionCategory(Enum):
     """
@@ -180,6 +271,13 @@ class AfflictionCategory(Enum):
     """
     BANE = auto()
     BOON = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class AfflictionTriggers(Enum):
@@ -193,6 +291,13 @@ class AfflictionTriggers(Enum):
     END_ROUND = auto()  # apply at the end of the round
     ACTION = auto()  # apply when an action is taken
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class AfflictionEffectTypes(Enum):
     """
@@ -200,6 +305,13 @@ class AfflictionEffectTypes(Enum):
     """
     DAMAGE = auto()
     AFFECT_STAT = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class AspectTypes(Enum):
@@ -217,8 +329,22 @@ class InputModes(Enum):
     MOUSE_AND_KB = auto()
     GAMEPAD = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class MouseButtons(Enum):
     LEFT_BUTTON = auto()
     RIGHT_BUTTON = auto()
     MIDDLE_BUTTON = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None

@@ -1,10 +1,56 @@
 import json
+from dataclasses import dataclass, field
+from typing import List
 
 from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
-    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes
+    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes, TargetTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 
+
+@dataclass
+class SkillEffectData:
+    name: str
+    required_tags: List[TargetTags] = field(default_factory=list)
+    required_target_type: TargetTags = None
+    damage: int = 0
+    damage_type: DamageTypes = None
+    accuracy: int = 0
+    stat_to_target: PrimaryStatTypes = None
+    new_terrain: TargetTags = None
+    affliction_name: str = ""
+    duration: int = 0
+
+    def __post_init__(self):
+        for index, tag in enumerate(self.required_tags):
+            if isinstance(tag, str):
+                required_tag = getattr(TargetTags, tag)
+                self.required_tags[index] = required_tag
+
+@dataclass()
+class SkillData:
+    name: str
+    description: str
+    icon: str
+    range: int
+    resource_type: str
+    resource_cost: int
+    time_cost: int
+    cooldown: int
+    required_target_type: TargetTypes
+    required_tags: List[TargetTags] = field(default_factory=list)
+    skill_effects: List[SkillEffectData] = field(default_factory=list)
+
+    def __post_init__(self):
+        for index, tag in enumerate(self.required_tags):
+            if isinstance(tag, str):
+                required_tag = getattr(TargetTags, tag)
+                self.required_tags[index] = required_tag
+
+@dataclass()
+class SkillTreeData:
+    name: str
+    skill: List[SkillData] = field(default_factory=list)
 
 class LibraryOfAlexandria:
     """
@@ -21,11 +67,46 @@ class LibraryOfAlexandria:
         self.aspect = {}
         self.terrain = {}
         self.actor_template = {}
+        self.dataclass_skills = {}
 
         self.load_data_into_library()
         self.convert_external_strings_to_internal_enums()
+        self.load_skills_into_data_classes()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
+
+    def load_skills_into_data_classes(self):
+
+        all_skill_data = self.skills
+
+        # loop all skill trees
+        for skill_tree_name, skill_tree_data in all_skill_data.items():
+            converted_skills = []
+
+            # loop all skills in each skill tree
+            for skill_name, skill_data in skill_tree_data.items():
+                converted_skill_effects = []
+
+                # loop skill effects in each skill
+                for index, skill_effect_data in enumerate(skill_data["skill_effects"]):
+                    # convert the skill effect data to the data class
+                    skill_effect = SkillEffectData(**skill_effect_data)
+                    converted_skill_effects.append(skill_effect)
+
+                # set the temp dict to contain the converted skill effects
+                new_skill_dict = skill_data.copy()
+                new_skill_dict["skill_effects"] = converted_skill_effects
+
+                # unpack the temp dict and convert the skill data to the data class
+                skill = SkillData(**new_skill_dict)
+                converted_skills.append(skill)
+
+            # set the dict to contain the converted skills
+            self.dataclass_skills[skill_tree_name] = converted_skills
+
+
+
+
 
     def load_data_into_library(self):
         """
