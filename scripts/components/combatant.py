@@ -1,4 +1,4 @@
-from scripts.core.constants import AfflictionEffectTypes, SecondaryStatTypes
+from scripts.core.constants import SecondaryStatTypes
 
 
 class Combatant:

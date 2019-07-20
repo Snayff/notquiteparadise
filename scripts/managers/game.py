@@ -34,5 +34,5 @@ class GameManager:
         self.previous_game_state = self.game_state
         self.game_state = new_game_state
 
-        log_string = f"Game_state updated to {self.game_state} from {self.previous_game_state}"
+        log_string = f"Game_state updated from {self.previous_game_state} to {self.game_state}"
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))

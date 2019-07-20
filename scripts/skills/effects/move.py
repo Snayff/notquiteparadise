@@ -1,16 +1,16 @@
-from scripts.core.constants import SkillEffectTypes
+from scripts.core.constants import EffectTypes
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.skill_effects.skill_effect import SkillEffect
+from scripts.skills.effects.effect import Effect
 
 
-class MoveSkillEffect(SkillEffect):
+class MoveEffect(Effect):
     """
-    SkillEffect to move an entity towards target tile
+    Effect to move an entity towards target tile
     """
 
     def __init__(self, owner):
-        super().__init__(owner, "move", "This is the Move effect", SkillEffectTypes.MOVE)
+        super().__init__(owner, "move", "This is the Move effect", EffectTypes.MOVE)
 
     def trigger(self, entity_to_move, target):
         """

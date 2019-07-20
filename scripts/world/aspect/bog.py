@@ -1,7 +1,7 @@
 import pygame
 
 from scripts.core.constants import TILE_SIZE, AspectTypes, TargetTags, PrimaryStatTypes, \
-    AfflictionCategory, SkillEffectTypes, LoggingEventTypes
+    AfflictionCategory, EffectTypes, LoggingEventTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -46,13 +46,13 @@ class Bog(Aspect):
             # attempt to apply on entity
             for effect in self.effects:
 
-                if effect.effect_type == SkillEffectTypes.APPLY_AFFLICTION:
+                if effect.effect_type == EffectTypes.APPLY_AFFLICTION:
                     effect.trigger(None, entity)
-                elif effect.effect_type == SkillEffectTypes.DAMAGE:
+                elif effect.effect_type == EffectTypes.DAMAGE:
                     effect.trigger(None, entity)
-                elif effect.effect_type == SkillEffectTypes.MOVE:
+                elif effect.effect_type == EffectTypes.MOVE:
                     effect.trigger()
-                elif effect.effect_type == SkillEffectTypes.CHANGE_TERRAIN:
+                elif effect.effect_type == EffectTypes.CHANGE_TERRAIN:
                     effect.trigger(terrain)
 
                     log_string = f"{effect} not found in 'bog.trigger'"

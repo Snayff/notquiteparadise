@@ -1,18 +1,19 @@
-from scripts.core.constants import LoggingEventTypes, SkillEffectTypes
+
+from scripts.core.constants import LoggingEventTypes, EffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 
 
-class SkillEffect:
+class Effect:
     """
-    Base class for skill skill_effects that make up the basis of skills.
+    Base class for  effects that make up the basis of skills.
     """
 
     def __init__(self, owner, name, description, skill_effect_type):
         self.owner = owner
         self.name = name
         self.description = description
-        self.skill_effect_type = skill_effect_type  # type:SkillEffectTypes
+        self.skill_effect_type = skill_effect_type  # type:EffectTypes
 
     def trigger(self):
         """

@@ -1,25 +1,24 @@
-import random
 
 from scripts.core.constants import LoggingEventTypes, TargetTags, MessageEventTypes, SecondaryStatTypes, \
-    HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, SkillEffectTypes
+    HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, EffectTypes
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.skill_effects.skill_effect import SkillEffect
+from scripts.skills.effects.effect import Effect
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
 
-class DamageSkillEffect(SkillEffect):
+class DamageEffect(Effect):
     """
-    SkillEffect to damage an Entity
+    Effect to damage an Entity
 
     """
 
     def __init__(self, owner):
-        super().__init__(owner, "damage", "This is the damage effect", SkillEffectTypes.DAMAGE)
+        super().__init__(owner, "damage", "This is the damage effect", EffectTypes.DAMAGE)
 
     def trigger(self, tile):
         """

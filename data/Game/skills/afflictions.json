@@ -5,11 +5,14 @@
         "icon": "placeholder/icon_00.png",
         "category": "bane",
         "trigger_event": "end_turn",
-        "affliction_effects": [
+        "effects": [
             {
-                "affliction_effect_type": "damage",
-                "damage": 1,
+                "effect_type": "damage",
+                "required_tags": ["other_entity"
+                ],
+                "damage": 15,
                 "damage_type": "pierce",
+                "accuracy": 10,
                 "stat_to_target": "bustle"
             }
         ]
@@ -20,7 +23,7 @@
         "icon": "placeholder/icon_00.png",
         "category": "bane",
         "trigger_event": "passive",
-        "affliction_effects": [
+        "effects": [
             {
                 "affliction_effect_type": "affect_stat",
                 "stat_to_affect": "action_cost_change" ,

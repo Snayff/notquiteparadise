@@ -2,16 +2,16 @@ import random
 from typing import List
 
 from scripts.core.constants import LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
-    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, SkillEffectTypes
+    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, EffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill import Skill
-from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
-from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
-from scripts.skills.skill_effects.damage import DamageSkillEffect
-from scripts.skills.skill_effects.move import MoveSkillEffect
+from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
+from scripts.skills.effects.change_terrain import ChangeTerrainEffect
+from scripts.skills.effects.damage import DamageEffect
+from scripts.skills.effects.move import MoveEffect
 from scripts.world.entity import Entity
 from scripts.world.terrain.terrain import Terrain
 from scripts.world.tile import Tile
@@ -50,8 +50,15 @@ class SkillMethods:
             if self.can_afford_cost(entity, resource_type, resource_cost):
                 distance = world_manager.Entity.get_chebyshev_distance_between_tiles(start_tile, target_tile)
                 skill_range = skill_data.range
-                if distance < skill_range:
+                if distance <= skill_range:
                     return True
+                else:
+                    publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Target out of skill range, "
+                    f"range {skill_range} > distance {distance}"))
+
+            else:
+                msg = f"You can't afford the cost."
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
         return False
 
@@ -84,7 +91,7 @@ class SkillMethods:
             log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-            msg = f"You can't do that there!"
+            msg = f"That's not the right target!"
             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             return False
 
@@ -135,18 +142,18 @@ class SkillMethods:
 
         Args:
             skill (Skill):
-            skill_effect_type(SkillEffectTypes):
+            skill_effect_type(EffectTypes):
         """
         created_effect = None
 
-        if skill_effect_type == SkillEffectTypes.DAMAGE:
-            created_effect = DamageSkillEffect(skill)
-        elif skill_effect_type == SkillEffectTypes.APPLY_AFFLICTION:
-            created_effect = ApplyAfflictionSkillEffect(skill)
-        elif skill_effect_type == SkillEffectTypes.MOVE:
-            created_effect = MoveSkillEffect(skill)
-        elif skill_effect_type == SkillEffectTypes.CHANGE_TERRAIN:
-            created_effect = ChangeTerrainSkillEffect(skill)
+        if skill_effect_type == EffectTypes.DAMAGE:
+            created_effect = DamageEffect(skill)
+        elif skill_effect_type == EffectTypes.APPLY_AFFLICTION:
+            created_effect = ApplyAfflictionEffect(skill)
+        elif skill_effect_type == EffectTypes.MOVE:
+            created_effect = MoveEffect(skill)
+        elif skill_effect_type == EffectTypes.CHANGE_TERRAIN:
+            created_effect = ChangeTerrainEffect(skill)
 
         return created_effect
 

@@ -1,7 +1,8 @@
+
 import json
 
-from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
-    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes
+from scripts.core.constants import LoggingEventTypes, TargetTags, EffectTypes, PrimaryStatTypes, \
+    AfflictionCategory, AfflictionTriggers, DamageTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill_dataclasses import SkillEffectData, SkillData, SkillTreeData
@@ -17,7 +18,6 @@ class LibraryOfAlexandria:
         self.homeland = {}
         self.race = {}
         self.savvy = {}
-        self.general = {}
         self.affliction = {}
         self.aspect = {}
         self.terrain = {}
@@ -45,14 +45,14 @@ class LibraryOfAlexandria:
                 converted_skill_effects = {}
 
                 # loop skill effects in each skill
-                for index, skill_effect_data in enumerate(skill_data["skill_effects"]):
+                for index, skill_effect_data in enumerate(skill_data["effects"]):
                     # convert the skill effect data to the data class
                     skill_effect = SkillEffectData(**skill_effect_data)
                     converted_skill_effects[skill_effect.effect_type.name] = skill_effect
 
                 # set the temp dict to contain the converted skill effects
                 new_skill_dict = skill_data.copy()
-                new_skill_dict["skill_effects"] = converted_skill_effects
+                new_skill_dict["effects"] = converted_skill_effects
 
                 # unpack the temp dict and convert the skill data to the data class
                 skill = SkillData(**new_skill_dict)
@@ -68,24 +68,6 @@ class LibraryOfAlexandria:
         self.skills = {}
         self.skills = converted_data
 
-    def load_data_into_library(self):
-        """
-        Load data from all external jsons to this central data library
-        """
-        import os
-        # N.B. this iss set in Sphinx config when Sphinx is running
-        if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.skills = self.load_values_from_skill_json()
-            self.homeland = self.load_values_from_homeland_json()
-            self.race = self.load_values_from_race_json()
-            self.savvy = self.load_values_from_savvy_json()
-            self.affliction = self.load_values_from_affliction_json()
-            self.aspect = self.load_values_from_aspect_json()
-            self.terrain = self.load_values_from_terrain_json()
-            self.actor_template = self.load_values_from_actor_json()
-
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
-
     def convert_external_strings_to_internal_enums(self):
         """
         Where there are external values that are utilised internally convert them to the internal constant.
@@ -99,10 +81,10 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "required_tags", "self", TargetTags.SELF)
 
         # Skills:SkillEffects:name
-        self.recursive_replace(self.skills, "effect_type", "damage", SkillEffectTypes.DAMAGE)
-        self.recursive_replace(self.skills, "effect_type", "apply_affliction", SkillEffectTypes.APPLY_AFFLICTION)
-        self.recursive_replace(self.skills, "effect_type", "move", SkillEffectTypes.MOVE)
-        self.recursive_replace(self.skills, "effect_type", "change_terrain", SkillEffectTypes.CHANGE_TERRAIN)
+        self.recursive_replace(self.skills, "effect_type", "damage", EffectTypes.DAMAGE)
+        self.recursive_replace(self.skills, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
+        self.recursive_replace(self.skills, "effect_type", "move", EffectTypes.MOVE)
+        self.recursive_replace(self.skills, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
 
         # Skills:SkillEffects:damage_type
         self.recursive_replace(self.skills, "damage_type", "pierce", DamageTypes.PIERCE)
@@ -122,9 +104,10 @@ class LibraryOfAlexandria:
 
         # Update Afflictions
         # Affliction:AfflictionEffects:name
-        self.recursive_replace(self.affliction, "affliction_effect_type", "damage", AfflictionEffectTypes.DAMAGE)
-        self.recursive_replace(self.affliction, "affliction_effect_type", "affect_stat",
-                               AfflictionEffectTypes.AFFECT_STAT)
+        self.recursive_replace(self.affliction, "effect_type", "damage", EffectTypes.DAMAGE)
+        self.recursive_replace(self.affliction, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
+        self.recursive_replace(self.affliction, "effect_type", "move", EffectTypes.MOVE)
+        self.recursive_replace(self.affliction, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
 
         # Affliction:AfflictionEffects:damage_type
         self.recursive_replace(self.affliction, "damage_type", "pierce", DamageTypes.PIERCE)
@@ -338,8 +321,26 @@ class LibraryOfAlexandria:
             SkillEffectData: data for a specified skill effect.
         """
 
-        effect_data = self.skills[skill_tree].skill[skill_name].skill_effects[skill_effect]
+        effect_data = self.skills[skill_tree].skill[skill_name].effects[skill_effect]
         return effect_data
+
+    def load_data_into_library(self):
+        """
+        Load data from all external jsons to this central data library
+        """
+        import os
+        # N.B. this iss set in Sphinx config when Sphinx is running
+        if "GENERATING_SPHINX_DOCS" not in os.environ:
+            self.skills = self.load_values_from_skill_json()
+            self.homeland = self.load_values_from_homeland_json()
+            self.race = self.load_values_from_race_json()
+            self.savvy = self.load_values_from_savvy_json()
+            self.affliction = self.load_values_from_affliction_json()
+            self.aspect = self.load_values_from_aspect_json()
+            self.terrain = self.load_values_from_terrain_json()
+            self.actor_template = self.load_values_from_actor_json()
+
+        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
 
     @staticmethod
     def load_values_from_skill_json():

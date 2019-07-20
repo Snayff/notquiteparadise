@@ -249,15 +249,7 @@ class InputManager:
                 else:
                     # can't use skill, is it due to being too poor?
                     if world_manager.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                        # can afford so must be picking wrong target
-                        msg = f"You can't do that there!"
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
                         publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
-
-                    else:
-                        msg = f"It seems you're too poor to do that."
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             else:
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
 

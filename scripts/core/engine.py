@@ -8,7 +8,7 @@ from typing import List
 
 import pygame
 
-from scripts.core.constants import GameStates, SkillEffectTypes, DamageTypes, PrimaryStatTypes, TargetTags
+from scripts.core.constants import GameStates, EffectTypes, DamageTypes, PrimaryStatTypes, TargetTags
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager, start
 from scripts.global_singletons.event_hub import event_hub

@@ -1,10 +1,9 @@
+
 from scripts.core.constants import AfflictionCategory, AfflictionTriggers, LoggingEventTypes, \
-    AfflictionEffectTypes
+    EffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction import Affliction
-from scripts.skills.affliction_effects.affect_stat import AffectStatAfflictionEffect
-from scripts.skills.affliction_effects.damage import DamageAfflictionEffect
 from scripts.world.entity import Entity
 
 
@@ -72,28 +71,6 @@ class AfflictionMethods:
         affliction = Affliction(affliction_name, duration, affected_entity)
 
         return affliction
-
-    @staticmethod
-    def create_affliction_effect(affliction, affliction_effect_type):
-        """
-                Create an Affliction Effect for the Affliction
-
-                Args:
-                    affliction (Affliction): the Affliction to contain the damage effect
-                    affliction_effect_type (AfflictionEffectTypes): affliction effect type
-
-                Returns:
-        """
-        owner = affliction
-        created_effect = None
-
-        if affliction_effect_type == AfflictionEffectTypes.DAMAGE:
-            created_effect = DamageAfflictionEffect(owner)
-
-        elif affliction_effect_type == AfflictionEffectTypes.AFFECT_STAT:
-            created_effect = AffectStatAfflictionEffect(owner)
-
-        return created_effect
 
     @staticmethod
     def get_affliction_category_from_string(affliction_category):
@@ -188,13 +165,13 @@ class AfflictionMethods:
             if affliction.affected_entity == entity and affliction.name == affliction_name:
                 return affliction
 
-    def get_affliction_effects_for_entity(self, entity, affliction_effect):
+    def get_affliction_effects_for_entity(self, entity, effect_type):
         """
         Get all affliction effects of specified type from a specified entity
 
         Args:
             entity (Entity):
-            affliction_effect (AfflictionEffectTypes):
+            effect_type (EffectTypes):
         """
         afflictions = self.get_afflictions_for_entity(entity)
         affliction_effects = []
@@ -202,7 +179,7 @@ class AfflictionMethods:
         # loop all affliction effects in all afflictions and return specified type
         for affliction in afflictions:
             for effect in affliction.affliction_effects:
-                if effect.effect_type == affliction_effect:
+                if effect.effect_type == effect_type:
                     affliction_effects.append(effect)
 
         return affliction_effects
@@ -217,7 +194,7 @@ class AfflictionMethods:
         """
         modifier = 0
 
-        affect_stat_effects = self.get_affliction_effects_for_entity(entity, AfflictionEffectTypes.AFFECT_STAT)
+        affect_stat_effects = self.get_affliction_effects_for_entity(entity, EffectTypes.AFFECT_STAT)
 
         # if we have any afflictions get the modifiers to the specified stat
         if affect_stat_effects:

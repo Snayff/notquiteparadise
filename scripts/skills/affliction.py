@@ -30,7 +30,7 @@ class Affliction:
         self.affected_entity = affected_entity  # set at time of allocation to an entity
         self.affliction_effects = []
 
-        # get the affliction skill_effects
+        # get the affliction effects
         affliction_effects = data.affliction_effects
 
         # unpack all affliction_effects

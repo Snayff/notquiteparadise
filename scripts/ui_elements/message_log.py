@@ -188,7 +188,7 @@ class MessageLog:
 
     def parse_message_and_convert_to_surface(self, message):
         """
-        Check for keywords and commands and apply skill_effects as required.
+        Check for keywords and commands and apply effects as required.
 
         Args:
             message ():

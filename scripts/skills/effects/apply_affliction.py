@@ -1,22 +1,22 @@
 from scripts.core.constants import TargetTags, AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
-    LoggingEventTypes, SkillEffectTypes
+    LoggingEventTypes, EffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction import Affliction
-from scripts.skills.skill_effects.skill_effect import SkillEffect
+from scripts.skills.effects.effect import Effect
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
 
-class ApplyAfflictionSkillEffect(SkillEffect):
+class ApplyAfflictionEffect(Effect):
     """
-    SkillEffect to apply an Affliction to an Entity
+    Effect to apply an Affliction to an Entity
     """
 
     def __init__(self, owner):
-        super().__init__(owner, "apply affliction", "This is the affliction effect", SkillEffectTypes.APPLY_AFFLICTION)
+        super().__init__(owner, "apply affliction", "This is the affliction effect", EffectTypes.APPLY_AFFLICTION)
 
     def trigger(self, tile):
         """
@@ -27,7 +27,8 @@ class ApplyAfflictionSkillEffect(SkillEffect):
         """
 
         super().trigger()
-        skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
+        skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
+                                                   self.skill_effect_type.name)
         affliction_data = library.get_affliction_data(skill_data.affliction_name)
 
         attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect

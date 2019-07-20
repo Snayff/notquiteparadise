@@ -1,13 +1,13 @@
 
 import pygame
 
-from scripts.core.constants import SkillEffectTypes
+from scripts.core.constants import EffectTypes
 from scripts.events.game_events import EndTurnEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
-from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
-from scripts.skills.skill_effects.damage import DamageSkillEffect
+from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
+from scripts.skills.effects.change_terrain import ChangeTerrainEffect
+from scripts.skills.effects.damage import DamageEffect
 
 
 class Skill:
@@ -37,8 +37,8 @@ class Skill:
         target_x, target_y = target_pos
         effected_tile = world_manager.Map.get_tile(target_x, target_y)
 
-        # apply any skill_effects
-        for effect_name, effect_data in skill_data.skill_effects.items():
+        # apply any effects
+        for effect_name, effect_data in skill_data.effects.items():
             effect = world_manager.Skill.create_skill_effect(self, effect_data.effect_type)
             effect.trigger(effected_tile)
 

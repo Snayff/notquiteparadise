@@ -234,14 +234,15 @@ class HitModifiers(Enum):
     CRIT = 1.4
 
 
-class SkillEffectTypes(Enum):
+class EffectTypes(Enum):
     """
-    Types of skill_effects
+    Types of effects
     """
     APPLY_AFFLICTION = auto()
     DAMAGE = auto()
     MOVE = auto()
     CHANGE_TERRAIN = auto()
+    AFFECT_STAT = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -283,22 +284,6 @@ class AfflictionTriggers(Enum):
         return NotImplemented
 
     __hash__ = None
-
-
-class AfflictionEffectTypes(Enum):
-    """
-    Types of Affliction effects
-    """
-    DAMAGE = auto()
-    AFFECT_STAT = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
-
 
 class AspectTypes(Enum):
     # TODO - replace with strings from json (as it is all defined in the json)
