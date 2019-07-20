@@ -34,7 +34,7 @@
             ],
             "range": 3,
             "resource_type": "mana",
-            "resource_cost": 10,
+            "resource_cost": 2,
             "time_cost": 20,
             "cooldown": 2,
             "skill_effects": [

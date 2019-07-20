@@ -20,23 +20,22 @@ class DamageSkillEffect(SkillEffect):
     def __init__(self, owner):
         super().__init__(owner, "damage", "This is the damage effect", SkillEffectTypes.DAMAGE)
 
-    def trigger(self, attacking_entity, defending_entity):
+    def trigger(self, defending_entity):
         """
         Trigger the effect
 
         Args:
-            attacking_entity (Entity):
             defending_entity (Entity):
         """
         super().trigger()
 
-        attacker = attacking_entity
+        attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
         defender = defending_entity
 
         from scripts.global_singletons.managers import world_manager
         target_type = world_manager.Skill.get_target_type(defender)
 
-        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
+        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
 
         # check the type is correct, then that the tags match
         if target_type == data.required_target_type:
@@ -44,7 +43,7 @@ class DamageSkillEffect(SkillEffect):
             if TargetTags.OTHER_ENTITY in data.required_tags:
                 if attacker != defender:
                     to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
-                                                            data.base_accuracy, data.stat_to_target, attacker)
+                                                            data.accuracy, data.stat_to_target, attacker)
                     hit_type = world_manager.Skill.get_hit_type(to_hit_score)
                     damage = self.calculate_damage(defender, hit_type, attacker)
 
@@ -97,9 +96,9 @@ class DamageSkillEffect(SkillEffect):
             int: damage to be dealt
         """
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Calculate damage..."))
-        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
+        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
 
-        initial_damage = data.base_damage  # TODO - add skill dmg modifier to allow dmg growth
+        initial_damage = data.damage  # TODO - add skill dmg modifier to allow dmg growth
 
         # get resistance value
         resist_value = 0

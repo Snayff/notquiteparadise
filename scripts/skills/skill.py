@@ -24,20 +24,6 @@ class Skill:
         self.skill_tree_name = skill_tree_name
         self.name = skill_name
 
-        data = library.get_skill_data(skill_tree_name, skill_name)
-
-        # skill_effects info
-        self.effects = []
-        effects = data.skill_effects  # dict of SkillEffectData objects
-
-        for effect in effects.values():
-            from scripts.global_singletons.managers import world_manager
-            created_effect = world_manager.Skill.create_skill_effect(self, effect.effect_type)
-
-            # if we have an effect add it to internal list
-            if created_effect:
-                self.effects.append(created_effect)
-
     def use(self, target_pos):
         """
         Use the skill
@@ -45,27 +31,18 @@ class Skill:
         Args:
             target_pos (tuple): x y of the target
         """
-        entity = self.owner.owner  # owner is actor, actor`s owner is entity
         from scripts.global_singletons.managers import world_manager
         skill_data = library.get_skill_data(self.skill_tree_name, self.name)
-        required_target = world_manager.Skill.get_target_type_from_string(skill_data.required_target_type)
+        required_target = skill_data.required_target_type
 
         target = world_manager.Skill.get_target(target_pos, required_target)  # get the tile or entity
+        # FIXME - terrain not working. Just pass tile and then determine application from tags?
 
         # apply any skill_effects
-        if self.effects:
-            for effect in self.effects:
-                if effect.name is SkillEffectTypes.DAMAGE:
-                    effect.trigger(entity, target)
+        for effect_name, effect_data in skill_data.skill_effects.items():
+            effect = world_manager.Skill.create_skill_effect(self, effect_data.effect_type)
+            effect.trigger(target)
 
-                elif effect.name is SkillEffectTypes.MOVE:
-                    effect.trigger(entity, target)
-
-                elif effect.name is SkillEffectTypes.APPLY_AFFLICTION:
-                    effect.trigger(entity, target)
-
-                elif effect.name is SkillEffectTypes.CHANGE_TERRAIN:
-                    effect.trigger(target)
         # end the turn
         publisher.publish(EndTurnEvent(skill_data.time_cost))
 

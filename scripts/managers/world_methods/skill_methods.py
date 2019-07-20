@@ -42,14 +42,10 @@ class SkillMethods:
         tile = world_manager.Map.get_tile(target_x, target_y)
 
         skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
-        required_target = self.get_target_type_from_string(skill_data.required_target_type)
+        required_target = skill_data.required_target_type
         skill_range = skill_data.range
         resource_type = skill_data.resource_type
         resource_cost = skill_data.resource_cost
-        required_tags = []
-
-        for tag in skill_data.required_tags:
-            required_tags.append(self.get_target_tags_from_string(tag))
 
         # do we need an entity?
         if required_target == TargetTypes.ENTITY:
@@ -65,7 +61,7 @@ class SkillMethods:
 
         # get info about the tile and the skill requirements
         is_required_type = self.is_required_target_type(tile, required_target)
-        has_tags = self.has_required_tags(tile, required_tags)
+        has_tags = self.has_required_tags(tile, skill_data.required_tags)
 
         # check we have everything we need and if so use the skill
         if is_required_type and has_tags:
@@ -134,9 +130,8 @@ class SkillMethods:
         tags_checked = {}
 
         # assess all tags
-
         for tag in required_tags:
-            tags_checked[tag] = self.manager.Map.tile_has_tag(tile, tag)
+            tags_checked[tag.name] = self.manager.Map.tile_has_tag(tile, tag)
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
@@ -238,67 +233,6 @@ class SkillMethods:
         log_string = f"{damage_type} not found in 'get_damage_type_from_string'"
         publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
-    def get_stat_from_string(self, stat):
-        """
-        Return PrimaryStatTypes or SecondaryStatTypes based on string name of stat
-        Args:
-            stat (str):
-
-        Returns:
-            The stat type
-        """
-        stat_enum = self.get_primary_stat_from_string(stat)
-        if stat_enum:
-            return stat_enum
-        else:
-            stat_enum = self.get_secondary_stat_from_string(stat)
-
-        if stat_enum:
-            return stat_enum
-
-        log_string = f"{stat} not found in 'get_stat_from_string'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
-
-    @staticmethod
-    def get_primary_stat_from_string(primary_stat):
-        """
-        Get the primary stat enum from a string
-        Args:
-            primary_stat:
-
-        Returns:
-
-        """
-        if primary_stat == "vigour":
-            return PrimaryStatTypes.VIGOUR
-        elif primary_stat == "clout":
-            return PrimaryStatTypes.CLOUT
-        elif primary_stat == "skullduggery":
-            return PrimaryStatTypes.SKULLDUGGERY
-        elif primary_stat == "bustle":
-            return PrimaryStatTypes.BUSTLE
-        elif primary_stat == "exactitude":
-            return PrimaryStatTypes.EXACTITUDE
-
-    @staticmethod
-    def get_secondary_stat_from_string(secondary_stat):
-        """
-        Get the secondary stat enum from a string
-        Args:
-            secondary_stat:
-
-        Returns:
-            SecondaryStatTypes:
-        """
-        if secondary_stat == "dodge_speed":
-            return SecondaryStatTypes.DODGE_SPEED
-        elif secondary_stat == "dodge_toughness":
-            return SecondaryStatTypes.DODGE_TOUGHNESS
-        elif secondary_stat == "dodge_intelligence":
-            return SecondaryStatTypes.DODGE_INTELLIGENCE
-        elif secondary_stat == "action_cost_change":
-            return SecondaryStatTypes.ACTION_COST_CHANGE
-
     @staticmethod
     def get_target(target_pos, required_target_type):
         """
@@ -361,28 +295,6 @@ class SkillMethods:
             return HitTypes.HIT
         else:
             return HitTypes.GRAZE
-
-    @staticmethod
-    def get_skill_effect_type_from_string(skill_effect_name):
-        """
-        Get the skill effect type from a string
-        Args:
-            skill_effect_name ():
-
-        Returns:
-            SkillEffectTypes
-        """
-        if skill_effect_name == "damage":
-            return SkillEffectTypes.DAMAGE
-        elif skill_effect_name == "move":
-            return SkillEffectTypes.MOVE
-        elif skill_effect_name == "change_terrain":
-            return SkillEffectTypes.CHANGE_TERRAIN
-        elif skill_effect_name == "apply_affliction":
-            return SkillEffectTypes.APPLY_AFFLICTION
-
-        log_string = f"{skill_effect_name} not found in 'get_skill_effect_type_from_string'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def create_skill_effect(skill, skill_effect_type):

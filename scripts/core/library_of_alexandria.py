@@ -143,6 +143,10 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "required_tags", "wall", TargetTags.WALL)
         self.recursive_replace(self.skills, "required_tags", "self", TargetTags.SELF)
 
+        # Skills:TargetTypes
+        self.recursive_replace(self.skills, "required_target_type", "terrain", TargetTypes.TERRAIN)
+        self.recursive_replace(self.skills, "required_target_type", "entity", TargetTypes.ENTITY)
+
         # Skills:SkillEffects:name
         self.recursive_replace(self.skills, "effect_type", "damage", SkillEffectTypes.DAMAGE)
         self.recursive_replace(self.skills, "effect_type", "apply_affliction", SkillEffectTypes.APPLY_AFFLICTION)
@@ -367,8 +371,8 @@ class LibraryOfAlexandria:
             SkillData: data for a specified skill.
         """
 
-        skill = self.skills[skill_tree].skill[skill_name]
-        return skill
+        skill_data = self.skills[skill_tree].skill[skill_name]
+        return skill_data
 
     def get_skill_effect_data(self, skill_tree, skill_name, skill_effect):
         """
@@ -383,8 +387,8 @@ class LibraryOfAlexandria:
             SkillEffectData: data for a specified skill effect.
         """
 
-        skill_effect = self.skills[skill_tree].skill[skill_name].skill_effect[skill_effect]
-        return skill_effect
+        effect_data = self.skills[skill_tree].skill[skill_name].skill_effects[skill_effect]
+        return effect_data
 
     @staticmethod
     def get_values_from_skill_json():

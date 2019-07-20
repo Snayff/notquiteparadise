@@ -16,6 +16,8 @@ class MoveSkillEffect(SkillEffect):
         """
         Trigger the effect
         """
+        # FIXME - handle target and destination
+        #  destination held in inherent values? e.g. distance to move AWAY = 1 ?
         from scripts.global_singletons.managers import world_manager
 
         data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)

@@ -17,12 +17,11 @@ class ApplyAfflictionSkillEffect(SkillEffect):
     def __init__(self, owner):
         super().__init__(owner, "apply affliction", "This is the affliction effect", SkillEffectTypes.APPLY_AFFLICTION)
 
-    def trigger(self, attacking_entity, defending_entity):
+    def trigger(self, defending_entity):
         """
-        Trigger the effect. Attacking Entity can be None.
+        Trigger the effect.
 
         Args:
-            attacking_entity(Entity):
             defending_entity(Entity):
         """
 
@@ -31,7 +30,7 @@ class ApplyAfflictionSkillEffect(SkillEffect):
         skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
         affliction_data = library.get_affliction_data(skill_data.affliction_name)
 
-        attacker = attacking_entity
+        attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
         defender = defending_entity
 
         from scripts.global_singletons.managers import world_manager

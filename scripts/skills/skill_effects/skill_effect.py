@@ -1,4 +1,4 @@
-from scripts.core.constants import LoggingEventTypes
+from scripts.core.constants import LoggingEventTypes, SkillEffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 
@@ -12,7 +12,7 @@ class SkillEffect:
         self.owner = owner
         self.name = name
         self.description = description
-        self.skill_effect_type = skill_effect_type
+        self.skill_effect_type = skill_effect_type  # type:SkillEffectTypes
 
     def trigger(self):
         """
