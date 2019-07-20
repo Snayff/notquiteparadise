@@ -33,14 +33,14 @@ class Skill:
         """
         from scripts.global_singletons.managers import world_manager
         skill_data = library.get_skill_data(self.skill_tree_name, self.name)
-        required_target = skill_data.required_target_type
 
-        target = world_manager.Skill.get_target(target_pos, required_target)  # get the tile or entity
+        target_x, target_y = target_pos
+        effected_tile = world_manager.Map.get_tile(target_x, target_y)
 
         # apply any skill_effects
         for effect_name, effect_data in skill_data.skill_effects.items():
             effect = world_manager.Skill.create_skill_effect(self, effect_data.effect_type)
-            effect.trigger(target)
+            effect.trigger(effected_tile)
 
         # end the turn
         publisher.publish(EndTurnEvent(skill_data.time_cost))

@@ -1,7 +1,7 @@
 from enum import Enum, auto
 
 TILE_SIZE = 64
-
+# TODO - create
 
 class VisualInfo:
     """
@@ -117,21 +117,6 @@ class UIEventTypes(Enum):
     Types of UI events
     """
     CLICK_UI = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
-
-
-class TargetTypes(Enum):
-    """
-    Types of targets
-    """
-    TERRAIN = auto()
-    ENTITY = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

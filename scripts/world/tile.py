@@ -1,4 +1,4 @@
-from scripts.core.constants import TILE_SIZE, TargetTypes, TargetTags
+from scripts.core.constants import TILE_SIZE, TargetTags
 from scripts.world.entity import Entity
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
@@ -35,8 +35,6 @@ class Tile:
 
         if entity:
             world_manager.Map.set_entity_on_tile(self, entity)
-
-
 
     @property
     def is_floor(self):

@@ -1,6 +1,6 @@
 import random
 
-from scripts.core.constants import LoggingEventTypes, TargetTypes, TargetTags, MessageEventTypes, SecondaryStatTypes, \
+from scripts.core.constants import LoggingEventTypes, TargetTags, MessageEventTypes, SecondaryStatTypes, \
     HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, SkillEffectTypes
 from scripts.events.entity_events import DieEvent
 from scripts.events.logging_events import LoggingEvent
@@ -9,6 +9,7 @@ from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill_effects.skill_effect import SkillEffect
 from scripts.world.entity import Entity
+from scripts.world.tile import Tile
 
 
 class DamageSkillEffect(SkillEffect):
@@ -20,25 +21,22 @@ class DamageSkillEffect(SkillEffect):
     def __init__(self, owner):
         super().__init__(owner, "damage", "This is the damage effect", SkillEffectTypes.DAMAGE)
 
-    def trigger(self, defending_entity):
+    def trigger(self, tile):
         """
         Trigger the effect
 
         Args:
-            defending_entity (Entity):
+            tile (Tile):
         """
         super().trigger()
 
         attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
-        defender = defending_entity
-
-        from scripts.global_singletons.managers import world_manager
-        target_type = world_manager.Skill.get_target_type(defender)
-
+        defender = tile.entity
         data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
 
-        # check the type is correct, then that the tags match
-        if target_type == data.required_target_type:
+        # check that the tags match
+        from scripts.global_singletons.managers import world_manager
+        if world_manager.Skill.has_required_tags(tile, data.required_tags):
             # if it needs to be another entity then it can't be looking at itself
             if TargetTags.OTHER_ENTITY in data.required_tags:
                 if attacker != defender:
@@ -78,12 +76,9 @@ class DamageSkillEffect(SkillEffect):
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
         else:
+            # N.B. the reason why is logged in has_required_tags
             msg = f"You can't do that there!"
             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-            # log why
-            log_string = f"-> target type incorrect; selected:{target_type}, needed:{data.required_target_type}"
-            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
 
     def calculate_damage(self, defending_entity, hit_type, attacking_entity=None):
         """

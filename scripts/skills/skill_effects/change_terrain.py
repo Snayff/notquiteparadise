@@ -18,50 +18,34 @@ class ChangeTerrainSkillEffect(SkillEffect):
         super().__init__(owner, "change_terrain", "This is the Manipulate Terrain effect",
                          SkillEffectTypes.CHANGE_TERRAIN)
 
-    def trigger(self, terrain_to_change):
+    def trigger(self, tile):
         """
         Trigger the effect; check tags and then, if all True, apply the effect
 
         Args:
-            terrain_to_change (Terrain):
+            tile (tile):
         """
         super().trigger()
 
-        tags_checked = {}  # bool list of tags checked
-        tile = terrain_to_change.owner
-        terrain = terrain_to_change
+        terrain = tile.terrain
         starting_terrain_name = terrain.name
 
-        from scripts.global_singletons.managers import world_manager
-        target_type = world_manager.Skill.get_target_type(terrain)
+
 
         data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
 
-        # check the type is correct, then that the tags match
-        if target_type == data.required_target_type:
+        # that the tags match
+        from scripts.global_singletons.managers import world_manager
+        if world_manager.Skill.has_required_tags(tile, data.required_tags):
+            world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
 
-            # assess all tags
-            for tag in data.required_tags:
-                tags_checked[tag.name] = world_manager.Map.tile_has_tag(tile, tag)
-
-            # if all tags came back true apply the change
-            if all(value for value in tags_checked.values()):
-                world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
-
-                # success message
-                entity = self.owner.owner.owner
-                msg = f"{entity.name} changed the {starting_terrain_name} to {tile.terrain.name}."
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-            else:
-                # log why
-                log_string = f"-> target tags incorrect; tag results:{tags_checked}"
-                publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
-        else:
-            # confirm can't do it
-            msg = f"You can't do that there!"
+            # success message
+            entity = self.owner.owner.owner
+            msg = f"{entity.name} changed the {starting_terrain_name} to {tile.terrain.name}."
             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
-            # log why
-            log_string = f"-> target type incorrect; selected:{target_type}, needed:{data.required_target_type}"
-            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+        else:
+            # confirm can't do it
+            # N.B. the reason why is logged in has_required_tags
+            msg = f"You can't do that there!"
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))

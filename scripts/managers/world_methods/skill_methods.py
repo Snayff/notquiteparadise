@@ -1,6 +1,7 @@
 import random
+from typing import List
 
-from scripts.core.constants import TargetTypes, LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
+from scripts.core.constants import LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
     PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, SkillEffectTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
@@ -37,89 +38,30 @@ class SkillMethods:
         """
         from scripts.global_singletons.managers import world_manager
 
+        start_tile = world_manager.Map.get_tile(entity.x, entity.y)
         target_x, target_y = target_pos
-        blocking_entity_at_location = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
-        tile = world_manager.Map.get_tile(target_x, target_y)
-
+        target_tile = world_manager.Map.get_tile(target_x, target_y)
         skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
-        required_target = skill_data.required_target_type
-        skill_range = skill_data.range
-        resource_type = skill_data.resource_type
-        resource_cost = skill_data.resource_cost
-
-        # do we need an entity?
-        if required_target == TargetTypes.ENTITY:
-            # is there an entity to target?
-            if blocking_entity_at_location:
-                # is the entity within range?
-                distance_to_entity = world_manager.Entity.get_chebyshev_distance_between_entities(entity,
-                                            blocking_entity_at_location)
-                if distance_to_entity > skill_range:
-                    return False
-            else:
-                return False
-
-        # get info about the tile and the skill requirements
-        is_required_type = self.is_required_target_type(tile, required_target)
-        has_tags = self.has_required_tags(tile, skill_data.required_tags)
 
         # check we have everything we need and if so use the skill
-        if is_required_type and has_tags:
+        if self.has_required_tags(target_tile, skill_data.required_tags):
+            resource_type = skill_data.resource_type
+            resource_cost = skill_data.resource_cost
             if self.can_afford_cost(entity, resource_type, resource_cost):
-                return True
+                distance = world_manager.Entity.get_chebyshev_distance_between_tiles(start_tile, target_tile)
+                skill_range = skill_data.range
+                if distance < skill_range:
+                    return True
 
         return False
-
-    def is_required_target_type(self, tile, required_target_type):
-        """
-        Check if the tile has the required target type
-
-        Args:
-            required_target_type ():
-            tile(Tile): tile to check for a target
-
-        Returns:
-             bool: True if required target type found, else False.
-
-        """
-        log_string = f"Checking target for type {required_target_type}..."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-        # if we need a terrain type then pass the tiles terrain and get its type
-        if required_target_type == TargetTypes.TERRAIN:
-            target_type = self.get_target_type(tile.terrain)
-            if target_type == TargetTypes.TERRAIN:
-                log_string = f"-> Target type OK! Type is {target_type}"
-                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-                return True
-            else:
-                log_string = f"-> Target type WRONG! Type is {target_type}"
-                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-                return False
-
-        # if we need an entity type then pass the tiles entity and get its type
-        elif required_target_type == TargetTypes.ENTITY:
-            target_type = self.get_target_type(tile.entity)
-            if target_type == TargetTypes.ENTITY:
-                log_string = f"-> Target type OK! Type is {target_type}"
-                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-                return True
-            else:
-                log_string = f"-> Target type WRONG! Type is {target_type}"
-                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-                return False
-
-        return False  # catch all
 
     def has_required_tags(self, tile, required_tags):
         """
         Check a tile has all required tags
 
         Args:
-            required_tags ():
-            tile (Tile):
+            tile(Tile):
+            required_tags(List):
 
         Returns:
             bool: True if tile has all tags
@@ -168,52 +110,6 @@ class SkillMethods:
         else:
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"'{entity.name}' cannot afford cost."))
             return False
-
-    @staticmethod
-    def get_target(target_pos, required_target_type):
-        """
-        Get target at xy based on target type
-
-        Args:
-            required_target_type ():
-            target_pos (tuple): x y of the target
-        """
-        # TODO - extend to target an area
-        from scripts.global_singletons.managers import world_manager
-        target_x, target_y = target_pos
-        target = None
-
-        if required_target_type == TargetTypes.ENTITY:
-            target = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
-
-        elif required_target_type == TargetTypes.TERRAIN:
-            target_tile = world_manager.Map.get_tile(target_x, target_y)
-            target = target_tile.terrain
-
-        log_string = f"Got target {target.name} of type {required_target_type}."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-        return target
-
-    @staticmethod
-    def get_target_type(target):
-        """
-        Get the type of the required target
-
-        Args:
-            target: the target; terrain or entity
-
-        Returns:
-            TargetTypes:
-        """
-
-        if isinstance(target, Terrain):
-            return TargetTypes.TERRAIN
-        elif isinstance(target, Entity):
-            return TargetTypes.ENTITY
-
-        log_string = f"Type no found for {target} in 'get_target_type'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
 
     @staticmethod
     def get_hit_type(to_hit_score):

@@ -4,7 +4,6 @@
             "name": "basic attack",
             "description": "This is the basic attack. It does damage.",
             "icon": "placeholder/icon_00.png",
-            "required_target_type": "entity",
             "required_tags": ["other_entity"],
             "range": 1,
             "resource_type": "mana",
@@ -14,7 +13,6 @@
             "skill_effects": [
                     {
                         "effect_type": "damage",
-                        "required_target_type": "entity",
                         "required_tags": ["other_entity"
                         ],
                         "damage": 15,
@@ -28,7 +26,6 @@
             "name": "throw dice",
             "description": "Time to throw the dice. It does damage.",
             "icon": "placeholder/icon_29.png",
-            "required_target_type": "entity",
             "required_tags": [
                 "other_entity"
             ],
@@ -40,7 +37,6 @@
             "skill_effects": [
                 {
                     "effect_type": "damage",
-                    "required_target_type": "entity",
                     "required_tags": [
                         "other_entity"
                     ],
@@ -55,7 +51,6 @@
             "name": "bring down the mountain",
             "description": "Turn a wall into a floor.",
             "icon": "placeholder/icon_40.png",
-            "required_target_type": "terrain",
             "required_tags": [
                 "wall",
                 "no_entity"
@@ -68,7 +63,6 @@
             "skill_effects": [
                 {
                     "effect_type": "change_terrain",
-                    "required_target_type": "terrain",
                     "required_tags": [
                         "wall",
                         "no_entity"
@@ -81,7 +75,6 @@
             "name": "burn the deck",
             "description": "Apply burning affliction",
             "icon": "placeholder/icon_40.png",
-            "required_target_type": "entity",
             "required_tags": [
                 "other_entity"
             ],
@@ -93,7 +86,6 @@
             "skill_effects": [
                 {
                     "effect_type": "damage",
-                    "required_target_type": "entity",
                     "required_tags": [
                         "other_entity"
                     ],
@@ -104,7 +96,6 @@
                 },
                 {
                     "effect_type": "apply_affliction",
-                    "required_target_type": "entity",
                     "required_tags": [
                         "other_entity"
                     ],
@@ -112,35 +103,6 @@
                     "stat_to_target": "skullduggery",
                     "affliction_name": "bogged down",
                     "duration": 3
-                }
-            ]
-        }
-    },
-    "another_skill_tree": {
-        "basic_attack": {
-            "name": "basic attack",
-            "description": "This is the basic attack. It does damage.",
-            "icon": "placeholder/icon_00.png",
-            "required_target_type": "entity",
-            "required_tags": [
-                "other_entity"
-            ],
-            "range": 1,
-            "resource_type": "mana",
-            "resource_cost": 1,
-            "time_cost": 15,
-            "cooldown": 0,
-            "skill_effects": [
-                {
-                    "effect_type": "damage",
-                    "required_target_type": "entity",
-                    "required_tags": [
-                        "other_entity"
-                    ],
-                    "damage": 15,
-                    "damage_type": "pierce",
-                    "accuracy": 10,
-                    "stat_to_target": "bustle"
                 }
             ]
         }

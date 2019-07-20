@@ -196,7 +196,8 @@ class MapMethods:
             entity:
         """
         tile.entity = entity
-        tile.entity.owner = tile
+        if entity:
+            tile.entity.owner = tile
 
     @staticmethod
     def get_entity_on_tile(tile):
@@ -250,7 +251,8 @@ class MapMethods:
             aspect:
         """
         tile.aspect = aspect
-        tile.aspect.owner = tile
+        if aspect:
+            tile.aspect.owner = tile
 
     @staticmethod
     def trigger_aspect_effect_on_tile(tile):

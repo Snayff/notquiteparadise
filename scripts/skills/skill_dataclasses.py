@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Dict
 
-from scripts.core.constants import SkillEffectTypes, TargetTags, DamageTypes, PrimaryStatTypes, TargetTypes
+from scripts.core.constants import SkillEffectTypes, TargetTags, DamageTypes, PrimaryStatTypes
 
 
 @dataclass
@@ -11,7 +11,6 @@ class SkillEffectData:
     """
     effect_type: SkillEffectTypes
     required_tags: List[TargetTags] = field(default_factory=list)
-    required_target_type: TargetTags = None
     damage: int = 0
     damage_type: DamageTypes = None
     accuracy: int = 0
@@ -34,7 +33,6 @@ class SkillData:
     resource_cost: int
     time_cost: int
     cooldown: int
-    required_target_type: TargetTypes
     required_tags: List[TargetTags] = field(default_factory=list)
     skill_effects: Dict = field(default_factory=list)
 

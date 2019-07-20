@@ -1,7 +1,7 @@
 import json
 
 from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
-    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes, TargetTypes
+    AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.skill_dataclasses import SkillEffectData, SkillData, SkillTreeData
@@ -97,10 +97,6 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "required_tags", "floor", TargetTags.FLOOR)
         self.recursive_replace(self.skills, "required_tags", "wall", TargetTags.WALL)
         self.recursive_replace(self.skills, "required_tags", "self", TargetTags.SELF)
-
-        # Skills:TargetTypes
-        self.recursive_replace(self.skills, "required_target_type", "terrain", TargetTypes.TERRAIN)
-        self.recursive_replace(self.skills, "required_target_type", "entity", TargetTypes.ENTITY)
 
         # Skills:SkillEffects:name
         self.recursive_replace(self.skills, "effect_type", "damage", SkillEffectTypes.DAMAGE)
