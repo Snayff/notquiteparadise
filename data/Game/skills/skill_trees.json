@@ -1,7 +1,7 @@
 {
     "cleromancer": {
         "basic_attack": {
-            "name": "basic_attack",
+            "name": "basic attack",
             "description": "This is the basic attack. It does damage.",
             "icon": "placeholder/icon_00.png",
             "required_target_type": "entity",
@@ -13,7 +13,7 @@
             "cooldown": 0,
             "skill_effects": [
                     {
-                        "name": "damage",
+                        "effect_type": "damage",
                         "required_target_type": "entity",
                         "required_tags": ["other_entity"
                         ],
@@ -39,7 +39,7 @@
             "cooldown": 2,
             "skill_effects": [
                 {
-                    "name": "damage",
+                    "effect_type": "damage",
                     "required_target_type": "entity",
                     "required_tags": [
                         "other_entity"
@@ -67,7 +67,7 @@
             "cooldown": 3,
             "skill_effects": [
                 {
-                    "name": "change_terrain",
+                    "effect_type": "change_terrain",
                     "required_target_type": "terrain",
                     "required_tags": [
                         "wall",
@@ -92,7 +92,7 @@
             "cooldown": 2,
             "skill_effects": [
                 {
-                    "name": "damage",
+                    "effect_type": "damage",
                     "required_target_type": "entity",
                     "required_tags": [
                         "other_entity"
@@ -103,14 +103,14 @@
                     "stat_to_target": "skullduggery"
                 },
                 {
-                    "name": "apply_affliction",
+                    "effect_type": "apply_affliction",
                     "required_target_type": "entity",
                     "required_tags": [
                         "other_entity"
                     ],
                     "accuracy": 100,
                     "stat_to_target": "skullduggery",
-                    "affliction_name": "bogged_down",
+                    "affliction_name": "bogged down",
                     "duration": 3
                 }
             ]
@@ -118,7 +118,7 @@
     },
     "another_skill_tree": {
         "basic_attack": {
-            "name": "basic_attack",
+            "name": "basic attack",
             "description": "This is the basic attack. It does damage.",
             "icon": "placeholder/icon_00.png",
             "required_target_type": "entity",
@@ -132,7 +132,7 @@
             "cooldown": 0,
             "skill_effects": [
                 {
-                    "name": "damage",
+                    "effect_type": "damage",
                     "required_target_type": "entity",
                     "required_tags": [
                         "other_entity"

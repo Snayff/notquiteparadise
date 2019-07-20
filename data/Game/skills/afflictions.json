@@ -7,7 +7,7 @@
         "trigger_event": "end_turn",
         "affliction_effects": [
             {
-                "name": "damage",
+                "affliction_effect_type": "damage",
                 "damage": 1,
                 "damage_type": "pierce",
                 "stat_to_target": "bustle"
@@ -22,7 +22,7 @@
         "trigger_event": "passive",
         "affliction_effects": [
             {
-                "name": "affect_stat",
+                "affliction_effect_type": "affect_stat",
                 "stat_to_affect": "action_cost_change" ,
                 "amount": 25
             }

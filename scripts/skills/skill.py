@@ -27,12 +27,12 @@ class Skill:
         data = library.get_skill_data(skill_tree_name, skill_name)
 
         # skill_effects info
-        effects = data.skill_effects  # list of skill_effects to process
         self.effects = []
+        effects = data.skill_effects  # dict of SkillEffectData objects
 
-        for effect in effects:
+        for effect in effects.values():
             from scripts.global_singletons.managers import world_manager
-            created_effect = world_manager.Skill.create_skill_effect(self, effect["name"])
+            created_effect = world_manager.Skill.create_skill_effect(self, effect.effect_type)
 
             # if we have an effect add it to internal list
             if created_effect:

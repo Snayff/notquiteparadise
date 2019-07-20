@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass, field
-from typing import List, Any
+from typing import List, Any, Dict
 
 from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
     AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes, TargetTypes
@@ -13,7 +13,7 @@ class SkillEffectData:
     """
     Data class for a skill effect
     """
-    name: str
+    effect_type: SkillEffectTypes
     required_tags: List[TargetTags] = field(default_factory=list)
     required_target_type: TargetTags = None
     damage: int = 0
@@ -40,7 +40,7 @@ class SkillData:
     cooldown: int
     required_target_type: TargetTypes
     required_tags: List[TargetTags] = field(default_factory=list)
-    skill_effects: List[SkillEffectData] = field(default_factory=list)
+    skill_effects: Dict = field(default_factory=list)
 
 
 @dataclass()
@@ -49,7 +49,8 @@ class SkillTreeData:
     Data class for a skill tree
     """
     name: str
-    skill: List[SkillData] = field(default_factory=list)
+    skill: Dict = field(default_factory=dict)
+
 
 class LibraryOfAlexandria:
     """
@@ -82,17 +83,17 @@ class LibraryOfAlexandria:
 
         # loop all skill trees
         for skill_tree_name, skill_tree_data in all_skill_data.items():
-            converted_skills = []
+            converted_skills = {}
 
             # loop all skills in each skill tree
             for skill_name, skill_data in skill_tree_data.items():
-                converted_skill_effects = []
+                converted_skill_effects = {}
 
                 # loop skill effects in each skill
                 for index, skill_effect_data in enumerate(skill_data["skill_effects"]):
                     # convert the skill effect data to the data class
                     skill_effect = SkillEffectData(**skill_effect_data)
-                    converted_skill_effects.append(skill_effect)
+                    converted_skill_effects[skill_effect.effect_type.name] = skill_effect
 
                 # set the temp dict to contain the converted skill effects
                 new_skill_dict = skill_data.copy()
@@ -100,7 +101,7 @@ class LibraryOfAlexandria:
 
                 # unpack the temp dict and convert the skill data to the data class
                 skill = SkillData(**new_skill_dict)
-                converted_skills.append(skill)
+                converted_skills[skill.name] = skill
 
             # convert to the data class
             converted_skill_tree = SkillTreeData(name=skill_tree_name, skill=converted_skills)
@@ -143,10 +144,10 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "required_tags", "self", TargetTags.SELF)
 
         # Skills:SkillEffects:name
-        self.recursive_replace(self.skills, "name", "damage", SkillEffectTypes.DAMAGE)
-        self.recursive_replace(self.skills, "name", "apply_affliction", SkillEffectTypes.APPLY_AFFLICTION)
-        self.recursive_replace(self.skills, "name", "move", SkillEffectTypes.MOVE)
-        self.recursive_replace(self.skills, "name", "change_terrain", SkillEffectTypes.CHANGE_TERRAIN)
+        self.recursive_replace(self.skills, "effect_type", "damage", SkillEffectTypes.DAMAGE)
+        self.recursive_replace(self.skills, "effect_type", "apply_affliction", SkillEffectTypes.APPLY_AFFLICTION)
+        self.recursive_replace(self.skills, "effect_type", "move", SkillEffectTypes.MOVE)
+        self.recursive_replace(self.skills, "effect_type", "change_terrain", SkillEffectTypes.CHANGE_TERRAIN)
 
         # Skills:SkillEffects:damage_type
         self.recursive_replace(self.skills, "damage_type", "pierce", DamageTypes.PIERCE)
@@ -166,8 +167,9 @@ class LibraryOfAlexandria:
 
         # Update Afflictions
         # Affliction:AfflictionEffects:name
-        self.recursive_replace(self.affliction, "name", "damage", AfflictionEffectTypes.DAMAGE)
-        self.recursive_replace(self.affliction, "name", "affect_stat", AfflictionEffectTypes.AFFECT_STAT)
+        self.recursive_replace(self.affliction, "affliction_effect_type", "damage", AfflictionEffectTypes.DAMAGE)
+        self.recursive_replace(self.affliction, "affliction_effect_type", "affect_stat",
+                               AfflictionEffectTypes.AFFECT_STAT)
 
         # Affliction:AfflictionEffects:damage_type
         self.recursive_replace(self.affliction, "damage_type", "pierce", DamageTypes.PIERCE)
@@ -362,18 +364,11 @@ class LibraryOfAlexandria:
             skill_name (str):
 
         Returns:
-            tuple: named tuple of values.
+            SkillData: data for a specified skill.
         """
 
-        self.skills[skill_tree]
-
-
-        # NOTE: I do not know how any of this works.  Let's live in hope that never causes a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(skill_name, list(self.skills[skill_tree][skill_name]))
-        data = named_tuple(**self.skills[skill_tree][skill_name])
-
-        return data
+        skill = self.skills[skill_tree].skill[skill_name]
+        return skill
 
     def get_skill_effect_data(self, skill_tree, skill_name, skill_effect):
         """
@@ -385,14 +380,11 @@ class LibraryOfAlexandria:
             skill_effect(str):
 
         Returns:
-            tuple: named tuple of values.
+            SkillEffectData: data for a specified skill effect.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that never causes a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(skill_name, list(self.skills[skill_tree][skill_name][skill_effect]))
-        data = named_tuple(**self.skills[skill_tree][skill_name][skill_effect])
 
-        return data
+        skill_effect = self.skills[skill_tree].skill[skill_name].skill_effect[skill_effect]
+        return skill_effect
 
     @staticmethod
     def get_values_from_skill_json():
