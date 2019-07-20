@@ -145,6 +145,7 @@ class TargetTags(Enum):
     """
     Types of target
     """
+    # TODO - externalise terrain types
     FLOOR = auto()
     WALL = auto()
     SELF = auto()

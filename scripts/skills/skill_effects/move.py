@@ -20,7 +20,7 @@ class MoveSkillEffect(SkillEffect):
         #  destination held in inherent values? e.g. distance to move AWAY = 1 ?
         from scripts.global_singletons.managers import world_manager
 
-        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
+        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
 
         # get required info
         start_pos_x, start_pos_y = entity_to_move.x, entity_to_move.y

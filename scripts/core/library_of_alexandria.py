@@ -1,55 +1,10 @@
 import json
-from dataclasses import dataclass, field
-from typing import List, Any, Dict
 
 from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
     AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes, TargetTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
-
-
-@dataclass
-class SkillEffectData:
-    """
-    Data class for a skill effect
-    """
-    effect_type: SkillEffectTypes
-    required_tags: List[TargetTags] = field(default_factory=list)
-    required_target_type: TargetTags = None
-    damage: int = 0
-    damage_type: DamageTypes = None
-    accuracy: int = 0
-    stat_to_target: PrimaryStatTypes = None
-    new_terrain: TargetTags = None
-    affliction_name: str = ""
-    duration: int = 0
-
-
-@dataclass()
-class SkillData:
-    """
-    Data class for a skill
-    """
-    name: str
-    description: str
-    icon: str
-    range: int
-    resource_type: str
-    resource_cost: int
-    time_cost: int
-    cooldown: int
-    required_target_type: TargetTypes
-    required_tags: List[TargetTags] = field(default_factory=list)
-    skill_effects: Dict = field(default_factory=list)
-
-
-@dataclass()
-class SkillTreeData:
-    """
-    Data class for a skill tree
-    """
-    name: str
-    skill: Dict = field(default_factory=dict)
+from scripts.skills.skill_dataclasses import SkillEffectData, SkillData, SkillTreeData
 
 
 class LibraryOfAlexandria:
@@ -120,14 +75,14 @@ class LibraryOfAlexandria:
         import os
         # N.B. this iss set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.skills = self.get_values_from_skill_json()
-            self.homeland = self.get_values_from_homeland_json()
-            self.race = self.get_values_from_race_json()
-            self.savvy = self.get_values_from_savvy_json()
-            self.affliction = self.get_values_from_affliction_json()
-            self.aspect = self.get_values_from_aspect_json()
-            self.terrain = self.get_values_from_terrain_json()
-            self.actor_template = self.get_values_from_actor_json()
+            self.skills = self.load_values_from_skill_json()
+            self.homeland = self.load_values_from_homeland_json()
+            self.race = self.load_values_from_race_json()
+            self.savvy = self.load_values_from_savvy_json()
+            self.affliction = self.load_values_from_affliction_json()
+            self.aspect = self.load_values_from_aspect_json()
+            self.terrain = self.load_values_from_terrain_json()
+            self.actor_template = self.load_values_from_actor_json()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
 
@@ -391,7 +346,7 @@ class LibraryOfAlexandria:
         return effect_data
 
     @staticmethod
-    def get_values_from_skill_json():
+    def load_values_from_skill_json():
         """
 
         Returns:
@@ -404,7 +359,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def get_values_from_affliction_json():
+    def load_values_from_affliction_json():
         """
 
         Returns:
@@ -416,7 +371,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def get_values_from_aspect_json():
+    def load_values_from_aspect_json():
         """
 
         Returns:
@@ -428,7 +383,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def get_values_from_terrain_json():
+    def load_values_from_terrain_json():
         """
 
         Returns:
@@ -440,7 +395,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def get_values_from_homeland_json():
+    def load_values_from_homeland_json():
         """
 
         Returns:
@@ -452,7 +407,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def get_values_from_savvy_json():
+    def load_values_from_savvy_json():
         """
 
         Returns:
@@ -464,7 +419,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def get_values_from_race_json():
+    def load_values_from_race_json():
         """
 
         Returns:
@@ -476,7 +431,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def get_values_from_actor_json():
+    def load_values_from_actor_json():
         """
 
         Returns:

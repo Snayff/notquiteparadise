@@ -36,7 +36,6 @@ class Skill:
         required_target = skill_data.required_target_type
 
         target = world_manager.Skill.get_target(target_pos, required_target)  # get the tile or entity
-        # FIXME - terrain not working. Just pass tile and then determine application from tags?
 
         # apply any skill_effects
         for effect_name, effect_data in skill_data.skill_effects.items():
