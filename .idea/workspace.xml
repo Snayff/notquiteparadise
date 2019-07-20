@@ -30,8 +30,8 @@
           <file pinned="true" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="506">
-                  <caret line="150" column="25" lean-forward="true" selection-start-line="150" selection-start-column="25" selection-end-line="150" selection-end-column="25" />
+                <state relative-caret-position="2645">
+                  <caret line="150" column="25" selection-start-line="150" selection-start-column="25" selection-end-line="150" selection-end-column="25" />
                 </state>
               </provider>
             </entry>
@@ -48,23 +48,25 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/skill_methods.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1357">
-                  <caret line="400" column="62" selection-start-line="400" selection-start-column="62" selection-end-line="400" selection-end-column="62" />
+                <state relative-caret-position="667">
+                  <caret line="153" column="17" lean-forward="true" selection-start-line="153" selection-start-column="17" selection-end-line="153" selection-end-column="17" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
+                    <element signature="e#1054#1098#0" expanded="true" />
+                    <element signature="e#13382#14091#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/data/game/skills/skill_trees.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="686">
-                  <caret line="146" column="5" selection-start-line="146" selection-start-column="5" selection-end-line="146" selection-end-column="5" />
+                <state relative-caret-position="782">
+                  <caret line="122" column="46" lean-forward="true" selection-start-line="122" selection-start-column="46" selection-end-line="122" selection-end-column="46" />
                   <folding>
                     <element signature="n#!!block;n#throw_dice#0;n#!!block;n#cleromancer#0;n#!!top" />
                     <element signature="n#!!block;n#bring_down_the_mountain#0;n#!!block;n#cleromancer#0;n#!!top" />
@@ -81,13 +83,15 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/scripts/core/library_of_alexandria.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="397">
-                  <caret line="89" column="50" selection-start-line="89" selection-start-column="50" selection-end-line="89" selection-end-column="50" />
+                <state relative-caret-position="-1617">
+                  <caret line="80" column="27" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
                   <folding>
-                    <element signature="e#750#948#0" expanded="true" />
-                    <element signature="e#1340#1538#0" expanded="true" />
-                    <element signature="e#1682#1739#1" expanded="true" />
-                    <element signature="e#1773#2270#0" expanded="true" />
+                    <element signature="e#427#448#1" expanded="true" />
+                    <element signature="e#1028#1044#1" expanded="true" />
+                    <element signature="e#1622#1638#1" expanded="true" />
+                    <element signature="e#1495#1997#0" expanded="true" />
+                    <element signature="e#3611#4365#0" expanded="true" />
+                    <element signature="e#14038#14562#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -451,9 +455,9 @@
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.497921" visible="true" weight="0.1023166" />
       <window_info id="Favorites" order="1" sideWeight="0.50053024" side_tool="true" weight="0.1023166" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.45173746" weight="0.2724359" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4372587" weight="0.24439102" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.45559844" visible="true" weight="0.2724359" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4512548" weight="0.2724359" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.43677607" weight="0.24439102" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4546332" visible="true" weight="0.2724359" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" content_ui="combo" id="TODO" order="6" sideWeight="0.49758688" weight="0.22916667" />
@@ -461,7 +465,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.484556" weight="0.2988782" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.2275641" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49710426" weight="0.32932693" />
-      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.5444015" side_tool="true" visible="true" weight="0.2724359" />
+      <window_info anchor="bottom" x="0" y="0" width="474" height="1207" id="Documentation" order="11" sideWeight="0.5453668" side_tool="true" visible="true" weight="0.2724359" />
       <window_info anchor="bottom" id="Structure" order="12" sideWeight="0.49710426" weight="0.23477565" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -488,8 +492,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/core/library_of_alexandria.py</url>
-          <line>75</line>
+          <line>73</line>
           <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/core/library_of_alexandria.py</url>
+          <line>371</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -864,6 +873,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+          <folding>
+            <element signature="e#101#118#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="49" column="75" selection-start-line="49" selection-start-column="75" selection-end-line="49" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/core/engine.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -871,6 +897,13 @@
           <folding>
             <element signature="e#1#16#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2645">
+          <caret line="150" column="25" selection-start-line="150" selection-start-column="25" selection-end-line="150" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -884,44 +917,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/skill_methods.py">
+    <entry file="file://$PROJECT_DIR$/data/game/skills/skill_trees.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1357">
-          <caret line="400" column="62" selection-start-line="400" selection-start-column="62" selection-end-line="400" selection-end-column="62" />
+        <state relative-caret-position="782">
+          <caret line="122" column="46" lean-forward="true" selection-start-line="122" selection-start-column="46" selection-end-line="122" selection-end-column="46" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="n#!!block;n#throw_dice#0;n#!!block;n#cleromancer#0;n#!!top" />
+            <element signature="n#!!block;n#bring_down_the_mountain#0;n#!!block;n#cleromancer#0;n#!!top" />
+            <element signature="n#!!block;n#burn_the_deck#0;n#!!block;n#cleromancer#0;n#!!top" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#101#118#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/core/constants.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="150" column="25" lean-forward="true" selection-start-line="150" selection-start-column="25" selection-end-line="150" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
+        <state relative-caret-position="1748">
           <caret line="347" selection-start-line="347" selection-end-line="347" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/skills/skill.py">
+    <entry file="file://$PROJECT_DIR$/scripts/managers/world_methods/skill_methods.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="49" column="75" selection-start-line="49" selection-start-column="75" selection-end-line="49" selection-end-column="75" />
+        <state relative-caret-position="667">
+          <caret line="153" column="17" lean-forward="true" selection-start-line="153" selection-start-column="17" selection-end-line="153" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1054#1098#0" expanded="true" />
+            <element signature="e#13382#14091#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -932,27 +955,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/game/skills/skill_trees.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="686">
-          <caret line="146" column="5" selection-start-line="146" selection-start-column="5" selection-end-line="146" selection-end-column="5" />
-          <folding>
-            <element signature="n#!!block;n#throw_dice#0;n#!!block;n#cleromancer#0;n#!!top" />
-            <element signature="n#!!block;n#bring_down_the_mountain#0;n#!!block;n#cleromancer#0;n#!!top" />
-            <element signature="n#!!block;n#burn_the_deck#0;n#!!block;n#cleromancer#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/core/library_of_alexandria.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="89" column="50" selection-start-line="89" selection-start-column="50" selection-end-line="89" selection-end-column="50" />
+        <state relative-caret-position="-1617">
+          <caret line="80" column="27" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
           <folding>
-            <element signature="e#750#948#0" expanded="true" />
-            <element signature="e#1340#1538#0" expanded="true" />
-            <element signature="e#1682#1739#1" expanded="true" />
-            <element signature="e#1773#2270#0" expanded="true" />
+            <element signature="e#427#448#1" expanded="true" />
+            <element signature="e#1028#1044#1" expanded="true" />
+            <element signature="e#1622#1638#1" expanded="true" />
+            <element signature="e#1495#1997#0" expanded="true" />
+            <element signature="e#3611#4365#0" expanded="true" />
+            <element signature="e#14038#14562#0" expanded="true" />
           </folding>
         </state>
       </provider>

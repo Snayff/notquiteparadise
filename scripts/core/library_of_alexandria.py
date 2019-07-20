@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Any
 
 from scripts.core.constants import LoggingEventTypes, TargetTags, SkillEffectTypes, PrimaryStatTypes, \
     AfflictionEffectTypes, AfflictionCategory, AfflictionTriggers, DamageTypes, TargetTypes
@@ -10,6 +10,9 @@ from scripts.global_singletons.event_hub import publisher
 
 @dataclass
 class SkillEffectData:
+    """
+    Data class for a skill effect
+    """
     name: str
     required_tags: List[TargetTags] = field(default_factory=list)
     required_target_type: TargetTags = None
@@ -21,14 +24,12 @@ class SkillEffectData:
     affliction_name: str = ""
     duration: int = 0
 
-    def __post_init__(self):
-        for index, tag in enumerate(self.required_tags):
-            if isinstance(tag, str):
-                required_tag = getattr(TargetTags, tag)
-                self.required_tags[index] = required_tag
 
 @dataclass()
 class SkillData:
+    """
+    Data class for a skill
+    """
     name: str
     description: str
     icon: str
@@ -41,14 +42,12 @@ class SkillData:
     required_tags: List[TargetTags] = field(default_factory=list)
     skill_effects: List[SkillEffectData] = field(default_factory=list)
 
-    def __post_init__(self):
-        for index, tag in enumerate(self.required_tags):
-            if isinstance(tag, str):
-                required_tag = getattr(TargetTags, tag)
-                self.required_tags[index] = required_tag
 
 @dataclass()
 class SkillTreeData:
+    """
+    Data class for a skill tree
+    """
     name: str
     skill: List[SkillData] = field(default_factory=list)
 
@@ -67,17 +66,19 @@ class LibraryOfAlexandria:
         self.aspect = {}
         self.terrain = {}
         self.actor_template = {}
-        self.dataclass_skills = {}
 
         self.load_data_into_library()
         self.convert_external_strings_to_internal_enums()
-        self.load_skills_into_data_classes()
+        self.convert_skills_to_data_classes()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
 
-    def load_skills_into_data_classes(self):
-
+    def convert_skills_to_data_classes(self):
+        """
+        Take skill data from library and convert to data classes 
+        """
         all_skill_data = self.skills
+        converted_data = {}
 
         # loop all skill trees
         for skill_tree_name, skill_tree_data in all_skill_data.items():
@@ -101,18 +102,22 @@ class LibraryOfAlexandria:
                 skill = SkillData(**new_skill_dict)
                 converted_skills.append(skill)
 
+            # convert to the data class
+            converted_skill_tree = SkillTreeData(name=skill_tree_name, skill=converted_skills)
+
             # set the dict to contain the converted skills
-            self.dataclass_skills[skill_tree_name] = converted_skills
+            converted_data[converted_skill_tree.name] = converted_skill_tree
 
-
-
-
+        # delete all info from skill and replace with the converted data
+        self.skills = {}
+        self.skills = converted_data
 
     def load_data_into_library(self):
         """
         Load data from all external jsons to this central data library
         """
         import os
+        # N.B. this iss set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
             self.skills = self.get_values_from_skill_json()
             self.homeland = self.get_values_from_homeland_json()
@@ -359,6 +364,10 @@ class LibraryOfAlexandria:
         Returns:
             tuple: named tuple of values.
         """
+
+        self.skills[skill_tree]
+
+
         # NOTE: I do not know how any of this works.  Let's live in hope that never causes a problem.
         from collections import namedtuple
         named_tuple = namedtuple(skill_name, list(self.skills[skill_tree][skill_name]))
