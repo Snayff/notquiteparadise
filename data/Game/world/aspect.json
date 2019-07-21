@@ -8,7 +8,6 @@
         "skill_effects": [
                 {
                     "name": "apply_affliction",
-                    "required_target_type": "entity",
                     "required_tags": ["other_entity"],
                     "accuracy": 100,
                     "stat_to_target": "skullduggery",

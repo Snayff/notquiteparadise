@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>scripts.managers.world_methods.entity_methods &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.managers.world_methods.entity_methods</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">tcod</span>
+<span class="kn">import</span> <span class="nn">scipy.spatial</span>
+
+<span class="kn">from</span> <span class="nn">scripts.components.actor</span> <span class="k">import</span> <span class="n">Actor</span>
+<span class="kn">from</span> <span class="nn">scripts.components.combatant</span> <span class="k">import</span> <span class="n">Combatant</span>
+<span class="kn">from</span> <span class="nn">scripts.components.homeland</span> <span class="k">import</span> <span class="n">Homeland</span>
+<span class="kn">from</span> <span class="nn">scripts.components.race</span> <span class="k">import</span> <span class="n">Race</span>
+<span class="kn">from</span> <span class="nn">scripts.components.savvy</span> <span class="k">import</span> <span class="n">Savvy</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
+<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
+
+
+<div class="viewcode-block" id="EntityMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods">[docs]</a><span class="k">class</span> <span class="nc">EntityMethods</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Queries relating to entities.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        manager(WorldManager): the manager containing this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world</span> <span class="k">import</span> <span class="n">WorldManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
+
+<div class="viewcode-block" id="EntityMethods.get_blocking_entity_at_location"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity_at_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_blocking_entity_at_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Entity: returns entity if there is one, else None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">)</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span>
+
+        <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">entity</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_entity_in_fov_at_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_entity_in_fov_at_tile">[docs]</a>    <span class="k">def</span> <span class="nf">get_entity_in_fov_at_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the entity at a target tile</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x: x of tile</span>
+<span class="sd">            tile_y: y of tile</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            entity: Entity or None if no entity found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">)</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span>
+
+        <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">is_tile_in_fov</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">entity</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_euclidean_distance_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_euclidean_distance_between_entities">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_euclidean_distance_between_entities</span><span class="p">(</span><span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get distance from an entity towards another entity`s location</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_entity (Entity):</span>
+<span class="sd">            target_entity (Entity):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: straight line distance</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_chebyshev_distance_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_chebyshev_distance_between_entities">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_chebyshev_distance_between_entities</span><span class="p">(</span><span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get distance from an entity towards another entity`s location</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_entity (Entity):</span>
+<span class="sd">            target_entity (Entity):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: distance in tiles</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_entity_position</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
+        <span class="n">target_entity_position</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">chebyshev</span><span class="p">(</span><span class="n">start_entity_position</span><span class="p">,</span> <span class="n">target_entity_position</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_direct_direction_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_direct_direction_between_entities">[docs]</a>    <span class="k">def</span> <span class="nf">get_direct_direction_between_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get direction from an entity towards another entity`s location</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_entity (Entity):</span>
+<span class="sd">            target_entity (Entity):</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> is looking for a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+
+        <span class="n">direction_x</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">direction_y</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">direction_x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">direction_y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">direction_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">direction_x</span> <span class="o">/</span> <span class="n">distance</span><span class="p">))</span>
+        <span class="n">direction_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">direction_y</span> <span class="o">/</span> <span class="n">distance</span><span class="p">))</span>
+
+        <span class="n">tile_is_blocked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">is_tile_blocking_movement</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
+                                                                                <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction_y</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tile_is_blocked</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_blocking_entity_at_location</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
+                                                                          <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction_y</span><span class="p">)):</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> found a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> did NOT find a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_a_star_direction_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_a_star_direction_between_entities">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_a_star_direction_between_entities</span><span class="p">(</span><span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use a* pathfinding to get a direction from one entity to another</span>
+<span class="sd">        Args:</span>
+<span class="sd">            start_entity:</span>
+<span class="sd">            target_entity:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_path_length</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
+        <span class="n">game_map</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">game_map</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_all_entities</span><span class="p">()</span>
+        <span class="n">entity_to_move</span> <span class="o">=</span> <span class="n">start_entity</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">target_entity</span>
+
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> is looking for a path to </span><span class="si">{target.name}</span><span class="s2"> with a*&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+
+        <span class="c1"># Create a FOV map that has the dimensions of the map</span>
+        <span class="n">fov</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map_new</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># Scan the current map each turn and set all the walls as unwalkable</span>
+        <span class="k">for</span> <span class="n">y1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="ow">not</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x1</span><span class="p">][</span><span class="n">y1</span><span class="p">]</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">,</span>
+                                           <span class="ow">not</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x1</span><span class="p">][</span><span class="n">y1</span><span class="p">]</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">)</span>
+
+        <span class="c1"># Scan all the objects to see if there are objects that must be navigated around</span>
+        <span class="c1"># Check also that the object isn&#39;t self or the target (so that the start and the end points are free)</span>
+        <span class="c1"># The AI class handles the situation if self is next to the target so it will not use this A* function</span>
+        <span class="c1"># anyway</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="ow">and</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">entity_to_move</span> <span class="ow">and</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">target</span><span class="p">:</span>
+                <span class="c1"># Set the tile as a wall so it must be navigated around</span>
+                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Allocate a A* path</span>
+        <span class="c1"># The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited</span>
+        <span class="n">my_path</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_new_using_map</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="mf">1.41</span><span class="p">)</span>
+
+        <span class="c1"># Compute the path between self`s coordinates and the target`s coordinates</span>
+        <span class="n">tcod</span><span class="o">.</span><span class="n">path_compute</span><span class="p">(</span><span class="n">my_path</span><span class="p">,</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Check if the path exists, and in this case, also the path is shorter than max_path_length</span>
+        <span class="c1"># The path size matters if you want the monster to use alternative longer paths (for example through</span>
+        <span class="c1"># other rooms) if for example the player is in a corridor</span>
+        <span class="c1"># It makes sense to keep path size relatively low to keep the monsters from running around the map if</span>
+        <span class="c1"># there`s an alternative path really far away</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_is_empty</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_size</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_path_length</span><span class="p">:</span>
+            <span class="c1"># Find the next coordinates in the computed full path</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_walk</span><span class="p">(</span><span class="n">my_path</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># convert to direction</span>
+            <span class="n">direction_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">direction_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">y</span>
+
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> found an a* path to </span><span class="si">{target.name}</span><span class="s2">...&quot;</span>
+            <span class="n">log_string2</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; will move from [</span><span class="si">{entity_to_move.x}</span><span class="s2">,</span><span class="si">{entity_to_move.y}</span><span class="s2">] towards [</span><span class="si">{x}</span><span class="s2">,</span><span class="si">{y}</span><span class="s2">] in direction &quot;</span>\
+                <span class="n">f</span><span class="s2">&quot;[</span><span class="si">{direction_x}</span><span class="s2">,</span><span class="si">{direction_y}</span><span class="s2">]&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string2</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># no path found return no movement direction</span>
+            <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> did NOT find an a* path to </span><span class="si">{target.name}</span><span class="s2">.&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+
+        <span class="c1"># Delete the path to free memory</span>
+        <span class="n">tcod</span><span class="o">.</span><span class="n">path_delete</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_all_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_all_entities">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the list of all entities</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of entities</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_player"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_player">[docs]</a>    <span class="k">def</span> <span class="nf">get_player</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the player.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Entity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">player</span></div>
+
+<div class="viewcode-block" id="EntityMethods.add_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_entity">[docs]</a>    <span class="k">def</span> <span class="nf">add_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add entity to game map</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+<span class="sd">            entity:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_entity_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.add_player"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_player">[docs]</a>    <span class="k">def</span> <span class="nf">add_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+<span class="sd">            entity:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - fold into create actor, use player arg default to false</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">add_entity</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.remove_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.remove_entity">[docs]</a>    <span class="k">def</span> <span class="nf">remove_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove entity from entities list and current tile.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># remove from tile</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">remove_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+
+        <span class="c1"># remove from entities list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.create_actor_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.create_actor_entity">[docs]</a>    <span class="k">def</span> <span class="nf">create_actor_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor_name</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+<span class="sd">            actor_name:</span>
+<span class="sd">            player (bool):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">actor_template</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_actor_template_data</span><span class="p">(</span><span class="n">actor_name</span><span class="p">)</span>
+
+        <span class="n">actor_name</span> <span class="o">=</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="n">sprite</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/actor/&quot;</span> <span class="o">+</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">spritesheet</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
+        <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/actor/&quot;</span> <span class="o">+</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">icon</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
+
+        <span class="c1"># catch any images not resized and resize them</span>
+        <span class="k">if</span> <span class="n">icon</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span> <span class="o">!=</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">):</span>
+            <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+
+        <span class="n">combatant_component</span> <span class="o">=</span> <span class="n">Combatant</span><span class="p">()</span>
+        <span class="n">savvy_component</span> <span class="o">=</span> <span class="n">Savvy</span><span class="p">(</span><span class="n">actor_template</span><span class="o">.</span><span class="n">savvy_component</span><span class="p">)</span>
+        <span class="n">homeland_component</span> <span class="o">=</span> <span class="n">Homeland</span><span class="p">(</span><span class="n">actor_template</span><span class="o">.</span><span class="n">homeland_component</span><span class="p">)</span>
+        <span class="n">race_component</span> <span class="o">=</span> <span class="n">Race</span><span class="p">(</span><span class="n">actor_template</span><span class="o">.</span><span class="n">race_component</span><span class="p">)</span>
+        <span class="n">actor_component</span> <span class="o">=</span> <span class="n">Actor</span><span class="p">()</span>
+
+        <span class="c1"># get the AI value and convert to relevant class</span>
+        <span class="n">ai_value</span> <span class="o">=</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">ai_component</span>
+        <span class="kn">from</span> <span class="nn">scripts.components.ai</span> <span class="k">import</span> <span class="n">BasicMonster</span>
+        <span class="k">if</span> <span class="n">ai_value</span> <span class="o">==</span> <span class="s2">&quot;basic_monster&quot;</span><span class="p">:</span>
+            <span class="n">ai_component</span> <span class="o">=</span> <span class="n">BasicMonster</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ai_component</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># create the Entity</span>
+        <span class="n">actor</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="n">actor_name</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">combatant</span><span class="o">=</span><span class="n">combatant_component</span><span class="p">,</span> <span class="n">race</span><span class="o">=</span><span class="n">race_component</span><span class="p">,</span>
+                       <span class="n">savvy</span><span class="o">=</span><span class="n">savvy_component</span><span class="p">,</span> <span class="n">homeland</span><span class="o">=</span><span class="n">homeland_component</span><span class="p">,</span> <span class="n">ai</span><span class="o">=</span><span class="n">ai_component</span><span class="p">,</span>
+                       <span class="n">actor</span><span class="o">=</span><span class="n">actor_component</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="n">player</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">)</span>
+
+        <span class="n">actor</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">hp</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">max_hp</span>
+
+        <span class="k">if</span> <span class="n">player</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_player</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">add_entity</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor</span><span class="p">)</span></div></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

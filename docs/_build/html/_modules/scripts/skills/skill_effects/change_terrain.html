@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>scripts.skills.skill_effects.change_terrain &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.skills.skill_effects.change_terrain</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">TargetTags</span>
+<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="k">import</span> <span class="n">MessageEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.skill_effect</span> <span class="k">import</span> <span class="n">SkillEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
+<span class="kn">from</span> <span class="nn">scripts.world.terrain.terrain</span> <span class="k">import</span> <span class="n">Terrain</span>
+<span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
+
+
+<div class="viewcode-block" id="ChangeTerrainSkillEffect"><a class="viewcode-back" href="../../../../skills.html#scripts.skills.skill_effects.change_terrain.ChangeTerrainSkillEffect">[docs]</a><span class="k">class</span> <span class="nc">ChangeTerrainSkillEffect</span><span class="p">(</span><span class="n">SkillEffect</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SkillEffect to change the terrain of a tile</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span>  <span class="n">required_target_type</span><span class="p">,</span> <span class="n">required_tags</span><span class="p">,</span> <span class="n">new_terrain</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;change_terrain&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the Manipulate Terrain effect&quot;</span><span class="p">,</span> <span class="n">required_target_type</span><span class="p">,</span>
+                         <span class="n">required_tags</span><span class="p">)</span>
+
+        <span class="c1"># get class from enum and store in self</span>
+        <span class="k">if</span> <span class="n">new_terrain</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_terrain</span> <span class="o">=</span> <span class="n">Floor</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">new_terrain</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_terrain</span> <span class="o">=</span> <span class="n">Wall</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ChangeTerrainSkillEffect.trigger"><a class="viewcode-back" href="../../../../skills.html#scripts.skills.skill_effects.change_terrain.ChangeTerrainSkillEffect.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terrain_to_change</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trigger the effect; check tags and then, if all True, apply the effect</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            terrain_to_change (Terrain):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span>
+
+        <span class="n">tags_checked</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># bool list of tags checked</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">terrain_to_change</span><span class="o">.</span><span class="n">owner</span>
+        <span class="n">terrain</span> <span class="o">=</span> <span class="n">terrain_to_change</span>
+        <span class="n">starting_terrain_name</span> <span class="o">=</span> <span class="n">terrain</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
+        <span class="n">target_type</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">get_target_type</span><span class="p">(</span><span class="n">terrain</span><span class="p">)</span>
+
+        <span class="c1"># check the type is correct, then that the tags match</span>
+        <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_target_type</span><span class="p">:</span>
+
+            <span class="c1"># assess all tags</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_tags</span><span class="p">:</span>
+                <span class="n">tags_checked</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+
+            <span class="c1"># if all tags came back true apply the change</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tags_checked</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+                <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_terrain_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_terrain</span><span class="p">)</span>
+
+                <span class="c1"># success message</span>
+                <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">owner</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity.name}</span><span class="s2"> changed the </span><span class="si">{starting_terrain_name}</span><span class="s2"> to </span><span class="si">{tile.terrain.name}</span><span class="s2">.&quot;</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># log why</span>
+                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; target tags incorrect; tag results:</span><span class="si">{tags_checked}</span><span class="s2">&quot;</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># confirm can&#39;t do it</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;You can&#39;t do that there!&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+
+            <span class="c1"># log why</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; target type incorrect; selected:</span><span class="si">{target_type}</span><span class="s2">, needed:</span><span class="si">{self.required_target_type}</span><span class="s2">&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

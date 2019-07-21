@@ -31,10 +31,10 @@ def initialise_game():
     world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
 
     # TODO - remove when skill learning is in
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic_attack"))
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw_dice"))
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "bring_down_the_mountain"))
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "burn_the_deck"))
+    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic attack"))
+    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw dice"))
+    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "bring down the mountain"))
+    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "burn the deck"))
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player

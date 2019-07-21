@@ -25,13 +25,13 @@ class GameMap:
             self.tiles.append([])
             for y in range(self.height):
                 # add to the column
-                self.tiles[x].append(Tile(x, y, terrain=Floor()))
+                self.tiles[x].append(Tile(x, y, terrain=TargetTags.FLOOR))
 
         # TODO remove - only for test
         if self.width > 10 and self.height > 10:
             from scripts.global_singletons.managers import world_manager
-            world_manager.Map.set_terrain_on_tile(self.tiles[0][5], Wall())
-            world_manager.Map.set_terrain_on_tile(self.tiles[10][2], Wall())
+            world_manager.Map.set_terrain_on_tile(self.tiles[0][5], TargetTags.WALL)
+            world_manager.Map.set_terrain_on_tile(self.tiles[10][2], TargetTags.WALL)
             world_manager.Map.set_aspect_on_tile(self.tiles[0][2], Bog())
 
         # setup the panel

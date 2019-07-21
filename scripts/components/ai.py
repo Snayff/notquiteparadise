@@ -19,7 +19,7 @@ class BasicMonster:
         entity = self.owner
         target = self.get_target()
         direction_x, direction_y = self.get_target_direction(target)
-        distance_to_target = world_manager.Entity.get_chebyshev_distance_between_entities(entity, target)
+        distance_to_target = world_manager.Entity.get_chebyshev_distance_between_tiles(entity, target)
         target_tile_x, target_tile_y = entity.x + direction_x, entity.y + direction_y
 
         log_string = f"'{entity.name}' is starting to take their turn..."

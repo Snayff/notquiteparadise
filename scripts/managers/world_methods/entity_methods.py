@@ -13,6 +13,7 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
+from scripts.world.tile import Tile
 
 
 class EntityMethods:
@@ -83,21 +84,21 @@ class EntityMethods:
         return math.sqrt(dx ** 2 + dy ** 2)
 
     @staticmethod
-    def get_chebyshev_distance_between_entities(start_entity, target_entity):
+    def get_chebyshev_distance_between_tiles(start_tile, end_tile):
         """
-        get distance from an entity towards another entity`s location
+        get distance from a Tile towards another Tile`s location
 
         Args:
-            start_entity (Entity):
-            target_entity (Entity):
+            start_tile (Tile):
+            end_tile (Tile):
 
         Returns:
             int: distance in tiles
 
         """
-        start_entity_position = [start_entity.x, start_entity.y]
-        target_entity_position = [target_entity.x, target_entity.y]
-        return scipy.spatial.distance.chebyshev(start_entity_position, target_entity_position)
+        start_tile_position = [start_tile.x, start_tile.y]
+        target_tile_position = [end_tile.x, end_tile.y]
+        return scipy.spatial.distance.chebyshev(start_tile_position, target_tile_position)
 
     def get_direct_direction_between_entities(self, start_entity, target_entity):
         """

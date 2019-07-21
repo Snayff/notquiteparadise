@@ -3,9 +3,12 @@ import cProfile
 import io
 import logging
 import pstats
+from dataclasses import field, dataclass
+from typing import List
+
 import pygame
 
-from scripts.core.constants import GameStates
+from scripts.core.constants import GameStates, EffectTypes, DamageTypes, PrimaryStatTypes, TargetTags
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager, start
 from scripts.global_singletons.event_hub import event_hub
@@ -15,14 +18,12 @@ from scripts.core.initialisers import initialise_game
 # FIXME - can target self when shouldnt be able to
 # FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
 # TODO - UI information should be pulled once then held
-# TODO - set terrain/aspect to use the appropriate type (enum) to load the values, rather than adding as instances
-# TODO - move info from bog to aspect to remove need to subclass
+# TODO - set terrain/aspects to use the appropriate type (enum) to load the values, rather than adding as instances
+# TODO - move info from bog to aspects to remove need to subclass
 # TODO - create global tooltip method - some relevant code in old message `log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
-# TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
-#  all skills etc. then only hold what they are and refer to the central data to act
 # TODO - effect activation events (so that world can update)
 # TODO - check if in battle; once damage taken keep an eye on enemy states
 # TODO - change from use fps for timing to delta time
@@ -32,6 +33,12 @@ from scripts.core.initialisers import initialise_game
 # TODO - review what other info can be externalised.
 # TODO - update combat in line with new standards
 # TODO - data validation of jsons on init
+# TODO - Review closure
+#  https://en.wikipedia.org/wiki/Closure_(computer_programming)
+# TODO - Review compression example
+#  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
+# TODO - rename scripts to notquiteparadise
+# TODO - move the docstring annotations to the function line, then install mypy
 
 
 def main():

@@ -3,6 +3,7 @@ from scripts.core.constants import TargetTags, TILE_SIZE
 from scripts.world.game_map import GameMap
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
+from scripts.world.tile import Tile
 
 
 class MapMethods:
@@ -195,15 +196,8 @@ class MapMethods:
             entity:
         """
         tile.entity = entity
-        tile.entity.owner = tile
-
-    @staticmethod
-    def remove_entity_on_tile(tile):
-        """
-        Remove entity from tile
-        """
-        tile.entity.owner = None
-        tile.entity = None
+        if entity:
+            tile.entity.owner = tile
 
     @staticmethod
     def get_entity_on_tile(tile):
@@ -222,19 +216,19 @@ class MapMethods:
         Set the new terrain on the tile.
 
         Args:
-            tile ():
-            terrain:
+            tile (Tile):
+            terrain (TargetTags):
         """
-        tile.terrain = terrain
-        tile.terrain.owner = tile
+        new_terrain = None
 
-    @staticmethod
-    def remove_terrain_on_tile(tile):
-        """
-        Remove terrain from tile
-        """
-        tile.terrain.owner = None
-        tile.terrain = None
+        if terrain == TargetTags.WALL:
+            new_terrain = Wall()
+        elif terrain == TargetTags.FLOOR:
+            new_terrain = Floor()
+
+        if new_terrain:
+            tile.terrain = new_terrain
+            tile.terrain.owner = tile
 
     @staticmethod
     def get_terrain_on_tile(tile):
@@ -250,22 +244,15 @@ class MapMethods:
     @staticmethod
     def set_aspect_on_tile(tile, aspect):
         """
-        Set the new aspect on the tile.
+        Set the new aspects on the tile.
 
         Args:
             tile ():
             aspect:
         """
         tile.aspect = aspect
-        tile.aspect.owner = tile
-
-    @staticmethod
-    def remove_aspect_on_tile(tile):
-        """
-        Remove aspect from tile
-        """
-        tile.aspect.owner = None
-        tile.aspect = None
+        if aspect:
+            tile.aspect.owner = tile
 
     @staticmethod
     def trigger_aspect_effect_on_tile(tile):

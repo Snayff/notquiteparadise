@@ -1,13 +1,13 @@
 
 import pygame
 
-
+from scripts.core.constants import EffectTypes
 from scripts.events.game_events import EndTurnEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.skill_effects.apply_affliction import ApplyAfflictionSkillEffect
-from scripts.skills.skill_effects.change_terrain import ChangeTerrainSkillEffect
-from scripts.skills.skill_effects.damage import DamageSkillEffect
+from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
+from scripts.skills.effects.change_terrain import ChangeTerrainEffect
+from scripts.skills.effects.damage import DamageEffect
 
 
 class Skill:
@@ -24,51 +24,6 @@ class Skill:
         self.skill_tree_name = skill_tree_name
         self.name = skill_name
 
-        skill = library.get_skill_data(skill_tree_name, skill_name)
-
-        # # aesthetic info
-        # self.description = skill.description  # the description of the skill
-        # self.icon = pygame.image.load("assets/skills/" + skill.icon).convert_alpha()  # icon showing the skill
-        #
-        # # targeting info
-        # self.range = skill.range  # how far away the skill can be used
-        # from scripts.global_singletons.managers import world_manager
-        # self.required_target_type = world_manager.Skill.get_target_type_from_string(skill.required_target_type)
-        # required_tags = skill.required_tags
-        # self.required_tags = []
-        #
-        # for tag in required_tags:
-        #     self.required_tags.append(world_manager.Skill.get_target_tags_from_string(tag))
-        #
-        # # resource info
-        # self.resource_type = skill.resource_type
-        # self.resource_cost = skill.resource_cost  # base value of resource spent to complete action
-        # self.time_cost = skill.time_cost  # base value of time spent to complete action
-        # self.cooldown = skill.cooldown  # how many rounds to wait between uses
-
-        # skill_effects info
-        effects = skill.skill_effects  # list of skill_effects to process
-        self.effects = []
-
-        for effect in effects:
-            created_effect = None
-            effect_name = effect["name"]
-            from scripts.global_singletons.managers import world_manager
-
-            if effect_name == "damage":
-
-                created_effect = world_manager.Skill.create_damage_effect(self, effect)
-
-            elif effect_name == "change_terrain":
-                created_effect = world_manager.Skill.create_change_terrain_effect(self, effect)
-
-            elif effect_name == "apply_affliction":
-                created_effect = world_manager.Skill.create_apply_affliction_effect(self, effect)
-
-            # if we have an effect add it to internal list
-            if created_effect:
-                self.effects.append(created_effect)
-
     def use(self, target_pos):
         """
         Use the skill
@@ -76,28 +31,19 @@ class Skill:
         Args:
             target_pos (tuple): x y of the target
         """
-        entity = self.owner.owner  # owner is actor, actor`s owner is entity
         from scripts.global_singletons.managers import world_manager
-        skill_data = library.get_skill_data(self.skill_tree_name, self.name)
-        required_target = world_manager.Skill.get_target_type_from_string(skill_data.required_target_type)
+        data = library.get_skill_data(self.skill_tree_name, self.name)
 
-        target = world_manager.Skill.get_target(target_pos, required_target)  # get the tile or entity
+        target_x, target_y = target_pos
+        effected_tile = world_manager.Map.get_tile(target_x, target_y)
 
-        # apply any skill_effects
-        if self.effects:
-            for effect in self.effects:
-
-                if type(effect) is DamageSkillEffect:
-                    effect.trigger(entity, target)
-
-                elif type(effect) is ChangeTerrainSkillEffect:
-                    effect.trigger(target)
-
-                elif type(effect) is ApplyAfflictionSkillEffect:
-                    effect.trigger(entity, target)
+        # apply any effects
+        for effect_name, effect_data in data.effects.items():
+            effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
+            effect.trigger(effected_tile)
 
         # end the turn
-        publisher.publish(EndTurnEvent(skill_data.time_cost))
+        publisher.publish(EndTurnEvent(data.time_cost))
 
 
 

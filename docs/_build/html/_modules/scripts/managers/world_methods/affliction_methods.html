@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>scripts.managers.world_methods.affliction_methods &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.managers.world_methods.affliction_methods</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> \
+    <span class="n">AfflictionEffectTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.affliction</span> <span class="k">import</span> <span class="n">Affliction</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.affliction_effects.affect_stat</span> <span class="k">import</span> <span class="n">AffectStatAfflictionEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.affliction_effects.damage</span> <span class="k">import</span> <span class="n">DamageAfflictionEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
+
+
+<div class="viewcode-block" id="AfflictionMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods">[docs]</a><span class="k">class</span> <span class="nc">AfflictionMethods</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Methods for taking actions with Afflictions</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        manager ():</span>
+<span class="sd">        active_afflictions (): list of all active afflictions</span>
+<span class="sd">        expired_afflictions (): list containing the expired afflictions to be deleted. empties at end of GameLoop</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expired_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="AfflictionMethods.cleanse_expired_afflictions"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.cleanse_expired_afflictions">[docs]</a>    <span class="k">def</span> <span class="nf">cleanse_expired_afflictions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete expired afflictions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">removed_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># check if affliction has expired</span>
+        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># log on expired list. Not removing now to avoid amending the currently iterating list</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">expired_afflictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span>
+
+        <span class="c1"># remove all expired afflictions from the active list and delete each instance</span>
+        <span class="c1"># pop removes the element so we keep looking at element 0 and popping it</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expired_afflictions</span><span class="p">):</span>
+            <span class="c1"># get the affliction</span>
+            <span class="n">affliction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expired_afflictions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="c1"># remove from active list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span>
+
+            <span class="c1"># add info to logging</span>
+            <span class="n">removed_afflictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction.affected_entity.name}</span><span class="s2">:</span><span class="si">{affliction.name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># delete the instance</span>
+            <span class="k">del</span> <span class="n">affliction</span>
+
+        <span class="c1"># if we removed anything log it</span>
+        <span class="k">if</span> <span class="n">removed_afflictions</span><span class="p">:</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Removed the following afflictions: </span><span class="si">{removed_afflictions}</span><span class="s2">&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.create_affliction"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.create_affliction">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_affliction</span><span class="p">(</span><span class="n">affliction_name</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">affected_entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an Affliction object</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            affliction_name (str): the type of the affliction</span>
+<span class="sd">            duration (int): amount of activations before expiry</span>
+<span class="sd">            affected_entity (Entity): the entity to be affected</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Affliction:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">affliction</span> <span class="o">=</span> <span class="n">Affliction</span><span class="p">(</span><span class="n">affliction_name</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">affected_entity</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">affliction</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.create_damage_effect"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.create_damage_effect">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_damage_effect</span><span class="p">(</span><span class="n">affliction</span><span class="p">,</span> <span class="n">effect</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the Damage Affliction Effect for the Affliction</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            affliction (Affliction): the Affliction to contain the damage effect</span>
+<span class="sd">            effect (): affliction effect json data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            DamageAfflictionEffect</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">affliction</span>
+        <span class="n">damage</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;damage&quot;</span><span class="p">]</span>
+        <span class="n">damage_type</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;damage_type&quot;</span><span class="p">]</span>
+        <span class="n">stat_to_target</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;stat_to_target&quot;</span><span class="p">]</span>
+
+        <span class="n">created_effect</span> <span class="o">=</span> <span class="n">DamageAfflictionEffect</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">damage</span><span class="p">,</span> <span class="n">damage_type</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">created_effect</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.create_affect_stat_effect"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.create_affect_stat_effect">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_affect_stat_effect</span><span class="p">(</span><span class="n">affliction</span><span class="p">,</span> <span class="n">effect</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the Affect Stat Affliction Effect for the Affliction</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            affliction (Affliction): the Affliction to contain the damage effect</span>
+<span class="sd">            effect (): affliction effect json data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            AffectStatAfflictionEffect</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">affliction</span>
+        <span class="n">stat_to_affect</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;stat_to_affect&quot;</span><span class="p">]</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;amount&quot;</span><span class="p">]</span>
+
+        <span class="n">created_effect</span> <span class="o">=</span> <span class="n">AffectStatAfflictionEffect</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">stat_to_affect</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">created_effect</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.get_affliction_effect_type_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_effect_type_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_affliction_effect_type_from_string</span><span class="p">(</span><span class="n">affliction_effect_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a string to the appropriate AfflictionEffectTypes (Enum) value</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            affliction_effect_name (str): string name of affliction effect</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            AfflictionEffectTypes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">affliction_effect_name</span> <span class="o">==</span> <span class="s2">&quot;damage&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AfflictionEffectTypes</span><span class="o">.</span><span class="n">DAMAGE</span>
+        <span class="k">elif</span> <span class="n">affliction_effect_name</span> <span class="o">==</span> <span class="s2">&quot;affect_stat&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AfflictionEffectTypes</span><span class="o">.</span><span class="n">AFFECT_STAT</span>
+
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction_effect_name}</span><span class="s2"> not found in &#39;get_affliction_effect_type_from_string&#39;&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.get_affliction_category_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_category_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_affliction_category_from_string</span><span class="p">(</span><span class="n">affliction_category</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a string to the appropriate AfflictionCategory (Enum) value</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            affliction_category (str): string name of affliction category</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            AfflictionCategory</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">affliction_category</span> <span class="o">==</span> <span class="s2">&quot;bane&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AfflictionCategory</span><span class="o">.</span><span class="n">BANE</span>
+        <span class="k">elif</span> <span class="n">affliction_category</span> <span class="o">==</span> <span class="s2">&quot;boon&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AfflictionCategory</span><span class="o">.</span><span class="n">BOON</span>
+
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction_category}</span><span class="s2"> not found in &#39;get_affliction_category_from_string&#39;&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.get_trigger_event_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_trigger_event_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_trigger_event_from_string</span><span class="p">(</span><span class="n">trigger_event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a string to the appropriate AfflictionTriggers (Enum) value</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            trigger_event (str): string name of trigger event</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            AfflictionTriggers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - add remaining afflictions</span>
+        <span class="k">if</span> <span class="n">trigger_event</span> <span class="o">==</span> <span class="s2">&quot;passive&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">PASSIVE</span>
+        <span class="k">elif</span> <span class="n">trigger_event</span> <span class="o">==</span> <span class="s2">&quot;end_turn&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">END_TURN</span>
+
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{trigger_event}</span><span class="s2"> not found in &#39;get_trigger_event_from_string&#39;&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.register_active_affliction"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.register_active_affliction">[docs]</a>    <span class="k">def</span> <span class="nf">register_active_affliction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register an affliction with the central list. Without this they exist in the ether and do nothing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            affliction (Affliction):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.trigger_afflictions_on_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.trigger_afflictions_on_entity">[docs]</a>    <span class="k">def</span> <span class="nf">trigger_afflictions_on_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction_trigger</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cause all afflictions of a specified AfflictionTrigger to trigger on an Entity</span>
+<span class="sd">        Args:</span>
+<span class="sd">            affliction_trigger (AfflictionTriggers):</span>
+<span class="sd">            entity (Entity):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">trigger_event</span> <span class="o">==</span> <span class="n">affliction_trigger</span> <span class="ow">and</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affected_entity</span> <span class="o">==</span> <span class="n">entity</span><span class="p">:</span>
+                <span class="n">affliction</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.get_afflictions_for_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_afflictions_for_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_afflictions_for_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all Afflictions for an Entity</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (Entity):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of Afflictions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entitys_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affected_entity</span> <span class="o">==</span> <span class="n">entity</span><span class="p">:</span>
+                <span class="n">entitys_afflictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entitys_afflictions</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.get_affliction_for_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_for_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_affliction_for_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the specified Affliction for an Entity</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (Entity):</span>
+<span class="sd">            affliction_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Affliction: the requested affliction, or None if nothing found</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affected_entity</span> <span class="o">==</span> <span class="n">entity</span> <span class="ow">and</span> <span class="n">affliction</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">affliction_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">affliction</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.get_affliction_effects_for_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_effects_for_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_affliction_effects_for_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">affliction_effect</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all affliction effects of specified type from a specified entity</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (Entity):</span>
+<span class="sd">            affliction_effect (AfflictionEffectTypes):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">afflictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_afflictions_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="n">affliction_effects</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># loop all affliction effects in all afflictions and return specified type</span>
+        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affliction_effects</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">affliction_effect</span><span class="p">:</span>
+                    <span class="n">affliction_effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">affliction_effects</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.get_stat_modifier_from_afflictions_on_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_modifier_from_afflictions_on_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_stat_modifier_from_afflictions_on_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">stat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the modifier for a specified stat from all applied afflictions on an entity</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (Entity):</span>
+<span class="sd">            stat (): primary or secondary stat</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">modifier</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">affect_stat_effects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_affliction_effects_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">AfflictionEffectTypes</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">)</span>
+
+        <span class="c1"># if we have any afflictions get the modifiers to the specified stat</span>
+        <span class="k">if</span> <span class="n">affect_stat_effects</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">affect_stat_effects</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">stat_to_affect</span> <span class="o">==</span> <span class="n">stat</span><span class="p">:</span>
+                    <span class="n">modifier</span> <span class="o">+=</span> <span class="n">effect</span><span class="o">.</span><span class="n">amount</span>
+
+        <span class="k">return</span> <span class="n">modifier</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

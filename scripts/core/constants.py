@@ -1,8 +1,7 @@
-
 from enum import Enum, auto
 
 TILE_SIZE = 64
-
+# TODO - create
 
 class VisualInfo:
     """
@@ -35,6 +34,13 @@ class GameStates(Enum):
     EXIT_GAME = auto()
     GAME_INITIALISING = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class EventTopics(Enum):
     """
@@ -53,11 +59,25 @@ class GameEventTypes(Enum):
     END_TURN = auto()
     CHANGE_GAME_STATE = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class MessageEventTypes(Enum):
     """Types of Message Events"""
     BASIC = auto()
     SYSTEM = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class LoggingEventTypes(Enum):
@@ -69,6 +89,13 @@ class LoggingEventTypes(Enum):
     INFO = auto()  # Confirmation that things are working as expected.
     DEBUG = auto()  # Detailed information, typically of interest only when diagnosing problems
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class EntityEventTypes(Enum):
     """Types of Entity Events"""
@@ -77,19 +104,33 @@ class EntityEventTypes(Enum):
     MOVE = auto()
     LEARN = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
 class UIEventTypes(Enum):
+    """
+    Types of UI events
+    """
     CLICK_UI = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
 
-class TargetTypes(Enum):
-    TERRAIN = auto()
-    ENTITY = auto()
+    __hash__ = None
 
 
 class TargetTags(Enum):
     """
     Types of target
     """
+    # TODO - externalise terrain types
     FLOOR = auto()
     WALL = auto()
     SELF = auto()
@@ -97,22 +138,52 @@ class TargetTags(Enum):
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class DamageTypes(Enum):
+    """
+    Damage types
+    """
     PIERCE = auto()
     BLUNT = auto()
     ELEMENTAL = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class PrimaryStatTypes(Enum):
+    """
+    Primary stats
+    """
     VIGOUR = auto()
     CLOUT = auto()
     SKULLDUGGERY = auto()
     BUSTLE = auto()
     EXACTITUDE = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
 
 class SecondaryStatTypes(Enum):
+    """
+    Secondary stats
+    """
     DODGE_SPEED = auto()
     DODGE_TOUGHNESS = auto()
     DODGE_INTELLIGENCE = auto()
@@ -120,6 +191,13 @@ class SecondaryStatTypes(Enum):
     RESIST_PIERCE = auto()
     RESIST_ELEMENTAL = auto()
     ACTION_COST_CHANGE = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class HitTypes(Enum):
@@ -129,6 +207,13 @@ class HitTypes(Enum):
     GRAZE = auto()
     HIT = auto()
     CRIT = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class HitValues(Enum):
@@ -149,14 +234,22 @@ class HitModifiers(Enum):
     CRIT = 1.4
 
 
-class SkillEffectTypes(Enum):
+class EffectTypes(Enum):
     """
-    Types of skill_effects
+    Types of effects
     """
     APPLY_AFFLICTION = auto()
     DAMAGE = auto()
     MOVE = auto()
     CHANGE_TERRAIN = auto()
+    AFFECT_STAT = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 
 class AfflictionCategory(Enum):
@@ -166,31 +259,17 @@ class AfflictionCategory(Enum):
     BANE = auto()
     BOON = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
 
-class AfflictionTypes(Enum):
-    """
-    Various types of afflictions
-    """
-
-    # TODO - replace with strings from json (as it is all defined in the json)
-    # BANES
-    MYOPIC = auto()
-    BOGGED_DOWN = auto()
-    SHAKEN = auto()
-    EXPOSED = auto()
-    RUPTURED = auto()
-    FLAMING = auto()
-    EXHAUSTED = auto()
-    HOBBLED = auto()
-    DISTRACTED = auto()
-    TORMENTED = auto()
-
-    # BOONS
+    __hash__ = None
 
 
 class AfflictionTriggers(Enum):
     """
-    When to trigger the affliction
+    When to trigger the afflictions
     """
     PASSIVE = auto()  # always applying effects
     END_TURN = auto()  # apply at end of round turn
@@ -199,14 +278,12 @@ class AfflictionTriggers(Enum):
     END_ROUND = auto()  # apply at the end of the round
     ACTION = auto()  # apply when an action is taken
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
 
-class AfflictionEffectTypes(Enum):
-    """
-    Types of Affliction effects
-    """
-    DAMAGE = auto()
-    AFFECT_STAT = auto()
-
+    __hash__ = None
 
 class AspectTypes(Enum):
     # TODO - replace with strings from json (as it is all defined in the json)
@@ -223,7 +300,22 @@ class InputModes(Enum):
     MOUSE_AND_KB = auto()
     GAMEPAD = auto()
 
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
 class MouseButtons(Enum):
     LEFT_BUTTON = auto()
     RIGHT_BUTTON = auto()
     MIDDLE_BUTTON = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None

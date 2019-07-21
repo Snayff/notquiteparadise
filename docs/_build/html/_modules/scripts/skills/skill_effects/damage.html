@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>scripts.skills.skill_effects.damage &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.skills.skill_effects.damage</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">TargetTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> \
+    <span class="n">HitTypes</span><span class="p">,</span> <span class="n">DamageTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">HitValues</span><span class="p">,</span> <span class="n">HitModifiers</span>
+<span class="kn">from</span> <span class="nn">scripts.events.entity_events</span> <span class="k">import</span> <span class="n">DieEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="k">import</span> <span class="n">MessageEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.skill_effect</span> <span class="k">import</span> <span class="n">SkillEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
+
+
+<div class="viewcode-block" id="DamageSkillEffect"><a class="viewcode-back" href="../../../../skills.html#scripts.skills.skill_effects.damage.DamageSkillEffect">[docs]</a><span class="k">class</span> <span class="nc">DamageSkillEffect</span><span class="p">(</span><span class="n">SkillEffect</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SkillEffect to damage an Entity</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        damage(int):</span>
+<span class="sd">        damage_type(int):</span>
+<span class="sd">        required_target_type(TargetTypes):</span>
+<span class="sd">        required_tags(list): list of TargetType enums</span>
+<span class="sd">        accuracy(int):</span>
+<span class="sd">        stat_to_target(PrimaryStatTypes):</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">required_target_type</span><span class="p">,</span> <span class="n">required_tags</span><span class="p">,</span> <span class="n">damage</span><span class="p">,</span> <span class="n">damage_type</span><span class="p">,</span>  <span class="n">accuracy</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;damage&quot;</span><span class="p">,</span> <span class="s2">&quot;This is the damage effect&quot;</span><span class="p">,</span> <span class="n">required_target_type</span><span class="p">,</span> <span class="n">required_tags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_damage</span> <span class="o">=</span> <span class="n">damage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">damage_type</span> <span class="o">=</span> <span class="n">damage_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_accuracy</span> <span class="o">=</span> <span class="n">accuracy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span> <span class="o">=</span> <span class="n">stat_to_target</span>
+
+<div class="viewcode-block" id="DamageSkillEffect.trigger"><a class="viewcode-back" href="../../../../skills.html#scripts.skills.skill_effects.damage.DamageSkillEffect.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacking_entity</span><span class="p">,</span> <span class="n">defending_entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trigger the effect</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            attacking_entity (Entity):</span>
+<span class="sd">            defending_entity (Entity):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span>
+
+        <span class="n">attacker</span> <span class="o">=</span> <span class="n">attacking_entity</span>
+        <span class="n">defender</span> <span class="o">=</span> <span class="n">defending_entity</span>
+
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
+        <span class="n">target_type</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">get_target_type</span><span class="p">(</span><span class="n">defender</span><span class="p">)</span>
+
+        <span class="c1"># check the type is correct, then that the tags match</span>
+        <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_target_type</span><span class="p">:</span>
+            <span class="c1"># if it needs to be another entity then it can&#39;t be looking at itself</span>
+            <span class="k">if</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">OTHER_ENTITY</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_tags</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">attacker</span> <span class="o">!=</span> <span class="n">defender</span><span class="p">:</span>
+                    <span class="n">to_hit_score</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">calculate_to_hit_score</span><span class="p">(</span><span class="n">defender</span><span class="p">,</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">base_accuracy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stat_to_target</span><span class="p">,</span> <span class="n">attacker</span><span class="p">)</span>
+                    <span class="n">hit_type</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">get_hit_type</span><span class="p">(</span><span class="n">to_hit_score</span><span class="p">)</span>
+                    <span class="n">damage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_damage</span><span class="p">(</span><span class="n">defender</span><span class="p">,</span> <span class="n">hit_type</span><span class="p">,</span> <span class="n">attacker</span><span class="p">)</span>
+
+                    <span class="c1"># apply damage</span>
+                    <span class="k">if</span> <span class="n">damage</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">apply_damage</span><span class="p">(</span><span class="n">defender</span><span class="p">,</span> <span class="n">damage</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">hit_type</span> <span class="o">==</span> <span class="n">HitTypes</span><span class="o">.</span><span class="n">GRAZE</span><span class="p">:</span>
+                            <span class="n">hit_type_desc</span> <span class="o">=</span> <span class="s2">&quot;grazes&quot;</span>
+                        <span class="k">elif</span> <span class="n">hit_type</span> <span class="o">==</span> <span class="n">HitTypes</span><span class="o">.</span><span class="n">HIT</span><span class="p">:</span>
+                            <span class="n">hit_type_desc</span> <span class="o">=</span> <span class="s2">&quot;hits&quot;</span>
+                        <span class="k">elif</span> <span class="n">hit_type</span> <span class="o">==</span> <span class="n">HitTypes</span><span class="o">.</span><span class="n">CRIT</span><span class="p">:</span>
+                            <span class="n">hit_type_desc</span> <span class="o">=</span> <span class="s2">&quot;crits&quot;</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">hit_type_desc</span> <span class="o">=</span> <span class="s2">&quot;does something unknown&quot;</span> <span class="c1"># catch all</span>
+
+                        <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{attacker.name}</span><span class="s2"> </span><span class="si">{hit_type_desc}</span><span class="s2"> </span><span class="si">{defender.name}</span><span class="s2"> for </span><span class="si">{damage}</span><span class="s2">.&quot;</span>
+                        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+                        <span class="c1"># TODO - add the damage type to the message and replace the type with an icon</span>
+                        <span class="c1"># TODO - add the explanation of the damage roll to a tooltip</span>
+
+                        <span class="c1"># check if defender died</span>
+                        <span class="k">if</span> <span class="n">defender</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">hp</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">DieEvent</span><span class="p">(</span><span class="n">defender</span><span class="p">))</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot; </span><span class="si">{defender.name}</span><span class="s2"> resists damage from </span><span class="si">{self.owner.name}</span><span class="s2">.&quot;</span>
+                        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{attacker.name}</span><span class="s2"> uses </span><span class="si">{self.owner.name}</span><span class="s2"> and deals no damage to </span><span class="si">{defender.name}</span><span class="s2">.&quot;</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;You can&#39;t do that there!&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+
+            <span class="c1"># log why</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; target type incorrect; selected:</span><span class="si">{target_type}</span><span class="s2">, needed:</span><span class="si">{self.required_target_type}</span><span class="s2">&quot;</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DamageSkillEffect.calculate_damage"><a class="viewcode-back" href="../../../../skills.html#scripts.skills.skill_effects.damage.DamageSkillEffect.calculate_damage">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defending_entity</span><span class="p">,</span> <span class="n">hit_type</span><span class="p">,</span> <span class="n">attacking_entity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Work out the damage to be dealt. if attacking entity is None then value used is 0.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            attacking_entity(Entity):</span>
+<span class="sd">            defending_entity(Entity):</span>
+<span class="sd">            hit_type(HitTypes):</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: damage to be dealt</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Calculate damage...&quot;</span><span class="p">))</span>
+
+        <span class="n">initial_damage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_damage</span>  <span class="c1"># TODO - add skill dmg modifier to allow dmg growth</span>
+
+        <span class="c1"># get resistance value</span>
+        <span class="n">resist_value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">damage_type</span> <span class="o">==</span> <span class="n">DamageTypes</span><span class="o">.</span><span class="n">PIERCE</span><span class="p">:</span>
+            <span class="n">resist_value</span> <span class="o">=</span> <span class="n">defending_entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">resist_pierce</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">damage_type</span> <span class="o">==</span> <span class="n">DamageTypes</span><span class="o">.</span><span class="n">BLUNT</span><span class="p">:</span>
+            <span class="n">resist_value</span> <span class="o">=</span> <span class="n">defending_entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">resist_blunt</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">damage_type</span> <span class="o">==</span> <span class="n">DamageTypes</span><span class="o">.</span><span class="n">ELEMENTAL</span><span class="p">:</span>
+            <span class="n">resist_value</span> <span class="o">=</span> <span class="n">defending_entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">resist_elemental</span>
+
+        <span class="c1"># mitigate damage with defence</span>
+        <span class="n">mitigated_damage</span> <span class="o">=</span> <span class="n">initial_damage</span> <span class="o">-</span> <span class="n">resist_value</span>
+
+        <span class="c1"># apply to hit modifier to damage</span>
+        <span class="k">if</span> <span class="n">hit_type</span> <span class="o">==</span> <span class="n">HitTypes</span><span class="o">.</span><span class="n">CRIT</span><span class="p">:</span>
+            <span class="n">modified_damage</span> <span class="o">=</span> <span class="n">mitigated_damage</span> <span class="o">*</span> <span class="n">HitModifiers</span><span class="o">.</span><span class="n">CRIT</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="n">hit_type</span> <span class="o">==</span> <span class="n">HitTypes</span><span class="o">.</span><span class="n">HIT</span><span class="p">:</span>
+            <span class="n">modified_damage</span> <span class="o">=</span> <span class="n">mitigated_damage</span> <span class="o">*</span> <span class="n">HitModifiers</span><span class="o">.</span><span class="n">HIT</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">modified_damage</span> <span class="o">=</span> <span class="n">mitigated_damage</span> <span class="o">*</span> <span class="n">HitModifiers</span><span class="o">.</span><span class="n">GRAZE</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="c1"># round down the dmg</span>
+        <span class="n">modified_damage</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">modified_damage</span><span class="p">)</span>
+
+        <span class="c1"># log the info</span>
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Initial damage:</span><span class="si">{initial_damage}</span><span class="s2">, Mitigated:</span><span class="si">{mitigated_damage}</span><span class="s2">,  Modified:</span><span class="si">{modified_damage}</span><span class="s2">.&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">modified_damage</span></div>
+
+<div class="viewcode-block" id="DamageSkillEffect.apply_damage"><a class="viewcode-back" href="../../../../skills.html#scripts.skills.skill_effects.damage.DamageSkillEffect.apply_damage">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">apply_damage</span><span class="p">(</span><span class="n">defending_entity</span><span class="p">,</span> <span class="n">damage</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply damage to an entity</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            defending_entity(Entity):</span>
+<span class="sd">            damage(int):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">defending_entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">hp</span> <span class="o">-=</span> <span class="n">damage</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

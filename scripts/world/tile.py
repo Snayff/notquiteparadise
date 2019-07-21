@@ -1,4 +1,4 @@
-from scripts.core.constants import TILE_SIZE, TargetTypes, TargetTags
+from scripts.core.constants import TILE_SIZE, TargetTags
 from scripts.world.entity import Entity
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
@@ -14,7 +14,7 @@ class Tile:
         is_visible(bool): if tile is visible to player
         entity(Entity): the entity on the tile
         terrain(Terrain): the terrain on the tile, such as floor or wall
-        aspect(Aspect): the aspect of the tile, such as smoke or fire
+        aspect(Aspect): the aspects of the tile, such as smoke or fire
     """
 
     def __init__(self, x, y, entity=None, terrain=None, aspect=None):
@@ -35,8 +35,6 @@ class Tile:
 
         if entity:
             world_manager.Map.set_entity_on_tile(self, entity)
-
-
 
     @property
     def is_floor(self):

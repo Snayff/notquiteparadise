@@ -81,13 +81,13 @@ class EntityHandler(Subscriber):
 
                 # clean up old tile
                 old_tile = world_manager.Map.get_tile(old_x, old_y)
-                world_manager.Map.remove_entity_on_tile(old_tile)
+                world_manager.Map.set_entity_on_tile(old_tile, None)
 
                 # move entity to new tile
                 new_tile = world_manager.Map.get_tile(target_x, target_y)
                 world_manager.Map.set_entity_on_tile(new_tile, entity)
 
-                # activate the tile's aspect affect
+                # activate the tile's aspects affect
                 world_manager.Map.trigger_aspect_effect_on_tile(new_tile)
 
                 # update fov if needed
@@ -127,7 +127,7 @@ class EntityHandler(Subscriber):
         # get the tile and remove the entity from it
         tile_x, tile_y = entity.x, entity.y
         tile = world_manager.Map.get_tile(tile_x, tile_y)
-        world_manager.Map.remove_entity_on_tile(tile)
+        world_manager.Map.set_entity_on_tile(tile, None)
 
         # remove from turn queue
         del turn_manager.turn_queue[entity]
