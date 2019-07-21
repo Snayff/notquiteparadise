@@ -33,8 +33,8 @@
   <h1>Source code for scripts.world.aspect.bog</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pygame</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">AspectTypes</span><span class="p">,</span> <span class="n">TargetTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> \
-    <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">SkillEffectTypes</span><span class="p">,</span> <span class="n">LoggingEventTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">AspectTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> \
+    <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">LoggingEventTypes</span>
 <span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
@@ -63,18 +63,8 @@
         <span class="c1"># create effects</span>
         <span class="n">effects</span> <span class="o">=</span> <span class="n">aspect</span><span class="o">.</span><span class="n">skill_effects</span>
         <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">effects</span><span class="p">:</span>
-            <span class="n">created_effect</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">effect_name</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
             <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-
-            <span class="k">if</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;damage&quot;</span><span class="p">:</span>
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_damage_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
-
-            <span class="k">elif</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;change_terrain&quot;</span><span class="p">:</span>
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_change_terrain_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
-
-            <span class="k">elif</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;apply_affliction&quot;</span><span class="p">:</span>
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_apply_affliction_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
+            <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
 
             <span class="c1"># if we have an effect add it to internal list</span>
             <span class="k">if</span> <span class="n">created_effect</span><span class="p">:</span>
@@ -89,13 +79,13 @@
             <span class="c1"># attempt to apply on entity</span>
             <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">effects</span><span class="p">:</span>
 
-                <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span><span class="p">:</span>
                     <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">DAMAGE</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">DAMAGE</span><span class="p">:</span>
                     <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">MOVE</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">MOVE</span><span class="p">:</span>
                     <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span>
-                <span class="k">elif</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">CHANGE_TERRAIN</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">CHANGE_TERRAIN</span><span class="p">:</span>
                     <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">terrain</span><span class="p">)</span>
 
                     <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{effect}</span><span class="s2"> not found in &#39;bog.trigger&#39;&quot;</span>

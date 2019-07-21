@@ -32,17 +32,20 @@
             
   <h1>Source code for scripts.managers.world_methods.skill_methods</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TargetTypes</span><span class="p">,</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">DamageTypes</span><span class="p">,</span> \
-    <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> <span class="n">HitValues</span><span class="p">,</span> <span class="n">HitTypes</span><span class="p">,</span> <span class="n">SkillEffectTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">DamageTypes</span><span class="p">,</span> \
+    <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> <span class="n">HitValues</span><span class="p">,</span> <span class="n">HitTypes</span><span class="p">,</span> <span class="n">EffectTypes</span>
 <span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="k">import</span> <span class="n">MessageEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.affect_stat</span> <span class="k">import</span> <span class="n">AffectStatEffect</span>
 <span class="kn">from</span> <span class="nn">scripts.skills.skill</span> <span class="k">import</span> <span class="n">Skill</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.apply_affliction</span> <span class="k">import</span> <span class="n">ApplyAfflictionSkillEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.change_terrain</span> <span class="k">import</span> <span class="n">ChangeTerrainSkillEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.damage</span> <span class="k">import</span> <span class="n">DamageSkillEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.apply_affliction</span> <span class="k">import</span> <span class="n">ApplyAfflictionEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.change_terrain</span> <span class="k">import</span> <span class="n">ChangeTerrainEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.damage</span> <span class="k">import</span> <span class="n">DamageEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.move</span> <span class="k">import</span> <span class="n">MoveEffect</span>
 <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.terrain</span> <span class="k">import</span> <span class="n">Terrain</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
@@ -69,93 +72,37 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
 
+        <span class="n">start_tile</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span> <span class="o">=</span> <span class="n">target_pos</span>
-        <span class="n">blocking_entity_at_location</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_blocking_entity_at_location</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span>
-
+        <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span>
         <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">required_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_target_type_from_string</span><span class="p">(</span><span class="n">skill_data</span><span class="o">.</span><span class="n">required_target_type</span><span class="p">)</span>
-        <span class="n">skill_range</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">range</span>
-        <span class="n">resource_type</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span>
-        <span class="n">resource_cost</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span>
-        <span class="n">required_tags</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">required_tags</span><span class="p">:</span>
-            <span class="n">required_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_target_tags_from_string</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
-
-        <span class="c1"># do we need an entity?</span>
-        <span class="k">if</span> <span class="n">required_target</span> <span class="o">==</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">:</span>
-            <span class="c1"># is there an entity to target?</span>
-            <span class="k">if</span> <span class="n">blocking_entity_at_location</span><span class="p">:</span>
-                <span class="c1"># is the entity within range?</span>
-                <span class="n">distance_to_entity</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_chebyshev_distance_between_entities</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span>
-                                            <span class="n">blocking_entity_at_location</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">distance_to_entity</span> <span class="o">&gt;</span> <span class="n">skill_range</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">False</span>
-
-        <span class="c1"># get info about the tile and the skill requirements</span>
-        <span class="n">is_required_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_required_target_type</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">required_target</span><span class="p">)</span>
-        <span class="n">has_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_required_tags</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">required_tags</span><span class="p">)</span>
 
         <span class="c1"># check we have everything we need and if so use the skill</span>
-        <span class="k">if</span> <span class="n">is_required_type</span> <span class="ow">and</span> <span class="n">has_tags</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_required_tags</span><span class="p">(</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">required_tags</span><span class="p">):</span>
+            <span class="n">resource_type</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span>
+            <span class="n">resource_cost</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">,</span> <span class="n">resource_cost</span><span class="p">):</span>
-                <span class="k">return</span> <span class="kc">True</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_chebyshev_distance_between_tiles</span><span class="p">(</span><span class="n">start_tile</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">)</span>
+                <span class="n">skill_range</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">range</span>
+                <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="n">skill_range</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Target out of skill range, &quot;</span>
+                    <span class="n">f</span><span class="s2">&quot;range </span><span class="si">{skill_range}</span><span class="s2"> &gt; distance </span><span class="si">{distance}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;You can&#39;t afford the cost.&quot;</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="kc">False</span></div>
-
-<div class="viewcode-block" id="SkillMethods.is_required_target_type"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.is_required_target_type">[docs]</a>    <span class="k">def</span> <span class="nf">is_required_target_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">required_target_type</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if the tile has the required target type</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            required_target_type ():</span>
-<span class="sd">            tile(Tile): tile to check for a target</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">             bool: True if required target type found, else False.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Checking target for type </span><span class="si">{required_target_type}</span><span class="s2">...&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
-
-        <span class="c1"># if we need a terrain type then pass the tiles terrain and get its type</span>
-        <span class="k">if</span> <span class="n">required_target_type</span> <span class="o">==</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">:</span>
-            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_target_type</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">terrain</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">:</span>
-                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Target type OK! Type is </span><span class="si">{target_type}</span><span class="s2">&quot;</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
-                <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Target type WRONG! Type is </span><span class="si">{target_type}</span><span class="s2">&quot;</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
-
-                <span class="k">return</span> <span class="kc">False</span>
-
-        <span class="c1"># if we need an entity type then pass the tiles entity and get its type</span>
-        <span class="k">elif</span> <span class="n">required_target_type</span> <span class="o">==</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">:</span>
-            <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_target_type</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">:</span>
-                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Target type OK! Type is </span><span class="si">{target_type}</span><span class="s2">&quot;</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
-                <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Target type WRONG! Type is </span><span class="si">{target_type}</span><span class="s2">&quot;</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
-
-                <span class="k">return</span> <span class="kc">False</span>
-
-        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># catch all</span></div>
 
 <div class="viewcode-block" id="SkillMethods.has_required_tags"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.has_required_tags">[docs]</a>    <span class="k">def</span> <span class="nf">has_required_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">required_tags</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check a tile has all required tags</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            required_tags ():</span>
-<span class="sd">            tile (Tile):</span>
+<span class="sd">            tile(Tile):</span>
+<span class="sd">            required_tags(List):</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            bool: True if tile has all tags</span>
@@ -166,9 +113,8 @@
         <span class="n">tags_checked</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># assess all tags</span>
-
         <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">required_tags</span><span class="p">:</span>
-            <span class="n">tags_checked</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+            <span class="n">tags_checked</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
 
         <span class="c1"># if all tags came back true return true</span>
         <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tags_checked</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
@@ -179,7 +125,7 @@
             <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Some tags WRONG! Tags checked are </span><span class="si">{tags_checked}</span><span class="s2">&quot;</span>
             <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
 
-            <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;You can&#39;t do that there!&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;That&#39;s not the right target!&quot;</span>
             <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
@@ -206,177 +152,6 @@
             <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; cannot afford cost.&quot;</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="SkillMethods.get_target_tags_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_target_tags_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_target_tags_from_string</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the tag enum from the tag string</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tag(str): the tag as in the json</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            enum</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;wall&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span>
-        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;floor&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">FLOOR</span>
-        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;self&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">SELF</span>
-        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;other_entity&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">OTHER_ENTITY</span>
-        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;no_entity&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">NO_ENTITY</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{tag}</span><span class="s2"> not found in &#39;get_target_tags_from_string&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="SkillMethods.get_target_type_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_target_type_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_target_type_from_string</span><span class="p">(</span><span class="n">target_type</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the target type enum from the tag string</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            target_type(str): the type as in the json</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            enum</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">ENTITY</span>
-        <span class="k">elif</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;terrain&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">TERRAIN</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{target_type}</span><span class="s2"> not found in &#39;get_target_type_from_string&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="SkillMethods.get_damage_type_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_damage_type_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_damage_type_from_string</span><span class="p">(</span><span class="n">damage_type</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the damage type enum from a string</span>
-<span class="sd">        Args:</span>
-<span class="sd">            damage_type:</span>
-
-<span class="sd">        Returns:</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">damage_type</span> <span class="o">==</span> <span class="s2">&quot;pierce&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">DamageTypes</span><span class="o">.</span><span class="n">PIERCE</span>
-        <span class="k">elif</span> <span class="n">damage_type</span> <span class="o">==</span> <span class="s2">&quot;blunt&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">DamageTypes</span><span class="o">.</span><span class="n">BLUNT</span>
-        <span class="k">elif</span> <span class="n">damage_type</span> <span class="o">==</span> <span class="s2">&quot;elemental&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">DamageTypes</span><span class="o">.</span><span class="n">ELEMENTAL</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{damage_type}</span><span class="s2"> not found in &#39;get_damage_type_from_string&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="SkillMethods.get_stat_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_stat_from_string">[docs]</a>    <span class="k">def</span> <span class="nf">get_stat_from_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return PrimaryStatTypes or SecondaryStatTypes based on string name of stat</span>
-<span class="sd">        Args:</span>
-<span class="sd">            stat (str):</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            The stat type</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">stat_enum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_primary_stat_from_string</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">stat_enum</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">stat_enum</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">stat_enum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_secondary_stat_from_string</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">stat_enum</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">stat_enum</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{stat}</span><span class="s2"> not found in &#39;get_stat_from_string&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="SkillMethods.get_primary_stat_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_primary_stat_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_primary_stat_from_string</span><span class="p">(</span><span class="n">primary_stat</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the primary stat enum from a string</span>
-<span class="sd">        Args:</span>
-<span class="sd">            primary_stat:</span>
-
-<span class="sd">        Returns:</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">primary_stat</span> <span class="o">==</span> <span class="s2">&quot;vigour&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">VIGOUR</span>
-        <span class="k">elif</span> <span class="n">primary_stat</span> <span class="o">==</span> <span class="s2">&quot;clout&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">CLOUT</span>
-        <span class="k">elif</span> <span class="n">primary_stat</span> <span class="o">==</span> <span class="s2">&quot;skullduggery&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">SKULLDUGGERY</span>
-        <span class="k">elif</span> <span class="n">primary_stat</span> <span class="o">==</span> <span class="s2">&quot;bustle&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">BUSTLE</span>
-        <span class="k">elif</span> <span class="n">primary_stat</span> <span class="o">==</span> <span class="s2">&quot;exactitude&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">EXACTITUDE</span></div>
-
-<div class="viewcode-block" id="SkillMethods.get_secondary_stat_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_secondary_stat_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_secondary_stat_from_string</span><span class="p">(</span><span class="n">secondary_stat</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the secondary stat enum from a string</span>
-<span class="sd">        Args:</span>
-<span class="sd">            secondary_stat:</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            SecondaryStatTypes:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">secondary_stat</span> <span class="o">==</span> <span class="s2">&quot;dodge_speed&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">DODGE_SPEED</span>
-        <span class="k">elif</span> <span class="n">secondary_stat</span> <span class="o">==</span> <span class="s2">&quot;dodge_toughness&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">DODGE_TOUGHNESS</span>
-        <span class="k">elif</span> <span class="n">secondary_stat</span> <span class="o">==</span> <span class="s2">&quot;dodge_intelligence&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">DODGE_INTELLIGENCE</span>
-        <span class="k">elif</span> <span class="n">secondary_stat</span> <span class="o">==</span> <span class="s2">&quot;action_cost_change&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">ACTION_COST_CHANGE</span></div>
-
-<div class="viewcode-block" id="SkillMethods.get_target"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_target">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_target</span><span class="p">(</span><span class="n">target_pos</span><span class="p">,</span> <span class="n">required_target_type</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get target at xy based on target type</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            required_target_type ():</span>
-<span class="sd">            target_pos (tuple): x y of the target</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO - extend to target an area</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-        <span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span> <span class="o">=</span> <span class="n">target_pos</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">if</span> <span class="n">required_target_type</span> <span class="o">==</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">:</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_blocking_entity_at_location</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">required_target_type</span> <span class="o">==</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">TERRAIN</span><span class="p">:</span>
-            <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">terrain</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Got target </span><span class="si">{target.name}</span><span class="s2"> of type </span><span class="si">{required_target_type}</span><span class="s2">.&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">target</span></div>
-
-<div class="viewcode-block" id="SkillMethods.get_target_type"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_target_type">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_target_type</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the type of the required target</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            target: the target; terrain or entity</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            TargetTypes:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Terrain</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">TERRAIN</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Entity</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">TargetTypes</span><span class="o">.</span><span class="n">ENTITY</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Type no found for </span><span class="si">{target}</span><span class="s2"> in &#39;get_target_type&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
 <div class="viewcode-block" id="SkillMethods.get_hit_type"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_hit_type">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_hit_type</span><span class="p">(</span><span class="n">to_hit_score</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -394,114 +169,27 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">HitTypes</span><span class="o">.</span><span class="n">GRAZE</span></div>
 
-<div class="viewcode-block" id="SkillMethods.get_skill_effect_type_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_skill_effect_type_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_skill_effect_type_from_string</span><span class="p">(</span><span class="n">skill_effect_name</span><span class="p">):</span>
+<div class="viewcode-block" id="SkillMethods.create_effect"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_effect">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_effect</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">effect_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the skill effect type from a string</span>
-<span class="sd">        Args:</span>
-<span class="sd">            skill_effect_name ():</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            SkillEffectTypes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">skill_effect_name</span> <span class="o">==</span> <span class="s2">&quot;damage&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">DAMAGE</span>
-        <span class="k">elif</span> <span class="n">skill_effect_name</span> <span class="o">==</span> <span class="s2">&quot;move&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">MOVE</span>
-        <span class="k">elif</span> <span class="n">skill_effect_name</span> <span class="o">==</span> <span class="s2">&quot;change_terrain&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">CHANGE_TERRAIN</span>
-        <span class="k">elif</span> <span class="n">skill_effect_name</span> <span class="o">==</span> <span class="s2">&quot;apply_affliction&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SkillEffectTypes</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{skill_effect_name}</span><span class="s2"> not found in &#39;get_skill_effect_type_from_string&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="SkillMethods.create_damage_effect"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_damage_effect">[docs]</a>    <span class="k">def</span> <span class="nf">create_damage_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">effect</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create the damage effect object</span>
+<span class="sd">        Create an effect and assign the owner.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            skill (Skill): the skill that will contain this effect</span>
-<span class="sd">            effect (dict): dict of effect values, from json</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            DamageSkillEffect: The created effect object</span>
+<span class="sd">            owner (object): Skill or Affliction</span>
+<span class="sd">            effect_type(EffectTypes):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Skill</span>
+        <span class="n">created_effect</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="c1"># get tags from skill_effects</span>
-        <span class="n">target_tags</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;required_tags&quot;</span><span class="p">]:</span>
-            <span class="n">target_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">get_target_tags_from_string</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
-
-        <span class="n">target_type</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get_target_type_from_string</span><span class="p">(</span><span class="n">effect</span><span class="p">[</span><span class="s2">&quot;required_target_type&quot;</span><span class="p">])</span>
-        <span class="n">damage_type</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get_damage_type_from_string</span><span class="p">(</span><span class="n">effect</span><span class="p">[</span><span class="s2">&quot;damage_type&quot;</span><span class="p">])</span>
-        <span class="n">stat_to_target</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get_secondary_stat_from_string</span><span class="p">(</span><span class="n">effect</span><span class="p">[</span><span class="s2">&quot;stat_to_target&quot;</span><span class="p">])</span>
-
-        <span class="c1"># add effect object to skill</span>
-        <span class="n">created_effect</span> <span class="o">=</span> <span class="n">DamageSkillEffect</span><span class="p">(</span><span class="n">skill</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">,</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;damage&quot;</span><span class="p">],</span> <span class="n">damage_type</span><span class="p">,</span>
-                                           <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">],</span> <span class="n">stat_to_target</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">created_effect</span></div>
-
-<div class="viewcode-block" id="SkillMethods.create_change_terrain_effect"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_change_terrain_effect">[docs]</a>    <span class="k">def</span> <span class="nf">create_change_terrain_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">effect</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create the change terrain effect object</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            skill (Skill): the skill that will contain this effect</span>
-<span class="sd">            effect (dict): dict of effect values, from json</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            ChangeTerrainSkillEffect: The created effect object</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Skill</span>
-
-        <span class="c1"># get tags from skill_effects</span>
-        <span class="n">target_tags</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;required_tags&quot;</span><span class="p">]:</span>
-            <span class="n">target_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">get_target_tags_from_string</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
-
-        <span class="n">target_type</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get_target_type_from_string</span><span class="p">(</span><span class="n">effect</span><span class="p">[</span><span class="s2">&quot;required_target_type&quot;</span><span class="p">])</span>
-        <span class="n">new_terrain</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get_target_tags_from_string</span><span class="p">(</span><span class="n">effect</span><span class="p">[</span><span class="s2">&quot;new_terrain&quot;</span><span class="p">])</span>
-
-        <span class="c1"># add effect object to skill</span>
-        <span class="n">created_effect</span> <span class="o">=</span> <span class="n">ChangeTerrainSkillEffect</span><span class="p">(</span><span class="n">skill</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">,</span> <span class="n">new_terrain</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">created_effect</span></div>
-
-<div class="viewcode-block" id="SkillMethods.create_apply_affliction_effect"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_apply_affliction_effect">[docs]</a>    <span class="k">def</span> <span class="nf">create_apply_affliction_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">effect</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create the apply affliction effect object</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            skill (Skill): the skill that will contain this effect</span>
-<span class="sd">            effect (dict): dict of effect values, from json</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            ApplyAfflictionSkillEffect: The created effect object</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Skill</span>
-
-        <span class="c1"># get the info for the APPLICATION of the affliction N.B. only create affliction at point of application</span>
-        <span class="n">target_type</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get_target_type_from_string</span><span class="p">(</span><span class="n">effect</span><span class="p">[</span><span class="s2">&quot;required_target_type&quot;</span><span class="p">])</span>
-
-        <span class="c1"># get tags from skill_effects</span>
-        <span class="n">target_tags</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;required_tags&quot;</span><span class="p">]:</span>
-            <span class="n">target_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">get_target_tags_from_string</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
-
-        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]</span>
-        <span class="n">stat_to_target</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get_stat_from_string</span><span class="p">(</span><span class="n">effect</span><span class="p">[</span><span class="s2">&quot;stat_to_target&quot;</span><span class="p">])</span>
-        <span class="n">affliction_name</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;affliction_name&quot;</span><span class="p">]</span>
-        <span class="n">affliction_duration</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>
-        <span class="n">affliction_values</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_data</span><span class="p">(</span><span class="n">affliction_name</span><span class="p">)</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-        <span class="n">affliction_category</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Affliction</span><span class="o">.</span><span class="n">get_affliction_category_from_string</span><span class="p">(</span><span class="n">affliction_values</span><span class="o">.</span><span class="n">category</span><span class="p">)</span>
-
-        <span class="c1"># add effect object to skill</span>
-        <span class="n">created_effect</span> <span class="o">=</span> <span class="n">ApplyAfflictionSkillEffect</span><span class="p">(</span><span class="n">skill</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="p">,</span>
-                                                    <span class="n">affliction_name</span><span class="p">,</span> <span class="n">affliction_category</span><span class="p">,</span> <span class="n">affliction_duration</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">DAMAGE</span><span class="p">:</span>
+            <span class="n">created_effect</span> <span class="o">=</span> <span class="n">DamageEffect</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span><span class="p">:</span>
+            <span class="n">created_effect</span> <span class="o">=</span> <span class="n">ApplyAfflictionEffect</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">MOVE</span><span class="p">:</span>
+            <span class="n">created_effect</span> <span class="o">=</span> <span class="n">MoveEffect</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">CHANGE_TERRAIN</span><span class="p">:</span>
+            <span class="n">created_effect</span> <span class="o">=</span> <span class="n">ChangeTerrainEffect</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">effect_type</span> <span class="o">==</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">:</span>
+            <span class="n">created_effect</span> <span class="o">=</span> <span class="n">AffectStatEffect</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">created_effect</span></div>
 

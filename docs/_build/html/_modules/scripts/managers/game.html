@@ -67,7 +67,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">previous_game_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span> <span class="o">=</span> <span class="n">new_game_state</span>
 
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Game_state updated to </span><span class="si">{self.game_state}</span><span class="s2"> from </span><span class="si">{self.previous_game_state}</span><span class="s2">&quot;</span>
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Game_state updated from </span><span class="si">{self.previous_game_state}</span><span class="s2"> to </span><span class="si">{self.game_state}</span><span class="s2">&quot;</span>
         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div></div>
 </pre></div>
 

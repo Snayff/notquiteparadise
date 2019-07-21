@@ -55,51 +55,31 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">affected_entity</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Affliction</span>
-        <span class="n">affliction</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_data</span><span class="p">(</span><span class="n">affliction_name</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">affliction_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">affliction</span><span class="o">.</span><span class="n">description</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icon</span> <span class="o">=</span> <span class="n">affliction</span><span class="o">.</span><span class="n">icon</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">affliction_category</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get_affliction_category_from_string</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">category</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trigger_event</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get_trigger_event_from_string</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">trigger_event</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span> <span class="o">=</span> <span class="n">affected_entity</span>  <span class="c1"># set at time of allocation to an entity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">affliction_effects</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># get the affliction skill_effects</span>
-        <span class="n">affliction_effects_values</span> <span class="o">=</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affliction_effects</span>
-
-        <span class="c1"># unpack all affliction_effects</span>
-        <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">affliction_effects_values</span><span class="p">:</span>
-            <span class="n">created_effect</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">effect_name</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;damage&quot;</span><span class="p">:</span>
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Affliction</span><span class="o">.</span><span class="n">create_damage_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;affect_stat&quot;</span><span class="p">:</span>
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Affliction</span><span class="o">.</span><span class="n">create_affect_stat_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
-
-            <span class="c1"># if we have an effect add it to internal list</span>
-            <span class="k">if</span> <span class="n">created_effect</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">affliction_effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">created_effect</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Affliction.trigger"><a class="viewcode-back" href="../../../skills.html#scripts.skills.affliction.Affliction.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Trigger all affliction effects and decrement duration by 1</span>
+<span class="sd">        Trigger all afflictions effects and decrement duration by 1</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Triggering effects in </span><span class="si">{self.name}</span><span class="s2">&quot;</span>
         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
 
-        <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">affliction_effects</span><span class="p">:</span>
-            <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="c1"># reduce duration on all effects other than Passive</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trigger_event</span> <span class="o">!=</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">PASSIVE</span><span class="p">:</span>
+        <span class="c1"># apply any effects</span>
+        <span class="k">for</span> <span class="n">effect_name</span><span class="p">,</span> <span class="n">effect_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect_data</span><span class="o">.</span><span class="n">effect_type</span><span class="p">)</span>
+            <span class="n">effected_tile</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">effected_tile</span><span class="p">)</span>
+
+    <span class="c1"># reduce duration on all effects other than Passive</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">trigger_event</span> <span class="o">!=</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">PASSIVE</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="mi">1</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Duration reduced to: </span><span class="si">{self.duration}</span><span class="s2">&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.affected_entity.name}</span><span class="s2">`s </span><span class="si">{self.name}</span><span class="s2"> duration reduced to </span><span class="si">{self.duration}</span><span class="s2">&quot;</span>
             <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div></div>
 
 </pre></div>

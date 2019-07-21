@@ -282,15 +282,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># can&#39;t use skill, is it due to being too poor?</span>
                     <span class="k">if</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">can_afford_cost</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">):</span>
-                        <span class="c1"># can afford so must be picking wrong target</span>
-                        <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;You can&#39;t do that there!&quot;</span>
-                        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
-
                         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">TARGETING_MODE</span><span class="p">,</span> <span class="n">skill</span><span class="p">))</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;It seems you&#39;re too poor to do that.&quot;</span>
-                        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="s2">&quot;There is nothing in that skill slot.&quot;</span><span class="p">))</span></div>
 

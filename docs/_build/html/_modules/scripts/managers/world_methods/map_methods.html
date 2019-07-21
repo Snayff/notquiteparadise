@@ -36,6 +36,7 @@
 <span class="kn">from</span> <span class="nn">scripts.world.game_map</span> <span class="k">import</span> <span class="n">GameMap</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
+<span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
 
 
 <div class="viewcode-block" id="MapMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods">[docs]</a><span class="k">class</span> <span class="nc">MapMethods</span><span class="p">:</span>
@@ -228,15 +229,8 @@
 <span class="sd">            entity:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tile</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
-
-<div class="viewcode-block" id="MapMethods.remove_entity_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.remove_entity_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">remove_entity_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove entity from tile</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
 
 <div class="viewcode-block" id="MapMethods.get_entity_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_entity_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_entity_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
@@ -255,19 +249,19 @@
 <span class="sd">        Set the new terrain on the tile.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tile ():</span>
-<span class="sd">            terrain:</span>
+<span class="sd">            tile (Tile):</span>
+<span class="sd">            terrain (TargetTags):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="n">terrain</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
+        <span class="n">new_terrain</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="MapMethods.remove_terrain_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.remove_terrain_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">remove_terrain_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove terrain from tile</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="k">if</span> <span class="n">terrain</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
+            <span class="n">new_terrain</span> <span class="o">=</span> <span class="n">Wall</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">terrain</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
+            <span class="n">new_terrain</span> <span class="o">=</span> <span class="n">Floor</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">new_terrain</span><span class="p">:</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="n">new_terrain</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
 
 <div class="viewcode-block" id="MapMethods.get_terrain_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_terrain_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_terrain_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
@@ -283,22 +277,15 @@
 <div class="viewcode-block" id="MapMethods.set_aspect_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.set_aspect_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_aspect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the new aspect on the tile.</span>
+<span class="sd">        Set the new aspects on the tile.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            tile ():</span>
 <span class="sd">            aspect:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="n">aspect</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
-
-<div class="viewcode-block" id="MapMethods.remove_aspect_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.remove_aspect_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">remove_aspect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove aspect from tile</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="k">if</span> <span class="n">aspect</span><span class="p">:</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
 
 <div class="viewcode-block" id="MapMethods.trigger_aspect_effect_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.trigger_aspect_effect_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">trigger_aspect_effect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>

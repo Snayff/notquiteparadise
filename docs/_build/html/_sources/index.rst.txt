@@ -5,7 +5,7 @@
 
 Welcome to Not Quite Paradise's documentation!
 ==================================================
-Last updated on |today| for |version|.
+Last updated on |today| for v|version|.
 
 ..  toctree::
     :maxdepth: 1

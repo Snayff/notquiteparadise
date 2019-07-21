@@ -31,7 +31,7 @@
           <div class="body" role="main">
             
   <h1>Source code for scripts.world.tile</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TargetTypes</span><span class="p">,</span> <span class="n">TargetTags</span>
+<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TargetTags</span>
 <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
@@ -47,7 +47,7 @@
 <span class="sd">        is_visible(bool): if tile is visible to player</span>
 <span class="sd">        entity(Entity): the entity on the tile</span>
 <span class="sd">        terrain(Terrain): the terrain on the tile, such as floor or wall</span>
-<span class="sd">        aspect(Aspect): the aspect of the tile, such as smoke or fire</span>
+<span class="sd">        aspect(Aspect): the aspects of the tile, such as smoke or fire</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">terrain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -68,8 +68,6 @@
 
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
             <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_entity_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
-
-
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_floor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

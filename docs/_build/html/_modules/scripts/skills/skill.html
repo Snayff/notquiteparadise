@@ -34,13 +34,13 @@
 <span></span>
 <span class="kn">import</span> <span class="nn">pygame</span>
 
-
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">EffectTypes</span>
 <span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="k">import</span> <span class="n">EndTurnEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.apply_affliction</span> <span class="k">import</span> <span class="n">ApplyAfflictionSkillEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.change_terrain</span> <span class="k">import</span> <span class="n">ChangeTerrainSkillEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill_effects.damage</span> <span class="k">import</span> <span class="n">DamageSkillEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.apply_affliction</span> <span class="k">import</span> <span class="n">ApplyAfflictionEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.change_terrain</span> <span class="k">import</span> <span class="n">ChangeTerrainEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.damage</span> <span class="k">import</span> <span class="n">DamageEffect</span>
 
 
 <div class="viewcode-block" id="Skill"><a class="viewcode-back" href="../../../skills.html#scripts.skills.skill.Skill">[docs]</a><span class="k">class</span> <span class="nc">Skill</span><span class="p">:</span>
@@ -57,51 +57,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span> <span class="o">=</span> <span class="n">skill_tree_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">skill_name</span>
 
-        <span class="n">skill</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
-
-        <span class="c1"># # aesthetic info</span>
-        <span class="c1"># self.description = skill.description  # the description of the skill</span>
-        <span class="c1"># self.icon = pygame.image.load(&quot;assets/skills/&quot; + skill.icon).convert_alpha()  # icon showing the skill</span>
-        <span class="c1">#</span>
-        <span class="c1"># # targeting info</span>
-        <span class="c1"># self.range = skill.range  # how far away the skill can be used</span>
-        <span class="c1"># from scripts.global_singletons.managers import world_manager</span>
-        <span class="c1"># self.required_target_type = world_manager.Skill.get_target_type_from_string(skill.required_target_type)</span>
-        <span class="c1"># required_tags = skill.required_tags</span>
-        <span class="c1"># self.required_tags = []</span>
-        <span class="c1">#</span>
-        <span class="c1"># for tag in required_tags:</span>
-        <span class="c1">#     self.required_tags.append(world_manager.Skill.get_target_tags_from_string(tag))</span>
-        <span class="c1">#</span>
-        <span class="c1"># # resource info</span>
-        <span class="c1"># self.resource_type = skill.resource_type</span>
-        <span class="c1"># self.resource_cost = skill.resource_cost  # base value of resource spent to complete action</span>
-        <span class="c1"># self.time_cost = skill.time_cost  # base value of time spent to complete action</span>
-        <span class="c1"># self.cooldown = skill.cooldown  # how many rounds to wait between uses</span>
-
-        <span class="c1"># skill_effects info</span>
-        <span class="n">effects</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">skill_effects</span>  <span class="c1"># list of skill_effects to process</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">effects</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">effects</span><span class="p">:</span>
-            <span class="n">created_effect</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">effect_name</span> <span class="o">=</span> <span class="n">effect</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-            <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-
-            <span class="k">if</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;damage&quot;</span><span class="p">:</span>
-
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_damage_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
-
-            <span class="k">elif</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;change_terrain&quot;</span><span class="p">:</span>
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_change_terrain_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
-
-            <span class="k">elif</span> <span class="n">effect_name</span> <span class="o">==</span> <span class="s2">&quot;apply_affliction&quot;</span><span class="p">:</span>
-                <span class="n">created_effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_apply_affliction_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">)</span>
-
-            <span class="c1"># if we have an effect add it to internal list</span>
-            <span class="k">if</span> <span class="n">created_effect</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">created_effect</span><span class="p">)</span>
-
 <div class="viewcode-block" id="Skill.use"><a class="viewcode-back" href="../../../skills.html#scripts.skills.skill.Skill.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Use the skill</span>
@@ -109,29 +64,19 @@
 <span class="sd">        Args:</span>
 <span class="sd">            target_pos (tuple): x y of the target</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">owner</span>  <span class="c1"># owner is actor, actor`s owner is entity</span>
         <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-        <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">required_target</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">get_target_type_from_string</span><span class="p">(</span><span class="n">skill_data</span><span class="o">.</span><span class="n">required_target_type</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="n">target</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">get_target</span><span class="p">(</span><span class="n">target_pos</span><span class="p">,</span> <span class="n">required_target</span><span class="p">)</span>  <span class="c1"># get the tile or entity</span>
+        <span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span> <span class="o">=</span> <span class="n">target_pos</span>
+        <span class="n">effected_tile</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">)</span>
 
-        <span class="c1"># apply any skill_effects</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">effects</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">effects</span><span class="p">:</span>
-
-                <span class="c1"># TODO - change to compare strings</span>
-                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span> <span class="ow">is</span> <span class="n">DamageSkillEffect</span><span class="p">:</span>
-                    <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ChangeTerrainSkillEffect</span><span class="p">:</span>
-                    <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ApplyAfflictionSkillEffect</span><span class="p">:</span>
-                    <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="c1"># apply any effects</span>
+        <span class="k">for</span> <span class="n">effect_name</span><span class="p">,</span> <span class="n">effect_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect_data</span><span class="o">.</span><span class="n">effect_type</span><span class="p">)</span>
+            <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">effected_tile</span><span class="p">)</span>
 
         <span class="c1"># end the turn</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">EndTurnEvent</span><span class="p">(</span><span class="n">skill_data</span><span class="o">.</span><span class="n">time_cost</span><span class="p">))</span></div></div>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">EndTurnEvent</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">time_cost</span><span class="p">))</span></div></div>
 
 
 
