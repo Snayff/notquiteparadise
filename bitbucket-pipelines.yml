@@ -19,16 +19,19 @@ pipelines:
           
           # code analysis
           - echo "Code Metrics"
-          # radon giving no results.
+          # error: radon giving no results.
           - radon cc -n C -s  scripts\
           - radon  mi -m -s --min B -j  scripts\
           - radon  raw -s  scripts\
           - echo "Unused scripts"
-          # vulture errors
+          # error: vulture errors for some reason
           # - vulture --sort-by-size  scripts\
           
           # documentation
           - cd docs
           - make html
+          - cd ..
+        artifacts:
+          - docs/**
           
 
