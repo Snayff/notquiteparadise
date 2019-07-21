@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>scripts.managers.game &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.managers.game</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pygame</span>
+
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">GameStates</span><span class="p">,</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">VisualInfo</span>
+<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+
+
+<div class="viewcode-block" id="GameManager"><a class="viewcode-back" href="../../../managers.html#scripts.managers.game.GameManager">[docs]</a><span class="k">class</span> <span class="nc">GameManager</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manager of Game Functions and data, such as the window details</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span> <span class="o">=</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">GAME_INITIALISING</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_game_state</span> <span class="o">=</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">GAME_INITIALISING</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal_clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;GameManager initialised.&quot;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="GameManager.update"><a class="viewcode-back" href="../../../managers.html#scripts.managers.game.GameManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the GameManager:</span>
+<span class="sd">            internal_clock ticks</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># set frame rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal_clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">VisualInfo</span><span class="o">.</span><span class="n">GAME_FPS</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GameManager.update_game_state"><a class="viewcode-back" href="../../../managers.html#scripts.managers.game.GameManager.update_game_state">[docs]</a>    <span class="k">def</span> <span class="nf">update_game_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_game_state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_game_state:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_game_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span> <span class="o">=</span> <span class="n">new_game_state</span>
+
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Game_state updated to </span><span class="si">{self.game_state}</span><span class="s2"> from </span><span class="si">{self.previous_game_state}</span><span class="s2">&quot;</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

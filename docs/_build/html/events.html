@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Events &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Managers" href="managers.html" />
+    <link rel="prev" title="Event Handlers" href="event_handlers.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="events">
+<h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-scripts.events.entity_events">
+<span id="entity"></span><h2>Entity<a class="headerlink" href="#module-scripts.events.entity_events" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.events.entity_events.LearnEvent">
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">LearnEvent</code><span class="sig-paren">(</span><em>entity_to_learn_skill</em>, <em>skill_tree_name</em>, <em>skill_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#LearnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.LearnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event for learning a new skill</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity_to_learn_skill</strong> – </p></li>
+<li><p><strong>skill_tree_name</strong> – </p></li>
+<li><p><strong>skill_name</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.events.entity_events.MoveEvent">
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">MoveEvent</code><span class="sig-paren">(</span><em>entity_to_move</em>, <em>target_pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to move an entity as a basic move action</p>
+<dl class="method">
+<dt id="scripts.events.entity_events.MoveEvent.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>entity_to_move</em>, <em>target_pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity_to_move</strong> – </p></li>
+<li><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.events.entity_events.UseSkillEvent">
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">UseSkillEvent</code><span class="sig-paren">(</span><em>entity_using_skill</em>, <em>target_pos</em>, <em>skill</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event for entity skill</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity_using_skill</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+<li><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – x, y</p></li>
+<li><p><strong>skill</strong> (<a class="reference internal" href="skills.html#scripts.skills.skill.Skill" title="scripts.skills.skill.Skill"><em>Skill</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.events.game_events">
+<span id="game"></span><h2>Game<a class="headerlink" href="#module-scripts.events.game_events" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-scripts.events.logging_events">
+<span id="logging"></span><h2>Logging<a class="headerlink" href="#module-scripts.events.logging_events" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-scripts.events.message_events">
+<span id="message"></span><h2>Message<a class="headerlink" href="#module-scripts.events.message_events" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-scripts.events.ui_events">
+<span id="ui"></span><h2>UI<a class="headerlink" href="#module-scripts.events.ui_events" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.events.ui_events.ClickUIEvent">
+<em class="property">class </em><code class="descclassname">scripts.events.ui_events.</code><code class="descname">ClickUIEvent</code><span class="sig-paren">(</span><em>button_pressed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#ClickUIEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.ClickUIEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event for clicking the UI</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mouse_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – </p></li>
+<li><p><strong>button_pressed</strong> (<a class="reference internal" href="core.html#scripts.core.constants.MouseButtons" title="scripts.core.constants.MouseButtons"><em>MouseButtons</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="event_handlers.html" title="previous chapter">Event Handlers</a></li>
+      <li>Next: <a href="managers.html" title="next chapter">Managers</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/events.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

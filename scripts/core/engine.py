@@ -24,8 +24,6 @@ from scripts.core.initialisers import initialise_game
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
-# TODO - move json data to a dictionary on load; create reload/refresh function (to allow mid game changes of data)
-#  all skills etc. then only hold what they are and refer to the central data to act
 # TODO - effect activation events (so that world can update)
 # TODO - check if in battle; once damage taken keep an eye on enemy states
 # TODO - change from use fps for timing to delta time
@@ -39,8 +37,6 @@ from scripts.core.initialisers import initialise_game
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - Review data classes example
-#  https://gist.github.com/brianbruggeman/978f0b9ff77a74f1e51fbdb5e310d67f
 # TODO - rename scripts to notquiteparadise
 # TODO - move the docstring annotations to the function line, then install mypy
 

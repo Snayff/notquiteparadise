@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>scripts.core.library_of_alexandria &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.core.library_of_alexandria</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">LoggingEventTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+
+
+<div class="viewcode-block" id="LibraryOfAlexandria"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria">[docs]</a><span class="k">class</span> <span class="nc">LibraryOfAlexandria</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The centre of all knowledge in the world.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO - Enums are internal only. Where we have an external string for internal value convert to Enum on load.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skills</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">homeland</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">race</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">savvy</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">general</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">affliction</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actor_template</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_data_into_library</span><span class="p">()</span>
+
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Data Library initialised.&quot;</span><span class="p">))</span>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.load_data_into_library"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_data_into_library">[docs]</a>    <span class="k">def</span> <span class="nf">load_data_into_library</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load data from all external jsons to this central data library</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skills</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_skill_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">homeland</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_homeland_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">race</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_race_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">savvy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_savvy_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">affliction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_affliction_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_aspect_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_terrain_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actor_template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values_from_actor_json</span><span class="p">()</span>
+
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Data Library refreshed.&quot;</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="LibraryOfAlexandria.get_terrain_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_terrain_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_terrain_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terrain_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a terrains from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            terrain_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that fact never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">terrain_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">[</span><span class="n">terrain_name</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">[</span><span class="n">terrain_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+    
+<div class="viewcode-block" id="LibraryOfAlexandria.get_actor_template_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_actor_template_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_actor_template_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actor_template_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a actor_templates from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            actor_template_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that fact never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">actor_template_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor_template</span><span class="p">[</span><span class="n">actor_template_name</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_template</span><span class="p">[</span><span class="n">actor_template_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+    
+<div class="viewcode-block" id="LibraryOfAlexandria.get_aspect_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_aspect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a aspects from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            aspect_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that fact never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">aspect_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+    
+<div class="viewcode-block" id="LibraryOfAlexandria.get_affliction_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_affliction_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_affliction_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a afflictions from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            affliction_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that fact never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">affliction_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affliction</span><span class="p">[</span><span class="n">affliction_name</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">affliction</span><span class="p">[</span><span class="n">affliction_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_savvy_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_savvy_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_savvy_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savvy_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a savvy from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            savvy_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that fact never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">savvy_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">savvy</span><span class="p">[</span><span class="n">savvy_name</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">savvy</span><span class="p">[</span><span class="n">savvy_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_race_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_race_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_race_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">race_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a race from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            race_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that fact never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">race_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="p">[</span><span class="n">race_name</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="p">[</span><span class="n">race_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+    
+<div class="viewcode-block" id="LibraryOfAlexandria.get_homeland_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_homeland_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_homeland_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">homeland_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a homeland from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            homeland_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that fact never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">homeland_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">homeland</span><span class="p">[</span><span class="n">homeland_name</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">homeland</span><span class="p">[</span><span class="n">homeland_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_skill_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_skill_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill_tree</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a skill from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            skill_tree (str):</span>
+<span class="sd">            skill_name (str):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: named tuple of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># NOTE: I do not know how any of this works.  Let&#39;s live in hope that never causes a problem.</span>
+        <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+        <span class="n">named_tuple</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">skill_name</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_tree</span><span class="p">][</span><span class="n">skill_name</span><span class="p">]))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">named_tuple</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_tree</span><span class="p">][</span><span class="n">skill_name</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_skill_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_skill_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_skill_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - create rules to confirm every tree has a basic attack</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/skills/skill_trees.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_affliction_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_affliction_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_affliction_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/skills/afflictions.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_aspect_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_aspect_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_aspect_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/world/aspect.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_terrain_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_terrain_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_terrain_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/world/terrain.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_homeland_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_homeland_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_homeland_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/entity/homeland.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_savvy_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_savvy_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_savvy_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/entity/savvy.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_race_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_race_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_race_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/entity/race.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_values_from_actor_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_values_from_actor_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_values_from_actor_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/entity/actor_template.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>scripts.core.constants &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.core.constants</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+
+<span class="n">TILE_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
+
+
+<div class="viewcode-block" id="VisualInfo"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.VisualInfo">[docs]</a><span class="k">class</span> <span class="nc">VisualInfo</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constant info about visual aspects such as resolution and frame rate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO -  should this be in game manager?</span>
+    <span class="n">BASE_WINDOW_WIDTH</span> <span class="o">=</span> <span class="mi">1280</span>
+    <span class="n">BASE_WINDOW_HEIGHT</span> <span class="o">=</span> <span class="mi">720</span>
+
+    <span class="n">GAME_FPS</span> <span class="o">=</span> <span class="mi">60</span>
+    <span class="n">ENTITY_SPRITE_FRAME_DURATION</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1"># seconds</span></div>
+
+
+<div class="viewcode-block" id="FOVInfo"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.FOVInfo">[docs]</a><span class="k">class</span> <span class="nc">FOVInfo</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constant info about the FOV settings</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">LIGHT_WALLS</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">FOV_ALGORITHM</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="GameStates"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.GameStates">[docs]</a><span class="k">class</span> <span class="nc">GameStates</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    States the Game can be in.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PLAYER_TURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ENEMY_TURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">PLAYER_DEAD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">TARGETING_MODE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">EXIT_GAME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GAME_INITIALISING</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EventTopics"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.EventTopics">[docs]</a><span class="k">class</span> <span class="nc">EventTopics</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Topics that Events can be associated with.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GAME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MESSAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">LOGGING</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">UI</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GameEventTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.GameEventTypes">[docs]</a><span class="k">class</span> <span class="nc">GameEventTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Types of Game Events&quot;&quot;&quot;</span>
+    <span class="n">EXIT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">END_TURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CHANGE_GAME_STATE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MessageEventTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.MessageEventTypes">[docs]</a><span class="k">class</span> <span class="nc">MessageEventTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Types of Message Events&quot;&quot;&quot;</span>
+    <span class="n">BASIC</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SYSTEM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LoggingEventTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.LoggingEventTypes">[docs]</a><span class="k">class</span> <span class="nc">LoggingEventTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Types of Logging Events&quot;&quot;&quot;</span>
+
+    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># A serious error, indicating that may be unable to continue running.</span>
+    <span class="n">ERROR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># A more serious problem, has not been able to perform some function.</span>
+    <span class="n">WARNING</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># An indication that something unexpected happened, but otherwise still working as expected.</span>
+    <span class="n">INFO</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># Confirmation that things are working as expected.</span>
+    <span class="n">DEBUG</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># Detailed information, typically of interest only when diagnosing problems</span></div>
+
+
+<div class="viewcode-block" id="EntityEventTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.EntityEventTypes">[docs]</a><span class="k">class</span> <span class="nc">EntityEventTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Types of Entity Events&quot;&quot;&quot;</span>
+    <span class="n">DIE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SKILL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MOVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">LEARN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="UIEventTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.UIEventTypes">[docs]</a><span class="k">class</span> <span class="nc">UIEventTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Types of UI events</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">CLICK_UI</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TargetTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.TargetTypes">[docs]</a><span class="k">class</span> <span class="nc">TargetTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Types of targets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">TERRAIN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TargetTags"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.TargetTags">[docs]</a><span class="k">class</span> <span class="nc">TargetTags</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Types of target</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">FLOOR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">WALL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SELF</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">OTHER_ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">NO_ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">OUT_OF_BOUNDS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DamageTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.DamageTypes">[docs]</a><span class="k">class</span> <span class="nc">DamageTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Damage types</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PIERCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BLUNT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ELEMENTAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PrimaryStatTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.PrimaryStatTypes">[docs]</a><span class="k">class</span> <span class="nc">PrimaryStatTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Primary stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">VIGOUR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CLOUT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SKULLDUGGERY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BUSTLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">EXACTITUDE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SecondaryStatTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.SecondaryStatTypes">[docs]</a><span class="k">class</span> <span class="nc">SecondaryStatTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Secondary stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DODGE_SPEED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DODGE_TOUGHNESS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DODGE_INTELLIGENCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_BLUNT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_PIERCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_ELEMENTAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ACTION_COST_CHANGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="HitTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.HitTypes">[docs]</a><span class="k">class</span> <span class="nc">HitTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The value of each hit type. The value is the starting amount.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GRAZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">HIT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CRIT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="HitValues"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.HitValues">[docs]</a><span class="k">class</span> <span class="nc">HitValues</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The value of each hit type. The value is the starting amount.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GRAZE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">HIT</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">CRIT</span> <span class="o">=</span> <span class="mi">130</span></div>
+
+
+<div class="viewcode-block" id="HitModifiers"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.HitModifiers">[docs]</a><span class="k">class</span> <span class="nc">HitModifiers</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The modifier for each hit type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GRAZE</span> <span class="o">=</span> <span class="mf">0.6</span>
+    <span class="n">HIT</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">CRIT</span> <span class="o">=</span> <span class="mf">1.4</span></div>
+
+
+<div class="viewcode-block" id="SkillEffectTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.SkillEffectTypes">[docs]</a><span class="k">class</span> <span class="nc">SkillEffectTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Types of skill_effects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">APPLY_AFFLICTION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DAMAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MOVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CHANGE_TERRAIN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AfflictionCategory"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.AfflictionCategory">[docs]</a><span class="k">class</span> <span class="nc">AfflictionCategory</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Boon or Bane</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">BANE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BOON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AfflictionTriggers"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.AfflictionTriggers">[docs]</a><span class="k">class</span> <span class="nc">AfflictionTriggers</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When to trigger the affliction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PASSIVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># always applying effects</span>
+    <span class="n">END_TURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply at end of round turn</span>
+    <span class="n">MOVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply if afflicted entity moves</span>
+    <span class="n">DEAL_DAMAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply if afflicted entity deals damage</span>
+    <span class="n">END_ROUND</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply at the end of the round</span>
+    <span class="n">ACTION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply when an action is taken</span></div>
+
+
+<div class="viewcode-block" id="AfflictionEffectTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.AfflictionEffectTypes">[docs]</a><span class="k">class</span> <span class="nc">AfflictionEffectTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Types of Affliction effects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DAMAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">AFFECT_STAT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AspectTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.AspectTypes">[docs]</a><span class="k">class</span> <span class="nc">AspectTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="c1"># TODO - replace with strings from json (as it is all defined in the json)</span>
+    <span class="n">DIRT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">LONG_GRASS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">FROZEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SMOKE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GAS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BOG</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">AFLAME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="InputModes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.InputModes">[docs]</a><span class="k">class</span> <span class="nc">InputModes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">MOUSE_AND_KB</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">GAMEPAD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MouseButtons"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.MouseButtons">[docs]</a><span class="k">class</span> <span class="nc">MouseButtons</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">LEFT_BUTTON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RIGHT_BUTTON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MIDDLE_BUTTON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

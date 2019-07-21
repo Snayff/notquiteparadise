@@ -15,11 +15,12 @@ class LibraryOfAlexandria:
     """
 
     def __init__(self):
-        self.skills = {}
+        # TODO - add conversion to data class for remaining dicts
+        self.skills = {}  # conversion done
         self.homelands = {}
         self.races = {}
         self.savvys = {}
-        self.afflictions = {}
+        self.afflictions = {}  # conversion done
         self.aspects = {}
         self.terrains = {}
         self.actor_template = {}

@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Skills &#8212; NotQuiteParadise 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="UI Elements" href="ui_elements.html" />
+    <link rel="prev" title="Managers" href="managers.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="skills">
+<h1>Skills<a class="headerlink" href="#skills" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-scripts.skills.skill">
+<span id="skill"></span><h2>Skill<a class="headerlink" href="#module-scripts.skills.skill" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.skills.skill.Skill">
+<em class="property">class </em><code class="descclassname">scripts.skills.skill.</code><code class="descname">Skill</code><span class="sig-paren">(</span><em>owner</em>, <em>skill_tree_name</em>, <em>skill_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill.html#Skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill.Skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>A skill to be used by an actor</p>
+<dl class="attribute">
+<dt id="scripts.skills.skill.Skill.name">
+<code class="descname">name</code><a class="headerlink" href="#scripts.skills.skill.Skill.name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.skill.Skill.owner">
+<code class="descname">owner</code><a class="headerlink" href="#scripts.skills.skill.Skill.owner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.skill.Skill.skill_tree_name">
+<code class="descname">skill_tree_name</code><a class="headerlink" href="#scripts.skills.skill.Skill.skill_tree_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scripts.skills.skill.Skill.use">
+<code class="descname">use</code><span class="sig-paren">(</span><em>target_pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill.html#Skill.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill.Skill.use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the skill</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – x y of the target</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.skills.affliction">
+<span id="affliction"></span><h2>Affliction<a class="headerlink" href="#module-scripts.skills.affliction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.skills.affliction.Affliction">
+<em class="property">class </em><code class="descclassname">scripts.skills.affliction.</code><code class="descname">Affliction</code><span class="sig-paren">(</span><em>affliction_name</em>, <em>duration</em>, <em>affected_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction.html#Affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction.Affliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Affliction, either Bane or Boon. Applies a periodic effect to an Entity, dictated by its AfflictionTrigger.</p>
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.name">
+<code class="descname">name</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>string name of the Affliction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.description">
+<code class="descname">description</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>description of the Affliction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.icon">
+<code class="descname">icon</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>pygame image to symbolise the Affliction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pygame.Image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.affliction_category">
+<code class="descname">affliction_category</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.affliction_category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bane or Boon</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#scripts.core.constants.AfflictionCategory" title="scripts.core.constants.AfflictionCategory">AfflictionCategory</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.duration">
+<code class="descname">duration</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>amount of applications before expiry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.trigger_event">
+<code class="descname">trigger_event</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.trigger_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>the event that triggers the Affliction to activate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#scripts.core.constants.AfflictionTriggers" title="scripts.core.constants.AfflictionTriggers">AfflictionTriggers</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.affected_entity">
+<code class="descname">affected_entity</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.affected_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>the Entity being impacted by the Affliction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity">Entity</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction.Affliction.affliction_effects">
+<code class="descname">affliction_effects</code><a class="headerlink" href="#scripts.skills.affliction.Affliction.affliction_effects" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of AfflictionEffects</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>(<a class="reference internal" href="#scripts.skills.affliction_effects.affliction_effect.AfflictionEffect" title="scripts.skills.affliction_effects.affliction_effect.AfflictionEffect">AfflictionEffect</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.skills.affliction.Affliction.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction.html#Affliction.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction.Affliction.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger all affliction effects and decrement duration by 1</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="affliction-effects">
+<h2>Affliction Effects<a class="headerlink" href="#affliction-effects" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.skills.affliction_effects.affliction_effect">
+<span id="affliction-effect"></span><h3>Affliction Effect<a class="headerlink" href="#module-scripts.skills.affliction_effects.affliction_effect" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.skills.affliction_effects.affliction_effect.AfflictionEffect">
+<em class="property">class </em><code class="descclassname">scripts.skills.affliction_effects.affliction_effect.</code><code class="descname">AfflictionEffect</code><span class="sig-paren">(</span><em>owner</em>, <em>name</em>, <em>description</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/affliction_effect.html#AfflictionEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.affliction_effect.AfflictionEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for affliction_effects that make up the basis of afflictions. They are effectively a simplified
+version of skill_effects</p>
+<dl class="method">
+<dt id="scripts.skills.affliction_effects.affliction_effect.AfflictionEffect.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/affliction_effect.html#AfflictionEffect.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.affliction_effect.AfflictionEffect.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the effect</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.skills.affliction_effects.affect_stat">
+<span id="affect-stat"></span><h3>Affect Stat<a class="headerlink" href="#module-scripts.skills.affliction_effects.affect_stat" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.skills.affliction_effects.affect_stat.AffectStatAfflictionEffect">
+<em class="property">class </em><code class="descclassname">scripts.skills.affliction_effects.affect_stat.</code><code class="descname">AffectStatAfflictionEffect</code><span class="sig-paren">(</span><em>owner</em>, <em>stat_to_affect</em>, <em>amount</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/affect_stat.html#AffectStatAfflictionEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.affect_stat.AffectStatAfflictionEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>SkillEffect to affect an Entity`s stats</p>
+<p>Attributes:</p>
+<dl class="method">
+<dt id="scripts.skills.affliction_effects.affect_stat.AffectStatAfflictionEffect.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/affect_stat.html#AffectStatAfflictionEffect.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.affect_stat.AffectStatAfflictionEffect.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the effect</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.skills.affliction_effects.damage">
+<span id="damage"></span><h3>Damage<a class="headerlink" href="#module-scripts.skills.affliction_effects.damage" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.skills.affliction_effects.damage.DamageAfflictionEffect">
+<em class="property">class </em><code class="descclassname">scripts.skills.affliction_effects.damage.</code><code class="descname">DamageAfflictionEffect</code><span class="sig-paren">(</span><em>owner</em>, <em>damage</em>, <em>damage_type</em>, <em>stat_to_target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/damage.html#DamageAfflictionEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.damage.DamageAfflictionEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>SkillEffect to damage an Entity</p>
+<dl class="attribute">
+<dt id="scripts.skills.affliction_effects.damage.DamageAfflictionEffect.damage">
+<code class="descname">damage</code><a class="headerlink" href="#scripts.skills.affliction_effects.damage.DamageAfflictionEffect.damage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction_effects.damage.DamageAfflictionEffect.damage_type">
+<code class="descname">damage_type</code><a class="headerlink" href="#scripts.skills.affliction_effects.damage.DamageAfflictionEffect.damage_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.affliction_effects.damage.DamageAfflictionEffect.stat_to_target">
+<code class="descname">stat_to_target</code><a class="headerlink" href="#scripts.skills.affliction_effects.damage.DamageAfflictionEffect.stat_to_target" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#scripts.core.constants.PrimaryStatTypes" title="scripts.core.constants.PrimaryStatTypes">PrimaryStatTypes</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scripts.skills.affliction_effects.damage.DamageAfflictionEffect.apply_damage">
+<em class="property">static </em><code class="descname">apply_damage</code><span class="sig-paren">(</span><em>defending_entity</em>, <em>damage</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/damage.html#DamageAfflictionEffect.apply_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.damage.DamageAfflictionEffect.apply_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply damage to an entity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>defending_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+<li><p><strong>damage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.skills.affliction_effects.damage.DamageAfflictionEffect.calculate_damage">
+<code class="descname">calculate_damage</code><span class="sig-paren">(</span><em>defending_entity</em>, <em>hit_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/damage.html#DamageAfflictionEffect.calculate_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.damage.DamageAfflictionEffect.calculate_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Work out the damage to be dealt
+:param defending_entity:
+:type defending_entity: Entity
+:param hit_type:
+:type hit_type: HitTypes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>damage to be dealt</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.skills.affliction_effects.damage.DamageAfflictionEffect.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><em>defending_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/affliction_effects/damage.html#DamageAfflictionEffect.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.affliction_effects.damage.DamageAfflictionEffect.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the effect</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>defending_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="skill-effects">
+<h2>Skill Effects<a class="headerlink" href="#skill-effects" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.skills.skill_effects.skill_effect">
+<span id="skill-effect"></span><h3>Skill Effect<a class="headerlink" href="#module-scripts.skills.skill_effects.skill_effect" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.skills.skill_effects.skill_effect.SkillEffect">
+<em class="property">class </em><code class="descclassname">scripts.skills.skill_effects.skill_effect.</code><code class="descname">SkillEffect</code><span class="sig-paren">(</span><em>owner</em>, <em>name</em>, <em>description</em>, <em>required_target_type</em>, <em>required_tags</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/skill_effect.html#SkillEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.skill_effect.SkillEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for skill skill_effects that make up the basis of skills.</p>
+<dl class="method">
+<dt id="scripts.skills.skill_effects.skill_effect.SkillEffect.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/skill_effect.html#SkillEffect.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.skill_effect.SkillEffect.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the effect</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.skills.skill_effects.apply_affliction">
+<span id="apply-affliction"></span><h3>Apply affliction<a class="headerlink" href="#module-scripts.skills.skill_effects.apply_affliction" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.skills.skill_effects.apply_affliction.ApplyAfflictionSkillEffect">
+<em class="property">class </em><code class="descclassname">scripts.skills.skill_effects.apply_affliction.</code><code class="descname">ApplyAfflictionSkillEffect</code><span class="sig-paren">(</span><em>owner</em>, <em>required_target_type</em>, <em>required_tags</em>, <em>accuracy</em>, <em>stat_to_target</em>, <em>affliction_name</em>, <em>affliction_category</em>, <em>affliction_duration</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/apply_affliction.html#ApplyAfflictionSkillEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.apply_affliction.ApplyAfflictionSkillEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>SkillEffect to apply an Affliction to an Entity</p>
+<dl class="method">
+<dt id="scripts.skills.skill_effects.apply_affliction.ApplyAfflictionSkillEffect.apply_affliction">
+<code class="descname">apply_affliction</code><span class="sig-paren">(</span><em>defending_entity</em>, <em>modified_duration</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/apply_affliction.html#ApplyAfflictionSkillEffect.apply_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.apply_affliction.ApplyAfflictionSkillEffect.apply_affliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the affliction to the target entity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>modified_duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+<li><p><strong>defending_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.skills.skill_effects.apply_affliction.ApplyAfflictionSkillEffect.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><em>attacking_entity</em>, <em>defending_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/apply_affliction.html#ApplyAfflictionSkillEffect.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.apply_affliction.ApplyAfflictionSkillEffect.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the effect. Attacking Entity can be None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attacking_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+<li><p><strong>defending_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.skills.skill_effects.change_terrain">
+<span id="change-terrain"></span><h3>Change Terrain<a class="headerlink" href="#module-scripts.skills.skill_effects.change_terrain" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.skills.skill_effects.change_terrain.ChangeTerrainSkillEffect">
+<em class="property">class </em><code class="descclassname">scripts.skills.skill_effects.change_terrain.</code><code class="descname">ChangeTerrainSkillEffect</code><span class="sig-paren">(</span><em>owner</em>, <em>required_target_type</em>, <em>required_tags</em>, <em>new_terrain</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/change_terrain.html#ChangeTerrainSkillEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.change_terrain.ChangeTerrainSkillEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>SkillEffect to change the terrain of a tile</p>
+<dl class="method">
+<dt id="scripts.skills.skill_effects.change_terrain.ChangeTerrainSkillEffect.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><em>terrain_to_change</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/change_terrain.html#ChangeTerrainSkillEffect.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.change_terrain.ChangeTerrainSkillEffect.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the effect; check tags and then, if all True, apply the effect</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>terrain_to_change</strong> (<a class="reference internal" href="world.html#scripts.world.terrain.terrain.Terrain" title="scripts.world.terrain.terrain.Terrain"><em>Terrain</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>Damage<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-scripts.skills.skill_effects.damage"></span><dl class="class">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect">
+<em class="property">class </em><code class="descclassname">scripts.skills.skill_effects.damage.</code><code class="descname">DamageSkillEffect</code><span class="sig-paren">(</span><em>owner</em>, <em>required_target_type</em>, <em>required_tags</em>, <em>damage</em>, <em>damage_type</em>, <em>accuracy</em>, <em>stat_to_target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/damage.html#DamageSkillEffect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect" title="Permalink to this definition">¶</a></dt>
+<dd><p>SkillEffect to damage an Entity</p>
+<dl class="attribute">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.damage">
+<code class="descname">damage</code><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.damage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.damage_type">
+<code class="descname">damage_type</code><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.damage_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.required_target_type">
+<code class="descname">required_target_type</code><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.required_target_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#scripts.core.constants.TargetTypes" title="scripts.core.constants.TargetTypes">TargetTypes</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.required_tags">
+<code class="descname">required_tags</code><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.required_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of TargetType enums</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.accuracy">
+<code class="descname">accuracy</code><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.stat_to_target">
+<code class="descname">stat_to_target</code><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.stat_to_target" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="core.html#scripts.core.constants.PrimaryStatTypes" title="scripts.core.constants.PrimaryStatTypes">PrimaryStatTypes</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.apply_damage">
+<em class="property">static </em><code class="descname">apply_damage</code><span class="sig-paren">(</span><em>defending_entity</em>, <em>damage</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/damage.html#DamageSkillEffect.apply_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.apply_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply damage to an entity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>defending_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+<li><p><strong>damage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.calculate_damage">
+<code class="descname">calculate_damage</code><span class="sig-paren">(</span><em>defending_entity</em>, <em>hit_type</em>, <em>attacking_entity=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/damage.html#DamageSkillEffect.calculate_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.calculate_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Work out the damage to be dealt. if attacking entity is None then value used is 0.
+:param attacking_entity:
+:type attacking_entity: Entity
+:param defending_entity:
+:type defending_entity: Entity
+:param hit_type:
+:type hit_type: HitTypes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>damage to be dealt</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.skills.skill_effects.damage.DamageSkillEffect.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><em>attacking_entity</em>, <em>defending_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/skills/skill_effects/damage.html#DamageSkillEffect.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.skills.skill_effects.damage.DamageSkillEffect.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the effect</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attacking_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+<li><p><strong>defending_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">NotQuiteParadise</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ui_elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="managers.html" title="previous chapter">Managers</a></li>
+      <li>Next: <a href="ui_elements.html" title="next chapter">UI Elements</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Snayff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/skills.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
