@@ -7,6 +7,7 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
+from scripts.skills.effects.affect_stat import AffectStatEffect
 from scripts.skills.skill import Skill
 from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
 from scripts.skills.effects.change_terrain import ChangeTerrainEffect
@@ -136,24 +137,26 @@ class SkillMethods:
             return HitTypes.GRAZE
 
     @staticmethod
-    def create_skill_effect(skill, skill_effect_type):
+    def create_effect(owner, effect_type):
         """
-        Create a skill effect and assign skill as the owner.
+        Create an effect and assign the owner.
 
         Args:
-            skill (Skill):
-            skill_effect_type(EffectTypes):
+            owner (object): Skill or Affliction
+            effect_type(EffectTypes):
         """
         created_effect = None
 
-        if skill_effect_type == EffectTypes.DAMAGE:
-            created_effect = DamageEffect(skill)
-        elif skill_effect_type == EffectTypes.APPLY_AFFLICTION:
-            created_effect = ApplyAfflictionEffect(skill)
-        elif skill_effect_type == EffectTypes.MOVE:
-            created_effect = MoveEffect(skill)
-        elif skill_effect_type == EffectTypes.CHANGE_TERRAIN:
-            created_effect = ChangeTerrainEffect(skill)
+        if effect_type == EffectTypes.DAMAGE:
+            created_effect = DamageEffect(owner)
+        elif effect_type == EffectTypes.APPLY_AFFLICTION:
+            created_effect = ApplyAfflictionEffect(owner)
+        elif effect_type == EffectTypes.MOVE:
+            created_effect = MoveEffect(owner)
+        elif effect_type == EffectTypes.CHANGE_TERRAIN:
+            created_effect = ChangeTerrainEffect(owner)
+        elif effect_type == EffectTypes.AFFECT_STAT:
+            created_effect = AffectStatEffect(owner)
 
         return created_effect
 

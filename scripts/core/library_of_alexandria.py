@@ -5,7 +5,8 @@ from scripts.core.constants import LoggingEventTypes, TargetTags, EffectTypes, P
     AfflictionCategory, AfflictionTriggers, DamageTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.skill_dataclasses import SkillEffectData, SkillData, SkillTreeData
+from scripts.skills.afflictions_dataclasses import AfflictionData
+from scripts.skills.skill_dataclasses import EffectData, SkillData, SkillTreeData
 
 
 class LibraryOfAlexandria:
@@ -15,17 +16,18 @@ class LibraryOfAlexandria:
 
     def __init__(self):
         self.skills = {}
-        self.homeland = {}
-        self.race = {}
-        self.savvy = {}
-        self.affliction = {}
-        self.aspect = {}
-        self.terrain = {}
+        self.homelands = {}
+        self.races = {}
+        self.savvys = {}
+        self.afflictions = {}
+        self.aspects = {}
+        self.terrains = {}
         self.actor_template = {}
 
         self.load_data_into_library()
         self.convert_external_strings_to_internal_enums()
         self.convert_skills_to_data_classes()
+        self.convert_afflictions_to_data_classes()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
 
@@ -47,7 +49,7 @@ class LibraryOfAlexandria:
                 # loop skill effects in each skill
                 for index, skill_effect_data in enumerate(skill_data["effects"]):
                     # convert the skill effect data to the data class
-                    skill_effect = SkillEffectData(**skill_effect_data)
+                    skill_effect = EffectData(**skill_effect_data)
                     converted_skill_effects[skill_effect.effect_type.name] = skill_effect
 
                 # set the temp dict to contain the converted skill effects
@@ -68,6 +70,35 @@ class LibraryOfAlexandria:
         self.skills = {}
         self.skills = converted_data
 
+    def convert_afflictions_to_data_classes(self):
+        """
+        Take affliction data from library and convert to data classes
+        """
+        all_afflictions_data = self.afflictions
+        converted_afflictions = {}
+
+        # loop all skill trees
+        for affliction_name, affliction_data in all_afflictions_data.items():
+            converted_effects = {}
+
+            # loop skill effects in each skill
+            for index, effect_data in enumerate(affliction_data["effects"]):
+                # convert the skill effect data to the data class
+                effect = EffectData(**effect_data)
+                converted_effects[effect.effect_type.name] = effect
+
+            # set the temp dict to contain the converted skill effects
+            new_affliction_dict = affliction_data.copy()
+            new_affliction_dict["effects"] = converted_effects
+
+            # unpack the temp dict and convert the skill data to the data class
+            skill = AfflictionData(**new_affliction_dict)
+            converted_afflictions[skill.name] = skill
+
+        # delete all info from skill and replace with the converted data
+        self.afflictions = {}
+        self.afflictions = converted_afflictions
+
     def convert_external_strings_to_internal_enums(self):
         """
         Where there are external values that are utilised internally convert them to the internal constant.
@@ -85,6 +116,7 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
         self.recursive_replace(self.skills, "effect_type", "move", EffectTypes.MOVE)
         self.recursive_replace(self.skills, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
+        self.recursive_replace(self.skills, "effect_type", "affect_stat", EffectTypes.AFFECT_STAT)
 
         # Skills:SkillEffects:damage_type
         self.recursive_replace(self.skills, "damage_type", "pierce", DamageTypes.PIERCE)
@@ -98,33 +130,41 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.skills, "stat_to_target", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
         self.recursive_replace(self.skills, "stat_to_target", "exactitude", PrimaryStatTypes.EXACTITUDE)
 
-        # Skills:SkillEffects:stat_to_target
+        # Skills:SkillEffects:new_terrain
         self.recursive_replace(self.skills, "new_terrain", "floor", TargetTags.FLOOR)
         self.recursive_replace(self.skills, "new_terrain", "wall", TargetTags.WALL)
 
         # Update Afflictions
         # Affliction:AfflictionEffects:name
-        self.recursive_replace(self.affliction, "effect_type", "damage", EffectTypes.DAMAGE)
-        self.recursive_replace(self.affliction, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
-        self.recursive_replace(self.affliction, "effect_type", "move", EffectTypes.MOVE)
-        self.recursive_replace(self.affliction, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
+        self.recursive_replace(self.afflictions, "effect_type", "damage", EffectTypes.DAMAGE)
+        self.recursive_replace(self.afflictions, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
+        self.recursive_replace(self.afflictions, "effect_type", "move", EffectTypes.MOVE)
+        self.recursive_replace(self.afflictions, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
+        self.recursive_replace(self.afflictions, "effect_type", "affect_stat", EffectTypes.AFFECT_STAT)
+
+        # Affliction:TargetTags
+        self.recursive_replace(self.afflictions, "required_tags", "other_entity", TargetTags.OTHER_ENTITY)
+        self.recursive_replace(self.afflictions, "required_tags", "no_entity", TargetTags.NO_ENTITY)
+        self.recursive_replace(self.afflictions, "required_tags", "floor", TargetTags.FLOOR)
+        self.recursive_replace(self.afflictions, "required_tags", "wall", TargetTags.WALL)
+        self.recursive_replace(self.afflictions, "required_tags", "self", TargetTags.SELF)
 
         # Affliction:AfflictionEffects:damage_type
-        self.recursive_replace(self.affliction, "damage_type", "pierce", DamageTypes.PIERCE)
-        self.recursive_replace(self.affliction, "damage_type", "blunt", DamageTypes.BLUNT)
-        self.recursive_replace(self.affliction, "damage_type", "elemental", DamageTypes.ELEMENTAL)
+        self.recursive_replace(self.afflictions, "damage_type", "pierce", DamageTypes.PIERCE)
+        self.recursive_replace(self.afflictions, "damage_type", "blunt", DamageTypes.BLUNT)
+        self.recursive_replace(self.afflictions, "damage_type", "elemental", DamageTypes.ELEMENTAL)
 
         # Affliction:category
-        self.recursive_replace(self.affliction, "category", "bane", AfflictionCategory.BANE)
-        self.recursive_replace(self.affliction, "category", "boon", AfflictionCategory.BOON)
+        self.recursive_replace(self.afflictions, "category", "bane", AfflictionCategory.BANE)
+        self.recursive_replace(self.afflictions, "category", "boon", AfflictionCategory.BOON)
 
         # Affliction:trigger_event
-        self.recursive_replace(self.affliction, "trigger_event", "end_turn", AfflictionTriggers.END_TURN)
-        self.recursive_replace(self.affliction, "trigger_event", "passive", AfflictionTriggers.PASSIVE)
-        self.recursive_replace(self.affliction, "trigger_event", "move", AfflictionTriggers.MOVE)
-        self.recursive_replace(self.affliction, "trigger_event", "deal_damage", AfflictionTriggers.DEAL_DAMAGE)
-        self.recursive_replace(self.affliction, "trigger_event", "end_round", AfflictionTriggers.END_ROUND)
-        self.recursive_replace(self.affliction, "trigger_event", "action", AfflictionTriggers.ACTION)
+        self.recursive_replace(self.afflictions, "trigger_event", "end_turn", AfflictionTriggers.END_TURN)
+        self.recursive_replace(self.afflictions, "trigger_event", "passive", AfflictionTriggers.PASSIVE)
+        self.recursive_replace(self.afflictions, "trigger_event", "move", AfflictionTriggers.MOVE)
+        self.recursive_replace(self.afflictions, "trigger_event", "deal_damage", AfflictionTriggers.DEAL_DAMAGE)
+        self.recursive_replace(self.afflictions, "trigger_event", "end_round", AfflictionTriggers.END_ROUND)
+        self.recursive_replace(self.afflictions, "trigger_event", "action", AfflictionTriggers.ACTION)
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """
@@ -168,8 +208,8 @@ class LibraryOfAlexandria:
         """
         # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
         from collections import namedtuple
-        named_tuple = namedtuple(terrain_name, self.terrain[terrain_name])
-        data = named_tuple(**self.terrain[terrain_name])
+        named_tuple = namedtuple(terrain_name, self.terrains[terrain_name])
+        data = named_tuple(**self.terrains[terrain_name])
 
         return data
 
@@ -202,49 +242,42 @@ class LibraryOfAlexandria:
         """
         # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
         from collections import namedtuple
-        named_tuple = namedtuple(aspect_name, self.aspect[aspect_name])
-        data = named_tuple(**self.aspect[aspect_name])
+        named_tuple = namedtuple(aspect_name, self.aspects[aspect_name])
+        data = named_tuple(**self.aspects[aspect_name])
 
         return data
 
     def get_affliction_data(self, affliction_name):
         """
-        Get data for a afflictions from the central library
+        Get data for an affliction from the central library
 
         Args:
             affliction_name (str):
 
         Returns:
-            tuple: named tuple of values.
+            AfflictionData: data for a specified Affliction.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(affliction_name, self.affliction[affliction_name])
-        data = named_tuple(**self.affliction[affliction_name])
 
+        data = self.afflictions[affliction_name]
         return data
 
-    def get_affliction_effect_data(self, affliction_name, affliction_effect_name):
+    def get_affliction_effect_data(self, affliction_name, effect_name):
         """
-        Get data for a afflictions from the central library
+        Get data for an affliction from the central library
 
         Args:
-            affliction_name (str):
-            affliction_effect_name(str)
-
+            affliction_name(str):
+            effect_name(EffectTypes):
         Returns:
-            tuple: named tuple of values.
+            EffectData: data for a specified effect.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(affliction_name, self.affliction[affliction_name][affliction_effect_name])
-        data = named_tuple(**self.affliction[affliction_name][affliction_effect_name])
 
+        data = self.afflictions[affliction_name].effects[effect_name]
         return data
 
     def get_savvy_data(self, savvy_name):
         """
-        Get data for a savvy from the central library
+        Get data for a savvys from the central library
 
         Args:
             savvy_name (str):
@@ -254,14 +287,14 @@ class LibraryOfAlexandria:
         """
         # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
         from collections import namedtuple
-        named_tuple = namedtuple(savvy_name, self.savvy[savvy_name])
-        data = named_tuple(**self.savvy[savvy_name])
+        named_tuple = namedtuple(savvy_name, self.savvys[savvy_name])
+        data = named_tuple(**self.savvys[savvy_name])
 
         return data
 
     def get_race_data(self, race_name):
         """
-        Get data for a race from the central library
+        Get data for a races from the central library
 
         Args:
             race_name (str):
@@ -271,14 +304,14 @@ class LibraryOfAlexandria:
         """
         # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
         from collections import namedtuple
-        named_tuple = namedtuple(race_name, self.race[race_name])
-        data = named_tuple(**self.race[race_name])
+        named_tuple = namedtuple(race_name, self.races[race_name])
+        data = named_tuple(**self.races[race_name])
 
         return data
 
     def get_homeland_data(self, homeland_name):
         """
-        Get data for a homeland from the central library
+        Get data for a homelands from the central library
 
         Args:
             homeland_name (str):
@@ -288,8 +321,8 @@ class LibraryOfAlexandria:
         """
         # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
         from collections import namedtuple
-        named_tuple = namedtuple(homeland_name, self.homeland[homeland_name])
-        data = named_tuple(**self.homeland[homeland_name])
+        named_tuple = namedtuple(homeland_name, self.homelands[homeland_name])
+        data = named_tuple(**self.homelands[homeland_name])
 
         return data
 
@@ -318,7 +351,7 @@ class LibraryOfAlexandria:
             skill_effect(str):
 
         Returns:
-            SkillEffectData: data for a specified skill effect.
+            EffectData: data for a specified skill effect.
         """
 
         effect_data = self.skills[skill_tree].skill[skill_name].effects[skill_effect]
@@ -332,12 +365,12 @@ class LibraryOfAlexandria:
         # N.B. this iss set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
             self.skills = self.load_values_from_skill_json()
-            self.homeland = self.load_values_from_homeland_json()
-            self.race = self.load_values_from_race_json()
-            self.savvy = self.load_values_from_savvy_json()
-            self.affliction = self.load_values_from_affliction_json()
-            self.aspect = self.load_values_from_aspect_json()
-            self.terrain = self.load_values_from_terrain_json()
+            self.homelands = self.load_values_from_homeland_json()
+            self.races = self.load_values_from_race_json()
+            self.savvys = self.load_values_from_savvy_json()
+            self.afflictions = self.load_values_from_affliction_json()
+            self.aspects = self.load_values_from_aspect_json()
+            self.terrains = self.load_values_from_terrain_json()
             self.actor_template = self.load_values_from_actor_json()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
@@ -398,7 +431,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/entity/homeland.json') as file:
+        with open('data/game/entity/homelands.json') as file:
             data = json.load(file)
 
         return data
@@ -410,7 +443,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/entity/savvy.json') as file:
+        with open('data/game/entity/savvys.json') as file:
             data = json.load(file)
 
         return data
@@ -422,7 +455,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/entity/race.json') as file:
+        with open('data/game/entity/races.json') as file:
             data = json.load(file)
 
         return data
@@ -435,7 +468,7 @@ class LibraryOfAlexandria:
 
         """
 
-        with open('data/game/entity/actor_template.json') as file:
+        with open('data/game/entity/actor_templates.json') as file:
             data = json.load(file)
 
         return data

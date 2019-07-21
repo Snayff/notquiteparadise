@@ -2,7 +2,7 @@ from scripts.core.constants import  EffectTypes
 from scripts.skills.effects.effect import Effect
 
 
-class AffectStatAfflictionEffect(Effect):
+class AffectStatEffect(Effect):
     """
     Effect to affect an Entity`s stats
 

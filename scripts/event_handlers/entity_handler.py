@@ -87,7 +87,7 @@ class EntityHandler(Subscriber):
                 new_tile = world_manager.Map.get_tile(target_x, target_y)
                 world_manager.Map.set_entity_on_tile(new_tile, entity)
 
-                # activate the tile's aspect affect
+                # activate the tile's aspects affect
                 world_manager.Map.trigger_aspect_effect_on_tile(new_tile)
 
                 # update fov if needed

@@ -244,7 +244,7 @@ class MapMethods:
     @staticmethod
     def set_aspect_on_tile(tile, aspect):
         """
-        Set the new aspect on the tile.
+        Set the new aspects on the tile.
 
         Args:
             tile ():

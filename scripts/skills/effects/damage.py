@@ -29,6 +29,21 @@ class DamageEffect(Effect):
         """
         super().trigger()
 
+        # determine if the damage is from an Affliction or a Skill
+        from scripts.skills.skill import Skill
+        from scripts.skills.affliction import Affliction
+        if isinstance(self.owner, Skill):
+            self.process_skill_damage(tile)
+        elif isinstance(self.owner, Affliction):
+            self.process_affliction_damage(tile)
+
+    def process_skill_damage(self, tile):
+        """
+        Process damage caused by a Skill. It is affected by the attacker.
+
+        Args:
+            tile (Tile):
+        """
         attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
         defender = tile.entity
         data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
@@ -42,7 +57,7 @@ class DamageEffect(Effect):
                     to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
                                                             data.accuracy, data.stat_to_target, attacker)
                     hit_type = world_manager.Skill.get_hit_type(to_hit_score)
-                    damage = self.calculate_damage(defender, hit_type, attacker)
+                    damage = self.calculate_damage(defender, hit_type, data, attacker)
 
                     # apply damage
                     if damage > 0:
@@ -79,18 +94,56 @@ class DamageEffect(Effect):
             msg = f"You can't do that there!"
             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
-    def calculate_damage(self, defending_entity, hit_type, attacking_entity=None):
+    def process_affliction_damage(self, tile):
+        """
+        Process damage caused by an Affliction
+
+        Args:
+            tile (Tile):
+        """
+        defender = tile.entity
+        data = library.get_affliction_effect_data(self.owner.name, self.skill_effect_type.name)
+
+        # check that the tags match
+        from scripts.global_singletons.managers import world_manager
+        if world_manager.Skill.has_required_tags(tile, data.required_tags):
+            damage = self.calculate_damage(defender, HitTypes.HIT, data)
+
+            # apply damage
+            if damage > 0:
+                self.apply_damage(defender, damage)
+
+                msg = f"{self.owner.name} damaged {defender.name} for {damage}."
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
+                # check if defender died
+                if defender.combatant.hp <= 0:
+                    publisher.publish(DieEvent(defender))
+
+            else:
+                # N.B. the reason why is logged in has_required_tags
+                msg = f" {defender.name} resists damage from {self.owner.name}."
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
+        else:
+            msg = f" {defender.name} can't be effected by damage from {self.owner.name}."
+            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
+    @staticmethod
+    def calculate_damage(defending_entity, hit_type, effect_data, attacking_entity=None):
         """
         Work out the damage to be dealt. if attacking entity is None then value used is 0.
         Args:
-            attacking_entity(Entity):
             defending_entity(Entity):
             hit_type(HitTypes):
+            effect_data (EffectData):
+            attacking_entity(Entity): Optional. Defaults to None.
+
         Returns:
             int: damage to be dealt
         """
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Calculate damage..."))
-        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
+        data = effect_data
 
         initial_damage = data.damage  # TODO - add skill dmg modifier to allow dmg growth
 

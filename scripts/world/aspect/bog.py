@@ -31,7 +31,7 @@ class Bog(Aspect):
         effects = aspect.skill_effects
         for effect in effects:
             from scripts.global_singletons.managers import world_manager
-            created_effect = world_manager.Skill.create_skill_effect(self, effect["name"])
+            created_effect = world_manager.Skill.create_effect(self, effect["name"])
 
             # if we have an effect add it to internal list
             if created_effect:

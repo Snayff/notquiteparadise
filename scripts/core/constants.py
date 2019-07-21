@@ -269,7 +269,7 @@ class AfflictionCategory(Enum):
 
 class AfflictionTriggers(Enum):
     """
-    When to trigger the affliction
+    When to trigger the afflictions
     """
     PASSIVE = auto()  # always applying effects
     END_TURN = auto()  # apply at end of round turn

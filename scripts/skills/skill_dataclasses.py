@@ -5,12 +5,13 @@ from scripts.core.constants import EffectTypes, TargetTags, DamageTypes, Primary
 
 
 @dataclass
-class SkillEffectData:
+class EffectData:
     """
     Data class for a skill effect
     """
     effect_type: EffectTypes
     required_tags: List[TargetTags] = field(default_factory=list)
+    amount: int = 0
     damage: int = 0
     damage_type: DamageTypes = None
     accuracy: int = 0
@@ -18,6 +19,7 @@ class SkillEffectData:
     new_terrain: TargetTags = None
     affliction_name: str = ""
     duration: int = 0
+    stat_to_affect: PrimaryStatTypes = None
 
 
 @dataclass()

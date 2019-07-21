@@ -25,7 +25,7 @@
         "trigger_event": "passive",
         "effects": [
             {
-                "affliction_effect_type": "affect_stat",
+                "effect_type": "affect_stat",
                 "stat_to_affect": "action_cost_change" ,
                 "amount": 25
             }

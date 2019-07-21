@@ -32,18 +32,18 @@ class Skill:
             target_pos (tuple): x y of the target
         """
         from scripts.global_singletons.managers import world_manager
-        skill_data = library.get_skill_data(self.skill_tree_name, self.name)
+        data = library.get_skill_data(self.skill_tree_name, self.name)
 
         target_x, target_y = target_pos
         effected_tile = world_manager.Map.get_tile(target_x, target_y)
 
         # apply any effects
-        for effect_name, effect_data in skill_data.effects.items():
-            effect = world_manager.Skill.create_skill_effect(self, effect_data.effect_type)
+        for effect_name, effect_data in data.effects.items():
+            effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
             effect.trigger(effected_tile)
 
         # end the turn
-        publisher.publish(EndTurnEvent(skill_data.time_cost))
+        publisher.publish(EndTurnEvent(data.time_cost))
 
 
 

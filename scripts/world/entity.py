@@ -23,7 +23,7 @@ class Entity:
             blocks_sight (bool) : Does entity block sight?
             combatant (Combatant): Component.
             race (Race): Component.
-            savvy (savvy): Component.
+            savvy (savvys): Component.
             homeland (Homeland): Component.
             ai (AI): Component.
             actor(Actor) : Component.

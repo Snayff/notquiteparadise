@@ -16,7 +16,7 @@ class ApplyAfflictionEffect(Effect):
     """
 
     def __init__(self, owner):
-        super().__init__(owner, "apply affliction", "This is the affliction effect", EffectTypes.APPLY_AFFLICTION)
+        super().__init__(owner, "apply afflictions", "This is the afflictions effect", EffectTypes.APPLY_AFFLICTION)
 
     def trigger(self, tile):
         """
@@ -35,7 +35,7 @@ class ApplyAfflictionEffect(Effect):
         defender = tile.entity
 
         # create var to hold the modified duration, if it does change, or the base duration
-        base_duration = skill_data.affliction_duration
+        base_duration = skill_data.duration
         modified_duration = base_duration
 
         # check the tags match
@@ -43,19 +43,19 @@ class ApplyAfflictionEffect(Effect):
         if world_manager.Skill.has_required_tags(tile, skill_data.required_tags):
 
             # Roll for BANE application
-            if affliction_data.affliction_category == AfflictionCategory.BANE:
+            if affliction_data.category == AfflictionCategory.BANE:
                 to_hit_score = world_manager.Skill.calculate_to_hit_score(defender, skill_data.accuracy,
                                                                           skill_data.stat_to_target,  attacker)
                 hit_type = world_manager.Skill.get_hit_type(to_hit_score)
 
-                # check if affliction applied
+                # check if afflictions applied
                 if hit_type == HitTypes.GRAZE:
                     msg = f"{defender.name} resisted {skill_data.affliction_name}."
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                 else:
                     hit_msg = ""
 
-                    # check if there was a crit and if so modify the duration of the affliction
+                    # check if there was a crit and if so modify the duration of the afflictions
                     if hit_type == HitTypes.CRIT:
                         modified_duration = int(base_duration * HitModifiers.CRIT.value)
                         hit_msg = f"a critical "
@@ -71,19 +71,20 @@ class ApplyAfflictionEffect(Effect):
 
     def apply_affliction(self, defending_entity, modified_duration):
         """
-        Apply the affliction to the target entity
+        Apply the afflictions to the target entity
 
         Args:
             modified_duration (int):
             defending_entity (Entity):
         """
-        skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
+        skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
+                                                   self.skill_effect_type.name)
 
         from scripts.global_singletons.managers import world_manager
         action = world_manager.Affliction
         active_affliction = action.get_affliction_for_entity(defending_entity, skill_data.affliction_name)
 
-        # check if entity already has the affliction
+        # check if entity already has the afflictions
         if active_affliction:
             # if so compare durations
             active_duration = active_affliction.duration
@@ -91,12 +92,12 @@ class ApplyAfflictionEffect(Effect):
             log_string = f"{defending_entity.name} already has {skill_data.affliction_name}:{active_duration}..."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
-            # alter the duration of the current affliction if the new one will last longer
+            # alter the duration of the current afflictions if the new one will last longer
             if active_duration < modified_duration:
                 active_affliction.duration = modified_duration
 
                 log_string = f"-> Active duration {active_duration} is less than new duration " \
-                    f"{modified_duration} so updated the duration on the active affliction."
+                    f"{modified_duration} so updated the duration on the active afflictions."
 
             else:
                 log_string = f"-> Active duration {active_duration} is greater than or equal to new duration " \
@@ -104,14 +105,14 @@ class ApplyAfflictionEffect(Effect):
             # log the outcome of the duration comparison
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-        # no current affliction of same type so apply new one
+        # no current afflictions of same type so apply new one
         else:
-            log_string = f"Applying {skill_data.affliction_name} affliction to {defending_entity.name} with duration " \
+            log_string = f"Applying {skill_data.affliction_name} afflictions to {defending_entity.name} with duration " \
                 f"of {modified_duration}."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
-            # create the affliction
+            # create the afflictions
             affliction = action.create_affliction(skill_data.affliction_name, modified_duration, defending_entity)
 
-            # add affliction to the central list
+            # add afflictions to the central list
             action.register_active_affliction(affliction)
