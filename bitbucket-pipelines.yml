@@ -31,7 +31,11 @@ pipelines:
           - cd docs
           - make html
           - cd ..
+          - git add .
+          - git commit -m "Added documentation"
+          - git push
         artifacts:
           - docs/**
+
           
 
