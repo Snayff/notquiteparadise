@@ -17,7 +17,7 @@ def initialise_game():
     """
     Init the game`s required info
     """
-    pygame.init()
+    #pygame.init()
 
     initialise_event_handlers()
 

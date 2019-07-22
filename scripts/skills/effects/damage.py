@@ -33,20 +33,16 @@ class DamageEffect(Effect):
         from scripts.skills.skill import Skill
         from scripts.skills.affliction import Affliction
         if isinstance(self.owner, Skill):
-            self.process_skill_damage(tile)
+            attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
+            data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
+                                                 self.skill_effect_type.name)
+            is_guaranteed_hit = False
         elif isinstance(self.owner, Affliction):
-            self.process_affliction_damage(tile)
+            attacker = None
+            data = library.get_affliction_effect_data(self.owner.name, self.skill_effect_type.name)
+            is_guaranteed_hit = True
 
-    def process_skill_damage(self, tile):
-        """
-        Process damage caused by a Skill. It is affected by the attacker.
-
-        Args:
-            tile (Tile):
-        """
-        attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
         defender = tile.entity
-        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
 
         # check that the tags match
         from scripts.global_singletons.managers import world_manager
@@ -54,9 +50,16 @@ class DamageEffect(Effect):
             # if it needs to be another entity then it can't be looking at itself
             if TargetTags.OTHER_ENTITY in data.required_tags:
                 if attacker != defender:
-                    to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
+
+                    # get the hit type
+                    if is_guaranteed_hit:
+                        hit_type = HitTypes.HIT
+                    else:
+                        to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
                                                             data.accuracy, data.stat_to_target, attacker)
-                    hit_type = world_manager.Skill.get_hit_type(to_hit_score)
+                        hit_type = world_manager.Skill.get_hit_type(to_hit_score)
+
+                    # calculate damage
                     damage = self.calculate_damage(defender, hit_type, data, attacker)
 
                     # apply damage
@@ -92,41 +95,6 @@ class DamageEffect(Effect):
         else:
             # N.B. the reason why is logged in has_required_tags
             msg = f"You can't do that there!"
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-    def process_affliction_damage(self, tile):
-        """
-        Process damage caused by an Affliction
-
-        Args:
-            tile (Tile):
-        """
-        defender = tile.entity
-        data = library.get_affliction_effect_data(self.owner.name, self.skill_effect_type.name)
-
-        # check that the tags match
-        from scripts.global_singletons.managers import world_manager
-        if world_manager.Skill.has_required_tags(tile, data.required_tags):
-            damage = self.calculate_damage(defender, HitTypes.HIT, data)
-
-            # apply damage
-            if damage > 0:
-                self.apply_damage(defender, damage)
-
-                msg = f"{self.owner.name} damaged {defender.name} for {damage}."
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-                # check if defender died
-                if defender.combatant.hp <= 0:
-                    publisher.publish(DieEvent(defender))
-
-            else:
-                # N.B. the reason why is logged in has_required_tags
-                msg = f" {defender.name} resists damage from {self.owner.name}."
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-        else:
-            msg = f" {defender.name} can't be effected by damage from {self.owner.name}."
             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
     @staticmethod

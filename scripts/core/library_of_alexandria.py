@@ -5,8 +5,9 @@ from scripts.core.constants import LoggingEventTypes, TargetTags, EffectTypes, P
     AfflictionCategory, AfflictionTriggers, DamageTypes
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.afflictions_dataclasses import AfflictionData
+from scripts.skills.affliction_dataclasses import AfflictionData
 from scripts.skills.skill_dataclasses import EffectData, SkillData, SkillTreeData
+from scripts.world.aspect_dataclass import AspectData
 
 
 class LibraryOfAlexandria:
@@ -25,10 +26,7 @@ class LibraryOfAlexandria:
         self.terrains = {}
         self.actor_template = {}
 
-        self.load_data_into_library()
-        self.convert_external_strings_to_internal_enums()
-        self.convert_skills_to_data_classes()
-        self.convert_afflictions_to_data_classes()
+        self.refresh_library_data()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
 
@@ -93,68 +91,81 @@ class LibraryOfAlexandria:
             new_affliction_dict["effects"] = converted_effects
 
             # unpack the temp dict and convert the skill data to the data class
-            skill = AfflictionData(**new_affliction_dict)
-            converted_afflictions[skill.name] = skill
+            affliction = AfflictionData(**new_affliction_dict)
+            converted_afflictions[affliction.name] = affliction
 
         # delete all info from skill and replace with the converted data
         self.afflictions = {}
         self.afflictions = converted_afflictions
 
+    def convert_aspects_to_data_classes(self):
+        """
+        Take aspect data from library and convert to data classes
+        """
+        all_aspect_data = self.aspects
+        converted_aspects = {}
+
+        # loop all skill trees
+        for aspect_name, aspect_data in all_aspect_data.items():
+            converted_effects = {}
+
+            # loop skill effects in each skill
+            for index, effect_data in enumerate(aspect_data["effects"]):
+                # convert the skill effect data to the data class
+                effect = EffectData(**effect_data)
+                converted_effects[effect.effect_type.name] = effect
+
+            # set the temp dict to contain the converted skill effects
+            new_aspect_dict = aspect_data.copy()
+            new_aspect_dict["effects"] = converted_effects
+
+            # unpack the temp dict and convert the skill data to the data class
+            aspect = AspectData(**new_aspect_dict)
+            converted_aspects[aspect.name] = aspect
+
+        # delete all info from skill and replace with the converted data
+        self.aspects = {}
+        self.aspects = converted_aspects
+
     def convert_external_strings_to_internal_enums(self):
         """
         Where there are external values that are utilised internally convert them to the internal constant.
         """
-        # Update Skills
-        # Skills:TargetTags
-        self.recursive_replace(self.skills, "required_tags", "other_entity", TargetTags.OTHER_ENTITY)
-        self.recursive_replace(self.skills, "required_tags", "no_entity", TargetTags.NO_ENTITY)
-        self.recursive_replace(self.skills, "required_tags", "floor", TargetTags.FLOOR)
-        self.recursive_replace(self.skills, "required_tags", "wall", TargetTags.WALL)
-        self.recursive_replace(self.skills, "required_tags", "self", TargetTags.SELF)
+        # Update shared values
+        lists_to_convert = [self.aspects, self.skills, self.afflictions]
+        
+        for current_list in lists_to_convert:
+            # Effects:required_tags
+            self.recursive_replace(current_list, "required_tags", "other_entity", TargetTags.OTHER_ENTITY)
+            self.recursive_replace(current_list, "required_tags", "no_entity", TargetTags.NO_ENTITY)
+            self.recursive_replace(current_list, "required_tags", "floor", TargetTags.FLOOR)
+            self.recursive_replace(current_list, "required_tags", "wall", TargetTags.WALL)
+            self.recursive_replace(current_list, "required_tags", "self", TargetTags.SELF)
 
-        # Skills:SkillEffects:name
-        self.recursive_replace(self.skills, "effect_type", "damage", EffectTypes.DAMAGE)
-        self.recursive_replace(self.skills, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
-        self.recursive_replace(self.skills, "effect_type", "move", EffectTypes.MOVE)
-        self.recursive_replace(self.skills, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
-        self.recursive_replace(self.skills, "effect_type", "affect_stat", EffectTypes.AFFECT_STAT)
+            # Effects:name
+            self.recursive_replace(current_list, "effect_type", "damage", EffectTypes.DAMAGE)
+            self.recursive_replace(current_list, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
+            self.recursive_replace(current_list, "effect_type", "move", EffectTypes.MOVE)
+            self.recursive_replace(current_list, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
+            self.recursive_replace(current_list, "effect_type", "affect_stat", EffectTypes.AFFECT_STAT)
 
-        # Skills:SkillEffects:damage_type
-        self.recursive_replace(self.skills, "damage_type", "pierce", DamageTypes.PIERCE)
-        self.recursive_replace(self.skills, "damage_type", "blunt", DamageTypes.BLUNT)
-        self.recursive_replace(self.skills, "damage_type", "elemental", DamageTypes.ELEMENTAL)
+            # Effects:damage_type
+            self.recursive_replace(current_list, "damage_type", "pierce", DamageTypes.PIERCE)
+            self.recursive_replace(current_list, "damage_type", "blunt", DamageTypes.BLUNT)
+            self.recursive_replace(current_list, "damage_type", "elemental", DamageTypes.ELEMENTAL)
 
-        # Skills:SkillEffects:stat_to_target
-        self.recursive_replace(self.skills, "stat_to_target", "bustle", PrimaryStatTypes.BUSTLE)
-        self.recursive_replace(self.skills, "stat_to_target", "vigour", PrimaryStatTypes.VIGOUR)
-        self.recursive_replace(self.skills, "stat_to_target", "clout", PrimaryStatTypes.CLOUT)
-        self.recursive_replace(self.skills, "stat_to_target", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
-        self.recursive_replace(self.skills, "stat_to_target", "exactitude", PrimaryStatTypes.EXACTITUDE)
+            # Effects:stat_to_target
+            self.recursive_replace(current_list, "stat_to_target", "bustle", PrimaryStatTypes.BUSTLE)
+            self.recursive_replace(current_list, "stat_to_target", "vigour", PrimaryStatTypes.VIGOUR)
+            self.recursive_replace(current_list, "stat_to_target", "clout", PrimaryStatTypes.CLOUT)
+            self.recursive_replace(current_list, "stat_to_target", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
+            self.recursive_replace(current_list, "stat_to_target", "exactitude", PrimaryStatTypes.EXACTITUDE)
 
-        # Skills:SkillEffects:new_terrain
-        self.recursive_replace(self.skills, "new_terrain", "floor", TargetTags.FLOOR)
-        self.recursive_replace(self.skills, "new_terrain", "wall", TargetTags.WALL)
-
+            # Effects:new_terrain
+            self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
+            self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
+       
         # Update Afflictions
-        # Affliction:AfflictionEffects:name
-        self.recursive_replace(self.afflictions, "effect_type", "damage", EffectTypes.DAMAGE)
-        self.recursive_replace(self.afflictions, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
-        self.recursive_replace(self.afflictions, "effect_type", "move", EffectTypes.MOVE)
-        self.recursive_replace(self.afflictions, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
-        self.recursive_replace(self.afflictions, "effect_type", "affect_stat", EffectTypes.AFFECT_STAT)
-
-        # Affliction:TargetTags
-        self.recursive_replace(self.afflictions, "required_tags", "other_entity", TargetTags.OTHER_ENTITY)
-        self.recursive_replace(self.afflictions, "required_tags", "no_entity", TargetTags.NO_ENTITY)
-        self.recursive_replace(self.afflictions, "required_tags", "floor", TargetTags.FLOOR)
-        self.recursive_replace(self.afflictions, "required_tags", "wall", TargetTags.WALL)
-        self.recursive_replace(self.afflictions, "required_tags", "self", TargetTags.SELF)
-
-        # Affliction:AfflictionEffects:damage_type
-        self.recursive_replace(self.afflictions, "damage_type", "pierce", DamageTypes.PIERCE)
-        self.recursive_replace(self.afflictions, "damage_type", "blunt", DamageTypes.BLUNT)
-        self.recursive_replace(self.afflictions, "damage_type", "elemental", DamageTypes.ELEMENTAL)
-
         # Affliction:category
         self.recursive_replace(self.afflictions, "category", "bane", AfflictionCategory.BANE)
         self.recursive_replace(self.afflictions, "category", "boon", AfflictionCategory.BOON)
@@ -233,19 +244,31 @@ class LibraryOfAlexandria:
 
     def get_aspect_data(self, aspect_name):
         """
-        Get data for a aspects from the central library
+        Get data for an aspect from the central library
 
         Args:
             aspect_name (str):
 
         Returns:
-            tuple: named tuple of values.
+            AspectData: data for a specified aspect.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(aspect_name, self.aspects[aspect_name])
-        data = named_tuple(**self.aspects[aspect_name])
 
+        data = self.aspects[aspect_name]
+        return data
+
+    def get_aspect_effect_data(self, aspect_name, effect_name):
+        """
+        Get data for an aspect from the central library
+
+        Args:
+            aspect_name(str):
+            effect_name(EffectTypes):
+
+        Returns:
+            EffectData: data for a specified effect.
+        """
+
+        data = self.aspects[aspect_name].effects[effect_name]
         return data
 
     def get_affliction_data(self, affliction_name):
@@ -269,6 +292,7 @@ class LibraryOfAlexandria:
         Args:
             affliction_name(str):
             effect_name(EffectTypes):
+
         Returns:
             EffectData: data for a specified effect.
         """
@@ -358,12 +382,22 @@ class LibraryOfAlexandria:
         effect_data = self.skills[skill_tree].skill[skill_name].effects[skill_effect]
         return effect_data
 
+    def refresh_library_data(self):
+        """
+        Load json data into the library, convert strings to enums and dicts to data classes.
+        """
+        self.load_data_into_library()
+        self.convert_external_strings_to_internal_enums()
+        self.convert_skills_to_data_classes()
+        self.convert_afflictions_to_data_classes()
+        self.convert_aspects_to_data_classes()
+
     def load_data_into_library(self):
         """
         Load data from all external jsons to this central data library
         """
         import os
-        # N.B. this iss set in Sphinx config when Sphinx is running
+        # N.B. this is set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
             self.skills = self.load_values_from_skill_json()
             self.homelands = self.load_values_from_homeland_json()

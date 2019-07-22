@@ -194,7 +194,7 @@ class InputManager:
                 debug_manager.set_visibility(True)
 
         if self.input_values["refresh_data"]:
-            library.load_data_into_library()
+            library.refresh_library_data()
             from scripts.global_singletons.managers import ui_manager
             ui_manager.skill_bar.update_skill_icons_to_show()
             publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "

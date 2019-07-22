@@ -242,17 +242,19 @@ class MapMethods:
         return tile.terrain
 
     @staticmethod
-    def set_aspect_on_tile(tile, aspect):
+    def set_aspect_on_tile(tile, aspect_name=None):
         """
-        Set the new aspects on the tile.
+        Set the new aspects on the tile. If aspect_name is not provided aspect will be removed.
 
         Args:
-            tile ():
-            aspect:
+            tile (Tile):
+            aspect_name(str):
         """
-        tile.aspect = aspect
-        if aspect:
-            tile.aspect.owner = tile
+        if aspect_name:
+            from scripts.world.aspect import Aspect
+            tile.aspect = Aspect(tile, aspect_name)
+        else:
+            tile.aspect = None
 
     @staticmethod
     def trigger_aspect_effect_on_tile(tile):

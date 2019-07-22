@@ -19,7 +19,6 @@ from scripts.core.initialisers import initialise_game
 # FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
 # TODO - UI information should be pulled once then held
 # TODO - set terrain/aspects to use the appropriate type (enum) to load the values, rather than adding as instances
-# TODO - move info from bog to aspects to remove need to subclass
 # TODO - create global tooltip method - some relevant code in old message `log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
@@ -51,6 +50,8 @@ def main():
     profiler = cProfile.Profile()
     profiler.enable()
 
+
+    # alternate approach to init the managers
     start()
     from scripts.global_singletons import managers
     managers.game_manager2.update_game_state(GameStates.PLAYER_TURN)
@@ -61,7 +62,6 @@ def main():
     game_loop()
 
     # we've left the game loop so now close everything down
-
     profiler.disable()
     dump_profiling_data(profiler)
     logging.shutdown()  # clear logging resources
