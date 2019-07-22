@@ -101,8 +101,6 @@
 </li>
       <li><a href="world.html#scripts.world.entity.Entity.animation_timer">animation_timer (scripts.world.entity.Entity attribute)</a>
 </li>
-      <li><a href="world.html#scripts.world.aspect.aspect.Aspect">Aspect (class in scripts.world.aspect.aspect)</a>
-</li>
       <li><a href="world.html#scripts.world.tile.Tile.aspect">aspect (scripts.world.tile.Tile attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.AspectTypes">AspectTypes (class in scripts.core.constants)</a>
@@ -115,26 +113,20 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.MessageLogPalette.background">background (scripts.ui_elements.palette.Palette.MessageLogPalette attribute)</a>
 </li>
-      <li><a href="world.html#scripts.world.aspect.aspect.Aspect.blocks_movement">blocks_movement (scripts.world.aspect.aspect.Aspect attribute)</a>
+      <li><a href="world.html#scripts.world.terrain.terrain.Terrain.blocks_movement">blocks_movement (scripts.world.terrain.terrain.Terrain attribute)</a>
 
       <ul>
-        <li><a href="world.html#scripts.world.terrain.terrain.Terrain.blocks_movement">(scripts.world.terrain.terrain.Terrain attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.tile.Tile.blocks_movement">(scripts.world.tile.Tile attribute)</a>
 </li>
       </ul></li>
-      <li><a href="world.html#scripts.world.aspect.aspect.Aspect.blocks_sight">blocks_sight (scripts.world.aspect.aspect.Aspect attribute)</a>
+      <li><a href="world.html#scripts.world.terrain.terrain.Terrain.blocks_sight">blocks_sight (scripts.world.terrain.terrain.Terrain attribute)</a>
 
       <ul>
-        <li><a href="world.html#scripts.world.terrain.terrain.Terrain.blocks_sight">(scripts.world.terrain.terrain.Terrain attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.tile.Tile.blocks_sight">(scripts.world.tile.Tile attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="world.html#scripts.world.aspect.bog.Bog">Bog (class in scripts.world.aspect.bog)</a>
-</li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.GameMapPalette.border">border (scripts.ui_elements.palette.Palette.GameMapPalette attribute)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.border_colour">border_colour (scripts.ui_elements.templates.panel.Panel attribute)</a>
@@ -177,13 +169,15 @@
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.colours.Colour.SecondaryColour">Colour.SecondaryColour (class in scripts.ui_elements.colours)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.colours.Colour.TertiaryColour">Colour.TertiaryColour (class in scripts.ui_elements.colours)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.colours.Colour.complement">complement (scripts.ui_elements.colours.Colour attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_afflictions_to_data_classes">convert_afflictions_to_data_classes() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_aspects_to_data_classes">convert_aspects_to_data_classes() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_external_strings_to_internal_enums">convert_external_strings_to_internal_enums() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
@@ -349,8 +343,6 @@
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_actor_template_data">get_actor_template_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_category_from_string">get_affliction_category_from_string() (scripts.managers.world_methods.affliction_methods.AfflictionMethods static method)</a>
-</li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_affliction_data">get_affliction_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_affliction_effect_data">get_affliction_effect_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
@@ -365,6 +357,8 @@
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_data">get_aspect_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_effect_data">get_aspect_effect_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity_at_location">get_blocking_entity_at_location() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_chebyshev_distance_between_tiles">get_chebyshev_distance_between_tiles() (scripts.managers.world_methods.entity_methods.EntityMethods static method)</a>
@@ -377,10 +371,10 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_entity_on_tile">get_entity_on_tile() (scripts.managers.world_methods.map_methods.MapMethods static method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_euclidean_distance_between_entities">get_euclidean_distance_between_entities() (scripts.managers.world_methods.entity_methods.EntityMethods static method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_euclidean_distance_between_entities">get_euclidean_distance_between_entities() (scripts.managers.world_methods.entity_methods.EntityMethods static method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_game_map">get_game_map() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_hit_type">get_hit_type() (scripts.managers.world_methods.skill_methods.SkillMethods static method)</a>
@@ -420,8 +414,6 @@
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_terrain_on_tile">get_terrain_on_tile() (scripts.managers.world_methods.map_methods.MapMethods static method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tile">get_tile() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
-</li>
-      <li><a href="managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_trigger_event_from_string">get_trigger_event_from_string() (scripts.managers.world_methods.affliction_methods.AfflictionMethods static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -592,13 +584,9 @@
       <ul>
         <li><a href="skills.html#scripts.skills.skill.Skill.name">(scripts.skills.skill.Skill attribute)</a>
 </li>
-        <li><a href="world.html#scripts.world.aspect.aspect.Aspect.name">(scripts.world.aspect.aspect.Aspect attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.terrain.terrain.Terrain.name">(scripts.world.terrain.terrain.Terrain attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.colours.Colour.ComplementColour.neutral">neutral (scripts.ui_elements.colours.Colour.ComplementColour attribute)</a>
 
       <ul>
@@ -609,6 +597,8 @@
         <li><a href="ui_elements.html#scripts.ui_elements.colours.Colour.TertiaryColour.neutral">(scripts.ui_elements.colours.Colour.TertiaryColour attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.turn.TurnManager.next_turn">next_turn() (scripts.managers.turn.TurnManager method)</a>
 </li>
   </ul></td>
@@ -620,8 +610,6 @@
       <li><a href="skills.html#scripts.skills.skill.Skill.owner">owner (scripts.skills.skill.Skill attribute)</a>
 
       <ul>
-        <li><a href="world.html#scripts.world.aspect.aspect.Aspect.owner">(scripts.world.aspect.aspect.Aspect attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.terrain.terrain.Terrain.owner">(scripts.world.terrain.terrain.Terrain attribute)</a>
 </li>
       </ul></li>
@@ -679,6 +667,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.refresh_library_data">refresh_library_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.register_active_affliction">register_active_affliction() (scripts.managers.world_methods.affliction_methods.AfflictionMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.remove_entity">remove_entity() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
@@ -745,15 +735,11 @@
 </li>
       <li><a href="ui_elements.html#module-scripts.ui_elements.targeting_overlay">scripts.ui_elements.targeting_overlay (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#module-scripts.ui_elements.templates.panel">scripts.ui_elements.templates.panel (module)</a>
 </li>
       <li><a href="ui_elements.html#module-scripts.ui_elements.templates.skill_container">scripts.ui_elements.templates.skill_container (module)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="world.html#module-scripts.world.aspect.aspect">scripts.world.aspect.aspect (module)</a>
-</li>
-      <li><a href="world.html#module-scripts.world.aspect.bog">scripts.world.aspect.bog (module)</a>
 </li>
       <li><a href="world.html#module-scripts.world.entity">scripts.world.entity (module)</a>
 </li>
@@ -809,12 +795,8 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods">SkillMethods (class in scripts.managers.world_methods.skill_methods)</a>
 </li>
-      <li><a href="world.html#scripts.world.aspect.aspect.Aspect.sprite">sprite (scripts.world.aspect.aspect.Aspect attribute)</a>
-
-      <ul>
-        <li><a href="world.html#scripts.world.terrain.terrain.Terrain.sprite">(scripts.world.terrain.terrain.Terrain attribute)</a>
+      <li><a href="world.html#scripts.world.terrain.terrain.Terrain.sprite">sprite (scripts.world.terrain.terrain.Terrain attribute)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -930,8 +912,6 @@
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.x">x (scripts.ui_elements.templates.panel.Panel attribute)</a>
 
       <ul>
-        <li><a href="world.html#scripts.world.aspect.aspect.Aspect.x">(scripts.world.aspect.aspect.Aspect attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.entity.Entity.x">(scripts.world.entity.Entity attribute)</a>
 </li>
         <li><a href="world.html#scripts.world.terrain.terrain.Terrain.x">(scripts.world.terrain.terrain.Terrain attribute)</a>
@@ -948,8 +928,6 @@
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.y">y (scripts.ui_elements.templates.panel.Panel attribute)</a>
 
       <ul>
-        <li><a href="world.html#scripts.world.aspect.aspect.Aspect.y">(scripts.world.aspect.aspect.Aspect attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.entity.Entity.y">(scripts.world.entity.Entity attribute)</a>
 </li>
         <li><a href="world.html#scripts.world.terrain.terrain.Terrain.y">(scripts.world.terrain.terrain.Terrain attribute)</a>

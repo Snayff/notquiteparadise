@@ -117,45 +117,6 @@
 
         <span class="k">return</span> <span class="n">affliction</span></div>
 
-<div class="viewcode-block" id="AfflictionMethods.get_affliction_category_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_category_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_affliction_category_from_string</span><span class="p">(</span><span class="n">affliction_category</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert a string to the appropriate AfflictionCategory (Enum) value</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            affliction_category (str): string name of afflictions category</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            AfflictionCategory</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">affliction_category</span> <span class="o">==</span> <span class="s2">&quot;bane&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">AfflictionCategory</span><span class="o">.</span><span class="n">BANE</span>
-        <span class="k">elif</span> <span class="n">affliction_category</span> <span class="o">==</span> <span class="s2">&quot;boon&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">AfflictionCategory</span><span class="o">.</span><span class="n">BOON</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction_category}</span><span class="s2"> not found in &#39;get_affliction_category_from_string&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="AfflictionMethods.get_trigger_event_from_string"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_trigger_event_from_string">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_trigger_event_from_string</span><span class="p">(</span><span class="n">trigger_event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert a string to the appropriate AfflictionTriggers (Enum) value</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            trigger_event (str): string name of trigger event</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            AfflictionTriggers</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO - add remaining afflictions</span>
-        <span class="k">if</span> <span class="n">trigger_event</span> <span class="o">==</span> <span class="s2">&quot;passive&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">PASSIVE</span>
-        <span class="k">elif</span> <span class="n">trigger_event</span> <span class="o">==</span> <span class="s2">&quot;end_turn&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">END_TURN</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{trigger_event}</span><span class="s2"> not found in &#39;get_trigger_event_from_string&#39;&quot;</span>
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span></div>
-
 <div class="viewcode-block" id="AfflictionMethods.register_active_affliction"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.register_active_affliction">[docs]</a>    <span class="k">def</span> <span class="nf">register_active_affliction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register an afflictions with the central list. Without this they exist in the ether and do nothing.</span>
@@ -225,7 +186,8 @@
 
         <span class="c1"># loop all afflictions effects in all afflictions and return specified type</span>
         <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">affliction</span><span class="o">.</span><span class="n">affliction_effects</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_data</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">effects</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">effect_type</span><span class="p">:</span>
                     <span class="n">affliction_effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span>
 

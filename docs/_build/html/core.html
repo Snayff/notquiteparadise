@@ -182,6 +182,12 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_aspects_to_data_classes">
+<code class="descname">convert_aspects_to_data_classes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.convert_aspects_to_data_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_aspects_to_data_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take aspect data from library and convert to data classes</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_external_strings_to_internal_enums">
 <code class="descname">convert_external_strings_to_internal_enums</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.convert_external_strings_to_internal_enums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_external_strings_to_internal_enums" title="Permalink to this definition">¶</a></dt>
 <dd><p>Where there are external values that are utilised internally convert them to the internal constant.</p>
@@ -250,16 +256,36 @@
 <dl class="method">
 <dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_data">
 <code class="descname">get_aspect_data</code><span class="sig-paren">(</span><em>aspect_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_aspect_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get data for a aspects from the central library</p>
+<dd><p>Get data for an aspect from the central library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>named tuple of values.</p>
+<dd class="field-even"><p>data for a specified aspect.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+<dd class="field-odd"><p>AspectData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_effect_data">
+<code class="descname">get_aspect_effect_data</code><span class="sig-paren">(</span><em>aspect_name</em>, <em>effect_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_aspect_effect_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_effect_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data for an aspect from the central library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>effect_name</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data for a specified effect.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>EffectData</p>
 </dd>
 </dl>
 </dd></dl>
@@ -441,6 +467,12 @@
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.refresh_library_data">
+<code class="descname">refresh_library_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.refresh_library_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.refresh_library_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load json data into the library, convert strings to enums and dicts to data classes.</p>
 </dd></dl>
 
 </dd></dl>
