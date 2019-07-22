@@ -518,20 +518,6 @@ Wrapper for the create effect under world_manager.Skill.</p>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
-<dt id="scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_category_from_string">
-<em class="property">static </em><code class="descname">get_affliction_category_from_string</code><span class="sig-paren">(</span><em>affliction_category</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/affliction_methods.html#AfflictionMethods.get_affliction_category_from_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_category_from_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a string to the appropriate AfflictionCategory (Enum) value</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>affliction_category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – string name of afflictions category</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>AfflictionCategory</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="method">
 <dt id="scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_effects_for_entity">
 <code class="descname">get_affliction_effects_for_entity</code><span class="sig-paren">(</span><em>entity</em>, <em>effect_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/affliction_methods.html#AfflictionMethods.get_affliction_effects_for_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_affliction_effects_for_entity" title="Permalink to this definition">¶</a></dt>
@@ -593,20 +579,6 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
 <li><p><strong>(</strong><strong>)</strong> (<em>stat</em>) – primary or secondary stat</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_trigger_event_from_string">
-<em class="property">static </em><code class="descname">get_trigger_event_from_string</code><span class="sig-paren">(</span><em>trigger_event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/affliction_methods.html#AfflictionMethods.get_trigger_event_from_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_trigger_event_from_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a string to the appropriate AfflictionTriggers (Enum) value</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>trigger_event</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – string name of trigger event</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>AfflictionTriggers</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1100,13 +1072,13 @@ Wrapper for the create effect under world_manager.Skill.</p>
 
 <dl class="staticmethod">
 <dt id="scripts.managers.world_methods.map_methods.MapMethods.set_aspect_on_tile">
-<em class="property">static </em><code class="descname">set_aspect_on_tile</code><span class="sig-paren">(</span><em>tile</em>, <em>aspect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.set_aspect_on_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.set_aspect_on_tile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the new aspects on the tile.</p>
+<em class="property">static </em><code class="descname">set_aspect_on_tile</code><span class="sig-paren">(</span><em>tile</em>, <em>aspect_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.set_aspect_on_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.set_aspect_on_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the new aspects on the tile. If aspect_name is not provided aspect will be removed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>(</strong><strong>)</strong> (<em>tile</em>) – </p></li>
-<li><p><strong>aspect</strong> – </p></li>
+<li><p><strong>tile</strong> (<a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile"><em>Tile</em></a>) – </p></li>
+<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 </dl>

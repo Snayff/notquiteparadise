@@ -275,17 +275,19 @@
         <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span></div>
 
 <div class="viewcode-block" id="MapMethods.set_aspect_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.set_aspect_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">set_aspect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_aspect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the new aspects on the tile.</span>
+<span class="sd">        Set the new aspects on the tile. If aspect_name is not provided aspect will be removed.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tile ():</span>
-<span class="sd">            aspect:</span>
+<span class="sd">            tile (Tile):</span>
+<span class="sd">            aspect_name(str):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="n">aspect</span>
-        <span class="k">if</span> <span class="n">aspect</span><span class="p">:</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
+        <span class="k">if</span> <span class="n">aspect_name</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">scripts.world.aspect</span> <span class="k">import</span> <span class="n">Aspect</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="MapMethods.trigger_aspect_effect_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.trigger_aspect_effect_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">trigger_aspect_effect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>

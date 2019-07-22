@@ -37,7 +37,6 @@
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.palette</span> <span class="k">import</span> <span class="n">Palette</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">VisualInfo</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.templates.panel</span> <span class="k">import</span> <span class="n">Panel</span>
-<span class="kn">from</span> <span class="nn">scripts.world.aspect.bog</span> <span class="k">import</span> <span class="n">Bog</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
@@ -65,7 +64,7 @@
             <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
             <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_terrain_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">5</span><span class="p">],</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">)</span>
             <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_terrain_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">)</span>
-            <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_aspect_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">Bog</span><span class="p">())</span>
+            <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_aspect_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;bog&quot;</span><span class="p">)</span>
 
         <span class="c1"># setup the panel</span>
         <span class="n">panel_x</span> <span class="o">=</span> <span class="mi">0</span>
