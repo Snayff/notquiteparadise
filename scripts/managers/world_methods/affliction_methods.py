@@ -84,45 +84,6 @@ class AfflictionMethods:
 
         return affliction
 
-    @staticmethod
-    def get_affliction_category_from_string(affliction_category):
-        """
-        Convert a string to the appropriate AfflictionCategory (Enum) value
-
-        Args:
-            affliction_category (str): string name of afflictions category
-
-        Returns:
-            AfflictionCategory
-        """
-        if affliction_category == "bane":
-            return AfflictionCategory.BANE
-        elif affliction_category == "boon":
-            return AfflictionCategory.BOON
-
-        log_string = f"{affliction_category} not found in 'get_affliction_category_from_string'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
-
-    @staticmethod
-    def get_trigger_event_from_string(trigger_event):
-        """
-        Convert a string to the appropriate AfflictionTriggers (Enum) value
-
-        Args:
-            trigger_event (str): string name of trigger event
-
-        Returns:
-            AfflictionTriggers
-        """
-        # TODO - add remaining afflictions
-        if trigger_event == "passive":
-            return AfflictionTriggers.PASSIVE
-        elif trigger_event == "end_turn":
-            return AfflictionTriggers.END_TURN
-
-        log_string = f"{trigger_event} not found in 'get_trigger_event_from_string'"
-        publisher.publish(LoggingEvent(LoggingEventTypes.CRITICAL, log_string))
-
     def register_active_affliction(self, affliction):
         """
         Register an afflictions with the central list. Without this they exist in the ether and do nothing.
@@ -192,7 +153,8 @@ class AfflictionMethods:
 
         # loop all afflictions effects in all afflictions and return specified type
         for affliction in afflictions:
-            for effect in affliction.affliction_effects:
+            data = library.get_affliction_data(affliction.name)
+            for effect in data.effects:
                 if effect.effect_type == effect_type:
                     affliction_effects.append(effect)
 

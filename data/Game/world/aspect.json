@@ -3,15 +3,15 @@
         "name": "bog",
         "description": "This is the bog aspect. It slows entities down.",
         "sprite": "placeholder/78.png",
-        "block_sight": false,
-        "block_movement": false,
-        "skill_effects": [
+        "blocks_sight": false,
+        "blocks_movement": false,
+        "effects": [
                 {
-                    "name": "apply_affliction",
+                    "effect_type": "apply_affliction",
                     "required_tags": ["other_entity"],
                     "accuracy": 100,
                     "stat_to_target": "skullduggery",
-                    "affliction_name": "bogged_down",
+                    "affliction_name": "bogged down",
                     "duration": 3
                 }
         ]

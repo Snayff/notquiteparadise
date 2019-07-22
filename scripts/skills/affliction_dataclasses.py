@@ -7,11 +7,11 @@ from scripts.core.constants import AfflictionTriggers, AfflictionCategory
 @dataclass()
 class AfflictionData:
     """
-    Data class for a skill
+    Data class for an Affliction
     """
-    name: str
-    description: str
-    icon: str
-    trigger_event: AfflictionTriggers
-    category: AfflictionCategory
+    name: str = "None"
+    description: str = "None"
+    icon: str = "None"
+    trigger_event: AfflictionTriggers = None
+    category: AfflictionCategory = None
     effects: Dict = field(default_factory=list)

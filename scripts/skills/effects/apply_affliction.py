@@ -25,32 +25,40 @@ class ApplyAfflictionEffect(Effect):
         Args:
             tile(Tile):
         """
-
         super().trigger()
-        skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                   self.skill_effect_type.name)
-        affliction_data = library.get_affliction_data(skill_data.affliction_name)
 
-        attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
+        # determine who triggered this effect to articulate the attacker and get the effect data
+        from scripts.skills.skill import Skill
+        from scripts.world.aspect import Aspect
+        if isinstance(self.owner, Skill):
+            attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
+            effect_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
+                                                        self.skill_effect_type.name)
+        elif isinstance(self.owner, Aspect):
+            attacker = None
+            effect_data = library.get_aspect_effect_data(self.owner.name, self.skill_effect_type.name)
+
+        affliction_data = library.get_affliction_data(effect_data.affliction_name)
+
         defender = tile.entity
 
         # create var to hold the modified duration, if it does change, or the base duration
-        base_duration = skill_data.duration
+        base_duration = effect_data.duration
         modified_duration = base_duration
 
         # check the tags match
         from scripts.global_singletons.managers import world_manager
-        if world_manager.Skill.has_required_tags(tile, skill_data.required_tags):
+        if world_manager.Skill.has_required_tags(tile, effect_data.required_tags):
 
             # Roll for BANE application
             if affliction_data.category == AfflictionCategory.BANE:
-                to_hit_score = world_manager.Skill.calculate_to_hit_score(defender, skill_data.accuracy,
-                                                                          skill_data.stat_to_target,  attacker)
+                to_hit_score = world_manager.Skill.calculate_to_hit_score(defender, effect_data.accuracy,
+                                                                          effect_data.stat_to_target,  attacker)
                 hit_type = world_manager.Skill.get_hit_type(to_hit_score)
 
                 # check if afflictions applied
                 if hit_type == HitTypes.GRAZE:
-                    msg = f"{defender.name} resisted {skill_data.affliction_name}."
+                    msg = f"{defender.name} resisted {effect_data.affliction_name}."
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
                 else:
                     hit_msg = ""
@@ -60,7 +68,7 @@ class ApplyAfflictionEffect(Effect):
                         modified_duration = int(base_duration * HitModifiers.CRIT.value)
                         hit_msg = f"a critical "
 
-                    msg = f"{defender.name} succumbed to {hit_msg}{skill_data.affliction_name}."
+                    msg = f"{defender.name} succumbed to {hit_msg}{effect_data.affliction_name}."
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
                     self.apply_affliction(defender, modified_duration)
@@ -77,19 +85,25 @@ class ApplyAfflictionEffect(Effect):
             modified_duration (int):
             defending_entity (Entity):
         """
-        skill_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                   self.skill_effect_type.name)
+        # determine who triggered this effect to articulate the attacker and get the effect data
+        from scripts.skills.skill import Skill
+        from scripts.world.aspect import Aspect
+        if isinstance(self.owner, Skill):
+            effect_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
+                                                        self.skill_effect_type.name)
+        elif isinstance(self.owner, Aspect):
+            effect_data = library.get_aspect_effect_data(self.owner.name, self.skill_effect_type.name)
 
         from scripts.global_singletons.managers import world_manager
-        action = world_manager.Affliction
-        active_affliction = action.get_affliction_for_entity(defending_entity, skill_data.affliction_name)
+        active_affliction = world_manager.Affliction.get_affliction_for_entity(defending_entity,
+                                                                               effect_data.affliction_name)
 
         # check if entity already has the afflictions
         if active_affliction:
             # if so compare durations
             active_duration = active_affliction.duration
 
-            log_string = f"{defending_entity.name} already has {skill_data.affliction_name}:{active_duration}..."
+            log_string = f"{defending_entity.name} already has {effect_data.affliction_name}:{active_duration}..."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             # alter the duration of the current afflictions if the new one will last longer
@@ -107,12 +121,13 @@ class ApplyAfflictionEffect(Effect):
 
         # no current afflictions of same type so apply new one
         else:
-            log_string = f"Applying {skill_data.affliction_name} afflictions to {defending_entity.name} with duration " \
-                f"of {modified_duration}."
+            log_string = f"Applying {effect_data.affliction_name} afflictions to {defending_entity.name} with " \
+                f"duration of {modified_duration}."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 
             # create the afflictions
-            affliction = action.create_affliction(skill_data.affliction_name, modified_duration, defending_entity)
+            affliction = world_manager.Affliction.create_affliction(effect_data.affliction_name, modified_duration,
+                                                                    defending_entity)
 
             # add afflictions to the central list
-            action.register_active_affliction(affliction)
+            world_manager.Affliction.register_active_affliction(affliction)

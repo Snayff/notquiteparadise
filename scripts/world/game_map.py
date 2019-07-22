@@ -4,7 +4,6 @@ from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 from scripts.core.constants import TargetTags, VisualInfo
 from scripts.ui_elements.templates.panel import Panel
-from scripts.world.aspect.bog import Bog
 from scripts.world.tile import Tile
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
@@ -32,7 +31,7 @@ class GameMap:
             from scripts.global_singletons.managers import world_manager
             world_manager.Map.set_terrain_on_tile(self.tiles[0][5], TargetTags.WALL)
             world_manager.Map.set_terrain_on_tile(self.tiles[10][2], TargetTags.WALL)
-            world_manager.Map.set_aspect_on_tile(self.tiles[0][2], Bog())
+            world_manager.Map.set_aspect_on_tile(self.tiles[0][2], "bog")
 
         # setup the panel
         panel_x = 0
