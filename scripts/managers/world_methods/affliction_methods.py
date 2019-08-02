@@ -155,8 +155,9 @@ class AfflictionMethods:
         for affliction in afflictions:
             data = library.get_affliction_data(affliction.name)
             for effect in data.effects:
-                if effect.effect_type == effect_type:
-                    affliction_effects.append(effect)
+                if effect.effect_type:
+                    if effect.effect_type == effect_type:
+                        affliction_effects.append(effect)
 
         return affliction_effects
 

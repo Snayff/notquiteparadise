@@ -29,15 +29,17 @@ from scripts.core.initialisers import initialise_game
 # TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
-# TODO - review what other info can be externalised.
 # TODO - update combat in line with new standards
 # TODO - data validation of jsons on init
 # TODO - Review closure
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - rename scripts to notquiteparadise
 # TODO - move the docstring annotations to the function line, then install mypy
+# TODO - dev input console:
+#  reload data
+#  spawn entity
+# TODO - use seed for RNG
 
 
 def main():

@@ -1,6 +1,7 @@
 
 import json
 
+from scripts.components.race_dataclass import RaceData
 from scripts.core.constants import LoggingEventTypes, TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes
 from scripts.events.logging_events import LoggingEvent
@@ -19,10 +20,10 @@ class LibraryOfAlexandria:
         # TODO - add conversion to data class for remaining dicts
         self.skills = {}  # conversion done
         self.homelands = {}
-        self.races = {}
+        self.races = {}  # in progress
         self.savvys = {}
         self.afflictions = {}  # conversion done
-        self.aspects = {}
+        self.aspects = {}  # conversion done
         self.terrains = {}
         self.actor_template = {}
 
@@ -90,11 +91,11 @@ class LibraryOfAlexandria:
             new_affliction_dict = affliction_data.copy()
             new_affliction_dict["effects"] = converted_effects
 
-            # unpack the temp dict and convert the skill data to the data class
+            # unpack the temp dict and convert the afflictions data to the data class
             affliction = AfflictionData(**new_affliction_dict)
             converted_afflictions[affliction.name] = affliction
 
-        # delete all info from skill and replace with the converted data
+        # delete all info from afflictions and replace with the converted data
         self.afflictions = {}
         self.afflictions = converted_afflictions
 
@@ -119,13 +120,31 @@ class LibraryOfAlexandria:
             new_aspect_dict = aspect_data.copy()
             new_aspect_dict["effects"] = converted_effects
 
-            # unpack the temp dict and convert the skill data to the data class
+            # unpack the temp dict and convert the aspect data to the data class
             aspect = AspectData(**new_aspect_dict)
             converted_aspects[aspect.name] = aspect
 
-        # delete all info from skill and replace with the converted data
+        # delete all info from aspect and replace with the converted data
         self.aspects = {}
         self.aspects = converted_aspects
+
+    def convert_races_to_data_classes(self):
+        """
+        Take race data from library and convert to data classes
+        """
+        all_race_data = self.races
+        converted_races = {}
+
+        # loop all skill trees
+        for race_name, race_data in all_race_data.items():
+
+            # unpack the dict and convert the data to the data class
+            race = RaceData(**race_data)
+            converted_races[race.name] = race
+
+        # delete all info from skill and replace with the converted data
+        self.races = {}
+        self.races = converted_races
 
     def convert_external_strings_to_internal_enums(self):
         """
@@ -325,13 +344,10 @@ class LibraryOfAlexandria:
             race_name (str):
 
         Returns:
-            tuple: named tuple of values.
+            RaceData: data for a specified Race.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(race_name, self.races[race_name])
-        data = named_tuple(**self.races[race_name])
 
+        data = self.races[race_name]
         return data
 
     def get_homeland_data(self, homeland_name):
@@ -391,6 +407,7 @@ class LibraryOfAlexandria:
         self.convert_skills_to_data_classes()
         self.convert_afflictions_to_data_classes()
         self.convert_aspects_to_data_classes()
+        self.convert_races_to_data_classes()
 
     def load_data_into_library(self):
         """
