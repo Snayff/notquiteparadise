@@ -32,6 +32,7 @@
             
   <h1>Source code for scripts.world.entity</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">scripts.events.entity_events</span> <span class="k">import</span> <span class="n">LearnEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
 
 
@@ -128,11 +129,13 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sight_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        How far an entity can see.</span>
 
 <span class="sd">        Returns:</span>
-
+<span class="sd">            int: Number of tiles an entity can see.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="o">.</span><span class="n">sight_range</span></div>
+        <span class="n">race_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_race_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">race</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">race_data</span><span class="o">.</span><span class="n">sight_range</span></div>
 </pre></div>
 
           </div>
