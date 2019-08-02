@@ -1,4 +1,5 @@
 from scripts.events.entity_events import LearnEvent
+from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 
 
@@ -95,8 +96,10 @@ class Entity:
     @property
     def sight_range(self):
         """
+        How far an entity can see.
 
         Returns:
-
+            int: Number of tiles an entity can see.
         """
-        return self.race.sight_range
+        race_data = library.get_race_data(self.race.name)
+        return race_data.sight_range

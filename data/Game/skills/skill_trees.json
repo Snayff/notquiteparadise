@@ -74,7 +74,7 @@
         "burn_the_deck": {
             "name": "burn the deck",
             "description": "Apply burning affliction",
-            "icon": "placeholder/icon_40.png",
+            "icon": "placeholder/icon_05.png",
             "required_tags": [
                 "other_entity"
             ],
