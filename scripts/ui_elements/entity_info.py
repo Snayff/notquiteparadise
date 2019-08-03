@@ -1,3 +1,4 @@
+
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
@@ -70,26 +71,15 @@ class SelectedEntityInfo:
         first_section_text.append(f"PRIMARY")
         first_section_text.append(f"Vigour: {entity.combatant.primary_stats.vigour}")
         first_section_text.append(f"Clout: {entity.combatant.primary_stats.clout}")
-        first_section_text.append(f"skullduggery: {entity.combatant.primary_stats.skullduggery}")
+        first_section_text.append(f"Skullduggery: {entity.combatant.primary_stats.skullduggery}")
         first_section_text.append(f"Bustle: {entity.combatant.primary_stats.bustle}")
         first_section_text.append(f"Exactitude: {entity.combatant.primary_stats.exactitude}")
 
         second_section_text_header = f"SECONDARY"
         second_section_column_one_text.append(f"Offense:")
-        second_section_column_one_text.append(f"Base Damage: {entity.combatant.secondary_stats.base_damage}")
-        second_section_column_one_text.append(f"Chance to Hit: {entity.combatant.secondary_stats.chance_to_hit}")
-        second_section_column_one_text.append(f"")
-        second_section_column_one_text.append(f"Utility:")
-        second_section_column_one_text.append(f"Action Cost Change: "
-                                              f"{entity.combatant.secondary_stats.action_cost_change}")
-        second_section_column_one_text.append(f"Status Length: {entity.combatant.secondary_stats.status_length}")
+        second_section_column_one_text.append(f"Accuracy: {entity.combatant.secondary_stats.accuracy}")
 
         second_section_column_two_text.append(f"Defence:")
-        second_section_column_two_text.append(f"Dodge speed: {entity.combatant.secondary_stats.dodge_speed}")
-        second_section_column_two_text.append(f"Dodge toughness: "
-                                              f"{entity.combatant.secondary_stats.dodge_toughness}")
-        second_section_column_two_text.append(f"Dodge intelligence: "
-                                              f"{entity.combatant.secondary_stats.dodge_intelligence}")
         second_section_column_two_text.append(f"Resist blunt: {entity.combatant.secondary_stats.resist_blunt}")
         second_section_column_two_text.append(f"Resist piece: {entity.combatant.secondary_stats.resist_pierce}")
         second_section_column_two_text.append(f"Resist elemental: "

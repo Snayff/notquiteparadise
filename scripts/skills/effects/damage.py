@@ -35,11 +35,11 @@ class DamageEffect(Effect):
         if isinstance(self.owner, Skill):
             attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
             data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                 self.skill_effect_type.name)
+                                                 self.skill_effect_type)
             is_guaranteed_hit = False
         elif isinstance(self.owner, Affliction):
             attacker = None
-            data = library.get_affliction_effect_data(self.owner.name, self.skill_effect_type.name)
+            data = library.get_affliction_effect_data(self.owner.name, self.skill_effect_type)
             is_guaranteed_hit = True
 
         defender = tile.entity

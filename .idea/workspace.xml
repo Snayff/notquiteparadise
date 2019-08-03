@@ -29,15 +29,11 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="335" />
-    <option name="width" value="2110" />
-    <option name="height" value="1407" />
-  </component>
+  <component name="ProjectId" id="1OuWJaBjUbZNMvw8Zm1426Mc7Q7" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/world" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/entity" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -49,16 +45,16 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\entity" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\entity" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\world" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\skills\effects" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\event_handlers" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\managers\world_methods" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\skills" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\entity" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
     </key>
   </component>
   <component name="RunDashboard">

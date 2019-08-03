@@ -1,6 +1,6 @@
 
-from scripts.components.primary_stats import PrimaryStats
-from scripts.components.secondary_stats import SecondaryStats
+from scripts.entity.primary_stats import PrimaryStats
+from scripts.entity.secondary_stats import SecondaryStats
 
 
 class Combatant:

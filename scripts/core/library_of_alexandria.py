@@ -3,7 +3,8 @@ import json
 
 from scripts.components.race_dataclass import RaceData
 from scripts.core.constants import LoggingEventTypes, TargetTags, EffectTypes, PrimaryStatTypes, \
-    AfflictionCategory, AfflictionTriggers, DamageTypes
+    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes
+from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction_dataclasses import AfflictionData
@@ -20,12 +21,13 @@ class LibraryOfAlexandria:
         # TODO - add conversion to data class for remaining dicts
         self.skills = {}  # conversion done
         self.homelands = {}
-        self.races = {}  # in progress
+        self.races = {}  # conversion done
         self.savvys = {}
         self.afflictions = {}  # conversion done
         self.aspects = {}  # conversion done
         self.terrains = {}
         self.actor_template = {}
+        self.stats = {}
 
         self.refresh_library_data()
 
@@ -142,9 +144,37 @@ class LibraryOfAlexandria:
             race = RaceData(**race_data)
             converted_races[race.name] = race
 
-        # delete all info from skill and replace with the converted data
+        # delete all info from races and replace with the converted data
         self.races = {}
         self.races = converted_races
+
+    def convert_stats_to_data_classes(self):
+        """
+        Take skill data from library and convert to data classes
+        """
+        all_stat_data = self.stats
+        converted_primary_stats = {}
+        converted_secondary_stats = {}
+
+        # loop all skill trees
+        for stat_type_name, stat_type_data in all_stat_data.items():
+
+            # loop all skills in each skill tree
+            for stat_name, stat_data in stat_type_data.items():
+
+                # unpack the dict and convert the stat data to the data class
+                if stat_type_name == "primary":
+                    stat = PrimaryStatData(**stat_data)
+                    converted_primary_stats[stat.primary_stat_type.name] = stat
+
+                elif stat_type_name == "secondary":
+                    stat = SecondaryStatData(**stat_data)
+                    converted_secondary_stats[stat.secondary_stat_type.name] = stat
+
+        # delete all info from skill and replace with the converted data
+        converted_data = StatData(primary=converted_primary_stats, secondary=converted_secondary_stats)
+        self.stats = {}
+        self.stats = converted_data
 
     def convert_external_strings_to_internal_enums(self):
         """
@@ -196,6 +226,18 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.afflictions, "trigger_event", "deal_damage", AfflictionTriggers.DEAL_DAMAGE)
         self.recursive_replace(self.afflictions, "trigger_event", "end_round", AfflictionTriggers.END_ROUND)
         self.recursive_replace(self.afflictions, "trigger_event", "action", AfflictionTriggers.ACTION)
+
+        # Update Stats
+        # Stat:Primary:primary_stat_type
+        self.recursive_replace(self.stats, "primary_stat_type", "bustle", PrimaryStatTypes.BUSTLE)
+        self.recursive_replace(self.stats, "primary_stat_type", "vigour", PrimaryStatTypes.VIGOUR)
+        self.recursive_replace(self.stats, "primary_stat_type", "clout", PrimaryStatTypes.CLOUT)
+        self.recursive_replace(self.stats, "primary_stat_type", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
+        self.recursive_replace(self.stats, "primary_stat_type", "exactitude", PrimaryStatTypes.EXACTITUDE)
+
+        # Stat:Secondary:secondary_stat_type
+        self.recursive_replace(self.stats, "secondary_stat_type", "max_hp", SecondaryStatTypes.MAX_HP)
+        self.recursive_replace(self.stats, "secondary_stat_type", "accuracy", SecondaryStatTypes.ACCURACY)
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """
@@ -275,19 +317,19 @@ class LibraryOfAlexandria:
         data = self.aspects[aspect_name]
         return data
 
-    def get_aspect_effect_data(self, aspect_name, effect_name):
+    def get_aspect_effect_data(self, aspect_name, effect_type):
         """
         Get data for an aspect from the central library
 
         Args:
             aspect_name(str):
-            effect_name(EffectTypes):
+            effect_type(EffectTypes):
 
         Returns:
             EffectData: data for a specified effect.
         """
 
-        data = self.aspects[aspect_name].effects[effect_name]
+        data = self.aspects[aspect_name].effects[effect_type.name]
         return data
 
     def get_affliction_data(self, affliction_name):
@@ -304,19 +346,19 @@ class LibraryOfAlexandria:
         data = self.afflictions[affliction_name]
         return data
 
-    def get_affliction_effect_data(self, affliction_name, effect_name):
+    def get_affliction_effect_data(self, affliction_name, effect_type):
         """
         Get data for an affliction from the central library
 
         Args:
             affliction_name(str):
-            effect_name(EffectTypes):
+            effect_type(EffectTypes):
 
         Returns:
             EffectData: data for a specified effect.
         """
 
-        data = self.afflictions[affliction_name].effects[effect_name]
+        data = self.afflictions[affliction_name].effects[effect_type.name]
         return data
 
     def get_savvy_data(self, savvy_name):
@@ -382,20 +424,50 @@ class LibraryOfAlexandria:
         skill_data = self.skills[skill_tree].skill[skill_name]
         return skill_data
 
-    def get_skill_effect_data(self, skill_tree, skill_name, skill_effect):
+    def get_primary_stat_data(self, primary_stat_type):
+        """
+        Get data for a primary stat from the central library
+
+        Args:
+            primary_stat_type (PrimaryStatTypes):
+
+        Returns:
+            PrimaryStatData:  stat data for specified stat.
+        """
+
+        stat_data = self.stats.primary[primary_stat_type.name]
+
+        return stat_data
+
+    def get_secondary_stat_data(self, secondary_stat_type):
+        """
+        Get data for a secondary stat from the central library
+
+        Args:
+            secondary_stat_type (SecondaryStatTypes):
+
+        Returns:
+            SecondaryStatData:  stat data for specified stat.
+        """
+
+        stat_data = self.stats.secondary[secondary_stat_type.name]
+
+        return stat_data
+
+    def get_skill_effect_data(self, skill_tree, skill_name, effect_type):
         """
         Get data for a skill from the central library
 
         Args:
             skill_tree(str):
             skill_name(str):
-            skill_effect(str):
+            effect_type(EffectTypes):
 
         Returns:
             EffectData: data for a specified skill effect.
         """
 
-        effect_data = self.skills[skill_tree].skill[skill_name].effects[skill_effect]
+        effect_data = self.skills[skill_tree].skill[skill_name].effects[effect_type.name]
         return effect_data
 
     def refresh_library_data(self):
@@ -408,6 +480,7 @@ class LibraryOfAlexandria:
         self.convert_afflictions_to_data_classes()
         self.convert_aspects_to_data_classes()
         self.convert_races_to_data_classes()
+        self.convert_stats_to_data_classes()
 
     def load_data_into_library(self):
         """
@@ -424,6 +497,7 @@ class LibraryOfAlexandria:
             self.aspects = self.load_values_from_aspect_json()
             self.terrains = self.load_values_from_terrain_json()
             self.actor_template = self.load_values_from_actor_json()
+            self.stats = self.load_values_from_stat_json()
 
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
 
@@ -521,6 +595,18 @@ class LibraryOfAlexandria:
         """
 
         with open('data/game/entity/actor_templates.json') as file:
+            data = json.load(file)
+
+        return data
+
+    @staticmethod
+    def load_values_from_stat_json():
+        """
+
+        Returns:
+
+        """
+        with open('data/game/entity/stats.json') as file:
             data = json.load(file)
 
         return data

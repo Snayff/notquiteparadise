@@ -1,0 +1,51 @@
+{
+    "primary": {
+        "vigour": {
+            "name": "vigour",
+            "primary_stat_type": "vigour",
+            "base_value": 5
+        },
+        "clout": {
+            "name": "clout",
+            "primary_stat_type": "clout",
+            "base_value": 5
+        },
+        "skullduggery": {
+            "name": "skullduggery",
+            "primary_stat_type": "skullduggery",
+            "base_value": 5
+        },
+        "bustle": {
+            "name": "bustle",
+            "primary_stat_type": "bustle",
+            "base_value": 5
+        },
+        "exactitude": {
+            "name": "exactitude",
+            "primary_stat_type": "exactitude",
+            "base_value": 5
+        }
+    },
+    "secondary": {
+        "max_hp": {
+            "name": "max hp",
+            "secondary_stat_type": "max_hp",
+            "base_value": 20,
+            "vigour_mod": 4,
+            "clout_mod": 0,
+            "skullduggery_mod": 0,
+            "bustle_mod": 0,
+            "exactitude_mod": 0
+        },
+        "accuracy": {
+            "name": "accuracy",
+            "secondary_stat_type": "accuracy",
+            "base_value": 10,
+            "vigour_mod": 20,
+            "clout_mod": 0,
+            "skullduggery_mod": 0,
+            "bustle_mod": 0,
+            "exactitude_mod": 0
+        }
+    }
+}
