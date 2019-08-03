@@ -36,7 +36,8 @@
 
 <span class="kn">from</span> <span class="nn">scripts.components.race_dataclass</span> <span class="k">import</span> <span class="n">RaceData</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> \
-    <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">DamageTypes</span>
+    <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">DamageTypes</span><span class="p">,</span> <span class="n">StatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.entity.stat_dataclasses</span> <span class="k">import</span> <span class="n">PrimaryStatData</span><span class="p">,</span> <span class="n">SecondaryStatData</span><span class="p">,</span> <span class="n">StatData</span>
 <span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
 <span class="kn">from</span> <span class="nn">scripts.skills.affliction_dataclasses</span> <span class="k">import</span> <span class="n">AfflictionData</span>
@@ -53,12 +54,13 @@
         <span class="c1"># TODO - add conversion to data class for remaining dicts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skills</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># conversion done</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">homelands</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">races</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># in progress</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">races</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># conversion done</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">savvys</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># conversion done</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># conversion done</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">terrains</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actor_template</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh_library_data</span><span class="p">()</span>
 
@@ -175,9 +177,37 @@
             <span class="n">race</span> <span class="o">=</span> <span class="n">RaceData</span><span class="p">(</span><span class="o">**</span><span class="n">race_data</span><span class="p">)</span>
             <span class="n">converted_races</span><span class="p">[</span><span class="n">race</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">race</span>
 
-        <span class="c1"># delete all info from skill and replace with the converted data</span>
+        <span class="c1"># delete all info from races and replace with the converted data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">races</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">races</span> <span class="o">=</span> <span class="n">converted_races</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.convert_stats_to_data_classes"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_stats_to_data_classes">[docs]</a>    <span class="k">def</span> <span class="nf">convert_stats_to_data_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Take skill data from library and convert to data classes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_stat_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span>
+        <span class="n">converted_primary_stats</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">converted_secondary_stats</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># loop all skill trees</span>
+        <span class="k">for</span> <span class="n">stat_type_name</span><span class="p">,</span> <span class="n">stat_type_data</span> <span class="ow">in</span> <span class="n">all_stat_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="c1"># loop all skills in each skill tree</span>
+            <span class="k">for</span> <span class="n">stat_name</span><span class="p">,</span> <span class="n">stat_data</span> <span class="ow">in</span> <span class="n">stat_type_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+                <span class="c1"># unpack the dict and convert the stat data to the data class</span>
+                <span class="k">if</span> <span class="n">stat_type_name</span> <span class="o">==</span> <span class="s2">&quot;primary&quot;</span><span class="p">:</span>
+                    <span class="n">stat</span> <span class="o">=</span> <span class="n">PrimaryStatData</span><span class="p">(</span><span class="o">**</span><span class="n">stat_data</span><span class="p">)</span>
+                    <span class="n">converted_primary_stats</span><span class="p">[</span><span class="n">stat</span><span class="o">.</span><span class="n">primary_stat_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span>
+
+                <span class="k">elif</span> <span class="n">stat_type_name</span> <span class="o">==</span> <span class="s2">&quot;secondary&quot;</span><span class="p">:</span>
+                    <span class="n">stat</span> <span class="o">=</span> <span class="n">SecondaryStatData</span><span class="p">(</span><span class="o">**</span><span class="n">stat_data</span><span class="p">)</span>
+                    <span class="n">converted_secondary_stats</span><span class="p">[</span><span class="n">stat</span><span class="o">.</span><span class="n">secondary_stat_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span>
+
+        <span class="c1"># delete all info from skill and replace with the converted data</span>
+        <span class="n">converted_data</span> <span class="o">=</span> <span class="n">StatData</span><span class="p">(</span><span class="n">primary</span><span class="o">=</span><span class="n">converted_primary_stats</span><span class="p">,</span> <span class="n">secondary</span><span class="o">=</span><span class="n">converted_secondary_stats</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">converted_data</span></div>
 
 <div class="viewcode-block" id="LibraryOfAlexandria.convert_external_strings_to_internal_enums"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_external_strings_to_internal_enums">[docs]</a>    <span class="k">def</span> <span class="nf">convert_external_strings_to_internal_enums</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -228,7 +258,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">,</span> <span class="s2">&quot;trigger_event&quot;</span><span class="p">,</span> <span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">MOVE</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">,</span> <span class="s2">&quot;trigger_event&quot;</span><span class="p">,</span> <span class="s2">&quot;deal_damage&quot;</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">DEAL_DAMAGE</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">,</span> <span class="s2">&quot;trigger_event&quot;</span><span class="p">,</span> <span class="s2">&quot;end_round&quot;</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">END_ROUND</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">,</span> <span class="s2">&quot;trigger_event&quot;</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">ACTION</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">,</span> <span class="s2">&quot;trigger_event&quot;</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="o">.</span><span class="n">ACTION</span><span class="p">)</span>
+
+        <span class="c1"># Update Stats</span>
+        <span class="c1"># Stat:Primary:primary_stat_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="s2">&quot;primary_stat_type&quot;</span><span class="p">,</span> <span class="s2">&quot;bustle&quot;</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">BUSTLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="s2">&quot;primary_stat_type&quot;</span><span class="p">,</span> <span class="s2">&quot;vigour&quot;</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">VIGOUR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="s2">&quot;primary_stat_type&quot;</span><span class="p">,</span> <span class="s2">&quot;clout&quot;</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">CLOUT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="s2">&quot;primary_stat_type&quot;</span><span class="p">,</span> <span class="s2">&quot;skullduggery&quot;</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">SKULLDUGGERY</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="s2">&quot;primary_stat_type&quot;</span><span class="p">,</span> <span class="s2">&quot;exactitude&quot;</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="n">EXACTITUDE</span><span class="p">)</span>
+
+        <span class="c1"># Stat:Secondary:secondary_stat_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="s2">&quot;secondary_stat_type&quot;</span><span class="p">,</span> <span class="s2">&quot;max_hp&quot;</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">MAX_HP</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="s2">&quot;secondary_stat_type&quot;</span><span class="p">,</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">ACCURACY</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="LibraryOfAlexandria.recursive_replace"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.recursive_replace">[docs]</a>    <span class="k">def</span> <span class="nf">recursive_replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_to_replace</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -308,19 +350,19 @@
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="LibraryOfAlexandria.get_aspect_effect_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_effect_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_aspect_effect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">,</span> <span class="n">effect_name</span><span class="p">):</span>
+<div class="viewcode-block" id="LibraryOfAlexandria.get_aspect_effect_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_aspect_effect_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_aspect_effect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">,</span> <span class="n">effect_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get data for an aspect from the central library</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            aspect_name(str):</span>
-<span class="sd">            effect_name(EffectTypes):</span>
+<span class="sd">            effect_type(EffectTypes):</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            EffectData: data for a specified effect.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span><span class="o">.</span><span class="n">effects</span><span class="p">[</span><span class="n">effect_name</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span><span class="o">.</span><span class="n">effects</span><span class="p">[</span><span class="n">effect_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
 <div class="viewcode-block" id="LibraryOfAlexandria.get_affliction_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_affliction_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_affliction_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">):</span>
@@ -337,19 +379,19 @@
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">[</span><span class="n">affliction_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="LibraryOfAlexandria.get_affliction_effect_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_affliction_effect_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_affliction_effect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">,</span> <span class="n">effect_name</span><span class="p">):</span>
+<div class="viewcode-block" id="LibraryOfAlexandria.get_affliction_effect_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_affliction_effect_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_affliction_effect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">,</span> <span class="n">effect_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get data for an affliction from the central library</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            affliction_name(str):</span>
-<span class="sd">            effect_name(EffectTypes):</span>
+<span class="sd">            effect_type(EffectTypes):</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            EffectData: data for a specified effect.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">[</span><span class="n">affliction_name</span><span class="p">]</span><span class="o">.</span><span class="n">effects</span><span class="p">[</span><span class="n">effect_name</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">afflictions</span><span class="p">[</span><span class="n">affliction_name</span><span class="p">]</span><span class="o">.</span><span class="n">effects</span><span class="p">[</span><span class="n">effect_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
 <div class="viewcode-block" id="LibraryOfAlexandria.get_savvy_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_savvy_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_savvy_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savvy_name</span><span class="p">):</span>
@@ -415,20 +457,50 @@
         <span class="n">skill_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_tree</span><span class="p">]</span><span class="o">.</span><span class="n">skill</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">skill_data</span></div>
 
-<div class="viewcode-block" id="LibraryOfAlexandria.get_skill_effect_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_skill_effect_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_skill_effect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill_tree</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">,</span> <span class="n">skill_effect</span><span class="p">):</span>
+<div class="viewcode-block" id="LibraryOfAlexandria.get_primary_stat_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_primary_stat_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_primary_stat_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">primary_stat_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a primary stat from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            primary_stat_type (PrimaryStatTypes):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            PrimaryStatData:  stat data for specified stat.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">stat_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">primary</span><span class="p">[</span><span class="n">primary_stat_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">stat_data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_secondary_stat_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_secondary_stat_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_secondary_stat_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secondary_stat_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data for a secondary stat from the central library</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            secondary_stat_type (SecondaryStatTypes):</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SecondaryStatData:  stat data for specified stat.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">stat_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">secondary</span><span class="p">[</span><span class="n">secondary_stat_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">stat_data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.get_skill_effect_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_skill_effect_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_skill_effect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill_tree</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">,</span> <span class="n">effect_type</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get data for a skill from the central library</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            skill_tree(str):</span>
 <span class="sd">            skill_name(str):</span>
-<span class="sd">            skill_effect(str):</span>
+<span class="sd">            effect_type(EffectTypes):</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            EffectData: data for a specified skill effect.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">effect_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_tree</span><span class="p">]</span><span class="o">.</span><span class="n">skill</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span><span class="o">.</span><span class="n">effects</span><span class="p">[</span><span class="n">skill_effect</span><span class="p">]</span>
+        <span class="n">effect_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_tree</span><span class="p">]</span><span class="o">.</span><span class="n">skill</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span><span class="o">.</span><span class="n">effects</span><span class="p">[</span><span class="n">effect_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">effect_data</span></div>
 
 <div class="viewcode-block" id="LibraryOfAlexandria.refresh_library_data"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.refresh_library_data">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_library_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -440,7 +512,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_skills_to_data_classes</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_afflictions_to_data_classes</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_aspects_to_data_classes</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">convert_races_to_data_classes</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_races_to_data_classes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_stats_to_data_classes</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="LibraryOfAlexandria.load_data_into_library"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_data_into_library">[docs]</a>    <span class="k">def</span> <span class="nf">load_data_into_library</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -457,6 +530,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_values_from_aspect_json</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terrains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_values_from_terrain_json</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">actor_template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_values_from_actor_json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_values_from_stat_json</span><span class="p">()</span>
 
         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Data Library refreshed.&quot;</span><span class="p">))</span></div>
 
@@ -554,6 +628,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/entity/actor_templates.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="LibraryOfAlexandria.load_values_from_stat_json"><a class="viewcode-back" href="../../../core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_stat_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_values_from_stat_json</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/game/entity/stats.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">data</span></div></div>

@@ -210,23 +210,16 @@
 
         <span class="c1"># check if attacker provided</span>
         <span class="k">if</span> <span class="n">attacker</span><span class="p">:</span>
-            <span class="n">attacker_value</span> <span class="o">=</span> <span class="n">attacker</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">chance_to_hit</span>
+            <span class="n">attacker_value</span> <span class="o">=</span> <span class="n">attacker</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">accuracy</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">attacker_value</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">modified_to_hit_score</span> <span class="o">=</span> <span class="n">attacker_value</span> <span class="o">+</span> <span class="n">skill_accuracy</span> <span class="o">+</span> <span class="n">roll</span>
 
-        <span class="c1"># get dodge score</span>
-        <span class="n">dodge_value</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">stat_to_target</span> <span class="o">==</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">DODGE_SPEED</span><span class="p">:</span>
-            <span class="n">dodge_value</span> <span class="o">=</span> <span class="n">defender</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">dodge_speed</span>
-        <span class="k">elif</span> <span class="n">stat_to_target</span> <span class="o">==</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">DODGE_TOUGHNESS</span><span class="p">:</span>
-            <span class="n">dodge_value</span> <span class="o">=</span> <span class="n">defender</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">dodge_toughness</span>
-        <span class="k">elif</span> <span class="n">stat_to_target</span> <span class="o">==</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="n">DODGE_INTELLIGENCE</span><span class="p">:</span>
-            <span class="n">dodge_value</span> <span class="o">=</span> <span class="n">defender</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">dodge_intelligence</span>
+        <span class="c1"># TODO -  mitigate to hit using stat to target</span>
 
         <span class="c1"># mitigate the to hit</span>
-        <span class="n">mitigated_to_hit_score</span> <span class="o">=</span> <span class="n">modified_to_hit_score</span> <span class="o">-</span> <span class="n">dodge_value</span>
+        <span class="n">mitigated_to_hit_score</span> <span class="o">=</span> <span class="n">modified_to_hit_score</span>
 
         <span class="c1"># log the info</span>
         <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Roll:</span><span class="si">{roll}</span><span class="s2">, Modified:</span><span class="si">{modified_to_hit_score}</span><span class="s2">, Mitigated:</span><span class="si">{mitigated_to_hit_score}</span><span class="s2">.&quot;</span>

@@ -34,7 +34,7 @@
 <span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 
 <span class="n">TILE_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
-<span class="c1"># TODO - create</span>
+
 
 <div class="viewcode-block" id="VisualInfo"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.VisualInfo">[docs]</a><span class="k">class</span> <span class="nc">VisualInfo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -195,6 +195,21 @@
     <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
+<div class="viewcode-block" id="StatTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.StatTypes">[docs]</a><span class="k">class</span> <span class="nc">StatTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Primary stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PRIMARY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SECONDARY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
 <div class="viewcode-block" id="PrimaryStatTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.PrimaryStatTypes">[docs]</a><span class="k">class</span> <span class="nc">PrimaryStatTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Primary stats</span>
@@ -217,13 +232,11 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Secondary stats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">DODGE_SPEED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">DODGE_TOUGHNESS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">DODGE_INTELLIGENCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">RESIST_BLUNT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">RESIST_PIERCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">RESIST_ELEMENTAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">ACTION_COST_CHANGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MAX_HP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ACCURACY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
