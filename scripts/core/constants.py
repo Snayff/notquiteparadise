@@ -1,7 +1,7 @@
 from enum import Enum, auto
 
 TILE_SIZE = 64
-# TODO - create
+
 
 class VisualInfo:
     """
@@ -162,6 +162,21 @@ class DamageTypes(Enum):
     __hash__ = None
 
 
+class StatTypes(Enum):
+    """
+    Primary stats
+    """
+    PRIMARY = auto()
+    SECONDARY = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
 class PrimaryStatTypes(Enum):
     """
     Primary stats
@@ -184,13 +199,11 @@ class SecondaryStatTypes(Enum):
     """
     Secondary stats
     """
-    DODGE_SPEED = auto()
-    DODGE_TOUGHNESS = auto()
-    DODGE_INTELLIGENCE = auto()
     RESIST_BLUNT = auto()
     RESIST_PIERCE = auto()
     RESIST_ELEMENTAL = auto()
-    ACTION_COST_CHANGE = auto()
+    MAX_HP = auto()
+    ACCURACY = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

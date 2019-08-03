@@ -177,23 +177,16 @@ class SkillMethods:
 
         # check if attacker provided
         if attacker:
-            attacker_value = attacker.combatant.secondary_stats.chance_to_hit
+            attacker_value = attacker.combatant.secondary_stats.accuracy
         else:
             attacker_value = 0
 
         modified_to_hit_score = attacker_value + skill_accuracy + roll
 
-        # get dodge score
-        dodge_value = 0
-        if stat_to_target == SecondaryStatTypes.DODGE_SPEED:
-            dodge_value = defender.combatant.secondary_stats.dodge_speed
-        elif stat_to_target == SecondaryStatTypes.DODGE_TOUGHNESS:
-            dodge_value = defender.combatant.secondary_stats.dodge_toughness
-        elif stat_to_target == SecondaryStatTypes.DODGE_INTELLIGENCE:
-            dodge_value = defender.combatant.secondary_stats.dodge_intelligence
+        # TODO -  mitigate to hit using stat to target
 
         # mitigate the to hit
-        mitigated_to_hit_score = modified_to_hit_score - dodge_value
+        mitigated_to_hit_score = modified_to_hit_score
 
         # log the info
         log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."

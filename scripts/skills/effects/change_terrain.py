@@ -30,9 +30,7 @@ class ChangeTerrainEffect(Effect):
         terrain = tile.terrain
         starting_terrain_name = terrain.name
 
-
-
-        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type.name)
+        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
 
         # that the tags match
         from scripts.global_singletons.managers import world_manager
