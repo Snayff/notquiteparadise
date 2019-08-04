@@ -21,7 +21,8 @@ class TargetingOverlay:
     def __init__(self):
         # data
         self.skill_being_targeted = None
-        self.tiles_to_highlight = []
+        self.tiles_in_range_and_fov = []
+        self.tiles_in_skill_effect_range = []
         self.selected_tile = None  # TODO - update the entity info panel in line with this
 
         # drawing info
@@ -42,19 +43,39 @@ class TargetingOverlay:
             surface:
         """
         self.draw_range_highlight(surface)
+        self.draw_effect_highlight(surface)
         self.draw_selected_tile(surface)
 
     def draw_range_highlight(self, surface):
         """
-        Draw the highlights on top of the tiles_to_highlight
+        Draw the highlights on top of the tiles_in_range_and_fov
+
         Args:
             surface:
         """
         tile_colour = self.palette.highlighted_range_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)
 
-        # draw highlight on all terrain listed, except the one selected
-        for tile in self.tiles_to_highlight:
+        # draw highlight on all tiles listed, except the one selected
+        for tile in self.tiles_in_range_and_fov:
+            if tile != self.selected_tile:
+                # amend rect position to reflect tile sizes
+                rect.x = tile.x * TILE_SIZE
+                rect.y = tile.y * TILE_SIZE
+                pygame.draw.rect(surface, tile_colour, rect, self.highlight_border_width)
+
+    def draw_effect_highlight(self, surface):
+        """
+        Draw the highlights on top of the tiles_in_skill_effect_range
+
+        Args:
+            surface:
+        """
+        tile_colour = self.palette.highlighted_effect_border
+        rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)
+
+        # draw highlight on all tiles listed, except the one selected
+        for tile in self.tiles_in_skill_effect_range:
             if tile != self.selected_tile:
                 # amend rect position to reflect tile sizes
                 rect.x = tile.x * TILE_SIZE
@@ -77,6 +98,7 @@ class TargetingOverlay:
     def set_skill_being_targeted(self, skill):
         """
         Set the skill that the player is currently targeting
+
         Args:
             skill:
         """
@@ -85,42 +107,55 @@ class TargetingOverlay:
     def set_selected_tile(self, tile):
         """
         Update the tile currently selected. Must be one in the highlighted range
+
         Args:
             tile:
         """
-        if tile in self.tiles_to_highlight:
+        if tile in self.tiles_in_range_and_fov:
             self.selected_tile = tile
 
-    def update_tiles_to_highlight(self):
+    def update_tiles_in_range_and_fov(self):
         """
-        build list of valid terrain within range
+        Update list of valid tiles within range based on currently selected skill's range.
         """
         # if there is a skill being targeted
         if self.skill_being_targeted:
 
-            self.tiles_to_highlight = []
+            # clear current tiles
+            self.tiles_in_range_and_fov = []
 
             from scripts.global_singletons.managers import world_manager
             player = world_manager.player
-            centre_x = player.x
-            centre_y = player.y
             skill_data = library.get_skill_data(self.skill_being_targeted.skill_tree_name,
                                                 self.skill_being_targeted.name)
             skill_range = skill_data.range
 
-            # +1 to make the range inclusive
-            for x in range(-skill_range, skill_range + 1):
-                for y in range(-skill_range, skill_range + 1):
-                    current_x = x + centre_x
-                    current_y = y + centre_y
+            # get the tiles in range
+            coords = world_manager.Skill.create_shape("square", skill_range)
+            tiles_in_range = world_manager.Map.get_tiles(player.x, player.y, coords)
+            tiles_in_range_and_fov = []
 
-                    # check in bounds, in fov and is targetable
-                    in_bounds = world_manager.Map.is_tile_in_bounds(current_x, current_y)
-                    in_fov = world_manager.FOV.is_tile_in_fov(current_x, current_y)
+            # only take tiles in range and FOV
+            for tile in tiles_in_range:
+                if world_manager.FOV.is_tile_in_fov(tile.x, tile.y):
+                    tiles_in_range_and_fov.append(tile)
 
-                    if in_bounds and in_fov:
-                        tile = world_manager.Map.get_tile(current_x, current_y)
-                        self.tiles_to_highlight.append(tile)
+            self.tiles_in_range_and_fov = tiles_in_range_and_fov
+
+    def update_tiles_in_skill_effect_range(self):
+
+        # if there is a skill being targeted
+        if self.skill_being_targeted:
+
+            # clear current tiles
+            self.tiles_in_skill_effect_range = []
+
+            from scripts.global_singletons.managers import world_manager
+            # TODO - get shape and shape size from skill data
+            coords = world_manager.Skill.create_shape("square", 1)
+            effected_tiles = world_manager.Map.get_tiles(self.selected_tile.x, self.selected_tile.y, coords)
+
+            self.tiles_in_skill_effect_range = effected_tiles
 
     def set_visibility(self, visible):
         """

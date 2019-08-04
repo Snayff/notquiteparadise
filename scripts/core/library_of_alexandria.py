@@ -27,7 +27,7 @@ class LibraryOfAlexandria:
         self.aspects = {}  # conversion done
         self.terrains = {}
         self.actor_template = {}
-        self.stats = {}
+        self.stats = {}  # conversion done
 
         self.refresh_library_data()
 

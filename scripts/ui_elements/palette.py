@@ -83,7 +83,8 @@ class Palette:
         def __init__(self):
             colour = Colour()
             self.selected_tile_border = colour.tertiary.neutral
-            self.highlighted_range_border = colour.complement.lighter
+            self.highlighted_range_border = colour.secondary.neutral
+            self.highlighted_effect_border = colour.complement.lighter
 
     class SkillBarPalette:
         """

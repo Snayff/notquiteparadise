@@ -52,15 +52,17 @@ def main():
     profiler = cProfile.Profile()
     profiler.enable()
 
-
     # alternate approach to init the managers
+    # TODO - determine if alternate approach is worthwhile
     start()
     from scripts.global_singletons import managers
     managers.game_manager2.update_game_state(GameStates.PLAYER_TURN)
+    #################################################
 
-    # load the game
+    # initialise the game
     initialise_game()
 
+    # run the game
     game_loop()
 
     # we've left the game loop so now close everything down

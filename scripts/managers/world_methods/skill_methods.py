@@ -23,6 +23,7 @@ class SkillMethods:
     Methods for querying skills and skill related info and taking skill actions.
     """
     def __init__(self, manager):
+        from scripts.managers.world import WorldManager
         self.manager = manager  # type: WorldManager
 
     def can_use_skill(self, entity, target_pos, skill):
@@ -219,3 +220,16 @@ class SkillMethods:
 
         log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+    def create_shape(self, shape, size):
+        list_of_coords = []
+
+        if shape == "square":
+            width = size
+            height = size
+
+            for x in range(-width, width + 1):
+                for y in range(-height, height + 1):
+                    list_of_coords.append((x, y))
+
+        return list_of_coords
