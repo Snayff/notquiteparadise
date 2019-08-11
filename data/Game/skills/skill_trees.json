@@ -6,6 +6,8 @@
             "icon": "placeholder/icon_00.png",
             "required_tags": ["other_entity"],
             "range": 1,
+            "shape": "target",
+            "shape_size": 1,
             "resource_type": "mana",
             "resource_cost": 1,
             "time_cost": 15,
@@ -30,6 +32,8 @@
                 "other_entity"
             ],
             "range": 3,
+            "shape": "square",
+            "shape_size": 2,
             "resource_type": "mana",
             "resource_cost": 2,
             "time_cost": 20,
@@ -56,6 +60,8 @@
                 "no_entity"
             ],
             "range": 6,
+            "shape": "target",
+            "shape_size": 1,
             "resource_type": "mana",
             "resource_cost": 10,
             "time_cost": 40,
@@ -79,6 +85,8 @@
                 "other_entity"
             ],
             "range": 4,
+            "shape": "square",
+            "shape_size": 1,
             "resource_type": "mana",
             "resource_cost": 1,
             "time_cost": 1,

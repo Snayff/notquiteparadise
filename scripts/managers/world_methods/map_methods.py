@@ -67,6 +67,8 @@ class MapMethods:
             tile_x(int):  x position of the tile
             tile_y(int):  y position of the tile
         """
+        # TODO - convert to properties of tile class
+
         game_map = self.get_game_map()
         tile = game_map.tiles[tile_x][tile_y]
 

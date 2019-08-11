@@ -2,7 +2,7 @@ import random
 from typing import List
 
 from scripts.core.constants import LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
-    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, EffectTypes
+    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, EffectTypes, SkillShapes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
@@ -92,9 +92,6 @@ class SkillMethods:
         else:
             log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-            msg = f"That's not the right target!"
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             return False
 
     @staticmethod
@@ -222,9 +219,22 @@ class SkillMethods:
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
     def create_shape(self, shape, size):
+        """
+        Get a list of coords from a shape and size.
+
+        Args:
+            shape (SkillShapes):
+            size (int):
+
+        Returns:
+            List[Tuple[int, int]]
+        """
         list_of_coords = []
 
-        if shape == "square":
+        if shape == SkillShapes.TARGET:
+            list_of_coords.append((0, 0))  # single target, centred on selection
+
+        elif shape == SkillShapes.SQUARE:
             width = size
             height = size
 

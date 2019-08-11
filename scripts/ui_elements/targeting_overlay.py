@@ -4,7 +4,7 @@ from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import TILE_SIZE, LoggingEventTypes
+from scripts.core.constants import TILE_SIZE, LoggingEventTypes, SkillShapes
 from scripts.core.fonts import Font
 from scripts.skills.skill import Skill
 
@@ -23,7 +23,7 @@ class TargetingOverlay:
         self.skill_being_targeted = None
         self.tiles_in_range_and_fov = []
         self.tiles_in_skill_effect_range = []
-        self.selected_tile = None  # TODO - update the entity info panel in line with this
+        self.selected_tile = None
 
         # drawing info
         self.palette = Palette().targeting_overlay
@@ -106,7 +106,7 @@ class TargetingOverlay:
 
     def set_selected_tile(self, tile):
         """
-        Update the tile currently selected. Must be one in the highlighted range
+        Update the tile currently selected. Must be in the highlighted range.
 
         Args:
             tile:
@@ -131,7 +131,7 @@ class TargetingOverlay:
             skill_range = skill_data.range
 
             # get the tiles in range
-            coords = world_manager.Skill.create_shape("square", skill_range)
+            coords = world_manager.Skill.create_shape(SkillShapes.SQUARE, skill_range)
             tiles_in_range = world_manager.Map.get_tiles(player.x, player.y, coords)
             tiles_in_range_and_fov = []
 
@@ -143,16 +143,20 @@ class TargetingOverlay:
             self.tiles_in_range_and_fov = tiles_in_range_and_fov
 
     def update_tiles_in_skill_effect_range(self):
-
+        """
+        Update the list of Tiles for those effected by the skill effect range. Based on selected skill.
+        """
         # if there is a skill being targeted
         if self.skill_being_targeted:
 
             # clear current tiles
             self.tiles_in_skill_effect_range = []
 
+            # get the skill data
+            data = library.get_skill_data(self.skill_being_targeted.skill_tree_name, self.skill_being_targeted.name)
+
             from scripts.global_singletons.managers import world_manager
-            # TODO - get shape and shape size from skill data
-            coords = world_manager.Skill.create_shape("square", 1)
+            coords = world_manager.Skill.create_shape(data.shape, data.shape_size)
             effected_tiles = world_manager.Map.get_tiles(self.selected_tile.x, self.selected_tile.y, coords)
 
             self.tiles_in_skill_effect_range = effected_tiles

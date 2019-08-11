@@ -18,12 +18,12 @@ class ApplyAfflictionEffect(Effect):
     def __init__(self, owner):
         super().__init__(owner, "apply afflictions", "This is the afflictions effect", EffectTypes.APPLY_AFFLICTION)
 
-    def trigger(self, tile):
+    def trigger(self, tiles):
         """
-        Trigger the effect.
+        Trigger the effect
 
         Args:
-            tile(Tile):
+            tiles (List[Tile]):
         """
         super().trigger()
 
@@ -40,42 +40,44 @@ class ApplyAfflictionEffect(Effect):
 
         affliction_data = library.get_affliction_data(effect_data.affliction_name)
 
-        defender = tile.entity
+        # loop all tiles in list
+        for tile in tiles:
+            defender = tile.entity
 
-        # create var to hold the modified duration, if it does change, or the base duration
-        base_duration = effect_data.duration
-        modified_duration = base_duration
+            # create var to hold the modified duration, if it does change, or the base duration
+            base_duration = effect_data.duration
+            modified_duration = base_duration
 
-        # check the tags match
-        from scripts.global_singletons.managers import world_manager
-        if world_manager.Skill.has_required_tags(tile, effect_data.required_tags):
+            # check the tags match
+            from scripts.global_singletons.managers import world_manager
+            if world_manager.Skill.has_required_tags(tile, effect_data.required_tags):
 
-            # Roll for BANE application
-            if affliction_data.category == AfflictionCategory.BANE:
-                to_hit_score = world_manager.Skill.calculate_to_hit_score(defender, effect_data.accuracy,
-                                                                          effect_data.stat_to_target,  attacker)
-                hit_type = world_manager.Skill.get_hit_type(to_hit_score)
+                # Roll for BANE application
+                if affliction_data.category == AfflictionCategory.BANE:
+                    to_hit_score = world_manager.Skill.calculate_to_hit_score(defender, effect_data.accuracy,
+                                                                              effect_data.stat_to_target,  attacker)
+                    hit_type = world_manager.Skill.get_hit_type(to_hit_score)
 
-                # check if afflictions applied
-                if hit_type == HitTypes.GRAZE:
-                    msg = f"{defender.name} resisted {effect_data.affliction_name}."
-                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-                else:
-                    hit_msg = ""
+                    # check if afflictions applied
+                    if hit_type == HitTypes.GRAZE:
+                        msg = f"{defender.name} resisted {effect_data.affliction_name}."
+                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                    else:
+                        hit_msg = ""
 
-                    # check if there was a crit and if so modify the duration of the afflictions
-                    if hit_type == HitTypes.CRIT:
-                        modified_duration = int(base_duration * HitModifiers.CRIT.value)
-                        hit_msg = f"a critical "
+                        # check if there was a crit and if so modify the duration of the afflictions
+                        if hit_type == HitTypes.CRIT:
+                            modified_duration = int(base_duration * HitModifiers.CRIT.value)
+                            hit_msg = f"a critical "
 
-                    msg = f"{defender.name} succumbed to {hit_msg}{effect_data.affliction_name}."
-                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                        msg = f"{defender.name} succumbed to {hit_msg}{effect_data.affliction_name}."
+                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
+                        self.apply_affliction(defender, modified_duration)
+
+                # Just apply the BOON
+                elif affliction_data.affliction_category == AfflictionCategory.BOON:
                     self.apply_affliction(defender, modified_duration)
-
-            # Just apply the BOON
-            elif affliction_data.affliction_category == AfflictionCategory.BOON:
-                self.apply_affliction(defender, modified_duration)
 
     def apply_affliction(self, defending_entity, modified_duration):
         """

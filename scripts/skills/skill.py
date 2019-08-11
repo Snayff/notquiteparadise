@@ -35,12 +35,14 @@ class Skill:
         data = library.get_skill_data(self.skill_tree_name, self.name)
 
         target_x, target_y = target_pos
-        effected_tile = world_manager.Map.get_tile(target_x, target_y)
+
+        coords = world_manager.Skill.create_shape(data.shape, data.shape_size)
+        effected_tiles = world_manager.Map.get_tiles(target_x, target_y, coords)
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
             effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
-            effect.trigger(effected_tile)
+            effect.trigger(effected_tiles)
 
         # end the turn
         publisher.publish(EndTurnEvent(data.time_cost))

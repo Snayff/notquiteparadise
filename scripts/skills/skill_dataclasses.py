@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Dict
 
-from scripts.core.constants import EffectTypes, TargetTags, DamageTypes, PrimaryStatTypes
+from scripts.core.constants import EffectTypes, TargetTags, DamageTypes, PrimaryStatTypes, SkillShapes
 
 
 @dataclass
@@ -17,7 +17,7 @@ class EffectData:
     accuracy: int = 0
     stat_to_target: PrimaryStatTypes = None
     new_terrain: TargetTags = None
-    affliction_name: str = ""
+    affliction_name: str = "None"
     duration: int = 0
     stat_to_affect: PrimaryStatTypes = None
 
@@ -27,14 +27,16 @@ class SkillData:
     """
     Data class for a skill
     """
-    name: str
-    description: str
-    icon: str
-    range: int
-    resource_type: str
-    resource_cost: int
-    time_cost: int
-    cooldown: int
+    name: str = "None"
+    description: str = "None"
+    icon: str = "None"
+    range: int = 1
+    shape: SkillShapes = None
+    shape_size: int = 1
+    resource_type: str = "None"
+    resource_cost: int = 0
+    time_cost: int = 0
+    cooldown: int = 0
     required_tags: List[TargetTags] = field(default_factory=list)
     effects: Dict = field(default_factory=list)
 
