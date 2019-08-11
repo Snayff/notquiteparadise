@@ -3,7 +3,7 @@ import json
 
 from scripts.components.race_dataclass import RaceData
 from scripts.core.constants import LoggingEventTypes, TargetTags, EffectTypes, PrimaryStatTypes, \
-    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes
+    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes
 from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
@@ -27,7 +27,7 @@ class LibraryOfAlexandria:
         self.aspects = {}  # conversion done
         self.terrains = {}
         self.actor_template = {}
-        self.stats = {}
+        self.stats = {}  # conversion done
 
         self.refresh_library_data()
 
@@ -238,6 +238,13 @@ class LibraryOfAlexandria:
         # Stat:Secondary:secondary_stat_type
         self.recursive_replace(self.stats, "secondary_stat_type", "max_hp", SecondaryStatTypes.MAX_HP)
         self.recursive_replace(self.stats, "secondary_stat_type", "accuracy", SecondaryStatTypes.ACCURACY)
+
+        # Update skills
+        # SkillTree:Skill:shape
+        self.recursive_replace(self.skills, "shape", "target", SkillShapes.TARGET)
+        self.recursive_replace(self.skills, "shape", "square", SkillShapes.SQUARE)
+        self.recursive_replace(self.skills, "shape", "circle", SkillShapes.CIRCLE)
+        self.recursive_replace(self.skills, "shape", "cross", SkillShapes.CROSS)
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """

@@ -910,10 +910,25 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="scripts.ui_elements.targeting_overlay.TargetingOverlay.draw_effect_highlight">
+<code class="descname">draw_effect_highlight</code><span class="sig-paren">(</span><em>surface</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui_elements/targeting_overlay.html#TargetingOverlay.draw_effect_highlight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui_elements.targeting_overlay.TargetingOverlay.draw_effect_highlight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw the highlights on top of the tiles_in_skill_effect_range</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>surface</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="scripts.ui_elements.targeting_overlay.TargetingOverlay.draw_range_highlight">
 <code class="descname">draw_range_highlight</code><span class="sig-paren">(</span><em>surface</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui_elements/targeting_overlay.html#TargetingOverlay.draw_range_highlight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui_elements.targeting_overlay.TargetingOverlay.draw_range_highlight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draw the highlights on top of the tiles_to_highlight
-:param surface:</p>
+<dd><p>Draw the highlights on top of the tiles_in_range_and_fov</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>surface</strong> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -926,15 +941,23 @@
 <dl class="method">
 <dt id="scripts.ui_elements.targeting_overlay.TargetingOverlay.set_selected_tile">
 <code class="descname">set_selected_tile</code><span class="sig-paren">(</span><em>tile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui_elements/targeting_overlay.html#TargetingOverlay.set_selected_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_selected_tile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the tile currently selected. Must be one in the highlighted range
-:param tile:</p>
+<dd><p>Update the tile currently selected. Must be in the highlighted range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tile</strong> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="scripts.ui_elements.targeting_overlay.TargetingOverlay.set_skill_being_targeted">
 <code class="descname">set_skill_being_targeted</code><span class="sig-paren">(</span><em>skill</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui_elements/targeting_overlay.html#TargetingOverlay.set_skill_being_targeted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_skill_being_targeted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the skill that the player is currently targeting
-:param skill:</p>
+<dd><p>Set the skill that the player is currently targeting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>skill</strong> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -949,9 +972,15 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_to_highlight">
-<code class="descname">update_tiles_to_highlight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui_elements/targeting_overlay.html#TargetingOverlay.update_tiles_to_highlight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_to_highlight" title="Permalink to this definition">¶</a></dt>
-<dd><p>build list of valid terrain within range</p>
+<dt id="scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_range_and_fov">
+<code class="descname">update_tiles_in_range_and_fov</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui_elements/targeting_overlay.html#TargetingOverlay.update_tiles_in_range_and_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_range_and_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update list of valid tiles within range based on currently selected skill’s range.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_skill_effect_range">
+<code class="descname">update_tiles_in_skill_effect_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui_elements/targeting_overlay.html#TargetingOverlay.update_tiles_in_skill_effect_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_skill_effect_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the list of Tiles for those effected by the skill effect range. Based on selected skill.</p>
 </dd></dl>
 
 </dd></dl>

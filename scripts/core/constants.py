@@ -298,6 +298,7 @@ class AfflictionTriggers(Enum):
 
     __hash__ = None
 
+
 class AspectTypes(Enum):
     # TODO - replace with strings from json (as it is all defined in the json)
     DIRT = auto()
@@ -308,6 +309,22 @@ class AspectTypes(Enum):
     BOG = auto()
     AFLAME = auto()
 
+
+class SkillShapes(Enum):
+    """
+    When to trigger the afflictions
+    """
+    TARGET = auto()  # single target
+    SQUARE = auto()
+    CIRCLE = auto()
+    CROSS = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 class InputModes(Enum):
     MOUSE_AND_KB = auto()

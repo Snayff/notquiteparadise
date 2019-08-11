@@ -79,8 +79,9 @@ class UiHandler(Subscriber):
 
                 # set the info needed to draw the overlay
                 ui_manager.targeting_overlay.set_skill_being_targeted(event.skill_to_be_used)
-                ui_manager.targeting_overlay.update_tiles_to_highlight()
+                ui_manager.targeting_overlay.update_tiles_in_range_and_fov()
                 ui_manager.targeting_overlay.set_selected_tile(tile)
+                ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
 
                 # show the entity info
                 entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)

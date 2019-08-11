@@ -4,6 +4,7 @@ from scripts.world.game_map import GameMap
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
+from typing import List
 
 
 class MapMethods:
@@ -66,6 +67,8 @@ class MapMethods:
             tile_x(int):  x position of the tile
             tile_y(int):  y position of the tile
         """
+        # TODO - convert to properties of tile class
+
         game_map = self.get_game_map()
         tile = game_map.tiles[tile_x][tile_y]
 
@@ -109,6 +112,30 @@ class MapMethods:
         game_map = self.get_game_map()
 
         return game_map.tiles[tile_x][tile_y]
+
+    def get_tiles(self, start_tile_x, start_tile_y, coords):
+        """
+        Get multiple tiles based on starting position and coordinates given
+        Args:
+            start_tile_x (int):
+            start_tile_y (int):
+            coords (list): List of tuples holding x y. E.g. (x, y)
+
+        Returns:
+            List[Tile]:
+        """
+        game_map = self.get_game_map()
+        tiles = []
+
+        for coord in coords:
+            tile_x = coord[0] + start_tile_x
+            tile_y = coord[1] + start_tile_y
+
+            # make sure it is in bounds
+            if self.is_tile_in_bounds(tile_x, tile_y):
+                tiles.append(game_map.tiles[tile_x][tile_y])
+
+        return tiles
 
     def is_tile_blocking_movement(self, tile_x, tile_y):
         """

@@ -2,7 +2,7 @@ import random
 from typing import List
 
 from scripts.core.constants import LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
-    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, EffectTypes
+    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, EffectTypes, SkillShapes
 from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
@@ -23,6 +23,7 @@ class SkillMethods:
     Methods for querying skills and skill related info and taking skill actions.
     """
     def __init__(self, manager):
+        from scripts.managers.world import WorldManager
         self.manager = manager  # type: WorldManager
 
     def can_use_skill(self, entity, target_pos, skill):
@@ -91,9 +92,6 @@ class SkillMethods:
         else:
             log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
             publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-
-            msg = f"That's not the right target!"
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
             return False
 
     @staticmethod
@@ -219,3 +217,51 @@ class SkillMethods:
 
         log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+
+    @staticmethod
+    def create_shape(shape, size):
+        """
+        Get a list of coords from a shape and size.
+
+        Args:
+            shape (SkillShapes):
+            size (int):
+
+        Returns:
+            List[Tuple[int, int]]
+        """
+        list_of_coords = []
+
+        if shape == SkillShapes.TARGET:
+            list_of_coords.append((0, 0))  # single target, centred on selection
+
+        elif shape == SkillShapes.SQUARE:
+            width = size
+            height = size
+
+            for x in range(-width, width + 1):
+                for y in range(-height, height + 1):
+                    list_of_coords.append((x, y))
+
+        elif shape == SkillShapes.CIRCLE:
+            radius = (size + size + 1) / 2
+
+            for x in range(-size, size + 1):
+                for y in range(-size, size + 1):
+                    if x * x + y * y < radius * radius:
+                        list_of_coords.append((x, y))
+
+        elif shape == SkillShapes.CROSS:
+            x_coords = [-1, 1]
+
+            for x in x_coords:
+                for y in range(-size, size + 1):
+
+                    # ignore 0's to ensure no duplication when running through the range
+                    # the multiplication of x by y means they are always both 0 if y is
+                    if y != 0:
+                        list_of_coords.append((x * y, y))
+
+            list_of_coords.append((0, 0))  # add selection back in
+
+        return list_of_coords

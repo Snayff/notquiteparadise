@@ -41,7 +41,7 @@ class Affliction:
         for effect_name, effect_data in data.effects.items():
             effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
             effected_tile = world_manager.Map.get_tile(self.affected_entity.x, self.affected_entity.y)
-            effect.trigger(effected_tile)
+            effect.trigger([effected_tile])
 
     # reduce duration on all effects other than Passive
         if data.trigger_event != AfflictionTriggers.PASSIVE:

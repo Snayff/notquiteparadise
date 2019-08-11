@@ -37,7 +37,7 @@
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.palette</span> <span class="k">import</span> <span class="n">Palette</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">LoggingEventTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">SkillShapes</span>
 <span class="kn">from</span> <span class="nn">scripts.core.fonts</span> <span class="k">import</span> <span class="n">Font</span>
 <span class="kn">from</span> <span class="nn">scripts.skills.skill</span> <span class="k">import</span> <span class="n">Skill</span>
 
@@ -54,8 +54,9 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_being_targeted</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tiles_to_highlight</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># TODO - update the entity info panel in line with this</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_range_and_fov</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_skill_effect_range</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># drawing info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">palette</span> <span class="o">=</span> <span class="n">Palette</span><span class="p">()</span><span class="o">.</span><span class="n">targeting_overlay</span>
@@ -75,19 +76,39 @@
 <span class="sd">            surface:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">draw_range_highlight</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw_effect_highlight</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">draw_selected_tile</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TargetingOverlay.draw_range_highlight"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.draw_range_highlight">[docs]</a>    <span class="k">def</span> <span class="nf">draw_range_highlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Draw the highlights on top of the tiles_to_highlight</span>
+<span class="sd">        Draw the highlights on top of the tiles_in_range_and_fov</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            surface:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tile_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">highlighted_range_border</span>
         <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
 
-        <span class="c1"># draw highlight on all terrain listed, except the one selected</span>
-        <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles_to_highlight</span><span class="p">:</span>
+        <span class="c1"># draw highlight on all tiles listed, except the one selected</span>
+        <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_range_and_fov</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tile</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span><span class="p">:</span>
+                <span class="c1"># amend rect position to reflect tile sizes</span>
+                <span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">TILE_SIZE</span>
+                <span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">TILE_SIZE</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">tile_colour</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">highlight_border_width</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TargetingOverlay.draw_effect_highlight"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.draw_effect_highlight">[docs]</a>    <span class="k">def</span> <span class="nf">draw_effect_highlight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw the highlights on top of the tiles_in_skill_effect_range</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            surface:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tile_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">highlighted_effect_border</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
+
+        <span class="c1"># draw highlight on all tiles listed, except the one selected</span>
+        <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_skill_effect_range</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">tile</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span><span class="p">:</span>
                 <span class="c1"># amend rect position to reflect tile sizes</span>
                 <span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">TILE_SIZE</span>
@@ -110,6 +131,7 @@
 <div class="viewcode-block" id="TargetingOverlay.set_skill_being_targeted"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_skill_being_targeted">[docs]</a>    <span class="k">def</span> <span class="nf">set_skill_being_targeted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skill</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the skill that the player is currently targeting</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            skill:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -117,43 +139,63 @@
 
 <div class="viewcode-block" id="TargetingOverlay.set_selected_tile"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_selected_tile">[docs]</a>    <span class="k">def</span> <span class="nf">set_selected_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Update the tile currently selected. Must be one in the highlighted range</span>
+<span class="sd">        Update the tile currently selected. Must be in the highlighted range.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            tile:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles_to_highlight</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_range_and_fov</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span> <span class="o">=</span> <span class="n">tile</span></div>
 
-<div class="viewcode-block" id="TargetingOverlay.update_tiles_to_highlight"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_to_highlight">[docs]</a>    <span class="k">def</span> <span class="nf">update_tiles_to_highlight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TargetingOverlay.update_tiles_in_range_and_fov"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_range_and_fov">[docs]</a>    <span class="k">def</span> <span class="nf">update_tiles_in_range_and_fov</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        build list of valid terrain within range</span>
+<span class="sd">        Update list of valid tiles within range based on currently selected skill&#39;s range.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># if there is a skill being targeted</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_being_targeted</span><span class="p">:</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">tiles_to_highlight</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># clear current tiles</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_range_and_fov</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
             <span class="n">player</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">player</span>
-            <span class="n">centre_x</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">x</span>
-            <span class="n">centre_y</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span>
             <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_being_targeted</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span>
                                                 <span class="bp">self</span><span class="o">.</span><span class="n">skill_being_targeted</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="n">skill_range</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">range</span>
 
-            <span class="c1"># +1 to make the range inclusive</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">skill_range</span><span class="p">,</span> <span class="n">skill_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">skill_range</span><span class="p">,</span> <span class="n">skill_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                    <span class="n">current_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">centre_x</span>
-                    <span class="n">current_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">centre_y</span>
+            <span class="c1"># get the tiles in range</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_shape</span><span class="p">(</span><span class="n">SkillShapes</span><span class="o">.</span><span class="n">SQUARE</span><span class="p">,</span> <span class="n">skill_range</span><span class="p">)</span>
+            <span class="n">tiles_in_range</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+            <span class="n">tiles_in_range_and_fov</span> <span class="o">=</span> <span class="p">[]</span>
 
-                    <span class="c1"># check in bounds, in fov and is targetable</span>
-                    <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">is_tile_in_bounds</span><span class="p">(</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">)</span>
-                    <span class="n">in_fov</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">is_tile_in_fov</span><span class="p">(</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">)</span>
+            <span class="c1"># only take tiles in range and FOV</span>
+            <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">tiles_in_range</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">is_tile_in_fov</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+                    <span class="n">tiles_in_range_and_fov</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
 
-                    <span class="k">if</span> <span class="n">in_bounds</span> <span class="ow">and</span> <span class="n">in_fov</span><span class="p">:</span>
-                        <span class="n">tile</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">tiles_to_highlight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_range_and_fov</span> <span class="o">=</span> <span class="n">tiles_in_range_and_fov</span></div>
+
+<div class="viewcode-block" id="TargetingOverlay.update_tiles_in_skill_effect_range"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_skill_effect_range">[docs]</a>    <span class="k">def</span> <span class="nf">update_tiles_in_skill_effect_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the list of Tiles for those effected by the skill effect range. Based on selected skill.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - set to only calculate on skill selection</span>
+        <span class="c1">#  currently recalcing constantly</span>
+
+        <span class="c1"># if there is a skill being targeted</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_being_targeted</span><span class="p">:</span>
+
+            <span class="c1"># clear current tiles</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_skill_effect_range</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># get the skill data</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_being_targeted</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_being_targeted</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_shape</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape_size</span><span class="p">)</span>
+            <span class="n">effected_tiles</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles_in_skill_effect_range</span> <span class="o">=</span> <span class="n">effected_tiles</span></div>
 
 <div class="viewcode-block" id="TargetingOverlay.set_visibility"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">set_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visible</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

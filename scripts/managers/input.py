@@ -285,7 +285,9 @@ class InputManager:
         if direction_x != 0 or direction_y != 0:
             tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
             tile = world_manager.Map.get_tile(tile_x, tile_y)
+            ui_manager.targeting_overlay.update_tiles_in_range_and_fov()
             ui_manager.targeting_overlay.set_selected_tile(tile)
+            ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
             ui_manager.entity_info.set_selected_entity(entity)
 
@@ -293,7 +295,9 @@ class InputManager:
         # TODO - move logic to event
         if self.input_values["mouse_moved"]:
             tile = world_manager.Map.get_tile(mouse_tile_x, mouse_tile_y)
+            ui_manager.targeting_overlay.update_tiles_in_range_and_fov()
             ui_manager.targeting_overlay.set_selected_tile(tile)
+            ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
             ui_manager.entity_info.set_selected_entity(entity)
 

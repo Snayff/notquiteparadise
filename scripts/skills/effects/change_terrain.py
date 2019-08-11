@@ -18,32 +18,35 @@ class ChangeTerrainEffect(Effect):
         super().__init__(owner, "change_terrain", "This is the Manipulate Terrain effect",
                          EffectTypes.CHANGE_TERRAIN)
 
-    def trigger(self, tile):
+    def trigger(self, tiles):
         """
-        Trigger the effect; check tags and then, if all True, apply the effect
+        Trigger the effect
 
         Args:
-            tile (tile):
+            tiles (List[Tile]):
         """
         super().trigger()
 
-        terrain = tile.terrain
-        starting_terrain_name = terrain.name
+        # loop all tiles in list
+        for tile in tiles:
 
-        data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
+            terrain = tile.terrain
+            starting_terrain_name = terrain.name
 
-        # that the tags match
-        from scripts.global_singletons.managers import world_manager
-        if world_manager.Skill.has_required_tags(tile, data.required_tags):
-            world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
+            data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.skill_effect_type)
 
-            # success message
-            entity = self.owner.owner.owner
-            msg = f"{entity.name} changed the {starting_terrain_name} to {tile.terrain.name}."
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+            # that the tags match
+            from scripts.global_singletons.managers import world_manager
+            if world_manager.Skill.has_required_tags(tile, data.required_tags):
+                world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
 
-        else:
-            # confirm can't do it
-            # N.B. the reason why is logged in has_required_tags
-            msg = f"You can't do that there!"
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                # success message
+                entity = self.owner.owner.owner
+                msg = f"{entity.name} changed the {starting_terrain_name} to {tile.terrain.name}."
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
+            else:
+                # confirm can't do it
+                # N.B. the reason why is logged in has_required_tags
+                msg = f"You can't do that there!"
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))

@@ -1,4 +1,6 @@
 
+from typing import List
+
 from scripts.core.constants import LoggingEventTypes, TargetTags, MessageEventTypes, SecondaryStatTypes, \
     HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, EffectTypes
 from scripts.events.entity_events import DieEvent
@@ -20,12 +22,12 @@ class DamageEffect(Effect):
     def __init__(self, owner):
         super().__init__(owner, "damage", "This is the damage effect", EffectTypes.DAMAGE)
 
-    def trigger(self, tile):
+    def trigger(self, tiles):
         """
         Trigger the effect
 
         Args:
-            tile (Tile):
+            tiles (List[Tile]):
         """
         super().trigger()
 
@@ -42,60 +44,62 @@ class DamageEffect(Effect):
             data = library.get_affliction_effect_data(self.owner.name, self.skill_effect_type)
             is_guaranteed_hit = True
 
-        defender = tile.entity
+        # loop all tiles in list
+        for tile in tiles:
+            defender = tile.entity
 
-        # check that the tags match
-        from scripts.global_singletons.managers import world_manager
-        if world_manager.Skill.has_required_tags(tile, data.required_tags):
-            # if it needs to be another entity then it can't be looking at itself
-            if TargetTags.OTHER_ENTITY in data.required_tags:
-                if attacker != defender:
+            # check that the tags match
+            from scripts.global_singletons.managers import world_manager
+            if world_manager.Skill.has_required_tags(tile, data.required_tags):
+                # if it needs to be another entity then it can't be looking at itself
+                if TargetTags.OTHER_ENTITY in data.required_tags:
+                    if attacker != defender:
 
-                    # get the hit type
-                    if is_guaranteed_hit:
-                        hit_type = HitTypes.HIT
-                    else:
-                        to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
-                                                            data.accuracy, data.stat_to_target, attacker)
-                        hit_type = world_manager.Skill.get_hit_type(to_hit_score)
-
-                    # calculate damage
-                    damage = self.calculate_damage(defender, hit_type, data, attacker)
-
-                    # apply damage
-                    if damage > 0:
-                        self.apply_damage(defender, damage)
-
-                        if hit_type == HitTypes.GRAZE:
-                            hit_type_desc = "grazes"
-                        elif hit_type == HitTypes.HIT:
-                            hit_type_desc = "hits"
-                        elif hit_type == HitTypes.CRIT:
-                            hit_type_desc = "crits"
+                        # get the hit type
+                        if is_guaranteed_hit:
+                            hit_type = HitTypes.HIT
                         else:
-                            hit_type_desc = "does something unknown" # catch all
+                            to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
+                                                                data.accuracy, data.stat_to_target, attacker)
+                            hit_type = world_manager.Skill.get_hit_type(to_hit_score)
 
-                        msg = f"{attacker.name} {hit_type_desc} {defender.name} for {damage}."
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-                        # TODO - add the damage type to the message and replace the type with an icon
-                        # TODO - add the explanation of the damage roll to a tooltip
+                        # calculate damage
+                        damage = self.calculate_damage(defender, hit_type, data, attacker)
 
-                        # check if defender died
-                        if defender.combatant.hp <= 0:
-                            publisher.publish(DieEvent(defender))
+                        # apply damage
+                        if damage > 0:
+                            self.apply_damage(defender, damage)
 
-                    else:
-                        msg = f" {defender.name} resists damage from {self.owner.name}."
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                            if hit_type == HitTypes.GRAZE:
+                                hit_type_desc = "grazes"
+                            elif hit_type == HitTypes.HIT:
+                                hit_type_desc = "hits"
+                            elif hit_type == HitTypes.CRIT:
+                                hit_type_desc = "crits"
+                            else:
+                                hit_type_desc = "does something unknown" # catch all
 
-            else:
-                msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                            # who did the damage?
+                            if attacker:
+                                attacker_name = attacker.name
+                            else:
+                                attacker_name = self.owner.name
+                            msg = f"{attacker_name} {hit_type_desc} {defender.name} for {damage}."
+                            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                            # TODO - add the damage type to the message and replace the type with an icon
+                            # TODO - add the explanation of the damage roll to a tooltip
 
-        else:
-            # N.B. the reason why is logged in has_required_tags
-            msg = f"You can't do that there!"
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                            # check if defender died
+                            if defender.combatant.hp <= 0:
+                                publisher.publish(DieEvent(defender))
+
+                        else:
+                            msg = f" {defender.name} resists damage from {self.owner.name}."
+                            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
+                else:
+                    msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
+                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
     @staticmethod
     def calculate_damage(defending_entity, hit_type, effect_data, attacking_entity=None):
