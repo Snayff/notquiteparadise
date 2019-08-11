@@ -130,7 +130,8 @@ class EntityHandler(Subscriber):
         world_manager.Map.set_entity_on_tile(tile, None)
 
         # remove from turn queue
-        del turn_manager.turn_queue[entity]
+        if entity in turn_manager.turn_queue:
+            turn_manager.turn_queue.pop(entity)
         if turn_manager.turn_holder == entity:
             turn_manager.build_new_turn_queue()
 

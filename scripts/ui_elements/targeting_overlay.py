@@ -146,6 +146,9 @@ class TargetingOverlay:
         """
         Update the list of Tiles for those effected by the skill effect range. Based on selected skill.
         """
+        # TODO - set to only calculate on skill selection
+        #  currently recalcing constantly
+
         # if there is a skill being targeted
         if self.skill_being_targeted:
 

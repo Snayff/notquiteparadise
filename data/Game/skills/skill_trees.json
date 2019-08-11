@@ -32,8 +32,8 @@
                 "other_entity"
             ],
             "range": 3,
-            "shape": "square",
-            "shape_size": 1,
+            "shape": "cross",
+            "shape_size": 2,
             "resource_type": "mana",
             "resource_cost": 2,
             "time_cost": 20,

@@ -251,4 +251,17 @@ class SkillMethods:
                     if x * x + y * y < radius * radius:
                         list_of_coords.append((x, y))
 
+        elif shape == SkillShapes.CROSS:
+            x_coords = [-1, 1]
+
+            for x in x_coords:
+                for y in range(-size, size + 1):
+
+                    # ignore 0's to ensure no duplication when running through the range
+                    # the multiplication of x by y means they are always both 0 if y is
+                    if y != 0:
+                        list_of_coords.append((x * y, y))
+
+            list_of_coords.append((0, 0))  # add selection back in
+
         return list_of_coords
