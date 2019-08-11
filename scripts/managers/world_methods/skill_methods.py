@@ -218,7 +218,8 @@ class SkillMethods:
         log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
-    def create_shape(self, shape, size):
+    @staticmethod
+    def create_shape(shape, size):
         """
         Get a list of coords from a shape and size.
 
@@ -241,5 +242,13 @@ class SkillMethods:
             for x in range(-width, width + 1):
                 for y in range(-height, height + 1):
                     list_of_coords.append((x, y))
+
+        elif shape == SkillShapes.CIRCLE:
+            radius = (size + size + 1) / 2
+
+            for x in range(-size, size + 1):
+                for y in range(-size, size + 1):
+                    if x * x + y * y < radius * radius:
+                        list_of_coords.append((x, y))
 
         return list_of_coords

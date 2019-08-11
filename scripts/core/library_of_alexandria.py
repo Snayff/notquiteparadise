@@ -243,6 +243,7 @@ class LibraryOfAlexandria:
         # SkillTree:Skill:shape
         self.recursive_replace(self.skills, "shape", "target", SkillShapes.TARGET)
         self.recursive_replace(self.skills, "shape", "square", SkillShapes.SQUARE)
+        self.recursive_replace(self.skills, "shape", "circle", SkillShapes.CIRCLE)
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """

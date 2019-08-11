@@ -316,6 +316,7 @@ class SkillShapes(Enum):
     """
     TARGET = auto()  # single target
     SQUARE = auto()
+    CIRCLE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
