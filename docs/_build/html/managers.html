@@ -995,6 +995,26 @@ Wrapper for the create effect under world_manager.Skill.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="scripts.managers.world_methods.map_methods.MapMethods.get_tiles">
+<code class="descname">get_tiles</code><span class="sig-paren">(</span><em>start_tile_x</em>, <em>start_tile_y</em>, <em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get multiple tiles based on starting position and coordinates given
+:param start_tile_x:
+:type start_tile_x: int
+:param start_tile_y:
+:type start_tile_y: int
+:param coords: List of tuples holding x y. E.g. (x, y)
+:type coords: list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[<a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile">Tile</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="scripts.managers.world_methods.map_methods.MapMethods.is_tile_blocking_movement">
 <code class="descname">is_tile_blocking_movement</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.is_tile_blocking_movement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.is_tile_blocking_movement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the specified tile is blocking movement
@@ -1210,6 +1230,23 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <li><p><strong>owner</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><em>object</em></a>) – Skill or Affliction</p></li>
 <li><p><strong>effect_type</strong> (<a class="reference internal" href="core.html#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_methods.skill_methods.SkillMethods.create_shape">
+<code class="descname">create_shape</code><span class="sig-paren">(</span><em>shape</em>, <em>size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/skill_methods.html#SkillMethods.create_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.skill_methods.SkillMethods.create_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of coords from a shape and size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<a class="reference internal" href="core.html#scripts.core.constants.SkillShapes" title="scripts.core.constants.SkillShapes"><em>SkillShapes</em></a>) – </p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List[Tuple[int, int]]</p>
 </dd>
 </dl>
 </dd></dl>

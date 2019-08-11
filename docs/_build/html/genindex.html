@@ -203,6 +203,8 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.create_player_fov_map">create_player_fov_map() (scripts.managers.world_methods.fov_methods.FOVMethods method)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_shape">create_shape() (scripts.managers.world_methods.skill_methods.SkillMethods method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_skill">create_skill() (scripts.managers.world_methods.skill_methods.SkillMethods static method)</a>
 </li>
       <li><a href="world.html#scripts.world.entity.Entity.current_sprite">current_sprite (scripts.world.entity.Entity attribute)</a>
@@ -249,8 +251,6 @@
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.displayed_hyperlinks">displayed_hyperlinks (scripts.ui_elements.message_log.MessageLog attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.debug.DebugManager.draw">draw() (scripts.managers.debug.DebugManager method)</a>
 
       <ul>
@@ -267,9 +267,13 @@
         <li><a href="world.html#scripts.world.tile.Tile.draw">(scripts.world.tile.Tile method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.draw_background">draw_background() (scripts.ui_elements.templates.panel.Panel method)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.draw_border">draw_border() (scripts.ui_elements.templates.panel.Panel method)</a>
+</li>
+      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.draw_effect_highlight">draw_effect_highlight() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui.UIManager.draw_game">draw_game() (scripts.managers.ui.UIManager method)</a>
 </li>
@@ -377,10 +381,10 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_euclidean_distance_between_entities">get_euclidean_distance_between_entities() (scripts.managers.world_methods.entity_methods.EntityMethods static method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_game_map">get_game_map() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_hit_type">get_hit_type() (scripts.managers.world_methods.skill_methods.SkillMethods static method)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_homeland_data">get_homeland_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
@@ -422,6 +426,8 @@
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_terrain_on_tile">get_terrain_on_tile() (scripts.managers.world_methods.map_methods.MapMethods static method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tile">get_tile() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tiles">get_tiles() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -805,6 +811,8 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods">SkillMethods (class in scripts.managers.world_methods.skill_methods)</a>
 </li>
+      <li><a href="core.html#scripts.core.constants.SkillShapes">SkillShapes (class in scripts.core.constants)</a>
+</li>
       <li><a href="world.html#scripts.world.terrain.terrain.Terrain.sprite">sprite (scripts.world.terrain.terrain.Terrain attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.StatTypes">StatTypes (class in scripts.core.constants)</a>
@@ -873,10 +881,10 @@
         <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.update">(scripts.ui_elements.message_log.MessageLog method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.debug.DebugManager.update_debug_message">update_debug_message() (scripts.managers.debug.DebugManager method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.game.GameManager.update_game_state">update_game_state() (scripts.managers.game.GameManager method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.input.InputManager.update_input_values">update_input_values() (scripts.managers.input.InputManager method)</a>
@@ -887,7 +895,9 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.update_tile_visibility">update_tile_visibility() (scripts.managers.world_methods.fov_methods.FOVMethods method)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_to_highlight">update_tiles_to_highlight() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
+      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_range_and_fov">update_tiles_in_range_and_fov() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
+</li>
+      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_skill_effect_range">update_tiles_in_skill_effect_range() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
 </li>
       <li><a href="skills.html#scripts.skills.skill.Skill.use">use() (scripts.skills.skill.Skill method)</a>
 </li>

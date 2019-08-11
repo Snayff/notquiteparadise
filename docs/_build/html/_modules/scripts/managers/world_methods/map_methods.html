@@ -37,6 +37,7 @@
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
 
 
 <div class="viewcode-block" id="MapMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods">[docs]</a><span class="k">class</span> <span class="nc">MapMethods</span><span class="p">:</span>
@@ -99,6 +100,8 @@
 <span class="sd">            tile_x(int):  x position of the tile</span>
 <span class="sd">            tile_y(int):  y position of the tile</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - convert to properties of tile class</span>
+
         <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">]</span>
 
@@ -142,6 +145,30 @@
         <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="MapMethods.get_tiles"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tiles">[docs]</a>    <span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_tile_x</span><span class="p">,</span> <span class="n">start_tile_y</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get multiple tiles based on starting position and coordinates given</span>
+<span class="sd">        Args:</span>
+<span class="sd">            start_tile_x (int):</span>
+<span class="sd">            start_tile_y (int):</span>
+<span class="sd">            coords (list): List of tuples holding x y. E.g. (x, y)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tile]:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+        <span class="n">tiles</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">:</span>
+            <span class="n">tile_x</span> <span class="o">=</span> <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">start_tile_x</span>
+            <span class="n">tile_y</span> <span class="o">=</span> <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">start_tile_y</span>
+
+            <span class="c1"># make sure it is in bounds</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tile_in_bounds</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+                <span class="n">tiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">tiles</span></div>
 
 <div class="viewcode-block" id="MapMethods.is_tile_blocking_movement"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_blocking_movement">[docs]</a>    <span class="k">def</span> <span class="nf">is_tile_blocking_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
