@@ -5,13 +5,14 @@
 image: python:3.7.3
 
 pipelines:
-  default:
-    - step:
+   branches:
+     develop:
+     - step:
         name: Deploy to develop
         deployment: develop
         caches: 
           - pip
-        script: # Modify the commands below to build your repository.
+        script: 
           - echo "Deploying to develop environment"
           - apt-get update
           - apt-get install -y libsdl2-dev
@@ -23,16 +24,17 @@ pipelines:
           - radon cc -n C -s  scripts\
           - radon  mi -m -s --min B -j  scripts\
           - radon  raw -s  scripts\
-          - echo "Unused scripts"
+          - echo "Unused Scripts"
           # error: vulture errors for some reason
           # - vulture --sort-by-size  scripts\
           
           # documentation
+          - echo "Build Documentation"
           - cd docs
           - make html
           - cd ..
           - git add .
-          - git commit -m "Added documentation"
+          - git commit -m "[skip ci] Added documentation"
           - git push
         artifacts:
           - docs/**
