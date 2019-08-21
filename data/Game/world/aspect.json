@@ -14,6 +14,24 @@
                     "affliction_name": "bogged down",
                     "duration": 3
                 }
+        ],
+        "interactions": [
+            {
+               "cause": "flaming",
+               "change_to": "dirt"
+            }
+        ]
+    },
+        "dirt": {
+        "name": "dirt",
+        "description": "This is the dirt aspect. It does nothing interesting.",
+        "sprite": "placeholder/51.png",
+        "blocks_sight": false,
+        "blocks_movement": false,
+        "effects": [
+        ],
+        "interactions": [
+        
         ]
     }
 }

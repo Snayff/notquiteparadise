@@ -12,7 +12,8 @@ from scripts.core.constants import GameStates, EffectTypes, DamageTypes, Primary
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager, start
 from scripts.global_singletons.event_hub import event_hub
-from scripts.core.initialisers import initialise_game
+from scripts.core.initialisers import initialise_game, initialise_event_handlers
+
 
 # Project Wide to do list...
 # FIXME - can target self when shouldnt be able to
@@ -52,6 +53,7 @@ def main():
     profiler = cProfile.Profile()
     profiler.enable()
 
+    #################################################
     # alternate approach to init the managers
     # TODO - determine if alternate approach is worthwhile
     start()
@@ -60,6 +62,7 @@ def main():
     #################################################
 
     # initialise the game
+    initialise_event_handlers()
     initialise_game()
 
     # run the game

@@ -8,8 +8,10 @@ from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, 
 from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction_dataclasses import AfflictionData
-from scripts.skills.skill_dataclasses import EffectData, SkillData, SkillTreeData
+from scripts.skills.skill_dataclasses import SkillData, SkillTreeData
+from scripts.skills.effects.effect_dataclass import EffectData
 from scripts.world.aspect_dataclass import AspectData
+from scripts.world.interaction_dataclass import InteractionData
 
 
 class LibraryOfAlexandria:
@@ -111,16 +113,24 @@ class LibraryOfAlexandria:
         # loop all skill trees
         for aspect_name, aspect_data in all_aspect_data.items():
             converted_effects = {}
+            converted_interactions = []
 
-            # loop skill effects in each skill
+            # loop effects
             for index, effect_data in enumerate(aspect_data["effects"]):
                 # convert the skill effect data to the data class
                 effect = EffectData(**effect_data)
                 converted_effects[effect.effect_type.name] = effect
 
+            # loop interactions
+            for index, interaction_data in enumerate(aspect_data["interactions"]):
+                # convert the skill effect data to the data class
+                interaction = InteractionData(**interaction_data)
+                converted_interactions.append(interaction)
+
             # set the temp dict to contain the converted skill effects
             new_aspect_dict = aspect_data.copy()
             new_aspect_dict["effects"] = converted_effects
+            new_aspect_dict["interactions"] = converted_interactions
 
             # unpack the temp dict and convert the aspect data to the data class
             aspect = AspectData(**new_aspect_dict)
@@ -202,6 +212,7 @@ class LibraryOfAlexandria:
             self.recursive_replace(current_list, "damage_type", "pierce", DamageTypes.PIERCE)
             self.recursive_replace(current_list, "damage_type", "blunt", DamageTypes.BLUNT)
             self.recursive_replace(current_list, "damage_type", "elemental", DamageTypes.ELEMENTAL)
+            self.recursive_replace(current_list, "damage_type", "fire", DamageTypes.FIRE)
 
             # Effects:stat_to_target
             self.recursive_replace(current_list, "stat_to_target", "bustle", PrimaryStatTypes.BUSTLE)
@@ -286,7 +297,7 @@ class LibraryOfAlexandria:
         Returns:
             tuple: named tuple of values.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
+        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
         from collections import namedtuple
         named_tuple = namedtuple(terrain_name, self.terrains[terrain_name])
         data = named_tuple(**self.terrains[terrain_name])
@@ -303,7 +314,7 @@ class LibraryOfAlexandria:
         Returns:
             tuple: named tuple of values.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
+        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
         from collections import namedtuple
         named_tuple = namedtuple(actor_template_name, self.actor_template[actor_template_name])
         data = named_tuple(**self.actor_template[actor_template_name])
@@ -326,7 +337,7 @@ class LibraryOfAlexandria:
 
     def get_aspect_effect_data(self, aspect_name, effect_type):
         """
-        Get data for an aspect from the central library
+        Get effect data for an aspect from the central library
 
         Args:
             aspect_name(str):
@@ -378,7 +389,7 @@ class LibraryOfAlexandria:
         Returns:
             tuple: named tuple of values.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
+        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
         from collections import namedtuple
         named_tuple = namedtuple(savvy_name, self.savvys[savvy_name])
         data = named_tuple(**self.savvys[savvy_name])
@@ -409,7 +420,7 @@ class LibraryOfAlexandria:
         Returns:
             tuple: named tuple of values.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never causes a problem.
+        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
         from collections import namedtuple
         named_tuple = namedtuple(homeland_name, self.homelands[homeland_name])
         data = named_tuple(**self.homelands[homeland_name])

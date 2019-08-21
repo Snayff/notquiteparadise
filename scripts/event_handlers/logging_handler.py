@@ -25,7 +25,7 @@ class LoggingHandler(Subscriber):
 
 
     def run(self, event):
-        # Note: Does not create a log entry. Doing so causes infinite loops. Don't do that.
+        # Note: Does not create a log entry. Doing so cause infinite loops. Don't do that.
         if event.type == LoggingEventTypes.CRITICAL:
             self.process_critical_logging_event(event)
         elif event.type == LoggingEventTypes.ERROR:

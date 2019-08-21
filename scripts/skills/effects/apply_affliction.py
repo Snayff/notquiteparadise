@@ -79,6 +79,10 @@ class ApplyAfflictionEffect(Effect):
                 elif affliction_data.affliction_category == AfflictionCategory.BOON:
                     self.apply_affliction(defender, modified_duration)
 
+        # trigger tile interactions caused by affliction
+        from scripts.events.map_events import TileInteractionEvent
+        publisher.publish(TileInteractionEvent(tiles, effect_data.affliction_name))
+
     def apply_affliction(self, defending_entity, modified_duration):
         """
         Apply the afflictions to the target entity

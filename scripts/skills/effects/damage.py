@@ -89,6 +89,12 @@ class DamageEffect(Effect):
                             # TODO - add the damage type to the message and replace the type with an icon
                             # TODO - add the explanation of the damage roll to a tooltip
 
+                            # trigger tile interactions caused by damage type
+                            from scripts.events.map_events import TileInteractionEvent
+                            # make lower case to compare to unconverted json string
+                            damage_type_name = data.damage_type.name.lower()
+                            publisher.publish(TileInteractionEvent(tiles, damage_type_name))
+
                             # check if defender died
                             if defender.combatant.hp <= 0:
                                 publisher.publish(DieEvent(defender))
@@ -100,6 +106,7 @@ class DamageEffect(Effect):
                 else:
                     msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
 
     @staticmethod
     def calculate_damage(defending_entity, hit_type, effect_data, attacking_entity=None):
