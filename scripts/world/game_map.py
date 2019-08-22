@@ -60,7 +60,7 @@ class GameMap:
         self.panel.surface.fill(Colour().black)
         self.panel.draw_background()
 
-        # terrain
+        # tiles
         for x in range(0, self.width):
             for y in range(0, self.height):
 

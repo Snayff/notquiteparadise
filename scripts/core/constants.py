@@ -251,6 +251,7 @@ class HitValues(Enum):
     """
     The value of each hit type. The value is the starting amount.
     """
+    # TODO - externalise the values
     GRAZE = 0
     HIT = 100
     CRIT = 130
@@ -315,17 +316,6 @@ class AfflictionTriggers(Enum):
         return NotImplemented
 
     __hash__ = None
-
-
-class AspectTypes(Enum):
-    # TODO - replace with strings from json (as it is all defined in the json)
-    DIRT = auto()
-    LONG_GRASS = auto()
-    FROZEN = auto()
-    SMOKE = auto()
-    GAS = auto()
-    BOG = auto()
-    AFLAME = auto()
 
 
 class SkillShapes(Enum):

@@ -25,7 +25,7 @@
         "dirt": {
         "name": "dirt",
         "description": "This is the dirt aspect. It does nothing interesting.",
-        "sprite": "placeholder/51.png",
+        "sprite": "placeholder/77.png",
         "blocks_sight": false,
         "blocks_movement": false,
         "effects": [

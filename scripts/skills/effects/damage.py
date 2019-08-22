@@ -50,7 +50,7 @@ class DamageEffect(Effect):
 
             # check that the tags match
             from scripts.global_singletons.managers import world_manager
-            if world_manager.Skill.has_required_tags(tile, data.required_tags):
+            if world_manager.Skill.has_required_tags(tile, data.required_tags, attacker):
                 # if it needs to be another entity then it can't be looking at itself
                 if TargetTags.OTHER_ENTITY in data.required_tags:
                     if attacker != defender:

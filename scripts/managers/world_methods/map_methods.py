@@ -204,7 +204,7 @@ class MapMethods:
                 return False
         elif target_tag == TargetTags.OTHER_ENTITY:
             # ensure active entity is NOT the same as the targeted one
-            if active_entity != tile.entity:
+            if active_entity != tile.entity and tile.has_entity:
                 return True
             else:
                 return False

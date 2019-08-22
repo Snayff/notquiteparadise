@@ -49,6 +49,10 @@ class MapHandler(Subscriber):
                         from scripts.global_singletons.managers import world_manager
                         world_manager.Map.set_aspect_on_tile(tile, interaction.change_to)
 
+                        # log the change
+                        log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
+                        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+
                         # inform player of change
                         from scripts.events.message_events import MessageEvent
                         msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."

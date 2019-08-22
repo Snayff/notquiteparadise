@@ -50,7 +50,7 @@ class ApplyAfflictionEffect(Effect):
 
             # check the tags match
             from scripts.global_singletons.managers import world_manager
-            if world_manager.Skill.has_required_tags(tile, effect_data.required_tags):
+            if world_manager.Skill.has_required_tags(tile, effect_data.required_tags, attacker):
 
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
@@ -127,7 +127,7 @@ class ApplyAfflictionEffect(Effect):
 
         # no current afflictions of same type so apply new one
         else:
-            log_string = f"Applying {effect_data.affliction_name} afflictions to {defending_entity.name} with " \
+            log_string = f"Applying {effect_data.affliction_name} afflictions to '{defending_entity.name}' with " \
                 f"duration of {modified_duration}."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 

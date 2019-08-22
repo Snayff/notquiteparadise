@@ -77,7 +77,7 @@ class BasicMonster:
         # TODO - actually get a target
         target = world_manager.player
 
-        log_string = f"{self.owner.name} chose {target.name} as a target."
+        log_string = f"{self.owner.name} chose '{target.name}' as a target."
         publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
         return target
 
