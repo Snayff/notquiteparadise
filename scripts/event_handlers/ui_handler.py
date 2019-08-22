@@ -26,7 +26,7 @@ class UiHandler(Subscriber):
 
         # log that event has been received
         log_string = f"{self.name} received {event.topic}:{event.type}"
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         if event.topic == EventTopics.UI:
             self.process_ui(event)

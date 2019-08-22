@@ -11,7 +11,7 @@
                 "required_tags": ["other_entity"
                 ],
                 "damage": 15,
-                "damage_type": "pierce",
+                "damage_type": "fire",
                 "accuracy": 10,
                 "stat_to_target": "bustle"
             }

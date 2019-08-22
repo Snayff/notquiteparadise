@@ -46,7 +46,7 @@ class SkillMethods:
         skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
         # check we have everything we need and if so use the skill
-        if self.has_required_tags(target_tile, skill_data.required_tags):
+        if self.has_required_tags(target_tile, skill_data.required_tags, entity):
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
             if self.can_afford_cost(entity, resource_type, resource_cost):
@@ -64,25 +64,40 @@ class SkillMethods:
 
         return False
 
-    def has_required_tags(self, tile, required_tags):
+    def has_required_tags(self, target_tile, required_tags, active_entity=None):
         """
         Check a tile has all required tags
 
         Args:
-            tile(Tile):
+            target_tile(Tile):
             required_tags(List):
+            active_entity(Entity):
 
         Returns:
             bool: True if tile has all tags
         """
-        log_string = f"Checking target for tags {required_tags}..."
+        # log what is being targeted
+        target = ""
+        if target_tile.entity:
+            if target_tile.entity.name == "player":
+                pass
+            target += target_tile.entity.name + ", "
+        else:
+            target += "no entity, "
+        if target_tile.aspect:
+            target += target_tile.aspect.name + ", "
+        else:
+            target += "no aspect, "
+        target += target_tile.terrain.name  # all tiles have terrain
+
+        log_string = f"Checking ({target}) for tags {required_tags}..."
         publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
 
         tags_checked = {}
 
         # assess all tags
         for tag in required_tags:
-            tags_checked[tag.name] = self.manager.Map.tile_has_tag(tile, tag)
+            tags_checked[tag.name] = self.manager.Map.tile_has_tag(target_tile, tag, active_entity)
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):

@@ -1,4 +1,4 @@
-from scripts.core.constants import TILE_SIZE
+from scripts.core.constants import TILE_SIZE, TargetTags
 from scripts.global_singletons.data_library import library
 from scripts.world.tile import Tile
 

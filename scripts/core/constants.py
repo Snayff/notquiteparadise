@@ -51,6 +51,7 @@ class EventTopics(Enum):
     LOGGING = auto()
     ENTITY = auto()
     UI = auto()
+    MAP = auto()
 
 
 class GameEventTypes(Enum):
@@ -126,6 +127,20 @@ class UIEventTypes(Enum):
     __hash__ = None
 
 
+class MapEventTypes(Enum):
+    """
+    Types of Map events
+    """
+    TILE_INTERACTION = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
 class TargetTags(Enum):
     """
     Types of target
@@ -133,10 +148,12 @@ class TargetTags(Enum):
     # TODO - externalise terrain types
     FLOOR = auto()
     WALL = auto()
+
     SELF = auto()
     OTHER_ENTITY = auto()
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
+
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -153,6 +170,7 @@ class DamageTypes(Enum):
     PIERCE = auto()
     BLUNT = auto()
     ELEMENTAL = auto()
+    FIRE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -233,6 +251,7 @@ class HitValues(Enum):
     """
     The value of each hit type. The value is the starting amount.
     """
+    # TODO - externalise the values
     GRAZE = 0
     HIT = 100
     CRIT = 130
@@ -297,17 +316,6 @@ class AfflictionTriggers(Enum):
         return NotImplemented
 
     __hash__ = None
-
-
-class AspectTypes(Enum):
-    # TODO - replace with strings from json (as it is all defined in the json)
-    DIRT = auto()
-    LONG_GRASS = auto()
-    FROZEN = auto()
-    SMOKE = auto()
-    GAS = auto()
-    BOG = auto()
-    AFLAME = auto()
 
 
 class SkillShapes(Enum):

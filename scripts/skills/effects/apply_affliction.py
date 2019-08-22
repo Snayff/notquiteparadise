@@ -50,7 +50,7 @@ class ApplyAfflictionEffect(Effect):
 
             # check the tags match
             from scripts.global_singletons.managers import world_manager
-            if world_manager.Skill.has_required_tags(tile, effect_data.required_tags):
+            if world_manager.Skill.has_required_tags(tile, effect_data.required_tags, attacker):
 
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
@@ -78,6 +78,10 @@ class ApplyAfflictionEffect(Effect):
                 # Just apply the BOON
                 elif affliction_data.affliction_category == AfflictionCategory.BOON:
                     self.apply_affliction(defender, modified_duration)
+
+        # trigger tile interactions caused by affliction
+        from scripts.events.map_events import TileInteractionEvent
+        publisher.publish(TileInteractionEvent(tiles, effect_data.affliction_name))
 
     def apply_affliction(self, defending_entity, modified_duration):
         """
@@ -123,7 +127,7 @@ class ApplyAfflictionEffect(Effect):
 
         # no current afflictions of same type so apply new one
         else:
-            log_string = f"Applying {effect_data.affliction_name} afflictions to {defending_entity.name} with " \
+            log_string = f"Applying {effect_data.affliction_name} afflictions to '{defending_entity.name}' with " \
                 f"duration of {modified_duration}."
             publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
 

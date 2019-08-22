@@ -2,6 +2,7 @@
 import pygame
 
 from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
+from scripts.event_handlers.map_handler import MapHandler
 from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
 from scripts.event_handlers.logging_handler import LoggingHandler
@@ -17,9 +18,6 @@ def initialise_game():
     """
     Init the game`s required info
     """
-    #pygame.init()
-
-    initialise_event_handlers()
 
     map_width = 50
     map_height = 30
@@ -65,4 +63,7 @@ def initialise_event_handlers():
     ui_handler.subscribe(EventTopics.ENTITY)
     ui_handler.subscribe(EventTopics.GAME)
     ui_handler.subscribe(EventTopics.UI)
+
+    map_handler = MapHandler(event_hub)
+    map_handler.subscribe(EventTopics.MAP)
 
