@@ -237,7 +237,7 @@
                 <span class="k">return</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">:</span>
             <span class="c1"># ensure active entity is NOT the same as the targeted one</span>
-            <span class="k">if</span> <span class="n">active_entity</span> <span class="o">!=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">active_entity</span> <span class="o">!=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span> <span class="ow">and</span> <span class="n">tile</span><span class="o">.</span><span class="n">has_entity</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">False</span>

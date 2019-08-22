@@ -79,7 +79,7 @@
         <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># check we have everything we need and if so use the skill</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_required_tags</span><span class="p">(</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">required_tags</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_required_tags</span><span class="p">(</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">required_tags</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
             <span class="n">resource_type</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span>
             <span class="n">resource_cost</span> <span class="o">=</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_afford_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">,</span> <span class="n">resource_cost</span><span class="p">):</span>
@@ -97,25 +97,40 @@
 
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="SkillMethods.has_required_tags"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.has_required_tags">[docs]</a>    <span class="k">def</span> <span class="nf">has_required_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">required_tags</span><span class="p">):</span>
+<div class="viewcode-block" id="SkillMethods.has_required_tags"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.has_required_tags">[docs]</a>    <span class="k">def</span> <span class="nf">has_required_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_tile</span><span class="p">,</span> <span class="n">required_tags</span><span class="p">,</span> <span class="n">active_entity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check a tile has all required tags</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tile(Tile):</span>
+<span class="sd">            target_tile(Tile):</span>
 <span class="sd">            required_tags(List):</span>
+<span class="sd">            active_entity(Entity):</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            bool: True if tile has all tags</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Checking target for tags </span><span class="si">{required_tags}</span><span class="s2">...&quot;</span>
+        <span class="c1"># log what is being targeted</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;player&quot;</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">target</span> <span class="o">+=</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">+=</span> <span class="s2">&quot;no entity, &quot;</span>
+        <span class="k">if</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">+=</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">+=</span> <span class="s2">&quot;no aspect, &quot;</span>
+        <span class="n">target</span> <span class="o">+=</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># all tiles have terrain</span>
+
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Checking (</span><span class="si">{target}</span><span class="s2">) for tags </span><span class="si">{required_tags}</span><span class="s2">...&quot;</span>
         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
 
         <span class="n">tags_checked</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># assess all tags</span>
         <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">required_tags</span><span class="p">:</span>
-            <span class="n">tags_checked</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+            <span class="n">tags_checked</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">target_tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
 
         <span class="c1"># if all tags came back true return true</span>
         <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tags_checked</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
