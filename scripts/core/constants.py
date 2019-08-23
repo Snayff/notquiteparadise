@@ -150,10 +150,11 @@ class DamageTypes(Enum):
     """
     Damage types
     """
-    PIERCE = auto()
-    BLUNT = auto()
-    ELEMENTAL = auto()
-    FIRE = auto()
+    BURN = auto()
+    CHEMICAL = auto()
+    ASTRAL = auto()
+    COLD = auto()
+    MUNDANE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -200,11 +201,16 @@ class SecondaryStatTypes(Enum):
     """
     Secondary stats
     """
-    RESIST_BLUNT = auto()
-    RESIST_PIERCE = auto()
-    RESIST_ELEMENTAL = auto()
     MAX_HP = auto()
+    MAX_STAMINA = auto()
+    HP = auto()
+    STAMINA = auto()
     ACCURACY = auto()
+    RESIST_BURN = auto()
+    RESIST_CHEMICAL = auto()
+    RESIST_ASTRAL = auto()
+    RESIST_COLD = auto()
+    RESIST_MUNDANE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -236,8 +242,8 @@ class HitValues(Enum):
     """
     # TODO - externalise the values
     GRAZE = 0
-    HIT = 100
-    CRIT = 130
+    HIT = 5
+    CRIT = 20
 
 
 class HitModifiers(Enum):

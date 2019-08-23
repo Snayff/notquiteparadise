@@ -80,10 +80,10 @@ class SelectedEntityInfo:
         second_section_column_one_text.append(f"Accuracy: {entity.combatant.secondary_stats.accuracy}")
 
         second_section_column_two_text.append(f"Defence:")
-        second_section_column_two_text.append(f"Resist blunt: {entity.combatant.secondary_stats.resist_blunt}")
-        second_section_column_two_text.append(f"Resist piece: {entity.combatant.secondary_stats.resist_pierce}")
-        second_section_column_two_text.append(f"Resist elemental: "
-                                              f"{entity.combatant.secondary_stats.resist_elemental}")
+        # second_section_column_two_text.append(f"Resist blunt: {entity.combatant.secondary_stats.resist_blunt}")
+        # second_section_column_two_text.append(f"Resist piece: {entity.combatant.secondary_stats.resist_pierce}")
+        # second_section_column_two_text.append(f"Resist elemental: "
+        #                                       f"{entity.combatant.secondary_stats.resist_elemental}")
 
         from scripts.global_singletons.managers import world_manager
         afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)

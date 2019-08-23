@@ -107,7 +107,6 @@ class DamageEffect(Effect):
                     msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
-
     @staticmethod
     def calculate_damage(defending_entity, hit_type, effect_data, attacking_entity=None):
         """
@@ -121,22 +120,39 @@ class DamageEffect(Effect):
         Returns:
             int: damage to be dealt
         """
-        logging.debug( f"Calculate damage...")
+        logging.debug(f"Calculate damage...")
         data = effect_data
 
         initial_damage = data.damage  # TODO - add skill dmg modifier to allow dmg growth
+        damage_from_stats = 0
+
+        # get damage from stats of attacker
+        if attacking_entity:
+            stat_amount = 0
+            # get the stat
+            for stat in PrimaryStatTypes:
+                if stat == data.mod_stat:
+                    stat_amount = getattr(attacking_entity.combatant.primary_stats, stat.name.lower())
+                    break
+
+            damage_from_stats = stat_amount * data.mod_amount
 
         # get resistance value
         resist_value = 0
-        if data.damage_type == DamageTypes.PIERCE:
-            resist_value = defending_entity.combatant.secondary_stats.resist_pierce
-        elif data.damage_type == DamageTypes.BLUNT:
-            resist_value = defending_entity.combatant.secondary_stats.resist_blunt
-        elif data.damage_type == DamageTypes.ELEMENTAL:
-            resist_value = defending_entity.combatant.secondary_stats.resist_elemental
+
+        for dmg_type in DamageTypes:
+            if dmg_type == data.damage_type:
+                resist_value = getattr(defending_entity.combatant.secondary_stats, "resist_" + dmg_type.name.lower())
+                break
+        # if data.damage_type == DamageTypes.PIERCE:
+        #     resist_value = defending_entity.combatant.secondary_stats.resist_pierce
+        # elif data.damage_type == DamageTypes.BLUNT:
+        #     resist_value = defending_entity.combatant.secondary_stats.resist_blunt
+        # elif data.damage_type == DamageTypes.ELEMENTAL:
+        #     resist_value = defending_entity.combatant.secondary_stats.resist_elemental
 
         # mitigate damage with defence
-        mitigated_damage = initial_damage - resist_value
+        mitigated_damage = (initial_damage + damage_from_stats) - resist_value
 
         # apply to hit modifier to damage
         if hit_type == HitTypes.CRIT:
@@ -147,13 +163,14 @@ class DamageEffect(Effect):
             modified_damage = mitigated_damage * HitModifiers.GRAZE.value
 
         # round down the dmg
-        modified_damage = int(modified_damage)
+        int_modified_damage = int(modified_damage)
 
         # log the info
-        log_string = f"-> Initial damage:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}."
+        log_string = f"-> Initial:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}," \
+                     f" Final: {int_modified_damage}"
         logging.debug(log_string)
 
-        return modified_damage
+        return int_modified_damage
 
     @staticmethod
     def apply_damage(defending_entity, damage):

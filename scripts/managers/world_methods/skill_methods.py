@@ -180,16 +180,16 @@ class SkillMethods:
         Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
         Args:
 
-            defender ():
-            skill_accuracy ():
-            stat_to_target ():
-            attacker ():
+            defender (Entity):
+            skill_accuracy (int):
+            stat_to_target (PrimaryStatTypes):
+            attacker (Entity):
         """
-        logging.debug( f"Get to hit scores...")
+        logging.debug(f"Get to hit scores...")
 
-        roll = random.randint(1, 100)
+        roll = random.randint(-3, 3)
 
-        # check if attacker provided
+        # if attacker get their accuracy
         if attacker:
             attacker_value = attacker.combatant.secondary_stats.accuracy
         else:
@@ -197,10 +197,10 @@ class SkillMethods:
 
         modified_to_hit_score = attacker_value + skill_accuracy + roll
 
-        # TODO -  mitigate to hit using stat to target
-
         # mitigate the to hit
-        mitigated_to_hit_score = modified_to_hit_score
+        defender_value = getattr(defender.combatant.primary_stats, stat_to_target.name.lower())
+
+        mitigated_to_hit_score = modified_to_hit_score - defender_value
 
         # log the info
         log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."

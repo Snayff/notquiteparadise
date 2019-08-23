@@ -45,8 +45,6 @@ def initialise_logging():
     # format in uk time
     logging.Formatter.converter = time.gmtime
 
-    logging.info("test")
-
 
 def initialise_game():
     """

@@ -7,10 +7,11 @@ class SecondaryStats:
     """
     Stats derived from the primary stats.
     """
-    # TODO - load the modifiers and base values from a json
 
     def __init__(self, owner):
         self.owner = owner
+
+    # TODO - use setattr() to create the properties dynamically
 
     @property
     def max_hp(self):
@@ -23,6 +24,35 @@ class SecondaryStats:
         stat_data = library.get_secondary_stat_data(SecondaryStatTypes.MAX_HP)
         base_value = stat_data.base_value
         
+        vigour = self.owner.primary_stats.vigour
+        from_vigour = vigour * stat_data.vigour_mod
+
+        clout = self.owner.primary_stats.clout
+        from_clout = clout * stat_data.clout_mod
+
+        skullduggery = self.owner.primary_stats.skullduggery
+        from_skullduggery = skullduggery * stat_data.skullduggery_mod
+
+        bustle = self.owner.primary_stats.bustle
+        from_bustle = bustle * stat_data.bustle_mod
+
+        exactitude = self.owner.primary_stats.exactitude
+        from_exactitude = exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+        return int(stat_total)
+
+    @property
+    def max_stamina(self):
+        """
+        Base value of an entities energy to take actions.
+
+        Returns:
+            int:
+        """
+        stat_data = library.get_secondary_stat_data(SecondaryStatTypes.MAX_STAMINA)
+        base_value = stat_data.base_value
+
         vigour = self.owner.primary_stats.vigour
         from_vigour = vigour * stat_data.vigour_mod
 
@@ -69,32 +99,148 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
         return int(stat_total)
-        return int(stat_total)
-
-    # TODO - update below stats to use library data and align to new damage types
 
     @property
-    def resist_blunt(self):
+    def resist_burn(self):
+        """
+        Base value of an entities resistance to burn damage.
+
+        Returns:
+            int:
+        """
+        stat_data = library.get_secondary_stat_data(SecondaryStatTypes.RESIST_BURN)
+        base_value = stat_data.base_value
+
         vigour = self.owner.primary_stats.vigour
-        vigour_modifier = 1
+        from_vigour = vigour * stat_data.vigour_mod
 
-        stat_total = (vigour * vigour_modifier)
-        return int(stat_total)
+        clout = self.owner.primary_stats.clout
+        from_clout = clout * stat_data.clout_mod
 
-    @property
-    def resist_pierce(self):
-        bustle = self.owner.primary_stats.bustle
-        bustle_modifier = 1
-
-        stat_total = (bustle * bustle_modifier)
-        return int(stat_total)
-
-    @property
-    def resist_elemental(self):
         skullduggery = self.owner.primary_stats.skullduggery
-        subtlety_modifier = 2
+        from_skullduggery = skullduggery * stat_data.skullduggery_mod
 
-        stat_total = (skullduggery * subtlety_modifier)
+        bustle = self.owner.primary_stats.bustle
+        from_bustle = bustle * stat_data.bustle_mod
+
+        exactitude = self.owner.primary_stats.exactitude
+        from_exactitude = exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
         return int(stat_total)
 
+    @property
+    def resist_cold(self):
+        """
+        Base value of an entities resistance to cold damage.
 
+        Returns:
+            int:
+        """
+        stat_data = library.get_secondary_stat_data(SecondaryStatTypes.RESIST_COLD)
+        base_value = stat_data.base_value
+
+        vigour = self.owner.primary_stats.vigour
+        from_vigour = vigour * stat_data.vigour_mod
+
+        clout = self.owner.primary_stats.clout
+        from_clout = clout * stat_data.clout_mod
+
+        skullduggery = self.owner.primary_stats.skullduggery
+        from_skullduggery = skullduggery * stat_data.skullduggery_mod
+
+        bustle = self.owner.primary_stats.bustle
+        from_bustle = bustle * stat_data.bustle_mod
+
+        exactitude = self.owner.primary_stats.exactitude
+        from_exactitude = exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+        return int(stat_total)
+
+    @property
+    def resist_chemical(self):
+        """
+        Base value of an entities resistance to chemical damage.
+
+        Returns:
+            int:
+        """
+        stat_data = library.get_secondary_stat_data(SecondaryStatTypes.RESIST_CHEMICAL)
+        base_value = stat_data.base_value
+
+        vigour = self.owner.primary_stats.vigour
+        from_vigour = vigour * stat_data.vigour_mod
+
+        clout = self.owner.primary_stats.clout
+        from_clout = clout * stat_data.clout_mod
+
+        skullduggery = self.owner.primary_stats.skullduggery
+        from_skullduggery = skullduggery * stat_data.skullduggery_mod
+
+        bustle = self.owner.primary_stats.bustle
+        from_bustle = bustle * stat_data.bustle_mod
+
+        exactitude = self.owner.primary_stats.exactitude
+        from_exactitude = exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+        return int(stat_total)
+
+    @property
+    def resist_astral(self):
+        """
+        Base value of an entities resistance to astral damage.
+
+        Returns:
+            int:
+        """
+        stat_data = library.get_secondary_stat_data(SecondaryStatTypes.RESIST_ASTRAL)
+        base_value = stat_data.base_value
+
+        vigour = self.owner.primary_stats.vigour
+        from_vigour = vigour * stat_data.vigour_mod
+
+        clout = self.owner.primary_stats.clout
+        from_clout = clout * stat_data.clout_mod
+
+        skullduggery = self.owner.primary_stats.skullduggery
+        from_skullduggery = skullduggery * stat_data.skullduggery_mod
+
+        bustle = self.owner.primary_stats.bustle
+        from_bustle = bustle * stat_data.bustle_mod
+
+        exactitude = self.owner.primary_stats.exactitude
+        from_exactitude = exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+        return int(stat_total)
+
+    @property
+    def resist_mundane(self):
+        """
+        Base value of an entities resistance to mundane damage.
+
+        Returns:
+            int:
+        """
+        stat_data = library.get_secondary_stat_data(SecondaryStatTypes.RESIST_MUNDANE)
+        base_value = stat_data.base_value
+
+        vigour = self.owner.primary_stats.vigour
+        from_vigour = vigour * stat_data.vigour_mod
+
+        clout = self.owner.primary_stats.clout
+        from_clout = clout * stat_data.clout_mod
+
+        skullduggery = self.owner.primary_stats.skullduggery
+        from_skullduggery = skullduggery * stat_data.skullduggery_mod
+
+        bustle = self.owner.primary_stats.bustle
+        from_bustle = bustle * stat_data.bustle_mod
+
+        exactitude = self.owner.primary_stats.exactitude
+        from_exactitude = exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+        return int(stat_total)

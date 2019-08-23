@@ -194,67 +194,53 @@ class LibraryOfAlexandria:
         
         for current_list in lists_to_convert:
             # Effects:required_tags
-            self.recursive_replace(current_list, "required_tags", "other_entity", TargetTags.OTHER_ENTITY)
-            self.recursive_replace(current_list, "required_tags", "no_entity", TargetTags.NO_ENTITY)
-            self.recursive_replace(current_list, "required_tags", "floor", TargetTags.FLOOR)
-            self.recursive_replace(current_list, "required_tags", "wall", TargetTags.WALL)
-            self.recursive_replace(current_list, "required_tags", "self", TargetTags.SELF)
+            for value in TargetTags:
+                self.recursive_replace(current_list, "required_tags", value.name.lower(), value)
 
             # Effects:name
-            self.recursive_replace(current_list, "effect_type", "damage", EffectTypes.DAMAGE)
-            self.recursive_replace(current_list, "effect_type", "apply_affliction", EffectTypes.APPLY_AFFLICTION)
-            self.recursive_replace(current_list, "effect_type", "move", EffectTypes.MOVE)
-            self.recursive_replace(current_list, "effect_type", "change_terrain", EffectTypes.CHANGE_TERRAIN)
-            self.recursive_replace(current_list, "effect_type", "affect_stat", EffectTypes.AFFECT_STAT)
+            for value in EffectTypes:
+                self.recursive_replace(current_list, "effect_type", value.name.lower(), value)
 
             # Effects:damage_type
-            self.recursive_replace(current_list, "damage_type", "pierce", DamageTypes.PIERCE)
-            self.recursive_replace(current_list, "damage_type", "blunt", DamageTypes.BLUNT)
-            self.recursive_replace(current_list, "damage_type", "elemental", DamageTypes.ELEMENTAL)
-            self.recursive_replace(current_list, "damage_type", "fire", DamageTypes.FIRE)
+            for value in DamageTypes:
+                self.recursive_replace(current_list, "damage_type", value.name.lower(), value)
+
+            # Effects:mod_stat
+            for value in PrimaryStatTypes:
+                self.recursive_replace(current_list, "mod_stat", value.name.lower(), value)
+            self.recursive_replace(current_list, "mod_stat", "none", None)  # need to add this as mod_stat can be none
 
             # Effects:stat_to_target
-            self.recursive_replace(current_list, "stat_to_target", "bustle", PrimaryStatTypes.BUSTLE)
-            self.recursive_replace(current_list, "stat_to_target", "vigour", PrimaryStatTypes.VIGOUR)
-            self.recursive_replace(current_list, "stat_to_target", "clout", PrimaryStatTypes.CLOUT)
-            self.recursive_replace(current_list, "stat_to_target", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
-            self.recursive_replace(current_list, "stat_to_target", "exactitude", PrimaryStatTypes.EXACTITUDE)
+            for value in PrimaryStatTypes:
+                self.recursive_replace(current_list, "stat_to_target", value.name.lower(), value)
 
             # Effects:new_terrain
+            # plans to remove terrain from internal so dont update for all values
             self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
             self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
        
         # Update Afflictions
         # Affliction:category
-        self.recursive_replace(self.afflictions, "category", "bane", AfflictionCategory.BANE)
-        self.recursive_replace(self.afflictions, "category", "boon", AfflictionCategory.BOON)
+        for value in AfflictionCategory:
+            self.recursive_replace(self.afflictions, "category", value.name.lower(), value)
 
         # Affliction:trigger_event
-        self.recursive_replace(self.afflictions, "trigger_event", "end_turn", AfflictionTriggers.END_TURN)
-        self.recursive_replace(self.afflictions, "trigger_event", "passive", AfflictionTriggers.PASSIVE)
-        self.recursive_replace(self.afflictions, "trigger_event", "move", AfflictionTriggers.MOVE)
-        self.recursive_replace(self.afflictions, "trigger_event", "deal_damage", AfflictionTriggers.DEAL_DAMAGE)
-        self.recursive_replace(self.afflictions, "trigger_event", "end_round", AfflictionTriggers.END_ROUND)
-        self.recursive_replace(self.afflictions, "trigger_event", "action", AfflictionTriggers.ACTION)
+        for value in AfflictionTriggers:
+            self.recursive_replace(self.afflictions, "trigger_event", value.name.lower(), value)
 
         # Update Stats
         # Stat:Primary:primary_stat_type
-        self.recursive_replace(self.stats, "primary_stat_type", "bustle", PrimaryStatTypes.BUSTLE)
-        self.recursive_replace(self.stats, "primary_stat_type", "vigour", PrimaryStatTypes.VIGOUR)
-        self.recursive_replace(self.stats, "primary_stat_type", "clout", PrimaryStatTypes.CLOUT)
-        self.recursive_replace(self.stats, "primary_stat_type", "skullduggery", PrimaryStatTypes.SKULLDUGGERY)
-        self.recursive_replace(self.stats, "primary_stat_type", "exactitude", PrimaryStatTypes.EXACTITUDE)
+        for value in PrimaryStatTypes:
+            self.recursive_replace(self.stats, "primary_stat_type", value.name.lower(), value)
 
         # Stat:Secondary:secondary_stat_type
-        self.recursive_replace(self.stats, "secondary_stat_type", "max_hp", SecondaryStatTypes.MAX_HP)
-        self.recursive_replace(self.stats, "secondary_stat_type", "accuracy", SecondaryStatTypes.ACCURACY)
+        for value in SecondaryStatTypes:
+            self.recursive_replace(self.stats, "secondary_stat_type", value.name.lower(), value)
 
         # Update skills
         # SkillTree:Skill:shape
-        self.recursive_replace(self.skills, "shape", "target", SkillShapes.TARGET)
-        self.recursive_replace(self.skills, "shape", "square", SkillShapes.SQUARE)
-        self.recursive_replace(self.skills, "shape", "circle", SkillShapes.CIRCLE)
-        self.recursive_replace(self.skills, "shape", "cross", SkillShapes.CROSS)
+        for value in SkillShapes:
+            self.recursive_replace(self.skills, "shape", value.name.lower(), value)
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """
