@@ -31,13 +31,13 @@
           <div class="body" role="main">
             
   <h1>Source code for scripts.managers.ui</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pygame</span>
+<span></span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
 
-<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.colours</span> <span class="k">import</span> <span class="n">Colour</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.entity_info</span> <span class="k">import</span> <span class="n">SelectedEntityInfo</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">VisualInfo</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">VisualInfo</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.message_log</span> <span class="k">import</span> <span class="n">MessageLog</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.skill_bar</span> <span class="k">import</span> <span class="n">SkillBar</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.targeting_overlay</span> <span class="k">import</span> <span class="n">TargetingOverlay</span>
@@ -71,7 +71,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">targeting_overlay</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: TargetingOverlay</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_bar</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># type: SkillBar</span>
 
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;UIManager initialised.&quot;</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;UIManager initialised.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="UIManager.update"><a class="viewcode-back" href="../../../managers.html#scripts.managers.ui.UIManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

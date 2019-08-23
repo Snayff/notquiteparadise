@@ -31,7 +31,8 @@
           <div class="body" role="main">
             
   <h1>Source code for scripts.core.constants</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span></span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 
 <span class="n">TILE_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 
@@ -81,7 +82,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">GAME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">MESSAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">LOGGING</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">UI</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">MAP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
@@ -105,23 +105,6 @@
     <span class="sd">&quot;&quot;&quot;Types of Message Events&quot;&quot;&quot;</span>
     <span class="n">BASIC</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">SYSTEM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">return</span> <span class="bp">NotImplemented</span>
-
-    <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="LoggingEventTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.LoggingEventTypes">[docs]</a><span class="k">class</span> <span class="nc">LoggingEventTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Types of Logging Events&quot;&quot;&quot;</span>
-
-    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># A serious error, indicating that may be unable to continue running.</span>
-    <span class="n">ERROR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># A more serious problem, has not been able to perform some function.</span>
-    <span class="n">WARNING</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># An indication that something unexpected happened, but otherwise still working as expected.</span>
-    <span class="n">INFO</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># Confirmation that things are working as expected.</span>
-    <span class="n">DEBUG</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># Detailed information, typically of interest only when diagnosing problems</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>

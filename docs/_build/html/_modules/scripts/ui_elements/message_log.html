@@ -31,11 +31,12 @@
           <div class="body" role="main">
             
   <h1>Source code for scripts.ui_elements.message_log</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">VisualInfo</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">VisualInfo</span>
 <span class="kn">from</span> <span class="nn">scripts.core.fonts</span> <span class="k">import</span> <span class="n">Font</span>
-<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.colours</span> <span class="k">import</span> <span class="n">Colour</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.palette</span> <span class="k">import</span> <span class="n">Palette</span>
@@ -92,7 +93,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_messages_to_show</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">panel_height</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_size</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span>
                                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span><span class="p">))</span>
 
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;OLD_MessageLog initialised.&quot;</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;OLD_MessageLog initialised.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MessageLog.update"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -278,8 +279,7 @@
                             <span class="c1"># note that the next word has already been processed</span>
                             <span class="n">processed_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Message log: Command &quot;</span>
-                            <span class="n">f</span><span class="s2">&quot;received </span><span class="si">{word}</span><span class="s2"> with no following word.&quot;</span><span class="p">))</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Message log: Command received </span><span class="si">{word}</span><span class="s2"> with no following word.&quot;</span><span class="p">)</span>
 
                     <span class="c1"># check for KEYWORDS</span>
                     <span class="k">elif</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">:</span>
@@ -343,7 +343,7 @@
                 <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_default</span>
 
                 <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Process message command: </span><span class="si">{cleaned_command}</span><span class="s2"> Suffix not understood.&quot;</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span> <span class="n">log_string</span><span class="p">))</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
             <span class="c1"># create the surface</span>
             <span class="n">new_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">word_to_affect</span><span class="p">,</span> <span class="n">colour</span><span class="p">)</span>

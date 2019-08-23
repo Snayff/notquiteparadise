@@ -32,11 +32,11 @@
             
   <h1>Source code for scripts.ui_elements.entity_info</h1><div class="highlight"><pre>
 <span></span>
-<span class="kn">from</span> <span class="nn">scripts.events.logging_events</span> <span class="k">import</span> <span class="n">LoggingEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.colours</span> <span class="k">import</span> <span class="n">Colour</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.palette</span> <span class="k">import</span> <span class="n">Palette</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">LoggingEventTypes</span><span class="p">,</span> <span class="n">VisualInfo</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">VisualInfo</span>
 <span class="kn">from</span> <span class="nn">scripts.core.fonts</span> <span class="k">import</span> <span class="n">Font</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.templates.panel</span> <span class="k">import</span> <span class="n">Panel</span>
 
@@ -62,7 +62,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">panel_x</span><span class="p">,</span> <span class="n">panel_y</span><span class="p">,</span> <span class="n">panel_width</span><span class="p">,</span> <span class="n">panel_height</span><span class="p">,</span> <span class="n">panel_background_colour</span><span class="p">,</span> <span class="n">panel_border</span><span class="p">,</span>
                            <span class="n">panel_border_colour</span><span class="p">)</span>
 
-        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">LoggingEvent</span><span class="p">(</span><span class="n">LoggingEventTypes</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;EntityInfo initialised.&quot;</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;EntityInfo initialised.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SelectedEntityInfo.draw"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.entity_info.SelectedEntityInfo.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
