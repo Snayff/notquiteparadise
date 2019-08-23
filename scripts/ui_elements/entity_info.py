@@ -1,9 +1,9 @@
 
-from scripts.events.logging_events import LoggingEvent
-from scripts.global_singletons.event_hub import publisher
+import logging
+
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import LoggingEventTypes, VisualInfo
+from scripts.core.constants import VisualInfo
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 
@@ -29,7 +29,7 @@ class SelectedEntityInfo:
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"EntityInfo initialised."))
+        logging.debug( f"EntityInfo initialised.")
 
     def draw(self, surface):
         """

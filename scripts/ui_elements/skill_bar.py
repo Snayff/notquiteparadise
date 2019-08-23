@@ -1,10 +1,10 @@
+
+import logging
 import pygame
 
-from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import LoggingEventTypes, VisualInfo
+from scripts.core.constants import VisualInfo
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 from scripts.ui_elements.templates.skill_container import SkillContainer
@@ -61,7 +61,7 @@ class SkillBar:
         from scripts.global_singletons.managers import ui_manager
         ui_manager.update_panel_visibility("skill_bar", self, True)
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"SkillBar initialised."))
+        logging.debug( f"SkillBar initialised.")
 
     def draw(self, surface):
         """

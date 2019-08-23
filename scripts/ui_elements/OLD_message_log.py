@@ -1,11 +1,11 @@
+
+import logging
 import pygame
 
-from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import MessageEventTypes, LoggingEventTypes, VisualInfo
+from scripts.core.constants import MessageEventTypes, VisualInfo
 from scripts.core.fonts import Font
-from scripts.events.logging_events import LoggingEvent
 from scripts.ui_elements.templates.panel import Panel
 
 
@@ -68,7 +68,7 @@ class OLD_MessageLog:
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"OLD_MessageLog initialised."))
+        logging.debug( f"OLD_MessageLog initialised.")
 
     def draw(self, surface):
         """
@@ -197,7 +197,7 @@ class OLD_MessageLog:
             message_type(MessageEventTypes):
             message(str):
         """
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"{message} added to message log"))
+        logging.info(f"{message} added to message log")
 
         self.message_list.append((message_type, message))
 
@@ -320,7 +320,7 @@ class OLD_MessageLog:
             extended_tooltip_text = ""
 
             # how long have we been hovering over it?
-            seconds_hovering = self.displayed_hyperlinks[self.index_of_active_hyperlink][2] / GAME_FPS
+            seconds_hovering = self.displayed_hyperlinks[self.index_of_active_hyperlink][2] / VisualInfo.GAME_FPS
 
             # is it long enough?
             if seconds_hovering > self.seconds_before_tooltip:

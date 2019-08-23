@@ -1,6 +1,8 @@
 
-from scripts.core.constants import LoggingEventTypes, EffectTypes
-from scripts.events.logging_events import LoggingEvent
+import logging
+
+from scripts.core.constants import EffectTypes
+
 from scripts.global_singletons.event_hub import publisher
 
 
@@ -20,6 +22,6 @@ class Effect:
         Trigger the effect
         """
         log_string = f"Applying {self.name} skill effect from '{self.owner.name}'."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
 

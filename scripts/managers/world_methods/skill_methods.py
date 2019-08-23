@@ -1,9 +1,10 @@
+import logging
 import random
 from typing import List
 
-from scripts.core.constants import LoggingEventTypes, MessageEventTypes, TargetTags, DamageTypes, \
+from scripts.core.constants import MessageEventTypes, TargetTags, DamageTypes, \
     PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, EffectTypes, SkillShapes
-from scripts.events.logging_events import LoggingEvent
+
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -55,8 +56,8 @@ class SkillMethods:
                 if distance <= skill_range:
                     return True
                 else:
-                    publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Target out of skill range, "
-                    f"range {skill_range} > distance {distance}"))
+                    logging.debug( f"Target out of skill range, "
+                    f"range {skill_range} > distance {distance}")
 
             else:
                 msg = f"You can't afford the cost."
@@ -91,7 +92,7 @@ class SkillMethods:
         target += target_tile.terrain.name  # all tiles have terrain
 
         log_string = f"Checking ({target}) for tags {required_tags}..."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
         tags_checked = {}
 
@@ -102,11 +103,11 @@ class SkillMethods:
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
             log_string = f"-> All tags OK! Tags checked are {tags_checked}"
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
             return True
         else:
             log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
             return False
 
     @staticmethod
@@ -126,10 +127,10 @@ class SkillMethods:
         # Check if cost can be paid
         # TODO - take different resources for cost, not just hp
         if entity.combatant.hp - cost > 0:
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"'{entity.name}' can afford cost."))
+            logging.debug( f"'{entity.name}' can afford cost.")
             return True
         else:
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"'{entity.name}' cannot afford cost."))
+            logging.debug( f"'{entity.name}' cannot afford cost.")
             return False
 
     @staticmethod
@@ -184,7 +185,7 @@ class SkillMethods:
             stat_to_target ():
             attacker ():
         """
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Get to hit scores..."))
+        logging.debug( f"Get to hit scores...")
 
         roll = random.randint(1, 100)
 
@@ -203,7 +204,7 @@ class SkillMethods:
 
         # log the info
         log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
         return mitigated_to_hit_score
 
@@ -231,7 +232,7 @@ class SkillMethods:
         entity.combatant.hp -= cost
 
         log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
     @staticmethod
     def create_shape(shape, size):

@@ -1,8 +1,10 @@
-from scripts.core.constants import LoggingEventTypes, GameEventTypes, GameStates, AfflictionTriggers
+import logging
+
+from scripts.core.constants import GameEventTypes, GameStates, AfflictionTriggers
 from scripts.global_singletons.event_hub import publisher
 from scripts.global_singletons.managers import game_manager, turn_manager, world_manager
 from scripts.events.game_events import ChangeGameStateEvent
-from scripts.events.logging_events import LoggingEvent
+
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
 
@@ -12,7 +14,7 @@ class GameHandler(Subscriber):
 
     def run(self, event):
         log_string = f"{self.name} received {event.type}"
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info( log_string)
 
         if event.type == GameEventTypes.EXIT:
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
@@ -29,5 +31,5 @@ class GameHandler(Subscriber):
             else:
                 log_string = f"-> new game state {event.new_game_state} is same " \
                     f"as current {game_manager.game_state} so state not updated."
-                publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+                logging.info( log_string)
 

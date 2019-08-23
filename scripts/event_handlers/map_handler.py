@@ -1,6 +1,8 @@
-from scripts.core.constants import LoggingEventTypes, MapEventTypes, MessageEventTypes
+
+import logging
+
+from scripts.core.constants import MapEventTypes, MessageEventTypes
 from scripts.event_handlers.pub_sub_hub import Subscriber
-from scripts.events.logging_events import LoggingEvent
 from scripts.events.map_events import TileInteractionEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -19,11 +21,11 @@ class MapHandler(Subscriber):
         """
 
         log_string = f"{self.name} received {event.type}..."
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info( log_string)
 
         if event.type == MapEventTypes.TILE_INTERACTION:
             log_string = f"-> Processing {event.cause} interaction on tiles"
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
             self.process_tile_interaction(event)
 
     @staticmethod
@@ -51,7 +53,7 @@ class MapHandler(Subscriber):
 
                         # log the change
                         log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
-                        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+                        logging.info( log_string)
 
                         # inform player of change
                         from scripts.events.message_events import MessageEvent

@@ -1,12 +1,13 @@
 
-from scripts.core.constants import LoggingEventTypes, EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
+import logging
+
+from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MouseButtons, TILE_SIZE, MessageEventTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.global_singletons.managers import game_manager, ui_manager, world_manager
-from scripts.events.logging_events import LoggingEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
 
@@ -26,7 +27,7 @@ class UiHandler(Subscriber):
 
         # log that event has been received
         log_string = f"{self.name} received {event.topic}:{event.type}"
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
         if event.topic == EventTopics.UI:
             self.process_ui(event)
@@ -59,7 +60,7 @@ class UiHandler(Subscriber):
         """
         ui_manager.entity_info.set_visibility(False)
         log_string = f"Entity info hidden."
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info( log_string)
 
     @staticmethod
     def process_game(event):
@@ -173,4 +174,4 @@ class UiHandler(Subscriber):
         if skill:
             publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
         else:
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Left clicked skill bar but no skill found."))
+            logging.debug( f"Left clicked skill bar but no skill found.")

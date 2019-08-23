@@ -1,12 +1,11 @@
 
 import json
+import logging
 
 from scripts.components.race_dataclass import RaceData
-from scripts.core.constants import LoggingEventTypes, TargetTags, EffectTypes, PrimaryStatTypes, \
+from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes
 from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
-from scripts.events.logging_events import LoggingEvent
-from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction_dataclasses import AfflictionData
 from scripts.skills.skill_dataclasses import SkillData, SkillTreeData
 from scripts.skills.effects.effect_dataclass import EffectData
@@ -33,7 +32,7 @@ class LibraryOfAlexandria:
 
         self.refresh_library_data()
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library initialised."))
+        logging.info( f"Data Library initialised.")
 
     def convert_skills_to_data_classes(self):
         """
@@ -517,7 +516,7 @@ class LibraryOfAlexandria:
             self.actor_template = self.load_values_from_actor_json()
             self.stats = self.load_values_from_stat_json()
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Data Library refreshed."))
+        logging.info( f"Data Library refreshed.")
 
     @staticmethod
     def load_values_from_skill_json():

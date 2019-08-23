@@ -3,16 +3,13 @@ import cProfile
 import io
 import logging
 import pstats
-from dataclasses import field, dataclass
-from typing import List
-
 import pygame
 
-from scripts.core.constants import GameStates, EffectTypes, DamageTypes, PrimaryStatTypes, TargetTags
+from scripts.core.constants import GameStates
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager, start
 from scripts.global_singletons.event_hub import event_hub
-from scripts.core.initialisers import initialise_game, initialise_event_handlers
+from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
 
 # Project Wide to do list...
@@ -43,6 +40,8 @@ def main():
     """
     The container for the game initialisation and game loop
     """
+    # initialise logging
+    initialise_logging()
 
     # initialise profiling
     # TODO - set to turn off for production builds

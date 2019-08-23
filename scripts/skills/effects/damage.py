@@ -1,10 +1,10 @@
-
+import logging
 from typing import List
 
-from scripts.core.constants import LoggingEventTypes, TargetTags, MessageEventTypes, SecondaryStatTypes, \
+from scripts.core.constants import TargetTags, MessageEventTypes, SecondaryStatTypes, \
     HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, EffectTypes
 from scripts.events.entity_events import DieEvent
-from scripts.events.logging_events import LoggingEvent
+
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -121,7 +121,7 @@ class DamageEffect(Effect):
         Returns:
             int: damage to be dealt
         """
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Calculate damage..."))
+        logging.debug( f"Calculate damage...")
         data = effect_data
 
         initial_damage = data.damage  # TODO - add skill dmg modifier to allow dmg growth
@@ -151,7 +151,7 @@ class DamageEffect(Effect):
 
         # log the info
         log_string = f"-> Initial damage:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
         return modified_damage
 

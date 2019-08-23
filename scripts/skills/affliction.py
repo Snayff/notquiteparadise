@@ -1,8 +1,7 @@
+import logging
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers, LoggingEventTypes
-from scripts.events.logging_events import LoggingEvent
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers
 from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
 
 
@@ -32,7 +31,7 @@ class Affliction:
         Trigger all afflictions effects and decrement duration by 1
         """
         log_string = f"Triggering effects in {self.name}"
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info( log_string)
 
         from scripts.global_singletons.managers import world_manager
         data = library.get_affliction_data(self.name)
@@ -47,5 +46,5 @@ class Affliction:
         if data.trigger_event != AfflictionTriggers.PASSIVE:
             self.duration -= 1
             log_string = f"{self.affected_entity.name}`s {self.name} duration reduced to {self.duration}"
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
 

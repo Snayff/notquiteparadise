@@ -1,10 +1,10 @@
+
+import logging
 import pygame
 
-from scripts.events.logging_events import LoggingEvent
-from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
-from scripts.core.constants import LoggingEventTypes, VisualInfo
+from scripts.core.constants import VisualInfo
 from scripts.ui_elements.message_log import MessageLog
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
@@ -38,7 +38,7 @@ class UIManager:
         self.targeting_overlay = None  # type: TargetingOverlay
         self.skill_bar = None # type: SkillBar
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"UIManager initialised."))
+        logging.info( f"UIManager initialised.")
 
     def update(self):
         """

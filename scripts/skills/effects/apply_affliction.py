@@ -1,6 +1,8 @@
+import logging
+
 from scripts.core.constants import TargetTags, AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
-    LoggingEventTypes, EffectTypes
-from scripts.events.logging_events import LoggingEvent
+    EffectTypes
+
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -110,7 +112,7 @@ class ApplyAfflictionEffect(Effect):
             active_duration = active_affliction.duration
 
             log_string = f"{defending_entity.name} already has {effect_data.affliction_name}:{active_duration}..."
-            publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+            logging.info( log_string)
 
             # alter the duration of the current afflictions if the new one will last longer
             if active_duration < modified_duration:
@@ -123,13 +125,13 @@ class ApplyAfflictionEffect(Effect):
                 log_string = f"-> Active duration {active_duration} is greater than or equal to new duration " \
                     f"{modified_duration} so no action taken."
             # log the outcome of the duration comparison
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
 
         # no current afflictions of same type so apply new one
         else:
             log_string = f"Applying {effect_data.affliction_name} afflictions to '{defending_entity.name}' with " \
                 f"duration of {modified_duration}."
-            publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+            logging.info( log_string)
 
             # create the afflictions
             affliction = world_manager.Affliction.create_affliction(effect_data.affliction_name, modified_duration,

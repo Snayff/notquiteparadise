@@ -1,9 +1,8 @@
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers, LoggingEventTypes, \
-    EffectTypes
-from scripts.events.logging_events import LoggingEvent
+import logging
+
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers, EffectTypes
 from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
 from scripts.skills.affliction import Affliction
 from scripts.world.entity import Entity
 
@@ -54,7 +53,7 @@ class AfflictionMethods:
         # if we removed anything log it
         if removed_afflictions:
             log_string = f"Removed the following afflictions: {removed_afflictions}"
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
 
     def create_effect(self, owner, effect_type):
         """

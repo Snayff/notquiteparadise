@@ -1,9 +1,10 @@
+
+import logging
 import pygame
 
-from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, LoggingEventTypes, MouseButtons
+from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, MouseButtons
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitEvent
-from scripts.events.logging_events import LoggingEvent
 from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
 from scripts.global_singletons.data_library import library
@@ -41,7 +42,7 @@ class InputManager:
 
         }
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"InputManager initialised."))
+        logging.info( f"InputManager initialised.")
 
     def update(self):
         """
@@ -57,7 +58,7 @@ class InputManager:
                     input_received += key + ", "
 
         if input_received != "":
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Input received: {input_received}"))
+            logging.debug( f"Input received: {input_received}")
 
         self.process_input()
 

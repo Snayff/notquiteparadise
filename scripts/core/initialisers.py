@@ -1,17 +1,51 @@
 
-import pygame
+import logging
+import time
 
 from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
 from scripts.event_handlers.map_handler import MapHandler
 from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
-from scripts.event_handlers.logging_handler import LoggingHandler
 from scripts.events.message_events import MessageEvent
 from scripts.event_handlers.message_handler import MessageHandler
 from scripts.event_handlers.game_handler import GameHandler
 from scripts.global_singletons.event_hub import publisher, event_hub
 from scripts.global_singletons.managers import game_manager, world_manager, turn_manager, ui_manager
 from scripts.event_handlers.ui_handler import UiHandler
+
+
+def initialise_logging():
+    """
+    Configure logging
+    
+    Logging levels:
+        CRITICAL - A serious error, indicating that may be unable to continue running.
+        ERROR - A more serious problem, has not been able to perform some function.
+        WARNING - An indication that something unexpected happened, but otherwise still working as expected.
+        INFO - Confirmation that things are working as expected.
+        DEBUG - Detailed information, typically of interest only when diagnosing problems
+    
+    File mode options:
+        'r' - open for reading(default)
+        'w' - open for writing, truncating the file first
+        'x' - open for exclusive creation, failing if the file already exists
+        'a' - open for writing, appending to the end of the file if it exists
+    
+    """
+    log_file_name = "logs/" + "game.log"
+    log_level = logging.DEBUG
+    file_mode = "w"
+
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
+
+    logging.basicConfig(filename=log_file_name, filemode=file_mode, level=log_level,
+                        format="%(asctime)s| %(levelname)-8s| %(message)s")  # 8 adds space for 8 characters (CRITICAL)
+
+    # format in uk time
+    logging.Formatter.converter = time.gmtime
+
+    logging.info("test")
 
 
 def initialise_game():
@@ -52,9 +86,6 @@ def initialise_event_handlers():
 
     message_handler = MessageHandler(event_hub)
     message_handler.subscribe(EventTopics.MESSAGE)
-
-    logging_handler = LoggingHandler(event_hub)
-    logging_handler.subscribe(EventTopics.LOGGING)
 
     entity_handler = EntityHandler(event_hub)
     entity_handler.subscribe(EventTopics.ENTITY)

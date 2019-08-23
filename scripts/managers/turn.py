@@ -1,6 +1,7 @@
-from scripts.core.constants import LoggingEventTypes, GameStates
+import logging
+
+from scripts.core.constants import GameStates
 from scripts.events.game_events import ChangeGameStateEvent
-from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 
 
@@ -21,13 +22,13 @@ class TurnManager:
         self.time = 0
         self.time_of_last_turn = 0
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"TurnManager initialised."))
+        logging.info( f"TurnManager initialised.")
 
     def build_new_turn_queue(self):
         """
         Build a new turn queue for all entities
         """
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Building a new turn queue..."))
+        logging.info( f"Building a new turn queue...")
 
         # create a turn queue from the entities list
         from scripts.global_singletons.managers import world_manager
@@ -45,7 +46,7 @@ class TurnManager:
         for entity, time in self.turn_queue.items():
             queue.append((entity.name, time))
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"-> Queue built. {queue}"))
+        logging.debug( f"-> Queue built. {queue}")
 
     def end_turn(self, spent_time):
         """
@@ -54,7 +55,7 @@ class TurnManager:
         Args:
             spent_time:
         """
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"Ending {self.turn_holder.name}`s turn..."))
+        logging.debug( f"Ending {self.turn_holder.name}`s turn...")
 
         entity = self.turn_holder
 
@@ -68,7 +69,7 @@ class TurnManager:
         Proceed to the next turn setting the next entity to act as the turn holder.
         """
         from scripts.global_singletons.managers import game_manager
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"Moving to the next turn..."))
+        logging.info( f"Moving to the next turn...")
 
         if not self.turn_queue:
             self.build_new_turn_queue()
@@ -91,5 +92,4 @@ class TurnManager:
         elif game_manager.game_state != GameStates.ENEMY_TURN:
             publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG,
-                                               f"-> It is now '{self.turn_holder.name}'`s turn."))
+        logging.debug(f"-> It is now '{self.turn_holder.name}'`s turn.")
