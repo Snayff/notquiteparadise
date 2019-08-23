@@ -308,6 +308,7 @@ class EntityMethods:
                        actor=actor_component, player=player, icon=icon)
 
         actor.combatant.hp = actor.combatant.secondary_stats.max_hp
+        actor.combatant.stamina = actor.combatant.secondary_stats.max_stamina
 
         if player:
             self.add_player(tile_x, tile_y, actor)

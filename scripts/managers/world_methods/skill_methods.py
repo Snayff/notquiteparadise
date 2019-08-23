@@ -116,21 +116,21 @@ class SkillMethods:
         Check if entity can afford the resource cost
 
         Args:
-            entity ():
-            resource ():
-            cost ():
+            entity (Entity):
+            resource (SecondaryStatTypes): HP or Stamina
+            cost (int):
 
         Returns:
             bool: True for success, False otherwise.
         """
 
         # Check if cost can be paid
-        # TODO - take different resources for cost, not just hp
-        if entity.combatant.hp - cost > 0:
-            logging.debug( f"'{entity.name}' can afford cost.")
+        value = getattr(entity.combatant, resource.name.lower())
+        if value - cost >= 0:
+            logging.debug(f"'{entity.name}' can afford cost.")
             return True
         else:
-            logging.debug( f"'{entity.name}' cannot afford cost.")
+            logging.debug(f"'{entity.name}' cannot afford cost.")
             return False
 
     @staticmethod
@@ -228,10 +228,18 @@ class SkillMethods:
     def pay_resource_cost(entity, resource, cost):
         """
         Remove the resource cost from the using entity
-        """
-        entity.combatant.hp -= cost
 
-        log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
+        Args:
+            entity (Entity):
+            resource (SecondaryStatTypes): HP or STAMINA
+            cost (int):
+        """
+        resource_value = getattr(entity.combatant, resource.name.lower())
+        resource_left = resource_value - cost
+
+        setattr(entity.combatant, resource.name.lower(), resource_left)
+
+        log_string = f"'{entity.name}' paid {cost} {resource.name} and has {resource_left} left."
         logging.debug(log_string)
 
     @staticmethod

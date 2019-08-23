@@ -242,6 +242,10 @@ class LibraryOfAlexandria:
         for value in SkillShapes:
             self.recursive_replace(self.skills, "shape", value.name.lower(), value)
 
+        # SkillTree:Skill:resource_type
+        for value in SecondaryStatTypes:
+            self.recursive_replace(self.skills, "resource_type", value.name.lower(), value)
+
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """
         Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
