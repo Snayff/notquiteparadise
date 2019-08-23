@@ -3,7 +3,7 @@ import logging
 
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import VisualInfo
+from scripts.core.constants import VisualInfo, SecondaryStatTypes, PrimaryStatTypes
 from scripts.core.fonts import Font
 from scripts.ui_elements.templates.panel import Panel
 
@@ -67,31 +67,51 @@ class SelectedEntityInfo:
         # TODO - move content out of draw
         header_text.append(f"{entity.name.capitalize()}")
         header_text.append(f"Current Health: {entity.combatant.hp}")
+        header_text.append(f"Current Stamina: {entity.combatant.stamina}")
 
         first_section_text.append(f"PRIMARY")
-        first_section_text.append(f"Vigour: {entity.combatant.primary_stats.vigour}")
-        first_section_text.append(f"Clout: {entity.combatant.primary_stats.clout}")
-        first_section_text.append(f"Skullduggery: {entity.combatant.primary_stats.skullduggery}")
-        first_section_text.append(f"Bustle: {entity.combatant.primary_stats.bustle}")
-        first_section_text.append(f"Exactitude: {entity.combatant.primary_stats.exactitude}")
+
+        p_stats = entity.combatant.primary_stats
+
+        for stat in PrimaryStatTypes:
+            try:
+                stat_value = getattr(p_stats, stat.name.lower())
+                name = stat.name.title()
+                name = name.replace("_", " ")
+
+                first_section_text.append(f"{name}: {stat_value}")
+
+            except AttributeError:
+                pass
 
         second_section_text_header = f"SECONDARY"
-        second_section_column_one_text.append(f"Offense:")
-        second_section_column_one_text.append(f"Accuracy: {entity.combatant.secondary_stats.accuracy}")
 
-        second_section_column_two_text.append(f"Defence:")
-        # second_section_column_two_text.append(f"Resist blunt: {entity.combatant.secondary_stats.resist_blunt}")
-        # second_section_column_two_text.append(f"Resist piece: {entity.combatant.secondary_stats.resist_pierce}")
-        # second_section_column_two_text.append(f"Resist elemental: "
-        #                                       f"{entity.combatant.secondary_stats.resist_elemental}")
+        s_stats = entity.combatant.secondary_stats
+        counter = 0
+
+        for stat in SecondaryStatTypes:
+            try:
+                stat_value = getattr(s_stats, stat.name.lower())
+                name = stat.name.title()
+                name = name.replace("_", " ")
+
+                if counter % 2 == 0:
+                    second_section_column_one_text.append(f"{name}: {stat_value}")
+                else:
+                    second_section_column_two_text.append(f"{name}: {stat_value}")
+
+                counter += 1
+
+            except AttributeError:
+                pass
 
         from scripts.global_singletons.managers import world_manager
         afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)
         affliction_names = []
         for affliction in afflictions:
             affliction_names.append(affliction.name)
-        second_section_column_two_text.append(f"Afflicted by: "
-                                              f"{affliction_names}")
+        second_section_column_one_text.append(f"")
+        second_section_column_one_text.append(f"Afflicted by: {affliction_names}")
 
         # panel background
         self.panel.draw_background()
