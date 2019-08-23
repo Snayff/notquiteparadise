@@ -1,8 +1,7 @@
+
+import logging
 import tcod
 
-from scripts.core.constants import TILE_SIZE, LoggingEventTypes
-from scripts.events.logging_events import LoggingEvent
-from scripts.global_singletons.event_hub import publisher
 from scripts.managers.world_methods.affliction_methods import AfflictionMethods
 from scripts.managers.world_methods.entity_methods import EntityMethods
 from scripts.managers.world_methods.fov_methods import FOVMethods
@@ -31,7 +30,7 @@ class WorldManager:
         self.player_fov_map = None  # type: tcod.map.Map
         self.player_fov_is_dirty = False
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"WorldManager initialised."))
+        logging.info( f"WorldManager initialised.")
 
     def update(self):
         """

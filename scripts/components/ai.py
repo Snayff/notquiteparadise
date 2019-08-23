@@ -1,12 +1,14 @@
+import logging
+
 import numpy
 
-from scripts.core.constants import LoggingEventTypes, MessageEventTypes
+from scripts.core.constants import MessageEventTypes
 from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
 from scripts.global_singletons.managers import world_manager
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import EndTurnEvent
-from scripts.events.logging_events import LoggingEvent
+
 from scripts.events.message_events import MessageEvent
 
 
@@ -23,11 +25,11 @@ class BasicMonster:
         target_tile_x, target_tile_y = entity.x + direction_x, entity.y + direction_y
 
         log_string = f"'{entity.name}' is starting to take their turn..."
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info(log_string)
 
         # !!!! TESTING ONLY!!!!!!!
         publisher.publish(EndTurnEvent(10))  # TODO -remove when  ai needs to act
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"-> Passed their turn."))
+        logging.info(f"-> Passed their turn.")
         return
 
         # FIXME - change to using the new list format
@@ -39,13 +41,13 @@ class BasicMonster:
 
             if distance_to_target <= attack_range:
                 log_string = f"-> '{entity.name}' decided to use {skill_value.name}."
-                publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+                logging.debug(log_string)
 
                 publisher.publish(UseSkillEvent(entity, (target_tile_x, target_tile_y), skill_value))
                 return None  # stop further processing in function
 
         log_string = f"-> '{entity.name}' found no possible attack."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
         # we can't attack so try to move closer
         # check target tile is valid
@@ -78,7 +80,7 @@ class BasicMonster:
         target = world_manager.player
 
         log_string = f"{self.owner.name} chose '{target.name}' as a target."
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info(log_string)
         return target
 
     def get_target_direction(self, target):

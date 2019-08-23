@@ -1,3 +1,4 @@
+import logging
 import math
 import pygame
 import tcod
@@ -8,8 +9,8 @@ from scripts.components.combatant import Combatant
 from scripts.components.homeland import Homeland
 from scripts.components.race import Race
 from scripts.components.savvy import Savvy
-from scripts.core.constants import LoggingEventTypes, TILE_SIZE
-from scripts.events.logging_events import LoggingEvent
+from scripts.core.constants import TILE_SIZE
+
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
@@ -110,7 +111,7 @@ class EntityMethods:
 
         """
         log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
         direction_x = target_entity.x - start_entity.x
         direction_y = target_entity.y - start_entity.y
@@ -125,12 +126,12 @@ class EntityMethods:
         if not (tile_is_blocked or self.get_blocking_entity_at_location(start_entity.x + direction_x,
                                                                           start_entity.y + direction_y)):
             log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
 
             return direction_x, direction_y
         else:
             log_string = f"{start_entity.name} did NOT find a direct path to {target_entity.name}."
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
 
             return start_entity.x, start_entity.y
 
@@ -153,7 +154,7 @@ class EntityMethods:
         target = target_entity
 
         log_string = f"{entity_to_move.name} is looking for a path to {target.name} with a*"
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+        logging.debug(log_string)
 
         # Create a FOV map that has the dimensions of the map
         fov = tcod.map_new(game_map.width, game_map.height)
@@ -196,14 +197,14 @@ class EntityMethods:
             log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
             log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},{y}] in direction "\
                 f"[{direction_x},{direction_y}]"
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string2))
+            logging.debug(log_string)
+            logging.debug( log_string2)
 
         else:
             # no path found return no movement direction
             direction_x, direction_y = 0, 0
             log_string = f"{entity_to_move.name} did NOT find an a* path to {target.name}."
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
 
         # Delete the path to free memory
         tcod.path_delete(my_path)

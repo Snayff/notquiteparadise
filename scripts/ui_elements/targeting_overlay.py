@@ -1,10 +1,11 @@
+
+import logging
 import pygame
 
-from scripts.events.logging_events import LoggingEvent
+
 from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import TILE_SIZE, LoggingEventTypes, SkillShapes
+from scripts.core.constants import TILE_SIZE,  SkillShapes
 from scripts.core.fonts import Font
 from scripts.skills.skill import Skill
 
@@ -33,7 +34,7 @@ class TargetingOverlay:
 
         self.is_dirty = True
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"TargetingOverlay initialised."))
+        logging.debug( f"TargetingOverlay initialised.")
 
     def draw(self, surface):
         """

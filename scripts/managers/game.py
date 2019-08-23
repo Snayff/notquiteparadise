@@ -1,8 +1,8 @@
+import logging
+
 import pygame
 
-from scripts.core.constants import GameStates, LoggingEventTypes, VisualInfo
-from scripts.events.logging_events import LoggingEvent
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.constants import GameStates, VisualInfo
 
 
 class GameManager:
@@ -14,7 +14,7 @@ class GameManager:
         self.previous_game_state = GameStates.GAME_INITIALISING
         self.internal_clock = pygame.time.Clock()
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"GameManager initialised."))
+        logging.info( f"GameManager initialised.")
 
     def update(self):
         """
@@ -35,4 +35,4 @@ class GameManager:
         self.game_state = new_game_state
 
         log_string = f"Game_state updated from {self.previous_game_state} to {self.game_state}"
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info( log_string)

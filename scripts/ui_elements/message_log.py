@@ -1,8 +1,9 @@
-from typing import Dict, Tuple
 
-from scripts.core.constants import MessageEventTypes, LoggingEventTypes, VisualInfo
+import logging
+
+from typing import Dict, Tuple
+from scripts.core.constants import MessageEventTypes, VisualInfo
 from scripts.core.fonts import Font
-from scripts.events.logging_events import LoggingEvent
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
@@ -59,7 +60,7 @@ class MessageLog:
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, f"OLD_MessageLog initialised."))
+        logging.debug( f"OLD_MessageLog initialised.")
 
     def update(self):
         """
@@ -245,8 +246,7 @@ class MessageLog:
                             # note that the next word has already been processed
                             processed_indices.append(word_count + 1)
                         else:
-                            publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, f"Message log: Command "
-                            f"received {word} with no following word."))
+                            logging.warning(f"Message log: Command received {word} with no following word.")
 
                     # check for KEYWORDS
                     elif word.lower() in self.keywords:
@@ -310,7 +310,7 @@ class MessageLog:
                 colour = self.palette.text_default
 
                 log_string = f"Process message command: {cleaned_command} Suffix not understood."
-                publisher.publish(LoggingEvent(LoggingEventTypes.WARNING, log_string))
+                logging.warning(log_string)
 
             # create the surface
             new_surface = self.font.render(word_to_affect, colour)

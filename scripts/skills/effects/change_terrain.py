@@ -1,5 +1,5 @@
-from scripts.core.constants import MessageEventTypes, LoggingEventTypes, TargetTags, EffectTypes
-from scripts.events.logging_events import LoggingEvent
+from scripts.core.constants import MessageEventTypes, EffectTypes
+
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher

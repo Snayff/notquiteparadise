@@ -1,3 +1,4 @@
+
 from enum import Enum, auto
 
 TILE_SIZE = 64
@@ -48,7 +49,6 @@ class EventTopics(Enum):
     """
     GAME = auto()
     MESSAGE = auto()
-    LOGGING = auto()
     ENTITY = auto()
     UI = auto()
     MAP = auto()
@@ -72,23 +72,6 @@ class MessageEventTypes(Enum):
     """Types of Message Events"""
     BASIC = auto()
     SYSTEM = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
-
-
-class LoggingEventTypes(Enum):
-    """Types of Logging Events"""
-
-    CRITICAL = auto()  # A serious error, indicating that may be unable to continue running.
-    ERROR = auto()  # A more serious problem, has not been able to perform some function.
-    WARNING = auto()  # An indication that something unexpected happened, but otherwise still working as expected.
-    INFO = auto()  # Confirmation that things are working as expected.
-    DEBUG = auto()  # Detailed information, typically of interest only when diagnosing problems
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

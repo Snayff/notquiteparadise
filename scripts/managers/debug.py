@@ -1,8 +1,9 @@
-from scripts.events.logging_events import LoggingEvent
-from scripts.global_singletons.event_hub import publisher
+
+import logging
+
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
-from scripts.core.constants import TILE_SIZE, LoggingEventTypes
+from scripts.core.constants import TILE_SIZE
 from scripts.core.fonts import Font
 
 
@@ -22,7 +23,7 @@ class DebugManager:
 
         self.font = Font().debug
 
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, f"DebugManager initialised."))
+        logging.info( f"DebugManager initialised.")
 
     def update(self):
         """

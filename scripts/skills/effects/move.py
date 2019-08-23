@@ -1,3 +1,5 @@
+import logging
+
 from scripts.core.constants import EffectTypes
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -48,6 +50,4 @@ class MoveEffect(Effect):
         # log the movement
         log_string = f"{entity_to_move.name} moved from [{start_pos_x},{start_pos_y}] to " \
             f"[{entity_to_move.x},{entity_to_move.y}]"
-        from scripts.events.logging_events import LoggingEvent
-        from scripts.core.constants import LoggingEventTypes
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info( log_string)

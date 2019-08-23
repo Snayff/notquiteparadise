@@ -1,11 +1,12 @@
-from scripts.core.constants import EntityEventTypes, LoggingEventTypes, MessageEventTypes
+import logging
+
+from scripts.core.constants import EntityEventTypes, MessageEventTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.global_singletons.managers import world_manager, turn_manager
 from scripts.events.game_events import EndTurnEvent
-from scripts.events.logging_events import LoggingEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber, Event
 
 
@@ -22,27 +23,27 @@ class EntityHandler(Subscriber):
         """
 
         log_string = f"{self.name} received {event.type}..."
-        publisher.publish(LoggingEvent(LoggingEventTypes.INFO, log_string))
+        logging.info( log_string)
 
         if event.type == EntityEventTypes.MOVE:
             log_string = f"-> Processing '{event.entity.name}'`s move."
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
             self.process_move(event)
 
         if event.type == EntityEventTypes.SKILL:
             log_string = f"-> Processing '{event.entity.name}'`s skill: {event.skill.name}."
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
             self.process_skill(event)
 
         if event.type == EntityEventTypes.DIE:
             log_string = f"-> Processing '{event.dying_entity.name}'`s death."
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
             self.process_die(event)
 
         if event.type == EntityEventTypes.LEARN:
             log_string = f"-> Processing '{event.entity.name}'`s learning of {event.skill_name} from " \
                 f"{event.skill_tree_name}."
-            publisher.publish(LoggingEvent(LoggingEventTypes.DEBUG, log_string))
+            logging.debug(log_string)
             self.process_learn(event)
 
     @staticmethod

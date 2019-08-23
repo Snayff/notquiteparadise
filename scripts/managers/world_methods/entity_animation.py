@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from scripts.core.constants import TILE_SIZE, GAME_FPS, ENTITY_SPRITE_FRAME_DURATION, VisualInfo
+from scripts.core.constants import TILE_SIZE, VisualInfo
 
 
 class EntityAnimation:
@@ -20,7 +20,7 @@ class EntityAnimation:
         # update entity sprites, if they're visible to player
         for entity in self.manager.entities:
             if game_map.is_tile_visible_to_player(entity.x, entity.y):
-                time_increment = 1 / GAME_FPS
+                time_increment = 1 / VisualInfo.GAME_FPS
                 entity.delay_until_idle_animation -= time_increment
 
                 #  if we aren't in the still sprite

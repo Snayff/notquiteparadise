@@ -1,7 +1,7 @@
-from scripts.core.constants import LoggingEventTypes
-from scripts.global_singletons.event_hub import publisher
+import logging
+
 from scripts.skills.skill import Skill
-from scripts.events.logging_events import LoggingEvent
+
 
 
 class Actor:
@@ -68,6 +68,6 @@ class Actor:
                 return skill
 
         log_string = f"Looked in {self.owner.name}`s known skills to find {skill_name}, but found nothing. "
-        publisher.publish(LoggingEvent(LoggingEventTypes.ERROR, log_string))
+        logging.error(log_string)
 
         return None
