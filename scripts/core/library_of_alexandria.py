@@ -213,6 +213,14 @@ class LibraryOfAlexandria:
             # Effects:stat_to_target
             for value in PrimaryStatTypes:
                 self.recursive_replace(current_list, "stat_to_target", value.name.lower(), value)
+            for value in SecondaryStatTypes:
+                self.recursive_replace(current_list, "stat_to_target", value.name.lower(), value)
+
+            # Effects:stat_to_affect
+            for value in PrimaryStatTypes:
+                self.recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
+            for value in SecondaryStatTypes:
+                self.recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
 
             # Effects:new_terrain
             # plans to remove terrain from internal so dont update for all values

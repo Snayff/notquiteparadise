@@ -28,8 +28,8 @@
         "effects": [
             {
                 "effect_type": "affect_stat",
-                "stat_to_affect": "resist_mundane" ,
-                "amount": 25
+                "stat_to_affect": "bustle" ,
+                "amount": -25
             }
         ]
     }
