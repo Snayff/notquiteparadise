@@ -33,8 +33,9 @@
   <h1>Source code for scripts.managers.world_methods.affliction_methods</h1><div class="highlight"><pre>
 <span></span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">EffectTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">AfflictionLifespan</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.skills.affliction</span> <span class="k">import</span> <span class="n">Affliction</span>
 <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
@@ -146,7 +147,7 @@
 <span class="sd">            entity (Entity):</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list: list of Afflictions</span>
+<span class="sd">            List[Affliction]: list of Afflictions</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entitys_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -185,23 +186,25 @@
 
         <span class="c1"># loop all afflictions effects in all afflictions and return specified type</span>
         <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_data</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">effects</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">effect_type</span> <span class="o">==</span> <span class="n">effect_type</span><span class="p">:</span>
-                        <span class="n">affliction_effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_effect_data</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">effect_type</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">affliction_effects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">affliction_effects</span></div>
 
-<div class="viewcode-block" id="AfflictionMethods.get_stat_modifier_from_afflictions_on_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_modifier_from_afflictions_on_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_stat_modifier_from_afflictions_on_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">stat</span><span class="p">):</span>
+<div class="viewcode-block" id="AfflictionMethods.get_stat_change_from_afflictions_on_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_change_from_afflictions_on_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_stat_change_from_afflictions_on_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">stat</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the modifier for a specified stat from all applied afflictions on an entity</span>
+<span class="sd">        Get the change for a specified stat from all applied afflictions on an entity</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            entity (Entity):</span>
 <span class="sd">            stat (): primary or secondary stat</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Amount of stat change</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">modifier</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">stat_change</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">affect_stat_effects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_affliction_effects_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">EffectTypes</span><span class="o">.</span><span class="n">AFFECT_STAT</span><span class="p">)</span>
 
@@ -209,9 +212,22 @@
         <span class="k">if</span> <span class="n">affect_stat_effects</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">affect_stat_effects</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">effect</span><span class="o">.</span><span class="n">stat_to_affect</span> <span class="o">==</span> <span class="n">stat</span><span class="p">:</span>
-                    <span class="n">modifier</span> <span class="o">+=</span> <span class="n">effect</span><span class="o">.</span><span class="n">amount</span>
+                    <span class="n">stat_change</span> <span class="o">+=</span> <span class="n">effect</span><span class="o">.</span><span class="n">amount</span>
 
-        <span class="k">return</span> <span class="n">modifier</span></div></div>
+        <span class="k">return</span> <span class="n">stat_change</span></div>
+
+<div class="viewcode-block" id="AfflictionMethods.reduce_affliction_durations_on_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.reduce_affliction_durations_on_entity">[docs]</a>    <span class="k">def</span> <span class="nf">reduce_affliction_durations_on_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reduce duration of all non-permanent afflictions on an entity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entitys_afflictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_afflictions_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">entitys_afflictions</span><span class="p">:</span>
+            <span class="c1"># reduce duration on all effects if they&#39;re not meant to be permanent</span>
+            <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">!=</span> <span class="n">AfflictionLifespan</span><span class="o">.</span><span class="n">PERMANENT</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction.affected_entity.name}</span><span class="s2">`s </span><span class="si">{affliction.name}</span><span class="s2"> duration reduced to &quot;</span> \
+                             <span class="n">f</span><span class="s2">&quot; </span><span class="si">{affliction.duration}</span><span class="s2">&quot;</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

@@ -74,12 +74,19 @@
         <span class="c1"># get the next entity in the queue</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">turn_holder</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">turn_queue</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">turn_queue</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
 
+        <span class="c1"># update game state based on turn holder</span>
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">game_manager</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_holder</span><span class="o">.</span><span class="n">player</span><span class="p">:</span>
+            <span class="n">game_manager</span><span class="o">.</span><span class="n">update_game_state</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">PLAYER_TURN</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">game_manager</span><span class="o">.</span><span class="n">update_game_state</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">ENEMY_TURN</span><span class="p">)</span>
+
         <span class="c1"># log result</span>
         <span class="n">queue</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_queue</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;-&gt; Queue built. </span><span class="si">{queue}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;-&gt; Queue built. </span><span class="si">{queue}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TurnManager.end_turn"><a class="viewcode-back" href="../../../managers.html#scripts.managers.turn.TurnManager.end_turn">[docs]</a>    <span class="k">def</span> <span class="nf">end_turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spent_time</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

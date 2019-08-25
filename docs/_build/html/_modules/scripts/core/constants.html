@@ -31,8 +31,7 @@
           <div class="body" role="main">
             
   <h1>Source code for scripts.core.constants</h1><div class="highlight"><pre>
-<span></span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 
 <span class="n">TILE_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 
@@ -170,7 +169,6 @@
     <span class="n">NO_ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">OUT_OF_BOUNDS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
-
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
@@ -183,10 +181,11 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Damage types</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">PIERCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">BLUNT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">ELEMENTAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">FIRE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CHEMICAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ASTRAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">COLD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MUNDANE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
@@ -233,11 +232,16 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Secondary stats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">RESIST_BLUNT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">RESIST_PIERCE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">RESIST_ELEMENTAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">MAX_HP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MAX_STAMINA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">HP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">STAMINA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">ACCURACY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_BURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_CHEMICAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_ASTRAL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_COLD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RESIST_MUNDANE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
@@ -269,8 +273,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO - externalise the values</span>
     <span class="n">GRAZE</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">HIT</span> <span class="o">=</span> <span class="mi">100</span>
-    <span class="n">CRIT</span> <span class="o">=</span> <span class="mi">130</span></div>
+    <span class="n">HIT</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">CRIT</span> <span class="o">=</span> <span class="mi">20</span></div>
 
 
 <div class="viewcode-block" id="HitModifiers"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.HitModifiers">[docs]</a><span class="k">class</span> <span class="nc">HitModifiers</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -319,12 +323,26 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    When to trigger the afflictions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">PASSIVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># always applying effects</span>
+    <span class="n">PASSIVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># always applying effects, overrides duration</span>
     <span class="n">END_TURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply at end of round turn</span>
     <span class="n">MOVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply if afflicted entity moves</span>
     <span class="n">DEAL_DAMAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply if afflicted entity deals damage</span>
     <span class="n">END_ROUND</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply at the end of the round</span>
     <span class="n">ACTION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply when an action is taken</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="AfflictionLifespan"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.AfflictionLifespan">[docs]</a><span class="k">class</span> <span class="nc">AfflictionLifespan</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Identify if the affliction duration should be reduced or not</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PERMANENT</span> <span class="o">=</span> <span class="mi">999</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
@@ -349,6 +367,7 @@
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
     <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
+
 
 <div class="viewcode-block" id="InputModes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.InputModes">[docs]</a><span class="k">class</span> <span class="nc">InputModes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">MOUSE_AND_KB</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>

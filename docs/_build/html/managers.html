@@ -445,8 +445,7 @@
 <dt id="scripts.managers.world.WorldManager.update">
 <code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world.html#WorldManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world.WorldManager.update" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
-<dt>Update the world manager:</dt><dd><p>player fov
-cleanse expired afflictions</p>
+<dt>Update the world manager:</dt><dd><p>player fov</p>
 </dd>
 </dl>
 </dd></dl>
@@ -564,15 +563,15 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>list of Afflictions</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-odd"><p>List[<a class="reference internal" href="skills.html#scripts.skills.affliction.Affliction" title="scripts.skills.affliction.Affliction">Affliction</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_modifier_from_afflictions_on_entity">
-<code class="descname">get_stat_modifier_from_afflictions_on_entity</code><span class="sig-paren">(</span><em>entity</em>, <em>stat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/affliction_methods.html#AfflictionMethods.get_stat_modifier_from_afflictions_on_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_modifier_from_afflictions_on_entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the modifier for a specified stat from all applied afflictions on an entity</p>
+<dt id="scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_change_from_afflictions_on_entity">
+<code class="descname">get_stat_change_from_afflictions_on_entity</code><span class="sig-paren">(</span><em>entity</em>, <em>stat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/affliction_methods.html#AfflictionMethods.get_stat_change_from_afflictions_on_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_change_from_afflictions_on_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the change for a specified stat from all applied afflictions on an entity</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -580,7 +579,19 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <li><p><strong>(</strong><strong>)</strong> (<em>stat</em>) – primary or secondary stat</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Amount of stat change</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_methods.affliction_methods.AfflictionMethods.reduce_affliction_durations_on_entity">
+<code class="descname">reduce_affliction_durations_on_entity</code><span class="sig-paren">(</span><em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/affliction_methods.html#AfflictionMethods.reduce_affliction_durations_on_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.affliction_methods.AfflictionMethods.reduce_affliction_durations_on_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce duration of all non-permanent afflictions on an entity.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1172,10 +1183,14 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt id="scripts.managers.world_methods.skill_methods.SkillMethods.calculate_to_hit_score">
 <em class="property">static </em><code class="descname">calculate_to_hit_score</code><span class="sig-paren">(</span><em>defender</em>, <em>skill_accuracy</em>, <em>stat_to_target</em>, <em>attacker=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/skill_methods.html#SkillMethods.calculate_to_hit_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.skill_methods.SkillMethods.calculate_to_hit_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
-:param defender ():
-:param skill_accuracy ():
-:param stat_to_target ():
-:param attacker ():</p>
+:param defender:
+:type defender: Entity
+:param skill_accuracy:
+:type skill_accuracy: int
+:param stat_to_target:
+:type stat_to_target: PrimaryStatTypes
+:param attacker:
+:type attacker: Entity</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -1185,9 +1200,9 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>(</strong><strong>)</strong> (<em>cost</em>) – </p></li>
-<li><p><strong>(</strong><strong>)</strong> – </p></li>
-<li><p><strong>(</strong><strong>)</strong> – </p></li>
+<li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+<li><p><strong>resource</strong> (<a class="reference internal" href="core.html#scripts.core.constants.SecondaryStatTypes" title="scripts.core.constants.SecondaryStatTypes"><em>SecondaryStatTypes</em></a>) – HP or Stamina</p></li>
+<li><p><strong>cost</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1308,6 +1323,15 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt id="scripts.managers.world_methods.skill_methods.SkillMethods.pay_resource_cost">
 <em class="property">static </em><code class="descname">pay_resource_cost</code><span class="sig-paren">(</span><em>entity</em>, <em>resource</em>, <em>cost</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/skill_methods.html#SkillMethods.pay_resource_cost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.skill_methods.SkillMethods.pay_resource_cost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the resource cost from the using entity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
+<li><p><strong>resource</strong> (<a class="reference internal" href="core.html#scripts.core.constants.SecondaryStatTypes" title="scripts.core.constants.SecondaryStatTypes"><em>SecondaryStatTypes</em></a>) – HP or STAMINA</p></li>
+<li><p><strong>cost</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

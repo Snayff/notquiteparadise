@@ -124,8 +124,8 @@
             <span class="n">target</span> <span class="o">+=</span> <span class="s2">&quot;no aspect, &quot;</span>
         <span class="n">target</span> <span class="o">+=</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># all tiles have terrain</span>
 
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Checking (</span><span class="si">{target}</span><span class="s2">) for tags </span><span class="si">{required_tags}</span><span class="s2">...&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
+        <span class="c1"># log_string = f&quot;Checking ({target}) for tags {required_tags}...&quot;</span>
+        <span class="c1"># logging.debug(log_string)</span>
 
         <span class="n">tags_checked</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -135,12 +135,12 @@
 
         <span class="c1"># if all tags came back true return true</span>
         <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tags_checked</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; All tags OK! Tags checked are </span><span class="si">{tags_checked}</span><span class="s2">&quot;</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
+            <span class="c1"># log_string = f&quot;-&gt; All tags OK! Tags checked are {tags_checked}&quot;</span>
+            <span class="c1"># logging.debug(log_string)</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Some tags WRONG! Tags checked are </span><span class="si">{tags_checked}</span><span class="s2">&quot;</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
+            <span class="c1"># log_string = f&quot;-&gt; Some tags WRONG! Tags checked are {tags_checked}&quot;</span>
+            <span class="c1"># logging.debug(log_string)</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="SkillMethods.can_afford_cost"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.can_afford_cost">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -149,21 +149,21 @@
 <span class="sd">        Check if entity can afford the resource cost</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            entity ():</span>
-<span class="sd">            resource ():</span>
-<span class="sd">            cost ():</span>
+<span class="sd">            entity (Entity):</span>
+<span class="sd">            resource (SecondaryStatTypes): HP or Stamina</span>
+<span class="sd">            cost (int):</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            bool: True for success, False otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Check if cost can be paid</span>
-        <span class="c1"># TODO - take different resources for cost, not just hp</span>
-        <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">hp</span> <span class="o">-</span> <span class="n">cost</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; can afford cost.&quot;</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">-</span> <span class="n">cost</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; can afford cost.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; cannot afford cost.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; cannot afford cost.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="SkillMethods.get_hit_type"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_hit_type">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -213,16 +213,16 @@
 <span class="sd">        Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.</span>
 <span class="sd">        Args:</span>
 
-<span class="sd">            defender ():</span>
-<span class="sd">            skill_accuracy ():</span>
-<span class="sd">            stat_to_target ():</span>
-<span class="sd">            attacker ():</span>
+<span class="sd">            defender (Entity):</span>
+<span class="sd">            skill_accuracy (int):</span>
+<span class="sd">            stat_to_target (PrimaryStatTypes):</span>
+<span class="sd">            attacker (Entity):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;Get to hit scores...&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Get to hit scores...&quot;</span><span class="p">)</span>
 
-        <span class="n">roll</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">roll</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
-        <span class="c1"># check if attacker provided</span>
+        <span class="c1"># if attacker get their accuracy</span>
         <span class="k">if</span> <span class="n">attacker</span><span class="p">:</span>
             <span class="n">attacker_value</span> <span class="o">=</span> <span class="n">attacker</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">accuracy</span>
         <span class="k">else</span><span class="p">:</span>
@@ -230,10 +230,10 @@
 
         <span class="n">modified_to_hit_score</span> <span class="o">=</span> <span class="n">attacker_value</span> <span class="o">+</span> <span class="n">skill_accuracy</span> <span class="o">+</span> <span class="n">roll</span>
 
-        <span class="c1"># TODO -  mitigate to hit using stat to target</span>
-
         <span class="c1"># mitigate the to hit</span>
-        <span class="n">mitigated_to_hit_score</span> <span class="o">=</span> <span class="n">modified_to_hit_score</span>
+        <span class="n">defender_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">defender</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">primary_stats</span><span class="p">,</span> <span class="n">stat_to_target</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+        <span class="n">mitigated_to_hit_score</span> <span class="o">=</span> <span class="n">modified_to_hit_score</span> <span class="o">-</span> <span class="n">defender_value</span>
 
         <span class="c1"># log the info</span>
         <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Roll:</span><span class="si">{roll}</span><span class="s2">, Modified:</span><span class="si">{modified_to_hit_score}</span><span class="s2">, Mitigated:</span><span class="si">{mitigated_to_hit_score}</span><span class="s2">.&quot;</span>
@@ -261,10 +261,18 @@
     <span class="k">def</span> <span class="nf">pay_resource_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">resource</span><span class="p">,</span> <span class="n">cost</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove the resource cost from the using entity</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">hp</span> <span class="o">-=</span> <span class="n">cost</span>
 
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; paid </span><span class="si">{cost}</span><span class="s2"> hp and has </span><span class="si">{entity.combatant.hp}</span><span class="s2"> left.&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            entity (Entity):</span>
+<span class="sd">            resource (SecondaryStatTypes): HP or STAMINA</span>
+<span class="sd">            cost (int):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resource_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="n">resource_left</span> <span class="o">=</span> <span class="n">resource_value</span> <span class="o">-</span> <span class="n">cost</span>
+
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">resource_left</span><span class="p">)</span>
+
+        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; paid </span><span class="si">{cost}</span><span class="s2"> </span><span class="si">{resource.name}</span><span class="s2"> and has </span><span class="si">{resource_left}</span><span class="s2"> left.&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SkillMethods.create_shape"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_shape">[docs]</a>    <span class="nd">@staticmethod</span>

@@ -36,7 +36,7 @@
 
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.colours</span> <span class="k">import</span> <span class="n">Colour</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.palette</span> <span class="k">import</span> <span class="n">Palette</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">VisualInfo</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">VisualInfo</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span>
 <span class="kn">from</span> <span class="nn">scripts.core.fonts</span> <span class="k">import</span> <span class="n">Font</span>
 <span class="kn">from</span> <span class="nn">scripts.ui_elements.templates.panel</span> <span class="k">import</span> <span class="n">Panel</span>
 
@@ -100,31 +100,51 @@
         <span class="c1"># TODO - move content out of draw</span>
         <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{entity.name.capitalize()}&quot;</span><span class="p">)</span>
         <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Current Health: </span><span class="si">{entity.combatant.hp}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Current Stamina: </span><span class="si">{entity.combatant.stamina}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;PRIMARY&quot;</span><span class="p">)</span>
-        <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Vigour: </span><span class="si">{entity.combatant.primary_stats.vigour}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Clout: </span><span class="si">{entity.combatant.primary_stats.clout}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Skullduggery: </span><span class="si">{entity.combatant.primary_stats.skullduggery}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Bustle: </span><span class="si">{entity.combatant.primary_stats.bustle}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Exactitude: </span><span class="si">{entity.combatant.primary_stats.exactitude}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">p_stats</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">primary_stats</span>
+
+        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">PrimaryStatTypes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p_stats</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+                <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
 
         <span class="n">second_section_text_header</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;SECONDARY&quot;</span>
-        <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Offense:&quot;</span><span class="p">)</span>
-        <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Accuracy: </span><span class="si">{entity.combatant.secondary_stats.accuracy}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Defence:&quot;</span><span class="p">)</span>
-        <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Resist blunt: </span><span class="si">{entity.combatant.secondary_stats.resist_blunt}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Resist piece: </span><span class="si">{entity.combatant.secondary_stats.resist_pierce}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Resist elemental: &quot;</span>
-                                              <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity.combatant.secondary_stats.resist_elemental}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">s_stats</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">SecondaryStatTypes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">s_stats</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">counter</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
 
         <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
         <span class="n">afflictions</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Affliction</span><span class="o">.</span><span class="n">get_afflictions_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">affliction_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">affliction_info</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="p">:</span>
-            <span class="n">affliction_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Afflicted by: &quot;</span>
-                                              <span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction_names}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">affliction_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">duration</span><span class="p">))</span>
+        <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Afflicted by: </span><span class="si">{affliction_info}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># panel background</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">draw_background</span><span class="p">()</span>
