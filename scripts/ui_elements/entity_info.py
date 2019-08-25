@@ -107,11 +107,11 @@ class SelectedEntityInfo:
 
         from scripts.global_singletons.managers import world_manager
         afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)
-        affliction_names = []
+        affliction_info = []
         for affliction in afflictions:
-            affliction_names.append(affliction.name)
+            affliction_info.append(affliction.name + ":" + str(affliction.duration))
         second_section_column_one_text.append(f"")
-        second_section_column_one_text.append(f"Afflicted by: {affliction_names}")
+        second_section_column_one_text.append(f"Afflicted by: {affliction_info}")
 
         # panel background
         self.panel.draw_background()

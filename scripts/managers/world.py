@@ -36,16 +36,7 @@ class WorldManager:
         """
         Update the world manager:
             player fov
-            cleanse expired afflictions
         """
         if self.player_fov_is_dirty and self.player:
             player = self.player
             self.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
-
-        # remove expired afflictions
-        self.Affliction.cleanse_expired_afflictions()
-
-
-
-
-

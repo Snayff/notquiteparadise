@@ -2,7 +2,7 @@
 import logging
 from typing import List
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers, EffectTypes
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers, EffectTypes, AfflictionLifespan
 from scripts.global_singletons.data_library import library
 from scripts.skills.affliction import Affliction
 from scripts.world.entity import Entity
@@ -182,3 +182,16 @@ class AfflictionMethods:
                     stat_change += effect.amount
 
         return stat_change
+
+    def reduce_affliction_durations_on_entity(self, entity):
+        """
+        Reduce duration of all non-permanent afflictions on an entity.
+        """
+        entitys_afflictions = self.get_afflictions_for_entity(entity)
+        for affliction in entitys_afflictions:
+            # reduce duration on all effects if they're not meant to be permanent
+            if affliction.duration != AfflictionLifespan.PERMANENT.value:
+                affliction.duration -= 1
+                log_string = f"{affliction.affected_entity.name}`s {affliction.name} duration reduced to " \
+                             f" {affliction.duration}"
+                logging.debug(log_string)

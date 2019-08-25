@@ -343,8 +343,11 @@ class LibraryOfAlexandria:
         Returns:
             EffectData: data for a specified effect.
         """
+        try:
+            data = self.aspects[aspect_name].effects[effect_type.name]
+        except KeyError:
+            data = None
 
-        data = self.aspects[aspect_name].effects[effect_type.name]
         return data
 
     def get_affliction_data(self, affliction_name):
@@ -372,8 +375,11 @@ class LibraryOfAlexandria:
         Returns:
             EffectData: data for a specified effect.
         """
+        try:
+            data = self.afflictions[affliction_name].effects[effect_type.name]
+        except KeyError:
+            data = None
 
-        data = self.afflictions[affliction_name].effects[effect_type.name]
         return data
 
     def get_savvy_data(self, savvy_name):
@@ -481,8 +487,11 @@ class LibraryOfAlexandria:
         Returns:
             EffectData: data for a specified skill effect.
         """
+        try:
+            effect_data = self.skills[skill_tree].skill[skill_name].effects[effect_type.name]
+        except KeyError:
+            effect_data = None
 
-        effect_data = self.skills[skill_tree].skill[skill_name].effects[effect_type.name]
         return effect_data
 
     def refresh_library_data(self):

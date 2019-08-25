@@ -91,8 +91,8 @@ class SkillMethods:
             target += "no aspect, "
         target += target_tile.terrain.name  # all tiles have terrain
 
-        log_string = f"Checking ({target}) for tags {required_tags}..."
-        logging.debug(log_string)
+        # log_string = f"Checking ({target}) for tags {required_tags}..."
+        # logging.debug(log_string)
 
         tags_checked = {}
 
@@ -102,12 +102,12 @@ class SkillMethods:
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
-            log_string = f"-> All tags OK! Tags checked are {tags_checked}"
-            logging.debug(log_string)
+            # log_string = f"-> All tags OK! Tags checked are {tags_checked}"
+            # logging.debug(log_string)
             return True
         else:
-            log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
-            logging.debug(log_string)
+            # log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
+            # logging.debug(log_string)
             return False
 
     @staticmethod

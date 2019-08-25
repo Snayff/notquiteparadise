@@ -20,4 +20,5 @@ class AffectStatEffect(Effect):
         """
         super().trigger()
 
-        # TODO - implement stat change (?is this already held in the stat, under the entity? if so confirm here)
+        # NOTE: Affect Stat is calculated as part of the entity's stat property. This  affliction effectively serves
+        # as a flag.
