@@ -293,9 +293,12 @@ class AfflictionTriggers(Enum):
     PASSIVE = auto()  # always applying effects, overrides duration
     END_TURN = auto()  # apply at end of round turn
     MOVE = auto()  # apply if afflicted entity moves
-    DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
-    END_ROUND = auto()  # apply at the end of the round
     ACTION = auto()  # apply when an action is taken
+
+    # Other triggers to consider
+    # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
+    # TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage
+    # USE_BURN = auto()  # apply if afflicted entity uses a burn type
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
