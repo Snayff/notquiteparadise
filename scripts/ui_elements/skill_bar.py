@@ -34,6 +34,7 @@ class SkillBar:
                            panel_border_colour)
 
         # init the containers
+        # TODO - separate to own function
         self.skill_containers = []
         self.icon_x = int(panel_width / 4) - 5  # centre of the skill bar
         self.gap_between_skill_icons = int((panel_height - (self.max_skills_in_bar * self.skill_icon_size)) /
@@ -61,7 +62,7 @@ class SkillBar:
         from scripts.global_singletons.managers import ui_manager
         ui_manager.update_panel_visibility("skill_bar", self, True)
 
-        logging.debug( f"SkillBar initialised.")
+        logging.debug(f"SkillBar initialised.")
 
     def draw(self, surface):
         """

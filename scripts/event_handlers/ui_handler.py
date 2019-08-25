@@ -52,15 +52,8 @@ class UiHandler(Subscriber):
 
         if event.type == EntityEventTypes.LEARN:
             ui_manager.skill_bar.update_skill_icons_to_show()
-
-    @staticmethod
-    def hide_entity_info():
-        """
-        Hide the entity info panel
-        """
-        ui_manager.entity_info.set_visibility(False)
-        log_string = f"Entity info hidden."
-        logging.info( log_string)
+        elif event.type == EntityEventTypes.DIE:
+            ui_manager.entity_queue.update_entity_queue()
 
     @staticmethod
     def process_game(event):
@@ -93,6 +86,9 @@ class UiHandler(Subscriber):
 
             elif game_manager.previous_game_state.TARGETING_MODE:
                 ui_manager.targeting_overlay.set_visibility(False)
+
+        elif event.type == GameEventTypes.END_TURN:
+            ui_manager.entity_queue.update_entity_queue()
 
     def process_ui(self, event):
         """
@@ -175,3 +171,12 @@ class UiHandler(Subscriber):
             publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
         else:
             logging.debug( f"Left clicked skill bar but no skill found.")
+
+    @staticmethod
+    def hide_entity_info():
+        """
+        Hide the entity info panel
+        """
+        ui_manager.entity_info.set_visibility(False)
+        log_string = f"Entity info hidden."
+        logging.info( log_string)
