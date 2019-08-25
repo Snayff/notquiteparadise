@@ -5,6 +5,7 @@ import pygame
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.core.constants import VisualInfo
+from scripts.ui_elements.entity_queue import EntityQueue
 from scripts.ui_elements.message_log import MessageLog
 from scripts.ui_elements.skill_bar import SkillBar
 from scripts.ui_elements.targeting_overlay import TargetingOverlay
@@ -21,11 +22,11 @@ class UIManager:
     """
 
     def __init__(self):
-        self.focused_window = None
+        self.focused_window = None  # TODO - use to track which menu/ui element is being used
         self.colour = Colour()
 
         self.desired_width = VisualInfo.BASE_WINDOW_WIDTH  # TODO - allow for selection by player but only multiples of
-                                                #  base (16:9)
+                                                           #  base (16:9)
         self.desired_height = VisualInfo.BASE_WINDOW_HEIGHT
         self.screen_scaling_mod_x = self.desired_width // VisualInfo.BASE_WINDOW_WIDTH
         self.screen_scaling_mod_y = self.desired_height // VisualInfo.BASE_WINDOW_HEIGHT
@@ -33,12 +34,16 @@ class UIManager:
         self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
         self.visible_elements = {}  # dict of all elements that are currently being rendered
 
+        # UI elements
         self.message_log = None  # type: MessageLog
         self.entity_info = None  # type: SelectedEntityInfo
         self.targeting_overlay = None  # type: TargetingOverlay
-        self.skill_bar = None # type: SkillBar
+        self.skill_bar = None  # type: SkillBar
+        self.entity_queue = None  # type: EntityQueue
 
-        logging.info( f"UIManager initialised.")
+        logging.info(f"UIManager initialised.")
+
+        # TODO - lift functions from ui_elements to the manager, as per other managers.
 
     def update(self):
         """
@@ -56,6 +61,7 @@ class UIManager:
         self.init_entity_info()
         self.init_targeting_overlay()
         self.init_skill_bar()
+        self.init_entity_queue()
 
     def init_message_log(self):
         """
@@ -86,12 +92,21 @@ class UIManager:
 
     def init_skill_bar(self):
         """
-        Initialise the selected skill bar
+        Initialise the skill bar
 
         Notes:
             Called late due to dependencies.
         """
         self.skill_bar = SkillBar()
+
+    def init_entity_queue(self):
+        """
+        Initialise the entity queue
+
+        Notes:
+            Called late due to dependencies.
+        """
+        self.entity_queue = EntityQueue()
 
     def draw_game(self, game_map=None, debug_active=False):
         """
@@ -128,6 +143,9 @@ class UIManager:
 
         if "skill_bar" in self.visible_elements:
             self.skill_bar.draw(self.main_surface)
+
+        if "entity_queue" in self.visible_elements:
+            self.entity_queue.draw(self.main_surface)
 
         # resize the surface to the desired resolution
         scaled_surface = pygame.transform.smoothscale(self.main_surface, (self.desired_width, self.desired_height))

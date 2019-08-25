@@ -23,6 +23,7 @@ class Palette:
         self.entity_info = self.EntityInfoPalette()
         self.targeting_overlay = self.TargetingOverlayPalette()
         self.skill_bar = self.SkillBarPalette()
+        self.entity_queue = self.EntityQueuePalette()
 
     class MessageLogPalette:
         """
@@ -95,4 +96,14 @@ class Palette:
             self.background = colour.black
             self.border = colour.complement.darker
             self.skill_border = colour.complement.lighter
+            self.text_default = colour.white
+
+    class EntityQueuePalette:
+        """
+        The palette for the entity queue
+        """
+        def __init__(self):
+            colour = Colour()
+            self.background = colour.black
+            self.border = colour.complement.darker
             self.text_default = colour.white

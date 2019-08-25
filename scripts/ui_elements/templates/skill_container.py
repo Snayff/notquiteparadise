@@ -28,7 +28,6 @@ class SkillContainer(Panel):
 
         self.owner.font.render_to(self.surface, (text_x, text_y), text, text_colour)
 
-
     def draw_self_on_other_surface(self, surface):
         """
         Draw the skill container on another surface

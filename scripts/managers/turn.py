@@ -1,8 +1,10 @@
 import logging
+from typing import Dict, Tuple
 
 from scripts.core.constants import GameStates
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.global_singletons.event_hub import publisher
+from scripts.world.entity import Entity
 
 
 class TurnManager:
@@ -17,12 +19,14 @@ class TurnManager:
 
     def __init__(self):
         self.turn_holder = None
-        self.turn_queue = {}  # (entity, time)
+        self.turn_queue = {}  # type: Dict[Tuple[Entity, int]] # (entity, time)
         self.round = 0
         self.time = 0
         self.time_of_last_turn = 0
 
-        logging.info( f"TurnManager initialised.")
+        # Note: Can't build turn queue here as dependencies are not loaded (e.g. entities)
+
+        logging.info(f"TurnManager initialised.")
 
     def build_new_turn_queue(self):
         """

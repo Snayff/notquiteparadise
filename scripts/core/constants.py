@@ -298,7 +298,7 @@ class AfflictionTriggers(Enum):
     # Other triggers to consider
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
     # TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage
-    # USE_BURN = auto()  # apply if afflicted entity uses a burn type
+    # USE_BURN = auto()  # apply if afflicted entity uses a burn type - etc.
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
