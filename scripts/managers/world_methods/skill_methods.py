@@ -91,8 +91,8 @@ class SkillMethods:
             target += "no aspect, "
         target += target_tile.terrain.name  # all tiles have terrain
 
-        log_string = f"Checking ({target}) for tags {required_tags}..."
-        logging.debug(log_string)
+        # log_string = f"Checking ({target}) for tags {required_tags}..."
+        # logging.debug(log_string)
 
         tags_checked = {}
 
@@ -102,12 +102,12 @@ class SkillMethods:
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
-            log_string = f"-> All tags OK! Tags checked are {tags_checked}"
-            logging.debug(log_string)
+            # log_string = f"-> All tags OK! Tags checked are {tags_checked}"
+            # logging.debug(log_string)
             return True
         else:
-            log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
-            logging.debug(log_string)
+            # log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
+            # logging.debug(log_string)
             return False
 
     @staticmethod
@@ -116,21 +116,21 @@ class SkillMethods:
         Check if entity can afford the resource cost
 
         Args:
-            entity ():
-            resource ():
-            cost ():
+            entity (Entity):
+            resource (SecondaryStatTypes): HP or Stamina
+            cost (int):
 
         Returns:
             bool: True for success, False otherwise.
         """
 
         # Check if cost can be paid
-        # TODO - take different resources for cost, not just hp
-        if entity.combatant.hp - cost > 0:
-            logging.debug( f"'{entity.name}' can afford cost.")
+        value = getattr(entity.combatant, resource.name.lower())
+        if value - cost >= 0:
+            logging.debug(f"'{entity.name}' can afford cost.")
             return True
         else:
-            logging.debug( f"'{entity.name}' cannot afford cost.")
+            logging.debug(f"'{entity.name}' cannot afford cost.")
             return False
 
     @staticmethod
@@ -180,16 +180,16 @@ class SkillMethods:
         Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
         Args:
 
-            defender ():
-            skill_accuracy ():
-            stat_to_target ():
-            attacker ():
+            defender (Entity):
+            skill_accuracy (int):
+            stat_to_target (PrimaryStatTypes):
+            attacker (Entity):
         """
-        logging.debug( f"Get to hit scores...")
+        logging.debug(f"Get to hit scores...")
 
-        roll = random.randint(1, 100)
+        roll = random.randint(-3, 3)
 
-        # check if attacker provided
+        # if attacker get their accuracy
         if attacker:
             attacker_value = attacker.combatant.secondary_stats.accuracy
         else:
@@ -197,10 +197,10 @@ class SkillMethods:
 
         modified_to_hit_score = attacker_value + skill_accuracy + roll
 
-        # TODO -  mitigate to hit using stat to target
-
         # mitigate the to hit
-        mitigated_to_hit_score = modified_to_hit_score
+        defender_value = getattr(defender.combatant.primary_stats, stat_to_target.name.lower())
+
+        mitigated_to_hit_score = modified_to_hit_score - defender_value
 
         # log the info
         log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
@@ -228,10 +228,18 @@ class SkillMethods:
     def pay_resource_cost(entity, resource, cost):
         """
         Remove the resource cost from the using entity
-        """
-        entity.combatant.hp -= cost
 
-        log_string = f"'{entity.name}' paid {cost} hp and has {entity.combatant.hp} left."
+        Args:
+            entity (Entity):
+            resource (SecondaryStatTypes): HP or STAMINA
+            cost (int):
+        """
+        resource_value = getattr(entity.combatant, resource.name.lower())
+        resource_left = resource_value - cost
+
+        setattr(entity.combatant, resource.name.lower(), resource_left)
+
+        log_string = f"'{entity.name}' paid {cost} {resource.name} and has {resource_left} left."
         logging.debug(log_string)
 
     @staticmethod

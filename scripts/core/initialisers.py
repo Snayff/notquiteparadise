@@ -3,6 +3,7 @@ import logging
 import time
 
 from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
+from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.map_handler import MapHandler
 from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
@@ -44,8 +45,6 @@ def initialise_logging():
 
     # format in uk time
     logging.Formatter.converter = time.gmtime
-
-    logging.info("test")
 
 
 def initialise_game():
@@ -97,4 +96,8 @@ def initialise_event_handlers():
 
     map_handler = MapHandler(event_hub)
     map_handler.subscribe(EventTopics.MAP)
+
+    affliction_handler = AfflictionHandler(event_hub)
+    affliction_handler.subscribe(EventTopics.ENTITY)
+    affliction_handler.subscribe(EventTopics.GAME)
 

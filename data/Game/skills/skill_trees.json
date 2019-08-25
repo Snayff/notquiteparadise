@@ -8,7 +8,7 @@
             "range": 1,
             "shape": "target",
             "shape_size": 1,
-            "resource_type": "mana",
+            "resource_type": "stamina",
             "resource_cost": 1,
             "time_cost": 15,
             "cooldown": 0,
@@ -18,8 +18,10 @@
                         "required_tags": ["other_entity"
                         ],
                         "damage": 15,
-                        "damage_type": "pierce",
-                        "accuracy": 10,
+                        "mod_stat": "bustle",
+                        "mod_amount": 0.2,
+                        "damage_type": "mundane",
+                        "accuracy": 0,
                         "stat_to_target": "bustle"
                     }
             ]
@@ -34,7 +36,7 @@
             "range": 3,
             "shape": "cross",
             "shape_size": 2,
-            "resource_type": "mana",
+            "resource_type": "stamina",
             "resource_cost": 2,
             "time_cost": 20,
             "cooldown": 2,
@@ -45,8 +47,10 @@
                         "other_entity"
                     ],
                     "damage": 15,
-                    "damage_type": "blunt",
-                    "accuracy": 5,
+                    "mod_stat": "bustle",
+                    "mod_amount": 0.2,
+                    "damage_type": "mundane",
+                    "accuracy": 0,
                     "stat_to_target": "skullduggery"
                 }
             ]
@@ -62,7 +66,7 @@
             "range": 6,
             "shape": "target",
             "shape_size": 1,
-            "resource_type": "mana",
+            "resource_type": "stamina",
             "resource_cost": 10,
             "time_cost": 40,
             "cooldown": 3,
@@ -87,7 +91,7 @@
             "range": 4,
             "shape": "circle",
             "shape_size": 2,
-            "resource_type": "mana",
+            "resource_type": "stamina",
             "resource_cost": 1,
             "time_cost": 1,
             "cooldown": 2,
@@ -98,8 +102,10 @@
                         "other_entity"
                     ],
                     "damage": 5,
-                    "damage_type": "blunt",
-                    "accuracy": 5,
+                    "mod_stat": "bustle",
+                    "mod_amount": 0.2,
+                    "damage_type": "mundane",
+                    "accuracy": -5,
                     "stat_to_target": "skullduggery"
                 },
                 {

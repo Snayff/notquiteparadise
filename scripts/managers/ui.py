@@ -64,7 +64,7 @@ class UIManager:
         Notes:
             Called late due to dependencies.
         """
-        self.message_log = MessageLog() # OLD_MessageLog()
+        self.message_log = MessageLog()
 
     def init_entity_info(self):
         """

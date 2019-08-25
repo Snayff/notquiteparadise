@@ -1,6 +1,6 @@
 import logging
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers, AfflictionLifespan
 from scripts.global_singletons.data_library import library
 from scripts.world.entity import Entity
 
@@ -28,7 +28,8 @@ class Affliction:
 
     def trigger(self):
         """
-        Trigger all afflictions effects and decrement duration by 1
+        Trigger all afflictions effects and decrement duration by 1 (Except for Permanent). Duration reduced at end
+        of turn.
         """
         log_string = f"Triggering effects in {self.name}"
         logging.info( log_string)
@@ -41,10 +42,4 @@ class Affliction:
             effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
             effected_tile = world_manager.Map.get_tile(self.affected_entity.x, self.affected_entity.y)
             effect.trigger([effected_tile])
-
-    # reduce duration on all effects other than Passive
-        if data.trigger_event != AfflictionTriggers.PASSIVE:
-            self.duration -= 1
-            log_string = f"{self.affected_entity.name}`s {self.name} duration reduced to {self.duration}"
-            logging.debug(log_string)
 

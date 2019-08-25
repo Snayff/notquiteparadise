@@ -1,4 +1,3 @@
-
 from enum import Enum, auto
 
 TILE_SIZE = 64
@@ -137,7 +136,6 @@ class TargetTags(Enum):
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
 
-
     def __eq__(self, other):
         if other.__class__ is self.__class__:
             return self.name == other.name and self.value == other.value
@@ -150,10 +148,11 @@ class DamageTypes(Enum):
     """
     Damage types
     """
-    PIERCE = auto()
-    BLUNT = auto()
-    ELEMENTAL = auto()
-    FIRE = auto()
+    BURN = auto()
+    CHEMICAL = auto()
+    ASTRAL = auto()
+    COLD = auto()
+    MUNDANE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -200,11 +199,16 @@ class SecondaryStatTypes(Enum):
     """
     Secondary stats
     """
-    RESIST_BLUNT = auto()
-    RESIST_PIERCE = auto()
-    RESIST_ELEMENTAL = auto()
     MAX_HP = auto()
+    MAX_STAMINA = auto()
+    HP = auto()
+    STAMINA = auto()
     ACCURACY = auto()
+    RESIST_BURN = auto()
+    RESIST_CHEMICAL = auto()
+    RESIST_ASTRAL = auto()
+    RESIST_COLD = auto()
+    RESIST_MUNDANE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -236,8 +240,8 @@ class HitValues(Enum):
     """
     # TODO - externalise the values
     GRAZE = 0
-    HIT = 100
-    CRIT = 130
+    HIT = 5
+    CRIT = 20
 
 
 class HitModifiers(Enum):
@@ -286,12 +290,26 @@ class AfflictionTriggers(Enum):
     """
     When to trigger the afflictions
     """
-    PASSIVE = auto()  # always applying effects
+    PASSIVE = auto()  # always applying effects, overrides duration
     END_TURN = auto()  # apply at end of round turn
     MOVE = auto()  # apply if afflicted entity moves
     DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
     END_ROUND = auto()  # apply at the end of the round
     ACTION = auto()  # apply when an action is taken
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
+class AfflictionLifespan(Enum):
+    """
+    Identify if the affliction duration should be reduced or not
+    """
+    PERMANENT = 999
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -316,6 +334,7 @@ class SkillShapes(Enum):
         return NotImplemented
 
     __hash__ = None
+
 
 class InputModes(Enum):
     MOUSE_AND_KB = auto()

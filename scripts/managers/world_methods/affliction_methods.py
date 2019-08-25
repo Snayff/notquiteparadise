@@ -1,7 +1,8 @@
 
 import logging
+from typing import List
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers, EffectTypes
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers, EffectTypes, AfflictionLifespan
 from scripts.global_singletons.data_library import library
 from scripts.skills.affliction import Affliction
 from scripts.world.entity import Entity
@@ -113,7 +114,7 @@ class AfflictionMethods:
             entity (Entity):
 
         Returns:
-            list: list of Afflictions
+            List[Affliction]: list of Afflictions
         """
         entitys_afflictions = []
 
@@ -152,23 +153,25 @@ class AfflictionMethods:
 
         # loop all afflictions effects in all afflictions and return specified type
         for affliction in afflictions:
-            data = library.get_affliction_data(affliction.name)
-            for effect in data.effects:
-                if effect.effect_type:
-                    if effect.effect_type == effect_type:
-                        affliction_effects.append(effect)
+            data = library.get_affliction_effect_data(affliction.name, effect_type)
+
+            if data:
+                affliction_effects.append(data)
 
         return affliction_effects
 
-    def get_stat_modifier_from_afflictions_on_entity(self, entity, stat):
+    def get_stat_change_from_afflictions_on_entity(self, entity, stat):
         """
-        Get the modifier for a specified stat from all applied afflictions on an entity
+        Get the change for a specified stat from all applied afflictions on an entity
 
         Args:
             entity (Entity):
             stat (): primary or secondary stat
+
+        Returns:
+            int: Amount of stat change
         """
-        modifier = 0
+        stat_change = 0
 
         affect_stat_effects = self.get_affliction_effects_for_entity(entity, EffectTypes.AFFECT_STAT)
 
@@ -176,6 +179,19 @@ class AfflictionMethods:
         if affect_stat_effects:
             for effect in affect_stat_effects:
                 if effect.stat_to_affect == stat:
-                    modifier += effect.amount
+                    stat_change += effect.amount
 
-        return modifier
+        return stat_change
+
+    def reduce_affliction_durations_on_entity(self, entity):
+        """
+        Reduce duration of all non-permanent afflictions on an entity.
+        """
+        entitys_afflictions = self.get_afflictions_for_entity(entity)
+        for affliction in entitys_afflictions:
+            # reduce duration on all effects if they're not meant to be permanent
+            if affliction.duration != AfflictionLifespan.PERMANENT.value:
+                affliction.duration -= 1
+                log_string = f"{affliction.affected_entity.name}`s {affliction.name} duration reduced to " \
+                             f" {affliction.duration}"
+                logging.debug(log_string)

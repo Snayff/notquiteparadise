@@ -11,7 +11,9 @@
                 "required_tags": ["other_entity"
                 ],
                 "damage": 15,
-                "damage_type": "fire",
+                "mod_stat": "none",
+                "mod_amount": 0,
+                "damage_type": "burn",
                 "accuracy": 10,
                 "stat_to_target": "bustle"
             }
@@ -19,15 +21,15 @@
     },
     "bogged_down": {
         "name": "bogged down",
-        "description": "This is the bogged down affliction. It makes actions take more time.",
+        "description": "This is the bogged down affliction. It weakens mundane defence.",
         "icon": "placeholder/icon_00.png",
         "category": "bane",
         "trigger_event": "passive",
         "effects": [
             {
                 "effect_type": "affect_stat",
-                "stat_to_affect": "action_cost_change" ,
-                "amount": 25
+                "stat_to_affect": "bustle" ,
+                "amount": -25
             }
         ]
     }

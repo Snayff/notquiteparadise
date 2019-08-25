@@ -14,16 +14,13 @@ class GameHandler(Subscriber):
 
     def run(self, event):
         log_string = f"{self.name} received {event.type}"
-        logging.info( log_string)
+        logging.info(log_string)
 
         if event.type == GameEventTypes.EXIT:
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
         elif event.type == GameEventTypes.END_TURN:
-            # TODO - move to separate handler
-            world_manager.Affliction.trigger_afflictions_on_entity(AfflictionTriggers.END_TURN,
-                                                                   turn_manager.turn_holder)
-            turn_manager.end_turn(event.time_spent)
+           turn_manager.end_turn(event.time_spent)
 
         elif event.type == GameEventTypes.CHANGE_GAME_STATE:
             if event.new_game_state != game_manager.game_state:

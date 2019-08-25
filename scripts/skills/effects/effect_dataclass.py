@@ -13,6 +13,8 @@ class EffectData:
     required_tags: List[TargetTags] = field(default_factory=list)
     amount: int = 0
     damage: int = 0
+    mod_stat: PrimaryStatTypes = None
+    mod_amount: int = 0
     damage_type: DamageTypes = None
     accuracy: int = 0
     stat_to_target: PrimaryStatTypes = None

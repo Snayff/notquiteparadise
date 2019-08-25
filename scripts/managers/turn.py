@@ -41,12 +41,19 @@ class TurnManager:
         # get the next entity in the queue
         self.turn_holder = min(self.turn_queue, key=self.turn_queue.get)
 
+        # update game state based on turn holder
+        from scripts.global_singletons.managers import game_manager
+        if self.turn_holder.player:
+            game_manager.update_game_state(GameStates.PLAYER_TURN)
+        else:
+            game_manager.update_game_state(GameStates.ENEMY_TURN)
+
         # log result
         queue = []
         for entity, time in self.turn_queue.items():
             queue.append((entity.name, time))
 
-        logging.debug( f"-> Queue built. {queue}")
+        logging.debug(f"-> Queue built. {queue}")
 
     def end_turn(self, spent_time):
         """

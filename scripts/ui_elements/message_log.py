@@ -60,7 +60,7 @@ class MessageLog:
         self.number_of_messages_to_show = int((panel_height - 2 * self.edge_size) / (self.font.size +
                                                                                      self.gap_between_lines))
 
-        logging.debug( f"OLD_MessageLog initialised.")
+        logging.debug(f"MessageLog initialised.")
 
     def update(self):
         """
