@@ -1,7 +1,7 @@
 
 import logging
 
-from scripts.core.constants import GameEventTypes, AfflictionTriggers
+from scripts.core.constants import GameEventTypes, AfflictionTriggers, EntityEventTypes
 from scripts.event_handlers.pub_sub_hub import Subscriber, Event
 from scripts.world.entity import Entity
 
@@ -33,9 +33,15 @@ class AfflictionHandler(Subscriber):
             world_manager.Affliction.reduce_affliction_durations_on_entity(turn_manager.turn_holder)
             world_manager.Affliction.cleanse_expired_afflictions()
 
+        elif event.type == EntityEventTypes.MOVE:
+            self.process_affliction_trigger(event.entity, AfflictionTriggers.MOVE)
+            self.process_affliction_trigger(event.entity, AfflictionTriggers.ACTION)
 
+        elif event.type == EntityEventTypes.SKILL:
+            self.process_affliction_trigger(event.entity, AfflictionTriggers.ACTION)
 
-    def process_affliction_trigger(self, entity, trigger):
+    @staticmethod
+    def process_affliction_trigger(entity, trigger):
         """
         Process the required affliction trigger
 

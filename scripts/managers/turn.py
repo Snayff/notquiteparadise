@@ -28,7 +28,7 @@ class TurnManager:
         """
         Build a new turn queue for all entities
         """
-        logging.info( f"Building a new turn queue...")
+        logging.info(f"Building a new turn queue...")
 
         # create a turn queue from the entities list
         from scripts.global_singletons.managers import world_manager
