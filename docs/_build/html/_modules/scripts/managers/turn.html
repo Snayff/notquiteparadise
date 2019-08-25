@@ -32,10 +32,12 @@
             
   <h1>Source code for scripts.managers.turn</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">GameStates</span>
 <span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="k">import</span> <span class="n">ChangeGameStateEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
 
 
 <div class="viewcode-block" id="TurnManager"><a class="viewcode-back" href="../../../managers.html#scripts.managers.turn.TurnManager">[docs]</a><span class="k">class</span> <span class="nc">TurnManager</span><span class="p">:</span>
@@ -50,18 +52,20 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">turn_holder</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">turn_queue</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># (entity, time)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_queue</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># type: Dict[Tuple[Entity, int]] # (entity, time)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">round</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_of_last_turn</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;TurnManager initialised.&quot;</span><span class="p">)</span>
+        <span class="c1"># Note: Can&#39;t build turn queue here as dependencies are not loaded (e.g. entities)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;TurnManager initialised.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TurnManager.build_new_turn_queue"><a class="viewcode-back" href="../../../managers.html#scripts.managers.turn.TurnManager.build_new_turn_queue">[docs]</a>    <span class="k">def</span> <span class="nf">build_new_turn_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build a new turn queue for all entities</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;Building a new turn queue...&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Building a new turn queue...&quot;</span><span class="p">)</span>
 
         <span class="c1"># create a turn queue from the entities list</span>
         <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>

@@ -67,6 +67,7 @@
                            <span class="n">panel_border_colour</span><span class="p">)</span>
 
         <span class="c1"># init the containers</span>
+        <span class="c1"># TODO - separate to own function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_containers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">icon_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">panel_width</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="mi">5</span>  <span class="c1"># centre of the skill bar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_skill_icons</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">panel_height</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_skills_in_bar</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span><span class="p">))</span> <span class="o">/</span>
@@ -94,7 +95,7 @@
         <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
         <span class="n">ui_manager</span><span class="o">.</span><span class="n">update_panel_visibility</span><span class="p">(</span><span class="s2">&quot;skill_bar&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;SkillBar initialised.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;SkillBar initialised.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SkillBar.draw"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.skill_bar.SkillBar.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

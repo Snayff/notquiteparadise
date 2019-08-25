@@ -56,6 +56,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">entity_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EntityInfoPalette</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">targeting_overlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TargetingOverlayPalette</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_bar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SkillBarPalette</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EntityQueuePalette</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Palette.MessageLogPalette"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.palette.Palette.MessageLogPalette">[docs]</a>    <span class="k">class</span> <span class="nc">MessageLogPalette</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -128,6 +129,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">colour</span><span class="o">.</span><span class="n">black</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="n">colour</span><span class="o">.</span><span class="n">complement</span><span class="o">.</span><span class="n">darker</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skill_border</span> <span class="o">=</span> <span class="n">colour</span><span class="o">.</span><span class="n">complement</span><span class="o">.</span><span class="n">lighter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">text_default</span> <span class="o">=</span> <span class="n">colour</span><span class="o">.</span><span class="n">white</span></div>
+
+<div class="viewcode-block" id="Palette.EntityQueuePalette"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.palette.Palette.EntityQueuePalette">[docs]</a>    <span class="k">class</span> <span class="nc">EntityQueuePalette</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The palette for the entity queue</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">colour</span> <span class="o">=</span> <span class="n">Colour</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">colour</span><span class="o">.</span><span class="n">black</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="n">colour</span><span class="o">.</span><span class="n">complement</span><span class="o">.</span><span class="n">darker</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">text_default</span> <span class="o">=</span> <span class="n">colour</span><span class="o">.</span><span class="n">white</span></div></div>
 </pre></div>
 

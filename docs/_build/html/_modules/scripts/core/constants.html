@@ -326,9 +326,12 @@
     <span class="n">PASSIVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># always applying effects, overrides duration</span>
     <span class="n">END_TURN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply at end of round turn</span>
     <span class="n">MOVE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply if afflicted entity moves</span>
-    <span class="n">DEAL_DAMAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply if afflicted entity deals damage</span>
-    <span class="n">END_ROUND</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply at the end of the round</span>
     <span class="n">ACTION</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># apply when an action is taken</span>
+
+    <span class="c1"># Other triggers to consider</span>
+    <span class="c1"># DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage</span>
+    <span class="c1"># TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage</span>
+    <span class="c1"># USE_BURN = auto()  # apply if afflicted entity uses a burn type - etc.</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
