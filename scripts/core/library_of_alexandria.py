@@ -10,7 +10,10 @@ from scripts.skills.affliction_dataclasses import AfflictionData
 from scripts.skills.skill_dataclasses import SkillData, SkillTreeData
 from scripts.skills.effects.effect_dataclass import EffectData
 from scripts.world.aspect_dataclass import AspectData
+from scripts.world.attitude_dataclass import AttitudeData
+from scripts.world.god_dataclass import GodData
 from scripts.world.interaction_dataclass import InteractionData
+from scripts.world.intervention_dataclass import InterventionData
 
 
 class LibraryOfAlexandria:
@@ -29,10 +32,11 @@ class LibraryOfAlexandria:
         self.terrains = {}
         self.actor_template = {}
         self.stats = {}  # conversion done
+        self.gods = {}  # conversion done
 
         self.refresh_library_data()
 
-        logging.info( f"Data Library initialised.")
+        logging.info(f"Data Library initialised.")
 
     def convert_skills_to_data_classes(self):
         """
@@ -109,7 +113,7 @@ class LibraryOfAlexandria:
         all_aspect_data = self.aspects
         converted_aspects = {}
 
-        # loop all skill trees
+        # loop all aspects
         for aspect_name, aspect_data in all_aspect_data.items():
             converted_effects = {}
             converted_interactions = []
@@ -185,12 +189,60 @@ class LibraryOfAlexandria:
         self.stats = {}
         self.stats = converted_data
 
+    def convert_gods_to_data_classes(self):
+        """
+        Take aspect data from library and convert to data classes
+        """
+        all_god_data = self.gods
+        converted_gods = {}
+
+        # loop all gods
+        for god_name, god_data in all_god_data.items():
+            converted_effects = {}
+            converted_interventions = []
+            converted_attitudes = []
+
+            # loop attitudes and convert to data class
+            for index, attitude_data in enumerate(god_data["attitudes"]):
+                attitude = AttitudeData(**attitude_data)
+                converted_attitudes.append(attitude)
+
+            # loop interventions and convert to data class
+            for index, intervention_data in enumerate(god_data["interventions"]):
+
+                # loop effects
+                for index, effect_data in enumerate(intervention_data["effects"]):
+                    # convert the skill effect data to the data class
+                    effect = EffectData(**effect_data)
+                    converted_effects[effect.effect_type.name] = effect
+
+                # set the temp dict to contain the converted effects
+                new_intervention_dict = intervention_data.copy()
+                new_intervention_dict["effects"] = converted_effects
+
+                # unpack the temp dict and convert the skill data to the data class
+                intervention = InterventionData(**new_intervention_dict)
+                converted_interventions[intervention.name] = intervention
+
+            # set the temp dict to contain the converted skill effects
+            new_god_dict = god_data.copy()
+            new_god_dict["effects"] = converted_effects
+            new_god_dict["interventions"] = converted_interventions
+
+            # unpack the temp dict and convert the aspect data to the data class
+            god = GodData(**new_god_dict)
+            converted_gods[god.name] = god
+
+        # delete all info from aspect and replace with the converted data
+        self.gods = {}
+        self.gods = converted_gods
+
     def convert_external_strings_to_internal_enums(self):
         """
         Where there are external values that are utilised internally convert them to the internal constant.
         """
         # Update shared values
-        lists_to_convert = [self.aspects, self.skills, self.afflictions]
+        lists_to_convert = [self.aspects, self.skills, self.afflictions, self.gods]
         
         for current_list in lists_to_convert:
             # Effects:required_tags
@@ -494,6 +546,50 @@ class LibraryOfAlexandria:
 
         return effect_data
 
+    def get_god_data(self, god_name):
+        """
+        Get data for a god from the central library
+
+        Args:
+            god_name (str):
+
+        Returns:
+            GodData:  data for specified god.
+        """
+
+        god_data = self.gods[god_name]
+
+        return god_data
+
+    def get_god_interventions_data(self, god_name):
+        """
+        Get data for a god's interventions from the central library
+
+        Args:
+            god_name(str):
+
+        Returns:
+            InterventionData: data for a specified god.
+        """
+        interventions_data = self.gods[god_name].interventions
+
+        return interventions_data
+
+    def get_god_intervention_effects_data(self, god_name, intervention_name):
+        """
+        Get data for the effects in a god's intervention from the central library
+
+        Args:
+            god_name(str):
+            intervention_name(str):
+
+        Returns:
+            EffectData: data for a specified skill effect.
+        """
+        effects_data = self.gods[god_name].interventions[intervention_name].effects
+
+        return effects_data
+
     def refresh_library_data(self):
         """
         Load json data into the library, convert strings to enums and dicts to data classes.
@@ -522,8 +618,9 @@ class LibraryOfAlexandria:
             self.terrains = self.load_values_from_terrain_json()
             self.actor_template = self.load_values_from_actor_json()
             self.stats = self.load_values_from_stat_json()
+            self.gods = self.load_values_from_gods_json()
 
-        logging.info( f"Data Library refreshed.")
+        logging.info(f"Data Library refreshed.")
 
     @staticmethod
     def load_values_from_skill_json():
@@ -631,6 +728,18 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/entity/stats.json') as file:
+            data = json.load(file)
+
+        return data
+
+    @staticmethod
+    def load_values_from_gods_json():
+        """
+
+        Returns:
+
+        """
+        with open('data/game/world/gods.json') as file:
             data = json.load(file)
 
         return data

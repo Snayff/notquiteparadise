@@ -54,14 +54,16 @@ def initialise_game():
 
     map_width = 50
     map_height = 30
-    world_manager.Map.create_new_map(map_width, map_height)
+    world_manager.Map.create_game_map(map_width, map_height)
     world_manager.FOV.create_player_fov_map(map_width, map_height)
     ui_manager.delayed_init()
 
-    world_manager.Entity.create_actor_entity(0, 0, "player", True)  # TODO - remove when proper load is in
-    world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
-    world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand")  # TODO - remove when actor gen is in load
-    world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
+    # TODO - remove when map generation is in
+    world_manager.Entity.create_actor_entity(0, 0, "player", True)
+    world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")
+    world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand")
+    world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand")
+    world_manager.Gods.create_god("small_gods")
 
     # TODO - remove when skill learning is in
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic attack"))

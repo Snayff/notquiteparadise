@@ -1,0 +1,29 @@
+{
+    "small_gods": {
+        "name": "the small gods",
+        "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
+        "sprite": "placeholder/Mobs_crow_01.png",
+        "attitudes": [
+            {
+                "action": "flaming",
+                "opinion_change": -5
+            }
+        ],
+        "interventions": [
+            {
+                "name": "slow the mighty",
+                "required_opinion": -10,
+                "effects": [
+                    {
+                        "effect_type": "apply_affliction",
+                        "required_tags": ["other_entity"],
+                        "accuracy": 100,
+                        "stat_to_target": "skullduggery",
+                        "affliction_name": "bogged down",
+                        "duration": 3
+                    }
+                 ]
+            }
+        ]
+    }
+}

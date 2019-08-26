@@ -13,7 +13,6 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 
 
 # Project Wide to do list...
-# FIXME - bogged down doesn't reduce duration (as it always applies). perhaps create duration reduction triggers
 # TODO - UI information should be pulled once then held
 # TODO - create global tooltip method - some relevant code in old message `log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
@@ -23,7 +22,6 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
-# TODO - update combat in line with new standards
 # TODO - data validation of jsons on init
 # TODO - Review closure
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
@@ -34,6 +32,10 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  reload data
 #  spawn entity
 # TODO - use seed for RNG
+# TODO - modify effects to be unique and handle multiple values
+# TODO - use range:0 to anchor skill to the player and apply the shape range from that point.
+
+
 
 
 def main():

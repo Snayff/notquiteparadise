@@ -1,10 +1,10 @@
+
 import logging
 import random
+
 from typing import List
-
-from scripts.core.constants import MessageEventTypes, TargetTags, DamageTypes, \
-    PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, EffectTypes, SkillShapes
-
+from scripts.core.constants import MessageEventTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
+    EffectTypes, SkillShapes
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -15,13 +15,15 @@ from scripts.skills.effects.change_terrain import ChangeTerrainEffect
 from scripts.skills.effects.damage import DamageEffect
 from scripts.skills.effects.move import MoveEffect
 from scripts.world.entity import Entity
-from scripts.world.terrain.terrain import Terrain
 from scripts.world.tile import Tile
 
 
 class SkillMethods:
     """
     Methods for querying skills and skill related info and taking skill actions.
+
+    Attributes:
+        manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
         from scripts.managers.world import WorldManager
