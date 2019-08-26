@@ -7,6 +7,10 @@
             {
                 "action": "flaming",
                 "opinion_change": -5
+            },
+            {
+                "action": "burn",
+                "opinion_change": -10
             }
         ],
         "interventions": [

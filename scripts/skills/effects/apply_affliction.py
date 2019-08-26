@@ -35,10 +35,10 @@ class ApplyAfflictionEffect(Effect):
         if isinstance(self.owner, Skill):
             attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
             effect_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                        self.skill_effect_type)
+                                                        self.effect_type)
         elif isinstance(self.owner, Aspect):
             attacker = None
-            effect_data = library.get_aspect_effect_data(self.owner.name, self.skill_effect_type)
+            effect_data = library.get_aspect_effect_data(self.owner.name, self.effect_type)
 
         affliction_data = library.get_affliction_data(effect_data.affliction_name)
 
@@ -98,9 +98,9 @@ class ApplyAfflictionEffect(Effect):
         from scripts.world.aspect import Aspect
         if isinstance(self.owner, Skill):
             effect_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                        self.skill_effect_type)
+                                                        self.effect_type)
         elif isinstance(self.owner, Aspect):
-            effect_data = library.get_aspect_effect_data(self.owner.name, self.skill_effect_type)
+            effect_data = library.get_aspect_effect_data(self.owner.name, self.effect_type)
 
         from scripts.global_singletons.managers import world_manager
         active_affliction = world_manager.Affliction.get_affliction_for_entity(defending_entity,

@@ -4,7 +4,7 @@ import logging
 
 from scripts.components.race_dataclass import RaceData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
-    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes
+    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes, HitTypes
 from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
 from scripts.skills.affliction_dataclasses import AfflictionData
 from scripts.skills.skill_dataclasses import SkillData, SkillTreeData
@@ -205,7 +205,10 @@ class LibraryOfAlexandria:
             # loop attitudes and convert to data class
             for index, attitude_data in enumerate(god_data["attitudes"]):
                 attitude = AttitudeData(**attitude_data)
-                converted_attitudes[attitude.action] = attitude
+                try:
+                    converted_attitudes[attitude.action.name] = attitude
+                except:  # Need to handle unhashable for the enums... but I don't know the type.
+                    converted_attitudes[attitude.action] = attitude
 
             # loop interventions and convert to data class
             for index, intervention_data in enumerate(god_data["interventions"]):
@@ -305,6 +308,14 @@ class LibraryOfAlexandria:
         # SkillTree:Skill:resource_type
         for value in SecondaryStatTypes:
             self.recursive_replace(self.skills, "resource_type", value.name.lower(), value)
+
+        # Gods:attitudes:action
+        for value in EffectTypes:
+            self.recursive_replace(self.gods, "action", value.name.lower(), value)
+        for value in DamageTypes:
+            self.recursive_replace(self.gods, "action", value.name.lower(), value)
+        for value in HitTypes:
+            self.recursive_replace(self.gods, "action", value.name.lower(), value)
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """

@@ -11,11 +11,11 @@ class Effect:
     Base class for  effects that make up the basis of skills.
     """
 
-    def __init__(self, owner, name, description, skill_effect_type):
+    def __init__(self, owner, name, description, effect_type):
         self.owner = owner
         self.name = name
         self.description = description
-        self.skill_effect_type = skill_effect_type  # type:EffectTypes
+        self.effect_type = effect_type  # type:EffectTypes
 
     def trigger(self):
         """
