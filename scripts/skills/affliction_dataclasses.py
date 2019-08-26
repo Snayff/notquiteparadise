@@ -14,4 +14,4 @@ class AfflictionData:
     icon: str = "None"
     trigger_event: AfflictionTriggers = None
     category: AfflictionCategory = None
-    effects: Dict = field(default_factory=list)
+    effects: Dict = field(default_factory=dict)

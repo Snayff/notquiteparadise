@@ -199,13 +199,13 @@ class LibraryOfAlexandria:
         # loop all gods
         for god_name, god_data in all_god_data.items():
             converted_effects = {}
-            converted_interventions = []
-            converted_attitudes = []
+            converted_interventions = {}
+            converted_attitudes = {}
 
             # loop attitudes and convert to data class
             for index, attitude_data in enumerate(god_data["attitudes"]):
                 attitude = AttitudeData(**attitude_data)
-                converted_attitudes.append(attitude)
+                converted_attitudes[attitude.action] = attitude
 
             # loop interventions and convert to data class
             for index, intervention_data in enumerate(god_data["interventions"]):
@@ -226,7 +226,7 @@ class LibraryOfAlexandria:
 
             # set the temp dict to contain the converted skill effects
             new_god_dict = god_data.copy()
-            new_god_dict["effects"] = converted_effects
+            new_god_dict["attitudes"] = converted_attitudes
             new_god_dict["interventions"] = converted_interventions
 
             # unpack the temp dict and convert the aspect data to the data class
@@ -590,6 +590,20 @@ class LibraryOfAlexandria:
 
         return effects_data
 
+    def get_god_attitudes_data(self, god_name):
+        """
+        Get data for a god's attitudes from the central library
+
+        Args:
+            god_name(str):
+
+        Returns:
+            AttitudeData: data for a specified god.
+        """
+        attitude_data = self.gods[god_name].attitudes
+
+        return attitude_data
+
     def refresh_library_data(self):
         """
         Load json data into the library, convert strings to enums and dicts to data classes.
@@ -601,6 +615,7 @@ class LibraryOfAlexandria:
         self.convert_aspects_to_data_classes()
         self.convert_races_to_data_classes()
         self.convert_stats_to_data_classes()
+        self.convert_gods_to_data_classes()
 
     def load_data_into_library(self):
         """

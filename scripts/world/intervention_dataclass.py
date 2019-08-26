@@ -1,6 +1,6 @@
 
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Dict
 from scripts.skills.effects.effect_dataclass import EffectData
 
 
@@ -11,4 +11,4 @@ class InterventionData:
     """
     name: str = "None"
     required_opinion: int = 0
-    effects: List[EffectData] = field(default_factory=list)
+    effects: Dict = field(default_factory=dict)

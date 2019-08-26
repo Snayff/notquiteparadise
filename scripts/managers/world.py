@@ -24,7 +24,7 @@ class WorldManager:
         self.Affliction = AfflictionMethods(self)
         self.Map = MapMethods(self)
         self.FOV = FOVMethods(self)
-        self.Gods = GodMethods(self)
+        self.God = GodMethods(self)
 
         self.game_map = None  # type: GameMap
         self.player = None  # type: Entity
@@ -33,7 +33,7 @@ class WorldManager:
         self.player_fov_map = None  # type: tcod.map.Map
         self.player_fov_is_dirty = False
 
-        logging.info( f"WorldManager initialised.")
+        logging.info(f"WorldManager initialised.")
 
     def update(self):
         """

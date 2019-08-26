@@ -63,7 +63,8 @@ def initialise_game():
     world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")
     world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand")
     world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand")
-    world_manager.Gods.create_god("small_gods")
+    world_manager.God.create_god("the small gods")
+    world_manager.God.judge_action("flaming", world_manager.Entity.get_player())
 
     # TODO - remove when skill learning is in
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic attack"))

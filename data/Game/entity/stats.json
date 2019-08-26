@@ -30,7 +30,7 @@
         "max_hp": {
             "name": "max hp",
             "secondary_stat_type": "max_hp",
-            "base_value": 20,
+            "base_value": 200,
             "vigour_mod": 2,
             "clout_mod": 0,
             "skullduggery_mod": 0,
