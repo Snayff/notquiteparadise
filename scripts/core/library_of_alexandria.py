@@ -580,7 +580,7 @@ class LibraryOfAlexandria:
             god_name(str):
 
         Returns:
-            InterventionData: data for a specified god.
+            dict: data for a specified god's interventions. (key, InterventionData)
         """
         interventions_data = self.gods[god_name].interventions
 

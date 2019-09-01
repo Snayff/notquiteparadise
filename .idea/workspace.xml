@@ -197,9 +197,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/scripts/managers/world_methods/god_methods.py</url>
-          <line>78</line>
-          <option name="timeStamp" value="12" />
+          <url>file://$PROJECT_DIR$/scripts/event_handlers/god_handler.py</url>
+          <line>72</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,6 +1,7 @@
 import logging
+import random
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 
 from scripts.global_singletons.data_library import library
 from scripts.world.god import God
@@ -25,8 +26,6 @@ class GodMethods:
         Args:
             god_name ():
         """
-        data = library.get_god_data(god_name)
-
         from scripts.world.god import God
         god = God(god_name)
         self.add_god_to_central_list(god)
@@ -83,3 +82,69 @@ class GodMethods:
 
                 logging.debug(f"'{god.name}' reacted to '{entity.name}' using {action_name}. New opinion ="
                               f" {god.opinions[entity]}")
+
+    def consider_intervening(self, entity, action=None):
+        """
+        Loop all gods and check if they will intervene
+
+        Args:
+            entity (Entity):
+            action (object): Can be str if matching name, e.g. affliction name, or Enum name, e.g. Hit Type name.
+
+        Returns:
+            List[Tuple]: List of tuples containing (God.name, intervention) as strings.
+        """
+
+        gods = self.get_gods()
+
+        all_interventions_taken = []
+
+        if action:
+            # handle enums and str being passed in
+            if isinstance(action, Enum):
+                action_name = action.name
+            else:
+                action_name = action
+        else:
+            action_name = "None"
+
+        # action taken by an entity so start consideration
+        for god in gods:
+
+            # does the god care about the entity?
+            if entity in god.opinions:
+                # what are the possible interventions
+                interventions = library.get_god_interventions_data(god.name)
+                attitudes = library.get_god_attitudes_data(god.name)
+                possible_interventions = []
+                intervention_weightings = []
+                base_inaction_value = 75  # weighting for doing nothing # TODO - move magic number to config
+                inaction_modifier = 1  # TODO - move magic number to config
+
+                for name, intervention in interventions.items():
+                    # is the god willing to intervene (meet required opinion)
+                    if abs(god.opinions[entity]) >= abs(intervention.required_opinion):
+                        possible_interventions.append(intervention)
+                        intervention_weightings.append(abs(intervention.required_opinion))
+
+                # make no intervention less likely if god cares about action
+                if action_name in attitudes:
+                    inaction_modifier = 0.5
+                # add inaction to list of choices
+                possible_interventions.append("None")
+                intervention_weightings.append(base_inaction_value * inaction_modifier)
+
+                # which intervention, if any,  shall the god consider using?
+                chosen_intervention = random.choices(possible_interventions)
+
+                # if god has chosen to take an action then add to list
+                if chosen_intervention != "None":
+                    all_interventions_taken.append((god.name, chosen_intervention))
+
+            return all_interventions_taken
+
+    def intervene(self, god_name, intervention_name):
+        pass
+
+
+    # TODO - god take action (consider taking action in response to any entity event?)

@@ -6,7 +6,7 @@
         "attitudes": [
             {
                 "action": "flaming",
-                "opinion_change": -5
+                "opinion_change": -80
             },
             {
                 "action": "burn",
