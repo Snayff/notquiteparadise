@@ -644,8 +644,8 @@ Wrapper for the create effect under world_manager.Skill.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.add_entity">
-<code class="descname">add_entity</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em>, <em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.add_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.add_entity" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.add_entity_to_central_list">
+<code class="descname">add_entity_to_central_list</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em>, <em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.add_entity_to_central_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.add_entity_to_central_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add entity to game map</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -659,8 +659,8 @@ Wrapper for the create effect under world_manager.Skill.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.add_player">
-<code class="descname">add_player</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em>, <em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.add_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.add_player" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.add_player_to_central_list">
+<code class="descname">add_player_to_central_list</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em>, <em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.add_player_to_central_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.add_player_to_central_list" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -678,9 +678,9 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tile_x</strong> – </p></li>
-<li><p><strong>tile_y</strong> – </p></li>
-<li><p><strong>actor_name</strong> – </p></li>
+<li><p><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+<li><p><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+<li><p><strong>actor_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
 <li><p><strong>player</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – </p></li>
 </ul>
 </dd>
@@ -916,6 +916,17 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt id="scripts.managers.world_methods.map_methods.MapMethods">
 <em class="property">class </em><code class="descclassname">scripts.managers.world_methods.map_methods.</code><code class="descname">MapMethods</code><span class="sig-paren">(</span><em>manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods" title="Permalink to this definition">¶</a></dt>
 <dd><p>Methods for querying game map and game map related info and taking game map actions.</p>
+<dl class="attribute">
+<dt id="scripts.managers.world_methods.map_methods.MapMethods.manager">
+<code class="descname">manager</code><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>the manager containing this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.managers.world.WorldManager" title="scripts.managers.world.WorldManager">WorldManager</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="scripts.managers.world_methods.map_methods.MapMethods.convert_xy_to_tile">
 <em class="property">static </em><code class="descname">convert_xy_to_tile</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.convert_xy_to_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.convert_xy_to_tile" title="Permalink to this definition">¶</a></dt>
@@ -935,8 +946,8 @@ Wrapper for the create effect under world_manager.Skill.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.managers.world_methods.map_methods.MapMethods.create_new_map">
-<code class="descname">create_new_map</code><span class="sig-paren">(</span><em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.create_new_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.create_new_map" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.managers.world_methods.map_methods.MapMethods.create_game_map">
+<code class="descname">create_game_map</code><span class="sig-paren">(</span><em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.create_game_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.create_game_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new GameMap and create player FOV</p>
 </dd></dl>
 
@@ -1187,6 +1198,17 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt id="scripts.managers.world_methods.skill_methods.SkillMethods">
 <em class="property">class </em><code class="descclassname">scripts.managers.world_methods.skill_methods.</code><code class="descname">SkillMethods</code><span class="sig-paren">(</span><em>manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/skill_methods.html#SkillMethods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.skill_methods.SkillMethods" title="Permalink to this definition">¶</a></dt>
 <dd><p>Methods for querying skills and skill related info and taking skill actions.</p>
+<dl class="attribute">
+<dt id="scripts.managers.world_methods.skill_methods.SkillMethods.manager">
+<code class="descname">manager</code><a class="headerlink" href="#scripts.managers.world_methods.skill_methods.SkillMethods.manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>the manager containing this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.managers.world.WorldManager" title="scripts.managers.world.WorldManager">WorldManager</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="scripts.managers.world_methods.skill_methods.SkillMethods.calculate_to_hit_score">
 <em class="property">static </em><code class="descname">calculate_to_hit_score</code><span class="sig-paren">(</span><em>defender</em>, <em>skill_accuracy</em>, <em>stat_to_target</em>, <em>attacker=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/skill_methods.html#SkillMethods.calculate_to_hit_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.skill_methods.SkillMethods.calculate_to_hit_score" title="Permalink to this definition">¶</a></dt>

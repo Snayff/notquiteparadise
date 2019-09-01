@@ -38,6 +38,7 @@
 <span class="kn">from</span> <span class="nn">scripts.managers.world_methods.affliction_methods</span> <span class="k">import</span> <span class="n">AfflictionMethods</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.world_methods.entity_methods</span> <span class="k">import</span> <span class="n">EntityMethods</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.world_methods.fov_methods</span> <span class="k">import</span> <span class="n">FOVMethods</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.world_methods.god_methods</span> <span class="k">import</span> <span class="n">GodMethods</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.world_methods.map_methods</span> <span class="k">import</span> <span class="n">MapMethods</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.world_methods.skill_methods</span> <span class="k">import</span> <span class="n">SkillMethods</span>
 
@@ -56,14 +57,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Affliction</span> <span class="o">=</span> <span class="n">AfflictionMethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Map</span> <span class="o">=</span> <span class="n">MapMethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">FOV</span> <span class="o">=</span> <span class="n">FOVMethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">God</span> <span class="o">=</span> <span class="n">GodMethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: GameMap</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: Entity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gods</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">player_fov_map</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: tcod.map.Map</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">player_fov_is_dirty</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;WorldManager initialised.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;WorldManager initialised.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="WorldManager.update"><a class="viewcode-back" href="../../../managers.html#scripts.managers.world.WorldManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

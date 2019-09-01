@@ -31,13 +31,13 @@
           <div class="body" role="main">
             
   <h1>Source code for scripts.managers.world_methods.skill_methods</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span></span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">random</span>
+
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
-
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">DamageTypes</span><span class="p">,</span> \
-    <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> <span class="n">HitValues</span><span class="p">,</span> <span class="n">HitTypes</span><span class="p">,</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">SkillShapes</span>
-
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> <span class="n">HitValues</span><span class="p">,</span> <span class="n">HitTypes</span><span class="p">,</span> \
+    <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">SkillShapes</span>
 <span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="k">import</span> <span class="n">MessageEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
@@ -48,13 +48,15 @@
 <span class="kn">from</span> <span class="nn">scripts.skills.effects.damage</span> <span class="k">import</span> <span class="n">DamageEffect</span>
 <span class="kn">from</span> <span class="nn">scripts.skills.effects.move</span> <span class="k">import</span> <span class="n">MoveEffect</span>
 <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.terrain</span> <span class="k">import</span> <span class="n">Terrain</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
 
 
 <div class="viewcode-block" id="SkillMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods">[docs]</a><span class="k">class</span> <span class="nc">SkillMethods</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Methods for querying skills and skill related info and taking skill actions.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        manager(WorldManager): the manager containing this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">scripts.managers.world</span> <span class="k">import</span> <span class="n">WorldManager</span>

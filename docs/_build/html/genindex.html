@@ -77,11 +77,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.active_afflictions">active_afflictions (scripts.managers.world_methods.affliction_methods.AfflictionMethods attribute)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_entity">add_entity() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
+      <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_entity_to_central_list">add_entity_to_central_list() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.add_message">add_message() (scripts.ui_elements.message_log.MessageLog method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_player">add_player() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
+      <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_player_to_central_list">add_player_to_central_list() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="skills.html#scripts.skills.affliction.Affliction.affected_entity">affected_entity (scripts.skills.affliction.Affliction attribute)</a>
 </li>
@@ -173,13 +173,15 @@
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.colours.Colour.complement">complement (scripts.ui_elements.colours.Colour attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_afflictions_to_data_classes">convert_afflictions_to_data_classes() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_aspects_to_data_classes">convert_aspects_to_data_classes() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_external_strings_to_internal_enums">convert_external_strings_to_internal_enums() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_gods_to_data_classes">convert_gods_to_data_classes() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_races_to_data_classes">convert_races_to_data_classes() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
@@ -199,7 +201,7 @@
         <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_effect">(scripts.managers.world_methods.skill_methods.SkillMethods static method)</a>
 </li>
       </ul></li>
-      <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.create_new_map">create_new_map() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
+      <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.create_game_map">create_game_map() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.create_player_fov_map">create_player_fov_map() (scripts.managers.world_methods.fov_methods.FOVMethods method)</a>
 </li>
@@ -383,8 +385,20 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_game_map">get_game_map() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_attitudes_data">get_god_attitudes_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_data">get_god_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_data">get_god_intervention_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_effect_data">get_god_intervention_effect_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_effects_data">get_god_intervention_effects_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_interventions_data">get_god_interventions_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_hit_type">get_hit_type() (scripts.managers.world_methods.skill_methods.SkillMethods static method)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_homeland_data">get_homeland_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
@@ -543,6 +557,8 @@
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_aspect_json">load_values_from_aspect_json() (scripts.core.library_of_alexandria.LibraryOfAlexandria static method)</a>
 </li>
+      <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_gods_json">load_values_from_gods_json() (scripts.core.library_of_alexandria.LibraryOfAlexandria static method)</a>
+</li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_homeland_json">load_values_from_homeland_json() (scripts.core.library_of_alexandria.LibraryOfAlexandria static method)</a>
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_race_json">load_values_from_race_json() (scripts.core.library_of_alexandria.LibraryOfAlexandria static method)</a>
@@ -568,15 +584,19 @@
       <ul>
         <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.manager">(scripts.managers.world_methods.entity_methods.EntityMethods attribute)</a>
 </li>
+        <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.manager">(scripts.managers.world_methods.map_methods.MapMethods attribute)</a>
+</li>
+        <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.manager">(scripts.managers.world_methods.skill_methods.SkillMethods attribute)</a>
+</li>
       </ul></li>
       <li><a href="core.html#scripts.core.constants.MapEventTypes">MapEventTypes (class in scripts.core.constants)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods">MapMethods (class in scripts.managers.world_methods.map_methods)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.menu_background">menu_background (scripts.ui_elements.palette.Palette attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.menu_background">menu_background (scripts.ui_elements.palette.Palette attribute)</a>
+</li>
       <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.message_list">message_list (scripts.ui_elements.message_log.MessageLog attribute)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui.UIManager.message_log">message_log (scripts.managers.ui.UIManager attribute)</a>

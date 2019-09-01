@@ -206,6 +206,12 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_gods_to_data_classes">
+<code class="descname">convert_gods_to_data_classes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.convert_gods_to_data_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_gods_to_data_classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take aspect data from library and convert to data classes</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_races_to_data_classes">
 <code class="descname">convert_races_to_data_classes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.convert_races_to_data_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.convert_races_to_data_classes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take race data from library and convert to data classes</p>
@@ -310,6 +316,118 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>EffectData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_attitudes_data">
+<code class="descname">get_god_attitudes_data</code><span class="sig-paren">(</span><em>god_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_god_attitudes_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_attitudes_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data for a god’s attitudes from the central library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data for a specified god.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>AttitudeData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_data">
+<code class="descname">get_god_data</code><span class="sig-paren">(</span><em>god_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_god_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data for a god from the central library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data for specified god.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GodData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_data">
+<code class="descname">get_god_intervention_data</code><span class="sig-paren">(</span><em>god_name</em>, <em>intervention_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_god_intervention_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data for a god’s specified intervention from the central library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data for a specified god’s  specified intervention.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>InterventionData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_effect_data">
+<code class="descname">get_god_intervention_effect_data</code><span class="sig-paren">(</span><em>god_name</em>, <em>intervention_name</em>, <em>effect_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_god_intervention_effect_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_effect_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data for a specified effect in a god’s intervention from the central library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data for a specified skill effect.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>EffectData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_effects_data">
+<code class="descname">get_god_intervention_effects_data</code><span class="sig-paren">(</span><em>god_name</em>, <em>intervention_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_god_intervention_effects_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_intervention_effects_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data for the effects in a god’s intervention from the central library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of effects data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[EffectData]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_interventions_data">
+<code class="descname">get_god_interventions_data</code><span class="sig-paren">(</span><em>god_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.get_god_interventions_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_god_interventions_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data for a god’s interventions from the central library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data for a specified god’s interventions. (key, InterventionData)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -478,6 +596,12 @@
 <dl class="staticmethod">
 <dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_aspect_json">
 <em class="property">static </em><code class="descname">load_values_from_aspect_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.load_values_from_aspect_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_aspect_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_gods_json">
+<em class="property">static </em><code class="descname">load_values_from_gods_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library_of_alexandria.html#LibraryOfAlexandria.load_values_from_gods_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library_of_alexandria.LibraryOfAlexandria.load_values_from_gods_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns:</p>
 </dd></dl>
 
