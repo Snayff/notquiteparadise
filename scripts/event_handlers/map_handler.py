@@ -21,7 +21,7 @@ class MapHandler(Subscriber):
         """
 
         log_string = f"{self.name} received {event.type}..."
-        logging.info( log_string)
+        logging.debug(log_string)
 
         if event.type == MapEventTypes.TILE_INTERACTION:
             log_string = f"-> Processing {event.cause} interaction on tiles"

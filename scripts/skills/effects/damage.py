@@ -37,11 +37,11 @@ class DamageEffect(Effect):
         if isinstance(self.owner, Skill):
             attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
             data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                 self.skill_effect_type)
+                                                 self.effect_type)
             is_guaranteed_hit = False
         elif isinstance(self.owner, Affliction):
             attacker = None
-            data = library.get_affliction_effect_data(self.owner.name, self.skill_effect_type)
+            data = library.get_affliction_effect_data(self.owner.name, self.effect_type)
             is_guaranteed_hit = True
 
         # loop all tiles in list
@@ -166,8 +166,8 @@ class DamageEffect(Effect):
         int_modified_damage = int(modified_damage)
 
         # log the info
-        log_string = f"-> Initial:{initial_damage}, Mitigated:{mitigated_damage},  Modified:{modified_damage}," \
-                     f" Final: {int_modified_damage}"
+        log_string = f"-> Initial:{initial_damage}, Mitigated: {format(mitigated_damage,'.2f')},  Modified" \
+                     f":{format(modified_damage,'.2f')}, Final: {int_modified_damage}"
         logging.debug(log_string)
 
         return int_modified_damage

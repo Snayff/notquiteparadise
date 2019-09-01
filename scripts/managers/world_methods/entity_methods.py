@@ -1,3 +1,4 @@
+
 import logging
 import math
 import pygame
@@ -10,9 +11,7 @@ from scripts.components.homeland import Homeland
 from scripts.components.race import Race
 from scripts.components.savvy import Savvy
 from scripts.core.constants import TILE_SIZE
-
 from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -229,7 +228,7 @@ class EntityMethods:
         """
         return self.manager.player
 
-    def add_entity(self, tile_x, tile_y, entity):
+    def add_entity_to_central_list(self, tile_x, tile_y, entity):
         """
         Add entity to game map
 
@@ -242,7 +241,7 @@ class EntityMethods:
         tile = self.manager.Map.get_tile(tile_x, tile_y)
         self.manager.Map.set_entity_on_tile(tile, entity)
 
-    def add_player(self, tile_x, tile_y, entity):
+    def add_player_to_central_list(self, tile_x, tile_y, entity):
         """
 
         Args:
@@ -252,7 +251,7 @@ class EntityMethods:
         """
         # TODO - fold into create actor, use player arg default to false
         self.manager.player = entity
-        self.manager.Entity.add_entity(tile_x, tile_y, entity)
+        self.manager.Entity.add_entity_to_central_list(tile_x, tile_y, entity)
 
     def remove_entity(self, entity):
         """
@@ -272,9 +271,9 @@ class EntityMethods:
         """
 
         Args:
-            tile_x:
-            tile_y:
-            actor_name:
+            tile_x (int):
+            tile_y (int):
+            actor_name (str):
             player (bool):
         """
         actor_template = library.get_actor_template_data(actor_name)
@@ -311,7 +310,7 @@ class EntityMethods:
         actor.combatant.stamina = actor.combatant.secondary_stats.max_stamina
 
         if player:
-            self.add_player(tile_x, tile_y, actor)
+            self.add_player_to_central_list(tile_x, tile_y, actor)
         else:
-            self.manager.Entity.add_entity(tile_x, tile_y, actor)
+            self.manager.Entity.add_entity_to_central_list(tile_x, tile_y, actor)
 

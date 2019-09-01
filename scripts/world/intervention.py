@@ -1,40 +1,35 @@
+import logging
 
-import pygame
-
-from scripts.core.constants import EffectTypes
-from scripts.events.game_events import EndTurnEvent
+from scripts.core.constants import MessageEventTypes
+from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
-from scripts.skills.effects.change_terrain import ChangeTerrainEffect
-from scripts.skills.effects.damage import DamageEffect
+from scripts.world.god import God
 
 
-class Skill:
+class Intervention:
     """
-    A skill to be used by an actor
+    An intervention to be used by a god
 
     Attributes:
             name(str):
-            owner():
-            skill_tree_name():
+            owner(God):
     """
-    def __init__(self, owner,  skill_tree_name, skill_name):
-        self.owner = owner
-        self.skill_tree_name = skill_tree_name
-        self.name = skill_name
+    def __init__(self, owner, intervention_name):
+        self.owner = owner  # type: God
+        self.name = intervention_name
 
         # TODO - add cooldown
 
     def use(self, target_pos):
         """
-        Use the skill
+        Use the intervention
 
         Args:
             target_pos (tuple): x y of the target
         """
         from scripts.global_singletons.managers import world_manager
-        data = library.get_skill_data(self.skill_tree_name, self.name)
+        data = library.get_god_intervention_data(self.owner.name, self.name)
 
         target_x, target_y = target_pos
 
@@ -46,9 +41,8 @@ class Skill:
             effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
             effect.trigger(effected_tiles)
 
-        # end the turn
-        publisher.publish(EndTurnEvent(data.time_cost))
-
-
-
-
+        # logging
+        tile = world_manager.Map.get_tile(target_x, target_y)
+        entity = world_manager.Map.get_entity_on_tile(tile)
+        msg = f"#col.info {self.owner.name} intervened, using {self.name} on {entity.name}."
+        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))

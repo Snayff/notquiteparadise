@@ -1,6 +1,6 @@
+
 from dataclasses import dataclass, field
 from typing import List, Dict
-
 from scripts.core.constants import TargetTags, SkillShapes
 
 

@@ -4,6 +4,7 @@ import time
 
 from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
 from scripts.event_handlers.affliction_handler import AfflictionHandler
+from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
 from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
@@ -54,14 +55,16 @@ def initialise_game():
 
     map_width = 50
     map_height = 30
-    world_manager.Map.create_new_map(map_width, map_height)
+    world_manager.Map.create_game_map(map_width, map_height)
     world_manager.FOV.create_player_fov_map(map_width, map_height)
     ui_manager.delayed_init()
 
-    world_manager.Entity.create_actor_entity(0, 0, "player", True)  # TODO - remove when proper load is in
-    world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
-    world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand")  # TODO - remove when actor gen is in load
-    world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand")  # TODO - remove when actor gen is in load
+    # TODO - remove when map generation is in
+    world_manager.Entity.create_actor_entity(0, 0, "player", True)
+    world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")
+    world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand")
+    world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand")
+    world_manager.God.create_god("the small gods")
 
     # TODO - remove when skill learning is in
     publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic attack"))
@@ -89,15 +92,18 @@ def initialise_event_handlers():
     entity_handler = EntityHandler(event_hub)
     entity_handler.subscribe(EventTopics.ENTITY)
 
-    ui_handler = UiHandler(event_hub)
-    ui_handler.subscribe(EventTopics.ENTITY)
-    ui_handler.subscribe(EventTopics.GAME)
-    ui_handler.subscribe(EventTopics.UI)
-
     map_handler = MapHandler(event_hub)
     map_handler.subscribe(EventTopics.MAP)
 
     affliction_handler = AfflictionHandler(event_hub)
     affliction_handler.subscribe(EventTopics.ENTITY)
     affliction_handler.subscribe(EventTopics.GAME)
+
+    god_handler = GodHandler(event_hub)
+    god_handler.subscribe(EventTopics.ENTITY)
+
+    ui_handler = UiHandler(event_hub)
+    ui_handler.subscribe(EventTopics.ENTITY)
+    ui_handler.subscribe(EventTopics.GAME)
+    ui_handler.subscribe(EventTopics.UI)
 

@@ -1,15 +1,14 @@
+
 import logging
 
-from scripts.core.constants import TargetTags, AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
+from scripts.core.constants import AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
     EffectTypes
-
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
-from scripts.skills.affliction import Affliction
 from scripts.skills.effects.effect import Effect
 from scripts.world.entity import Entity
-from scripts.world.tile import Tile
+
 
 
 class ApplyAfflictionEffect(Effect):
@@ -32,13 +31,19 @@ class ApplyAfflictionEffect(Effect):
         # determine who triggered this effect to articulate the attacker and get the effect data
         from scripts.skills.skill import Skill
         from scripts.world.aspect import Aspect
+        from scripts.world.intervention import Intervention
         if isinstance(self.owner, Skill):
             attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect
             effect_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                        self.skill_effect_type)
+                                                        self.effect_type)
         elif isinstance(self.owner, Aspect):
             attacker = None
-            effect_data = library.get_aspect_effect_data(self.owner.name, self.skill_effect_type)
+            effect_data = library.get_aspect_effect_data(self.owner.name, self.effect_type)
+
+        elif isinstance(self.owner, Intervention):
+            attacker = None
+            effect_data = library.get_god_intervention_effect_data(self.owner.owner.name, self.owner.name,
+                                                                   self.effect_type)
 
         affliction_data = library.get_affliction_data(effect_data.affliction_name)
 
@@ -96,11 +101,16 @@ class ApplyAfflictionEffect(Effect):
         # determine who triggered this effect to articulate the attacker and get the effect data
         from scripts.skills.skill import Skill
         from scripts.world.aspect import Aspect
+        from scripts.world.intervention import Intervention
         if isinstance(self.owner, Skill):
             effect_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                        self.skill_effect_type)
+                                                        self.effect_type)
         elif isinstance(self.owner, Aspect):
-            effect_data = library.get_aspect_effect_data(self.owner.name, self.skill_effect_type)
+            effect_data = library.get_aspect_effect_data(self.owner.name, self.effect_type)
+        elif isinstance(self.owner, Intervention):
+            attacker = None
+            effect_data = library.get_god_intervention_effect_data(self.owner.owner.name, self.owner.name,
+                                                                   self.effect_type)
 
         from scripts.global_singletons.managers import world_manager
         active_affliction = world_manager.Affliction.get_affliction_for_entity(defending_entity,
@@ -112,7 +122,7 @@ class ApplyAfflictionEffect(Effect):
             active_duration = active_affliction.duration
 
             log_string = f"{defending_entity.name} already has {effect_data.affliction_name}:{active_duration}..."
-            logging.info( log_string)
+            logging.debug(log_string)
 
             # alter the duration of the current afflictions if the new one will last longer
             if active_duration < modified_duration:
@@ -121,9 +131,8 @@ class ApplyAfflictionEffect(Effect):
                 log_string = f"-> Active duration {active_duration} is less than new duration " \
                     f"{modified_duration} so updated the duration on the active afflictions."
 
-            else:
-                log_string = f"-> Active duration {active_duration} is greater than or equal to new duration " \
-                    f"{modified_duration} so no action taken."
+            # no action taken if duration already longer
+
             # log the outcome of the duration comparison
             logging.debug(log_string)
 
@@ -131,7 +140,7 @@ class ApplyAfflictionEffect(Effect):
         else:
             log_string = f"Applying {effect_data.affliction_name} afflictions to '{defending_entity.name}' with " \
                 f"duration of {modified_duration}."
-            logging.info( log_string)
+            logging.info(log_string)
 
             # create the afflictions
             affliction = world_manager.Affliction.create_affliction(effect_data.affliction_name, modified_duration,

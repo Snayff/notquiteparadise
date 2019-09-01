@@ -11,6 +11,9 @@ from scripts.event_handlers.pub_sub_hub import Subscriber, Event
 
 
 class EntityHandler(Subscriber):
+    """
+    Handle events affecting entities
+    """
     def __init__(self, event_hub):
         Subscriber.__init__(self, "entity_handler", event_hub)
 
@@ -23,7 +26,7 @@ class EntityHandler(Subscriber):
         """
 
         log_string = f"{self.name} received {event.type}..."
-        logging.info( log_string)
+        logging.debug(log_string)
 
         if event.type == EntityEventTypes.MOVE:
             log_string = f"-> Processing '{event.entity.name}'`s move."

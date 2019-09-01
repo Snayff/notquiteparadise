@@ -21,7 +21,7 @@ class AfflictionHandler(Subscriber):
             event(Event): the event in need of processing
         """
         log_string = f"{self.name} received {event.type}..."
-        logging.info(log_string)
+        logging.debug(log_string)
 
         if event.type == GameEventTypes.END_TURN:
             # trigger end of turn afflictions

@@ -10,9 +10,13 @@ from typing import List
 class MapMethods:
     """
     Methods for querying game map and game map related info and taking game map actions.
+
+    Attributes:
+        manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        self.manager = manager
+        from scripts.managers.world import WorldManager
+        self.manager = manager  # type: WorldManager
 
     def get_game_map(self):
         """
@@ -173,7 +177,7 @@ class MapMethods:
 
         return tile_x, tile_y
 
-    def create_new_map(self, width, height):
+    def create_game_map(self, width, height):
         """
         Create new GameMap and create player FOV
         """
