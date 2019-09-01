@@ -21,6 +21,11 @@ class GodHandler(Subscriber):
         Args:
             event(Event): the event in need of processing
         """
+        # TODO -
+        #  create events for receiving afflictions
+        #  create events for receiving damage types
+        #  create events for causing and receiving hit type
+        #  create events for being the cause of death
 
         log_string = f"{self.name} received {event.type}..."
         logging.debug(log_string)
@@ -70,11 +75,6 @@ class GodHandler(Subscriber):
         # TODO - update to pass action to consider_intervening
         chosen_interventions = world_manager.God.consider_intervening(event.entity)
 
-        for god_name, intervention_name in chosen_interventions:
-            world_manager.God.intervene(god_name, intervention_name)
+        for god, intervention, entity in chosen_interventions:
+            world_manager.God.intervene(god, intervention, entity)
 
-        # TODO -
-        #  create events for receiving afflictions
-        #  create events for receiving damage types
-        #  create events for causing and receiving hit type
-        #  create events for being the cause of death

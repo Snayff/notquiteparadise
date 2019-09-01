@@ -5,7 +5,6 @@ from typing import List, Tuple
 
 from scripts.global_singletons.data_library import library
 from scripts.world.god import God
-from scripts.world.god_dataclass import GodData
 
 
 class GodMethods:
@@ -28,6 +27,7 @@ class GodMethods:
         """
         from scripts.world.god import God
         god = God(god_name)
+
         self.add_god_to_central_list(god)
 
     def add_god_to_central_list(self, god):
@@ -92,7 +92,7 @@ class GodMethods:
             action (object): Can be str if matching name, e.g. affliction name, or Enum name, e.g. Hit Type name.
 
         Returns:
-            List[Tuple]: List of tuples containing (God.name, intervention) as strings.
+            List[Tuple]: List of tuples containing (God.name, intervention, entity) as strings.
         """
 
         gods = self.get_gods()
@@ -114,7 +114,7 @@ class GodMethods:
             # does the god care about the entity?
             if entity in god.opinions:
                 # what are the possible interventions
-                interventions = library.get_god_interventions_data(god.name)
+                interventions = god.interventions
                 attitudes = library.get_god_attitudes_data(god.name)
                 possible_interventions = []
                 intervention_weightings = []
@@ -122,12 +122,14 @@ class GodMethods:
                 inaction_modifier = 1  # TODO - move magic number to config
 
                 for name, intervention in interventions.items():
-                    # is the god willing to intervene (meet required opinion)
-                    if abs(god.opinions[entity]) >= abs(intervention.required_opinion):
-                        possible_interventions.append(intervention)
-                        intervention_weightings.append(abs(intervention.required_opinion))
+                    intervention_data = library.get_god_intervention_data(intervention.owner.name, name)
 
-                # make no intervention less likely if god cares about action
+                    # is the god willing to intervene (meet required opinion)
+                    if abs(god.opinions[entity]) >= abs(intervention_data.required_opinion):
+                        possible_interventions.append(intervention)
+                        intervention_weightings.append(abs(intervention_data.required_opinion))
+
+                # make no intervention less likely if god cares about action taken by entity
                 if action_name in attitudes:
                     inaction_modifier = 0.5
                 # add inaction to list of choices
@@ -135,16 +137,24 @@ class GodMethods:
                 intervention_weightings.append(base_inaction_value * inaction_modifier)
 
                 # which intervention, if any,  shall the god consider using?
-                chosen_intervention = random.choices(possible_interventions)
+                chosen_intervention_list = random.choices(possible_interventions)
+                chosen_intervention = chosen_intervention_list.pop()
 
                 # if god has chosen to take an action then add to list
                 if chosen_intervention != "None":
-                    all_interventions_taken.append((god.name, chosen_intervention))
+                    all_interventions_taken.append((god, chosen_intervention, entity))
 
             return all_interventions_taken
 
-    def intervene(self, god_name, intervention_name):
-        pass
+    @staticmethod
+    def intervene(god, intervention, entity):
+        """
+        God to use intervention on entity.
 
+        Args:
+            god (God):
+            intervention (Intervention):
+            entity (Entity):
+        """
+        god.interventions[intervention.name].use((entity.x, entity.y))
 
-    # TODO - god take action (consider taking action in response to any entity event?)

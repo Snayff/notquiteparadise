@@ -281,6 +281,10 @@ class LibraryOfAlexandria:
             # plans to remove terrain from internal so dont update for all values
             self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
             self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
+
+            # SkillTree:Skill:shape
+            for value in SkillShapes:
+                self.recursive_replace(current_list, "shape", value.name.lower(), value)
        
         # Update Afflictions
         # Affliction:category
@@ -301,10 +305,6 @@ class LibraryOfAlexandria:
             self.recursive_replace(self.stats, "secondary_stat_type", value.name.lower(), value)
 
         # Update skills
-        # SkillTree:Skill:shape
-        for value in SkillShapes:
-            self.recursive_replace(self.skills, "shape", value.name.lower(), value)
-
         # SkillTree:Skill:resource_type
         for value in SecondaryStatTypes:
             self.recursive_replace(self.skills, "resource_type", value.name.lower(), value)
@@ -586,6 +586,21 @@ class LibraryOfAlexandria:
 
         return interventions_data
 
+    def get_god_intervention_data(self, god_name, intervention_name):
+        """
+        Get data for a god's specified intervention from the central library
+
+        Args:
+            god_name(str):
+            intervention_name(str):
+
+        Returns:
+            InterventionData: data for a specified god's  specified intervention.
+        """
+        interventions_data = self.gods[god_name].interventions[intervention_name]
+
+        return interventions_data
+
     def get_god_intervention_effects_data(self, god_name, intervention_name):
         """
         Get data for the effects in a god's intervention from the central library
@@ -595,9 +610,25 @@ class LibraryOfAlexandria:
             intervention_name(str):
 
         Returns:
-            EffectData: data for a specified skill effect.
+            List[EffectData]: list of effects data
         """
         effects_data = self.gods[god_name].interventions[intervention_name].effects
+
+        return effects_data
+
+    def get_god_intervention_effect_data(self, god_name, intervention_name, effect_type):
+        """
+        Get data for a specified effect in a god's intervention from the central library
+
+        Args:
+            god_name(str):
+            intervention_name(str):
+            effect_type(EffectTypes):
+
+        Returns:
+            EffectData: data for a specified skill effect.
+        """
+        effects_data = self.gods[god_name].interventions[intervention_name].effects[effect_type.name]
 
         return effects_data
 

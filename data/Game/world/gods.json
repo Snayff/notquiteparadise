@@ -17,6 +17,14 @@
             {
                 "name": "slow the mighty",
                 "required_opinion": -10,
+                "description": "Apply burning affliction",
+                "icon": "placeholder/icon_05.png",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "shape": "circle",
+                "shape_size": 2,
+                "cooldown": 4,
                 "effects": [
                     {
                         "effect_type": "apply_affliction",
