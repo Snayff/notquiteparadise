@@ -45,7 +45,7 @@ class SecondaryStats:
     @property
     def max_stamina(self):
         """
-        Base value of an entities energy to take actions.
+        an entities energy to take actions.
 
         Returns:
             int:
@@ -74,7 +74,7 @@ class SecondaryStats:
     @property
     def accuracy(self):
         """
-        Base value of an entities likelihood to hit.
+        an entities likelihood to hit.
 
         Returns:
             int:
@@ -103,7 +103,7 @@ class SecondaryStats:
     @property
     def resist_burn(self):
         """
-        Base value of an entities resistance to burn damage.
+        an entities resistance to burn damage.
 
         Returns:
             int:
@@ -132,7 +132,7 @@ class SecondaryStats:
     @property
     def resist_cold(self):
         """
-        Base value of an entities resistance to cold damage.
+        an entities resistance to cold damage.
 
         Returns:
             int:
@@ -161,7 +161,7 @@ class SecondaryStats:
     @property
     def resist_chemical(self):
         """
-        Base value of an entities resistance to chemical damage.
+        an entities resistance to chemical damage.
 
         Returns:
             int:
@@ -190,7 +190,7 @@ class SecondaryStats:
     @property
     def resist_astral(self):
         """
-        Base value of an entities resistance to astral damage.
+        an entities resistance to astral damage.
 
         Returns:
             int:
@@ -219,11 +219,41 @@ class SecondaryStats:
     @property
     def resist_mundane(self):
         """
-        Base value of an entities resistance to mundane damage.
+        an entities resistance to mundane damage.
 
         Returns:
             int:
         """
+        stat_data = library.get_secondary_stat_data(SecondaryStatTypes.RESIST_MUNDANE)
+        base_value = stat_data.base_value
+
+        vigour = self.owner.primary_stats.vigour
+        from_vigour = vigour * stat_data.vigour_mod
+
+        clout = self.owner.primary_stats.clout
+        from_clout = clout * stat_data.clout_mod
+
+        skullduggery = self.owner.primary_stats.skullduggery
+        from_skullduggery = skullduggery * stat_data.skullduggery_mod
+
+        bustle = self.owner.primary_stats.bustle
+        from_bustle = bustle * stat_data.bustle_mod
+
+        exactitude = self.owner.primary_stats.exactitude
+        from_exactitude = exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+        return int(stat_total)
+    
+    @property
+    def sight_range(self):
+        """
+        Highest value among base contributions then modifiers applied. 
+
+        Returns:
+            int:
+        """
+        # TODO - add sight range to characteristic jsons
         stat_data = library.get_secondary_stat_data(SecondaryStatTypes.RESIST_MUNDANE)
         base_value = stat_data.base_value
 

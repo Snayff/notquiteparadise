@@ -106,6 +106,16 @@
             "skullduggery_mod": 0,
             "bustle_mod": 0,
             "exactitude_mod": 0
+        },
+        "sight_range": {
+            "name": "sight range",
+            "secondary_stat_type": "sight_range",
+            "base_value": 1,
+            "vigour_mod": 0,
+            "clout_mod": 0,
+            "skullduggery_mod": 0,
+            "bustle_mod": 0,
+            "exactitude_mod": 0
         }
     }
 }

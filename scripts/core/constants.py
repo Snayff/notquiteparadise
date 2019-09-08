@@ -209,6 +209,7 @@ class SecondaryStatTypes(Enum):
     RESIST_ASTRAL = auto()
     RESIST_COLD = auto()
     RESIST_MUNDANE = auto()
+    SIGHT_RANGE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
