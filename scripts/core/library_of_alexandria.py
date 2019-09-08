@@ -604,7 +604,15 @@ class LibraryOfAlexandria:
             SkillData: data for a specified skill.
         """
 
-        skill_data = self.skills[skill_tree].skill[skill_name]
+        if skill_tree in self.homelands:
+            skill_data = self.homelands[skill_tree].skills[skill_name]
+        elif skill_tree in self.savvys:
+            skill_data = self.savvys[skill_tree].skills[skill_name]
+        elif skill_tree in self.races:
+            skill_data = self.races[skill_tree].skills[skill_name]
+        else:
+            skill_data = None
+
         return skill_data
 
     def get_primary_stat_data(self, primary_stat_type):
@@ -650,7 +658,14 @@ class LibraryOfAlexandria:
             EffectData: data for a specified skill effect.
         """
         try:
-            effect_data = self.skills[skill_tree].skill[skill_name].effects[effect_type.name]
+            if skill_tree in self.homelands:
+                effect_data = self.homelands[skill_tree].skills[skill_name].effects[effect_type.name]
+            elif skill_tree in self.savvys:
+                effect_data = self.savvys[skill_tree].skills[skill_name].effects[effect_type.name]
+            elif skill_tree in self.races:
+                effect_data = self.races[skill_tree].skills[skill_name].effects[effect_type.name]
+            else:
+                effect_data = None
         except KeyError:
             effect_data = None
 
