@@ -1,9 +1,10 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Dict
 
 
 @dataclass()
-class RaceData:
+class CharacteristicData:
     """
     Data class for an aspect
     """
@@ -16,3 +17,4 @@ class RaceData:
     skullduggery: int = 0
     bustle: int = 0
     exactitude: int = 0
+    skills: Dict = field(default_factory=dict)

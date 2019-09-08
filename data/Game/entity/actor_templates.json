@@ -4,7 +4,7 @@
 		"description" : "Player description",
 		"race_component" : "herraculen",
 		"savvy_component": "cleromancer",
-		"homeland_component": "aristo_pirate",
+		"homeland_component": "aristo pirate",
 		"ai_component" : "none",
         "spritesheet" : "placeholder/Mobs_skeleton_06.png",
         "icon": "placeholder/Mobs_skeleton_06.png"
@@ -13,8 +13,8 @@
 		"name" : "goblinn hired hand",
 		"description" : "goblinn hired hand description",
 		"race_component" : "goblinn",
-		"savvy_component": "hired_hand",
-		"homeland_component": "bog_refugee",
+		"savvy_component": "hired hand",
+		"homeland_component": "bog refugee",
 		"ai_component" : "basic_monster",
         "spritesheet" : "placeholder/Mobs_goblin_02.png",
         "icon": "placeholder/Mobs_goblin_02.png"
