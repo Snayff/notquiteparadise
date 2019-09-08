@@ -6,8 +6,8 @@ from scripts.components.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes, HitTypes
 from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
-from scripts.skills.affliction_dataclasses import AfflictionData
-from scripts.skills.skill_dataclasses import SkillData, SkillTreeData
+from scripts.skills.affliction_dataclass import AfflictionData
+from scripts.skills.skill_dataclass import SkillData
 from scripts.skills.effects.effect_dataclass import EffectData
 from scripts.world.aspect_dataclass import AspectData
 from scripts.world.attitude_dataclass import AttitudeData
@@ -23,10 +23,9 @@ class LibraryOfAlexandria:
 
     def __init__(self):
         # TODO - add conversion to data class for remaining dicts
-        self.skills = {}  # conversion done
-        self.homelands = {}
+        self.homelands = {} # conversion done
         self.races = {}  # conversion done
-        self.savvys = {}
+        self.savvys = {} # conversion done
         self.afflictions = {}  # conversion done
         self.aspects = {}  # conversion done
         self.terrains = {}
@@ -37,45 +36,6 @@ class LibraryOfAlexandria:
         self.refresh_library_data()
 
         logging.info(f"Data Library initialised.")
-
-    def convert_skills_to_data_classes(self):
-        """
-        Take skill data from library and convert to data classes 
-        """
-        all_skill_data = self.skills
-        converted_data = {}
-
-        # loop all skill trees
-        for skill_tree_name, skill_tree_data in all_skill_data.items():
-            converted_skills = {}
-
-            # loop all skills in each skill tree
-            for skill_name, skill_data in skill_tree_data.items():
-                converted_skill_effects = {}
-
-                # loop skill effects in each skill
-                for index, skill_effect_data in enumerate(skill_data["effects"]):
-                    # convert the skill effect data to the data class
-                    skill_effect = EffectData(**skill_effect_data)
-                    converted_skill_effects[skill_effect.effect_type.name] = skill_effect
-
-                # set the temp dict to contain the converted skill effects
-                new_skill_dict = skill_data.copy()
-                new_skill_dict["effects"] = converted_skill_effects
-
-                # unpack the temp dict and convert the skill data to the data class
-                skill = SkillData(**new_skill_dict)
-                converted_skills[skill.name] = skill
-
-            # convert to the data class
-            converted_skill_tree = SkillTreeData(name=skill_tree_name, skill=converted_skills)
-
-            # set the dict to contain the converted skills
-            converted_data[converted_skill_tree.name] = converted_skill_tree
-
-        # delete all info from skill and replace with the converted data
-        self.skills = {}
-        self.skills = converted_data
 
     def convert_afflictions_to_data_classes(self):
         """
@@ -350,7 +310,7 @@ class LibraryOfAlexandria:
         Where there are external values that are utilised internally convert them to the internal constant.
         """
         # Update shared values
-        lists_to_convert = [self.aspects, self.skills, self.afflictions, self.gods, self.savvys, self.races,
+        lists_to_convert = [self.aspects, self.afflictions, self.gods, self.savvys, self.races,
             self.homelands]
         
         for current_list in lists_to_convert:
@@ -388,11 +348,11 @@ class LibraryOfAlexandria:
             self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
             self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
 
-            # SkillTree:Skill:shape
+            # Skill:shape
             for value in SkillShapes:
                 self.recursive_replace(current_list, "shape", value.name.lower(), value)
 
-            # SkillTree:Skill:resource_type
+            # Skill:resource_type
             for value in SecondaryStatTypes:
                 self.recursive_replace(current_list, "resource_type", value.name.lower(), value)
        
@@ -615,6 +575,32 @@ class LibraryOfAlexandria:
 
         return skill_data
 
+    def get_skill_effect_data(self, skill_tree, skill_name, effect_type):
+        """
+        Get data for a skill from the central library
+
+        Args:
+            skill_tree(str):
+            skill_name(str):
+            effect_type(EffectTypes):
+
+        Returns:
+            EffectData: data for a specified skill effect.
+        """
+        try:
+            if skill_tree in self.homelands:
+                effect_data = self.homelands[skill_tree].skills[skill_name].effects[effect_type.name]
+            elif skill_tree in self.savvys:
+                effect_data = self.savvys[skill_tree].skills[skill_name].effects[effect_type.name]
+            elif skill_tree in self.races:
+                effect_data = self.races[skill_tree].skills[skill_name].effects[effect_type.name]
+            else:
+                effect_data = None
+        except KeyError:
+            effect_data = None
+
+        return effect_data
+
     def get_primary_stat_data(self, primary_stat_type):
         """
         Get data for a primary stat from the central library
@@ -644,32 +630,6 @@ class LibraryOfAlexandria:
         stat_data = self.stats.secondary[secondary_stat_type.name]
 
         return stat_data
-
-    def get_skill_effect_data(self, skill_tree, skill_name, effect_type):
-        """
-        Get data for a skill from the central library
-
-        Args:
-            skill_tree(str):
-            skill_name(str):
-            effect_type(EffectTypes):
-
-        Returns:
-            EffectData: data for a specified skill effect.
-        """
-        try:
-            if skill_tree in self.homelands:
-                effect_data = self.homelands[skill_tree].skills[skill_name].effects[effect_type.name]
-            elif skill_tree in self.savvys:
-                effect_data = self.savvys[skill_tree].skills[skill_name].effects[effect_type.name]
-            elif skill_tree in self.races:
-                effect_data = self.races[skill_tree].skills[skill_name].effects[effect_type.name]
-            else:
-                effect_data = None
-        except KeyError:
-            effect_data = None
-
-        return effect_data
 
     def get_god_data(self, god_name):
         """
@@ -766,7 +726,6 @@ class LibraryOfAlexandria:
         """
         self.load_data_into_library()
         self.convert_external_strings_to_internal_enums()
-        self.convert_skills_to_data_classes()
         self.convert_afflictions_to_data_classes()
         self.convert_aspects_to_data_classes()
         self.convert_stats_to_data_classes()
@@ -782,7 +741,6 @@ class LibraryOfAlexandria:
         import os
         # N.B. this is set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.skills = self.load_values_from_skill_json()
             self.homelands = self.load_values_from_homeland_json()
             self.races = self.load_values_from_race_json()
             self.savvys = self.load_values_from_savvy_json()
@@ -794,19 +752,6 @@ class LibraryOfAlexandria:
             self.gods = self.load_values_from_gods_json()
 
         logging.info(f"Data Library refreshed.")
-
-    @staticmethod
-    def load_values_from_skill_json():
-        """
-
-        Returns:
-
-        """
-        # TODO - create rules to confirm every tree has a basic attack
-        with open('data/game/skills/skill_trees.json') as file:
-            data = json.load(file)
-
-        return data
 
     @staticmethod
     def load_values_from_affliction_json():
