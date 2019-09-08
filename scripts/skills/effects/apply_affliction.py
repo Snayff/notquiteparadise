@@ -108,7 +108,6 @@ class ApplyAfflictionEffect(Effect):
         elif isinstance(self.owner, Aspect):
             effect_data = library.get_aspect_effect_data(self.owner.name, self.effect_type)
         elif isinstance(self.owner, Intervention):
-            attacker = None
             effect_data = library.get_god_intervention_effect_data(self.owner.owner.name, self.owner.name,
                                                                    self.effect_type)
 

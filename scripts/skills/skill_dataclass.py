@@ -23,10 +23,3 @@ class SkillData:
     effects: Dict = field(default_factory=dict)
 
 
-@dataclass()
-class SkillTreeData:
-    """
-    Data class for a skill tree
-    """
-    name: str
-    skill: Dict = field(default_factory=dict)

@@ -2,12 +2,12 @@
 import json
 import logging
 
-from scripts.components.race_dataclass import RaceData
+from scripts.components.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes, HitTypes
 from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
-from scripts.skills.affliction_dataclasses import AfflictionData
-from scripts.skills.skill_dataclasses import SkillData, SkillTreeData
+from scripts.skills.affliction_dataclass import AfflictionData
+from scripts.skills.skill_dataclass import SkillData
 from scripts.skills.effects.effect_dataclass import EffectData
 from scripts.world.aspect_dataclass import AspectData
 from scripts.world.attitude_dataclass import AttitudeData
@@ -23,10 +23,9 @@ class LibraryOfAlexandria:
 
     def __init__(self):
         # TODO - add conversion to data class for remaining dicts
-        self.skills = {}  # conversion done
-        self.homelands = {}
+        self.homelands = {}  # conversion done
         self.races = {}  # conversion done
-        self.savvys = {}
+        self.savvys = {}  # conversion done
         self.afflictions = {}  # conversion done
         self.aspects = {}  # conversion done
         self.terrains = {}
@@ -38,45 +37,6 @@ class LibraryOfAlexandria:
 
         logging.info(f"Data Library initialised.")
 
-    def convert_skills_to_data_classes(self):
-        """
-        Take skill data from library and convert to data classes 
-        """
-        all_skill_data = self.skills
-        converted_data = {}
-
-        # loop all skill trees
-        for skill_tree_name, skill_tree_data in all_skill_data.items():
-            converted_skills = {}
-
-            # loop all skills in each skill tree
-            for skill_name, skill_data in skill_tree_data.items():
-                converted_skill_effects = {}
-
-                # loop skill effects in each skill
-                for index, skill_effect_data in enumerate(skill_data["effects"]):
-                    # convert the skill effect data to the data class
-                    skill_effect = EffectData(**skill_effect_data)
-                    converted_skill_effects[skill_effect.effect_type.name] = skill_effect
-
-                # set the temp dict to contain the converted skill effects
-                new_skill_dict = skill_data.copy()
-                new_skill_dict["effects"] = converted_skill_effects
-
-                # unpack the temp dict and convert the skill data to the data class
-                skill = SkillData(**new_skill_dict)
-                converted_skills[skill.name] = skill
-
-            # convert to the data class
-            converted_skill_tree = SkillTreeData(name=skill_tree_name, skill=converted_skills)
-
-            # set the dict to contain the converted skills
-            converted_data[converted_skill_tree.name] = converted_skill_tree
-
-        # delete all info from skill and replace with the converted data
-        self.skills = {}
-        self.skills = converted_data
-
     def convert_afflictions_to_data_classes(self):
         """
         Take affliction data from library and convert to data classes
@@ -84,7 +44,7 @@ class LibraryOfAlexandria:
         all_afflictions_data = self.afflictions
         converted_afflictions = {}
 
-        # loop all skill trees
+        # loop all afflictions
         for affliction_name, affliction_data in all_afflictions_data.items():
             converted_effects = {}
 
@@ -150,16 +110,121 @@ class LibraryOfAlexandria:
         all_race_data = self.races
         converted_races = {}
 
-        # loop all skill trees
+        # loop all races
         for race_name, race_data in all_race_data.items():
+            converted_skills = {}
 
-            # unpack the dict and convert the data to the data class
-            race = RaceData(**race_data)
+            # loop skills and convert to data class
+            for index, skill_data in enumerate(race_data["skills"]):
+                converted_effects = {}
+
+                # loop effects
+                for index, effect_data in enumerate(skill_data["effects"]):
+                    # convert the effect data to the data class
+                    effect = EffectData(**effect_data)
+                    converted_effects[effect.effect_type.name] = effect
+
+                # set the temp dict to contain the converted effects
+                new_skill_dict = skill_data.copy()
+                new_skill_dict["effects"] = converted_effects
+
+                # unpack the temp dict and convert the data to the data class
+                skill = SkillData(**new_skill_dict)
+                converted_skills[skill.name] = skill
+
+            # set the temp dict to contain the converted skill effects
+            new_race_dict = race_data.copy()
+            new_race_dict["skills"] = converted_skills
+
+            # unpack the temp dict and convert the aspect data to the data class
+            race = CharacteristicData(**new_race_dict)
             converted_races[race.name] = race
 
-        # delete all info from races and replace with the converted data
+        # delete all info from aspect and replace with the converted data
         self.races = {}
         self.races = converted_races
+        
+    def convert_savvys_to_data_classes(self):
+        """
+        Take savvy data from library and convert to data classes
+        """
+        all_savvy_data = self.savvys
+        converted_savvys = {}
+
+        # loop all savvys
+        for savvy_name, savvy_data in all_savvy_data.items():
+            converted_skills = {}
+
+            # loop skills and convert to data class
+            for index, skill_data in enumerate(savvy_data["skills"]):
+                converted_effects = {}
+
+                # loop effects
+                for index, effect_data in enumerate(skill_data["effects"]):
+                    # convert the effect data to the data class
+                    effect = EffectData(**effect_data)
+                    converted_effects[effect.effect_type.name] = effect
+
+                # set the temp dict to contain the converted effects
+                new_skill_dict = skill_data.copy()
+                new_skill_dict["effects"] = converted_effects
+
+                # unpack the temp dict and convert the data to the data class
+                skill = SkillData(**new_skill_dict)
+                converted_skills[skill.name] = skill
+
+            # set the temp dict to contain the converted skill effects
+            new_savvy_dict = savvy_data.copy()
+            new_savvy_dict["skills"] = converted_skills
+
+            # unpack the temp dict and convert the aspect data to the data class
+            savvy = CharacteristicData(**new_savvy_dict)
+            converted_savvys[savvy.name] = savvy
+
+        # delete all info from aspect and replace with the converted data
+        self.savvys = {}
+        self.savvys = converted_savvys
+        
+    def convert_homelands_to_data_classes(self):
+        """
+        Take homeland data from library and convert to data classes
+        """
+        all_homeland_data = self.homelands
+        converted_homelands = {}
+
+        # loop all homelands
+        for homeland_name, homeland_data in all_homeland_data.items():
+            converted_skills = {}
+
+            # loop skills and convert to data class
+            for index, skill_data in enumerate(homeland_data["skills"]):
+                converted_effects = {}
+
+                # loop effects
+                for index, effect_data in enumerate(skill_data["effects"]):
+                    # convert the effect data to the data class
+                    effect = EffectData(**effect_data)
+                    converted_effects[effect.effect_type.name] = effect
+
+                # set the temp dict to contain the converted effects
+                new_skill_dict = skill_data.copy()
+                new_skill_dict["effects"] = converted_effects
+
+                # unpack the temp dict and convert the data to the data class
+                skill = SkillData(**new_skill_dict)
+                converted_skills[skill.name] = skill
+
+            # set the temp dict to contain the converted skill effects
+            new_homeland_dict = homeland_data.copy()
+            new_homeland_dict["skills"] = converted_skills
+
+            # unpack the temp dict and convert the aspect data to the data class
+            homeland = CharacteristicData(**new_homeland_dict)
+            converted_homelands[homeland.name] = homeland
+
+        # delete all info from aspect and replace with the converted data
+        self.homelands = {}
+        self.homelands = converted_homelands
 
     def convert_stats_to_data_classes(self):
         """
@@ -198,7 +263,6 @@ class LibraryOfAlexandria:
 
         # loop all gods
         for god_name, god_data in all_god_data.items():
-            converted_effects = {}
             converted_interventions = {}
             converted_attitudes = {}
 
@@ -207,11 +271,12 @@ class LibraryOfAlexandria:
                 attitude = AttitudeData(**attitude_data)
                 try:
                     converted_attitudes[attitude.action.name] = attitude
-                except:  # Need to handle unhashable for the enums... but I don't know the type.
+                except:  # Need to handle unhashable for the enums... but I don't know the exception type.
                     converted_attitudes[attitude.action] = attitude
 
             # loop interventions and convert to data class
             for index, intervention_data in enumerate(god_data["interventions"]):
+                converted_effects = {}
 
                 # loop effects
                 for index, effect_data in enumerate(intervention_data["effects"]):
@@ -245,7 +310,8 @@ class LibraryOfAlexandria:
         Where there are external values that are utilised internally convert them to the internal constant.
         """
         # Update shared values
-        lists_to_convert = [self.aspects, self.skills, self.afflictions, self.gods]
+        lists_to_convert = [self.aspects, self.afflictions, self.gods, self.savvys, self.races,
+            self.homelands]
         
         for current_list in lists_to_convert:
             # Effects:required_tags
@@ -282,9 +348,13 @@ class LibraryOfAlexandria:
             self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
             self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
 
-            # SkillTree:Skill:shape
+            # Skill:shape
             for value in SkillShapes:
                 self.recursive_replace(current_list, "shape", value.name.lower(), value)
+
+            # Skill:resource_type
+            for value in SecondaryStatTypes:
+                self.recursive_replace(current_list, "resource_type", value.name.lower(), value)
        
         # Update Afflictions
         # Affliction:category
@@ -303,11 +373,6 @@ class LibraryOfAlexandria:
         # Stat:Secondary:secondary_stat_type
         for value in SecondaryStatTypes:
             self.recursive_replace(self.stats, "secondary_stat_type", value.name.lower(), value)
-
-        # Update skills
-        # SkillTree:Skill:resource_type
-        for value in SecondaryStatTypes:
-            self.recursive_replace(self.skills, "resource_type", value.name.lower(), value)
 
         # Gods:attitudes:action
         for value in EffectTypes:
@@ -453,13 +518,10 @@ class LibraryOfAlexandria:
             savvy_name (str):
 
         Returns:
-            tuple: named tuple of values.
+            CharacteristicData: data for a specified Race.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(savvy_name, self.savvys[savvy_name])
-        data = named_tuple(**self.savvys[savvy_name])
 
+        data = self.savvys[savvy_name]
         return data
 
     def get_race_data(self, race_name):
@@ -470,7 +532,7 @@ class LibraryOfAlexandria:
             race_name (str):
 
         Returns:
-            RaceData: data for a specified Race.
+            CharacteristicData: data for a specified Race.
         """
 
         data = self.races[race_name]
@@ -484,13 +546,10 @@ class LibraryOfAlexandria:
             homeland_name (str):
 
         Returns:
-            tuple: named tuple of values.
+            CharacteristicData: data for a specified Race.
         """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(homeland_name, self.homelands[homeland_name])
-        data = named_tuple(**self.homelands[homeland_name])
 
+        data = self.homelands[homeland_name]
         return data
 
     def get_skill_data(self, skill_tree, skill_name):
@@ -505,8 +564,42 @@ class LibraryOfAlexandria:
             SkillData: data for a specified skill.
         """
 
-        skill_data = self.skills[skill_tree].skill[skill_name]
+        if skill_tree in self.homelands:
+            skill_data = self.homelands[skill_tree].skills[skill_name]
+        elif skill_tree in self.savvys:
+            skill_data = self.savvys[skill_tree].skills[skill_name]
+        elif skill_tree in self.races:
+            skill_data = self.races[skill_tree].skills[skill_name]
+        else:
+            skill_data = None
+
         return skill_data
+
+    def get_skill_effect_data(self, skill_tree, skill_name, effect_type):
+        """
+        Get data for a skill from the central library
+
+        Args:
+            skill_tree(str):
+            skill_name(str):
+            effect_type(EffectTypes):
+
+        Returns:
+            EffectData: data for a specified skill effect.
+        """
+        try:
+            if skill_tree in self.homelands:
+                effect_data = self.homelands[skill_tree].skills[skill_name].effects[effect_type.name]
+            elif skill_tree in self.savvys:
+                effect_data = self.savvys[skill_tree].skills[skill_name].effects[effect_type.name]
+            elif skill_tree in self.races:
+                effect_data = self.races[skill_tree].skills[skill_name].effects[effect_type.name]
+            else:
+                effect_data = None
+        except KeyError:
+            effect_data = None
+
+        return effect_data
 
     def get_primary_stat_data(self, primary_stat_type):
         """
@@ -537,25 +630,6 @@ class LibraryOfAlexandria:
         stat_data = self.stats.secondary[secondary_stat_type.name]
 
         return stat_data
-
-    def get_skill_effect_data(self, skill_tree, skill_name, effect_type):
-        """
-        Get data for a skill from the central library
-
-        Args:
-            skill_tree(str):
-            skill_name(str):
-            effect_type(EffectTypes):
-
-        Returns:
-            EffectData: data for a specified skill effect.
-        """
-        try:
-            effect_data = self.skills[skill_tree].skill[skill_name].effects[effect_type.name]
-        except KeyError:
-            effect_data = None
-
-        return effect_data
 
     def get_god_data(self, god_name):
         """
@@ -652,12 +726,13 @@ class LibraryOfAlexandria:
         """
         self.load_data_into_library()
         self.convert_external_strings_to_internal_enums()
-        self.convert_skills_to_data_classes()
         self.convert_afflictions_to_data_classes()
         self.convert_aspects_to_data_classes()
-        self.convert_races_to_data_classes()
         self.convert_stats_to_data_classes()
         self.convert_gods_to_data_classes()
+        self.convert_homelands_to_data_classes()
+        self.convert_savvys_to_data_classes()
+        self.convert_races_to_data_classes()
 
     def load_data_into_library(self):
         """
@@ -666,7 +741,6 @@ class LibraryOfAlexandria:
         import os
         # N.B. this is set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.skills = self.load_values_from_skill_json()
             self.homelands = self.load_values_from_homeland_json()
             self.races = self.load_values_from_race_json()
             self.savvys = self.load_values_from_savvy_json()
@@ -678,19 +752,6 @@ class LibraryOfAlexandria:
             self.gods = self.load_values_from_gods_json()
 
         logging.info(f"Data Library refreshed.")
-
-    @staticmethod
-    def load_values_from_skill_json():
-        """
-
-        Returns:
-
-        """
-        # TODO - create rules to confirm every tree has a basic attack
-        with open('data/game/skills/skill_trees.json') as file:
-            data = json.load(file)
-
-        return data
 
     @staticmethod
     def load_values_from_affliction_json():
