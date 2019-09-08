@@ -110,7 +110,7 @@
         "sight_range": {
             "name": "sight range",
             "secondary_stat_type": "sight_range",
-            "base_value": 1,
+            "base_value": 2,
             "vigour_mod": 0,
             "clout_mod": 0,
             "skullduggery_mod": 0,

@@ -248,7 +248,7 @@ class SecondaryStats:
     @property
     def sight_range(self):
         """
-        Highest value among base contributions then modifiers applied. 
+        Highest value among base contributions then modifiers applied. Cant be less than 0.
 
         Returns:
             int:
@@ -273,4 +273,8 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        # ensure 0 or above
+        stat_total = max(stat_total, 0)
+
         return int(stat_total)

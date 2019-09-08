@@ -141,7 +141,7 @@
         "skills": [
             {
                 "name": "Flail",
-                "description": "Fungechists are not known for their physical prowess.",
+                "description": "Fungechists are not known for their physical prowess but you haven't got much choice.",
                 "icon": "placeholder/icon_00.png",
                 "required_tags": ["other_entity"],
                 "range": 1,
@@ -168,7 +168,7 @@
             },
             {
                 "name": "Eye-watering Mistake",
-                "description": "Throw a fragile vial with all their might to irritate their enemies.",
+                "description": "Use all your sneakiness to irritate your enemies.",
                 "icon": "placeholder/icon_00.png",
                 "required_tags": [
                     "other_entity"
@@ -205,7 +205,40 @@
                     }
 
                 ]
+            },
+            {
+                "name": "Fractious Fungi",
+                "description": "Hurl a dried toadstool and watch it leave a gift that keeps on giving.",
+                "icon": "placeholder/icon_00.png",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "range": 3,
+                "shape": "target",
+                "shape_size": 1,
+                "resource_type": "stamina",
+                "resource_cost": 10,
+                "time_cost": 40,
+                "cooldown": 5,
+                "effects": [
+                    {
+                        "effect_type": "damage",
+                        "required_tags": [
+                            "other_entity"
+                        ],
+                        "damage": 1,
+                        "mod_stat": "clout",
+                        "mod_amount": 0.3,
+                        "damage_type": "mundane",
+                        "accuracy": -5,
+                        "stat_to_target": "bustle"
+                    }
+                ]
             }
+            
+            
+            
+            
         ]
     }
 }
