@@ -23,9 +23,9 @@ class LibraryOfAlexandria:
 
     def __init__(self):
         # TODO - add conversion to data class for remaining dicts
-        self.homelands = {} # conversion done
+        self.homelands = {}  # conversion done
         self.races = {}  # conversion done
-        self.savvys = {} # conversion done
+        self.savvys = {}  # conversion done
         self.afflictions = {}  # conversion done
         self.aspects = {}  # conversion done
         self.terrains = {}
@@ -44,7 +44,7 @@ class LibraryOfAlexandria:
         all_afflictions_data = self.afflictions
         converted_afflictions = {}
 
-        # loop all skill trees
+        # loop all afflictions
         for affliction_name, affliction_data in all_afflictions_data.items():
             converted_effects = {}
 
@@ -112,11 +112,11 @@ class LibraryOfAlexandria:
 
         # loop all races
         for race_name, race_data in all_race_data.items():
-            converted_effects = {}
             converted_skills = {}
 
             # loop skills and convert to data class
             for index, skill_data in enumerate(race_data["skills"]):
+                converted_effects = {}
 
                 # loop effects
                 for index, effect_data in enumerate(skill_data["effects"]):
@@ -153,11 +153,11 @@ class LibraryOfAlexandria:
 
         # loop all savvys
         for savvy_name, savvy_data in all_savvy_data.items():
-            converted_effects = {}
             converted_skills = {}
 
             # loop skills and convert to data class
             for index, skill_data in enumerate(savvy_data["skills"]):
+                converted_effects = {}
 
                 # loop effects
                 for index, effect_data in enumerate(skill_data["effects"]):
@@ -194,11 +194,11 @@ class LibraryOfAlexandria:
 
         # loop all homelands
         for homeland_name, homeland_data in all_homeland_data.items():
-            converted_effects = {}
             converted_skills = {}
 
             # loop skills and convert to data class
             for index, skill_data in enumerate(homeland_data["skills"]):
+                converted_effects = {}
 
                 # loop effects
                 for index, effect_data in enumerate(skill_data["effects"]):
@@ -263,7 +263,6 @@ class LibraryOfAlexandria:
 
         # loop all gods
         for god_name, god_data in all_god_data.items():
-            converted_effects = {}
             converted_interventions = {}
             converted_attitudes = {}
 
@@ -277,6 +276,7 @@ class LibraryOfAlexandria:
 
             # loop interventions and convert to data class
             for index, intervention_data in enumerate(god_data["interventions"]):
+                converted_effects = {}
 
                 # loop effects
                 for index, effect_data in enumerate(intervention_data["effects"]):
