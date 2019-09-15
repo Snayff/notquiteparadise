@@ -35,8 +35,8 @@ class PrimaryStats:
             component_changes += entity.homeland.vigour
 
         from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
-                                                                                                PrimaryStatTypes.VIGOUR)
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, PrimaryStatTypes.VIGOUR)
         
         total = max(1, int(component_changes + base_value + affliction_changes))
         

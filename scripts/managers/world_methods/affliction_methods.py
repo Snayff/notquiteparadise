@@ -19,7 +19,7 @@ class AfflictionMethods:
     """
 
     def __init__(self, manager):
-        from scripts.managers.world import WorldManager
+        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
         self.active_afflictions = []
         self.expired_afflictions = []

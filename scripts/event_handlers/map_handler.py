@@ -34,6 +34,10 @@ class MapHandler(Subscriber):
             log_string = f"-> Processing end of turn map updates."
             logging.debug(log_string)
             self.process_end_of_turn_updates()
+        elif event.type == GameEventTypes.END_ROUND:
+            log_string = f"-> Processing end of round map updates."
+            logging.debug(log_string)
+            self.process_end_of_round_updates()
 
     @staticmethod
     def process_tile_interaction(event):
@@ -73,17 +77,30 @@ class MapHandler(Subscriber):
     @staticmethod
     def process_end_of_turn_updates():
         """
+        Trigger aspects on tile turn holder is on
+        """
+        from scripts.global_singletons.managers import turn_manager
+        from scripts.global_singletons.managers import world_manager
+        entity = turn_manager.turn_holder
+        tile = world_manager.Map.get_tile(entity.x, entity.y)
+
+        # trigger aspects
+        world_manager.Map.trigger_aspects_on_tile(tile)
+
+    @staticmethod
+    def process_end_of_round_updates():
+        """
         Update aspect durations
         """
-        # reduce duration of aspects
+
         from scripts.global_singletons.managers import world_manager
         game_map = world_manager.Map.get_game_map()
 
+        # TODO - set to only apply within X range of player
         for row in game_map.tiles:
             for tile in row:
                 if tile.aspects:
+
+                    # update durations
                     world_manager.Map.reduce_aspect_durations_on_tile(tile)
                     world_manager.Map.cleanse_expired_aspects(tile)
-
-
-

@@ -58,6 +58,7 @@ class GameEventTypes(Enum):
     EXIT = auto()
     END_TURN = auto()
     CHANGE_GAME_STATE = auto()
+    END_ROUND = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

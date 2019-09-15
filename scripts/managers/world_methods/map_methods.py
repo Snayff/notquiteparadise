@@ -17,7 +17,7 @@ class MapMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        from scripts.managers.world import WorldManager
+        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
     def get_game_map(self):
@@ -285,15 +285,18 @@ class MapMethods:
             tile (Tile):
             aspect_name(str):
         """
+        data = library.get_aspect_data(aspect_name)
 
         # check if the aspect already exists
         if aspect_name in tile.aspects:
             # reset duration
-            data = library.get_aspect_data(aspect_name)
             tile.aspects[aspect_name].duration = data.duration
         else:
             from scripts.world.aspect import Aspect
-            tile.aspects[aspect_name] = Aspect(tile, aspect_name)
+            if data.duration:
+                tile.aspects[aspect_name] = Aspect(tile, aspect_name, data.duration)
+            else:
+                tile.aspects[aspect_name] = Aspect(tile, aspect_name)
 
     @staticmethod
     def remove_aspect_from_tile(tile, aspect_name):
@@ -325,14 +328,15 @@ class MapMethods:
             tile (Tile):
         """
         for key, aspect in tile.aspects.items():
-            if aspect.duration:
+            if aspect.duration is not None:
                 aspect.duration -= 1
 
                 log_string = f"({aspect.x},{aspect.y}) {aspect.name}`s duration reduced to " \
                              f" {aspect.duration}"
                 logging.debug(log_string)
 
-    def cleanse_expired_aspects(self, tile):
+    @staticmethod
+    def cleanse_expired_aspects(tile):
         """
         Delete expired aspects
 
@@ -346,7 +350,7 @@ class MapMethods:
         for key, aspect in tile.aspects.items():
 
             # make sure it isnt none before checking duration
-            if aspect.duration:
+            if aspect.duration is not None:
                 if aspect.duration <= 0:
                     # log on expired list. Not removing now to avoid amending the currently iterating list
                     expired_aspects.append(aspect)
@@ -355,11 +359,11 @@ class MapMethods:
         # pop removes the element so we keep looking at element 0 and popping it
         index = 0
         while index < len(expired_aspects):
-            # get the aspects
+            # get the aspect
             aspect = expired_aspects.pop(index)
 
             # remove from tile
-            tile.aspects.remove(aspect)
+            del tile.aspects[aspect.name]
 
             # add info to logging
             removed_aspects.append(f"{aspect.x},{aspect.y}:{aspect.name}")

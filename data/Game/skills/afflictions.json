@@ -43,7 +43,7 @@
             {
                 "effect_type": "affect_stat",
                 "stat_to_affect": "sight_range",
-                "amount": -1
+                "amount": -2
             }
         ]
     }

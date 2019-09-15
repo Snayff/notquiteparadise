@@ -40,7 +40,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.MAX_HP)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 
     @property
     def max_stamina(self):
@@ -69,7 +77,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.MAX_STAMINA)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 
     @property
     def accuracy(self):
@@ -98,7 +114,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.ACCURACY)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 
     @property
     def resist_burn(self):
@@ -127,7 +151,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.RESIST_BURN)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 
     @property
     def resist_cold(self):
@@ -156,7 +188,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.RESIST_COLD)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 
     @property
     def resist_chemical(self):
@@ -185,7 +225,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.RESIST_CHEMICAL)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 
     @property
     def resist_astral(self):
@@ -214,7 +262,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.RESIST_ASTRAL)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 
     @property
     def resist_mundane(self):
@@ -243,7 +299,15 @@ class SecondaryStats:
         from_exactitude = exactitude * stat_data.exactitude_mod
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
-        return int(stat_total)
+
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+            self.owner.owner, SecondaryStatTypes.RESIST_MUNDANE)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
     
     @property
     def sight_range(self):
@@ -274,7 +338,11 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # ensure 0 or above
-        stat_total = max(stat_total, 0)
+        from scripts.global_singletons.managers import world_manager
+        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+                self.owner.owner, SecondaryStatTypes.SIGHT_RANGE)
 
-        return int(stat_total)
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total

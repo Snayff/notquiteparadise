@@ -169,7 +169,7 @@
             {
                 "name": "Eye-watering Mistake",
                 "description": "Use all your sneakiness to irritate your enemies.",
-                "icon": "placeholder/icon_00.png",
+                "icon": "placeholder/icon_37.png",
                 "required_tags": [
                     "other_entity"
                 ],
@@ -201,7 +201,7 @@
                         "accuracy": 100,
                         "stat_to_target": "vigour",
                         "affliction_name": "myopic",
-                        "duration": 2
+                        "duration": 10
                     }
 
                 ]
@@ -209,7 +209,7 @@
             {
                 "name": "Fractious Fungi",
                 "description": "Hurl a dried toadstool and watch it leave a gift that keeps on giving.",
-                "icon": "placeholder/icon_00.png",
+                "icon": "placeholder/icon_40.png",
                 "required_tags": [
                     "other_entity"
                 ],
@@ -242,10 +242,6 @@
                     }
                 ]
             }
-            
-            
-            
-            
         ]
     }
 }

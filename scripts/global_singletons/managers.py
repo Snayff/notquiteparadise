@@ -1,10 +1,10 @@
 
-from scripts.managers.debug import DebugManager
-from scripts.managers.game import GameManager
-from scripts.managers.input import InputManager
-from scripts.managers.turn import TurnManager
-from scripts.managers.ui import UIManager
-from scripts.managers.world import WorldManager
+from scripts.managers.debug_manager import DebugManager
+from scripts.managers.game_manager import GameManager
+from scripts.managers.input_manager import InputManager
+from scripts.managers.turn_manager import TurnManager
+from scripts.managers.ui_manager import UIManager
+from scripts.managers.world_manager import WorldManager
 
 game_manager2: GameManager
 

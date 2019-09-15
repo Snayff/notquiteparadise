@@ -9,6 +9,7 @@ from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.skills.effects.effect import Effect
+from scripts.world.aspect import Aspect
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -43,6 +44,10 @@ class DamageEffect(Effect):
             attacker = None
             data = library.get_affliction_effect_data(self.owner.name, self.effect_type)
             is_guaranteed_hit = True
+        elif isinstance(self.owner, Aspect):
+            attacker = None
+            data = library.get_aspect_effect_data(self.owner.name, self.effect_type)
+            is_guaranteed_hit = False
 
         # loop all tiles in list
         for tile in tiles:
