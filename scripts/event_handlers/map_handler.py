@@ -31,7 +31,7 @@ class MapHandler(Subscriber):
     @staticmethod
     def process_tile_interaction(event):
         """
-        Check the cause on the aspect of a tile and trigger any interactions.
+        Check the cause on the aspects of a tile and trigger any interactions.
 
         Args:
             event(TileInteractionEvent):
@@ -41,21 +41,24 @@ class MapHandler(Subscriber):
         for tile in event.tiles:
 
             # only aspects have interactions...
-            if tile.aspect:
-                aspect_data = library.get_aspect_data(tile.aspect.name)
+            if tile.aspects:
 
-                # check cause is a valid trigger for an interaction
-                for interaction in aspect_data.interactions:
-                    if event.cause == interaction.cause:
-                        # change aspect
-                        from scripts.global_singletons.managers import world_manager
-                        world_manager.Map.set_aspect_on_tile(tile, interaction.change_to)
+                for key, aspect in tile.aspects.items():
+                    aspect_data = library.get_aspect_data(aspect.name)
 
-                        # log the change
-                        log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
-                        logging.info( log_string)
+                    # check cause is a valid trigger for an interaction
+                    for interaction in aspect_data.interactions:
+                        if event.cause == interaction.cause:
+                            # change aspects
+                            from scripts.global_singletons.managers import world_manager
+                            world_manager.Map.remove_aspect_from_tile(tile, aspect.name)
+                            world_manager.Map.add_aspect_to_tile(tile, interaction.change_to)
 
-                        # inform player of change
-                        from scripts.events.message_events import MessageEvent
-                        msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                            # log the change
+                            log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
+                            logging.info(log_string)
+
+                            # inform player of change
+                            from scripts.events.message_events import MessageEvent
+                            msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."
+                            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))

@@ -14,7 +14,7 @@ class Tile:
         is_visible(bool): if tile is visible to player
         entity(Entity): the entity on the tile
         terrain(Terrain): the terrain on the tile, such as floor or wall
-        aspect(Aspect): the aspects of the tile, such as smoke or fire
+        aspect(dict[Aspect]): the aspects of the tile, such as smoke or fire
     """
 
     def __init__(self, x, y, entity=None, terrain=None, aspect=None):
@@ -23,7 +23,7 @@ class Tile:
         self.is_visible = False
         self.entity = None
         self.terrain = None
-        self.aspect = None
+        self.aspects = {}
 
         from scripts.global_singletons.managers import world_manager
 
@@ -31,7 +31,7 @@ class Tile:
             world_manager.Map.set_terrain_on_tile(self, terrain)
 
         if aspect:
-            world_manager.Map.set_aspect_on_tile(self, aspect)
+            world_manager.Map.add_aspect_to_tile(self, aspect)
 
         if entity:
             world_manager.Map.set_entity_on_tile(self, entity)
@@ -93,8 +93,8 @@ class Tile:
         elif self.terrain:
             if self.terrain.blocks_movement:
                 tile_blocks_movement = True
-        elif self.aspect:
-            if self.aspect.blocks_movement:
+        elif self.aspects:
+            if self.aspects.blocks_movement:
                 tile_blocks_movement = True
 
         return tile_blocks_movement
@@ -115,8 +115,8 @@ class Tile:
         elif self.terrain:
             if self.terrain.blocks_sight:
                 tile_blocks_sight = True
-        elif self.aspect:
-            if self.aspect.blocks_sight:
+        elif self.aspects:
+            if self.aspects.blocks_sight:
                 tile_blocks_sight = True
 
         return tile_blocks_sight
@@ -136,7 +136,8 @@ class Tile:
         if self.entity:
             surface.blit(self.entity.icon, draw_position)
 
-        if self.aspect:
-            surface.blit(self.aspect.sprite, draw_position)
+        if self.aspects:
+            for key, aspect in self.aspects.items():
+                surface.blit(aspect.sprite, draw_position)
 
 

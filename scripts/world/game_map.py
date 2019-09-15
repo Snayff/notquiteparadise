@@ -31,7 +31,7 @@ class GameMap:
             from scripts.global_singletons.managers import world_manager
             world_manager.Map.set_terrain_on_tile(self.tiles[0][5], TargetTags.WALL)
             world_manager.Map.set_terrain_on_tile(self.tiles[10][2], TargetTags.WALL)
-            world_manager.Map.set_aspect_on_tile(self.tiles[0][2], "bog")
+            world_manager.Map.add_aspect_to_tile(self.tiles[0][2], "bog")
 
         # setup the panel
         panel_x = 0

@@ -19,6 +19,7 @@ class EffectData:
     accuracy: int = 0
     stat_to_target: PrimaryStatTypes = None
     new_terrain: TargetTags = None
+    aspect_name: str = "None"
     affliction_name: str = "None"
     duration: int = 0
     stat_to_affect: PrimaryStatTypes = None

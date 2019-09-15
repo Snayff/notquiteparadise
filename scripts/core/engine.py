@@ -28,6 +28,8 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
 # TODO - move the docstring annotations to the function line, then install mypy
 # TODO - use seed for RNG
+# TODO - new lighting system
+#  entities create light, sight range shows light in range
 
 
 

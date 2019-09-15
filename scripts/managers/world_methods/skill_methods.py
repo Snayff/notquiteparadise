@@ -87,10 +87,11 @@ class SkillMethods:
             target += target_tile.entity.name + ", "
         else:
             target += "no entity, "
-        if target_tile.aspect:
-            target += target_tile.aspect.name + ", "
+        if target_tile.aspects:
+            for key, aspect in target_tile.aspects.items():
+                target += aspect.name + ", "
         else:
-            target += "no aspect, "
+            target += "no aspects, "
         target += target_tile.terrain.name  # all tiles have terrain
 
         # log_string = f"Checking ({target}) for tags {required_tags}..."

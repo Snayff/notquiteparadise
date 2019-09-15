@@ -40,7 +40,7 @@
         "max_stamina": {
             "name": "max stamina",
             "secondary_stat_type": "max_stamina",
-            "base_value": 5,
+            "base_value": 500,
             "vigour_mod": 0,
             "clout_mod": 0,
             "skullduggery_mod": 0,

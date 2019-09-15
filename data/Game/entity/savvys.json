@@ -232,6 +232,13 @@
                         "damage_type": "mundane",
                         "accuracy": -5,
                         "stat_to_target": "bustle"
+                    },
+                    {
+                        "effect_type": "add_aspect",
+                        "required_tags": [
+                            "any"
+                        ],
+                        "aspect_name": "shrapnel"
                     }
                 ]
             }

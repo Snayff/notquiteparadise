@@ -135,6 +135,7 @@ class TargetTags(Enum):
     OTHER_ENTITY = auto()
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
+    ANY = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -263,6 +264,7 @@ class EffectTypes(Enum):
     MOVE = auto()
     CHANGE_TERRAIN = auto()
     AFFECT_STAT = auto()
+    ADD_ASPECT = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

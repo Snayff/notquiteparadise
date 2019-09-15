@@ -8,10 +8,11 @@ from scripts.world.interaction_dataclass import InteractionData
 @dataclass()
 class AspectData:
     """
-    Data class for an aspect
+    Data class for an aspects
     """
     name: str = "None"
     description: str = "None"
+    duration: int = None
     sprite: str = "None"
     blocks_sight: bool = False
     blocks_movement: bool = False

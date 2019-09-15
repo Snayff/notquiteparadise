@@ -5,6 +5,7 @@ from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
 from typing import List
+from scripts.global_singletons.data_library import library
 
 
 class MapMethods:
@@ -214,6 +215,8 @@ class MapMethods:
                 return False
         elif target_tag == TargetTags.NO_ENTITY:
             return not tile.has_entity
+        elif target_tag == TargetTags.ANY:
+            return True
         else:
             return False  # catch all
 
@@ -273,25 +276,42 @@ class MapMethods:
         return tile.terrain
 
     @staticmethod
-    def set_aspect_on_tile(tile, aspect_name=None):
+    def add_aspect_to_tile(tile, aspect_name):
         """
-        Set the new aspects on the tile. If aspect_name is not provided aspect will be removed.
+        Add a new aspects on the tile. If it already exists reset duration.
 
         Args:
             tile (Tile):
             aspect_name(str):
         """
-        if aspect_name:
-            from scripts.world.aspect import Aspect
-            tile.aspect = Aspect(tile, aspect_name)
+
+        # check if the aspect already exists
+        if aspect_name in tile.aspects:
+            # reset duration
+            data = library.get_aspect_data(aspect_name)
+            tile.aspects[aspect_name].duration = data.duration
         else:
-            tile.aspect = None
+            from scripts.world.aspect import Aspect
+            tile.aspects[aspect_name] = Aspect(tile, aspect_name)
 
     @staticmethod
-    def trigger_aspect_effect_on_tile(tile):
+    def remove_aspect_from_tile(tile, aspect_name):
+        """
+        Aspect is removed from the tile.
+
+        Args:
+            tile (Tile):
+            aspect_name(str):
+        """
+        if aspect_name in tile.aspects:
+            del tile.aspects[aspect_name]
+
+    @staticmethod
+    def trigger_aspects_on_tile(tile):
         """
         Trigger the effect of the Aspect
         """
-        if tile.aspect:
-            tile.aspect.trigger()
+        if tile.aspects:
+            for key, aspect in tile.aspects.items():
+                aspect.trigger()
 
