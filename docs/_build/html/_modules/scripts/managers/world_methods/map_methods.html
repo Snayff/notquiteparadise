@@ -31,13 +31,15 @@
           <div class="body" role="main">
             
   <h1>Source code for scripts.managers.world_methods.map_methods</h1><div class="highlight"><pre>
-<span></span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
 <span class="kn">from</span> <span class="nn">scripts.world.game_map</span> <span class="k">import</span> <span class="n">GameMap</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 
 
 <div class="viewcode-block" id="MapMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods">[docs]</a><span class="k">class</span> <span class="nc">MapMethods</span><span class="p">:</span>
@@ -48,7 +50,7 @@
 <span class="sd">        manager(WorldManager): the manager containing this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world</span> <span class="k">import</span> <span class="n">WorldManager</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
 
 <div class="viewcode-block" id="MapMethods.get_game_map"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">get_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -247,6 +249,8 @@
                 <span class="k">return</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">:</span>
             <span class="k">return</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">has_entity</span>
+        <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">ANY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># catch all</span></div>
 
@@ -305,29 +309,105 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span></div>
 
-<div class="viewcode-block" id="MapMethods.set_aspect_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.set_aspect_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">set_aspect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MapMethods.add_aspect_to_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.add_aspect_to_tile">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_aspect_to_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the new aspects on the tile. If aspect_name is not provided aspect will be removed.</span>
+<span class="sd">        Add a new aspects on the tile. If it already exists reset duration.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            tile (Tile):</span>
 <span class="sd">            aspect_name(str):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">aspect_name</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">scripts.world.aspect</span> <span class="k">import</span> <span class="n">Aspect</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_aspect_data</span><span class="p">(</span><span class="n">aspect_name</span><span class="p">)</span>
 
-<div class="viewcode-block" id="MapMethods.trigger_aspect_effect_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.trigger_aspect_effect_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">trigger_aspect_effect_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+        <span class="c1"># check if the aspect already exists</span>
+        <span class="k">if</span> <span class="n">aspect_name</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+            <span class="c1"># reset duration</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">duration</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">scripts.world.aspect</span> <span class="k">import</span> <span class="n">Aspect</span>
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
+                <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MapMethods.remove_aspect_from_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.remove_aspect_from_tile">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">remove_aspect_from_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aspect is removed from the tile.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile (Tile):</span>
+<span class="sd">            aspect_name(str):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">aspect_name</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="MapMethods.trigger_aspects_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.trigger_aspects_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">trigger_aspects_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Trigger the effect of the Aspect</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span></div></div>
+        <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">aspect</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="MapMethods.reduce_aspect_durations_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.reduce_aspect_durations_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">reduce_aspect_durations_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reduce duration of all non-permanent afflictions on an entity.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile (Tile):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="mi">1</span>
+
+                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;(</span><span class="si">{aspect.x}</span><span class="s2">,</span><span class="si">{aspect.y}</span><span class="s2">) </span><span class="si">{aspect.name}</span><span class="s2">`s duration reduced to &quot;</span> \
+                             <span class="n">f</span><span class="s2">&quot; </span><span class="si">{aspect.duration}</span><span class="s2">&quot;</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MapMethods.cleanse_expired_aspects"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.cleanse_expired_aspects">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cleanse_expired_aspects</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete expired aspects</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile (Tile):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">removed_aspects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">expired_aspects</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># check if aspects has expired</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="c1"># make sure it isnt none before checking duration</span>
+            <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># log on expired list. Not removing now to avoid amending the currently iterating list</span>
+                    <span class="n">expired_aspects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+
+        <span class="c1"># remove all expired aspects from the tile and delete each instance</span>
+        <span class="c1"># pop removes the element so we keep looking at element 0 and popping it</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">expired_aspects</span><span class="p">):</span>
+            <span class="c1"># get the aspect</span>
+            <span class="n">aspect</span> <span class="o">=</span> <span class="n">expired_aspects</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="c1"># remove from tile</span>
+            <span class="k">del</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+            <span class="c1"># add info to logging</span>
+            <span class="n">removed_aspects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{aspect.x}</span><span class="s2">,</span><span class="si">{aspect.y}</span><span class="s2">:</span><span class="si">{aspect.name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># delete the instance</span>
+            <span class="k">del</span> <span class="n">aspect</span>
+
+        <span class="c1"># if we removed anything log it</span>
+        <span class="k">if</span> <span class="n">removed_aspects</span><span class="p">:</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Removed the following aspects: </span><span class="si">{removed_aspects}</span><span class="s2">&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

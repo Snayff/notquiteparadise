@@ -47,7 +47,7 @@
 <span class="sd">        is_visible(bool): if tile is visible to player</span>
 <span class="sd">        entity(Entity): the entity on the tile</span>
 <span class="sd">        terrain(Terrain): the terrain on the tile, such as floor or wall</span>
-<span class="sd">        aspect(Aspect): the aspects of the tile, such as smoke or fire</span>
+<span class="sd">        aspect(dict[Aspect]): the aspects of the tile, such as smoke or fire</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">terrain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -56,7 +56,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
 
@@ -64,7 +64,7 @@
             <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_terrain_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terrain</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">aspect</span><span class="p">:</span>
-            <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_aspect_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">)</span>
+            <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">add_aspect_to_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
             <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_entity_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
@@ -126,8 +126,8 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
                 <span class="n">tile_blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
                 <span class="n">tile_blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">return</span> <span class="n">tile_blocks_movement</span>
@@ -148,8 +148,8 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
                 <span class="n">tile_blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
                 <span class="n">tile_blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">return</span> <span class="n">tile_blocks_sight</span>
@@ -169,8 +169,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
             <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">icon</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="p">:</span>
-            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aspect</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">)</span></div></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">)</span></div></div>
 
 
 </pre></div>

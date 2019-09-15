@@ -57,7 +57,7 @@
 <span class="sd">        manager(WorldManager): the manager containing this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world</span> <span class="k">import</span> <span class="n">WorldManager</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
 
 <div class="viewcode-block" id="EntityMethods.get_blocking_entity_at_location"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity_at_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_blocking_entity_at_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
@@ -300,18 +300,20 @@
         <span class="c1"># remove from entities list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EntityMethods.create_actor_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.create_actor_entity">[docs]</a>    <span class="k">def</span> <span class="nf">create_actor_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor_name</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityMethods.create_actor_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.create_actor_entity">[docs]</a>    <span class="k">def</span> <span class="nf">create_actor_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor_template_name</span><span class="p">,</span> <span class="n">actor_name</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an entity from an actor template</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            tile_x (int):</span>
 <span class="sd">            tile_y (int):</span>
 <span class="sd">            actor_name (str):</span>
+<span class="sd">            actor_template_name (str):</span>
 <span class="sd">            player (bool):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">actor_template</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_actor_template_data</span><span class="p">(</span><span class="n">actor_name</span><span class="p">)</span>
+        <span class="n">actor_template</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_actor_template_data</span><span class="p">(</span><span class="n">actor_template_name</span><span class="p">)</span>
 
-        <span class="n">actor_name</span> <span class="o">=</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">actor_name</span> <span class="o">=</span> <span class="n">actor_name</span>
 
         <span class="n">sprite</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/actor/&quot;</span> <span class="o">+</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">spritesheet</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
         <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/actor/&quot;</span> <span class="o">+</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">icon</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
