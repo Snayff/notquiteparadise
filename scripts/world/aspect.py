@@ -16,6 +16,8 @@ class Aspect:
         
     """
     def __init__(self, owner, aspect_name, duration=None):
+        # TODO - should aspects be logged on a central list, like afflictions?
+
         self.owner = owner  # type: Tile
         self.name = aspect_name
         self.duration = duration

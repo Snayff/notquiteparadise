@@ -14,6 +14,7 @@ class GameMap:
     object to hold tile and fov
     """
     def __init__(self, width, height):
+        # TODO - separate core data (tiles, width, height) from UI and create gamemap UI element
         self.tiles = []
         self.width = width
         self.height = height

@@ -94,6 +94,7 @@ def initialise_event_handlers():
 
     map_handler = MapHandler(event_hub)
     map_handler.subscribe(EventTopics.MAP)
+    map_handler.subscribe(EventTopics.GAME)
 
     affliction_handler = AfflictionHandler(event_hub)
     affliction_handler.subscribe(EventTopics.ENTITY)

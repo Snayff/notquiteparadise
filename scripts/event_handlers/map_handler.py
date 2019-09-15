@@ -1,7 +1,7 @@
 
 import logging
 
-from scripts.core.constants import MapEventTypes, MessageEventTypes
+from scripts.core.constants import MapEventTypes, MessageEventTypes, GameEventTypes
 from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.events.map_events import TileInteractionEvent
 from scripts.global_singletons.data_library import library
@@ -9,6 +9,9 @@ from scripts.global_singletons.event_hub import publisher
 
 
 class MapHandler(Subscriber):
+    """
+    Handle map related events
+    """
     def __init__(self, event_hub):
         Subscriber.__init__(self, "map_handler", event_hub)
 
@@ -24,9 +27,13 @@ class MapHandler(Subscriber):
         logging.debug(log_string)
 
         if event.type == MapEventTypes.TILE_INTERACTION:
-            log_string = f"-> Processing {event.cause} interaction on tiles"
+            log_string = f"-> Processing {event.cause} interaction on tiles."
             logging.debug(log_string)
             self.process_tile_interaction(event)
+        elif event.type == GameEventTypes.END_TURN:
+            log_string = f"-> Processing end of turn map updates."
+            logging.debug(log_string)
+            self.process_end_of_turn_updates()
 
     @staticmethod
     def process_tile_interaction(event):
@@ -62,3 +69,21 @@ class MapHandler(Subscriber):
                             from scripts.events.message_events import MessageEvent
                             msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."
                             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+
+    @staticmethod
+    def process_end_of_turn_updates():
+        """
+        Update aspect durations
+        """
+        # reduce duration of aspects
+        from scripts.global_singletons.managers import world_manager
+        game_map = world_manager.Map.get_game_map()
+
+        for row in game_map.tiles:
+            for tile in row:
+                if tile.aspects:
+                    world_manager.Map.reduce_aspect_durations_on_tile(tile)
+                    world_manager.Map.cleanse_expired_aspects(tile)
+
+
+

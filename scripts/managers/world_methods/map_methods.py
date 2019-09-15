@@ -1,3 +1,4 @@
+import logging
 
 from scripts.core.constants import TargetTags, TILE_SIZE
 from scripts.world.game_map import GameMap
@@ -315,3 +316,58 @@ class MapMethods:
             for key, aspect in tile.aspects.items():
                 aspect.trigger()
 
+    @staticmethod
+    def reduce_aspect_durations_on_tile(tile):
+        """
+        Reduce duration of all non-permanent afflictions on an entity.
+
+        Args:
+            tile (Tile):
+        """
+        for key, aspect in tile.aspects.items():
+            if aspect.duration:
+                aspect.duration -= 1
+
+                log_string = f"({aspect.x},{aspect.y}) {aspect.name}`s duration reduced to " \
+                             f" {aspect.duration}"
+                logging.debug(log_string)
+
+    def cleanse_expired_aspects(self, tile):
+        """
+        Delete expired aspects
+
+        Args:
+            tile (Tile):
+        """
+        removed_aspects = []
+        expired_aspects = []
+
+        # check if aspects has expired
+        for key, aspect in tile.aspects.items():
+
+            # make sure it isnt none before checking duration
+            if aspect.duration:
+                if aspect.duration <= 0:
+                    # log on expired list. Not removing now to avoid amending the currently iterating list
+                    expired_aspects.append(aspect)
+
+        # remove all expired aspects from the tile and delete each instance
+        # pop removes the element so we keep looking at element 0 and popping it
+        index = 0
+        while index < len(expired_aspects):
+            # get the aspects
+            aspect = expired_aspects.pop(index)
+
+            # remove from tile
+            tile.aspects.remove(aspect)
+
+            # add info to logging
+            removed_aspects.append(f"{aspect.x},{aspect.y}:{aspect.name}")
+
+            # delete the instance
+            del aspect
+
+        # if we removed anything log it
+        if removed_aspects:
+            log_string = f"Removed the following aspects: {removed_aspects}"
+            logging.debug(log_string)
