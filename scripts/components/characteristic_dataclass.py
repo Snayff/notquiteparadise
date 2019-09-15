@@ -6,7 +6,7 @@ from typing import Dict
 @dataclass()
 class CharacteristicData:
     """
-    Data class for an aspect
+    Data class for an aspects
     """
     name: str = "None"
     description: str = "None"

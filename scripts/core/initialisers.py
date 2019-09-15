@@ -60,17 +60,20 @@ def initialise_game():
     ui_manager.delayed_init()
 
     # TODO - remove when map generation is in
-    world_manager.Entity.create_actor_entity(0, 0, "player", True)
-    world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand")
-    world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand")
-    world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand")
+    world_manager.Entity.create_actor_entity(0, 0, "player", "player", True)
+    world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand", "steve")
+    world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand", "bob")
+    world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand", "estaban")
     world_manager.God.create_god("the small gods")
 
     # TODO - remove when skill learning is in
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic attack"))
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw dice"))
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "bring down the mountain"))
-    publisher.publish(LearnEvent(world_manager.player, "cleromancer", "burn the deck"))
+    # publisher.publish(LearnEvent(world_manager.player, "cleromancer", "basic attack"))
+    # publisher.publish(LearnEvent(world_manager.player, "cleromancer", "throw dice"))
+    # publisher.publish(LearnEvent(world_manager.player, "cleromancer", "bring down the mountain"))
+    # publisher.publish(LearnEvent(world_manager.player, "cleromancer", "burn the deck"))
+    publisher.publish(LearnEvent(world_manager.player, "Fungechist", "Flail"))
+    publisher.publish(LearnEvent(world_manager.player, "Fungechist", "Eye-watering Mistake"))
+    publisher.publish(LearnEvent(world_manager.player, "Fungechist", "Fractious Fungi"))
 
     game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player
@@ -94,6 +97,7 @@ def initialise_event_handlers():
 
     map_handler = MapHandler(event_hub)
     map_handler.subscribe(EventTopics.MAP)
+    map_handler.subscribe(EventTopics.GAME)
 
     affliction_handler = AfflictionHandler(event_hub)
     affliction_handler.subscribe(EventTopics.ENTITY)

@@ -4,7 +4,7 @@ import pygame
 
 from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, MouseButtons
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
-from scripts.events.game_events import ChangeGameStateEvent, ExitEvent
+from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
 from scripts.global_singletons.data_library import library
@@ -210,7 +210,7 @@ class InputManager:
 
         # general actions
         if self.input_values["cancel"]:
-            publisher.publish(ExitEvent())
+            publisher.publish(ExitGameEvent())
 
         # UI interactions
         mouse_button = self.get_pressed_mouse_button()
@@ -232,27 +232,32 @@ class InputManager:
         # has a skill input been pressed?
         if skill_number != -1:
 
-            # get the skill at the relevant number
-            skill = player.actor.known_skills[skill_number]
+            # is skill in range?
+            if skill_number < len(player.actor.known_skills):
 
-            # do we have a skill in the slot?
-            if skill:
-                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                # get the skill at the relevant number
+                skill = player.actor.known_skills[skill_number]
 
-                # check who we are moused over
-                from scripts.global_singletons.managers import ui_manager
-                mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
-                target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
+                # is there a skill in the slot?
+                if skill:
 
-                # create a skill with a target, or activate targeting mode
-                if world_manager.Skill.can_use_skill(player, (target_x, target_y), skill):
-                    publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
+                    skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+
+                    # check who we are moused over
+                    from scripts.global_singletons.managers import ui_manager
+                    mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
+                    target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
+
+                    # create a skill with a target, or activate targeting mode
+                    if world_manager.Skill.can_use_skill(player, (target_x, target_y), skill):
+                        publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
+                    else:
+                        # can't use skill, is it due to being too poor?
+                        if world_manager.Skill.can_afford_cost(player, skill_data.resource_type,
+                                                               skill_data.resource_cost):
+                            publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
                 else:
-                    # can't use skill, is it due to being too poor?
-                    if world_manager.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                        publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
-            else:
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
+                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
 
     def process_targeting_mode_input(self):
         """

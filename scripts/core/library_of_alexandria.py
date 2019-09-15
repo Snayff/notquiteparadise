@@ -68,7 +68,7 @@ class LibraryOfAlexandria:
 
     def convert_aspects_to_data_classes(self):
         """
-        Take aspect data from library and convert to data classes
+        Take aspects data from library and convert to data classes
         """
         all_aspect_data = self.aspects
         converted_aspects = {}
@@ -95,11 +95,11 @@ class LibraryOfAlexandria:
             new_aspect_dict["effects"] = converted_effects
             new_aspect_dict["interactions"] = converted_interactions
 
-            # unpack the temp dict and convert the aspect data to the data class
+            # unpack the temp dict and convert the aspects data to the data class
             aspect = AspectData(**new_aspect_dict)
             converted_aspects[aspect.name] = aspect
 
-        # delete all info from aspect and replace with the converted data
+        # delete all info from aspects and replace with the converted data
         self.aspects = {}
         self.aspects = converted_aspects
 
@@ -136,11 +136,11 @@ class LibraryOfAlexandria:
             new_race_dict = race_data.copy()
             new_race_dict["skills"] = converted_skills
 
-            # unpack the temp dict and convert the aspect data to the data class
+            # unpack the temp dict and convert the aspects data to the data class
             race = CharacteristicData(**new_race_dict)
             converted_races[race.name] = race
 
-        # delete all info from aspect and replace with the converted data
+        # delete all info from aspects and replace with the converted data
         self.races = {}
         self.races = converted_races
         
@@ -177,11 +177,11 @@ class LibraryOfAlexandria:
             new_savvy_dict = savvy_data.copy()
             new_savvy_dict["skills"] = converted_skills
 
-            # unpack the temp dict and convert the aspect data to the data class
+            # unpack the temp dict and convert the aspects data to the data class
             savvy = CharacteristicData(**new_savvy_dict)
             converted_savvys[savvy.name] = savvy
 
-        # delete all info from aspect and replace with the converted data
+        # delete all info from aspects and replace with the converted data
         self.savvys = {}
         self.savvys = converted_savvys
         
@@ -218,11 +218,11 @@ class LibraryOfAlexandria:
             new_homeland_dict = homeland_data.copy()
             new_homeland_dict["skills"] = converted_skills
 
-            # unpack the temp dict and convert the aspect data to the data class
+            # unpack the temp dict and convert the aspects data to the data class
             homeland = CharacteristicData(**new_homeland_dict)
             converted_homelands[homeland.name] = homeland
 
-        # delete all info from aspect and replace with the converted data
+        # delete all info from aspects and replace with the converted data
         self.homelands = {}
         self.homelands = converted_homelands
 
@@ -256,7 +256,7 @@ class LibraryOfAlexandria:
 
     def convert_gods_to_data_classes(self):
         """
-        Take aspect data from library and convert to data classes
+        Take aspects data from library and convert to data classes
         """
         all_god_data = self.gods
         converted_gods = {}
@@ -297,11 +297,11 @@ class LibraryOfAlexandria:
             new_god_dict["attitudes"] = converted_attitudes
             new_god_dict["interventions"] = converted_interventions
 
-            # unpack the temp dict and convert the aspect data to the data class
+            # unpack the temp dict and convert the aspects data to the data class
             god = GodData(**new_god_dict)
             converted_gods[god.name] = god
 
-        # delete all info from aspect and replace with the converted data
+        # delete all info from aspects and replace with the converted data
         self.gods = {}
         self.gods = converted_gods
 
@@ -356,7 +356,6 @@ class LibraryOfAlexandria:
             for value in SecondaryStatTypes:
                 self.recursive_replace(current_list, "resource_type", value.name.lower(), value)
        
-        # Update Afflictions
         # Affliction:category
         for value in AfflictionCategory:
             self.recursive_replace(self.afflictions, "category", value.name.lower(), value)
@@ -365,7 +364,6 @@ class LibraryOfAlexandria:
         for value in AfflictionTriggers:
             self.recursive_replace(self.afflictions, "trigger_event", value.name.lower(), value)
 
-        # Update Stats
         # Stat:Primary:primary_stat_type
         for value in PrimaryStatTypes:
             self.recursive_replace(self.stats, "primary_stat_type", value.name.lower(), value)
@@ -381,6 +379,9 @@ class LibraryOfAlexandria:
             self.recursive_replace(self.gods, "action", value.name.lower(), value)
         for value in HitTypes:
             self.recursive_replace(self.gods, "action", value.name.lower(), value)
+
+        # Aspect:duration
+        self.recursive_replace(self.aspects, "duration", "none", None)  # need to add this as duration can be none
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """
@@ -448,13 +449,13 @@ class LibraryOfAlexandria:
 
     def get_aspect_data(self, aspect_name):
         """
-        Get data for an aspect from the central library
+        Get data for an aspects from the central library
 
         Args:
             aspect_name (str):
 
         Returns:
-            AspectData: data for a specified aspect.
+            AspectData: data for a specified aspects.
         """
 
         data = self.aspects[aspect_name]
@@ -462,7 +463,7 @@ class LibraryOfAlexandria:
 
     def get_aspect_effect_data(self, aspect_name, effect_type):
         """
-        Get effect data for an aspect from the central library
+        Get effect data for an aspects from the central library
 
         Args:
             aspect_name(str):

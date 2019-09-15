@@ -24,7 +24,7 @@ class EntityMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        from scripts.managers.world import WorldManager
+        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
     def get_blocking_entity_at_location(self, tile_x, tile_y):
@@ -267,18 +267,20 @@ class EntityMethods:
         # remove from entities list
         self.manager.entities.remove(entity)
 
-    def create_actor_entity(self, tile_x, tile_y, actor_name, player=False):
+    def create_actor_entity(self, tile_x, tile_y, actor_template_name, actor_name, player=False):
         """
+        Create an entity from an actor template
 
         Args:
             tile_x (int):
             tile_y (int):
             actor_name (str):
+            actor_template_name (str):
             player (bool):
         """
-        actor_template = library.get_actor_template_data(actor_name)
+        actor_template = library.get_actor_template_data(actor_template_name)
 
-        actor_name = actor_template.name
+        actor_name = actor_name
 
         sprite = pygame.image.load("assets/actor/" + actor_template.spritesheet).convert_alpha()
         icon = pygame.image.load("assets/actor/" + actor_template.icon).convert_alpha()

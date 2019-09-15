@@ -1,7 +1,7 @@
 {
     "flaming": {
         "name": "flaming",
-        "description": "This is the flaming affliction. It does damage.",
+        "description": "It does damage.",
         "icon": "placeholder/icon_00.png",
         "category": "bane",
         "trigger_event": "end_turn",
@@ -21,7 +21,7 @@
     },
     "bogged_down": {
         "name": "bogged down",
-        "description": "This is the bogged down affliction. It weakens mundane defence.",
+        "description": "It weakens mundane defence and makes you a little bit slower.",
         "icon": "placeholder/icon_00.png",
         "category": "bane",
         "trigger_event": "passive",
@@ -30,6 +30,20 @@
                 "effect_type": "affect_stat",
                 "stat_to_affect": "bustle" ,
                 "amount": -25
+            }
+        ]
+    },
+    "myopic": {
+        "name": "myopic",
+        "description": "You can't see very well.",
+        "icon": "placeholder/icon_00.png",
+        "category": "bane",
+        "trigger_event": "passive",
+        "effects": [
+            {
+                "effect_type": "affect_stat",
+                "stat_to_affect": "sight_range",
+                "amount": -2
             }
         ]
     }

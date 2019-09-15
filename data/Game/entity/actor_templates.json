@@ -13,7 +13,7 @@
 		"name" : "goblinn hired hand",
 		"description" : "goblinn hired hand description",
 		"race_component" : "goblinn",
-		"savvy_component": "hired hand",
+		"savvy_component": "cleromancer",
 		"homeland_component": "bog refugee",
 		"ai_component" : "basic_monster",
         "spritesheet" : "placeholder/Mobs_goblin_02.png",

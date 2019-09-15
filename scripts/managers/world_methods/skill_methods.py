@@ -8,6 +8,7 @@ from scripts.core.constants import MessageEventTypes, PrimaryStatTypes, Secondar
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
+from scripts.skills.effects.add_aspect import AddAspectEffect
 from scripts.skills.effects.affect_stat import AffectStatEffect
 from scripts.skills.skill import Skill
 from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
@@ -26,7 +27,7 @@ class SkillMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        from scripts.managers.world import WorldManager
+        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
     def can_use_skill(self, entity, target_pos, skill):
@@ -87,10 +88,11 @@ class SkillMethods:
             target += target_tile.entity.name + ", "
         else:
             target += "no entity, "
-        if target_tile.aspect:
-            target += target_tile.aspect.name + ", "
+        if target_tile.aspects:
+            for key, aspect in target_tile.aspects.items():
+                target += aspect.name + ", "
         else:
-            target += "no aspect, "
+            target += "no aspects, "
         target += target_tile.terrain.name  # all tiles have terrain
 
         # log_string = f"Checking ({target}) for tags {required_tags}..."
@@ -173,6 +175,8 @@ class SkillMethods:
             created_effect = ChangeTerrainEffect(owner)
         elif effect_type == EffectTypes.AFFECT_STAT:
             created_effect = AffectStatEffect(owner)
+        elif effect_type == EffectTypes.ADD_ASPECT:
+            created_effect = AddAspectEffect(owner)
 
         return created_effect
 

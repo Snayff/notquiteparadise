@@ -58,6 +58,7 @@ class GameEventTypes(Enum):
     EXIT = auto()
     END_TURN = auto()
     CHANGE_GAME_STATE = auto()
+    END_ROUND = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -135,6 +136,7 @@ class TargetTags(Enum):
     OTHER_ENTITY = auto()
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
+    ANY = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -209,6 +211,7 @@ class SecondaryStatTypes(Enum):
     RESIST_ASTRAL = auto()
     RESIST_COLD = auto()
     RESIST_MUNDANE = auto()
+    SIGHT_RANGE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -262,6 +265,7 @@ class EffectTypes(Enum):
     MOVE = auto()
     CHANGE_TERRAIN = auto()
     AFFECT_STAT = auto()
+    ADD_ASPECT = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

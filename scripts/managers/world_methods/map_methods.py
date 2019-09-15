@@ -1,3 +1,4 @@
+import logging
 
 from scripts.core.constants import TargetTags, TILE_SIZE
 from scripts.world.game_map import GameMap
@@ -5,6 +6,7 @@ from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
 from typing import List
+from scripts.global_singletons.data_library import library
 
 
 class MapMethods:
@@ -15,7 +17,7 @@ class MapMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        from scripts.managers.world import WorldManager
+        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
     def get_game_map(self):
@@ -214,6 +216,8 @@ class MapMethods:
                 return False
         elif target_tag == TargetTags.NO_ENTITY:
             return not tile.has_entity
+        elif target_tag == TargetTags.ANY:
+            return True
         else:
             return False  # catch all
 
@@ -273,25 +277,101 @@ class MapMethods:
         return tile.terrain
 
     @staticmethod
-    def set_aspect_on_tile(tile, aspect_name=None):
+    def add_aspect_to_tile(tile, aspect_name):
         """
-        Set the new aspects on the tile. If aspect_name is not provided aspect will be removed.
+        Add a new aspects on the tile. If it already exists reset duration.
 
         Args:
             tile (Tile):
             aspect_name(str):
         """
-        if aspect_name:
-            from scripts.world.aspect import Aspect
-            tile.aspect = Aspect(tile, aspect_name)
+        data = library.get_aspect_data(aspect_name)
+
+        # check if the aspect already exists
+        if aspect_name in tile.aspects:
+            # reset duration
+            tile.aspects[aspect_name].duration = data.duration
         else:
-            tile.aspect = None
+            from scripts.world.aspect import Aspect
+            if data.duration:
+                tile.aspects[aspect_name] = Aspect(tile, aspect_name, data.duration)
+            else:
+                tile.aspects[aspect_name] = Aspect(tile, aspect_name)
 
     @staticmethod
-    def trigger_aspect_effect_on_tile(tile):
+    def remove_aspect_from_tile(tile, aspect_name):
+        """
+        Aspect is removed from the tile.
+
+        Args:
+            tile (Tile):
+            aspect_name(str):
+        """
+        if aspect_name in tile.aspects:
+            del tile.aspects[aspect_name]
+
+    @staticmethod
+    def trigger_aspects_on_tile(tile):
         """
         Trigger the effect of the Aspect
         """
-        if tile.aspect:
-            tile.aspect.trigger()
+        if tile.aspects:
+            for key, aspect in tile.aspects.items():
+                aspect.trigger()
 
+    @staticmethod
+    def reduce_aspect_durations_on_tile(tile):
+        """
+        Reduce duration of all non-permanent afflictions on an entity.
+
+        Args:
+            tile (Tile):
+        """
+        for key, aspect in tile.aspects.items():
+            if aspect.duration is not None:
+                aspect.duration -= 1
+
+                log_string = f"({aspect.x},{aspect.y}) {aspect.name}`s duration reduced to " \
+                             f" {aspect.duration}"
+                logging.debug(log_string)
+
+    @staticmethod
+    def cleanse_expired_aspects(tile):
+        """
+        Delete expired aspects
+
+        Args:
+            tile (Tile):
+        """
+        removed_aspects = []
+        expired_aspects = []
+
+        # check if aspects has expired
+        for key, aspect in tile.aspects.items():
+
+            # make sure it isnt none before checking duration
+            if aspect.duration is not None:
+                if aspect.duration <= 0:
+                    # log on expired list. Not removing now to avoid amending the currently iterating list
+                    expired_aspects.append(aspect)
+
+        # remove all expired aspects from the tile and delete each instance
+        # pop removes the element so we keep looking at element 0 and popping it
+        index = 0
+        while index < len(expired_aspects):
+            # get the aspect
+            aspect = expired_aspects.pop(index)
+
+            # remove from tile
+            del tile.aspects[aspect.name]
+
+            # add info to logging
+            removed_aspects.append(f"{aspect.x},{aspect.y}:{aspect.name}")
+
+            # delete the instance
+            del aspect
+
+        # if we removed anything log it
+        if removed_aspects:
+            log_string = f"Removed the following aspects: {removed_aspects}"
+            logging.debug(log_string)

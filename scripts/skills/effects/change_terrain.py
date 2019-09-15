@@ -1,5 +1,5 @@
-from scripts.core.constants import MessageEventTypes, EffectTypes
 
+from scripts.core.constants import MessageEventTypes, EffectTypes
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -15,7 +15,7 @@ class ChangeTerrainEffect(Effect):
     """
 
     def __init__(self, owner):
-        super().__init__(owner, "change_terrain", "This is the Manipulate Terrain effect",
+        super().__init__(owner, "change_terrain", "This is the Change Terrain effect",
                          EffectTypes.CHANGE_TERRAIN)
 
     def trigger(self, tiles):
