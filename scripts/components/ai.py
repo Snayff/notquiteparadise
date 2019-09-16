@@ -29,7 +29,7 @@ class BasicMonster:
         logging.info(log_string)
 
         # !!!! TESTING ONLY!!!!!!!
-        publisher.publish(EndTurnEvent(10))  # TODO -remove when  ai needs to act
+        publisher.publish(EndTurnEvent(entity, 10))  # TODO -remove when  ai needs to act
         logging.info(f"-> Passed their turn.")
         return
 

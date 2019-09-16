@@ -25,12 +25,11 @@ class AfflictionHandler(Subscriber):
 
         if event.type == GameEventTypes.END_TURN:
             # trigger end of turn afflictions
-            from scripts.global_singletons.managers import turn_manager
-            self.process_affliction_trigger(turn_manager.turn_holder, AfflictionTriggers.END_TURN)
+            self.process_affliction_trigger(event.entity, AfflictionTriggers.END_TURN)
 
             # reduce duration and cleanse expired
             from scripts.global_singletons.managers import world_manager
-            world_manager.Affliction.reduce_affliction_durations_on_entity(turn_manager.turn_holder)
+            world_manager.Affliction.reduce_affliction_durations_on_entity(event.entity)
             world_manager.Affliction.cleanse_expired_afflictions()
 
         elif event.type == EntityEventTypes.MOVE:

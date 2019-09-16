@@ -20,7 +20,7 @@ class GameHandler(Subscriber):
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
         elif event.type == GameEventTypes.END_TURN:
-           turn_manager.end_turn(event.time_spent)
+            turn_manager.end_turn(event.time_spent)
 
         elif event.type == GameEventTypes.CHANGE_GAME_STATE:
             if event.new_game_state != game_manager.game_state:
