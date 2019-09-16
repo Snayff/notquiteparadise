@@ -4,13 +4,16 @@ from scripts.event_handlers.pub_sub_hub import Event
 
 class EndTurnEvent(Event):
     """
-    Event to end an entities ability to act and give that ability to another
+    Event to end an entities ability to act.
 
     Args:
+        entity(Entity):
         time_spent(int):
+
     """
-    def __init__(self, time_spent):
+    def __init__(self, entity, time_spent):
         Event.__init__(self, GameEventTypes.END_TURN, EventTopics.GAME)
+        self.entity = entity
         self.time_spent = time_spent
 
 

@@ -3,6 +3,7 @@ import logging
 
 from scripts.core.constants import MapEventTypes, MessageEventTypes, GameEventTypes
 from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.events.game_events import EndTurnEvent
 from scripts.events.map_events import TileInteractionEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
@@ -33,7 +34,7 @@ class MapHandler(Subscriber):
         elif event.type == GameEventTypes.END_TURN:
             log_string = f"-> Processing end of turn map updates."
             logging.debug(log_string)
-            self.process_end_of_turn_updates()
+            self.process_end_of_turn_updates(event)
         elif event.type == GameEventTypes.END_ROUND:
             log_string = f"-> Processing end of round map updates."
             logging.debug(log_string)
@@ -75,13 +76,15 @@ class MapHandler(Subscriber):
                             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
     @staticmethod
-    def process_end_of_turn_updates():
+    def process_end_of_turn_updates(event):
         """
         Trigger aspects on tile turn holder is on
+
+        Args:
+            event(EndTurnEvent):
         """
-        from scripts.global_singletons.managers import turn_manager
+        entity = event.entity
         from scripts.global_singletons.managers import world_manager
-        entity = turn_manager.turn_holder
         tile = world_manager.Map.get_tile(entity.x, entity.y)
 
         # trigger aspects

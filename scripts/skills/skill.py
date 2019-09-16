@@ -47,7 +47,8 @@ class Skill:
             effect.trigger(effected_tiles)
 
         # end the turn
-        publisher.publish(EndTurnEvent(data.time_cost))
+        entity = self.owner.owner
+        publisher.publish(EndTurnEvent(entity, data.time_cost))
 
 
 

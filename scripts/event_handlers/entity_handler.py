@@ -99,7 +99,7 @@ class EntityHandler(Subscriber):
                     world_manager.player_fov_is_dirty = True
 
                 # end turn
-                publisher.publish(EndTurnEvent(10))  # TODO - replace magic number with cost to move
+                publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
 
     @staticmethod
     def process_skill(event):

@@ -68,7 +68,7 @@ class TurnManager:
         Args:
             spent_time:
         """
-        logging.debug( f"Ending {self.turn_holder.name}`s turn...")
+        logging.debug(f"Ending {self.turn_holder.name}`s turn...")
 
         entity = self.turn_holder
 
