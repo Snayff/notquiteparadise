@@ -169,8 +169,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'NotQuiteParadise', 'NotQuiteParadise Documentation',
-     author, 'NotQuiteParadise', 'One line description of project.',
-     'Miscellaneous'),
+     author, 'NotQuiteParadise', 'A game about dreams.',
+     '???'),
 ]
 
 
