@@ -17,6 +17,7 @@ class EntityQueue:
         self.entity_icon_size = 64
         self.entity_queue = []  # type: List[Tuple]  # (image, str)
         self.gap_between_entities = 2
+        self.is_visible = True
 
         # panel info
         panel_width = int(self.entity_icon_size * 1.5)
@@ -34,10 +35,6 @@ class EntityQueue:
 
         # get entities to show
         self.update_entity_queue()
-
-        # set self to be rendered
-        from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("entity_queue", self, True)
 
         logging.debug(f"EntityQueue initialised.")
 

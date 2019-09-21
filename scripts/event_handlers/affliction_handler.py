@@ -20,10 +20,10 @@ class AfflictionHandler(Subscriber):
         Args:
             event(Event): the event in need of processing
         """
-        log_string = f"{self.name} received {event.type}..."
+        log_string = f"{self.name} received {event.event_type}..."
         logging.debug(log_string)
 
-        if event.type == GameEventTypes.END_TURN:
+        if event.event_type == GameEventTypes.END_TURN:
             # trigger end of turn afflictions
             self.process_affliction_trigger(event.entity, AfflictionTriggers.END_TURN)
 
@@ -32,11 +32,11 @@ class AfflictionHandler(Subscriber):
             world_manager.Affliction.reduce_affliction_durations_on_entity(event.entity)
             world_manager.Affliction.cleanse_expired_afflictions()
 
-        elif event.type == EntityEventTypes.MOVE:
+        elif event.event_type == EntityEventTypes.MOVE:
             self.process_affliction_trigger(event.entity, AfflictionTriggers.MOVE)
             self.process_affliction_trigger(event.entity, AfflictionTriggers.ACTION)
 
-        elif event.type == EntityEventTypes.SKILL:
+        elif event.event_type == EntityEventTypes.SKILL:
             self.process_affliction_trigger(event.entity, AfflictionTriggers.ACTION)
 
     @staticmethod

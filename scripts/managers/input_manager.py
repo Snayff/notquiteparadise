@@ -83,7 +83,7 @@ class InputManager:
             self.check_mouse_input(event)
 
             # is a KB KEY pressed?
-            if event.type == pygame.KEYDOWN:
+            if event.event_type == pygame.KEYDOWN:
                 self.check_kb_directional_input(event)
                 self.check_kb_interaction_input(event)
                 self.check_kb_general_input(event)
@@ -96,7 +96,7 @@ class InputManager:
             event (pygame.event):
         """
         # update MOUSE input values based on event
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.event_type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
                 self.input_values["left_click"] = True
             elif pygame.mouse.get_pressed()[1]:
@@ -104,7 +104,7 @@ class InputManager:
             elif pygame.mouse.get_pressed()[2]:
                 self.input_values["right_click"] = True
 
-        if event.type == pygame.MOUSEMOTION:
+        if event.event_type == pygame.MOUSEMOTION:
             self.input_values["mouse_moved"] = True
 
     def check_kb_directional_input(self, event):
@@ -245,7 +245,9 @@ class InputManager:
 
                     # check who we are moused over
                     from scripts.global_singletons.managers import ui_manager
-                    mouse_x, mouse_y = ui_manager.get_relative_scaled_mouse_pos("game_map")
+                    mouse_x, mouse_y =ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
+                                                                     ui_manager.screen_scaling_mod_y,
+                                                                     ui_manager.visible_elements, "game_map")
                     target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
                     # create a skill with a target, or activate targeting mode
@@ -275,7 +277,8 @@ class InputManager:
         if mouse_button:
             publisher.publish(ClickUIEvent(mouse_button))
 
-        mouse_x, mouse_y = ui_manager.get_scaled_mouse_pos()
+        mouse_x, mouse_y = ui_manager.Mouse.get_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
+                                                                 ui_manager.screen_scaling_mod_y)
         mouse_tile_x, mouse_tile_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
         # cancel out
@@ -295,7 +298,7 @@ class InputManager:
             ui_manager.targeting_overlay.set_selected_tile(tile)
             ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
-            ui_manager.entity_info.set_selected_entity(entity)
+            ui_manager.Element.set_selected_entity(entity)
 
         # if mouse moved update selected tile
         # TODO - move logic to event
@@ -305,7 +308,7 @@ class InputManager:
             ui_manager.targeting_overlay.set_selected_tile(tile)
             ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
-            ui_manager.entity_info.set_selected_entity(entity)
+            ui_manager.Element.set_selected_entity(entity)
 
         #  SKILL USAGE
         skill_number = self.get_pressed_skill_number()

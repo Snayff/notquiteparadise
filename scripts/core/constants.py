@@ -2,6 +2,7 @@
 from enum import Enum, auto
 
 TILE_SIZE = 64
+ICON_IN_TEXT_SIZE = 16
 
 
 class VisualInfo:
@@ -304,6 +305,7 @@ class AfflictionTriggers(Enum):
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
     # TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage
     # USE_BURN = auto()  # apply if afflicted entity uses a burn type - etc.
+    # DEATH = auto()  # apply if afflicted entity dies
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -360,6 +362,25 @@ class MouseButtons(Enum):
     LEFT_BUTTON = auto()
     RIGHT_BUTTON = auto()
     MIDDLE_BUTTON = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
+class UIElementTypes(Enum):
+    """
+    The different UI elements
+    """
+    MESSAGE_LOG = auto()
+    ENTITY_INFO = auto()
+    TARGETING_OVERLAY = auto()
+    SKILL_BAR = auto()
+    ENTITY_QUEUE = auto()
+    CAMERA = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

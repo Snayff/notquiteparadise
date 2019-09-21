@@ -25,6 +25,7 @@ class TargetingOverlay:
         self.tiles_in_range_and_fov = []
         self.tiles_in_skill_effect_range = []
         self.selected_tile = None
+        self.is_visible = True
 
         # drawing info
         self.palette = Palette().targeting_overlay
@@ -32,9 +33,7 @@ class TargetingOverlay:
         self.select_border_width = 5
         self.highlight_border_width = 3
 
-        self.is_dirty = True
-
-        logging.debug( f"TargetingOverlay initialised.")
+        logging.debug(f"TargetingOverlay initialised.")
 
     def draw(self, surface):
         """
@@ -164,13 +163,3 @@ class TargetingOverlay:
             effected_tiles = world_manager.Map.get_tiles(self.selected_tile.x, self.selected_tile.y, coords)
 
             self.tiles_in_skill_effect_range = effected_tiles
-
-    def set_visibility(self, visible):
-        """
-        Set the visibility of the targeting overlay
-
-        Args:
-            visible (bool): Visible or not
-        """
-        from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("targeting_overlay", self, visible)

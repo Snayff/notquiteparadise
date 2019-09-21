@@ -81,7 +81,7 @@ class DebugManager:
 
         if self.show_mouse_pos:
             from scripts.global_singletons.managers import ui_manager
-            pos = ui_manager.get_scaled_mouse_pos()
+            pos =ui_manager.Mouse.get_scaled_mouse_pos(ui_manager.screen_scaling_mod_x, ui_manager.screen_scaling_mod_y)
             msg = f"Abs mouse pos : {pos}, "
 
             offset_x = 0

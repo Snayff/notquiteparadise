@@ -91,7 +91,8 @@ def game_loop():
         event_hub.update()
 
         # DRAW
-        ui_manager.draw_game(world_manager.game_map, debug_manager.visible)
+        debug_manager.draw(ui_manager.main_surface)
+        ui_manager.Element.draw_visible_elements()
 
 
 def dump_profiling_data(profiler):

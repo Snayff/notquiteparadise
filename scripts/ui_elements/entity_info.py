@@ -14,22 +14,23 @@ class SelectedEntityInfo:
     """
     def __init__(self):
         self.selected_entity = None
-        self.palette = Palette().entity_info
-        self.font = Font().default
-        self.gap_between_lines = int(self.font.size / 3)
+        font_size = Font().default.size
+        self.gap_between_lines = int(font_size / 3)
+        self.is_visible = True
 
         # panel info
+        palette = Palette().entity_info
         panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
         panel_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
         panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
         panel_y = VisualInfo.BASE_WINDOW_HEIGHT - panel_height
         panel_border = 2
-        panel_background_colour = self.palette.background
-        panel_border_colour = self.palette.border
+        panel_background_colour = palette.background
+        panel_border_colour = palette.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
 
-        logging.debug( f"EntityInfo initialised.")
+        logging.debug(f"EntityInfo initialised.")
 
     def draw(self, surface):
         """
@@ -60,8 +61,9 @@ class SelectedEntityInfo:
         second_section_column_one_text = []
         second_section_column_two_text = []
         header_text = []
-        font = self.font
-        font_size = self.font.size
+        from scripts.global_singletons.managers import ui_manager
+        font = ui_manager.Font.default
+        font_size = font.size
 
         # what messages do we want to show?
         # TODO - move content out of draw
@@ -170,26 +172,4 @@ class SelectedEntityInfo:
         # draw all to provided surface
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
-    def set_selected_entity(self, entity):
-        """
-        Set the selected entity  and make panel visible
-
-        Args:
-            entity(tuple): x y position of tile in game map
-        """
-        self.selected_entity = entity
-        if entity is not None:
-            self.set_visibility(True)
-        else:
-            self.set_visibility(False)
-
-    def set_visibility(self, visible):
-        """
-        Set the visibility of the selected entity info
-
-        Args:
-            visible (bool): Visible or not
-        """
-        from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("entity_info", self, visible)
 

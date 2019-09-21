@@ -24,18 +24,18 @@ class MapHandler(Subscriber):
             event(Event): the event in need of processing
         """
 
-        log_string = f"{self.name} received {event.type}..."
+        log_string = f"{self.name} received {event.event_type}..."
         logging.debug(log_string)
 
-        if event.type == MapEventTypes.TILE_INTERACTION:
+        if event.event_type == MapEventTypes.TILE_INTERACTION:
             log_string = f"-> Processing {event.cause} interaction on tiles."
             logging.debug(log_string)
             self.process_tile_interaction(event)
-        elif event.type == GameEventTypes.END_TURN:
+        elif event.event_type == GameEventTypes.END_TURN:
             log_string = f"-> Processing end of turn map updates."
             logging.debug(log_string)
             self.process_end_of_turn_updates(event)
-        elif event.type == GameEventTypes.END_ROUND:
+        elif event.event_type == GameEventTypes.END_ROUND:
             log_string = f"-> Processing end of round map updates."
             logging.debug(log_string)
             self.process_end_of_round_updates()

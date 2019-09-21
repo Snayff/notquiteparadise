@@ -21,6 +21,7 @@ class SkillBar:
         self.palette = Palette().skill_bar
         self.max_skills_in_bar = 5
         self.skill_icon_size = 64
+        self.is_visible = True
 
         # panel info
         panel_width = int(self.skill_icon_size * 1.5)
@@ -57,10 +58,6 @@ class SkillBar:
 
             # increment counter
             skill_number += 1
-
-        # set self to be rendered
-        from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("skill_bar", self, True)
 
         logging.debug(f"SkillBar initialised.")
 

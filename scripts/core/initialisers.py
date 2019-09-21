@@ -57,7 +57,6 @@ def initialise_game():
     map_height = 30
     world_manager.Map.create_game_map(map_width, map_height)
     world_manager.FOV.create_player_fov_map(map_width, map_height)
-    ui_manager.delayed_init()
 
     # TODO - remove when map generation is in
     world_manager.Entity.create_actor_entity(0, 0, "player", "player", True)

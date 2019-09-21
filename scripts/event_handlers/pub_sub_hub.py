@@ -1,8 +1,9 @@
 
-from scripts.core.constants import EventTopics
-
 
 class EventHub:
+    """
+    Event hub to handle the interactions between events and subscribers
+    """
     def __init__(self):
         self.events = []
         self.subscribers = {}
@@ -27,6 +28,9 @@ class EventHub:
 
 
 class Publisher:
+    """
+    Class to create events and log them with the event hub
+    """
     def __init__(self, event_hub):
         self.event_hub = event_hub
 
@@ -35,6 +39,9 @@ class Publisher:
 
 
 class Subscriber:
+    """
+    Class to set default behaviour for handlers listening for events
+    """
     def __init__(self, name, event_hub):
         self.name = name
         self.event_hub = event_hub
@@ -47,11 +54,16 @@ class Subscriber:
 
 
 class Event:
-    def __init__(self, type, topic):
+    """
+    Events to cause top level actions to take place
+    """
+    def __init__(self, event_type, topic):
         """
-        :type type:
-        :type topic: EventTopics
+
+        Args:
+            event_type ():
+            topic ():
         """
-        self.type = type
+        self.event_type = event_type
         self.topic = topic
 

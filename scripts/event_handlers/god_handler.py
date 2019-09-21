@@ -27,13 +27,13 @@ class GodHandler(Subscriber):
         #  create events for causing and receiving hit type
         #  create events for being the cause of death
 
-        log_string = f"{self.name} received {event.type}..."
+        log_string = f"{self.name} received {event.event_type}..."
         logging.debug(log_string)
 
         if event.topic == EventTopics.ENTITY:
             self.process_interventions(event)
 
-        if event.type == EntityEventTypes.SKILL:
+        if event.event_type == EntityEventTypes.SKILL:
             self.process_judgements(event)
 
     @staticmethod

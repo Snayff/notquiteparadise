@@ -13,16 +13,16 @@ class GameHandler(Subscriber):
         Subscriber.__init__(self, "game_handler", event_hub)
 
     def run(self, event):
-        log_string = f"{self.name} received {event.type}"
+        log_string = f"{self.name} received {event.event_type}"
         logging.info(log_string)
 
-        if event.type == GameEventTypes.EXIT:
+        if event.event_type == GameEventTypes.EXIT:
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
-        elif event.type == GameEventTypes.END_TURN:
+        elif event.event_type == GameEventTypes.END_TURN:
             turn_manager.end_turn(event.time_spent)
 
-        elif event.type == GameEventTypes.CHANGE_GAME_STATE:
+        elif event.event_type == GameEventTypes.CHANGE_GAME_STATE:
             if event.new_game_state != game_manager.game_state:
                 game_manager.update_game_state(event.new_game_state)
             else:
