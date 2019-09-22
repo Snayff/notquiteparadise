@@ -57,10 +57,11 @@ class EventTopics(Enum):
 
 class GameEventTypes(Enum):
     """Types of Game Events"""
-    EXIT = auto()
-    END_TURN = auto()
-    CHANGE_GAME_STATE = auto()
-    END_ROUND = auto()
+    EXIT = auto()  # go back a step / exit current focus
+    INITIALISE = auto()  # initialise game resources
+    END_TURN = auto()  # end of turn
+    CHANGE_GAME_STATE = auto()  # move from one game state to another
+    END_ROUND = auto()  # end of round
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

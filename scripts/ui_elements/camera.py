@@ -1,6 +1,6 @@
 
 from scripts.ui_elements.templates.panel import Panel
-from scripts.core.constants import VisualInfo
+from scripts.core.constants import VisualInfo, TILE_SIZE
 from scripts.ui_elements.colours import Colour
 from scripts.ui_elements.palette import Palette
 
@@ -12,6 +12,9 @@ class Camera:
 
     def __init__(self):
         self.tiles_to_draw = []  # the tile passed from the GameMap to draw
+        self.is_visible = False
+        self.rows_in_view = 10
+        self.cols_in_view = 10
 
         # setup the panel
         panel_x = 0
@@ -36,16 +39,35 @@ class Camera:
         self.panel.surface.fill(Colour().black)
         self.panel.draw_background()
 
-        # tiles
-        for x in range(0, len(self.tiles_to_draw)):
-            for y in range(0, len(self.tiles_to_draw)):
-
-                from scripts.global_singletons.managers import world_manager
-                if world_manager.Map.is_tile_visible_to_player(x, y):
-                    # TODO - move the draw out of the tile
-                    self.tiles[x][y].draw(self.panel.surface)
+        self.draw_map()
 
         # panel border
         self.panel.draw_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
+
+    def draw_map(self):
+        """
+        Draw the game map on the panel surface
+        """
+        for x in range(0, len(self.tiles_to_draw)):
+            self.draw_tile(self.tiles_to_draw[x])
+
+    def draw_tile(self, tile):
+        """
+        Draw the tile on the panel surface
+
+        Args:
+            tile (Tile):
+        """
+        draw_position = (tile.x * TILE_SIZE, tile.y * TILE_SIZE)
+
+        if tile.terrain:
+            self.panel.surface.blit(tile.terrain.sprite, draw_position)
+
+        if tile.entity:
+            self.panel.surface.blit(tile.entity.icon, draw_position)
+
+        if tile.aspects:
+            for key, aspect in tile.aspects.items():
+                self.panel.surface.blit(aspect.sprite, draw_position)
 

@@ -6,13 +6,8 @@ from scripts.core.fonts import Font
 from scripts.managers.ui_methods.element_methods import ElementMethods
 from scripts.managers.ui_methods.message_methods import MessageMethods
 from scripts.managers.ui_methods.mouse_methods import MouseMethods
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.core.constants import VisualInfo
-from scripts.ui_elements.entity_queue import EntityQueue
 from scripts.ui_elements.palette import Palette
-from scripts.ui_elements.skill_bar import SkillBar
-from scripts.ui_elements.targeting_overlay import TargetingOverlay
 
 
 class UIManager:
@@ -24,7 +19,6 @@ class UIManager:
     """
 
     def __init__(self):
-        # methods
         self.Element = ElementMethods(self)
         self.Mouse = MouseMethods(self)
         self.Message = MessageMethods(self)

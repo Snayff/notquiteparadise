@@ -20,13 +20,14 @@ class SkillContainer(Panel):
         """
         Draw the use key for the skills
         """
-        font = self.owner.font
+        from scripts.global_singletons.managers import ui_manager
+        font = ui_manager.Font.skill_bar
         text_x = int(self.width - (font.size / 1.8))
         text_y = int(self.height - font.size * 1.2)
         text = str(self.skill_number)
-        text_colour = self.owner.palette.text_default
+        text_colour = ui_manager.Palette.skill_bar.text_default
 
-        self.owner.font.render_to(self.surface, (text_x, text_y), text, text_colour)
+        font.render_to(self.surface, (text_x, text_y), text, text_colour)
 
     def draw_self_on_other_surface(self, surface):
         """

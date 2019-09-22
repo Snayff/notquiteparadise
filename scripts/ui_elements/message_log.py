@@ -28,7 +28,7 @@ class MessageLog:
         self.icons = {}
         self.commands = {}
         self.is_dirty = True
-        self.is_visible = True
+        self.is_visible = False
 
         # panel info
         panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
@@ -55,8 +55,6 @@ class MessageLog:
 
         logging.debug(f"MessageLog initialised.")
 
-
-
     def draw(self, surface):
         """
         Draw the message log and all included text and icons
@@ -72,7 +70,8 @@ class MessageLog:
         # init info for message render
         msg_x = self.edge_size + self.message_indent
         msg_y = self.edge_size
-        font = self.font
+        from scripts.global_singletons.managers import ui_manager
+        font = ui_manager.Font.message_log
         font_size = font.size
         line_count = 0
 

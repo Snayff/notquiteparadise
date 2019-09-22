@@ -16,7 +16,7 @@ class SelectedEntityInfo:
         self.selected_entity = None
         font_size = Font().default.size
         self.gap_between_lines = int(font_size / 3)
-        self.is_visible = True
+        self.is_visible = False
 
         # panel info
         palette = Palette().entity_info

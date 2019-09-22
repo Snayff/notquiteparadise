@@ -25,7 +25,7 @@ class TargetingOverlay:
         self.tiles_in_range_and_fov = []
         self.tiles_in_skill_effect_range = []
         self.selected_tile = None
-        self.is_visible = True
+        self.is_visible = False
 
         # drawing info
         self.select_border_width = 5
@@ -40,9 +40,12 @@ class TargetingOverlay:
         Args:
             surface:
         """
-        self.draw_range_highlight(surface)
-        self.draw_effect_highlight(surface)
-        self.draw_selected_tile(surface)
+        if self.skill_being_targeted:
+            self.draw_range_highlight(surface)
+            self.draw_effect_highlight(surface)
+
+        if self.selected_tile:
+            self.draw_selected_tile(surface)
 
     def draw_range_highlight(self, surface):
         """
@@ -52,7 +55,7 @@ class TargetingOverlay:
             surface:
         """
         from scripts.global_singletons.managers import ui_manager
-        palette = ui_manager.Palette
+        palette = ui_manager.Palette.targeting_overlay
 
         tile_colour = palette.highlighted_range_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)
@@ -73,7 +76,7 @@ class TargetingOverlay:
             surface:
         """
         from scripts.global_singletons.managers import ui_manager
-        palette = ui_manager.Palette
+        palette = ui_manager.Palette.targeting_overlay
 
         tile_colour = palette.highlighted_effect_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)
@@ -93,7 +96,7 @@ class TargetingOverlay:
             surface:
         """
         from scripts.global_singletons.managers import ui_manager
-        palette = ui_manager.Palette
+        palette = ui_manager.Palette.targeting_overlay
 
         tile_colour = palette.selected_tile_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)

@@ -1,4 +1,4 @@
-from scripts.core.constants import TILE_SIZE, TargetTags
+
 from scripts.world.entity import Entity
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
@@ -121,23 +121,5 @@ class Tile:
 
         return tile_blocks_sight
 
-    def draw(self, surface):
-        """
-        Draw the tile on the specified surface
-
-        Args:
-            surface(pygame.Surface): The surface to draw to
-        """
-        draw_position = (self.x * TILE_SIZE, self.y * TILE_SIZE)
-
-        if self.terrain:
-            surface.blit(self.terrain.sprite, draw_position)
-
-        if self.entity:
-            surface.blit(self.entity.icon, draw_position)
-
-        if self.aspects:
-            for key, aspect in self.aspects.items():
-                surface.blit(aspect.sprite, draw_position)
 
 

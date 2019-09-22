@@ -52,6 +52,15 @@ class UiHandler(Subscriber):
             ui_manager.Element.update_skill_bars_icons()
         elif event.event_type == EntityEventTypes.DIE:
             ui_manager.Element.update_entity_queue()
+        elif event.event_type == EntityEventTypes.MOVE:
+            row_size, col_size = ui_manager.Element.get_camera_view_size()
+
+            from scripts.global_singletons.managers import world_manager
+            # TODO - extend to work with rectangle rather than square
+            tiles = world_manager.FOV.get_tiles_in_range_and_fov_of_player(row_size)
+
+            ui_manager.Element.set_tiles_in_camera(tiles)
+
 
     @staticmethod
     def process_game(event):
@@ -63,8 +72,25 @@ class UiHandler(Subscriber):
         """
         if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
 
+            if event.new_game_state == GameStates.GAME_INITIALISING:
+                # show ui
+                ui_manager.Element.set_element_visibility(UIElementTypes.CAMERA, True)
+                ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
+                ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_QUEUE, True)
+                ui_manager.Element.set_element_visibility(UIElementTypes.SKILL_BAR, True)
+
+                # update camera
+                row_size, col_size = ui_manager.Element.get_camera_view_size()
+
+                from scripts.global_singletons.managers import world_manager
+                # TODO - extend to work with rectangle rather than square
+                tiles = world_manager.FOV.get_tiles_in_range_and_fov_of_player(row_size)
+
+                ui_manager.Element.set_tiles_in_camera(tiles)
+
             # if changing to targeting mode then turn on targeting overlay
-            if event.new_game_state == GameStates.TARGETING_MODE:
+            elif event.new_game_state == GameStates.TARGETING_MODE:
+                from scripts.global_singletons.managers import world_manager
                 # get info for initial selected tile
                 player = world_manager.player
                 tile = world_manager.Map.get_tile(player.x, player.y)
@@ -101,8 +127,8 @@ class UiHandler(Subscriber):
             button = event.button_pressed
             mouse_x = event.mouse_x
             mouse_y = event.mouse_y
-            clicked_rect =ui_manager.Mouse.get_clicked_panels_rect(ui_manager.screen_scaling_mod_x, ui_manager.screen_scaling_mod_y,
-                                                   ui_manager.visible_elements, mouse_x, mouse_y)
+            clicked_rect = ui_manager.Mouse.get_clicked_panels_rect(ui_manager.screen_scaling_mod_x,
+                                                    ui_manager.screen_scaling_mod_y, mouse_x, mouse_y)
             game_state = game_manager.game_state
 
             # handle right click actions

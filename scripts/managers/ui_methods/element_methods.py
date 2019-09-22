@@ -1,4 +1,6 @@
 import logging
+from typing import Tuple
+
 import pygame
 
 from scripts.core.constants import UIElementTypes, SkillShapes
@@ -81,7 +83,7 @@ class ElementMethods:
 
         surface = self.manager.main_surface
 
-        for key, element in self.manager.elements:
+        for key, element in self.manager.elements.items():
             if element.is_visible:
                 element.draw(surface)
 
@@ -117,17 +119,50 @@ class ElementMethods:
         Args:
             tile(Tile):
         """
-        targeting_overlay = self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name]
+        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
 
         if tile in targeting_overlay.tiles_in_range_and_fov:
             targeting_overlay.selected_tile = tile
+
+    def set_tiles_in_camera(self, tiles):
+        """
+        Set the tiles to be drawn by the camera based on the camera size.
+
+        Args:
+            tiles (list[Tile]): all of the tiles.
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        camera.tiles_to_draw = tiles
+
+    def get_camera_view_size(self):
+        """
+        Get the size of the camera view
+
+        Returns:
+            Tuple[int,int]: (rows, cols)  in number of tiles
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        return camera.rows_in_view, camera.cols_in_view
+
+    def get_ui_element(self, element_type):
+        """
+        Get UI element. Returns nothing if not found. Won't be found if not init'd.
+
+        Args:
+            element_type (UIElementTypes):
+
+        Returns:
+            any: ui element
+        """
+        return self.manager.elements[element_type.name]
 
     def update_targeting_overlays_tiles_in_range_and_fov(self):
         """
         Update list of valid tiles within range based on currently selected skill's range.
         """
         # TODO - convert to a set and set via en event
-        targeting_overlay = self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name]
+        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
 
         # clear current tiles
         targeting_overlay.tiles_in_range_and_fov = []
@@ -149,7 +184,7 @@ class ElementMethods:
         Update the list of Tiles for those effected by the skill effect range. Based on selected skill.
         """
         # TODO - convert to a set and set via en event
-        targeting_overlay = self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name]
+        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
 
         # if there is a skill being targeted
         if targeting_overlay.skill_being_targeted:
@@ -173,7 +208,7 @@ class ElementMethods:
         Get the player`s known skills to show in the skill bar.
         """
         # TODO - convert to a set and set via en event
-        skill_bar = self.manager.elements[UIElementTypes.SKILL_BAR.name]
+        skill_bar = self.get_ui_element(UIElementTypes.SKILL_BAR)
 
         # update info
         from scripts.global_singletons.managers import world_manager
@@ -200,7 +235,7 @@ class ElementMethods:
         Get info from the turn_manager and update the entity queue to be displayed
         """
         # TODO - convert to a set and set via en event
-        entity_queue = self.manager.elements[UIElementTypes.ENTITY_QUEUE.name]
+        entity_queue = self.get_ui_element(UIElementTypes.ENTITY_QUEUE)
 
         # clear current queue
         entity_queue.entity_queue.clear()

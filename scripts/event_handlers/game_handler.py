@@ -23,6 +23,12 @@ class GameHandler(Subscriber):
             turn_manager.end_turn(event.time_spent)
 
         elif event.event_type == GameEventTypes.CHANGE_GAME_STATE:
+
+            # handle initialise state
+            if event.new_game_state == GameStates.GAME_INITIALISING:
+                publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
+
+            # handle game state change
             if event.new_game_state != game_manager.game_state:
                 game_manager.update_game_state(event.new_game_state)
             else:

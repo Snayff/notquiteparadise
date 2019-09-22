@@ -19,7 +19,7 @@ class SkillBar:
         # setup info
         self.max_skills_in_bar = 5
         self.skill_icon_size = 64
-        self.is_visible = True
+        self.is_visible = False
 
         # panel info
         panel_width = int(self.skill_icon_size * 1.5)
@@ -42,8 +42,8 @@ class SkillBar:
                                            self.max_skills_in_bar)
 
         size = self.skill_icon_size
-        bg_colour = self.palette.background
-        bor_colour = self.palette.skill_border
+        bg_colour = palette.background
+        bor_colour = palette.skill_border
         bor_size = 1
         skill_number = 1
 

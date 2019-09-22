@@ -11,5 +11,5 @@ setup(
     license='',
     author='Gabriel',
     author_email='',
-    description=''
+    description='', install_requires=['pygame']
 )

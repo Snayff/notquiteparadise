@@ -1,4 +1,3 @@
-
 import logging
 import pygame
 
@@ -15,6 +14,7 @@ class InputManager:
     """
     Manager of Input Functions and data, such as which input method and recent key presses
     """
+
     def __init__(self):
         self.input_mode = InputModes.MOUSE_AND_KB
         self.input_values = {
@@ -42,7 +42,7 @@ class InputManager:
 
         }
 
-        logging.info( f"InputManager initialised.")
+        logging.info(f"InputManager initialised.")
 
     def update(self):
         """
@@ -58,7 +58,7 @@ class InputManager:
                     input_received += key + ", "
 
         if input_received != "":
-            logging.debug( f"Input received: {input_received}")
+            logging.debug(f"Input received: {input_received}")
 
         self.process_input()
 
@@ -83,11 +83,11 @@ class InputManager:
             self.check_mouse_input(event)
 
             # is a KB KEY pressed?
-            if event.event_type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 self.check_kb_directional_input(event)
                 self.check_kb_interaction_input(event)
                 self.check_kb_general_input(event)
-    
+
     def check_mouse_input(self, event):
         """
         Check for mouse input
@@ -96,7 +96,8 @@ class InputManager:
             event (pygame.event):
         """
         # update MOUSE input values based on event
-        if event.event_type == pygame.MOUSEBUTTONDOWN:
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
                 self.input_values["left_click"] = True
             elif pygame.mouse.get_pressed()[1]:
@@ -104,7 +105,7 @@ class InputManager:
             elif pygame.mouse.get_pressed()[2]:
                 self.input_values["right_click"] = True
 
-        if event.event_type == pygame.MOUSEMOTION:
+        if event.type == pygame.MOUSEMOTION:
             self.input_values["mouse_moved"] = True
 
     def check_kb_directional_input(self, event):
@@ -245,9 +246,10 @@ class InputManager:
 
                     # check who we are moused over
                     from scripts.global_singletons.managers import ui_manager
-                    mouse_x, mouse_y =ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
-                                                                     ui_manager.screen_scaling_mod_y,
-                                                                     ui_manager.visible_elements, "game_map")
+                    mouse_x, mouse_y = ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
+                                                                                      ui_manager.screen_scaling_mod_y,
+                                                                                      ui_manager.visible_elements,
+                                                                                      "game_map")
                     target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
                     # create a skill with a target, or activate targeting mode

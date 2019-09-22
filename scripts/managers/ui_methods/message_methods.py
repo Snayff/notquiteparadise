@@ -75,7 +75,7 @@ class MessageMethods:
             wrapped_message = self.line_wrap_message(message, font, max_width)
 
             # parse message
-            parsed_message_list = message_log.parse_message_and_convert_to_surface(wrapped_message, font)
+            parsed_message_list = self.parse_message_and_convert_to_surface(wrapped_message, font)
 
             # add each line to the main message list
             for message in parsed_message_list:

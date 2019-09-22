@@ -17,7 +17,7 @@ class EntityQueue:
         self.entity_icon_size = 64
         self.entity_queue = []  # type: List[Tuple]  # (image, str)
         self.gap_between_entities = 2
-        self.is_visible = True
+        self.is_visible = False
 
         # panel info
         panel_width = int(self.entity_icon_size * 1.5)
