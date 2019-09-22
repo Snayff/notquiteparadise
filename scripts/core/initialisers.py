@@ -75,7 +75,6 @@ def initialise_game():
     publisher.publish(LearnEvent(world_manager.player, "Fungechist", "Fractious Fungi"))
 
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
-    #game_manager.update_game_state(GameStates.GAME_INITIALISING)  # TODO remove when main menu is starting point
     turn_manager.turn_holder = world_manager.player
 
     publisher.publish(MessageEvent(MessageEventTypes.BASIC, "Welcome to #col.info Not #col.info "

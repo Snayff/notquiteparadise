@@ -90,7 +90,7 @@ def game_loop():
         event_hub.update()
 
         # DRAW
-        debug_manager.draw(ui_manager.main_surface)
+        debug_manager.draw()
         ui_manager.Element.draw_visible_elements()
 
 

@@ -30,7 +30,8 @@ class MessageMethods:
         keywords["grazes"] = palette.keyword_grazes
         keywords["crits"] = palette.keyword_crits
 
-        self.manager.elements[UIElementTypes.MESSAGE_LOG.name].keywords = keywords
+        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+        message_log.keywords = keywords
 
     def init_icons(self):
         """
@@ -44,7 +45,8 @@ class MessageMethods:
         import pygame
         icons["info"] = pygame.image.load("assets/icons/placeholder/book.PNG").convert_alpha()
 
-        self.manager.elements[UIElementTypes.MESSAGE_LOG.name].icons = icons
+        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+        message_log.icons = icons
 
     def init_commands(self):
         """
@@ -57,7 +59,8 @@ class MessageMethods:
         commands["positive"] = palette.text_positive
         commands["info"] = palette.text_info
 
-        self.manager.elements[UIElementTypes.MESSAGE_LOG.name].commands = commands
+        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+        message_log.commands = commands
 
     def add_message(self, message):
         """
@@ -67,7 +70,7 @@ class MessageMethods:
             message (str):
         """
         try:
-            message_log = self.manager.elements[UIElementTypes.MESSAGE_LOG.name]
+            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
 
             # text wrap message
             max_width = message_log.panel.width - (message_log.message_indent * 2)  # *2 to offer border on each side
@@ -145,7 +148,7 @@ class MessageMethods:
         Returns:
             list[list[pygame.Surface]] : A list (one per line) containing lists of surfaces for each set of words
         """
-        message_log = self.manager.elements[UIElementTypes.MESSAGE_LOG.name]
+        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
         parsed_message_list = []
 
         # check for new lines
@@ -242,7 +245,7 @@ class MessageMethods:
         default_text_colour = self.manager.Palette.message_log.text_default
 
         try:
-            message_log = self.manager.elements[UIElementTypes.MESSAGE_LOG.name]
+            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
 
             # remove the hash from the string
             cleaned_command = command.replace("#", "")
@@ -296,7 +299,7 @@ class MessageMethods:
         # TODO - register / unregister tooltips
 
         try:
-            message_log = self.manager.elements[UIElementTypes.MESSAGE_LOG.name]
+            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
 
             # update first message index
             if len(message_log.message_list) > message_log.number_of_messages_to_show:

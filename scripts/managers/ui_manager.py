@@ -1,12 +1,11 @@
 
 import logging
-import pygame
 
 from scripts.core.fonts import Font
+from scripts.managers.ui_methods.display_methods import DisplayMethods
 from scripts.managers.ui_methods.element_methods import ElementMethods
 from scripts.managers.ui_methods.message_methods import MessageMethods
 from scripts.managers.ui_methods.mouse_methods import MouseMethods
-from scripts.core.constants import VisualInfo
 from scripts.ui_elements.palette import Palette
 
 
@@ -19,22 +18,12 @@ class UIManager:
     """
 
     def __init__(self):
+        self.Display = DisplayMethods(self)
         self.Element = ElementMethods(self)
         self.Mouse = MouseMethods(self)
         self.Message = MessageMethods(self)
         self.Palette = Palette()  # doesnt need self as only holds data
         self.Font = Font()  # doesnt need self as only holds data
-
-        self.elements = {}  # list of all init'd ui elements
-
-        # display info - move to display?
-        self.desired_width = VisualInfo.BASE_WINDOW_WIDTH  # TODO - allow for selection by player but only multiples of
-                                                           #  base (16:9)
-        self.desired_height = VisualInfo.BASE_WINDOW_HEIGHT
-        self.screen_scaling_mod_x = self.desired_width // VisualInfo.BASE_WINDOW_WIDTH
-        self.screen_scaling_mod_y = self.desired_height // VisualInfo.BASE_WINDOW_HEIGHT
-        self.screen = pygame.display.set_mode((self.desired_width, self.desired_height))
-        self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
 
         logging.info(f"UIManager initialised.")
 

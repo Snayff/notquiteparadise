@@ -53,6 +53,7 @@ class UiHandler(Subscriber):
         elif event.event_type == EntityEventTypes.DIE:
             ui_manager.Element.update_entity_queue()
         elif event.event_type == EntityEventTypes.MOVE:
+            # TODO - swap this around so that the UI pulls from the game, not vice versa.
             row_size, col_size = ui_manager.Element.get_camera_view_size()
 
             from scripts.global_singletons.managers import world_manager
@@ -127,8 +128,8 @@ class UiHandler(Subscriber):
             button = event.button_pressed
             mouse_x = event.mouse_x
             mouse_y = event.mouse_y
-            clicked_rect = ui_manager.Mouse.get_clicked_panels_rect(ui_manager.screen_scaling_mod_x,
-                                                    ui_manager.screen_scaling_mod_y, mouse_x, mouse_y)
+            clicked_rect = ui_manager.Mouse.get_colliding_panel(ui_manager.screen_scaling_mod_x,
+                                                                ui_manager.screen_scaling_mod_y, mouse_x, mouse_y)
             game_state = game_manager.game_state
 
             # handle right click actions
@@ -165,8 +166,7 @@ class UiHandler(Subscriber):
             mouse_y (int):
             clicked_rect (Rect): The clicked rect, from ui_elements.
         """
-        tile_pos =ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x, ui_manager.screen_scaling_mod_y,
-                                                 ui_manager.visible_elements, clicked_rect, mouse_x, mouse_y)
+        tile_pos =ui_manager.Mouse.get_relative_scaled_mouse_pos(mouse_x, mouse_y)
         tile_x = tile_pos[0] // TILE_SIZE
         tile_y = tile_pos[1] // TILE_SIZE
         entity = world_manager.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
@@ -187,9 +187,7 @@ class UiHandler(Subscriber):
             mouse_x (int):
             mouse_y (int):
         """
-        relative_mouse_pos = ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
-                                                           ui_manager.screen_scaling_mod_y, ui_manager.visible_elements,
-                                                           clicked_rect, mouse_x, mouse_y)
+        relative_mouse_pos = ui_manager.Mouse.get_relative_scaled_mouse_pos(mouse_x, mouse_y)
         skill_number = ui_manager.Mouse.get_skill_index_from_skill_clicked(relative_mouse_pos[0], relative_mouse_pos[1])
 
         # if we clicked a skill in the skill bar create the targeting overlay

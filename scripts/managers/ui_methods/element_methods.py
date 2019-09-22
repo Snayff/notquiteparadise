@@ -25,41 +25,43 @@ class ElementMethods:
         from scripts.managers.ui_manager import UIManager
         self.manager = manager  # type: UIManager
 
+        self.elements = {}  # list of all init'd ui elements
+
     def init_message_log(self):
         """
         Initialise the message log ui element.
         """
-        self.manager.elements[UIElementTypes.MESSAGE_LOG.name] = MessageLog()
+        self.elements[UIElementTypes.MESSAGE_LOG.name] = MessageLog()
 
     def init_entity_info(self):
         """
         Initialise the selected entity info ui element
         """
-        self.manager.elements[UIElementTypes.ENTITY_INFO.name] = SelectedEntityInfo()
+        self.elements[UIElementTypes.ENTITY_INFO.name] = SelectedEntityInfo()
 
     def init_targeting_overlay(self):
         """
         Initialise the targeting_overlay
         """
-        self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name] = TargetingOverlay()
+        self.elements[UIElementTypes.TARGETING_OVERLAY.name] = TargetingOverlay()
 
     def init_skill_bar(self):
         """
         Initialise the skill bar
         """
-        self.manager.elements[UIElementTypes.SKILL_BAR.name] = SkillBar()
+        self.elements[UIElementTypes.SKILL_BAR.name] = SkillBar()
 
     def init_entity_queue(self):
         """
         Initialise the entity queue
         """
-        self.manager.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
+        self.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
 
     def init_camera(self):
         """
         Initialise the camera
         """
-        self.manager.elements[UIElementTypes.CAMERA.name] = Camera()
+        self.elements[UIElementTypes.CAMERA.name] = Camera()
 
     def set_element_visibility(self, element_type, visible):
         """
@@ -70,7 +72,7 @@ class ElementMethods:
             visible (bool):
         """
         try:
-            element = self.manager.elements[element_type.name]
+            element = self.elements[element_type.name]
             element.is_visible = visible
         except KeyError:
             logging.debug(f"Tried to set {element_type.name} to {visible} but key doesn't exist.")
@@ -81,15 +83,16 @@ class ElementMethods:
         """
         # TODO - add handling for dirty
 
-        surface = self.manager.main_surface
+        surface = self.manager.Display.get_main_surface()
 
-        for key, element in self.manager.elements.items():
+        for key, element in self.elements.items():
             if element.is_visible:
                 element.draw(surface)
 
         # resize the surface to the desired resolution
-        scaled_surface = pygame.transform.scale(surface, (self.manager.desired_width, self.manager.desired_height))
-        self.manager.screen.blit(scaled_surface, (0, 0))
+        scaled_surface = pygame.transform.scale(surface, self.manager.Display.get_desired_resolution())
+        window = self.manager.Display.get_window()
+        window.blit(scaled_surface, (0, 0))
 
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
@@ -101,7 +104,7 @@ class ElementMethods:
         Args:
             entity(Entity):
         """
-        self.manager.elements[UIElementTypes.ENTITY_INFO.name].selected_entity = entity
+        self.elements[UIElementTypes.ENTITY_INFO.name].selected_entity = entity
 
     def set_skill_being_targeted(self, skill):
         """
@@ -110,7 +113,7 @@ class ElementMethods:
         Args:
             skill (Skill):
         """
-        self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name].skill_being_targeted = skill
+        self.elements[UIElementTypes.TARGETING_OVERLAY.name].skill_being_targeted = skill
 
     def set_selected_tile(self, tile):
         """
@@ -155,7 +158,16 @@ class ElementMethods:
         Returns:
             any: ui element
         """
-        return self.manager.elements[element_type.name]
+        return self.elements[element_type.name]
+
+    def get_ui_elements(self):
+        """
+        Get all the ui elements
+
+        Returns:
+            list: list of ui_elements
+        """
+        return self.elements
 
     def update_targeting_overlays_tiles_in_range_and_fov(self):
         """

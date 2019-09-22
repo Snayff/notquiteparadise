@@ -246,10 +246,7 @@ class InputManager:
 
                     # check who we are moused over
                     from scripts.global_singletons.managers import ui_manager
-                    mouse_x, mouse_y = ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
-                                                                                      ui_manager.screen_scaling_mod_y,
-                                                                                      ui_manager.visible_elements,
-                                                                                      "game_map")
+                    mouse_x, mouse_y = ui_manager.Mouse.get_relative_scaled_mouse_pos()
                     target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
                     # create a skill with a target, or activate targeting mode
@@ -279,8 +276,7 @@ class InputManager:
         if mouse_button:
             publisher.publish(ClickUIEvent(mouse_button))
 
-        mouse_x, mouse_y = ui_manager.Mouse.get_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
-                                                                 ui_manager.screen_scaling_mod_y)
+        mouse_x, mouse_y = ui_manager.Mouse.get_scaled_mouse_pos()
         mouse_tile_x, mouse_tile_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
         # cancel out
