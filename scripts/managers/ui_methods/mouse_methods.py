@@ -1,5 +1,7 @@
 import pygame
 
+from scripts.core.constants import UIElementTypes
+
 
 class MouseMethods:
     """
@@ -82,3 +84,26 @@ class MouseMethods:
                     clicked_rect = key
 
         return clicked_rect
+
+    def get_skill_index_from_skill_clicked(self, relative_x, relative_y):
+        """
+        Return the index of the skill clicked in the skill bar
+
+        Args:
+            relative_x (int):
+            relative_y (int):
+
+        Returns:
+            int: -1 if nothing, else 0+.
+
+        Notes:
+            The skills in the skill bar are pulled, in order, from the player`s known skills.
+        """
+        skill_bar = self.manager.elements[UIElementTypes.SKILL_BAR.name]
+
+        for container in skill_bar.skill_containers:
+            if container.rect.collidepoint(relative_x, relative_y):
+                skill_index = skill_bar.skill_containers.index(container)
+                return skill_index
+
+        return -1

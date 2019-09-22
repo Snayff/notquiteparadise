@@ -197,7 +197,7 @@ class InputManager:
         if self.input_values["refresh_data"]:
             library.refresh_library_data()
             from scripts.global_singletons.managers import ui_manager
-            ui_manager.skill_bar.update_skill_icons_to_show()
+            ui_manager.Element.update_skill_bars_icons()
             publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
                                                                      "reloaded~~"))
 
@@ -294,9 +294,9 @@ class InputManager:
         if direction_x != 0 or direction_y != 0:
             tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
             tile = world_manager.Map.get_tile(tile_x, tile_y)
-            ui_manager.targeting_overlay.update_tiles_in_range_and_fov()
+            ui_manager.Element.update_targeting_overlays_tiles_in_range_and_fov()()
             ui_manager.targeting_overlay.set_selected_tile(tile)
-            ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
+            ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
             ui_manager.Element.set_selected_entity(entity)
 
@@ -304,9 +304,9 @@ class InputManager:
         # TODO - move logic to event
         if self.input_values["mouse_moved"]:
             tile = world_manager.Map.get_tile(mouse_tile_x, mouse_tile_y)
-            ui_manager.targeting_overlay.update_tiles_in_range_and_fov()
+            ui_manager.Element.update_targeting_overlays_tiles_in_range_and_fov()()
             ui_manager.targeting_overlay.set_selected_tile(tile)
-            ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
+            ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
             ui_manager.Element.set_selected_entity(entity)
 

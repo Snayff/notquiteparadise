@@ -1,7 +1,8 @@
 import logging
 import pygame
 
-from scripts.core.constants import UIElementTypes
+from scripts.core.constants import UIElementTypes, SkillShapes
+from scripts.global_singletons.data_library import library
 from scripts.ui_elements.camera import Camera
 from scripts.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui_elements.entity_queue import EntityQueue
@@ -58,7 +59,7 @@ class ElementMethods:
         """
         self.manager.elements[UIElementTypes.CAMERA.name] = Camera()
 
-    def update_element_visibility(self, element_type, visible):
+    def set_element_visibility(self, element_type, visible):
         """
         Update whether an element is visible.
 
@@ -100,3 +101,126 @@ class ElementMethods:
         """
         self.manager.elements[UIElementTypes.ENTITY_INFO.name].selected_entity = entity
 
+    def set_skill_being_targeted(self, skill):
+        """
+        Set the skill that the player is currently targeting
+
+        Args:
+            skill (Skill):
+        """
+        self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name].skill_being_targeted = skill
+
+    def set_selected_tile(self, tile):
+        """
+        Update the tile currently selected. Must be in the highlighted range.
+
+        Args:
+            tile(Tile):
+        """
+        targeting_overlay = self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name]
+
+        if tile in targeting_overlay.tiles_in_range_and_fov:
+            targeting_overlay.selected_tile = tile
+
+    def update_targeting_overlays_tiles_in_range_and_fov(self):
+        """
+        Update list of valid tiles within range based on currently selected skill's range.
+        """
+        # TODO - convert to a set and set via en event
+        targeting_overlay = self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name]
+
+        # clear current tiles
+        targeting_overlay.tiles_in_range_and_fov = []
+
+        # if there is a skill being targeted
+        if targeting_overlay.skill_being_targeted:
+
+            skill_data = library.get_skill_data(targeting_overlay.skill_being_targeted.skill_tree_name,
+                                                targeting_overlay.skill_being_targeted.name)
+            skill_range = skill_data.range
+
+            from scripts.global_singletons.managers import world_manager
+            tiles = world_manager.FOV.get_tiles_in_range_and_fov_of_player(skill_range)
+
+            targeting_overlay.tiles_in_range_and_fov = tiles
+
+    def update_targeting_overlays_tiles_in_skill_effect_range(self):
+        """
+        Update the list of Tiles for those effected by the skill effect range. Based on selected skill.
+        """
+        # TODO - convert to a set and set via en event
+        targeting_overlay = self.manager.elements[UIElementTypes.TARGETING_OVERLAY.name]
+
+        # if there is a skill being targeted
+        if targeting_overlay.skill_being_targeted:
+
+            # clear current tiles
+            targeting_overlay.tiles_in_skill_effect_range = []
+
+            # get the skill data
+            data = library.get_skill_data(targeting_overlay.skill_being_targeted.skill_tree_name,
+                                          targeting_overlay.skill_being_targeted.name)
+
+            from scripts.global_singletons.managers import world_manager
+            coords = world_manager.Skill.create_shape(data.shape, data.shape_size)
+            effected_tiles = world_manager.Map.get_tiles(targeting_overlay.selected_tile.x,
+                                                         targeting_overlay.selected_tile.y, coords)
+
+            targeting_overlay.tiles_in_skill_effect_range = effected_tiles
+
+    def update_skill_bars_icons(self):
+        """
+        Get the player`s known skills to show in the skill bar.
+        """
+        # TODO - convert to a set and set via en event
+        skill_bar = self.manager.elements[UIElementTypes.SKILL_BAR.name]
+
+        # update info
+        from scripts.global_singletons.managers import world_manager
+        player = world_manager.player
+
+        # if the player has been init'd update skill bar
+        if player:
+            for counter, skill in enumerate(player.actor.known_skills):
+
+                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                skill_icon = pygame.image.load("assets/skills/" + skill_data.icon).convert_alpha()
+
+                # catch any images not the right size and resize them
+                if skill_icon.get_size() != (skill_bar.skill_icon_size, skill_bar.skill_icon_size):
+                    icon = pygame.transform.smoothscale(skill_icon, (skill_bar.skill_icon_size,
+                            skill_bar.skill_icon_size))
+                else:
+                    icon = skill_icon
+
+                skill_bar.skill_containers[counter].skill_icon = icon
+
+    def update_entity_queue(self):
+        """
+        Get info from the turn_manager and update the entity queue to be displayed
+        """
+        # TODO - convert to a set and set via en event
+        entity_queue = self.manager.elements[UIElementTypes.ENTITY_QUEUE.name]
+
+        # clear current queue
+        entity_queue.entity_queue.clear()
+
+        counter = 0
+
+        # loop entities in turn queue, up to max to show
+        from scripts.global_singletons.managers import turn_manager
+        for entity, time in turn_manager.turn_queue.items():
+            if counter < entity_queue.max_entities_to_show:
+                icon = entity.icon
+
+                # catch any images not the right size and resize them
+                if icon.get_size() != (entity_queue.entity_icon_size, entity_queue.entity_icon_size):
+                    icon = pygame.transform.smoothscale(icon, (entity_queue.entity_icon_size,
+                        entity_queue.entity_icon_size))
+
+                entity_queue.entity_queue.append((icon, entity.name))
+
+                counter += 1
+
+            else:
+                break

@@ -1,6 +1,6 @@
 import tcod
 
-from scripts.core.constants import FOVInfo
+from scripts.core.constants import FOVInfo, SkillShapes
 
 
 class FOVMethods:
@@ -81,3 +81,27 @@ class FOVMethods:
         for x in range(0, game_map.width):
             for y in range(0, game_map.height):
                 game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
+
+    def get_tiles_in_range_and_fov_of_player(self, range_from_centre):
+        """
+        Get all of the tiles within a specified range of the player that are also in the FOV
+
+        Args:
+            range_from_centre (int):
+
+        Returns:
+            list[Tile]: A list of tiles
+        """
+        player = self.manager.player
+
+        # get the tiles in range
+        coords = self.manager.Skill.create_shape(SkillShapes.SQUARE, range_from_centre)  # square as LOS is square
+        tiles_in_range = self.manager.Map.get_tiles(player.x, player.y, coords)
+        tiles_in_range_and_fov = []
+
+        # only take tiles in range and FOV
+        for tile in tiles_in_range:
+            if self.is_tile_in_fov(tile.x, tile.y):
+                tiles_in_range_and_fov.append(tile)
+
+        return tiles_in_range_and_fov

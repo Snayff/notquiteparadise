@@ -24,6 +24,16 @@ class UIManager:
     """
 
     def __init__(self):
+        # methods
+        self.Element = ElementMethods(self)
+        self.Mouse = MouseMethods(self)
+        self.Message = MessageMethods(self)
+        self.Palette = Palette()  # doesnt need self as only holds data
+        self.Font = Font()  # doesnt need self as only holds data
+
+        self.elements = {}  # list of all init'd ui elements
+
+        # display info - move to display?
         self.desired_width = VisualInfo.BASE_WINDOW_WIDTH  # TODO - allow for selection by player but only multiples of
                                                            #  base (16:9)
         self.desired_height = VisualInfo.BASE_WINDOW_HEIGHT
@@ -32,140 +42,16 @@ class UIManager:
         self.screen = pygame.display.set_mode((self.desired_width, self.desired_height))
         self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
 
-        # UI elements
-        self.targeting_overlay = None  # type: TargetingOverlay
-        self.skill_bar = None  # type: SkillBar
-        self.entity_queue = None  # type: EntityQueue
-
-        #########
-        self.Element = ElementMethods(self)
-        self.Mouse = MouseMethods(self)
-        self.Message = MessageMethods(self)
-        self.Palette = Palette()  # doesnt need self as only holds data
-        self.Font = Font()  # doesnt need self as only holds data
-        self.elements = {}
-
-
         logging.info(f"UIManager initialised.")
-
-        # TODO - lift functions from ui_elements to the manager, as per other managers.
 
     def update(self):
         """
-        No updates currently needed
+        No updates currently needed but must have the method
         """
 
 
 def example_code():
     pass
-# Targeting function from pygame tut
-# def menu_tile_select(coords_origin = None, max_range = None, radius = None,
-#     penetrate_walls = True, pierce_creature = True):
-#     ''' This menu let`s the player select a tile.
-#
-#     This function pauses the game, produces an on screen rectangle and when the
-#     player presses the left mb, will return (message for now) the map address.
-#     '''
-#
-#     menu_close = False
-#
-#     while not menu_close:
-#
-#         # Get mos position
-#         mouse_x, mouse_y = pygame.mouse.get_pos()
-#
-#         # Get button clicks
-#         events_list = pygame.event.get()
-#
-#         # mouse map selection
-#
-#         mapx_pixel, mapy_pixel = CAMERA.win_to_map((mouse_x, mouse_y))
-#
-#         map_coord_x = mapx_pixel/constants.CELL_WIDTH
-#         map_coord_y = mapy_pixel/constants.CELL_HEIGHT
-#
-#         valid_tiles = []
-#
-#         if coords_origin:
-#             full_list_tiles = map_find_line(coords_origin, (map_coord_x, map_coord_y))
-#
-#             for i, (x, y) in enumerate(full_list_tiles):
-#
-#                 valid_tiles.append((x, y))
-#
-#                 # stop at max range
-#                 if max_range and i == max_range - 1:
-#                     break
-#
-#                 # stop at wall
-#                 if not penetrate_walls and GAME.current_map[x][y].block_path:
-#                     break
-#
-#                 # stop at creature
-#                 if not pierce_creature and map_check_for_creature(x, y):
-#                     break
-#
-#
-#         else:
-#             valid_tiles = [(map_coord_x, map_coord_y)]
-#
-#         # return map_coords when presses left mb
-#         for event in events_list:
-#             if event.event_type == pygame.KEYDOWN:
-#                 # if player presses 'i' again, close menu
-#                 if event.key == pygame.K_l:
-#                     menu_close = True
-#
-#             if event.event_type == pygame.MOUSEBUTTONDOWN:
-#
-#                 if event.button == 1:
-#                     # returns coords selected
-#                     return (valid_tiles[-1])
-#
-#
-#         # draw game first
-#         SURFACE_MAIN.fill(constants.COLOR_DEFAULT_BG)
-#         SURFACE_MAP.fill(constants.COLOR_BLACK)
-#
-#         CAMERA.update()
-#
-#         # draw the map
-#         draw_map(GAME.current_map)
-#
-#         # draw all objects
-#         for obj in sorted(GAME.current_objects, key = lambda obj: obj.depth,
-#             reverse = True):
-#             obj.draw()
-#
-#         # Draw rectangle at mouse position on top of game
-#         for (tile_x, tile_y) in valid_tiles:
-#
-#             if (tile_x, tile_y) == valid_tiles[-1]:
-#                 draw_tile_rect(coords = (tile_x, tile_y), mark = 'X')
-#             else:
-#                 draw_tile_rect(coords = (tile_x, tile_y))
-#
-#         if radius:
-#             area_effect = map_find_radius(valid_tiles[-1], radius)
-#
-#             for (tile_x, tile_y) in area_effect:
-#
-#                 draw_tile_rect(coords = (tile_x, tile_y),
-#                                tile_color = constants.COLOR_RED,
-#                                tile_alpha = 150)
-#
-#         SURFACE_MAIN.blit(SURFACE_MAP, (0, 0), CAMERA.rectangle)
-#
-#         draw_debug()
-#         draw_messages()
-#
-#         # update the display
-#         pygame.display.flip()
-#
-#         # tick the CLOCK
-#         CLOCK.tick(constants.GAME_FPS)
-
-
 # Camera class from pygame tutorial
 # class obj_Camera:
 #

@@ -46,12 +46,12 @@ class UiHandler(Subscriber):
         """
 
         # if an entity acts then hide the entity info
-        ui_manager.Element.update_element_visibility(UIElementTypes.ENTITY_INFO, False)
+        ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
 
         if event.event_type == EntityEventTypes.LEARN:
-            ui_manager.skill_bar.update_skill_icons_to_show()
+            ui_manager.Element.update_skill_bars_icons()
         elif event.event_type == EntityEventTypes.DIE:
-            ui_manager.entity_queue.update_entity_queue()
+            ui_manager.Element.update_entity_queue()
 
     @staticmethod
     def process_game(event):
@@ -70,23 +70,24 @@ class UiHandler(Subscriber):
                 tile = world_manager.Map.get_tile(player.x, player.y)
 
                 # set the info needed to draw the overlay
-                ui_manager.targeting_overlay.set_skill_being_targeted(event.skill_to_be_used)
-                ui_manager.targeting_overlay.update_tiles_in_range_and_fov()
-                ui_manager.targeting_overlay.set_selected_tile(tile)
-                ui_manager.targeting_overlay.update_tiles_in_skill_effect_range()
+                ui_manager.Element.set_skill_being_targeted(event.skill_to_be_used)
+                ui_manager.Element.update_targeting_overlays_tiles_in_range_and_fov()
+                ui_manager.Element.set_selected_tile(tile)
+                ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
 
                 # show the entity info
                 entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
-                ui_manager.Element.update_element_visibility(UIElementTypes.ENTITY_INFO, True)
+                ui_manager.Element.set_selected_entity(entity)
+                ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
 
                 # show the overlay
-                ui_manager.Element.update_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
+                ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
 
             elif game_manager.previous_game_state.TARGETING_MODE:
-                ui_manager.Element.update_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
+                ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
 
         elif event.event_type == GameEventTypes.END_TURN:
-            ui_manager.entity_queue.update_entity_queue()
+            ui_manager.Element.update_entity_queue()
 
     def process_ui(self, event):
         """
@@ -146,9 +147,9 @@ class UiHandler(Subscriber):
 
         if entity:
             ui_manager.Element.set_selected_entity(entity)
-            ui_manager.Element.update_element_visibility(UIElementTypes.ENTITY_INFO, True)
+            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
         else:
-            ui_manager.Element.update_element_visibility(UIElementTypes.ENTITY_INFO, False)
+            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
 
     @staticmethod
     def attempt_to_trigger_targeting_mode(clicked_rect, mouse_x, mouse_y):
@@ -160,17 +161,16 @@ class UiHandler(Subscriber):
             mouse_x (int):
             mouse_y (int):
         """
-        relative_mouse_pos =ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
+        relative_mouse_pos = ui_manager.Mouse.get_relative_scaled_mouse_pos(ui_manager.screen_scaling_mod_x,
                                                            ui_manager.screen_scaling_mod_y, ui_manager.visible_elements,
                                                            clicked_rect, mouse_x, mouse_y)
-        skill_number = ui_manager.skill_bar.get_skill_index_from_skill_clicked(relative_mouse_pos[0],
-                                                                               relative_mouse_pos[1])
-        player = world_manager.player
+        skill_number = ui_manager.Mouse.get_skill_index_from_skill_clicked(relative_mouse_pos[0], relative_mouse_pos[1])
 
         # if we clicked a skill in the skill bar create the targeting overlay
+        player = world_manager.player
         skill = player.actor.known_skills[skill_number]
 
         if skill:
             publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
         else:
-            logging.debug( f"Left clicked skill bar but no skill found.")
+            logging.debug(f"Left clicked skill bar but no skill found.")
