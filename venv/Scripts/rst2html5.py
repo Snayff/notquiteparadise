@@ -1,4 +1,4 @@
-#!C:\Users\Gabriel\Documents\NotQuiteParadise\venv\Scripts\python.exe
+#!c:\users\gabriel\documents\notquiteparadise\venv\scripts\python.exe
 # -*- coding: utf8 -*-
 # :Copyright: © 2015 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:
@@ -11,7 +11,7 @@
 # .. _2-Clause BSD license: http://www.spdx.org/licenses/BSD-2-Clause
 #
 # Revision: $Revision: 7847 $
-# Date: $Date: 2015-03-17 18:30:47 +0100 (Di, 17 Mär 2015) $
+# Date: $Date: 2015-03-17 18:30:47 +0100 (Di, 17. Mär 2015) $
 
 """
 A minimal front end to the Docutils Publisher, producing HTML 5 documents.

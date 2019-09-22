@@ -1,4 +1,4 @@
-#!C:\Users\Gabriel\Documents\NotQuiteParadise\venv\Scripts\python.exe
+#!c:\users\gabriel\documents\notquiteparadise\venv\scripts\python.exe
 
 # $Id: rst2s5.py 4564 2006-05-21 20:44:42Z wiemann $
 # Author: Chris Liechti <cliechti@gmx.net>

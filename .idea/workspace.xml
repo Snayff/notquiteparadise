@@ -28,8 +28,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Setup Script" />
         <option value="Python Script" />
+        <option value="Setup Script" />
       </list>
     </option>
   </component>
@@ -50,7 +50,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/managers/ui_methods/ui_interaction_methods.py" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JSON" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -204,7 +204,8 @@
       <workItem from="1568545875289" duration="12595000" />
       <workItem from="1568560144742" duration="109000" />
       <workItem from="1568654959156" duration="5151000" />
-      <workItem from="1569069031501" duration="15184000" />
+      <workItem from="1569069031501" duration="15217000" />
+      <workItem from="1569090731219" duration="903000" />
     </task>
     <servers />
   </component>
