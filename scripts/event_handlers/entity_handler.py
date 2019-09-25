@@ -96,7 +96,8 @@ class EntityHandler(Subscriber):
 
                 # update fov if needed
                 if entity.player:
-                    world_manager.player_fov_is_dirty = True
+                    player = world_manager.Entity.get_player()
+                    world_manager.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
 
                 # end turn
                 publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move

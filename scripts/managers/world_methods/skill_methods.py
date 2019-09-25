@@ -60,7 +60,7 @@ class SkillMethods:
                     return True
                 else:
                     logging.debug( f"Target out of skill range, "
-                    f"range {skill_range} > distance {distance}")
+                    f"range {skill_range} < distance {distance}")
 
             else:
                 msg = f"You can't afford the cost."

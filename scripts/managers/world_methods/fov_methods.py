@@ -19,10 +19,7 @@ class FOVMethods:
         for x in range(width):
             for y in range(height):
                 tile = self.manager.Map.get_tile(x, y)
-                tcod.map_set_properties(self.get_player_fov(), x, y, not tile.blocks_sight,
-                                        not tile.blocks_movement)
-
-        self.set_player_fov_state(True)
+                tcod.map_set_properties(self.get_player_fov(), x, y, not tile.blocks_sight, not tile.blocks_movement)
 
     def recompute_player_fov(self, x, y, radius):
         """
@@ -32,10 +29,8 @@ class FOVMethods:
             y:
             radius:
         """
-        tcod.map_compute_fov(self.get_player_fov(), x, y, radius, FOVInfo.LIGHT_WALLS,
-                             FOVInfo.FOV_ALGORITHM)
+        tcod.map_compute_fov(self.get_player_fov(), x, y, radius, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
         self.manager.FOV.update_tile_visibility(self.get_player_fov())
-        self.set_player_fov_state(False)
 
     def is_tile_in_fov(self, tile_x, tile_y):
         """
@@ -50,15 +45,6 @@ class FOVMethods:
         """
 
         return tcod.map_is_in_fov(self.get_player_fov(), tile_x, tile_y)
-
-    def set_player_fov_state(self, dirty):
-        """
-        Set the player's FOV to dirty
-
-        Args:
-            dirty (bool):
-        """
-        self.manager.player_fov_is_dirty = dirty
 
     def get_player_fov(self):
         """
@@ -92,7 +78,7 @@ class FOVMethods:
         Returns:
             list[Tile]: A list of tiles
         """
-        player = self.manager.player
+        player = self.manager.Entity.get_player()
 
         # get the tiles in range
         coords = self.manager.Skill.create_shape(SkillShapes.SQUARE, range_from_centre)  # square as LOS is square

@@ -60,6 +60,9 @@ def initialise_game():
 
     # TODO - remove when map generation is in
     world_manager.Entity.create_actor_entity(0, 0, "player", "player", True)
+    player = world_manager.Entity.get_player()
+    world_manager.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
+
     world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand", "steve")
     world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand", "bob")
     world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand", "estaban")

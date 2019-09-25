@@ -224,7 +224,7 @@ class EntityMethods:
         Get the player.
 
         Returns:
-            Entity
+            Entity:
         """
         return self.manager.player
 
