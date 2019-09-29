@@ -10,7 +10,7 @@ class MessageHandler(Subscriber):
         Subscriber.__init__(self, "message_handler", event_hub)
 
     def run(self, event):
-        log_string = f"{self.name} received {event.event_type}..."
-        logging.debug(log_string)
+        # log that event has been received
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         ui_manager.Message.add_message(event.message)

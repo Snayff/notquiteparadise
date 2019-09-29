@@ -122,6 +122,7 @@ class MapMethods:
     def get_tiles(self, start_tile_x, start_tile_y, coords):
         """
         Get multiple tiles based on starting position and coordinates given
+
         Args:
             start_tile_x (int):
             start_tile_y (int):

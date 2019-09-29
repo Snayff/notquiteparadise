@@ -13,8 +13,11 @@ class Camera:
     def __init__(self):
         self.tiles_to_draw = []  # the tile passed from the GameMap to draw
         self.is_visible = False
-        self.rows_in_view = 10
-        self.cols_in_view = 10
+        self.rows_in_view_from_centre = 5
+        self.cols_in_view_from_centre = 5
+
+        # TODO - add centre pos and tolerance around that, update when exceeding tolerance area so camera centres on
+        #  that and not the player.
 
         # setup the panel
         panel_x = 0
@@ -39,13 +42,13 @@ class Camera:
         self.panel.surface.fill(Colour().black)
         self.panel.draw_background()
 
-        self.draw_map()
+        self.draw_cameras_tiles()
 
         # panel border
         self.panel.draw_border()
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
-    def draw_map(self):
+    def draw_cameras_tiles(self):
         """
         Draw the game map on the panel surface
         """
@@ -59,7 +62,10 @@ class Camera:
         Args:
             tile (Tile):
         """
-        draw_position = (tile.x * TILE_SIZE, tile.y * TILE_SIZE)
+
+        from scripts.global_singletons.managers import world_manager
+        player = world_manager.player
+        draw_position = ((tile.x - player.x) * TILE_SIZE, (tile.y - player.y) * TILE_SIZE)
 
         if tile.terrain:
             self.panel.surface.blit(tile.terrain.sprite, draw_position)

@@ -47,13 +47,6 @@ class TurnManager:
         # get the next entity in the queue
         self.turn_holder = min(self.turn_queue, key=self.turn_queue.get)
 
-        # update game state based on turn holder
-        from scripts.global_singletons.managers import game_manager
-        if self.turn_holder.player:
-            game_manager.update_game_state(GameStates.PLAYER_TURN)
-        else:
-            game_manager.update_game_state(GameStates.ENEMY_TURN)
-
         # log result
         queue = []
         for entity, time in self.turn_queue.items():
@@ -75,13 +68,10 @@ class TurnManager:
         #  update actor`s time spent
         entity.actor.spend_time(spent_time)
 
-        self.next_turn()
-
     def next_turn(self):
         """
         Proceed to the next turn, setting the next entity to act as the turn holder.
         """
-        from scripts.global_singletons.managers import game_manager
         logging.info(f"Moving to the next turn...")
 
         if not self.turn_queue:
@@ -103,14 +93,6 @@ class TurnManager:
             self.next_round(time_progressed)
         else:
             self.round_time += time_progressed
-
-        # if turn holder is the player then update to player turn
-        from scripts.global_singletons.managers import world_manager
-        if self.turn_holder == world_manager.player:
-            publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
-        # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
-        elif game_manager.game_state != GameStates.ENEMY_TURN:
-            publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
         logging.debug(f"-> It is now '{self.turn_holder.name}'`s turn.")
 

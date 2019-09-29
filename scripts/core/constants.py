@@ -34,6 +34,7 @@ class GameStates(Enum):
     TARGETING_MODE = auto()
     EXIT_GAME = auto()
     GAME_INITIALISING = auto()
+    NEW_TURN = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -57,10 +58,10 @@ class EventTopics(Enum):
 class GameEventTypes(Enum):
     """Types of Game Events"""
     EXIT = auto()  # go back a step / exit current focus
-    INITIALISE = auto()  # initialise game resources
     END_TURN = auto()  # end of turn
     CHANGE_GAME_STATE = auto()  # move from one game state to another
     END_ROUND = auto()  # end of round
+
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

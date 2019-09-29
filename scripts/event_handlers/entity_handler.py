@@ -24,9 +24,8 @@ class EntityHandler(Subscriber):
         Args:
             event(Event): the event in need of processing
         """
-
-        log_string = f"{self.name} received {event.event_type}..."
-        logging.debug(log_string)
+        # log that event has been received
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         if event.event_type == EntityEventTypes.MOVE:
             log_string = f"-> Processing '{event.entity.name}'`s move."

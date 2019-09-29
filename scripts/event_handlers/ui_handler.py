@@ -10,22 +10,21 @@ from scripts.global_singletons.event_hub import publisher
 from scripts.global_singletons.managers import game_manager, ui_manager, world_manager
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
+
 class UiHandler(Subscriber):
     """
-    Handle events that effect the UI
+    Handle events that effect the UI. The UI handler watches and reacts.
     """
 
     def __init__(self, event_hub):
         Subscriber.__init__(self, "ui_handler", event_hub)
-        # TODO - all UI functionality to watch events and update UI in response
 
     def run(self, event):
         """
         Process the events
         """
-
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}")
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         if event.topic == EventTopics.UI:
             if event.event_type == UIEventTypes.CLICK_UI:
@@ -71,19 +70,14 @@ class UiHandler(Subscriber):
                 elif event.new_game_state == GameStates.TARGETING_MODE:
                     self.trigger_targeting_overlay_and_entity_info(event.skill_to_be_used)
 
+                # new turn updates
+                elif event.new_game_state == GameStates.NEW_TURN:
+                    ui_manager.Element.update_entity_queue()
+
                 # if the previous game state was targeting mode we must be moving to something else, therefore the
                 # overlay is no longer needed
-                elif game_manager.previous_game_state.TARGETING_MODE:
+                if game_manager.previous_game_state == GameStates.TARGETING_MODE:
                     ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
-
-            elif event.event_type == GameEventTypes.END_TURN:
-                ui_manager.Element.update_entity_queue()
-
-
-
-
-
-
 
     @staticmethod
     def attempt_to_set_selected_entity(mouse_x, mouse_y):
@@ -147,11 +141,11 @@ class UiHandler(Subscriber):
         ui_manager.Element.set_selected_tile(tile)
         ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
 
-        # show the entity info
-        self.trigger_entity_info(tile)
-
         # show the overlay
         ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
+
+        # show the entity info
+        self.trigger_entity_info(tile)
 
     @staticmethod
     def trigger_entity_info(tile):

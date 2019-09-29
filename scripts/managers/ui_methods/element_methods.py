@@ -57,6 +57,10 @@ class ElementMethods:
         """
         self.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
 
+        from scripts.global_singletons.managers import turn_manager
+        if turn_manager:
+            self.update_entity_queue()
+
     def init_camera(self):
         """
         Initialise the camera
@@ -146,7 +150,7 @@ class ElementMethods:
             Tuple[int,int]: (rows, cols)  in number of tiles
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        return camera.rows_in_view, camera.cols_in_view
+        return camera.rows_in_view_from_centre, camera.cols_in_view_from_centre
 
     def get_ui_element(self, element_type):
         """
