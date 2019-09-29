@@ -152,6 +152,16 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         return camera.rows_in_view_from_centre, camera.cols_in_view_from_centre
 
+    def set_tiles_in_targeting_overlay(self, tiles):
+        """
+        Set the tiles to be shown in the targeting overlay
+
+        Args:
+            tiles (list[Tiles]):
+        """
+        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        targeting_overlay.tiles_in_range_and_fov = tiles
+
     def get_ui_element(self, element_type):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
@@ -173,27 +183,32 @@ class ElementMethods:
         """
         return self.elements
 
+    def get_skill_being_targeted(self):
+        """
+        Get the skill being targeted (held in targeting overlay).
+
+        Returns:
+            Skill:
+        """
+        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        return targeting_overlay.skill_being_targeted
+
     def update_targeting_overlays_tiles_in_range_and_fov(self):
         """
         Update list of valid tiles within range based on currently selected skill's range.
         """
-        # TODO - convert to a set and set via en event
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
-
-        # clear current tiles
-        targeting_overlay.tiles_in_range_and_fov = []
+        skill_being_targeted = self.get_skill_being_targeted()
 
         # if there is a skill being targeted
-        if targeting_overlay.skill_being_targeted:
+        if skill_being_targeted:
 
-            skill_data = library.get_skill_data(targeting_overlay.skill_being_targeted.skill_tree_name,
-                                                targeting_overlay.skill_being_targeted.name)
+            skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
             skill_range = skill_data.range
 
             from scripts.global_singletons.managers import world_manager
             tiles = world_manager.FOV.get_tiles_in_range_and_fov_of_player(skill_range)
 
-            targeting_overlay.tiles_in_range_and_fov = tiles
+            self.set_tiles_in_targeting_overlay(tiles)
 
     def update_targeting_overlays_tiles_in_skill_effect_range(self):
         """

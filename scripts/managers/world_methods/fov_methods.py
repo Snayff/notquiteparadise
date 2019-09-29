@@ -15,11 +15,12 @@ class FOVMethods:
         Create the fov map for the player
         """
         self.manager.player_fov_map = tcod.map_new(width, height)
+        fov_map = self.get_player_fov()
 
         for x in range(width):
             for y in range(height):
                 tile = self.manager.Map.get_tile(x, y)
-                tcod.map_set_properties(self.get_player_fov(), x, y, not tile.blocks_sight, not tile.blocks_movement)
+                tcod.map_set_properties(fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
 
     def recompute_player_fov(self, x, y, radius):
         """
@@ -86,8 +87,9 @@ class FOVMethods:
         tiles_in_range_and_fov = []
 
         # only take tiles in range and FOV
+        in_fov = self.is_tile_in_fov
         for tile in tiles_in_range:
-            if self.is_tile_in_fov(tile.x, tile.y):
+            if in_fov(tile.x, tile.y):
                 tiles_in_range_and_fov.append(tile)
 
         return tiles_in_range_and_fov
