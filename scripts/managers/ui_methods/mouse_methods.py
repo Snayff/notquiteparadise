@@ -59,7 +59,7 @@ class MouseMethods:
             mouse_y(int):  Optional. Mouses y coord.
 
         Returns:
-            rect: ui_element
+            rect: ui_element's panel
         """
         colliding_panel = None
 
@@ -76,6 +76,33 @@ class MouseMethods:
                     colliding_panel = ui_object.panel
 
         return colliding_panel
+
+    def get_colliding_ui_element_type(self, mouse_x=-1, mouse_y=-1):
+        """
+        Determine which ui element type is colliding with mouse position. Current position used if one not provided.
+
+        Args:
+            mouse_x(int): Optional. Mouses x coord
+            mouse_y(int):  Optional. Mouses y coord.
+
+        Returns:
+            UIElementTypes: ui_element type
+        """
+        ui_element_type = None
+
+        # if mouse pos was provided use it, else get it
+        if mouse_x != -1 and mouse_y != -1:
+            mouse_pos = (mouse_x, mouse_y)
+        else:
+            mouse_pos = self.get_scaled_mouse_pos()
+
+        ui_elements = self.manager.Element.get_ui_elements()
+        for key, ui_object in ui_elements.items():
+            if hasattr(ui_object, "panel"):
+                if ui_object.panel.rect.collidepoint(mouse_pos):
+                    ui_element_type = key
+
+        return ui_element_type
 
     def get_skill_index_from_skill_clicked(self, relative_x, relative_y):
         """

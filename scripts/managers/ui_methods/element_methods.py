@@ -117,7 +117,7 @@ class ElementMethods:
 
     def set_selected_tile(self, tile):
         """
-        Update the tile currently selected. Must be in the highlighted range.
+        Update the tile currently selected in the targeting overlay. Must be in the highlighted range.
 
         Args:
             tile(Tile):
@@ -195,7 +195,7 @@ class ElementMethods:
         """
         Update the list of Tiles for those effected by the skill effect range. Based on selected skill.
         """
-        # TODO - convert to a set and set via en event
+        # TODO - convert to a set method and set via an event
         targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
 
         # if there is a skill being targeted

@@ -12,7 +12,6 @@ class VisualInfo:
     # TODO -  should this be in game manager?
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
-
     GAME_FPS = 60
     ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
 
@@ -131,15 +130,15 @@ class TargetTags(Enum):
     """
     Types of target
     """
-    # TODO - externalise terrain types
-    FLOOR = auto()
-    WALL = auto()
-
     SELF = auto()
     OTHER_ENTITY = auto()
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
     ANY = auto()
+
+    # TODO - externalise terrain types
+    FLOOR = auto()
+    WALL = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
