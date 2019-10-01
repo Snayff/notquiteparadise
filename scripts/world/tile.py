@@ -85,19 +85,18 @@ class Tile:
         Returns:
             bool: True if movement is blocked.
         """
-        tile_blocks_movement = False
-
         if self.entity:
             if self.entity.blocks_movement:
-                tile_blocks_movement = True
+                return True
         elif self.terrain:
             if self.terrain.blocks_movement:
-                tile_blocks_movement = True
+                return True
         elif self.aspects:
-            if self.aspects.blocks_movement:
-                tile_blocks_movement = True
+            for aspect in self.aspects:
+                if aspect.blocks_movement:
+                    return True
 
-        return tile_blocks_movement
+        return False
 
     @property
     def blocks_sight(self):
@@ -107,19 +106,18 @@ class Tile:
         Returns:
             bool: True if sight is blocked.
         """
-        tile_blocks_sight = False
-
         if self.entity:
             if self.entity.blocks_sight:
-                tile_blocks_sight = True
+                return True
         elif self.terrain:
             if self.terrain.blocks_sight:
-                tile_blocks_sight = True
+                return True
         elif self.aspects:
-            if self.aspects.blocks_sight:
-                tile_blocks_sight = True
+            for aspect in self.aspects:
+                if aspect.blocks_sight:
+                    return True
 
-        return tile_blocks_sight
+        return False
 
 
 

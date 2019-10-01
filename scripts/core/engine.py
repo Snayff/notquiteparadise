@@ -14,7 +14,6 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 
 
 # Project Wide to do list...
-# TODO - UI information should be pulled once then held
 # TODO - create global tooltip method - some relevant code in old message `log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions

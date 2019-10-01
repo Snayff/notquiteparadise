@@ -131,27 +131,6 @@ class ElementMethods:
         if tile in targeting_overlay.tiles_in_range_and_fov:
             targeting_overlay.selected_tile = tile
 
-    def set_tiles_in_camera(self, tiles):
-        """
-        Set the tiles to be drawn by the camera based on the camera size.
-
-        Args:
-            tiles (list[Tile]): all of the tiles.
-        """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
-
-        camera.tiles_to_draw = tiles
-
-    def get_camera_view_size(self):
-        """
-        Get the size of the camera view
-
-        Returns:
-            Tuple[int,int]: (rows, cols)  in number of tiles
-        """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
-        return camera.rows_in_view_from_centre, camera.cols_in_view_from_centre
-
     def set_tiles_in_targeting_overlay(self, tiles):
         """
         Set the tiles to be shown in the targeting overlay
@@ -290,3 +269,101 @@ class ElementMethods:
 
             else:
                 break
+
+    def set_tiles_in_camera(self, tiles):
+        """
+        Set the tiles to be drawn by the camera based on the camera size.
+
+        Args:
+            tiles (list[Tile]): all of the tiles to draw.
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        camera.tiles_to_draw = tiles
+
+    def is_player_in_camera_edge(self, player_pos: Tuple):
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        player_x, player_y = player_pos
+        
+        edge_start_x = camera.x
+        edge_end_x = camera.x + camera.width
+        edge_start_y = camera.y
+        edge_end_y = camera.y + camera.height
+        
+        if edge_start_x <= player_x <= edge_start_x + camera.edge_size:
+            return True
+        elif edge_end_x <= player_x <= edge_end_x + camera.edge_size:
+            return True
+        elif edge_start_y <= player_y <= edge_start_y + camera.edge_size:
+            return True
+        elif edge_end_y <= player_y <= edge_end_y + camera.edge_size:
+            return True
+        else:
+            return False
+
+    def should_camera_move(self, player_pos: Tuple, target_pos: Tuple):
+
+        player_x, player_y = player_pos
+        target_x, target_y = target_pos
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        edge_start_x = camera.x
+        edge_end_x = camera.x + camera.width
+        edge_start_y = camera.y
+        edge_end_y = camera.y + camera.height
+
+        player_pos_in_edge = self.is_player_in_camera_edge(player_pos)
+        target_pos_in_edge = self.is_player_in_camera_edge(target_pos)
+
+        # are we currently in the edge (e.g. edge of world)
+        if player_pos_in_edge:
+
+            # will we still be in the edge after we move?
+            if target_pos_in_edge:
+                dir_x = abs(player_x - target_x)
+                dir_y = abs(player_y - target_y)
+
+                # are we moving to a worse position?
+                if edge_start_x <= player_x <= edge_start_x + camera.edge_size:
+                    # player is on the left side, are we moving left?
+                    if dir_x < 0:
+                        return True
+                if edge_end_x <= player_x <= edge_end_x + camera.edge_size:
+                    # player is on the right side, are we moving right?
+                    if 0 < dir_x:
+                        return True
+                if edge_start_y <= player_y <= edge_start_y + camera.edge_size:
+                    # player is on the up side, are we moving up?
+                    if dir_y < 0:
+                        return True
+                if edge_end_y <= player_y <= edge_end_y + camera.edge_size:
+                    # player is on the down side, are we moving down?
+                    if 0 < dir_y:
+                        return True
+
+        elif target_pos_in_edge:
+            # we are moving into the edge
+            return True
+
+
+    def move_camera(self, move_x, move_y):
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        from scripts.global_singletons.managers import world_manager
+        game_map = world_manager.Map.get_game_map()
+
+        # clamp function: max(low, min(n, high))
+        camera.x = max(0, min(camera.x + move_x, game_map.width))
+        camera.y = max(0, min(camera.y + move_y, game_map.height))
+
+    def update_cameras_tiles_to_draw(self):
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        coords = []
+
+        for x in range(camera.x, camera.x + camera.width):
+            for y in range(camera.y, camera.y + camera.height):
+                coords.append((x, y))
+
+        from scripts.global_singletons.managers import world_manager
+        tiles = world_manager.Map.get_tiles(camera.x, camera.y, coords)
+        self.set_tiles_in_camera(tiles)

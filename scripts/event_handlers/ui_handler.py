@@ -1,5 +1,6 @@
 
 import logging
+from typing import Tuple
 
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MouseButtons, TILE_SIZE, MessageEventTypes, UIElementTypes
@@ -58,7 +59,7 @@ class UiHandler(Subscriber):
             elif event.event_type == EntityEventTypes.DIE:
                 ui_manager.Element.update_entity_queue()
             elif event.event_type == EntityEventTypes.MOVE:
-                self.refresh_camera()
+                self.update_camera(event.target_pos)
 
         if event.topic == EventTopics.GAME:
             if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
@@ -78,6 +79,10 @@ class UiHandler(Subscriber):
                 # overlay is no longer needed
                 if game_manager.previous_game_state == GameStates.TARGETING_MODE:
                     ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
+
+
+
+
 
     @staticmethod
     def attempt_to_set_selected_entity(mouse_x, mouse_y):
@@ -178,20 +183,18 @@ class UiHandler(Subscriber):
             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
     @staticmethod
-    def refresh_camera():
-        """
-        Refresh the camera's information to show the correct tiles in view
-        """
-        # determine what size of tiles to get
-        row_size, col_size = ui_manager.Element.get_camera_view_size()
+    def update_camera(target_pos: Tuple = None):
 
-        # retrieve that size of tiles
-        from scripts.global_singletons.managers import world_manager
-        # TODO - extend to work with rectangle rather than square
-        tiles = world_manager.FOV.get_tiles_in_range_and_fov_of_player(row_size)
+        player = world_manager.Entity.get_player()
 
-        # update camera
-        ui_manager.Element.set_tiles_in_camera(tiles)
+        if target_pos:
+            if ui_manager.Element.should_camera_move((player.x, player.y), target_pos):
+                target_x, target_y = target_pos
+                move_x = player.x - target_x
+                move_y = player.y - target_y
+                ui_manager.Element.move_camera(move_x, move_y)
+
+        ui_manager.Element.update_cameras_tiles_to_draw()
 
     def init_ui(self):
         """
@@ -204,4 +207,4 @@ class UiHandler(Subscriber):
         ui_manager.Element.set_element_visibility(UIElementTypes.SKILL_BAR, True)
 
         # update camera
-        self.refresh_camera()
+        self.update_camera()
