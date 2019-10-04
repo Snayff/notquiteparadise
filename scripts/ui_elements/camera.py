@@ -1,3 +1,4 @@
+from operator import mod
 
 from scripts.ui_elements.templates.panel import Panel
 from scripts.core.constants import VisualInfo, TILE_SIZE
@@ -20,13 +21,6 @@ class Camera:
         self.width = 10
         self.height = 10
         self.edge_size = 3
-
-        self.row_radius = 5
-        self.col_radius = 5
-        self.centre_pos = (self.row_radius + 1, self.col_radius + 1)
-
-        # TODO - add centre pos and tolerance around that, update when exceeding tolerance area so camera centres on
-        #  that and not the player.
 
         # setup the panel
         panel_x = 0
@@ -64,6 +58,8 @@ class Camera:
         draw = self.draw_tile
         tiles = self.tiles_to_draw
 
+        assert self.width * self.height == len(tiles)
+
         for x in range(0, len(tiles)):
             draw(tiles[x])
 
@@ -71,11 +67,7 @@ class Camera:
         """
         Draw the tile on the panel surface
         """
-
-        # from scripts.global_singletons.managers import world_manager
-        # player = world_manager.player
-        # draw_position = ((tile.x - player.x) * TILE_SIZE, (tile.y - player.y) * TILE_SIZE)
-        draw_position = ((tile.x - self.x) * TILE_SIZE, (tile.y - self.y) * TILE_SIZE)
+        draw_position = (tile.x * TILE_SIZE, tile.y * TILE_SIZE)
 
         if tile.terrain:
             self.panel.surface.blit(tile.terrain.sprite, draw_position)

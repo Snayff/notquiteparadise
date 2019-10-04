@@ -59,7 +59,7 @@ class UiHandler(Subscriber):
             elif event.event_type == EntityEventTypes.DIE:
                 ui_manager.Element.update_entity_queue()
             elif event.event_type == EntityEventTypes.MOVE:
-                self.update_camera(event.target_pos)
+                self.update_camera(event.start_pos, event.target_pos)
 
         if event.topic == EventTopics.GAME:
             if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
@@ -183,15 +183,15 @@ class UiHandler(Subscriber):
             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
     @staticmethod
-    def update_camera(target_pos: Tuple = None):
-
-        player = world_manager.Entity.get_player()
+    def update_camera(start_pos: Tuple = None, target_pos: Tuple = None):
 
         if target_pos:
-            if ui_manager.Element.should_camera_move((player.x, player.y), target_pos):
+            outcome = ui_manager.Element.should_camera_move(start_pos, target_pos)
+            if outcome:
                 target_x, target_y = target_pos
-                move_x = player.x - target_x
-                move_y = player.y - target_y
+                start_x, start_y = start_pos
+                move_x = target_x - start_x
+                move_y = target_y - start_y
                 ui_manager.Element.move_camera(move_x, move_y)
 
         ui_manager.Element.update_cameras_tiles_to_draw()

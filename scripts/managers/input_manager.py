@@ -225,7 +225,7 @@ class InputManager:
         # if destination isn't 0 then we need to move player
         if direction_x != 0 or direction_y != 0:
             target_x, target_y = direction_x + player.x, direction_y + player.y
-            publisher.publish(MoveEvent(player, (target_x, target_y)))
+            publisher.publish(MoveEvent(player, (player.x, player.y), (target_x, target_y)))
 
         # SKILLS usage
         skill_number = self.get_pressed_skill_number()
