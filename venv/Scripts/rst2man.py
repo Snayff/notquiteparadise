@@ -1,4 +1,4 @@
-#!C:\Users\Gabriel\Documents\NotQuiteParadise\venv\Scripts\python.exe
+#!c:\users\gabriel\documents\notquiteparadise\venv\scripts\python.exe
 
 # Author: 
 # Contact: grubert@users.sf.net

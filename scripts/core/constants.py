@@ -2,6 +2,7 @@
 from enum import Enum, auto
 
 TILE_SIZE = 64
+ICON_IN_TEXT_SIZE = 16
 
 
 class VisualInfo:
@@ -11,7 +12,6 @@ class VisualInfo:
     # TODO -  should this be in game manager?
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
-
     GAME_FPS = 60
     ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
 
@@ -34,6 +34,7 @@ class GameStates(Enum):
     TARGETING_MODE = auto()
     EXIT_GAME = auto()
     GAME_INITIALISING = auto()
+    NEW_TURN = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -56,10 +57,11 @@ class EventTopics(Enum):
 
 class GameEventTypes(Enum):
     """Types of Game Events"""
-    EXIT = auto()
-    END_TURN = auto()
-    CHANGE_GAME_STATE = auto()
-    END_ROUND = auto()
+    EXIT = auto()  # go back a step / exit current focus
+    END_TURN = auto()  # end of turn
+    CHANGE_GAME_STATE = auto()  # move from one game state to another
+    END_ROUND = auto()  # end of round
+
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -129,15 +131,15 @@ class TargetTags(Enum):
     """
     Types of target
     """
-    # TODO - externalise terrain types
-    FLOOR = auto()
-    WALL = auto()
-
     SELF = auto()
     OTHER_ENTITY = auto()
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
     ANY = auto()
+
+    # TODO - externalise terrain types
+    FLOOR = auto()
+    WALL = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -304,6 +306,7 @@ class AfflictionTriggers(Enum):
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
     # TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage
     # USE_BURN = auto()  # apply if afflicted entity uses a burn type - etc.
+    # DEATH = auto()  # apply if afflicted entity dies
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -360,6 +363,25 @@ class MouseButtons(Enum):
     LEFT_BUTTON = auto()
     RIGHT_BUTTON = auto()
     MIDDLE_BUTTON = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
+class UIElementTypes(Enum):
+    """
+    The different UI elements
+    """
+    MESSAGE_LOG = auto()
+    ENTITY_INFO = auto()
+    TARGETING_OVERLAY = auto()
+    SKILL_BAR = auto()
+    ENTITY_QUEUE = auto()
+    CAMERA = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

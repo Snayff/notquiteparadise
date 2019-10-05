@@ -9,11 +9,11 @@ from scripts.core.constants import GameStates
 from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
     input_manager, start
 from scripts.global_singletons.event_hub import event_hub
-from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
+from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging, \
+    initialise_ui_elements
 
 
 # Project Wide to do list...
-# TODO - UI information should be pulled once then held
 # TODO - create global tooltip method - some relevant code in old message `log -
 #  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
@@ -30,9 +30,6 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - use seed for RNG
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
-
-
-
 
 
 def main():
@@ -56,6 +53,7 @@ def main():
     #################################################
 
     # initialise the game
+    initialise_ui_elements()
     initialise_event_handlers()
     initialise_game()
 
@@ -91,7 +89,8 @@ def game_loop():
         event_hub.update()
 
         # DRAW
-        ui_manager.draw_game(world_manager.game_map, debug_manager.visible)
+        debug_manager.draw()
+        ui_manager.Element.draw_visible_elements()
 
 
 def dump_profiling_data(profiler):

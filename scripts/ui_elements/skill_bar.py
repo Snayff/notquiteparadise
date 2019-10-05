@@ -17,10 +17,9 @@ class SkillBar:
 
     def __init__(self):
         # setup info
-        self.font = Font().skill_bar
-        self.palette = Palette().skill_bar
         self.max_skills_in_bar = 5
         self.skill_icon_size = 64
+        self.is_visible = False
 
         # panel info
         panel_width = int(self.skill_icon_size * 1.5)
@@ -28,8 +27,10 @@ class SkillBar:
         panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
         panel_y = 0
         panel_border = 2
-        panel_background_colour = self.palette.background
-        panel_border_colour = self.palette.border
+        from scripts.global_singletons.managers import ui_manager
+        palette = ui_manager.Palette.skill_bar
+        panel_background_colour = palette.background
+        panel_border_colour = palette.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
 
@@ -41,8 +42,8 @@ class SkillBar:
                                            self.max_skills_in_bar)
 
         size = self.skill_icon_size
-        bg_colour = self.palette.background
-        bor_colour = self.palette.skill_border
+        bg_colour = palette.background
+        bor_colour = palette.skill_border
         bor_size = 1
         skill_number = 1
 
@@ -57,10 +58,6 @@ class SkillBar:
 
             # increment counter
             skill_number += 1
-
-        # set self to be rendered
-        from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("skill_bar", self, True)
 
         logging.debug(f"SkillBar initialised.")
 
@@ -91,47 +88,5 @@ class SkillBar:
         # draw everything to the passed in surface
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
 
-    def update_skill_icons_to_show(self):
-        """
-        Get the player`s known skills to show in the skill bar.
-        """
 
-        # update info
-        from scripts.global_singletons.managers import world_manager
-        player = world_manager.player
 
-        # if the player has been init'd update skill bar
-        if player:
-            for counter, skill in enumerate(player.actor.known_skills):
-
-                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
-                skill_icon = pygame.image.load("assets/skills/" + skill_data.icon).convert_alpha()
-
-                # catch any images not the right size and resize them
-                if skill_icon.get_size() != (self.skill_icon_size, self.skill_icon_size):
-                    icon = pygame.transform.smoothscale(skill_icon, (self.skill_icon_size, self.skill_icon_size))
-                else:
-                    icon = skill_icon
-
-                self.skill_containers[counter].skill_icon = icon
-
-    def get_skill_index_from_skill_clicked(self, relative_x, relative_y):
-        """
-        Return the index of the skill clicked in the skill bar
-
-        Args:
-            relative_x:
-            relative_y:
-
-        Returns:
-            int: -1 if nothing, else 0-4.
-
-        Notes:
-            The skills in the skill bar are pulled, in order, from the player`s known skills.
-        """
-        for container in self.skill_containers:
-            if container.rect.collidepoint(relative_x, relative_y):
-                skill_index = self.skill_containers.index(container)
-                return skill_index
-
-        return -1

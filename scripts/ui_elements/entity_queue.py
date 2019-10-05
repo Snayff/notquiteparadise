@@ -17,6 +17,7 @@ class EntityQueue:
         self.entity_icon_size = 64
         self.entity_queue = []  # type: List[Tuple]  # (image, str)
         self.gap_between_entities = 2
+        self.is_visible = False
 
         # panel info
         panel_width = int(self.entity_icon_size * 1.5)
@@ -31,13 +32,6 @@ class EntityQueue:
 
         # defined here due to dependency on panel
         self.max_entities_to_show = int(panel_height / (self.entity_icon_size + self.gap_between_entities))
-
-        # get entities to show
-        self.update_entity_queue()
-
-        # set self to be rendered
-        from scripts.global_singletons.managers import ui_manager
-        ui_manager.update_panel_visibility("entity_queue", self, True)
 
         logging.debug(f"EntityQueue initialised.")
 
@@ -67,28 +61,3 @@ class EntityQueue:
 
         # draw everything to the passed in surface
         surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
-
-    def update_entity_queue(self):
-        """
-        Get info from the turn_manager and update the entity queue to be displayed
-        """
-        # clear current queue
-        self.entity_queue.clear()
-
-        counter = 0
-
-        # loop entities in turn queue, up to max to show
-        from scripts.global_singletons.managers import turn_manager
-        for entity, time in turn_manager.turn_queue.items():
-            if counter < self.max_entities_to_show:
-                icon = entity.icon
-                # catch any images not the right size and resize them
-                if icon.get_size() != (self.entity_icon_size, self.entity_icon_size):
-                    icon = pygame.transform.smoothscale(icon, (self.entity_icon_size, self.entity_icon_size))
-
-                self.entity_queue.append((icon, entity.name))
-
-                counter += 1
-
-            else:
-                break

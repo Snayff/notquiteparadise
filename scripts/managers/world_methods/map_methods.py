@@ -5,7 +5,7 @@ from scripts.world.game_map import GameMap
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
-from typing import List
+from typing import List, Tuple
 from scripts.global_singletons.data_library import library
 
 
@@ -20,7 +20,7 @@ class MapMethods:
         from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
-    def get_game_map(self):
+    def get_game_map(self) -> GameMap:
         """
         Get current game_map
 
@@ -99,7 +99,7 @@ class MapMethods:
         """
         game_map = self.get_game_map()
 
-        if (0 <= tile_x <= game_map.width) and (0 <= tile_y <= game_map.height):
+        if (0 <= tile_x < game_map.width) and (0 <= tile_y < game_map.height):
             return True
         else:
             return False
@@ -122,10 +122,11 @@ class MapMethods:
     def get_tiles(self, start_tile_x, start_tile_y, coords):
         """
         Get multiple tiles based on starting position and coordinates given
+
         Args:
             start_tile_x (int):
             start_tile_y (int):
-            coords (list): List of tuples holding x y. E.g. (x, y)
+            coords (list[Tuple]): List of tuples holding x y. E.g. (x, y)
 
         Returns:
             List[Tile]:

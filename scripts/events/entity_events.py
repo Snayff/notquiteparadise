@@ -1,5 +1,8 @@
+from typing import Tuple
+
 from scripts.core.constants import EntityEventTypes, EventTopics
 from scripts.event_handlers.pub_sub_hub import Event
+from scripts.world.entity import Entity
 
 
 class UseSkillEvent(Event):
@@ -28,15 +31,11 @@ class MoveEvent(Event):
     """
     Event to move an entity as a basic move action
     """
-    def __init__(self, entity_to_move, target_pos):
-        """
+    def __init__(self, entity_to_move: Entity, start_pos: Tuple, target_pos: Tuple):
 
-        Args:
-            entity_to_move:
-            target_pos (tuple):
-        """
         Event.__init__(self, EntityEventTypes.MOVE, EventTopics.ENTITY)
         self.entity = entity_to_move
+        self.start_pos = start_pos
         self.target_pos = target_pos
 
 

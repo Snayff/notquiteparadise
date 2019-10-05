@@ -26,20 +26,16 @@ class WorldManager:
         self.FOV = FOVMethods(self)
         self.God = GodMethods(self)
 
+        # TODO -  move into the relevant method groups
         self.game_map = None  # type: GameMap
         self.player = None  # type: Entity
         self.entities = []
         self.gods = []
         self.player_fov_map = None  # type: tcod.map.Map
-        self.player_fov_is_dirty = False
 
         logging.info(f"WorldManager initialised.")
 
     def update(self):
         """
-        Update the world manager:
-            player fov
+        None but method must exist
         """
-        if self.player_fov_is_dirty and self.player:
-            player = self.player
-            self.FOV.recompute_player_fov(player.x, player.y, player.sight_range)

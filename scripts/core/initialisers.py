@@ -1,13 +1,13 @@
-
 import logging
 import time
 
-from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
+from scripts.core.constants import EventTopics, GameStates, MessageEventTypes, UIElementTypes
 from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
 from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
+from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
 from scripts.event_handlers.message_handler import MessageHandler
 from scripts.event_handlers.game_handler import GameHandler
@@ -57,10 +57,12 @@ def initialise_game():
     map_height = 30
     world_manager.Map.create_game_map(map_width, map_height)
     world_manager.FOV.create_player_fov_map(map_width, map_height)
-    ui_manager.delayed_init()
 
     # TODO - remove when map generation is in
     world_manager.Entity.create_actor_entity(0, 0, "player", "player", True)
+    player = world_manager.Entity.get_player()
+    world_manager.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
+
     world_manager.Entity.create_actor_entity(0, 3, "goblinn_hand", "steve")
     world_manager.Entity.create_actor_entity(1, 4, "goblinn_hand", "bob")
     world_manager.Entity.create_actor_entity(2, 3, "goblinn_hand", "estaban")
@@ -75,11 +77,11 @@ def initialise_game():
     publisher.publish(LearnEvent(world_manager.player, "Fungechist", "Eye-watering Mistake"))
     publisher.publish(LearnEvent(world_manager.player, "Fungechist", "Fractious Fungi"))
 
-    game_manager.update_game_state(GameStates.PLAYER_TURN)  # TODO remove when main menu is starting point
+    publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
     turn_manager.turn_holder = world_manager.player
 
     publisher.publish(MessageEvent(MessageEventTypes.BASIC, "Welcome to #col.info Not #col.info "
-                                                                     "Quite  #col.info Paradise. "))
+                                                            "Quite  #col.info Paradise. "))
 
 
 def initialise_event_handlers():
@@ -111,3 +113,14 @@ def initialise_event_handlers():
     ui_handler.subscribe(EventTopics.GAME)
     ui_handler.subscribe(EventTopics.UI)
 
+
+def initialise_ui_elements():
+    """
+    initialise all ui elements
+    """
+    ui_manager.Element.init_camera()
+    ui_manager.Element.init_entity_info()
+    ui_manager.Element.init_entity_queue()
+    ui_manager.Element.init_message_log()
+    ui_manager.Element.init_skill_bar()
+    ui_manager.Element.init_targeting_overlay()

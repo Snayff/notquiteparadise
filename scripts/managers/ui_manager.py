@@ -1,14 +1,12 @@
 
 import logging
-import pygame
 
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.entity_info import SelectedEntityInfo
-from scripts.core.constants import VisualInfo
-from scripts.ui_elements.entity_queue import EntityQueue
-from scripts.ui_elements.message_log import MessageLog
-from scripts.ui_elements.skill_bar import SkillBar
-from scripts.ui_elements.targeting_overlay import TargetingOverlay
+from scripts.core.fonts import Font
+from scripts.managers.ui_methods.display_methods import DisplayMethods
+from scripts.managers.ui_methods.element_methods import ElementMethods
+from scripts.managers.ui_methods.message_methods import MessageMethods
+from scripts.managers.ui_methods.mouse_methods import MouseMethods
+from scripts.ui_elements.palette import Palette
 
 
 class UIManager:
@@ -16,400 +14,27 @@ class UIManager:
     Manage the UI, such as windows, resource bars etc
 
     Attributes:
-        focused_window (pygame.surface) : The window currently in focus.
         main_surface (pygame.surface): The main surface to render to
-        message_log (MessageLog): Object holding message log functionality
     """
 
     def __init__(self):
-        self.focused_window = None  # TODO - use to track which menu/ui element is being used
-        self.colour = Colour()
-
-        self.desired_width = VisualInfo.BASE_WINDOW_WIDTH  # TODO - allow for selection by player but only multiples of
-                                                           #  base (16:9)
-        self.desired_height = VisualInfo.BASE_WINDOW_HEIGHT
-        self.screen_scaling_mod_x = self.desired_width // VisualInfo.BASE_WINDOW_WIDTH
-        self.screen_scaling_mod_y = self.desired_height // VisualInfo.BASE_WINDOW_HEIGHT
-        self.screen = pygame.display.set_mode((self.desired_width, self.desired_height))
-        self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
-        self.visible_elements = {}  # dict of all elements that are currently being rendered
-
-        # UI elements
-        self.message_log = None  # type: MessageLog
-        self.entity_info = None  # type: SelectedEntityInfo
-        self.targeting_overlay = None  # type: TargetingOverlay
-        self.skill_bar = None  # type: SkillBar
-        self.entity_queue = None  # type: EntityQueue
+        self.Display = DisplayMethods(self)
+        self.Element = ElementMethods(self)
+        self.Mouse = MouseMethods(self)
+        self.Message = MessageMethods(self)
+        self.Palette = Palette()  # doesnt need self as only holds data
+        self.Font = Font()  # doesnt need self as only holds data
 
         logging.info(f"UIManager initialised.")
 
-        # TODO - lift functions from ui_elements to the manager, as per other managers.
-
     def update(self):
         """
-        Update UI elements, if required.
-
+        No updates currently needed but must have the method
         """
-        if self.message_log:
-            self.message_log.update()
-
-    def delayed_init(self):
-        """
-        init additional objects. Called late due to dependencies.
-        """
-        self.init_message_log()
-        self.init_entity_info()
-        self.init_targeting_overlay()
-        self.init_skill_bar()
-        self.init_entity_queue()
-
-    def init_message_log(self):
-        """
-        Initialise the message log.
-
-        Notes:
-            Called late due to dependencies.
-        """
-        self.message_log = MessageLog()
-
-    def init_entity_info(self):
-        """
-        Initialise the selected entity info
-
-        Notes:
-            Called late due to dependencies.
-        """
-        self.entity_info = SelectedEntityInfo()
-
-    def init_targeting_overlay(self):
-        """
-        Initialise the targeting_overlay
-
-        Notes:
-            Called late due to dependencies.
-        """
-        self.targeting_overlay = TargetingOverlay()
-
-    def init_skill_bar(self):
-        """
-        Initialise the skill bar
-
-        Notes:
-            Called late due to dependencies.
-        """
-        self.skill_bar = SkillBar()
-
-    def init_entity_queue(self):
-        """
-        Initialise the entity queue
-
-        Notes:
-            Called late due to dependencies.
-        """
-        self.entity_queue = EntityQueue()
-
-    def draw_game(self, game_map=None, debug_active=False):
-        """
-        Draw the entire game.
-
-        Args:
-            game_map (GameMap): the current game map
-            debug_active (bool): whether to show the debug messages
-        """
-        # TODO - draw dirty only
-
-        # clear last frames drawing
-        self.main_surface.fill(self.colour.black)
-
-        # draw new frame
-        # TODO - change visible_elements to enum
-        if "game_map" in self.visible_elements:
-            game_map.draw(self.main_surface)
-
-        # debug doesnt use a panel so we check for the flag
-        if debug_active:
-            from scripts.global_singletons.managers import debug_manager
-            debug_manager.draw(self.main_surface)
-
-        if "message_log" in self.visible_elements:
-            self.message_log.draw(self.main_surface)
-            #self.message_log.draw_tooltips(self.main_surface)
-
-        if "entity_info" in self.visible_elements:
-            self.entity_info.draw(self.main_surface)
-
-        if "targeting_overlay" in self.visible_elements:
-            self.targeting_overlay.draw(self.main_surface)
-
-        if "skill_bar" in self.visible_elements:
-            self.skill_bar.draw(self.main_surface)
-
-        if "entity_queue" in self.visible_elements:
-            self.entity_queue.draw(self.main_surface)
-
-        # resize the surface to the desired resolution
-        scaled_surface = pygame.transform.smoothscale(self.main_surface, (self.desired_width, self.desired_height))
-        self.screen.blit(scaled_surface, (0, 0))
-
-        # update the display
-        pygame.display.flip()  # make sure to do this as the last drawing element in a frame
-
-    def update_panel_visibility(self, name, ui_object, visible):
-        """
-        Update whether a panel is visible.
-
-        Args:
-            name(str): Key value
-            ui_object(Object):   The object to pull the info from
-            visible (bool): Whether to show the panel or not
-        """
-        if visible:
-            self.visible_elements[name] = ui_object
-            # self.visible_elements[name] = Rect(panel.x, panel.y, panel.width, panel.height)
-        else:
-            self.visible_elements.pop(name, None)
-
-    def get_scaled_mouse_pos(self):
-        """
-        Get the scaled mouse position
-
-        Returns(tuple): Returns mouse position scaled to screen size
-
-        """
-        mouse_pos = pygame.mouse.get_pos()
-        scaled_mouse_pos = mouse_pos[0] // self.screen_scaling_mod_x, mouse_pos[1] // self.screen_scaling_mod_y
-        return scaled_mouse_pos
-
-    def get_relative_scaled_mouse_pos(self, visible_panel_name, mouse_x=-1, mouse_y=-1):
-        """
-        Get the scaled mouse position relative to the visible panel. Current position used if one not provided.
-
-        Args:
-            visible_panel_name (str): name of the visible panel
-            mouse_x(int): Optional. Mouses x coord
-            mouse_y(int):  Optional. Mouses y coord.
-
-        Returns:
-            tuple: Returns mouse position scaled to screen size
-        """
-        # if mouse pos was provided use it, else get it
-        if mouse_x != -1 and mouse_y != -1:
-            mouse_pos = (mouse_x, mouse_y)
-        else:
-            mouse_pos = self.get_scaled_mouse_pos()
-
-        ui_object = self.visible_elements.get(visible_panel_name).panel
-
-        relative_mouse_pos = mouse_pos[0] - ui_object.x, mouse_pos[1] - ui_object.y
-
-        return relative_mouse_pos
-
-    def get_clicked_panels_rect(self, mouse_x=-1, mouse_y=-1):
-        """
-        Determine which panel has been clicked based on mouse position. Current position used if one not provided.
-
-        Args:
-            mouse_x(int): Optional. Mouses x coord
-            mouse_y(int):  Optional. Mouses y coord.
-
-        Returns:
-            rect: ui_element
-        """
-        clicked_rect = None
-
-        # if mouse pos was provided use it, else get it
-        if mouse_x != -1 and mouse_y != -1:
-            mouse_pos = (mouse_x, mouse_y)
-        else:
-            mouse_pos = self.get_scaled_mouse_pos()
-
-        for key, ui_object in self.visible_elements.items():
-            if hasattr(ui_object, "panel"):
-                if ui_object.panel.rect.collidepoint(mouse_pos):
-                    clicked_rect = key
-
-        return clicked_rect
 
 
 def example_code():
     pass
-# Targeting function from pygame tut
-# def menu_tile_select(coords_origin = None, max_range = None, radius = None,
-#     penetrate_walls = True, pierce_creature = True):
-#     ''' This menu let`s the player select a tile.
-#
-#     This function pauses the game, produces an on screen rectangle and when the
-#     player presses the left mb, will return (message for now) the map address.
-#     '''
-#
-#     menu_close = False
-#
-#     while not menu_close:
-#
-#         # Get mos position
-#         mouse_x, mouse_y = pygame.mouse.get_pos()
-#
-#         # Get button clicks
-#         events_list = pygame.event.get()
-#
-#         # mouse map selection
-#
-#         mapx_pixel, mapy_pixel = CAMERA.win_to_map((mouse_x, mouse_y))
-#
-#         map_coord_x = mapx_pixel/constants.CELL_WIDTH
-#         map_coord_y = mapy_pixel/constants.CELL_HEIGHT
-#
-#         valid_tiles = []
-#
-#         if coords_origin:
-#             full_list_tiles = map_find_line(coords_origin, (map_coord_x, map_coord_y))
-#
-#             for i, (x, y) in enumerate(full_list_tiles):
-#
-#                 valid_tiles.append((x, y))
-#
-#                 # stop at max range
-#                 if max_range and i == max_range - 1:
-#                     break
-#
-#                 # stop at wall
-#                 if not penetrate_walls and GAME.current_map[x][y].block_path:
-#                     break
-#
-#                 # stop at creature
-#                 if not pierce_creature and map_check_for_creature(x, y):
-#                     break
-#
-#
-#         else:
-#             valid_tiles = [(map_coord_x, map_coord_y)]
-#
-#         # return map_coords when presses left mb
-#         for event in events_list:
-#             if event.type == pygame.KEYDOWN:
-#                 # if player presses 'i' again, close menu
-#                 if event.key == pygame.K_l:
-#                     menu_close = True
-#
-#             if event.type == pygame.MOUSEBUTTONDOWN:
-#
-#                 if event.button == 1:
-#                     # returns coords selected
-#                     return (valid_tiles[-1])
-#
-#
-#         # draw game first
-#         SURFACE_MAIN.fill(constants.COLOR_DEFAULT_BG)
-#         SURFACE_MAP.fill(constants.COLOR_BLACK)
-#
-#         CAMERA.update()
-#
-#         # draw the map
-#         draw_map(GAME.current_map)
-#
-#         # draw all objects
-#         for obj in sorted(GAME.current_objects, key = lambda obj: obj.depth,
-#             reverse = True):
-#             obj.draw()
-#
-#         # Draw rectangle at mouse position on top of game
-#         for (tile_x, tile_y) in valid_tiles:
-#
-#             if (tile_x, tile_y) == valid_tiles[-1]:
-#                 draw_tile_rect(coords = (tile_x, tile_y), mark = 'X')
-#             else:
-#                 draw_tile_rect(coords = (tile_x, tile_y))
-#
-#         if radius:
-#             area_effect = map_find_radius(valid_tiles[-1], radius)
-#
-#             for (tile_x, tile_y) in area_effect:
-#
-#                 draw_tile_rect(coords = (tile_x, tile_y),
-#                                tile_color = constants.COLOR_RED,
-#                                tile_alpha = 150)
-#
-#         SURFACE_MAIN.blit(SURFACE_MAP, (0, 0), CAMERA.rectangle)
-#
-#         draw_debug()
-#         draw_messages()
-#
-#         # update the display
-#         pygame.display.flip()
-#
-#         # tick the CLOCK
-#         CLOCK.tick(constants.GAME_FPS)
-
-
-# Camera class from pygame tutorial
-# class obj_Camera:
-#
-#     def __init__(self):
-#
-#         self.width = constants.CAMERA_WIDTH
-#         self.height = constants.CAMERA_HEIGHT
-#         self.x, self.y = (0, 0)
-#
-#     @property
-#     def rectangle(self):
-#
-#         pos_rect = pygame.Rect((0, 0), (constants.CAMERA_WIDTH,
-#                                         constants.CAMERA_HEIGHT))
-#
-#         pos_rect.center = (self.x, self.y)
-#
-#         return pos_rect
-#
-#     @property
-#     def map_address(self):
-#
-#         map_x = self.x / constants.CELL_WIDTH
-#         map_y = self.y / constants.CELL_HEIGHT
-#
-#         return (map_x, map_y)
-#
-#     def update(self):
-#
-#         target_x = PLAYER.x * constants.CELL_WIDTH + (constants.CELL_WIDTH/2)
-#         target_y = PLAYER.y * constants.CELL_HEIGHT + (constants.CELL_HEIGHT/2)
-#
-#         distance_x, distance_y = self.map_dist((target_x, target_y))
-#
-#         self.x += int(distance_x)
-#         self.y += int(distance_y)
-#
-#     def win_to_map(self, coords):
-#
-#         tar_x, tar_y = coords
-#
-#         #convert window coords to distace from camera
-#         cam_d_x, cam_d_y = self.cam_dist((tar_x, tar_y))
-#
-#         #distance from cam -> map coord
-#         map_p_x = self.x + cam_d_x
-#         map_p_y = self.y + cam_d_y
-#
-#         return((map_p_x, map_p_y))
-#
-#
-#     def map_dist(self, coords):
-#
-#         new_x, new_y = coords
-#
-#         dist_x = new_x - self.x
-#         dist_y = new_y - self.y
-#
-#         return (dist_x, dist_y)
-#
-#     def cam_dist(self, coords):
-#
-#         win_x, win_y = coords
-#
-#         dist_x = win_x - (self.width / 2)
-#         dist_y = win_y - (self.height / 2)
-#
-#         return (dist_x, dist_y)
-
 
 # button  from pygame tutorial
 # class ui_Button:
@@ -448,7 +73,7 @@ def example_code():
 #                      and mouse_y <= self.rect.bottom )
 #
 #         for event in local_events:
-#             if event.type == pygame.MOUSEBUTTONDOWN:
+#             if event.event_type == pygame.MOUSEBUTTONDOWN:
 #                 if event.button == 1: mouse_clicked = True
 #
 #         if mouse_over and mouse_clicked:
@@ -585,7 +210,7 @@ def example_code():
 #
 #         # handle menu events
 #         for event in list_of_events:
-#             if event.type == pygame.QUIT:
+#             if event.event_type == pygame.QUIT:
 #                 pygame.quit()
 #                 sys.exit()
 #
@@ -701,11 +326,11 @@ def example_code():
 #
 #         # handle menu events
 #         for event in list_of_events:
-#             if event.type == pygame.QUIT:
+#             if event.event_type == pygame.QUIT:
 #                 pygame.quit()
 #                 sys.exit()
 #
-#             if event.type == pygame.KEYDOWN:
+#             if event.event_type == pygame.KEYDOWN:
 #                 if event.key == pygame.K_ESCAPE:
 #                     menu_close = True
 #
@@ -780,7 +405,7 @@ def example_code():
 #         for event in events_list:
 #
 #             # if a key has been pressed
-#             if event.type == pygame.KEYDOWN:
+#             if event.event_type == pygame.KEYDOWN:
 #
 #                 # was it the 'p' key?
 #                 if event.key == pygame.K_p:
@@ -854,12 +479,12 @@ def example_code():
 #
 #         # cycle through events
 #         for event in events_list:
-#             if event.type == pygame.KEYDOWN:
+#             if event.event_type == pygame.KEYDOWN:
 #                 # if player presses 'i' again, close menu
 #                 if event.key == pygame.K_i:
 #                     menu_close = True
 #
-#             if event.type == pygame.MOUSEBUTTONDOWN:
+#             if event.event_type == pygame.MOUSEBUTTONDOWN:
 #
 #                 if event.button == 1:
 #

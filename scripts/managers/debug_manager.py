@@ -32,12 +32,13 @@ class DebugManager:
         if self.visible:
             self.update_debug_message()
 
-    def draw(self, surface):
+    def draw(self):
         """
         Draw the debug info
-        Args:
-            surface:
         """
+        from scripts.global_singletons.managers import ui_manager
+        surface = ui_manager.Display.get_main_surface()
+
         font = self.font
         font_size = font.size
 
@@ -81,7 +82,7 @@ class DebugManager:
 
         if self.show_mouse_pos:
             from scripts.global_singletons.managers import ui_manager
-            pos = ui_manager.get_scaled_mouse_pos()
+            pos = ui_manager.Mouse.get_scaled_mouse_pos()
             msg = f"Abs mouse pos : {pos}, "
 
             offset_x = 0

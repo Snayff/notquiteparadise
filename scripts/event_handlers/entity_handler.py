@@ -24,26 +24,25 @@ class EntityHandler(Subscriber):
         Args:
             event(Event): the event in need of processing
         """
+        # log that event has been received
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
-        log_string = f"{self.name} received {event.type}..."
-        logging.debug(log_string)
-
-        if event.type == EntityEventTypes.MOVE:
+        if event.event_type == EntityEventTypes.MOVE:
             log_string = f"-> Processing '{event.entity.name}'`s move."
             logging.debug(log_string)
             self.process_move(event)
 
-        if event.type == EntityEventTypes.SKILL:
+        if event.event_type == EntityEventTypes.SKILL:
             log_string = f"-> Processing '{event.entity.name}'`s skill: {event.skill.name}."
             logging.debug(log_string)
             self.process_skill(event)
 
-        if event.type == EntityEventTypes.DIE:
+        if event.event_type == EntityEventTypes.DIE:
             log_string = f"-> Processing '{event.dying_entity.name}'`s death."
             logging.debug(log_string)
             self.process_die(event)
 
-        if event.type == EntityEventTypes.LEARN:
+        if event.event_type == EntityEventTypes.LEARN:
             log_string = f"-> Processing '{event.entity.name}'`s learning of {event.skill_name} from " \
                 f"{event.skill_tree_name}."
             logging.debug(log_string)
@@ -96,7 +95,8 @@ class EntityHandler(Subscriber):
 
                 # update fov if needed
                 if entity.player:
-                    world_manager.player_fov_is_dirty = True
+                    player = world_manager.Entity.get_player()
+                    world_manager.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
 
                 # end turn
                 publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
