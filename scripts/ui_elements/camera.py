@@ -55,29 +55,34 @@ class Camera:
         """
         Draw the game map on the panel surface
         """
-        draw = self.draw_tile
         tiles = self.tiles_to_draw
 
         assert self.width * self.height == len(tiles)
 
+        y_pos = 0
+        x_pos = 0
+
         for x in range(0, len(tiles)):
-            draw(tiles[x])
+            # draw(tiles[x])
+            tile = tiles[x]
 
-    def draw_tile(self, tile: Tile):
-        """
-        Draw the tile on the panel surface
-        """
-        draw_position = (tile.x * TILE_SIZE, tile.y * TILE_SIZE)
+            if y_pos >= self.height:
+                y_pos = 0
+                x_pos += 1
 
-        if tile.terrain:
-            self.panel.surface.blit(tile.terrain.sprite, draw_position)
+            draw_position = (x_pos * TILE_SIZE, y_pos * TILE_SIZE)
 
-        if tile.entity:
-            self.panel.surface.blit(tile.entity.icon, draw_position)
+            if tile.terrain:
+                self.panel.surface.blit(tile.terrain.sprite, draw_position)
 
-        if tile.aspects:
-            for key, aspect in tile.aspects.items():
-                self.panel.surface.blit(aspect.sprite, draw_position)
+            if tile.entity:
+                self.panel.surface.blit(tile.entity.icon, draw_position)
+
+            if tile.aspects:
+                for key, aspect in tile.aspects.items():
+                    self.panel.surface.blit(aspect.sprite, draw_position)
+
+            y_pos += 1
 
 
 # Camera class from pygame tutorial
