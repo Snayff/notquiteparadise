@@ -155,7 +155,7 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.world.tile</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TargetTags</span>
+<span></span>
 <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
@@ -242,19 +242,18 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            bool: True if movement is blocked.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile_blocks_movement</span> <span class="o">=</span> <span class="kc">False</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
-                <span class="n">tile_blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">return</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
-                <span class="n">tile_blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">return</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
-                <span class="n">tile_blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
 
-        <span class="k">return</span> <span class="n">tile_blocks_movement</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">blocks_sight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -264,38 +263,19 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            bool: True if sight is blocked.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile_blocks_sight</span> <span class="o">=</span> <span class="kc">False</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
-                <span class="n">tile_blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">return</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
-                <span class="n">tile_blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">return</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
-                <span class="n">tile_blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
 
-        <span class="k">return</span> <span class="n">tile_blocks_sight</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Tile.draw"><a class="viewcode-back" href="../../../world.html#scripts.world.tile.Tile.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Draw the tile on the specified surface</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            surface(pygame.Surface): The surface to draw to</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">draw_position</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
-            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
-            <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">icon</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">aspect</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="n">draw_position</span><span class="p">)</span></div></div>
 
 
 </pre></div>

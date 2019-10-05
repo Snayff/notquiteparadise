@@ -186,7 +186,7 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="events.html#scripts.events.entity_events.MoveEvent.__init__">__init__() (scripts.events.entity_events.MoveEvent method)</a>
+      <li><a href="event_handlers.html#scripts.event_handlers.pub_sub_hub.Event.__init__">__init__() (scripts.event_handlers.pub_sub_hub.Event method)</a>
 
       <ul>
         <li><a href="world.html#scripts.world.entity.Entity.__init__">(scripts.world.entity.Entity method)</a>
@@ -204,18 +204,16 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_entity_to_central_list">add_entity_to_central_list() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.add_message">add_message() (scripts.ui_elements.message_log.MessageLog method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_player_to_central_list">add_player_to_central_list() (scripts.managers.world_methods.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="skills.html#scripts.skills.affliction.Affliction.affected_entity">affected_entity (scripts.skills.affliction.Affliction attribute)</a>
 </li>
       <li><a href="skills.html#scripts.skills.affliction.Affliction">Affliction (class in scripts.skills.affliction)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="skills.html#scripts.skills.affliction.Affliction.affliction_category">affliction_category (scripts.skills.affliction.Affliction attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="skills.html#scripts.skills.affliction.Affliction.affliction_effects">affliction_effects (scripts.skills.affliction.Affliction attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.AfflictionCategory">AfflictionCategory (class in scripts.core.constants)</a>
@@ -239,19 +237,15 @@
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.MessageLogPalette.background">background (scripts.ui_elements.palette.Palette.MessageLogPalette attribute)</a>
 </li>
       <li><a href="world.html#scripts.world.terrain.terrain.Terrain.blocks_movement">blocks_movement (scripts.world.terrain.terrain.Terrain attribute)</a>
-
-      <ul>
-        <li><a href="world.html#scripts.world.tile.Tile.blocks_movement">(scripts.world.tile.Tile attribute)</a>
 </li>
-      </ul></li>
+      <li><a href="world.html#scripts.world.tile.Tile.blocks_movement">blocks_movement() (scripts.world.tile.Tile property)</a>
+</li>
       <li><a href="world.html#scripts.world.terrain.terrain.Terrain.blocks_sight">blocks_sight (scripts.world.terrain.terrain.Terrain attribute)</a>
-
-      <ul>
-        <li><a href="world.html#scripts.world.tile.Tile.blocks_sight">(scripts.world.tile.Tile attribute)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="world.html#scripts.world.tile.Tile.blocks_sight">blocks_sight() (scripts.world.tile.Tile property)</a>
+</li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.GameMapPalette.border">border (scripts.ui_elements.palette.Palette.GameMapPalette attribute)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.border_colour">border_colour (scripts.ui_elements.templates.panel.Panel attribute)</a>
@@ -368,8 +362,10 @@
 </li>
       <li><a href="skills.html#scripts.skills.affliction.Affliction.description">description (scripts.skills.affliction.Affliction attribute)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.displayed_hyperlinks">displayed_hyperlinks (scripts.ui_elements.message_log.MessageLog attribute)</a>
+      <li><a href="events.html#scripts.events.entity_events.DieEvent">DieEvent (class in scripts.events.entity_events)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.entity_info.SelectedEntityInfo.draw">draw() (scripts.ui_elements.entity_info.SelectedEntityInfo method)</a>
 
       <ul>
@@ -379,13 +375,7 @@
 </li>
         <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.draw">(scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
 </li>
-        <li><a href="world.html#scripts.world.game_map.GameMap.draw">(scripts.world.game_map.GameMap method)</a>
-</li>
-        <li><a href="world.html#scripts.world.tile.Tile.draw">(scripts.world.tile.Tile method)</a>
-</li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.draw_background">draw_background() (scripts.ui_elements.templates.panel.Panel method)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.draw_border">draw_border() (scripts.ui_elements.templates.panel.Panel method)</a>
@@ -426,13 +416,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.world_methods.entity_methods.EntityMethods">EntityMethods (class in scripts.managers.world_methods.entity_methods)</a>
 </li>
+      <li><a href="event_handlers.html#scripts.event_handlers.pub_sub_hub.Event">Event (class in scripts.event_handlers.pub_sub_hub)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.pub_sub_hub.EventHub">EventHub (class in scripts.event_handlers.pub_sub_hub)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.EventTopics">EventTopics (class in scripts.core.constants)</a>
 </li>
       <li><a href="events.html#scripts.events.game_events.ExitGameEvent">ExitGameEvent (class in scripts.events.game_events)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.expired_afflictions">expired_afflictions (scripts.managers.world_methods.affliction_methods.AfflictionMethods attribute)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.expressions">expressions (scripts.ui_elements.message_log.MessageLog attribute)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.MessageLogPalette.expressions_player">expressions_player (scripts.ui_elements.palette.Palette.MessageLogPalette attribute)</a>
 </li>
@@ -530,8 +522,6 @@
 </li>
       <li><a href="core.html#scripts.core.library_of_alexandria.LibraryOfAlexandria.get_skill_effect_data">get_skill_effect_data() (scripts.core.library_of_alexandria.LibraryOfAlexandria method)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.skill_bar.SkillBar.get_skill_index_from_skill_clicked">get_skill_index_from_skill_clicked() (scripts.ui_elements.skill_bar.SkillBar method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.get_stat_change_from_afflictions_on_entity">get_stat_change_from_afflictions_on_entity() (scripts.managers.world_methods.affliction_methods.AfflictionMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_target_type_from_tile">get_target_type_from_tile() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
@@ -544,29 +534,29 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tiles">get_tiles() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.get_tiles_in_range_and_fov_of_player">get_tiles_in_range_and_fov_of_player() (scripts.managers.world_methods.fov_methods.FOVMethods method)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="world.html#scripts.world.tile.Tile.has_entity">has_entity (scripts.world.tile.Tile attribute)</a>
+      <li><a href="world.html#scripts.world.tile.Tile.has_entity">has_entity() (scripts.world.tile.Tile property)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.has_required_tags">has_required_tags() (scripts.managers.world_methods.skill_methods.SkillMethods method)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.height">height (scripts.ui_elements.templates.panel.Panel attribute)</a>
 </li>
-      <li><a href="core.html#scripts.core.constants.HitModifiers">HitModifiers (class in scripts.core.constants)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="core.html#scripts.core.constants.HitModifiers">HitModifiers (class in scripts.core.constants)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.HitTypes">HitTypes (class in scripts.core.constants)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.HitValues">HitValues (class in scripts.core.constants)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.MessageLogPalette.hyperlink">hyperlink (scripts.ui_elements.palette.Palette.MessageLogPalette attribute)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.hyperlinks">hyperlinks (scripts.ui_elements.message_log.MessageLog attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -578,22 +568,16 @@
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.icons">icons (scripts.ui_elements.message_log.MessageLog attribute)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.index_of_active_hyperlink">index_of_active_hyperlink (scripts.ui_elements.message_log.MessageLog attribute)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.initialise_icons">initialise_icons() (scripts.ui_elements.message_log.MessageLog method)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.initialise_keywords">initialise_keywords() (scripts.ui_elements.message_log.MessageLog method)</a>
-</li>
       <li><a href="core.html#scripts.core.constants.InputModes">InputModes (class in scripts.core.constants)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.is_dirty">is_dirty (scripts.ui_elements.message_log.MessageLog attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="world.html#scripts.world.tile.Tile.is_floor">is_floor (scripts.world.tile.Tile attribute)</a>
+      <li><a href="world.html#scripts.world.tile.Tile.is_floor">is_floor() (scripts.world.tile.Tile property)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_blocking_movement">is_tile_blocking_movement() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_blocking_sight">is_tile_blocking_sight() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_in_bounds">is_tile_in_bounds() (scripts.managers.world_methods.map_methods.MapMethods method)</a>
@@ -604,7 +588,7 @@
 </li>
       <li><a href="world.html#scripts.world.tile.Tile.is_visible">is_visible (scripts.world.tile.Tile attribute)</a>
 </li>
-      <li><a href="world.html#scripts.world.tile.Tile.is_wall">is_wall (scripts.world.tile.Tile attribute)</a>
+      <li><a href="world.html#scripts.world.tile.Tile.is_wall">is_wall() (scripts.world.tile.Tile property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -684,7 +668,7 @@
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.message_list">message_list (scripts.ui_elements.message_log.MessageLog attribute)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.message_type_to_show">message_type_to_show (scripts.ui_elements.message_log.MessageLog attribute)</a>
+      <li><a href="events.html#scripts.events.message_events.MessageEvent">MessageEvent (class in scripts.events.message_events)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.MessageEventTypes">MessageEventTypes (class in scripts.core.constants)</a>
 </li>
@@ -740,8 +724,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette">Palette (class in scripts.ui_elements.palette)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.palette">palette (scripts.ui_elements.message_log.MessageLog attribute)</a>
-</li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.EntityInfoPalette">Palette.EntityInfoPalette (class in scripts.ui_elements.palette)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.EntityQueuePalette">Palette.EntityQueuePalette (class in scripts.ui_elements.palette)</a>
@@ -758,15 +740,13 @@
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel">Panel (class in scripts.ui_elements.templates.panel)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.parse_message_and_convert_to_surface">parse_message_and_convert_to_surface() (scripts.ui_elements.message_log.MessageLog method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.pay_resource_cost">pay_resource_cost() (scripts.managers.world_methods.skill_methods.SkillMethods static method)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.colours.Colour.primary">primary (scripts.ui_elements.colours.Colour attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.PrimaryStatTypes">PrimaryStatTypes (class in scripts.core.constants)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.process_message_command">process_message_command() (scripts.ui_elements.message_log.MessageLog method)</a>
+      <li><a href="event_handlers.html#scripts.event_handlers.pub_sub_hub.Publisher">Publisher (class in scripts.event_handlers.pub_sub_hub)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -842,12 +822,12 @@
 </li>
       <li><a href="ui_elements.html#module-scripts.ui_elements.templates.skill_container">scripts.ui_elements.templates.skill_container (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="world.html#module-scripts.world.entity">scripts.world.entity (module)</a>
 </li>
       <li><a href="world.html#module-scripts.world.game_map">scripts.world.game_map (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="world.html#module-scripts.world.terrain.floor">scripts.world.terrain.floor (module)</a>
 </li>
       <li><a href="world.html#module-scripts.world.terrain.terrain">scripts.world.terrain.terrain (module)</a>
@@ -864,23 +844,9 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.set_entity_on_tile">set_entity_on_tile() (scripts.managers.world_methods.map_methods.MapMethods static method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.set_player_fov_state">set_player_fov_state() (scripts.managers.world_methods.fov_methods.FOVMethods method)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.entity_info.SelectedEntityInfo.set_selected_entity">set_selected_entity() (scripts.ui_elements.entity_info.SelectedEntityInfo method)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_selected_tile">set_selected_tile() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_skill_being_targeted">set_skill_being_targeted() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.set_terrain_on_tile">set_terrain_on_tile() (scripts.managers.world_methods.map_methods.MapMethods static method)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.entity_info.SelectedEntityInfo.set_visibility">set_visibility() (scripts.ui_elements.entity_info.SelectedEntityInfo method)</a>
-
-      <ul>
-        <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.set_visibility">(scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
-</li>
-      </ul></li>
-      <li><a href="world.html#scripts.world.entity.Entity.sight_range">sight_range (scripts.world.entity.Entity attribute)</a>
+      <li><a href="world.html#scripts.world.entity.Entity.sight_range">sight_range() (scripts.world.entity.Entity property)</a>
 </li>
       <li><a href="skills.html#scripts.skills.skill.Skill">Skill (class in scripts.skills.skill)</a>
 </li>
@@ -900,6 +866,8 @@
 </li>
       <li><a href="core.html#scripts.core.constants.StatTypes">StatTypes (class in scripts.core.constants)</a>
 </li>
+      <li><a href="event_handlers.html#scripts.event_handlers.pub_sub_hub.Subscriber">Subscriber (class in scripts.event_handlers.pub_sub_hub)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -918,12 +886,10 @@
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.MessageLogPalette.text_default">text_default (scripts.ui_elements.palette.Palette.MessageLogPalette attribute)</a>
 </li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.text_wrap_message">text_wrap_message() (scripts.ui_elements.message_log.MessageLog method)</a>
+      <li><a href="world.html#scripts.world.tile.Tile">Tile (class in scripts.world.tile)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="world.html#scripts.world.tile.Tile">Tile (class in scripts.world.tile)</a>
-</li>
       <li><a href="managers.html#scripts.managers.world_methods.map_methods.MapMethods.tile_has_tag">tile_has_tag() (scripts.managers.world_methods.map_methods.MapMethods static method)</a>
 </li>
       <li><a href="ui_elements.html#scripts.ui_elements.palette.Palette.MessageLogPalette.tooltip_background">tooltip_background (scripts.ui_elements.palette.Palette.MessageLogPalette attribute)</a>
@@ -944,19 +910,13 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="core.html#scripts.core.constants.UIElementTypes">UIElementTypes (class in scripts.core.constants)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.UIEventTypes">UIEventTypes (class in scripts.core.constants)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.message_log.MessageLog.update">update() (scripts.ui_elements.message_log.MessageLog method)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.skill_bar.SkillBar.update_skill_icons_to_show">update_skill_icons_to_show() (scripts.ui_elements.skill_bar.SkillBar method)</a>
-</li>
-      <li><a href="managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.update_tile_visibility">update_tile_visibility() (scripts.managers.world_methods.fov_methods.FOVMethods method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_range_and_fov">update_tiles_in_range_and_fov() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
-</li>
-      <li><a href="ui_elements.html#scripts.ui_elements.targeting_overlay.TargetingOverlay.update_tiles_in_skill_effect_range">update_tiles_in_skill_effect_range() (scripts.ui_elements.targeting_overlay.TargetingOverlay method)</a>
+      <li><a href="managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.update_tile_visibility">update_tile_visibility() (scripts.managers.world_methods.fov_methods.FOVMethods method)</a>
 </li>
       <li><a href="skills.html#scripts.skills.skill.Skill.use">use() (scripts.skills.skill.Skill method)</a>
 </li>
@@ -991,11 +951,15 @@
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.x">x (scripts.ui_elements.templates.panel.Panel attribute)</a>
 
       <ul>
-        <li><a href="world.html#scripts.world.entity.Entity.x">(scripts.world.entity.Entity attribute)</a>
-</li>
-        <li><a href="world.html#scripts.world.terrain.terrain.Terrain.x">(scripts.world.terrain.terrain.Terrain attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.tile.Tile.x">(scripts.world.tile.Tile attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="world.html#scripts.world.entity.Entity.x">x() (scripts.world.entity.Entity property)</a>
+
+      <ul>
+        <li><a href="world.html#scripts.world.terrain.terrain.Terrain.x">(scripts.world.terrain.terrain.Terrain property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1007,11 +971,15 @@
       <li><a href="ui_elements.html#scripts.ui_elements.templates.panel.Panel.y">y (scripts.ui_elements.templates.panel.Panel attribute)</a>
 
       <ul>
-        <li><a href="world.html#scripts.world.entity.Entity.y">(scripts.world.entity.Entity attribute)</a>
-</li>
-        <li><a href="world.html#scripts.world.terrain.terrain.Terrain.y">(scripts.world.terrain.terrain.Terrain attribute)</a>
-</li>
         <li><a href="world.html#scripts.world.tile.Tile.y">(scripts.world.tile.Tile attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="world.html#scripts.world.entity.Entity.y">y() (scripts.world.entity.Entity property)</a>
+
+      <ul>
+        <li><a href="world.html#scripts.world.terrain.terrain.Terrain.y">(scripts.world.terrain.terrain.Terrain property)</a>
 </li>
       </ul></li>
   </ul></td>

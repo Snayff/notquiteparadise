@@ -171,22 +171,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">palette</span> <span class="o">=</span> <span class="n">Palette</span><span class="p">()</span><span class="o">.</span><span class="n">entity_info</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">()</span><span class="o">.</span><span class="n">default</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">font_size</span> <span class="o">=</span> <span class="n">Font</span><span class="p">()</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">font_size</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># panel info</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">Palette</span><span class="p">()</span><span class="o">.</span><span class="n">entity_info</span>
         <span class="n">panel_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_WIDTH</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">panel_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">panel_x</span> <span class="o">=</span> <span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_WIDTH</span> <span class="o">-</span> <span class="n">panel_width</span>
         <span class="n">panel_y</span> <span class="o">=</span> <span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_HEIGHT</span> <span class="o">-</span> <span class="n">panel_height</span>
         <span class="n">panel_border</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">panel_background_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">background</span>
-        <span class="n">panel_border_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">border</span>
+        <span class="n">panel_background_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">background</span>
+        <span class="n">panel_border_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">border</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">panel_x</span><span class="p">,</span> <span class="n">panel_y</span><span class="p">,</span> <span class="n">panel_width</span><span class="p">,</span> <span class="n">panel_height</span><span class="p">,</span> <span class="n">panel_background_colour</span><span class="p">,</span> <span class="n">panel_border</span><span class="p">,</span>
                            <span class="n">panel_border_colour</span><span class="p">)</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;EntityInfo initialised.&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;EntityInfo initialised.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SelectedEntityInfo.draw"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.entity_info.SelectedEntityInfo.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -196,159 +197,140 @@
 <span class="sd">            surface (Surface): Surface to draw to</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># entity info</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span>
-        <span class="n">icon</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">icon</span>
-
-        <span class="c1"># formatting info</span>
-        <span class="n">panel_centre_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">icon_width</span><span class="p">,</span> <span class="n">icon_height</span> <span class="o">=</span> <span class="n">icon</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span><span class="o">.</span><span class="n">size</span>
-        <span class="n">half_icon_width</span> <span class="o">=</span> <span class="n">icon_width</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">half_icon_height</span> <span class="o">=</span> <span class="n">icon_height</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">icon_x</span> <span class="o">=</span> <span class="n">panel_centre_x</span> <span class="o">-</span> <span class="n">half_icon_width</span>
-        <span class="n">icon_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-</span> <span class="n">half_icon_height</span>
-        <span class="n">column_one_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">16</span>
-        <span class="n">column_two_x</span> <span class="o">=</span> <span class="n">panel_centre_x</span> <span class="o">+</span> <span class="n">column_one_x</span>
-        <span class="n">header_x</span> <span class="o">=</span> <span class="n">icon_x</span>
-        <span class="n">header_y</span> <span class="o">=</span> <span class="n">icon_y</span> <span class="o">+</span> <span class="n">icon_height</span>
-        <span class="n">font_colour</span> <span class="o">=</span> <span class="n">Colour</span><span class="p">()</span><span class="o">.</span><span class="n">white</span>
-        <span class="n">panel_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span>
-        <span class="n">first_section_text</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">second_section_column_one_text</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">second_section_column_two_text</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">header_text</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">font</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span>
-        <span class="n">font_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">size</span>
-
-        <span class="c1"># what messages do we want to show?</span>
-        <span class="c1"># TODO - move content out of draw</span>
-        <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{entity.name.capitalize()}&quot;</span><span class="p">)</span>
-        <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Current Health: </span><span class="si">{entity.combatant.hp}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Current Stamina: </span><span class="si">{entity.combatant.stamina}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;PRIMARY&quot;</span><span class="p">)</span>
-
-        <span class="n">p_stats</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">primary_stats</span>
-
-        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">PrimaryStatTypes</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p_stats</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-
-                <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="k">pass</span>
-
-        <span class="n">second_section_text_header</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;SECONDARY&quot;</span>
-
-        <span class="n">s_stats</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span>
-        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">SecondaryStatTypes</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">s_stats</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">counter</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-
-            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="k">pass</span>
-
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-        <span class="n">afflictions</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Affliction</span><span class="o">.</span><span class="n">get_afflictions_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">affliction_info</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="p">:</span>
-            <span class="n">affliction_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">duration</span><span class="p">))</span>
-        <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Afflicted by: </span><span class="si">{affliction_info}</span><span class="s2">&quot;</span><span class="p">)</span>
-
         <span class="c1"># panel background</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">draw_background</span><span class="p">()</span>
 
-        <span class="c1"># render the entity`s icon</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="p">(</span><span class="n">icon_x</span><span class="p">,</span> <span class="n">icon_y</span><span class="p">))</span>
+        <span class="c1"># entity info</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">:</span>
+            <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span>
+            <span class="n">icon</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">icon</span>
 
-        <span class="c1"># render header</span>
-        <span class="n">adjusted_y</span> <span class="o">=</span> <span class="n">header_y</span>
-        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">header_text</span><span class="p">:</span>
-            <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">header_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
-            <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+            <span class="c1"># formatting info</span>
+            <span class="n">panel_centre_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">icon_width</span><span class="p">,</span> <span class="n">icon_height</span> <span class="o">=</span> <span class="n">icon</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">half_icon_width</span> <span class="o">=</span> <span class="n">icon_width</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">half_icon_height</span> <span class="o">=</span> <span class="n">icon_height</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">icon_x</span> <span class="o">=</span> <span class="n">panel_centre_x</span> <span class="o">-</span> <span class="n">half_icon_width</span>
+            <span class="n">icon_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span> <span class="o">-</span> <span class="n">half_icon_height</span>
+            <span class="n">column_one_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">16</span>
+            <span class="n">column_two_x</span> <span class="o">=</span> <span class="n">panel_centre_x</span> <span class="o">+</span> <span class="n">column_one_x</span>
+            <span class="n">header_x</span> <span class="o">=</span> <span class="n">icon_x</span>
+            <span class="n">header_y</span> <span class="o">=</span> <span class="n">icon_y</span> <span class="o">+</span> <span class="n">icon_height</span>
+            <span class="n">font_colour</span> <span class="o">=</span> <span class="n">Colour</span><span class="p">()</span><span class="o">.</span><span class="n">white</span>
+            <span class="n">panel_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span>
+            <span class="n">first_section_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">second_section_column_one_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">second_section_column_two_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">header_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
+            <span class="n">font</span> <span class="o">=</span> <span class="n">ui_manager</span><span class="o">.</span><span class="n">Font</span><span class="o">.</span><span class="n">default</span>
+            <span class="n">font_size</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">size</span>
 
-        <span class="c1"># render the first section</span>
-        <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
-        <span class="n">current_column</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># header of section</span>
-        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">first_section_text</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">current_column</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># what messages do we want to show?</span>
+            <span class="c1"># TODO - move content out of draw</span>
+            <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{entity.name.capitalize()}&quot;</span><span class="p">)</span>
+            <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Current Health: </span><span class="si">{entity.combatant.hp}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">header_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Current Stamina: </span><span class="si">{entity.combatant.stamina}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;PRIMARY&quot;</span><span class="p">)</span>
+
+            <span class="n">p_stats</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">primary_stats</span>
+
+            <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">PrimaryStatTypes</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p_stats</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+                    <span class="n">first_section_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># in case it fails to pull expected attribute</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="n">second_section_text_header</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;SECONDARY&quot;</span>
+
+            <span class="n">s_stats</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">SecondaryStatTypes</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">s_stats</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">counter</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">second_section_column_two_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">: </span><span class="si">{stat_value}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
+            <span class="n">afflictions</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Affliction</span><span class="o">.</span><span class="n">get_afflictions_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="n">affliction_info</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="p">:</span>
+                <span class="n">affliction_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">affliction</span><span class="o">.</span><span class="n">duration</span><span class="p">))</span>
+            <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">second_section_column_one_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Afflicted by: </span><span class="si">{affliction_info}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># render the entity`s icon</span>
+            <span class="n">panel_surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="p">(</span><span class="n">icon_x</span><span class="p">,</span> <span class="n">icon_y</span><span class="p">))</span>
+
+            <span class="c1"># render header</span>
+            <span class="n">adjusted_y</span> <span class="o">=</span> <span class="n">header_y</span>
+            <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">header_text</span><span class="p">:</span>
                 <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">header_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
-                <span class="n">current_column</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="c1"># just added header so increment y</span>
                 <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
-            <span class="k">elif</span> <span class="n">current_column</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="c1"># render the first section</span>
+            <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+            <span class="n">current_column</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># header of section</span>
+            <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">first_section_text</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">current_column</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">header_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
+                    <span class="n">current_column</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="c1"># just added header so increment y</span>
+                    <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+                <span class="k">elif</span> <span class="n">current_column</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">column_one_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
+                    <span class="n">current_column</span> <span class="o">=</span> <span class="mi">2</span>
+                    <span class="c1"># N.B. just moving column so don&#39;t increment y</span>
+                <span class="k">elif</span> <span class="n">current_column</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">column_two_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
+                    <span class="n">current_column</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="c1"># now in second column so adjust y</span>
+                    <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+
+            <span class="c1"># render the second section</span>
+            <span class="c1"># render the header</span>
+            <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+            <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">header_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">second_section_text_header</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
+            <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+
+            <span class="n">second_main_row_y</span> <span class="o">=</span> <span class="n">adjusted_y</span> <span class="o">+</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+
+            <span class="c1"># render the first column of the second section</span>
+            <span class="n">adjusted_y</span> <span class="o">=</span> <span class="n">second_main_row_y</span>
+            <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">second_section_column_one_text</span><span class="p">:</span>
                 <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">column_one_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
-                <span class="n">current_column</span> <span class="o">=</span> <span class="mi">2</span>
-                <span class="c1"># N.B. just moving column so don&#39;t increment y</span>
-            <span class="k">elif</span> <span class="n">current_column</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">column_two_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
-                <span class="n">current_column</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="c1"># now in second column so adjust y</span>
                 <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
 
-        <span class="c1"># render the second section</span>
-        <span class="c1"># render the header</span>
-        <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
-        <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">header_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">second_section_text_header</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
-        <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
-
-        <span class="n">second_main_row_y</span> <span class="o">=</span> <span class="n">adjusted_y</span> <span class="o">+</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
-
-        <span class="c1"># render the first column of the second section</span>
-        <span class="n">adjusted_y</span> <span class="o">=</span> <span class="n">second_main_row_y</span>
-        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">second_section_column_one_text</span><span class="p">:</span>
-            <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">column_one_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
-            <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
-
-        <span class="c1"># render the second column of the second section</span>
-        <span class="n">adjusted_y</span> <span class="o">=</span> <span class="n">second_main_row_y</span>
-        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">second_section_column_two_text</span><span class="p">:</span>
-            <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">column_two_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
-            <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
+            <span class="c1"># render the second column of the second section</span>
+            <span class="n">adjusted_y</span> <span class="o">=</span> <span class="n">second_main_row_y</span>
+            <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">second_section_column_two_text</span><span class="p">:</span>
+                <span class="n">font</span><span class="o">.</span><span class="n">render_to</span><span class="p">(</span><span class="n">panel_surface</span><span class="p">,</span> <span class="p">(</span><span class="n">column_two_x</span><span class="p">,</span> <span class="n">adjusted_y</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">font_colour</span><span class="p">)</span>
+                <span class="n">adjusted_y</span> <span class="o">+=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span>
 
         <span class="c1"># panel border</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">draw_border</span><span class="p">()</span>
 
         <span class="c1"># draw all to provided surface</span>
-        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
+        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div></div>
 
-<div class="viewcode-block" id="SelectedEntityInfo.set_selected_entity"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.entity_info.SelectedEntityInfo.set_selected_entity">[docs]</a>    <span class="k">def</span> <span class="nf">set_selected_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the selected entity  and make panel visible</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            entity(tuple): x y position of tile in game map</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span> <span class="o">=</span> <span class="n">entity</span>
-        <span class="k">if</span> <span class="n">entity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_visibility</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_visibility</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SelectedEntityInfo.set_visibility"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.entity_info.SelectedEntityInfo.set_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">set_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visible</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the visibility of the selected entity info</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            visible (bool): Visible or not</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
-        <span class="n">ui_manager</span><span class="o">.</span><span class="n">update_panel_visibility</span><span class="p">(</span><span class="s2">&quot;entity_info&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">visible</span><span class="p">)</span></div></div>
 
 </pre></div>
 

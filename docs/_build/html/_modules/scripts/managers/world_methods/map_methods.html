@@ -162,7 +162,7 @@
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
 <span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
 
 
@@ -177,7 +177,7 @@
         <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
 
-<div class="viewcode-block" id="MapMethods.get_game_map"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">get_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MapMethods.get_game_map"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">get_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameMap</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get current game_map</span>
 
@@ -256,7 +256,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_x</span> <span class="o">&lt;=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_y</span> <span class="o">&lt;=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
@@ -279,10 +279,11 @@
 <div class="viewcode-block" id="MapMethods.get_tiles"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tiles">[docs]</a>    <span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_tile_x</span><span class="p">,</span> <span class="n">start_tile_y</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get multiple tiles based on starting position and coordinates given</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            start_tile_x (int):</span>
 <span class="sd">            start_tile_y (int):</span>
-<span class="sd">            coords (list): List of tuples holding x y. E.g. (x, y)</span>
+<span class="sd">            coords (list[Tuple]): List of tuples holding x y. E.g. (x, y)</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[Tile]:</span>

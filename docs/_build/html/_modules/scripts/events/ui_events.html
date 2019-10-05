@@ -171,7 +171,7 @@
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">UIEventTypes</span><span class="o">.</span><span class="n">CLICK_UI</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">UI</span><span class="p">)</span>
 
         <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
-        <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">ui_manager</span><span class="o">.</span><span class="n">get_scaled_mouse_pos</span><span class="p">()</span>
+        <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">ui_manager</span><span class="o">.</span><span class="n">Mouse</span><span class="o">.</span><span class="n">get_scaled_mouse_pos</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mouse_x</span> <span class="o">=</span> <span class="n">mouse_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mouse_y</span> <span class="o">=</span> <span class="n">mouse_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">button_pressed</span> <span class="o">=</span> <span class="n">button_pressed</span></div>

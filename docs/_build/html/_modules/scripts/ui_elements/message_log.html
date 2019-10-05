@@ -172,27 +172,20 @@
 <span class="sd">    Store messages, and related functionality, to be shown in the message log.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        palette (Palette): Palette of Colours</span>
 <span class="sd">        message_list (List(Tuple(MessageEventTypes, string))):  list of messages and their type</span>
-<span class="sd">        message_type_to_show  (MessageEventTypes): Type of message to show in log</span>
-<span class="sd">        expressions  (Dict): Dictionary of expressions to look for and their colour to show.</span>
 <span class="sd">        icons (Dict): Dictionary of icons to look for and the icon to show.</span>
-<span class="sd">        hyperlinks (Dict): Dictionary of hyperlinks to look for and the linked info to show.</span>
-<span class="sd">        is_dirty</span>
-<span class="sd">        displayed_hyperlinks</span>
-<span class="sd">        index_of_active_hyperlink</span>
+<span class="sd">        is_dirty (bool): flag indicating need to draw</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># log setup</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">()</span><span class="o">.</span><span class="n">message_log</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span> <span class="o">=</span> <span class="n">Colour</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">palette</span> <span class="o">=</span> <span class="n">Palette</span><span class="p">()</span><span class="o">.</span><span class="n">message_log</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">messages_to_draw</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialise_keywords</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">icons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialise_icons</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">icons</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># panel info</span>
         <span class="n">panel_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_WIDTH</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span>
@@ -200,43 +193,24 @@
         <span class="n">panel_x</span> <span class="o">=</span> <span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_WIDTH</span> <span class="o">-</span> <span class="n">panel_width</span>
         <span class="n">panel_y</span> <span class="o">=</span> <span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_HEIGHT</span> <span class="o">-</span> <span class="n">panel_height</span>
         <span class="n">panel_border</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">panel_background_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">background</span>
-        <span class="n">panel_border_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">border</span>
+
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">ui_manager</span><span class="o">.</span><span class="n">Palette</span><span class="o">.</span><span class="n">message_log</span>
+        <span class="n">panel_background_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">background</span>
+        <span class="n">panel_border_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">border</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">panel_x</span><span class="p">,</span> <span class="n">panel_y</span><span class="p">,</span> <span class="n">panel_width</span><span class="p">,</span> <span class="n">panel_height</span><span class="p">,</span> <span class="n">panel_background_colour</span><span class="p">,</span> <span class="n">panel_border</span><span class="p">,</span>
                            <span class="n">panel_border_colour</span><span class="p">)</span>
-
-        <span class="c1"># set panel to be rendered</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
-        <span class="n">ui_manager</span><span class="o">.</span><span class="n">update_panel_visibility</span><span class="p">(</span><span class="s2">&quot;message_log&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># log info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">edge_size</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_indent</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">font_size</span> <span class="o">=</span> <span class="n">Font</span><span class="p">()</span><span class="o">.</span><span class="n">message_log</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">font_size</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">first_message_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_messages_to_show</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">panel_height</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_size</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_messages_to_show</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">panel_height</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_size</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">font_size</span> <span class="o">+</span>
                                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">gap_between_lines</span><span class="p">))</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;MessageLog initialised.&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="MessageLog.update"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Update the message log, ensuring correct messages are shown</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">:</span>
-            <span class="c1"># update first message index</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_messages_to_show</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">first_message_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_list</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_messages_to_show</span>
-
-            <span class="c1"># clear messages to draw</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">messages_to_draw</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-
-            <span class="c1"># update message to draw</span>
-            <span class="n">messages_to_show</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_messages_to_show</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_list</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">counter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">messages_to_show</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">messages_to_draw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_list</span><span class="p">[</span><span class="n">counter</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_message_index</span><span class="p">])</span></div>
-
-            <span class="c1"># TODO - register / unregister tooltips</span>
 
 <div class="viewcode-block" id="MessageLog.draw"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -253,7 +227,8 @@
         <span class="c1"># init info for message render</span>
         <span class="n">msg_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_indent</span>
         <span class="n">msg_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_size</span>
-        <span class="n">font</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span>
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
+        <span class="n">font</span> <span class="o">=</span> <span class="n">ui_manager</span><span class="o">.</span><span class="n">Font</span><span class="o">.</span><span class="n">message_log</span>
         <span class="n">font_size</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">size</span>
         <span class="n">line_count</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -276,249 +251,8 @@
 
         <span class="c1"># panel border</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">draw_border</span><span class="p">()</span>
-        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
+        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div></div>
 
-<div class="viewcode-block" id="MessageLog.add_message"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.add_message">[docs]</a>    <span class="k">def</span> <span class="nf">add_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message_type</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add a message to the message log</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            message_type (MessageEventTypes):</span>
-<span class="sd">            message (str):</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO - remove message_type</span>
-
-        <span class="c1"># text wrap message</span>
-        <span class="n">wrapped_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_wrap_message</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-
-        <span class="c1"># parse message</span>
-        <span class="n">parsed_message_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_message_and_convert_to_surface</span><span class="p">(</span><span class="n">wrapped_message</span><span class="p">)</span>
-
-        <span class="c1"># add each line to the main message list</span>
-        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">parsed_message_list</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">message_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-
-        <span class="c1"># flag need to update</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_dirty</span> <span class="o">=</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="MessageLog.text_wrap_message"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.text_wrap_message">[docs]</a>    <span class="k">def</span> <span class="nf">text_wrap_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Break a message into lines based on panel width</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            message (str): message to wrap</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            list: list of wrapped lines</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">font</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span>
-        <span class="n">words</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-        <span class="n">line_break</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="se">\n</span><span class="s2"> &quot;</span>
-        <span class="n">max_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message_indent</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># *2 to offer border on each side</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">wrapped_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-        <span class="c1"># check size of each word and if it extends past total width</span>
-        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
-            <span class="c1"># add space back to the word</span>
-            <span class="n">word</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
-
-            <span class="c1"># if next word is a command then don&#39;t add it to calculations</span>
-            <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;#&quot;</span><span class="p">:</span>
-                <span class="c1"># get size</span>
-                <span class="n">word_surface</span><span class="p">,</span> <span class="n">world_rect</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_default</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
-                <span class="n">word_width</span><span class="p">,</span> <span class="n">word_height</span> <span class="o">=</span> <span class="n">word_surface</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
-
-                <span class="c1"># if word will run outside of size insert a break</span>
-                <span class="k">if</span> <span class="n">x</span> <span class="o">+</span> <span class="n">word_width</span> <span class="o">&gt;=</span> <span class="n">max_width</span><span class="p">:</span>
-                    <span class="c1"># start counting new line width</span>
-                    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-                    <span class="n">wrapped_text</span> <span class="o">+=</span> <span class="n">line_break</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">word_width</span> <span class="o">=</span> <span class="mi">0</span>
-
-            <span class="c1"># add current word to new string</span>
-            <span class="n">wrapped_text</span> <span class="o">+=</span> <span class="n">word</span>
-            <span class="n">x</span> <span class="o">+=</span> <span class="n">word_width</span>
-
-        <span class="k">return</span> <span class="n">wrapped_text</span></div>
-
-<div class="viewcode-block" id="MessageLog.parse_message_and_convert_to_surface"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.parse_message_and_convert_to_surface">[docs]</a>    <span class="k">def</span> <span class="nf">parse_message_and_convert_to_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check for keywords and commands and apply effects as required.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            message ():</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            List[List[pygame.Surface]] : A list (one per line) containing lists of surfaces for each set of words</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">parsed_message_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># check for new lines</span>
-        <span class="n">message_list</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="c1"># now we have a list of strings, one string per line</span>
-        <span class="k">for</span> <span class="n">line_count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">message_list</span><span class="p">)):</span>
-            <span class="n">line_list</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">outstanding_word_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-            <span class="c1"># get the line to work on</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">message_list</span><span class="p">[</span><span class="n">line_count</span><span class="p">]</span>
-
-            <span class="c1"># break line into words</span>
-            <span class="n">word_list</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-            <span class="n">processed_indices</span> <span class="o">=</span> <span class="p">[]</span>
-
-            <span class="c1"># check each word in the line</span>
-            <span class="k">for</span> <span class="n">word_count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word_list</span><span class="p">)):</span>
-                <span class="n">word</span> <span class="o">=</span> <span class="n">word_list</span><span class="p">[</span><span class="n">word_count</span><span class="p">]</span>
-
-                <span class="c1"># check index hasn&#39;t been processed already (commands look forward...)</span>
-                <span class="k">if</span> <span class="n">word_count</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">processed_indices</span><span class="p">:</span>
-
-                    <span class="c1"># check for COMMANDS</span>
-                    <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;#&quot;</span><span class="p">:</span>
-
-                        <span class="c1"># if any words waiting to be converted to a surface then do so</span>
-                        <span class="k">if</span> <span class="n">outstanding_word_string</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                            <span class="n">text_surface</span><span class="p">,</span> <span class="n">text_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">outstanding_word_string</span><span class="p">,</span>
-                                                                       <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_default</span><span class="p">)</span>
-                            <span class="n">line_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_surface</span><span class="p">)</span>
-
-                            <span class="c1"># we&#39;ve used the outstanding word so clear it</span>
-                            <span class="n">outstanding_word_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-                        <span class="c1"># check there is a word to process after the command</span>
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">word_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="c1"># process the command</span>
-                            <span class="n">command</span> <span class="o">=</span> <span class="n">word</span>
-                            <span class="c1"># get the next word (the one to process) and remove from the list</span>
-                            <span class="n">word_to_process</span> <span class="o">=</span> <span class="n">word_list</span><span class="p">[</span><span class="n">word_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                            <span class="n">text_surface</span><span class="p">,</span> <span class="n">text_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_message_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">word_to_process</span><span class="p">)</span>
-                            <span class="n">line_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_surface</span><span class="p">)</span>
-
-                            <span class="c1"># note that the next word has already been processed</span>
-                            <span class="n">processed_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Message log: Command received </span><span class="si">{word}</span><span class="s2"> with no following word.&quot;</span><span class="p">)</span>
-
-                    <span class="c1"># check for KEYWORDS</span>
-                    <span class="k">elif</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">:</span>
-                        <span class="c1"># if any words waiting to be converted to a surface then do so</span>
-                        <span class="k">if</span> <span class="n">outstanding_word_string</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                            <span class="n">text_surface</span><span class="p">,</span> <span class="n">text_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">outstanding_word_string</span><span class="p">,</span>
-                                                                       <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_default</span><span class="p">)</span>
-                            <span class="n">line_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_surface</span><span class="p">)</span>
-
-                            <span class="c1"># we&#39;ve used the outstanding word so clear it</span>
-                            <span class="n">outstanding_word_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-                        <span class="c1"># render the key word</span>
-                        <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-                        <span class="n">text_surface</span><span class="p">,</span> <span class="n">text_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">word</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">colour</span><span class="p">)</span>
-                        <span class="n">line_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_surface</span><span class="p">)</span>
-
-                    <span class="c1"># handle NORMAL WORDS</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">outstanding_word_string</span> <span class="o">+=</span> <span class="n">word</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
-
-            <span class="c1"># handle any remaining word</span>
-            <span class="k">if</span> <span class="n">outstanding_word_string</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">text_surface</span><span class="p">,</span> <span class="n">text_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">outstanding_word_string</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_default</span><span class="p">)</span>
-                <span class="n">line_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_surface</span><span class="p">)</span>
-
-            <span class="c1"># add the line_list (of surfaces) to the parsed message list</span>
-            <span class="n">parsed_message_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_list</span><span class="p">)</span>
-
-        <span class="c1"># return the parsed message list (a list, of lists, of surfaces)</span>
-        <span class="k">return</span> <span class="n">parsed_message_list</span></div>
-
-<div class="viewcode-block" id="MessageLog.process_message_command"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.process_message_command">[docs]</a>    <span class="k">def</span> <span class="nf">process_message_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">word_to_affect</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Process text formatting commands</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            command (str): The command dictating the change. In format of #prefix.suffix</span>
-<span class="sd">            word_to_affect (str): The word that will be changed by the command</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Tuple(pygame.Surface, pygame.Rect): tuple of surface then rect</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># remove the hash from the string</span>
-        <span class="n">cleaned_command</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-        <span class="c1"># split command prefix</span>
-        <span class="n">command_prefix</span><span class="p">,</span> <span class="n">command_suffix</span> <span class="o">=</span> <span class="n">cleaned_command</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># check which command to execute</span>
-        <span class="c1"># COLOUR CHANGE</span>
-        <span class="k">if</span> <span class="n">command_prefix</span> <span class="o">==</span> <span class="s2">&quot;col&quot;</span><span class="p">:</span>
-            <span class="c1"># get the colour to apply to the text</span>
-            <span class="k">if</span> <span class="n">command_suffix</span> <span class="o">==</span> <span class="s2">&quot;negative&quot;</span><span class="p">:</span>
-                <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_negative</span>
-            <span class="k">elif</span> <span class="n">command_suffix</span> <span class="o">==</span> <span class="s2">&quot;positive&quot;</span><span class="p">:</span>
-                <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_positive</span>
-            <span class="k">elif</span> <span class="n">command_suffix</span> <span class="o">==</span> <span class="s2">&quot;info&quot;</span><span class="p">:</span>
-                <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_info</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_default</span>
-
-                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Process message command: </span><span class="si">{cleaned_command}</span><span class="s2"> Suffix not understood.&quot;</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
-
-            <span class="c1"># create the surface</span>
-            <span class="n">new_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">word_to_affect</span><span class="p">,</span> <span class="n">colour</span><span class="p">)</span>
-
-        <span class="c1"># REPLACE WORD WITH AN ICON</span>
-        <span class="k">elif</span> <span class="n">command_prefix</span> <span class="o">==</span> <span class="s2">&quot;ico&quot;</span><span class="p">:</span>
-            <span class="n">icon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">icons</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">command_suffix</span><span class="p">)</span>
-
-            <span class="c1"># catch any images not resized and resize them</span>
-            <span class="c1"># TODO - remove magic numbers</span>
-            <span class="k">if</span> <span class="n">icon</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">):</span>
-                <span class="kn">import</span> <span class="nn">pygame</span>
-                <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
-
-            <span class="c1"># return is expecting surface, rect</span>
-            <span class="n">new_surface</span> <span class="o">=</span> <span class="n">icon</span><span class="p">,</span> <span class="n">icon</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
-
-        <span class="c1"># catch all; render as default</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">new_surface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">word_to_affect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">text_default</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">new_surface</span></div>
-
-<div class="viewcode-block" id="MessageLog.initialise_keywords"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.initialise_keywords">[docs]</a>    <span class="k">def</span> <span class="nf">initialise_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialise the keywords for highlighting in the message log</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Dict[str, Tuple[int, int, int]]: keyword: colour</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">keywords</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="n">keywords</span><span class="p">[</span><span class="s2">&quot;grazes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">keyword_grazes</span>
-        <span class="n">keywords</span><span class="p">[</span><span class="s2">&quot;crits&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">keyword_crits</span>
-
-        <span class="k">return</span> <span class="n">keywords</span></div>
-
-<div class="viewcode-block" id="MessageLog.initialise_icons"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.message_log.MessageLog.initialise_icons">[docs]</a>    <span class="k">def</span> <span class="nf">initialise_icons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Load the list of icons</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Dict[str, pygame.Surface]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">icons</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="kn">import</span> <span class="nn">pygame</span>
-        <span class="n">icons</span><span class="p">[</span><span class="s2">&quot;info&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/icons/placeholder/book.PNG&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">icons</span></div></div>
 
 </pre></div>
 

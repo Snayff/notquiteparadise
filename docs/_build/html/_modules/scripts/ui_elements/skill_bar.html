@@ -174,10 +174,9 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># setup info</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">()</span><span class="o">.</span><span class="n">skill_bar</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">palette</span> <span class="o">=</span> <span class="n">Palette</span><span class="p">()</span><span class="o">.</span><span class="n">skill_bar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_skills_in_bar</span> <span class="o">=</span> <span class="mi">5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span> <span class="o">=</span> <span class="mi">64</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># panel info</span>
         <span class="n">panel_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">)</span>
@@ -185,8 +184,10 @@
         <span class="n">panel_x</span> <span class="o">=</span> <span class="n">VisualInfo</span><span class="o">.</span><span class="n">BASE_WINDOW_WIDTH</span> <span class="o">-</span> <span class="n">panel_width</span>
         <span class="n">panel_y</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">panel_border</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">panel_background_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">background</span>
-        <span class="n">panel_border_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">border</span>
+        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">ui_manager</span><span class="o">.</span><span class="n">Palette</span><span class="o">.</span><span class="n">skill_bar</span>
+        <span class="n">panel_background_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">background</span>
+        <span class="n">panel_border_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">border</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">panel_x</span><span class="p">,</span> <span class="n">panel_y</span><span class="p">,</span> <span class="n">panel_width</span><span class="p">,</span> <span class="n">panel_height</span><span class="p">,</span> <span class="n">panel_background_colour</span><span class="p">,</span> <span class="n">panel_border</span><span class="p">,</span>
                            <span class="n">panel_border_colour</span><span class="p">)</span>
 
@@ -198,8 +199,8 @@
                                            <span class="bp">self</span><span class="o">.</span><span class="n">max_skills_in_bar</span><span class="p">)</span>
 
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span>
-        <span class="n">bg_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">background</span>
-        <span class="n">bor_colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">skill_border</span>
+        <span class="n">bg_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">background</span>
+        <span class="n">bor_colour</span> <span class="o">=</span> <span class="n">palette</span><span class="o">.</span><span class="n">skill_border</span>
         <span class="n">bor_size</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">skill_number</span> <span class="o">=</span> <span class="mi">1</span>
 
@@ -214,10 +215,6 @@
 
             <span class="c1"># increment counter</span>
             <span class="n">skill_number</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="c1"># set self to be rendered</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">ui_manager</span>
-        <span class="n">ui_manager</span><span class="o">.</span><span class="n">update_panel_visibility</span><span class="p">(</span><span class="s2">&quot;skill_bar&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;SkillBar initialised.&quot;</span><span class="p">)</span>
 
@@ -246,52 +243,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">draw_border</span><span class="p">()</span>
 
         <span class="c1"># draw everything to the passed in surface</span>
-        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
+        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div></div>
 
-<div class="viewcode-block" id="SkillBar.update_skill_icons_to_show"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.skill_bar.SkillBar.update_skill_icons_to_show">[docs]</a>    <span class="k">def</span> <span class="nf">update_skill_icons_to_show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the player`s known skills to show in the skill bar.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># update info</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-        <span class="n">player</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">player</span>
 
-        <span class="c1"># if the player has been init&#39;d update skill bar</span>
-        <span class="k">if</span> <span class="n">player</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">counter</span><span class="p">,</span> <span class="n">skill</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">known_skills</span><span class="p">):</span>
-
-                <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="n">skill_icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/skills/&quot;</span> <span class="o">+</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">icon</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
-
-                <span class="c1"># catch any images not the right size and resize them</span>
-                <span class="k">if</span> <span class="n">skill_icon</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span><span class="p">):</span>
-                    <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">skill_icon</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_icon_size</span><span class="p">))</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">icon</span> <span class="o">=</span> <span class="n">skill_icon</span>
-
-                <span class="bp">self</span><span class="o">.</span><span class="n">skill_containers</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span><span class="o">.</span><span class="n">skill_icon</span> <span class="o">=</span> <span class="n">icon</span></div>
-
-<div class="viewcode-block" id="SkillBar.get_skill_index_from_skill_clicked"><a class="viewcode-back" href="../../../ui_elements.html#scripts.ui_elements.skill_bar.SkillBar.get_skill_index_from_skill_clicked">[docs]</a>    <span class="k">def</span> <span class="nf">get_skill_index_from_skill_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relative_x</span><span class="p">,</span> <span class="n">relative_y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the index of the skill clicked in the skill bar</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            relative_x:</span>
-<span class="sd">            relative_y:</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: -1 if nothing, else 0-4.</span>
-
-<span class="sd">        Notes:</span>
-<span class="sd">            The skills in the skill bar are pulled, in order, from the player`s known skills.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">container</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_containers</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">container</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">relative_x</span><span class="p">,</span> <span class="n">relative_y</span><span class="p">):</span>
-                <span class="n">skill_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_containers</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">container</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">skill_index</span>
-
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div></div>
 </pre></div>
 
 	    </div>
