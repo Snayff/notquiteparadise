@@ -80,10 +80,6 @@ class UiHandler(Subscriber):
                 if game_manager.previous_game_state == GameStates.TARGETING_MODE:
                     ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
 
-
-
-
-
     @staticmethod
     def attempt_to_set_selected_entity(mouse_x, mouse_y):
         """
@@ -184,7 +180,13 @@ class UiHandler(Subscriber):
 
     @staticmethod
     def update_camera(start_pos: Tuple = None, target_pos: Tuple = None):
+        """
+        Update tiles shown in camera.
 
+        Args:
+            start_pos ():
+            target_pos ():
+        """
         if target_pos:
             outcome = ui_manager.Element.should_camera_move(start_pos, target_pos)
             if outcome:

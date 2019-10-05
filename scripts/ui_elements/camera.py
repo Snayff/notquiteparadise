@@ -55,15 +55,13 @@ class Camera:
         """
         Draw the game map on the panel surface
         """
+        # TODO - draw visible only
         tiles = self.tiles_to_draw
-
-        assert self.width * self.height == len(tiles)
 
         y_pos = 0
         x_pos = 0
 
         for x in range(0, len(tiles)):
-            # draw(tiles[x])
             tile = tiles[x]
 
             if y_pos >= self.height:

@@ -282,6 +282,15 @@ class ElementMethods:
         camera.tiles_to_draw = tiles
 
     def is_target_pos_in_camera_edge(self, target_pos: Tuple):
+        """
+        Determine if target position is within the edge of the camera
+
+        Args:
+            target_pos (): x,y
+
+        Returns:
+            bool:
+        """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         player_x, player_y = target_pos
 
@@ -290,19 +299,32 @@ class ElementMethods:
         edge_start_y = camera.y
         edge_end_y = camera.y + camera.height
 
-        if edge_start_x <= player_x <= edge_start_x + camera.edge_size:
+        if edge_start_x <= player_x < edge_start_x + camera.edge_size:
+            print("in left")
             return True
-        elif edge_end_x >= player_x >= edge_end_x - camera.edge_size:
+        elif edge_end_x >= player_x > edge_end_x - camera.edge_size:
+            print("in right")
             return True
-        elif edge_start_y <= player_y <= edge_start_y + camera.edge_size:
+        elif edge_start_y <= player_y < edge_start_y + camera.edge_size:
+            print("in up")
             return True
-        elif edge_end_y >= player_y >= edge_end_y - camera.edge_size:
+        elif edge_end_y >= player_y > edge_end_y - camera.edge_size:
+            print("in down")
             return True
         else:
             return False
 
     def should_camera_move(self, start_pos: Tuple, target_pos: Tuple):
+        """
+        Determine if camera should move based on start and target pos and intersecting the edge of the screen.
 
+        Args:
+            start_pos (): x,y
+            target_pos (): x,y
+
+        Returns:
+            bool:
+        """
         start_x, start_y = start_pos
         target_x, target_y = target_pos
         camera = self.get_ui_element(UIElementTypes.CAMERA)
@@ -320,25 +342,29 @@ class ElementMethods:
 
             # will we still be in the edge after we move?
             if target_pos_in_edge:
-                dir_x = abs(start_x - target_x)
-                dir_y = abs(start_y - target_y)
+                dir_x = target_x - start_x
+                dir_y = target_y - start_y
 
                 # are we moving to a worse position?
-                if edge_start_x <= start_x <= edge_start_x + camera.edge_size:
+                if edge_start_x <= start_x < edge_start_x + camera.edge_size:
                     # player is on the left side, are we moving left?
                     if dir_x < 0:
+                        print("moving left")
                         return True
-                if edge_end_x >= start_x >= edge_end_x - camera.edge_size:
+                if edge_end_x > start_x >= edge_end_x - camera.edge_size:
                     # player is on the right side, are we moving right?
                     if 0 < dir_x:
+                        print("moving right")
                         return True
-                if edge_start_y <= start_y <= edge_start_y + camera.edge_size:
+                if edge_start_y <= start_y < edge_start_y + camera.edge_size:
                     # player is on the up side, are we moving up?
                     if dir_y < 0:
+                        print("moving up")
                         return True
-                if edge_end_y >= start_y >= edge_end_y - camera.edge_size:
+                if edge_end_y > start_y >= edge_end_y - camera.edge_size:
                     # player is on the down side, are we moving down?
                     if 0 < dir_y:
+                        print("moving down")
                         return True
 
         elif target_pos_in_edge:
@@ -349,6 +375,13 @@ class ElementMethods:
             return False
 
     def move_camera(self, move_x, move_y):
+        """
+        Increment camera's drawn tiles in the given direction. N.B. Physical position on screen does not change.
+
+        Args:
+            move_x ():
+            move_y ():
+        """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
         from scripts.global_singletons.managers import world_manager
@@ -359,6 +392,9 @@ class ElementMethods:
         camera.y = max(0, min(camera.y + move_y, game_map.height))
 
     def update_cameras_tiles_to_draw(self):
+        """
+        Retrieve the tiles to draw within view of the camera
+        """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         coords = []
 
@@ -367,6 +403,6 @@ class ElementMethods:
                 coords.append((x, y))
 
         from scripts.global_singletons.managers import world_manager
-        # use 0,0 to stop the camera double jumping
+        # use 0,0 to stop the camera double jumping due to converting back and forth from world and physical space
         tiles = world_manager.Map.get_tiles(0, 0, coords)
         self.set_tiles_in_camera(tiles)

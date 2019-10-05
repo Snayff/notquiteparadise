@@ -99,7 +99,7 @@ class MapMethods:
         """
         game_map = self.get_game_map()
 
-        if (0 <= tile_x <= game_map.width) and (0 <= tile_y <= game_map.height):
+        if (0 <= tile_x < game_map.width) and (0 <= tile_y < game_map.height):
             return True
         else:
             return False
