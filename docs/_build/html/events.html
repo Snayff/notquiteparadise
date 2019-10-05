@@ -161,12 +161,12 @@
 <span id="entity"></span><h2>Entity<a class="headerlink" href="#module-scripts.events.entity_events" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.events.entity_events.DieEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">DieEvent</code><span class="sig-paren">(</span><em class="sig-param">dying_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#DieEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.DieEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">DieEvent</code><span class="sig-paren">(</span><em>dying_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#DieEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.DieEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="class">
 <dt id="scripts.events.entity_events.LearnEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">LearnEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_learn_skill</em>, <em class="sig-param">skill_tree_name</em>, <em class="sig-param">skill_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#LearnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.LearnEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">LearnEvent</code><span class="sig-paren">(</span><em>entity_to_learn_skill</em>, <em>skill_tree_name</em>, <em>skill_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#LearnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.LearnEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event for learning a new skill</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -181,13 +181,13 @@
 
 <dl class="class">
 <dt id="scripts.events.entity_events.MoveEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_move: scripts.world.entity.Entity</em>, <em class="sig-param">start_pos: Tuple</em>, <em class="sig-param">target_pos: Tuple</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">MoveEvent</code><span class="sig-paren">(</span><em>entity_to_move: scripts.world.entity.Entity</em>, <em>start_pos: Tuple</em>, <em>target_pos: Tuple</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event to move an entity as a basic move action</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.events.entity_events.UseSkillEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">UseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_using_skill</em>, <em class="sig-param">target_pos</em>, <em class="sig-param">skill</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">UseSkillEvent</code><span class="sig-paren">(</span><em>entity_using_skill</em>, <em>target_pos</em>, <em>skill</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event for entity skill</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -205,19 +205,19 @@
 <span id="game"></span><h2>Game<a class="headerlink" href="#module-scripts.events.game_events" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.events.game_events.ChangeGameStateEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">ChangeGameStateEvent</code><span class="sig-paren">(</span><em class="sig-param">new_game_state</em>, <em class="sig-param">skill_to_be_used=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/game_events.html#ChangeGameStateEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.ChangeGameStateEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.game_events.</code><code class="descname">ChangeGameStateEvent</code><span class="sig-paren">(</span><em>new_game_state</em>, <em>skill_to_be_used=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/game_events.html#ChangeGameStateEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.ChangeGameStateEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event to change the current game state</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.events.game_events.EndRoundEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">EndRoundEvent</code><a class="reference internal" href="_modules/scripts/events/game_events.html#EndRoundEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.EndRoundEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.game_events.</code><code class="descname">EndRoundEvent</code><a class="reference internal" href="_modules/scripts/events/game_events.html#EndRoundEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.EndRoundEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event to process the end of a round</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.events.game_events.EndTurnEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">EndTurnEvent</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">time_spent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/game_events.html#EndTurnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.EndTurnEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.game_events.</code><code class="descname">EndTurnEvent</code><span class="sig-paren">(</span><em>entity</em>, <em>time_spent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/game_events.html#EndTurnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.EndTurnEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event to end an entities ability to act.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -231,7 +231,7 @@
 
 <dl class="class">
 <dt id="scripts.events.game_events.ExitGameEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">ExitGameEvent</code><a class="reference internal" href="_modules/scripts/events/game_events.html#ExitGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.ExitGameEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.game_events.</code><code class="descname">ExitGameEvent</code><a class="reference internal" href="_modules/scripts/events/game_events.html#ExitGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.ExitGameEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event to exit the game</p>
 </dd></dl>
 
@@ -243,7 +243,7 @@
 <span id="message"></span><h2>Message<a class="headerlink" href="#module-scripts.events.message_events" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.events.message_events.MessageEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.message_events.</code><code class="sig-name descname">MessageEvent</code><span class="sig-paren">(</span><em class="sig-param">event_type</em>, <em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/message_events.html#MessageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.message_events.MessageEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.message_events.</code><code class="descname">MessageEvent</code><span class="sig-paren">(</span><em>event_type</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/message_events.html#MessageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.message_events.MessageEvent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -251,7 +251,7 @@
 <span id="ui"></span><h2>UI<a class="headerlink" href="#module-scripts.events.ui_events" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.events.ui_events.ClickUIEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">ClickUIEvent</code><span class="sig-paren">(</span><em class="sig-param">button_pressed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#ClickUIEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.ClickUIEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.ui_events.</code><code class="descname">ClickUIEvent</code><span class="sig-paren">(</span><em>button_pressed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#ClickUIEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.ClickUIEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event for clicking the UI</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
