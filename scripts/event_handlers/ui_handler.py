@@ -3,7 +3,7 @@ import logging
 from typing import Tuple
 
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, MouseButtons, TILE_SIZE, MessageEventTypes, UIElementTypes
+    UIEventTypes, MouseButtons, TILE_SIZE, MessageEventTypes, UIElements
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
@@ -36,22 +36,22 @@ class UiHandler(Subscriber):
                 game_state = game_manager.game_state
 
                 # Selecting an entity
-                if button == MouseButtons.RIGHT_BUTTON and clicked_element == UIElementTypes.CAMERA:
+                if button == MouseButtons.RIGHT_BUTTON and clicked_element == UIElements.CAMERA:
                     self.attempt_to_set_selected_entity(mouse_x, mouse_y)
 
                 # Selecting a skill
-                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.SKILL_BAR:
+                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElements.SKILL_BAR:
                     self.attempt_to_trigger_targeting_mode(mouse_x, mouse_y)
 
                 # using a selected skill
-                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.CAMERA  and game_state \
+                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElements.CAMERA  and game_state \
                         == GameStates.TARGETING_MODE:
                     self.attempt_to_use_targeted_skill()
 
         if event.topic == EventTopics.ENTITY:
 
             # if an entity acts then hide the entity info element
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
+            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, False)
 
             # update UI based on entity action taken
             if event.event_type == EntityEventTypes.LEARN:
@@ -78,7 +78,7 @@ class UiHandler(Subscriber):
                 # if the previous game state was targeting mode we must be moving to something else, therefore the
                 # overlay is no longer needed
                 if game_manager.previous_game_state == GameStates.TARGETING_MODE:
-                    ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
+                    ui_manager.Element.set_element_visibility(UIElements.TARGETING_OVERLAY, False)
 
     @staticmethod
     def attempt_to_set_selected_entity(mouse_x, mouse_y):
@@ -96,11 +96,11 @@ class UiHandler(Subscriber):
 
         if entity:
             ui_manager.Element.set_selected_entity(entity)
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
-            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
+            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, True)
+            ui_manager.Element.set_element_visibility(UIElements.MESSAGE_LOG, False)
         else:
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
+            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, False)
+            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, True)
 
     @staticmethod
     def attempt_to_trigger_targeting_mode(mouse_x, mouse_y):
@@ -143,7 +143,7 @@ class UiHandler(Subscriber):
         ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
 
         # show the overlay
-        ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
+        ui_manager.Element.set_element_visibility(UIElements.TARGETING_OVERLAY, True)
 
         # show the entity info
         self.trigger_entity_info(tile)
@@ -158,7 +158,7 @@ class UiHandler(Subscriber):
         """
         entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
         ui_manager.Element.set_selected_entity(entity)
-        ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
+        ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, True)
 
     @staticmethod
     def attempt_to_use_targeted_skill():
@@ -203,10 +203,10 @@ class UiHandler(Subscriber):
         Initialise the UI
         """
         # show ui
-        ui_manager.Element.set_element_visibility(UIElementTypes.CAMERA, True)
-        ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
-        ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_QUEUE, True)
-        ui_manager.Element.set_element_visibility(UIElementTypes.SKILL_BAR, True)
+        ui_manager.Element.set_element_visibility(UIElements.CAMERA, True)
+        ui_manager.Element.set_element_visibility(UIElements.MESSAGE_LOG, True)
+        ui_manager.Element.set_element_visibility(UIElements.ENTITY_QUEUE, True)
+        ui_manager.Element.set_element_visibility(UIElements.SKILL_BAR, True)
 
         # update camera
         self.update_camera()

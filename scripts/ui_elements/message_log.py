@@ -58,6 +58,7 @@ class MessageLog:
     def draw(self, surface):
         """
         Draw the message log and all included text and icons
+
         Args:
             surface(Surface): Main surface to draw to.
         """

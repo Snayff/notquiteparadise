@@ -1,7 +1,7 @@
 import logging
 import time
 
-from scripts.core.constants import EventTopics, GameStates, MessageEventTypes, UIElementTypes
+from scripts.core.constants import EventTopics, GameStates, MessageEventTypes, UIElements
 from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler

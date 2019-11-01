@@ -1,6 +1,6 @@
 import logging
 
-from scripts.core.constants import UIElementTypes, ICON_IN_TEXT_SIZE
+from scripts.core.constants import UIElements, ICON_IN_TEXT_SIZE
 from scripts.core.fonts import Font
 
 
@@ -30,7 +30,7 @@ class MessageMethods:
         keywords["grazes"] = palette.keyword_grazes
         keywords["crits"] = palette.keyword_crits
 
-        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+        message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
         message_log.keywords = keywords
 
     def init_icons(self):
@@ -45,7 +45,7 @@ class MessageMethods:
         import pygame
         icons["info"] = pygame.image.load("assets/icons/placeholder/book.PNG").convert_alpha()
 
-        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+        message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
         message_log.icons = icons
 
     def init_commands(self):
@@ -59,7 +59,7 @@ class MessageMethods:
         commands["positive"] = palette.text_positive
         commands["info"] = palette.text_info
 
-        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+        message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
         message_log.commands = commands
 
     def add_message(self, message):
@@ -70,7 +70,7 @@ class MessageMethods:
             message (str):
         """
         try:
-            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+            message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
 
             # text wrap message
             max_width = message_log.panel.width - (message_log.message_indent * 2)  # *2 to offer border on each side
@@ -90,7 +90,7 @@ class MessageMethods:
             message_log.is_dirty = True
 
         except KeyError:
-            logging.debug(f"Tried to set message in MessageLog but key not found.")
+            logging.debug(f"Tried to set message in MessageLog but key not found. Is the MessageLog init'd?")
 
     def line_wrap_message(self, message, font, max_width):
         """
@@ -148,7 +148,7 @@ class MessageMethods:
         Returns:
             list[list[pygame.Surface]] : A list (one per line) containing lists of surfaces for each set of words
         """
-        message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+        message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
         parsed_message_list = []
 
         # check for new lines
@@ -245,7 +245,7 @@ class MessageMethods:
         default_text_colour = self.manager.Palette.message_log.text_default
 
         try:
-            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+            message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
 
             # remove the hash from the string
             cleaned_command = command.replace("#", "")
@@ -299,7 +299,7 @@ class MessageMethods:
         # TODO - register / unregister tooltips
 
         try:
-            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+            message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
 
             # update first message index
             if len(message_log.message_list) > message_log.number_of_messages_to_show:

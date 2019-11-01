@@ -1,7 +1,7 @@
 import logging
 import pygame
 
-from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, MouseButtons, UIElementTypes
+from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, MouseButtons, UIElements
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
@@ -268,7 +268,7 @@ class InputManager:
         player = world_manager.player
 
         from scripts.global_singletons.managers import ui_manager
-        targeting_overlay = ui_manager.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        targeting_overlay = ui_manager.Element.get_ui_element(UIElements.TARGETING_OVERLAY)
         selected_tile = targeting_overlay.selected_tile
 
         # UI interactions
@@ -285,8 +285,8 @@ class InputManager:
             from scripts.global_singletons.managers import game_manager
             previous_state = game_manager.previous_game_state
             publisher.publish(ChangeGameStateEvent(previous_state))
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
-            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
+            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, False)
+            ui_manager.Element.set_element_visibility(UIElements.MESSAGE_LOG, True)
 
         # if direction isn't 0 then we need to move selected_tile
         # TODO - move logic to event
@@ -310,12 +310,12 @@ class InputManager:
             ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
             ui_manager.Element.set_selected_entity(entity)
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
-            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
+            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, True)
+            ui_manager.Element.set_element_visibility(UIElements.MESSAGE_LOG, False)
 
         #  SKILL USAGE
         skill_number = self.get_pressed_skill_number()
-        targeting_overlay = ui_manager.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        targeting_overlay = ui_manager.Element.get_ui_element(UIElements.TARGETING_OVERLAY)
         skill_being_targeted = targeting_overlay.skill_being_targeted
 
         # have we confirmed skill use on selected tile?

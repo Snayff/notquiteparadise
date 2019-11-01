@@ -372,7 +372,7 @@ class MouseButtons(Enum):
     __hash__ = None
 
 
-class UIElementTypes(Enum):
+class UIElements(Enum):
     """
     The different UI elements
     """

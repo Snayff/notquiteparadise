@@ -3,7 +3,7 @@ from typing import Tuple
 
 import pygame
 
-from scripts.core.constants import UIElementTypes, SkillShapes
+from scripts.core.constants import UIElements, SkillShapes
 from scripts.global_singletons.data_library import library
 from scripts.ui_elements.camera import Camera
 from scripts.ui_elements.entity_info import SelectedEntityInfo
@@ -31,31 +31,31 @@ class ElementMethods:
         """
         Initialise the message log ui element.
         """
-        self.elements[UIElementTypes.MESSAGE_LOG.name] = MessageLog()
+        self.elements[UIElements.MESSAGE_LOG.name] = MessageLog()
 
     def init_entity_info(self):
         """
         Initialise the selected entity info ui element
         """
-        self.elements[UIElementTypes.ENTITY_INFO.name] = SelectedEntityInfo()
+        self.elements[UIElements.ENTITY_INFO.name] = SelectedEntityInfo()
 
     def init_targeting_overlay(self):
         """
         Initialise the targeting_overlay
         """
-        self.elements[UIElementTypes.TARGETING_OVERLAY.name] = TargetingOverlay()
+        self.elements[UIElements.TARGETING_OVERLAY.name] = TargetingOverlay()
 
     def init_skill_bar(self):
         """
         Initialise the skill bar
         """
-        self.elements[UIElementTypes.SKILL_BAR.name] = SkillBar()
+        self.elements[UIElements.SKILL_BAR.name] = SkillBar()
 
     def init_entity_queue(self):
         """
         Initialise the entity queue
         """
-        self.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
+        self.elements[UIElements.ENTITY_QUEUE.name] = EntityQueue()
 
         from scripts.global_singletons.managers import turn_manager
         if turn_manager:
@@ -65,14 +65,14 @@ class ElementMethods:
         """
         Initialise the camera
         """
-        self.elements[UIElementTypes.CAMERA.name] = Camera()
+        self.elements[UIElements.CAMERA.name] = Camera()
 
     def set_element_visibility(self, element_type, visible):
         """
         Update whether an element is visible.
 
         Args:
-            element_type (UIElementTypes): 
+            element_type (UIElements): 
             visible (bool):
         """
         try:
@@ -108,7 +108,7 @@ class ElementMethods:
         Args:
             entity(Entity):
         """
-        self.elements[UIElementTypes.ENTITY_INFO.name].selected_entity = entity
+        self.elements[UIElements.ENTITY_INFO.name].selected_entity = entity
 
     def set_skill_being_targeted(self, skill):
         """
@@ -117,7 +117,7 @@ class ElementMethods:
         Args:
             skill (Skill):
         """
-        self.elements[UIElementTypes.TARGETING_OVERLAY.name].skill_being_targeted = skill
+        self.elements[UIElements.TARGETING_OVERLAY.name].skill_being_targeted = skill
 
     def set_selected_tile(self, tile):
         """
@@ -126,7 +126,7 @@ class ElementMethods:
         Args:
             tile(Tile):
         """
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        targeting_overlay = self.get_ui_element(UIElements.TARGETING_OVERLAY)
 
         if tile in targeting_overlay.tiles_in_range_and_fov:
             targeting_overlay.selected_tile = tile
@@ -138,7 +138,7 @@ class ElementMethods:
         Args:
             tiles (list[Tiles]):
         """
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        targeting_overlay = self.get_ui_element(UIElements.TARGETING_OVERLAY)
         targeting_overlay.tiles_in_range_and_fov = tiles
 
     def get_ui_element(self, element_type):
@@ -146,7 +146,7 @@ class ElementMethods:
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
 
         Args:
-            element_type (UIElementTypes):
+            element_type (UIElements):
 
         Returns:
             any: ui element
@@ -169,7 +169,7 @@ class ElementMethods:
         Returns:
             Skill:
         """
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        targeting_overlay = self.get_ui_element(UIElements.TARGETING_OVERLAY)
         return targeting_overlay.skill_being_targeted
 
     def update_targeting_overlays_tiles_in_range_and_fov(self):
@@ -194,7 +194,7 @@ class ElementMethods:
         Update the list of Tiles for those effected by the skill effect range. Based on selected skill.
         """
         # TODO - convert to a set method and set via an event
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        targeting_overlay = self.get_ui_element(UIElements.TARGETING_OVERLAY)
 
         # if there is a skill being targeted
         if targeting_overlay.skill_being_targeted:
@@ -218,7 +218,7 @@ class ElementMethods:
         Get the player`s known skills to show in the skill bar.
         """
         # TODO - convert to a set and set via en event
-        skill_bar = self.get_ui_element(UIElementTypes.SKILL_BAR)
+        skill_bar = self.get_ui_element(UIElements.SKILL_BAR)
 
         # update info
         from scripts.global_singletons.managers import world_manager
@@ -245,7 +245,7 @@ class ElementMethods:
         Get info from the turn_manager and update the entity queue to be displayed
         """
         # TODO - convert to a set and set via en event
-        entity_queue = self.get_ui_element(UIElementTypes.ENTITY_QUEUE)
+        entity_queue = self.get_ui_element(UIElements.ENTITY_QUEUE)
 
         # clear current queue
         entity_queue.entity_queue.clear()
@@ -277,7 +277,7 @@ class ElementMethods:
         Args:
             tiles (list[Tile]): all of the tiles to draw.
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElements.CAMERA)
 
         camera.tiles_to_draw = tiles
 
@@ -291,7 +291,7 @@ class ElementMethods:
         Returns:
             bool:
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElements.CAMERA)
         player_x, player_y = target_pos
 
         edge_start_x = camera.x
@@ -300,16 +300,12 @@ class ElementMethods:
         edge_end_y = camera.y + camera.height
 
         if edge_start_x <= player_x < edge_start_x + camera.edge_size:
-            print("in left")
             return True
         elif edge_end_x >= player_x > edge_end_x - camera.edge_size:
-            print("in right")
             return True
         elif edge_start_y <= player_y < edge_start_y + camera.edge_size:
-            print("in up")
             return True
         elif edge_end_y >= player_y > edge_end_y - camera.edge_size:
-            print("in down")
             return True
         else:
             return False
@@ -327,7 +323,7 @@ class ElementMethods:
         """
         start_x, start_y = start_pos
         target_x, target_y = target_pos
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElements.CAMERA)
 
         edge_start_x = camera.x
         edge_end_x = camera.x + camera.width
@@ -382,7 +378,7 @@ class ElementMethods:
             move_x ():
             move_y ():
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElements.CAMERA)
 
         from scripts.global_singletons.managers import world_manager
         game_map = world_manager.Map.get_game_map()
@@ -395,7 +391,7 @@ class ElementMethods:
         """
         Retrieve the tiles to draw within view of the camera
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElements.CAMERA)
         coords = []
 
         for x in range(camera.x, camera.x + camera.width):

@@ -1,6 +1,6 @@
 
 import pygame
-from scripts.core.constants import UIElementTypes
+from scripts.core.constants import UIElements
 
 
 class MouseMethods:
@@ -86,7 +86,7 @@ class MouseMethods:
             mouse_y(int):  Optional. Mouses y coord.
 
         Returns:
-            UIElementTypes: ui_element type
+            UIElements: ui_element type
         """
         ui_element_type = None
 
@@ -118,7 +118,7 @@ class MouseMethods:
         Notes:
             The skills in the skill bar are pulled, in order, from the player`s known skills.
         """
-        skill_bar = self.manager.Element.get_ui_element(UIElementTypes.SKILL_BAR)
+        skill_bar = self.manager.Element.get_ui_element(UIElements.SKILL_BAR)
 
         for container in skill_bar.skill_containers:
             if container.rect.collidepoint(relative_x, relative_y):
