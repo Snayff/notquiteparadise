@@ -53,7 +53,7 @@ def main():
     #################################################
 
     # initialise the game
-    initialise_ui_elements()
+    #initialise_ui_elements()
     initialise_event_handlers()
     initialise_game()
 
@@ -72,6 +72,7 @@ def game_loop():
     """
     The core game loop, handling input, rendering and logic.
     """
+
     while not game_manager.game_state == GameStates.EXIT_GAME:
 
         # limit frames

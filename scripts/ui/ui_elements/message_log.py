@@ -1,13 +1,10 @@
 
 import logging
 
-from typing import Dict, Tuple
-from scripts.core.constants import MessageEventTypes, VisualInfo
-from scripts.core.fonts import Font
-from scripts.global_singletons.event_hub import publisher
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.palette import Palette
-from scripts.ui_elements.templates.panel import Panel
+from typing import Dict
+from scripts.core.constants import VisualInfo
+from scripts.ui.basic.fonts import Font
+from scripts.ui.templates.panel import Panel
 
 
 class MessageLog:

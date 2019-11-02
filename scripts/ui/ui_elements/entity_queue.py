@@ -1,12 +1,11 @@
 
 import logging
-import pygame
 
 from typing import List, Tuple
 from scripts.core.constants import VisualInfo
-from scripts.core.fonts import Font
-from scripts.ui_elements.palette import Palette
-from scripts.ui_elements.templates.panel import Panel
+from scripts.ui.basic.fonts import Font
+from scripts.ui.basic.palette import Palette
+from scripts.ui.templates.panel import Panel
 
 
 class EntityQueue:

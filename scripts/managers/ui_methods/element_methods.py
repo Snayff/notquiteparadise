@@ -3,14 +3,14 @@ from typing import Tuple
 
 import pygame
 
-from scripts.core.constants import UIElements, SkillShapes
+from scripts.core.constants import UIElements
 from scripts.global_singletons.data_library import library
-from scripts.ui_elements.camera import Camera
-from scripts.ui_elements.entity_info import SelectedEntityInfo
-from scripts.ui_elements.entity_queue import EntityQueue
-from scripts.ui_elements.message_log import MessageLog
-from scripts.ui_elements.skill_bar import SkillBar
-from scripts.ui_elements.targeting_overlay import TargetingOverlay
+from scripts.ui.ui_elements.camera import Camera
+from scripts.ui.ui_elements.entity_info import SelectedEntityInfo
+from scripts.ui.ui_elements.entity_queue import EntityQueue
+from scripts.ui.ui_elements.message_log import MessageLog
+from scripts.ui.ui_elements.skill_bar import SkillBar
+from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
 
 
 class ElementMethods:
@@ -26,6 +26,25 @@ class ElementMethods:
         self.manager = manager  # type: UIManager
 
         self.elements = {}  # list of all init'd ui elements
+
+        ###########################################################
+        from scripts.ui.templates.frame import Frame
+        from scripts.ui.templates.widget_style import WidgetStyle
+        from scripts.ui.templates.text_box import TextBox
+        from scripts.ui.basic.fonts import Font
+        font = Font().default
+        from scripts.ui.basic.colours import Colour
+        text_box_style = WidgetStyle(font, background_colour=Colour().green, border_colour=Colour().red, border_size=1)
+        text_box = TextBox(5, 5, 90, 90, text_box_style, "this is a text box and has text over several lines")
+        widgets = [text_box]
+        frame_style = WidgetStyle(font, background_colour=Colour().blue, border_colour=Colour().red, border_size=1)
+        frame = Frame(200, 200, 100, 100, frame_style, widgets)
+
+        from scripts.ui.ui_elements.another_message_log import AnotherMessageLog
+        msg_log = AnotherMessageLog(frame)
+        msg_log.is_visible = True
+        self.elements["new_msg_log"] = msg_log
+        #############################################################
 
     def init_message_log(self):
         """
@@ -151,7 +170,10 @@ class ElementMethods:
         Returns:
             any: ui element
         """
-        return self.elements[element_type.name]
+        try:
+            return self.elements[element_type.name]
+        except KeyError:
+            return None
 
     def get_ui_elements(self):
         """
@@ -217,15 +239,15 @@ class ElementMethods:
         """
         Get the player`s known skills to show in the skill bar.
         """
-        # TODO - convert to a set and set via en event
+        # TODO - convert to a set and set via an event
         skill_bar = self.get_ui_element(UIElements.SKILL_BAR)
 
         # update info
         from scripts.global_singletons.managers import world_manager
         player = world_manager.player
 
-        # if the player has been init'd update skill bar
-        if player:
+        # if the player and the skill bar have been init'd update skill bar
+        if player and skill_bar:
             for counter, skill in enumerate(player.actor.known_skills):
 
                 skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
@@ -247,28 +269,30 @@ class ElementMethods:
         # TODO - convert to a set and set via en event
         entity_queue = self.get_ui_element(UIElements.ENTITY_QUEUE)
 
-        # clear current queue
-        entity_queue.entity_queue.clear()
+        # if entity queue has been init'd
+        if entity_queue:
+            # clear current queue
+            entity_queue.entity_queue.clear()
 
-        counter = 0
+            counter = 0
 
-        # loop entities in turn queue, up to max to show
-        from scripts.global_singletons.managers import turn_manager
-        for entity, time in turn_manager.turn_queue.items():
-            if counter < entity_queue.max_entities_to_show:
-                icon = entity.icon
+            # loop entities in turn queue, up to max to show
+            from scripts.global_singletons.managers import turn_manager
+            for entity, time in turn_manager.turn_queue.items():
+                if counter < entity_queue.max_entities_to_show:
+                    icon = entity.icon
 
-                # catch any images not the right size and resize them
-                if icon.get_size() != (entity_queue.entity_icon_size, entity_queue.entity_icon_size):
-                    icon = pygame.transform.smoothscale(icon, (entity_queue.entity_icon_size,
-                        entity_queue.entity_icon_size))
+                    # catch any images not the right size and resize them
+                    if icon.get_size() != (entity_queue.entity_icon_size, entity_queue.entity_icon_size):
+                        icon = pygame.transform.smoothscale(icon, (entity_queue.entity_icon_size,
+                            entity_queue.entity_icon_size))
 
-                entity_queue.entity_queue.append((icon, entity.name))
+                    entity_queue.entity_queue.append((icon, entity.name))
 
-                counter += 1
+                    counter += 1
 
-            else:
-                break
+                else:
+                    break
 
     def set_tiles_in_camera(self, tiles):
         """
@@ -325,50 +349,52 @@ class ElementMethods:
         target_x, target_y = target_pos
         camera = self.get_ui_element(UIElements.CAMERA)
 
-        edge_start_x = camera.x
-        edge_end_x = camera.x + camera.width
-        edge_start_y = camera.y
-        edge_end_y = camera.y + camera.height
+        # if camera has been init'd
+        if camera:
+            edge_start_x = camera.x
+            edge_end_x = camera.x + camera.width
+            edge_start_y = camera.y
+            edge_end_y = camera.y + camera.height
 
-        start_pos_in_edge = self.is_target_pos_in_camera_edge(start_pos)
-        target_pos_in_edge = self.is_target_pos_in_camera_edge(target_pos)
+            start_pos_in_edge = self.is_target_pos_in_camera_edge(start_pos)
+            target_pos_in_edge = self.is_target_pos_in_camera_edge(target_pos)
 
-        # are we currently in the edge (e.g. edge of world)
-        if start_pos_in_edge:
+            # are we currently in the edge (e.g. edge of world)
+            if start_pos_in_edge:
 
-            # will we still be in the edge after we move?
-            if target_pos_in_edge:
-                dir_x = target_x - start_x
-                dir_y = target_y - start_y
+                # will we still be in the edge after we move?
+                if target_pos_in_edge:
+                    dir_x = target_x - start_x
+                    dir_y = target_y - start_y
 
-                # are we moving to a worse position?
-                if edge_start_x <= start_x < edge_start_x + camera.edge_size:
-                    # player is on the left side, are we moving left?
-                    if dir_x < 0:
-                        print("moving left")
-                        return True
-                if edge_end_x > start_x >= edge_end_x - camera.edge_size:
-                    # player is on the right side, are we moving right?
-                    if 0 < dir_x:
-                        print("moving right")
-                        return True
-                if edge_start_y <= start_y < edge_start_y + camera.edge_size:
-                    # player is on the up side, are we moving up?
-                    if dir_y < 0:
-                        print("moving up")
-                        return True
-                if edge_end_y > start_y >= edge_end_y - camera.edge_size:
-                    # player is on the down side, are we moving down?
-                    if 0 < dir_y:
-                        print("moving down")
-                        return True
+                    # are we moving to a worse position?
+                    if edge_start_x <= start_x < edge_start_x + camera.edge_size:
+                        # player is on the left side, are we moving left?
+                        if dir_x < 0:
+                            print("moving left")
+                            return True
+                    if edge_end_x > start_x >= edge_end_x - camera.edge_size:
+                        # player is on the right side, are we moving right?
+                        if 0 < dir_x:
+                            print("moving right")
+                            return True
+                    if edge_start_y <= start_y < edge_start_y + camera.edge_size:
+                        # player is on the up side, are we moving up?
+                        if dir_y < 0:
+                            print("moving up")
+                            return True
+                    if edge_end_y > start_y >= edge_end_y - camera.edge_size:
+                        # player is on the down side, are we moving down?
+                        if 0 < dir_y:
+                            print("moving down")
+                            return True
 
-        elif target_pos_in_edge:
-            # we are moving into the edge
-            return True
+            elif target_pos_in_edge:
+                # we are moving into the edge
+                return True
 
-        else:
-            return False
+            else:
+                return False
 
     def move_camera(self, move_x, move_y):
         """
@@ -394,11 +420,13 @@ class ElementMethods:
         camera = self.get_ui_element(UIElements.CAMERA)
         coords = []
 
-        for x in range(camera.x, camera.x + camera.width):
-            for y in range(camera.y, camera.y + camera.height):
-                coords.append((x, y))
+        # if camera has been init'd
+        if camera:
+            for x in range(camera.x, camera.x + camera.width):
+                for y in range(camera.y, camera.y + camera.height):
+                    coords.append((x, y))
 
-        from scripts.global_singletons.managers import world_manager
-        # use 0,0 to stop the camera double jumping due to converting back and forth from world and physical space
-        tiles = world_manager.Map.get_tiles(0, 0, coords)
-        self.set_tiles_in_camera(tiles)
+            from scripts.global_singletons.managers import world_manager
+            # use 0,0 to stop the camera double jumping due to converting back and forth from world and physical space
+            tiles = world_manager.Map.get_tiles(0, 0, coords)
+            self.set_tiles_in_camera(tiles)

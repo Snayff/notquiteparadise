@@ -1,12 +1,12 @@
 
 import logging
 
-from scripts.core.fonts import Font
+from scripts.ui.basic.fonts import Font
 from scripts.managers.ui_methods.display_methods import DisplayMethods
 from scripts.managers.ui_methods.element_methods import ElementMethods
 from scripts.managers.ui_methods.message_methods import MessageMethods
 from scripts.managers.ui_methods.mouse_methods import MouseMethods
-from scripts.ui_elements.palette import Palette
+from scripts.ui.basic.palette import Palette
 
 
 class UIManager:

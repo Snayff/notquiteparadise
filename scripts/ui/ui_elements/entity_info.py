@@ -1,11 +1,11 @@
 
 import logging
 
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.palette import Palette
+from scripts.ui.basic.colours import Colour
+from scripts.ui.basic.palette import Palette
 from scripts.core.constants import VisualInfo, SecondaryStatTypes, PrimaryStatTypes
-from scripts.core.fonts import Font
-from scripts.ui_elements.templates.panel import Panel
+from scripts.ui.basic.fonts import Font
+from scripts.ui.templates.panel import Panel
 
 
 class SelectedEntityInfo:

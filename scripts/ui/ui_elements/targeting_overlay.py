@@ -2,11 +2,7 @@
 import logging
 import pygame
 
-
-from scripts.global_singletons.data_library import library
-from scripts.ui_elements.palette import Palette
-from scripts.core.constants import TILE_SIZE,  SkillShapes
-from scripts.core.fonts import Font
+from scripts.core.constants import TILE_SIZE
 from scripts.skills.skill import Skill
 
 

@@ -1,10 +1,7 @@
-from operator import mod
-
-from scripts.ui_elements.templates.panel import Panel
+from scripts.ui.templates.panel import Panel
 from scripts.core.constants import VisualInfo, TILE_SIZE
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.palette import Palette
-from scripts.world.tile import Tile
+from scripts.ui.basic.colours import Colour
+from scripts.ui.basic.palette import Palette
 
 
 class Camera:

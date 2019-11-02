@@ -1,13 +1,9 @@
 
 import logging
-import pygame
 
-from scripts.global_singletons.data_library import library
-from scripts.ui_elements.palette import Palette
 from scripts.core.constants import VisualInfo
-from scripts.core.fonts import Font
-from scripts.ui_elements.templates.panel import Panel
-from scripts.ui_elements.templates.skill_container import SkillContainer
+from scripts.ui.templates.panel import Panel
+from scripts.ui.templates.skill_container import SkillContainer
 
 
 class SkillBar:

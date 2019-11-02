@@ -1,7 +1,6 @@
 import logging
 
 from scripts.core.constants import UIElements, ICON_IN_TEXT_SIZE
-from scripts.core.fonts import Font
 
 
 class MessageMethods:
@@ -72,27 +71,30 @@ class MessageMethods:
         try:
             message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
 
-            # text wrap message
-            max_width = message_log.panel.width - (message_log.message_indent * 2)  # *2 to offer border on each side
-            font = self.manager.Font.message_log
-            wrapped_message = self.line_wrap_message(message, font, max_width)
+            # if message log has been init'd
+            if message_log:
+                # text wrap message
+                max_width = message_log.panel.width - (message_log.message_indent * 2)   # *2 to offer border on each
+                # side
+                font = self.manager.Font.message_log
+                wrapped_message = self.line_wrap_text(message, font, max_width)
 
-            # parse message
-            parsed_message_list = self.parse_message_and_convert_to_surface(wrapped_message, font)
+                # parse message
+                parsed_message_list = self.parse_text(wrapped_message, font)
 
-            # add each line to the main message list
-            for message in parsed_message_list:
-                message_log.message_list.append(message)
+                # add each line to the main message list
+                for message in parsed_message_list:
+                    message_log.message_list.append(message)
 
-            self.update_messages_shown()
+                self.update_messages_shown()
 
-            # flag need to update
-            message_log.is_dirty = True
+                # flag need to update
+                message_log.is_dirty = True
 
         except KeyError:
-            logging.debug(f"Tried to set message in MessageLog but key not found. Is the MessageLog init'd?")
+            logging.debug(f"Tried to add message to MessageLog but key not found. Is the MessageLog init'd?")
 
-    def line_wrap_message(self, message, font, max_width):
+    def line_wrap_text(self, message, font, max_width):
         """
         Break a message into lines based on panel width
 
@@ -137,7 +139,7 @@ class MessageMethods:
 
         return wrapped_text
 
-    def parse_message_and_convert_to_surface(self, message, font):
+    def parse_text(self, message, font):
         """
         Check for keywords and commands and apply effects as required.
 
@@ -303,7 +305,8 @@ class MessageMethods:
 
             # update first message index
             if len(message_log.message_list) > message_log.number_of_messages_to_show:
-                message_log.first_message_index = len(message_log.message_list) - message_log.number_of_messages_to_show
+                message_log.first_message_index = len(message_log.message_list) -  \
+                                                  message_log.number_of_messages_to_show
 
             # clear messages to draw
             message_log.messages_to_draw.clear()

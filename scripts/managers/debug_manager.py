@@ -1,10 +1,10 @@
 
 import logging
 
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.palette import Palette
+from scripts.ui.basic.colours import Colour
+from scripts.ui.basic.palette import Palette
 from scripts.core.constants import TILE_SIZE
-from scripts.core.fonts import Font
+from scripts.ui.basic.fonts import Font
 
 
 class DebugManager:

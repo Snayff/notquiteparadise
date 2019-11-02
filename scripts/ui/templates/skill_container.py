@@ -1,5 +1,5 @@
 
-from scripts.ui_elements.templates.panel import Panel
+from scripts.ui.templates.panel import Panel
 
 
 class SkillContainer(Panel):
