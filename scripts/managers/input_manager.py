@@ -1,7 +1,7 @@
 import logging
 import pygame
 
-from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, MouseButtons, UIElements
+from scripts.core.constants import InputModes, GameStates, MessageEventTypes, MouseButtons, UIElementTypes
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
@@ -21,6 +21,8 @@ class InputManager:
             "left_click": False,
             "right_click": False,
             "middle_click": False,
+            "wheel_up": False,
+            "wheel_down": False,
             "mouse_moved": False,
             "up": False,
             "down": False,
@@ -96,14 +98,17 @@ class InputManager:
             event (pygame.event):
         """
         # update MOUSE input values based on event
-
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if pygame.mouse.get_pressed()[0]:
+            if event.button == 1:
                 self.input_values["left_click"] = True
-            elif pygame.mouse.get_pressed()[1]:
+            elif event.button == 2:
                 self.input_values["middle_click"] = True
-            elif pygame.mouse.get_pressed()[2]:
+            elif event.button == 3:
                 self.input_values["right_click"] = True
+            elif event.button == 4:
+                self.input_values["wheel_up"] = True
+            elif event.button == 5:
+                self.input_values["wheel_down"] = True
 
         if event.type == pygame.MOUSEMOTION:
             self.input_values["mouse_moved"] = True
@@ -268,7 +273,7 @@ class InputManager:
         player = world_manager.player
 
         from scripts.global_singletons.managers import ui_manager
-        targeting_overlay = ui_manager.Element.get_ui_element(UIElements.TARGETING_OVERLAY)
+        targeting_overlay = ui_manager.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
         selected_tile = targeting_overlay.selected_tile
 
         # UI interactions
@@ -285,8 +290,8 @@ class InputManager:
             from scripts.global_singletons.managers import game_manager
             previous_state = game_manager.previous_game_state
             publisher.publish(ChangeGameStateEvent(previous_state))
-            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, False)
-            ui_manager.Element.set_element_visibility(UIElements.MESSAGE_LOG, True)
+            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
+            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
 
         # if direction isn't 0 then we need to move selected_tile
         # TODO - move logic to event
@@ -310,12 +315,12 @@ class InputManager:
             ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
             entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
             ui_manager.Element.set_selected_entity(entity)
-            ui_manager.Element.set_element_visibility(UIElements.ENTITY_INFO, True)
-            ui_manager.Element.set_element_visibility(UIElements.MESSAGE_LOG, False)
+            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
+            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
 
         #  SKILL USAGE
         skill_number = self.get_pressed_skill_number()
-        targeting_overlay = ui_manager.Element.get_ui_element(UIElements.TARGETING_OVERLAY)
+        targeting_overlay = ui_manager.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
         skill_being_targeted = targeting_overlay.skill_being_targeted
 
         # have we confirmed skill use on selected tile?
@@ -384,6 +389,10 @@ class InputManager:
             return MouseButtons.LEFT_BUTTON
         elif self.input_values["middle_click"]:
             return MouseButtons.MIDDLE_BUTTON
+        elif self.input_values["wheel_up"]:
+            return MouseButtons.WHEEL_UP
+        elif self.input_values["wheel_down"]:
+            return MouseButtons.WHEEL_DOWN
         else:
             return None
 

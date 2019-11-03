@@ -1,7 +1,7 @@
 from typing import List
 
 import pygame
-from abc import ABC, abstractmethod
+from abc import ABC
 from scripts.ui.templates.widget_style import WidgetStyle
 
 
@@ -24,12 +24,15 @@ class Widget(ABC):
         # now that we know the size adjust the images to correct their sizes
         self.resize_style_images()
 
-    @abstractmethod
     def draw(self, surface):
         """
-        Base draw method of the widget. Must be overridden.
+        Base base style and all children of the widget.
         """
-        raise NotImplementedError(f"draw method must be overridden for {self!r}")
+        self.base_style.draw(surface, self.rect)
+
+        # draw all contained widgets
+        for child in self.children:
+            child.draw(surface)
 
     def resize_style_images(self):
         """

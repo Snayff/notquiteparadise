@@ -1,11 +1,10 @@
-
+import pygame.freetype
 
 class Font:
     """
     Renderable font.
     """
     def __init__(self):
-        import pygame.freetype
         pygame.freetype.init()
 
         font_dir = "assets/fonts/"
@@ -17,6 +16,9 @@ class Font:
 
         self.message_log = pygame.freetype.Font(None,  14)
         self.message_log.pad = True
+
+        self.entity_info = pygame.freetype.Font(None, 14)
+        self.entity_info.pad = True
 
         self.targeting_overlay = pygame.freetype.Font(font_dir + "Barlow-Regular.otf", 10)
         self.targeting_overlay.pad = True

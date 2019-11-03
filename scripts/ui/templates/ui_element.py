@@ -1,5 +1,5 @@
 import pygame
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import List
 from scripts.ui.templates.widget_style import WidgetStyle
 
@@ -28,6 +28,13 @@ class UIElement(ABC):
         adjusted_rect = [0, 0, self.rect.width, self.rect.height]
         self.base_style.draw(main_surface, adjusted_rect)
 
-        # draw all contained widgets and containers
+        # draw all contained widgets
         for child in self.children:
             child.draw(self.surface)
+
+    @abstractmethod
+    def handle_input(self, input_key, input_state):
+        """
+        Base input method of the widget. Must be overridden.
+        """
+        raise NotImplementedError(f"handle_input method must be overridden for {self!r}")

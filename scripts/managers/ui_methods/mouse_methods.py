@@ -1,6 +1,6 @@
 
 import pygame
-from scripts.core.constants import UIElements
+from scripts.core.constants import UIElementTypes
 
 
 class MouseMethods:
@@ -10,6 +10,7 @@ class MouseMethods:
     Attributes:
         manager ():
     """
+    # TODO - move to input manager
 
     def __init__(self, manager):
         from scripts.managers.ui_manager import UIManager
@@ -79,16 +80,15 @@ class MouseMethods:
 
     def get_colliding_ui_element_type(self, mouse_x=-1, mouse_y=-1):
         """
-        Determine which ui element type is colliding with mouse position. Current position used if one not provided.
+        Determine which ui element is colliding with mouse position. Current position used if one not provided.
 
         Args:
             mouse_x(int): Optional. Mouses x coord
             mouse_y(int):  Optional. Mouses y coord.
 
         Returns:
-            UIElements: ui_element type
+            UIElementTypes: UIElementTypes constant
         """
-        ui_element_type = None
 
         # if mouse pos was provided use it, else get it
         if mouse_x != -1 and mouse_y != -1:
@@ -96,13 +96,11 @@ class MouseMethods:
         else:
             mouse_pos = self.get_scaled_mouse_pos()
 
+        # check if mouse collides with a visible ui element
         ui_elements = self.manager.Element.get_ui_elements()
         for key, ui_object in ui_elements.items():
-            if hasattr(ui_object, "panel"):
-                if ui_object.panel.rect.collidepoint(mouse_pos):
-                    ui_element_type = key
-
-        return ui_element_type
+            if ui_object.is_visible and ui_object.rect.collidepoint(mouse_pos):
+                return UIElementTypes[key]
 
     def get_skill_index_from_skill_clicked(self, relative_x, relative_y):
         """
@@ -118,7 +116,7 @@ class MouseMethods:
         Notes:
             The skills in the skill bar are pulled, in order, from the player`s known skills.
         """
-        skill_bar = self.manager.Element.get_ui_element(UIElements.SKILL_BAR)
+        skill_bar = self.manager.Element.get_ui_element(UIElementTypes.SKILL_BAR)
 
         for container in skill_bar.skill_containers:
             if container.rect.collidepoint(relative_x, relative_y):

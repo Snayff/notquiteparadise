@@ -4,7 +4,6 @@ import logging
 from scripts.ui.basic.fonts import Font
 from scripts.managers.ui_methods.display_methods import DisplayMethods
 from scripts.managers.ui_methods.element_methods import ElementMethods
-from scripts.managers.ui_methods.message_methods import MessageMethods
 from scripts.managers.ui_methods.mouse_methods import MouseMethods
 from scripts.ui.basic.palette import Palette
 
@@ -21,7 +20,6 @@ class UIManager:
         self.Display = DisplayMethods(self)
         self.Element = ElementMethods(self)
         self.Mouse = MouseMethods(self)
-        self.Message = MessageMethods(self)
         self.Palette = Palette()  # doesnt need self as only holds data
         self.Font = Font()  # doesnt need self as only holds data
 

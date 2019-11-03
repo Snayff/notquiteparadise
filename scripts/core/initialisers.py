@@ -1,7 +1,7 @@
 import logging
 import time
 
-from scripts.core.constants import EventTopics, GameStates, MessageEventTypes, UIElements
+from scripts.core.constants import EventTopics, GameStates, MessageEventTypes, UIElementTypes
 from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
@@ -119,8 +119,12 @@ def initialise_ui_elements():
     initialise all ui elements
     """
     ui_manager.Element.init_camera()
-    ui_manager.Element.init_entity_info()
-    ui_manager.Element.init_entity_queue()
+    # ui_manager.Element.init_entity_info()
+    # ui_manager.Element.init_entity_queue()
     ui_manager.Element.init_message_log()
-    ui_manager.Element.init_skill_bar()
-    ui_manager.Element.init_targeting_overlay()
+    # ui_manager.Element.init_skill_bar()
+    # ui_manager.Element.init_targeting_overlay()
+
+    from scripts.ui.ui_elements.new_entity_info import EntityInfo
+    ui_manager.Element.elements["ent"] = EntityInfo()
+    ui_manager.Element.elements["ent"].is_visible = True

@@ -53,7 +53,7 @@ def main():
     #################################################
 
     # initialise the game
-    #initialise_ui_elements()
+    initialise_ui_elements()
     initialise_event_handlers()
     initialise_game()
 

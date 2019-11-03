@@ -13,4 +13,4 @@ class MessageHandler(Subscriber):
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
-        ui_manager.Message.add_message(event.message)
+        ui_manager.Element.add_to_message_log(event.message)

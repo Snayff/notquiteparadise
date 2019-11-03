@@ -1,6 +1,8 @@
 import logging
 from typing import List
 
+import pygame
+
 from scripts.core.constants import ICON_IN_TEXT_SIZE
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.widget import Widget
@@ -12,7 +14,7 @@ class TextBox(Widget):
     A widget to show text.
     """
     def __init__(self, x: int, y: int, width: int, height: int, base_style: WidgetStyle,  children: List = [],
-            name: str = "text_box", text: str = "text"):
+            name: str = "text_box", text: str = ""):
         super().__init__(x, y, width, height, base_style, children, name)
 
         # aesthetics
@@ -33,11 +35,100 @@ class TextBox(Widget):
         self.commands = {}  # TODO - move to library
         self.first_line_index = 0
 
+        # init references
+        self.init_commands()
+        self.init_icons()
+        self.init_keywords()
+
         # add the initial text
-        self.add_text(text)
-        self.update_text_shown()
+        if text:
+            self.add_text(text)
+            self.update_text_shown()
+
+    def draw(self, surface):
+        """
+        Draw the text in the text box, as well as the base style.
+
+        Args:
+            surface ():
+        """
+        super().draw(surface)
+
+        # formatting info
+        style = self.base_style
+        text_indent = 5
+        msg_x = style.border_size + text_indent
+        msg_y = style.border_size + text_indent
+        font = style.font
+        font_size = font.size
+        line_gap = int(font_size / 3)
+        line_count = 0
+
+        # render the messages_to_draw
+        for line_list in self.text_to_draw:
+            # reset offset
+            x_offset = 0
+
+            # get y position of line to write to
+            adjusted_y = msg_y + (line_count * (font_size + line_gap))
+
+            # update  line count
+            line_count += 1
+
+            # pull each surface from each line_list and render to the panel surface
+            for text in line_list:
+                surface.blit(text, (msg_x + x_offset, adjusted_y))
+                message_width = text.get_width()
+                x_offset += message_width + 2  # 2 for space between words
+
+    def init_keywords(self):
+        """
+        Initialise the keywords for highlighting in the text log
+
+        Returns:
+            dict[str, Tuple[int, int, int]]: keyword: colour
+
+        """
+        keywords = {}
+        palette = Palette().message_log
+
+        keywords["grazes"] = palette.keyword_grazes
+        keywords["crits"] = palette.keyword_crits
+
+        self.keywords = keywords
+
+    def init_icons(self):
+        """
+        Load the list of icons
+
+        """
+        icons = {}
+
+        icons["info"] = pygame.image.load("assets/icons/placeholder/book.PNG").convert_alpha()
+
+        self.icons = icons
+
+    def init_commands(self):
+        """
+        Initialise the commands
+        """
+
+        commands = {}
+        palette = Palette().message_log
+
+        commands["negative"] = palette.text_negative
+        commands["positive"] = palette.text_positive
+        commands["info"] = palette.text_info
+
+        self.commands = commands
 
     def add_text(self, text):
+        """
+        Add text to the text box
+
+        Args:
+            text ():
+        """
         if self.base_style.border_size:
             border_size = self.base_style.border_size
         else:
@@ -48,6 +139,10 @@ class TextBox(Widget):
 
         for text in parsed_text_list:
             self.text_list.append(text)
+
+        # update first text index
+        if len(self.text_list) > self.max_lines:
+            self.first_line_index = len(self.text_list) - self.max_lines
 
     @staticmethod
     def line_wrap_text(text, font, max_width):
@@ -133,7 +228,6 @@ class TextBox(Widget):
                     # check for COMMANDS
                     if word[0] == "#":
                         # TODO - handle specifying an end point, e.g. ##, rather than just next word
-
 
                         # if any words waiting to be converted to a surface then do so
                         if outstanding_word_string != "":
@@ -247,50 +341,11 @@ class TextBox(Widget):
         """
         # TODO - register / unregister tooltips
 
-        # update first text index
-        if len(self.text_list) > self.max_lines:
-            self.first_line_index = len(self.text_list) - self.max_lines
-
         # clear messages to draw
         self.text_to_draw.clear()
 
         # update text to draw
-        text_to_draw = min(self.max_lines, len(self.text_list))
-        for counter in range(0, text_to_draw):
+        lines_to_draw = min(self.max_lines, len(self.text_list))
+        for counter in range(0, lines_to_draw):
             self.text_to_draw.append(self.text_list[counter + self.first_line_index])
 
-    def draw(self, surface):
-        """
-        Draw the text in the text box, as well as the base style.
-
-        Args:
-            surface ():
-        """
-        style = self.base_style
-        style.draw(surface, self.rect)
-
-        # formatting info
-        text_indent = 5
-        msg_x = style.border_size + text_indent
-        msg_y = style.border_size + text_indent
-        font = style.font
-        font_size = font.size
-        line_gap = int(font_size / 3)
-        line_count = 0
-
-        # render the messages_to_draw
-        for line_list in self.text_to_draw:
-            # reset offset
-            x_offset = 0
-
-            # get y position of line to write to
-            adjusted_y = msg_y + (line_count * (font_size + line_gap))
-
-            # update  line count
-            line_count += 1
-
-            # pull each surface from each line_list and render to the panel surface
-            for text in line_list:
-                surface.blit(text, (msg_x + x_offset, adjusted_y))
-                message_width = text.get_width()
-                x_offset += message_width + 2  # 2 for space between words

@@ -1,3 +1,5 @@
+import pygame
+
 from scripts.ui.templates.panel import Panel
 from scripts.core.constants import VisualInfo, TILE_SIZE
 from scripts.ui.basic.colours import Colour
@@ -29,6 +31,7 @@ class Camera:
         panel_border_colour = Palette().game_map.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
                            panel_border_colour)
+        self.rect = pygame.rect.Rect(self.x, self.y, panel_width, panel_height)
 
     def draw(self, surface):
         """
