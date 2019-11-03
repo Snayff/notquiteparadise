@@ -6,7 +6,7 @@ from scripts.ui.basic.colours import Colour
 
 class WidgetStyle:
     """
-    Aesthetic settings for a widget or container
+    Aesthetic settings for a widget or parent_widget
     """
     def __init__(self, font: freetype.Font, font_colour: Colour = (255, 255, 255), background_image: surface
             = None, background_colour: Colour = None, border_colour: Colour = None, border_size: int = 0,
@@ -32,7 +32,7 @@ class WidgetStyle:
 
     def draw(self, surface, rect):
         """
-        Draw the basic style info for the widget or container
+        Draw the basic style info for the widget
 
         Args:
             surface ():

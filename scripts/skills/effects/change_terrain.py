@@ -40,7 +40,7 @@ class ChangeTerrainEffect(Effect):
             if world_manager.Skill.has_required_tags(tile, data.required_tags):
                 world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
 
-                # success message
+                # success text
                 entity = self.owner.owner.owner
                 msg = f"{entity.name} changed the {starting_terrain_name} to {tile.terrain.name}."
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))

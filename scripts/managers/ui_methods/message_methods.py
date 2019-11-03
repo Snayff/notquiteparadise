@@ -17,7 +17,7 @@ class MessageMethods:
 
     def init_keywords(self):
         """
-        Initialise the keywords for highlighting in the message log
+        Initialise the keywords for highlighting in the text log
 
         Returns:
             dict[str, Tuple[int, int, int]]: keyword: colour
@@ -63,45 +63,48 @@ class MessageMethods:
 
     def add_message(self, message):
         """
-        Add a message to the message log. Includes processing of the message.
+        Add a text to the text log. Includes processing of the text.
 
         Args:
             message (str):
         """
+        log = self.manager.Element.elements["new_msg_log"]
+        log.add_message(message)
+
         try:
             message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
 
-            # if message log has been init'd
-            if message_log:
-                # text wrap message
-                max_width = message_log.panel.width - (message_log.message_indent * 2)   # *2 to offer border on each
-                # side
-                font = self.manager.Font.message_log
-                wrapped_message = self.line_wrap_text(message, font, max_width)
-
-                # parse message
-                parsed_message_list = self.parse_text(wrapped_message, font)
-
-                # add each line to the main message list
-                for message in parsed_message_list:
-                    message_log.message_list.append(message)
-
-                self.update_messages_shown()
-
-                # flag need to update
-                message_log.is_dirty = True
+            # # if text log has been init'd
+            # if message_log:
+            #     # text wrap text
+            #     max_width = message_log.panel.width - (message_log.message_indent * 2)   # *2 to offer border on each
+            #     # side
+            #     font = self.manager.Font.message_log
+            #     wrapped_message = self.line_wrap_text(text, font, max_width)
+            #
+            #     # parse text
+            #     parsed_message_list = self.parse_text(wrapped_message, font)
+            #
+            #     # add each line to the main text list
+            #     for text in parsed_message_list:
+            #         message_log.message_list.append(text)
+            #
+            #     self.update_messages_shown()
+            #
+            #     # flag need to update
+            #     message_log.is_dirty = True
 
         except KeyError:
-            logging.debug(f"Tried to add message to MessageLog but key not found. Is the MessageLog init'd?")
+            logging.debug(f"Tried to add text to MessageLog but key not found. Is the MessageLog init'd?")
 
     def line_wrap_text(self, message, font, max_width):
         """
-        Break a message into lines based on panel width
+        Break a text into lines based on panel width
 
         Args:
             font (pygame.font):
             max_width (int):
-            message (str): message to wrap
+            message (str): text to wrap
 
         Returns:
             list[strings]: list of strings comprising wrapped lines of text
@@ -226,10 +229,10 @@ class MessageMethods:
                 text_surface, text_rect = font.render(outstanding_word_string, palette.text_default)
                 line_list.append(text_surface)
 
-            # add the line_list (of surfaces) to the parsed message list
+            # add the line_list (of surfaces) to the parsed text list
             parsed_message_list.append(line_list)
 
-        # return the parsed message list (a list, of lists, of surfaces)
+        # return the parsed text list (a list, of lists, of surfaces)
         return parsed_message_list
 
     def process_message_command(self, command, word_to_affect, font):
@@ -264,7 +267,7 @@ class MessageMethods:
                 else:
                     colour = default_text_colour
 
-                    log_string = f"Process message command: {cleaned_command} Suffix not understood."
+                    log_string = f"Process text command: {cleaned_command} Suffix not understood."
                     logging.warning(log_string)
 
                 # create the surface
@@ -289,21 +292,21 @@ class MessageMethods:
             return new_surface
 
         except KeyError:
-            logging.debug(f"Tried to parse message command in MessageLog but key not found.")
+            logging.debug(f"Tried to parse text command in MessageLog but key not found.")
             new_surface = font.render(word_to_affect, default_text_colour)
 
             return new_surface
 
     def update_messages_shown(self):
         """
-        Update the message log, ensuring correct messages are shown
+        Update the text log, ensuring correct messages are shown
         """
         # TODO - register / unregister tooltips
 
         try:
             message_log = self.manager.Element.get_ui_element(UIElements.MESSAGE_LOG)
 
-            # update first message index
+            # update first text index
             if len(message_log.message_list) > message_log.number_of_messages_to_show:
                 message_log.first_message_index = len(message_log.message_list) -  \
                                                   message_log.number_of_messages_to_show
@@ -311,7 +314,7 @@ class MessageMethods:
             # clear messages to draw
             message_log.messages_to_draw.clear()
 
-            # update message to draw
+            # update text to draw
             messages_to_show = min(message_log.number_of_messages_to_show, len(message_log.message_list))
             for counter in range(0, messages_to_show):
                 message_log.messages_to_draw.append(message_log.message_list[counter + message_log.first_message_index])

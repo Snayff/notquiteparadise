@@ -3,7 +3,7 @@ from typing import Tuple
 
 import pygame
 
-from scripts.core.constants import UIElements
+from scripts.core.constants import UIElements, VisualInfo
 from scripts.global_singletons.data_library import library
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.entity_info import SelectedEntityInfo
@@ -28,27 +28,33 @@ class ElementMethods:
         self.elements = {}  # list of all init'd ui elements
 
         ###########################################################
-        from scripts.ui.templates.frame import Frame
+        self.init_camera()
+
         from scripts.ui.templates.widget_style import WidgetStyle
         from scripts.ui.templates.text_box import TextBox
         from scripts.ui.basic.fonts import Font
-        font = Font().default
         from scripts.ui.basic.colours import Colour
-        text_box_style = WidgetStyle(font, background_colour=Colour().green, border_colour=Colour().red, border_size=1)
-        text_box = TextBox(5, 5, 90, 90, text_box_style, "this is a text box and has text over several lines")
-        widgets = [text_box]
-        frame_style = WidgetStyle(font, background_colour=Colour().blue, border_colour=Colour().red, border_size=1)
-        frame = Frame(200, 200, 100, 100, frame_style, widgets)
-
         from scripts.ui.ui_elements.another_message_log import AnotherMessageLog
-        msg_log = AnotherMessageLog(frame)
+        font = Font().default
+        element_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
+        element_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        element_x = VisualInfo.BASE_WINDOW_WIDTH - element_width
+        element_y = VisualInfo.BASE_WINDOW_HEIGHT - element_height
+
+        text_box_style = WidgetStyle(font, background_colour=Colour().green, border_colour=Colour().red, border_size=1)
+        frame_style = WidgetStyle(font, background_colour=Colour().blue, border_colour=Colour().red, border_size=1)
+
+        text_box = TextBox(5, 5, element_width - 10, element_height - 10, text_box_style, [], "message_box",
+                           "Welcome to NQP.")
+        widgets = [text_box]
+        msg_log = AnotherMessageLog(element_x, element_y, element_width, element_height, frame_style, widgets)
         msg_log.is_visible = True
         self.elements["new_msg_log"] = msg_log
         #############################################################
 
     def init_message_log(self):
         """
-        Initialise the message log ui element.
+        Initialise the text log ui element.
         """
         self.elements[UIElements.MESSAGE_LOG.name] = MessageLog()
 
@@ -371,22 +377,18 @@ class ElementMethods:
                     if edge_start_x <= start_x < edge_start_x + camera.edge_size:
                         # player is on the left side, are we moving left?
                         if dir_x < 0:
-                            print("moving left")
                             return True
                     if edge_end_x > start_x >= edge_end_x - camera.edge_size:
                         # player is on the right side, are we moving right?
                         if 0 < dir_x:
-                            print("moving right")
                             return True
                     if edge_start_y <= start_y < edge_start_y + camera.edge_size:
                         # player is on the up side, are we moving up?
                         if dir_y < 0:
-                            print("moving up")
                             return True
                     if edge_end_y > start_y >= edge_end_y - camera.edge_size:
                         # player is on the down side, are we moving down?
                         if 0 < dir_y:
-                            print("moving down")
                             return True
 
             elif target_pos_in_edge:

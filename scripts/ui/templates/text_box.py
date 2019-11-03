@@ -1,4 +1,7 @@
+import logging
+from typing import List
 
+from scripts.core.constants import ICON_IN_TEXT_SIZE
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.widget import Widget
 from scripts.ui.templates.widget_style import WidgetStyle
@@ -8,12 +11,11 @@ class TextBox(Widget):
     """
     A widget to show text.
     """
-    def __init__(self, x: int, y: int, width: int, height: int, base_style: WidgetStyle, text: str = "text"):
-        super().__init__(x, y, width, height, base_style)
+    def __init__(self, x: int, y: int, width: int, height: int, base_style: WidgetStyle,  children: List = [],
+            name: str = "text_box", text: str = "text"):
+        super().__init__(x, y, width, height, base_style, children, name)
 
-        self.text_list = []
-        self.text_to_draw = []
-        self.first_line_index = 0
+        # aesthetics
         self.line_gap = int(self.base_style.font.size / 3)
 
         if self.base_style.border_size:
@@ -21,8 +23,17 @@ class TextBox(Widget):
         else:
             border_size = 0
 
-        self.max_lines = int((self.height - (border_size * 2)) / (self.base_style.font.size + self.line_gap))
+        self.max_lines = int((self.rect.height - (border_size * 2)) / (self.base_style.font.size + self.line_gap))
 
+        # state and info
+        self.text_list = []
+        self.text_to_draw = []
+        self.keywords = {}  # TODO - move to library
+        self.icons = {}  # TODO - move to library
+        self.commands = {}  # TODO - move to library
+        self.first_line_index = 0
+
+        # add the initial text
         self.add_text(text)
         self.update_text_shown()
 
@@ -31,28 +42,29 @@ class TextBox(Widget):
             border_size = self.base_style.border_size
         else:
             border_size = 0
-        max_width = self.width - (border_size * 2)  # *2 to offer border on each side
+        max_width = self.rect.width - (border_size * 2)  # *2 to offer border on each side
         wrapped_text = self.line_wrap_text(text, self.base_style.font, max_width)
         parsed_text_list = self.parse_text(wrapped_text, self.base_style.font)
 
         for text in parsed_text_list:
             self.text_list.append(text)
 
-    def line_wrap_text(self, message, font, max_width):
+    @staticmethod
+    def line_wrap_text(text, font, max_width):
         """
-        Break a message into lines based on panel width
+        Break a text into lines based on max_width
 
         Args:
             font (pygame.font):
             max_width (int):
-            message (str): message to wrap
+            text (str): text to wrap
 
         Returns:
             list[strings]: list of strings comprising wrapped lines of text
 
         """
 
-        words = message.split()
+        words = text.split()
         line_break = " \n "
         x = 0
         wrapped_text = ""
@@ -83,21 +95,22 @@ class TextBox(Widget):
 
         return wrapped_text
 
-    def parse_text(self, message, font):
+    def parse_text(self, text, font):
         """
         Check for keywords and commands and apply effects as required.
 
         Args:
-            message ():
+            text ():
             font ():
 
         Returns:
             list[list[pygame.Surface]] : A list (one per line) containing lists of surfaces for each set of words
         """
         parsed_message_list = []
+        palette = Palette().message_log
 
         # check for new lines
-        message_list = message.split("\n")
+        message_list = text.split("\n")
 
         # now we have a list of strings, one string per line
         for line_count in range(len(message_list)):
@@ -111,26 +124,122 @@ class TextBox(Widget):
             word_list = line.split()
             processed_indices = []
 
-            palette = Palette().message_log
-
             # check each word in the line
             for word_count in range(len(word_list)):
                 word = word_list[word_count]
 
                 # check index hasn't been processed already (commands look forward...)
                 if word_count not in processed_indices:
-                    outstanding_word_string += word + " "
+                    # check for COMMANDS
+                    if word[0] == "#":
+                        # TODO - handle specifying an end point, e.g. ##, rather than just next word
+
+
+                        # if any words waiting to be converted to a surface then do so
+                        if outstanding_word_string != "":
+                            text_surface, text_rect = font.render(outstanding_word_string, palette.text_default)
+                            # TODO - use info from base style
+                            line_list.append(text_surface)
+
+                            # we've used the outstanding word so clear it
+                            outstanding_word_string = ""
+
+                        # check there is a word to process after the command
+                        if len(word_list) > word_count + 1:
+                            # process the command
+                            command = word
+                            # get the next word (the one to process) and remove from the list
+                            word_to_process = word_list[word_count + 1]
+                            text_surface, text_rect = self.process_formatting_command(command, word_to_process, font)
+                            line_list.append(text_surface)
+
+                            # note that the next word has already been processed
+                            processed_indices.append(word_count + 1)
+                        else:
+                            logging.warning(f"Text box: Command received {word} with no following word.")
+
+                    # check for KEYWORDS
+                    elif word.lower() in self.keywords:
+                        # if any words waiting to be converted to a surface then do so
+                        if outstanding_word_string != "":
+                            text_surface, text_rect = font.render(outstanding_word_string, palette.text_default)
+                            line_list.append(text_surface)
+
+                            # we've used the outstanding word so clear it
+                            outstanding_word_string = ""
+
+                        # render the key word
+                        colour = self.keywords.get(word.lower())
+                        text_surface, text_rect = font.render(word + " ", colour)
+                        line_list.append(text_surface)
+
+                    # handle NORMAL WORDS
+                    else:
+                        outstanding_word_string += word + " "
 
             # handle any remaining word
             if outstanding_word_string != "":
                 text_surface, text_rect = font.render(outstanding_word_string, palette.text_default)
                 line_list.append(text_surface)
 
-            # add the line_list (of surfaces) to the parsed message list
+            # add the line_list (of surfaces) to the parsed text list
             parsed_message_list.append(line_list)
 
-        # return the parsed message list (a list, of lists, of surfaces)
+        # return the parsed text list (a list, of lists, of surfaces)
         return parsed_message_list
+
+    def process_formatting_command(self, command, word_to_affect, font):
+        """
+        Process text formatting commands
+
+        Args:
+            font ():
+            command (str): The command dictating the change. In format of #prefix.suffix
+            word_to_affect (str): The word that will be changed by the command
+
+        Returns:
+            Tuple(pygame.Surface, pygame.Rect): tuple of surface then rect
+        """
+        default_text_colour = Palette().message_log.text_default
+
+        # remove the command (#) from the string
+        cleaned_command = command.replace("#", "")
+
+        # split command prefix
+        command_prefix, command_suffix = cleaned_command.split(".")
+
+        # check which command to execute
+        # COLOUR CHANGE
+        if command_prefix == "col":
+            # get the colour to apply to the text
+            if command_suffix in self.commands:
+                colour = self.commands[command_suffix]
+            else:
+                colour = default_text_colour
+
+                log_string = f"Process text command: {cleaned_command} Suffix not understood."
+                logging.warning(log_string)
+
+            # create the surface
+            new_surface = font.render(word_to_affect, colour)
+
+        # REPLACE WORD WITH AN ICON
+        elif command_prefix == "ico":
+            icon = self.icons[command_suffix]
+
+            # catch any images not resized and resize them
+            if icon.get_size() != (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE):
+                import pygame
+                icon = pygame.transform.smoothscale(icon, (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE))
+
+            # return is expecting surface, rect
+            new_surface = icon, icon.get_rect()
+
+        # catch all; render as default
+        else:
+            new_surface = font.render(word_to_affect, default_text_colour)
+
+        return new_surface
 
     def update_text_shown(self):
         """
@@ -138,20 +247,25 @@ class TextBox(Widget):
         """
         # TODO - register / unregister tooltips
 
-        # update first message index
+        # update first text index
         if len(self.text_list) > self.max_lines:
             self.first_line_index = len(self.text_list) - self.max_lines
 
         # clear messages to draw
         self.text_to_draw.clear()
 
-        # update message to draw
+        # update text to draw
         text_to_draw = min(self.max_lines, len(self.text_list))
         for counter in range(0, text_to_draw):
             self.text_to_draw.append(self.text_list[counter + self.first_line_index])
 
-
     def draw(self, surface):
+        """
+        Draw the text in the text box, as well as the base style.
+
+        Args:
+            surface ():
+        """
         style = self.base_style
         style.draw(surface, self.rect)
 

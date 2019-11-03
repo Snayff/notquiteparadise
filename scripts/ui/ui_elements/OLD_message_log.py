@@ -11,12 +11,12 @@
 #
 # class OLD_MessageLog:
 #     """
-#     Store messages, and related functionality, to be shown in the message log.
+#     Store messages, and related functionality, to be shown in the text log.
 #
 #     Attributes:
 #         palette (Palette): Palette of Colours
 #         message_list (List(Tuple(MessageEventTypes, string))):  list of messages and their type
-#         message_type_to_show  (MessageEventTypes): Type of message to show in log
+#         message_type_to_show  (MessageEventTypes): Type of text to show in log
 #         expressions  (Dict): Dictionary of expressions to look for and their colour to show.
 #         icons (Dict): Dictionary of icons to look for and the icon to show.
 #         hyperlinks (Dict): Dictionary of hyperlinks to look for and the linked info to show.
@@ -70,7 +70,7 @@
 #
 #     def draw(self, surface):
 #         """
-#         Draw the message log and all included text and icons
+#         Draw the text log and all included text and icons
 #         Args:
 #             surface(Surface): Main surface to draw to.
 #         """
@@ -84,7 +84,7 @@
 #         messages_to_show = min(len(self.message_list), self.number_of_messages_to_show)
 #         first_message_index = self.first_message_to_show
 #
-#         # init info for message render
+#         # init info for text render
 #         msg_x = self.edge_size + self.message_indent
 #         msg_y = self.edge_size
 #         font = self.font
@@ -99,13 +99,13 @@
 #             # get y position of line to write to
 #             adjusted_y = msg_y + (message_count * (font_size + self.gap_between_lines))
 #
-#             # parse message for expressions
+#             # parse text for expressions
 #             parsed_message = self.parse_message(messages[message_count + first_message_index][1])
 #
 #             # render all parsed messages
 #             for counter in range(len(parsed_message)):
 #
-#                 # get the message to render and position to render to
+#                 # get the text to render and position to render to
 #                 msg_to_render = parsed_message[counter][1]
 #                 adjusted_x = msg_x + current_msg_x_offset
 #
@@ -154,7 +154,7 @@
 #                     current_msg_x_offset += (msg_length + 2) * (font_size / 2)  # Not sure about the formula, but it
 #                                                                                 # seems to works.
 #
-#         # no longer dirty # TODO - uncomment when able to setup message log is dirty
+#         # no longer dirty # TODO - uncomment when able to setup text log is dirty
 #         # self.is_dirty = False
 #
 #         # panel border
@@ -168,12 +168,12 @@
 #         Args:
 #             surface (Surface): Main surface to draw to.
 #         """
-#         # TODO - extract tooltip method from message log
+#         # TODO - extract tooltip method from text log
 #         # Message log tooltips
 #         font = self.font
 #         font_colour = self.palette.tooltip_text
 #
-#         # update message log tooltip info
+#         # update text log tooltip info
 #         self.check_mouse_over_link()
 #
 #         tooltip_info = self.get_active_tooltip()
@@ -188,18 +188,18 @@
 #                 font.render_to(surface, (extended_text_x, extended_text_y), extended_tooltip_text,
 #                                font_colour)
 #
-#     def add_message(self, message_type, message):
+#     def add_message(self, message_type, text):
 #         """
-#         Add a message to the OLD_MessageLog
+#         Add a text to the OLD_MessageLog
 #         Args:
 #             message_type(MessageEventTypes):
-#             message(str):
+#             text(str):
 #         """
-#         logging.info(f"{message} added to message log")
+#         logging.info(f"{text} added to text log")
 #
-#         self.message_list.append((message_type, message))
+#         self.message_list.append((message_type, text))
 #
-#         # if more messages than we can show at once then increment first message position
+#         # if more messages than we can show at once then increment first text position
 #         if len(self.message_list) > self.number_of_messages_to_show:
 #             self.update_first_message_position(1)
 #
@@ -209,11 +209,11 @@
 #         Args:
 #             increment:
 #         """
-#         #  prevent the first message going too far and showing less than max number of message_list to show
+#         #  prevent the first text going too far and showing less than max number of message_list to show
 #         self.first_message_to_show = min(self.first_message_to_show + increment, len(self.message_list) -
 #                                                                                  self.number_of_messages_to_show)
 #
-#         # ensure first message position cannot be less than the start of the message_list
+#         # ensure first text position cannot be less than the start of the message_list
 #         self.first_message_to_show = max(self.first_message_to_show, 0)
 #
 #     def set_message_type_to_show(self, message_type):
@@ -327,7 +327,7 @@
 #                 hyperlink_strings = self.hyperlinks.get(active_link[1])
 #                 tooltip_text = hyperlink_strings[0]
 #
-#                 # get location to show message
+#                 # get location to show text
 #                 text_x = active_link[0].x + 10
 #                 text_y = active_link[0].y
 #
@@ -367,25 +367,25 @@
 #         else:
 #             return []
 #
-#     def parse_message(self, message):
+#     def parse_message(self, text):
 #         """
 #         Parse for colours, tags and formatting
 #
 #         Args:
-#              message (str): The message string that needs parsing.
+#              text (str): The text string that needs parsing.
 #
 #         Returns:
-#              List[Tuple[Colour, str]]: List of Tuples containing message and colour
+#              List[Tuple[Colour, str]]: List of Tuples containing text and colour
 #         """
 #
-#         updated_message = message
+#         updated_message = text
 #
 #         # add spaces around special chars
 #         for char in ['\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '>', '#', '+', '-', '.', '!', '$', '\'']:
-#             if char in message:
-#                 updated_message = message.replace(char, " " + char)
+#             if char in text:
+#                 updated_message = text.replace(char, " " + char)
 #
-#         # break message out by spaces
+#         # break text out by spaces
 #         message_list = updated_message.split()
 #
 #         parsed_message_list = []
@@ -400,44 +400,44 @@
 #             # EXPRESSIONS
 #             if msg in self.expressions:
 #
-#                 # expression found so let`s deal with any in progress message
+#                 # expression found so let`s deal with any in progress text
 #                 if msg_in_progress != "":
 #                     # apply currently built string and then increment line
 #                     parsed_message_list.append((default_colour, msg_in_progress))
 #                     msg_in_progress = ""
 #
-#                 # create the expression as a new message
+#                 # create the expression as a new text
 #                 colour = self.expressions.get(msg)
 #                 parsed_message_list.append((colour, msg))
 #
 #             # ICONS
 #             elif msg in self.icons:
 #
-#                 # icon found so let`s deal with any in progress message
+#                 # icon found so let`s deal with any in progress text
 #                 if msg_in_progress != "":
 #                     # apply currently built string and then increment line
 #                     parsed_message_list.append((default_colour, msg_in_progress))
 #                     msg_in_progress = ""
 #
-#                 # create the icon as a new message
+#                 # create the icon as a new text
 #                 icon = self.icons.get(msg)
 #                 parsed_message_list.append((icon, "icon"))
 #
 #             # HYPERLINKS
 #             elif msg in self.hyperlinks:
 #
-#                 # hyperlink found so let`s deal with any in progress message
+#                 # hyperlink found so let`s deal with any in progress text
 #                 if msg_in_progress != "":
 #                     # apply currently built string and then increment line
 #                     parsed_message_list.append((default_colour, msg_in_progress))
 #                     msg_in_progress = ""
 #
-#                 # amend the colour to indicate the message is a  hyperlink
+#                 # amend the colour to indicate the text is a  hyperlink
 #                 parsed_message_list.append((self.palette.hyperlink, msg))
 #
 #             # NORMAL TEXT
 #             else:
-#                 # No match so extend current message line
+#                 # No match so extend current text line
 #                 if msg_in_progress != "":
 #                     msg_in_progress += " " + msg
 #                 else:

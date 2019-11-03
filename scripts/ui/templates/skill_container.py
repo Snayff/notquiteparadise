@@ -31,7 +31,7 @@ class SkillContainer(Panel):
 
     def draw_self_on_other_surface(self, surface):
         """
-        Draw the skill container on another surface
+        Draw the skill parent_widget on another surface
 
         Args:
             surface:

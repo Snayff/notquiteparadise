@@ -91,7 +91,7 @@ class DamageEffect(Effect):
                                 attacker_name = self.owner.name
                             msg = f"{attacker_name} {hit_type_desc} {defender.name} for {damage}."
                             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-                            # TODO - add the damage type to the message and replace the type with an icon
+                            # TODO - add the damage type to the text and replace the type with an icon
                             # TODO - add the explanation of the damage roll to a tooltip
 
                             # trigger tile interactions caused by damage type

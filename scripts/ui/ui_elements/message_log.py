@@ -9,7 +9,7 @@ from scripts.ui.templates.panel import Panel
 
 class MessageLog:
     """
-    Store messages, and related functionality, to be shown in the message log.
+    Store messages, and related functionality, to be shown in the text log.
 
     Attributes:
         message_list (List(Tuple(MessageEventTypes, string))):  list of messages and their type
@@ -54,7 +54,7 @@ class MessageLog:
 
     def draw(self, surface):
         """
-        Draw the message log and all included text and icons
+        Draw the text log and all included text and icons
 
         Args:
             surface(Surface): Main surface to draw to.
@@ -65,7 +65,7 @@ class MessageLog:
         # panel background
         self.panel.draw_background()
 
-        # init info for message render
+        # init info for text render
         msg_x = self.edge_size + self.message_indent
         msg_y = self.edge_size
         from scripts.global_singletons.managers import ui_manager

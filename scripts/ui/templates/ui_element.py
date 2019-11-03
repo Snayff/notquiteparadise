@@ -1,14 +1,33 @@
-from scripts.ui.templates.widget_container import WidgetContainer
+import pygame
+from abc import ABC
+from typing import List
+from scripts.ui.templates.widget_style import WidgetStyle
 
 
-class UIElement:
-    def __init__(self, container: WidgetContainer):
-        self.container = container
+class UIElement(ABC):
+    """
+    A grouping of widgets to create a specific UI element.
+    """
+    def __init__(self, x: int, y: int, width: int, height: int, base_style: WidgetStyle, children: List = []):
+        # aesthetics
+        self.base_style = base_style
+
+        # position and size
+        self.rect = pygame.rect.Rect(x, y, width, height)
+
+        # state and info
+        self.children = children
         self.is_visible = False
-        import pygame
-        self.surface = pygame.Surface((self.container.width, self.container.height))
+        self.surface = pygame.Surface((self.rect.width, self.rect.height))
 
-        # update container's rect as it is the ultimate parent and therefore does not have a relative position
-        # a container within a container is not affected
-        self.container.rect.x = 0
-        self.container.rect.y = 0
+    def draw(self, main_surface):
+        """
+        Base draw method of the ui element.
+        """
+        # adjust the rect of the ui element as it is absolute, not relative
+        adjusted_rect = [0, 0, self.rect.width, self.rect.height]
+        self.base_style.draw(main_surface, adjusted_rect)
+
+        # draw all contained widgets and containers
+        for child in self.children:
+            child.draw(self.surface)

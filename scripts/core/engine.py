@@ -34,7 +34,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 
 def main():
     """
-    The container for the game initialisation and game loop
+    The parent_widget for the game initialisation and game loop
     """
     # initialise logging
     initialise_logging()
