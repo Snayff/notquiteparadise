@@ -5,9 +5,9 @@ import pygame
 
 from scripts.core.constants import UIElementTypes, VisualInfo
 from scripts.global_singletons.data_library import library
+from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.camera import Camera
-from scripts.ui.ui_elements.entity_info import SelectedEntityInfo
 from scripts.ui.ui_elements.entity_queue import EntityQueue
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
@@ -37,7 +37,7 @@ class ElementMethods:
         """
         Initialise the selected entity info ui element
         """
-        self.elements[UIElementTypes.ENTITY_INFO.name] = SelectedEntityInfo()
+        self.elements[UIElementTypes.ENTITY_INFO.name] = EntityInfo()
 
     def init_targeting_overlay(self):
         """
@@ -108,8 +108,10 @@ class ElementMethods:
         Args:
             entity(Entity):
         """
-        self.elements[UIElementTypes.ENTITY_INFO.name].selected_entity = entity
-        #self.elements[UIElementTypes.ENTITY_INFO.name].update_entity_info(entity)
+        try:
+            self.elements[UIElementTypes.ENTITY_INFO.name].update_entity_info(entity)
+        except KeyError:
+            logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
     def set_skill_being_targeted(self, skill):
         """
@@ -421,4 +423,4 @@ class ElementMethods:
             message_log.add_message(message)
 
         except KeyError:
-            logging.debug(f"Tried to add text to MessageLog but key not found. Is the MessageLog init'd?")
+            logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")

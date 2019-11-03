@@ -1,177 +1,187 @@
-
 import logging
 
-from scripts.ui.basic.colours import Colour
-from scripts.ui.basic.palette import Palette
-from scripts.core.constants import VisualInfo, SecondaryStatTypes, PrimaryStatTypes
+from scripts.core.constants import InputStates, VisualInfo, ICON_SIZE, PrimaryStatTypes, SecondaryStatTypes
 from scripts.ui.basic.fonts import Font
-from scripts.ui.templates.panel import Panel
+from scripts.ui.basic.palette import Palette
+from scripts.ui.templates.frame import Frame
+from scripts.ui.templates.text_box import TextBox
+from scripts.ui.templates.ui_element import UIElement
+from scripts.ui.templates.widget_style import WidgetStyle
 
 
-class SelectedEntityInfo:
+class EntityInfo(UIElement):
     """
-    Handle the information for the selected entity and the associated panel
+    Hold text relating to the game's events, to display to the player.
     """
     def __init__(self):
+        # state and info
         self.selected_entity = None
-        font_size = Font().default.size
-        self.gap_between_lines = int(font_size / 3)
-        self.is_visible = False
 
-        # panel info
+        # size and position
+        width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
+        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        x = VisualInfo.BASE_WINDOW_WIDTH - width
+        y = VisualInfo.BASE_WINDOW_HEIGHT - height
+
+        # create style
         palette = Palette().entity_info
-        panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
-        panel_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
-        panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
-        panel_y = VisualInfo.BASE_WINDOW_HEIGHT - panel_height
-        panel_border = 2
-        panel_background_colour = palette.background
-        panel_border_colour = palette.border
-        self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
-                           panel_border_colour)
+        font = Font().entity_info
+        font_colour = palette.text_default
+        bg_colour = palette.background
+        border_colour = palette.border
+        border_size = 2
 
+        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+
+        children = []
+        edge = 5
+        # TODO - add back in to remove borders
+        text_box_base_style = WidgetStyle(font=font, background_colour=bg_colour, font_colour=font_colour)
+
+        # create child widgets
+        frame_x = (width / 2) - (ICON_SIZE / 2)  # find centre and then move half the width of the icon to the left
+        frame_y = edge
+        frame = Frame(frame_x, frame_y, ICON_SIZE, ICON_SIZE, base_style, [], "icon_frame")
+        
+        info_y = frame_y + ICON_SIZE + edge
+        info_height = base_style.font.size * 6  # size * 2 is same as a line's height, need 3 lines
+        info_text_box = TextBox(edge, info_y, width - (edge * 2), info_height - (edge * 2), base_style, [],
+                                "current_info")
+
+        primary_y = info_y + info_height + edge
+        text_height = (height - primary_y - (edge * 2)) / 2
+        primary_text_box = TextBox(edge, primary_y, width - (edge * 2), text_height - (edge * 2),
+                                   base_style, [], "primary_stats")
+        secondary_y = primary_y + text_height + edge
+        secondary_text_box = TextBox(edge, secondary_y, width - (edge * 2), text_height - (edge * 2),
+                                     base_style, [], "secondary_stats")
+
+        # add children
+        children.append(frame)
+        children.append(info_text_box)
+        children.append(primary_text_box)
+        children.append(secondary_text_box)
+
+        # complete base class init
+        super().__init__(x, y, width, height, base_style, children)
+
+        # confirm init complete
         logging.debug(f"EntityInfo initialised.")
 
-    def draw(self, surface):
+    def draw(self, main_surface):
         """
-        Draw the entity info
+        Draw the text log.
 
         Args:
-            surface (Surface): Surface to draw to
-
+            main_surface ():
         """
-        # panel background
-        self.panel.draw_background()
+        super().draw(self.surface)
 
-        # entity info
-        if self.selected_entity:
-            entity = self.selected_entity
-            icon = entity.icon
+        # blit to the main surface
+        main_surface.blit(self.surface, (self.rect.x, self.rect.y))
 
-            # formatting info
-            panel_centre_x = self.panel.width / 2
-            icon_width, icon_height = icon.get_rect().size
-            half_icon_width = icon_width / 2
-            half_icon_height = icon_height / 2
-            icon_x = panel_centre_x - half_icon_width
-            icon_y = (self.panel.height / 8) - half_icon_height
-            column_one_x = self.panel.width / 16
-            column_two_x = panel_centre_x + column_one_x
-            header_x = icon_x
-            header_y = icon_y + icon_height
-            font_colour = Colour().white
-            panel_surface = self.panel.surface
-            first_section_text = []
-            second_section_column_one_text = []
-            second_section_column_two_text = []
-            header_text = []
-            from scripts.global_singletons.managers import ui_manager
-            font = ui_manager.Font.default
-            font_size = font.size
+    def handle_input(self, input_key, input_state: InputStates = InputStates.PRESSED):
+        """
+        Process received input
 
-            # what messages do we want to show?
-            # TODO - move content out of draw
-            header_text.append(f"{entity.name.capitalize()}")
-            header_text.append(f"Current Health: {entity.combatant.hp}")
-            header_text.append(f"Current Stamina: {entity.combatant.stamina}")
+        Args:
+            input_key (): input received. Mouse, keyboard, gamepad.
+            input_state (): pressed or released
+        """
+        pass
 
-            first_section_text.append(f"PRIMARY")
+    def update_entity_info(self, entity):
+        """
+        Update the info held for the new entity
 
-            p_stats = entity.combatant.primary_stats
+        Args:
+            entity ():
+        """
+        self.selected_entity = entity
+        self.update_icon()
+        self.update_current_info()
+        self.update_primary_stats()
+        self.update_secondary_stats()
 
-            for stat in PrimaryStatTypes:
-                try:
-                    stat_value = getattr(p_stats, stat.name.lower())
-                    name = stat.name.title()
-                    name = name.replace("_", " ")
+    def update_icon(self):
+        """
+        Update the entity icon
+        """
+        for child in self.children:
+            if child.name == "icon_frame":
+                child.image = self.selected_entity.icon
+                break
 
-                    first_section_text.append(f"{name}: {stat_value}")
+    def update_current_info(self):
+        """
+        Update the current info text box
+        """
+        for child in self.children:
+            if child.name == "current_info":
+                entity = self.selected_entity
+                child.add_text(f"{entity.name.capitalize()}")
+                child.add_text(f"Current Health: {entity.combatant.hp}")
+                child.add_text(f"Current Stamina: {entity.combatant.stamina}")
+                child.update_text_shown()
+                break
 
-                # in case it fails to pull expected attribute
-                except AttributeError:
-                    pass
+    def update_primary_stats(self):
+        """
+        Update the primary stats text box
+        """
+        for child in self.children:
+            if child.name == "primary_stats":
+                stats = self.selected_entity.combatant.primary_stats
 
-            second_section_text_header = f"SECONDARY"
+                for stat in PrimaryStatTypes:
+                    try:
+                        stat_value = getattr(stats, stat.name.lower())
+                        name = stat.name.title()
+                        name = name.replace("_", " ")
 
-            s_stats = entity.combatant.secondary_stats
-            counter = 0
+                        child.add_text(f"{name}: {stat_value}")
 
-            for stat in SecondaryStatTypes:
-                try:
-                    stat_value = getattr(s_stats, stat.name.lower())
-                    name = stat.name.title()
-                    name = name.replace("_", " ")
+                    # in case it fails to pull expected attribute
+                    except AttributeError:
+                        logging.warning(f"Attribute {stat} not found for EntityInfo.")
 
-                    if counter % 2 == 0:
-                        second_section_column_one_text.append(f"{name}: {stat_value}")
-                    else:
-                        second_section_column_two_text.append(f"{name}: {stat_value}")
+                child.update_text_shown()
+                break
 
-                    counter += 1
+    def update_secondary_stats(self):
+        """
+        Update the secondary stats text box
+        """
+        for child in self.children:
+            if child.name == "secondary_stats":
+                stats = self.selected_entity.combatant.secondary_stats
 
-                except AttributeError:
-                    pass
+                for stat in SecondaryStatTypes:
+                    try:
+                        stat_value = getattr(stats, stat.name.lower())
+                        name = stat.name.title()
+                        name = name.replace("_", " ")
 
-            from scripts.global_singletons.managers import world_manager
-            afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)
-            affliction_info = []
-            for affliction in afflictions:
-                affliction_info.append(affliction.name + ":" + str(affliction.duration))
-            second_section_column_one_text.append(f"")
-            second_section_column_one_text.append(f"Afflicted by: {affliction_info}")
+                        child.add_text(f"{name}: {stat_value}")
 
-            # render the entity`s icon
-            panel_surface.blit(icon, (icon_x, icon_y))
+                    # in case it fails to pull expected attribute
+                    except AttributeError:
+                        logging.warning(f"Attribute {stat} not found for EntityInfo.")
 
-            # render header
-            adjusted_y = header_y
-            for text in header_text:
-                font.render_to(panel_surface, (header_x, adjusted_y), text, font_colour)
-                adjusted_y += font_size + self.gap_between_lines
+                child.update_text_shown()
+                break
 
-            # render the first section
-            adjusted_y += font_size + self.gap_between_lines
-            current_column = 0  # header of section
-            for text in first_section_text:
-                if current_column == 0:
-                    font.render_to(panel_surface, (header_x, adjusted_y), text, font_colour)
-                    current_column = 1
-                    # just added header so increment y
-                    adjusted_y += font_size + self.gap_between_lines
-                elif current_column == 1:
-                    font.render_to(panel_surface, (column_one_x, adjusted_y), text, font_colour)
-                    current_column = 2
-                    # N.B. just moving column so don't increment y
-                elif current_column == 2:
-                    font.render_to(panel_surface, (column_two_x, adjusted_y), text, font_colour)
-                    current_column = 1
-                    # now in second column so adjust y
-                    adjusted_y += font_size + self.gap_between_lines
+    def update_affliction_info(self):
+        """
+        Update the affliction info text box
+        """
+        pass
 
-            # render the second section
-            # render the header
-            adjusted_y += font_size + self.gap_between_lines
-            font.render_to(panel_surface, (header_x, adjusted_y), second_section_text_header, font_colour)
-            adjusted_y += font_size + self.gap_between_lines
-
-            second_main_row_y = adjusted_y + font_size + self.gap_between_lines
-
-            # render the first column of the second section
-            adjusted_y = second_main_row_y
-            for text in second_section_column_one_text:
-                font.render_to(panel_surface, (column_one_x, adjusted_y), text, font_colour)
-                adjusted_y += font_size + self.gap_between_lines
-
-            # render the second column of the second section
-            adjusted_y = second_main_row_y
-            for text in second_section_column_two_text:
-                font.render_to(panel_surface, (column_two_x, adjusted_y), text, font_colour)
-                adjusted_y += font_size + self.gap_between_lines
-
-        # panel border
-        self.panel.draw_border()
-
-        # draw all to provided surface
-        surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
-
-
+        # from scripts.global_singletons.managers import world_manager
+        # afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)
+        # affliction_info = []
+        # for affliction in afflictions:
+        #     affliction_info.append(affliction.name + ":" + str(affliction.duration))
+        # second_section_column_one_text.append(f"")
+        # second_section_column_one_text.append(f"Afflicted by: {affliction_info}")

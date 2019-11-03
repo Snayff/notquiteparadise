@@ -17,6 +17,8 @@ class TextBox(Widget):
             name: str = "text_box", text: str = ""):
         super().__init__(x, y, width, height, base_style, children, name)
 
+        # TODO - add text alignment
+
         # aesthetics
         self.line_gap = int(self.base_style.font.size / 3)
 
@@ -56,12 +58,11 @@ class TextBox(Widget):
 
         # formatting info
         style = self.base_style
-        text_indent = 5
-        msg_x = style.border_size + text_indent
-        msg_y = style.border_size + text_indent
+        text_indent = 2
+        msg_x = style.border_size + text_indent + self.rect.x
+        msg_y = style.border_size + text_indent + self.rect.y
         font = style.font
-        font_size = font.size
-        line_gap = int(font_size / 3)
+        line_gap = int(font.size / 3)
         line_count = 0
 
         # render the messages_to_draw
@@ -70,16 +71,16 @@ class TextBox(Widget):
             x_offset = 0
 
             # get y position of line to write to
-            adjusted_y = msg_y + (line_count * (font_size + line_gap))
-
-            # update  line count
-            line_count += 1
+            adjusted_y = int(msg_y + (line_count * (font.size + line_gap)))
 
             # pull each surface from each line_list and render to the panel surface
             for text in line_list:
                 surface.blit(text, (msg_x + x_offset, adjusted_y))
                 message_width = text.get_width()
                 x_offset += message_width + 2  # 2 for space between words
+
+            # update  line count
+            line_count += 1
 
     def init_keywords(self):
         """

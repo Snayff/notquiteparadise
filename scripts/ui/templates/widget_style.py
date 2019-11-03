@@ -38,7 +38,7 @@ class WidgetStyle:
             surface ():
             rect ():
         """
-        # add colours
+        # add border and background
         if self.background_colour:
             pygame.draw.rect(surface, self.background_colour, rect)
 

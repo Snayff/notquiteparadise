@@ -28,6 +28,10 @@ class Frame(Widget):
         """
         super().draw(surface)
 
+        if self.image:
+            surface.blit(self.image, self.rect)
+
+
     def resize_image(self):
         """
         Ensure the image is the size of the rect
