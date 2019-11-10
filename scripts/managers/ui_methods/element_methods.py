@@ -233,18 +233,8 @@ class ElementMethods:
         # if the player and the skill bar have been init'd update skill bar
         if player and skill_bar:
             for counter, skill in enumerate(player.actor.known_skills):
+                skill_bar.set_skill(counter, skill)
 
-                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
-                skill_icon = pygame.image.load("assets/skills/" + skill_data.icon).convert_alpha()
-
-                # catch any images not the right size and resize them
-                if skill_icon.get_size() != (skill_bar.skill_icon_size, skill_bar.skill_icon_size):
-                    icon = pygame.transform.smoothscale(skill_icon, (skill_bar.skill_icon_size,
-                            skill_bar.skill_icon_size))
-                else:
-                    icon = skill_icon
-
-                skill_bar.skill_containers[counter].skill_icon = icon
 
     def update_entity_queue(self):
         """

@@ -3,6 +3,7 @@ import logging
 import pygame
 
 from scripts.core.constants import InputStates, VisualInfo
+from scripts.global_singletons.data_library import library
 from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.frame import Frame
@@ -20,8 +21,8 @@ class NewSkillBar(UIElement):
         # state info
         self.skills = []
         self.max_skills = 5
-        for skill_slot in range(0, self.max_skills - 1):
-            self.skills.append = None
+        for skill_slot in range(0, self.max_skills):
+            self.skills += [None]
 
         # size and position
         width = 80
@@ -41,11 +42,10 @@ class NewSkillBar(UIElement):
         grid_rows = self.max_skills
         grid_columns = 1
         grid_children = []
-        img = pygame.image.load("assets/icons/placeholder/book.PNG").convert_alpha()
 
         for skill_number in range(0, grid_rows + grid_columns):
             base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
-                                     font_colour=font_colour, border_size=border_size, background_image=img)
+                                     font_colour=font_colour, border_size=border_size)
             # TODO - convert to text box to add skill number/hotkey
             frame = Frame(base_style=base_style, name=f"skill{skill_number}")
             grid_children.append(frame)
@@ -83,3 +83,11 @@ class NewSkillBar(UIElement):
 
     def set_skill(self, slot_number, skill):
         self.skills[slot_number] = skill
+
+        # TODO - find better way of recursively checking for children
+        for child in self.children[0].children:
+            if child.name == f"skill{slot_number}":
+                data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                icon = pygame.image.load("assets/skills/" + data.icon).convert_alpha()
+                icon = child.resize_image(icon, child.rect.width, child.rect.height)
+                child.base_style.background_image = icon
