@@ -8,7 +8,7 @@ class UIElement(ABC):
     """
     A grouping of widgets to create a specific UI element.
     """
-    def __init__(self, x: int, y: int, width: int, height: int, base_style: WidgetStyle, children: List = []):
+    def __init__(self, base_style: WidgetStyle, x: int, y: int, width: int, height: int, children: List = None):
         # aesthetics
         self.base_style = base_style
 
@@ -20,12 +20,14 @@ class UIElement(ABC):
         self.is_visible = False
         self.surface = pygame.Surface((self.rect.width, self.rect.height))
 
+    @abstractmethod
     def draw(self, main_surface):
         """
         Base draw method of the ui element.
         """
         # adjust the rect of the ui element as it is absolute, not relative
-        adjusted_rect = [0, 0, self.rect.width, self.rect.height]
+        # we dont adjust the actual rect as that would change the ui elements position
+        adjusted_rect = pygame.Rect(0, 0, self.rect.width, self.rect.height)
         self.base_style.draw(main_surface, adjusted_rect)
 
         # draw all contained widgets

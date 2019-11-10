@@ -13,7 +13,6 @@ class MessageLog(UIElement):
     Hold text relating to the game's events, to display to the player.
     """
     def __init__(self):
-
         # size and position
         width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 1)
         height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
@@ -28,9 +27,6 @@ class MessageLog(UIElement):
         border_colour = palette.border
         border_size = 2
 
-        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
-                                 font_colour=font_colour, border_size=border_size)
-
         # create child text box and style
         children = []
         edge = 5
@@ -39,8 +35,11 @@ class MessageLog(UIElement):
                            "message_box")
         children.append(text_box)
 
+        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+
         # complete base class init
-        super().__init__(x, y, width, height, base_style, children)
+        super().__init__(base_style, x, y, width, height, children)
 
         # confirm init complete
         logging.debug(f"MessageLog initialised.")

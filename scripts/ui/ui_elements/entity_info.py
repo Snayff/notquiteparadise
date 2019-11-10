@@ -30,30 +30,36 @@ class EntityInfo(UIElement):
         border_colour = palette.border
         border_size = 2
 
-        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+        base_style1 = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
                                  font_colour=font_colour, border_size=border_size)
+        base_style2 = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+        base_style3 = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+        base_style4 = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+        base_style5 = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                  font_colour=font_colour, border_size=border_size)
 
         children = []
         edge = 5
-        # TODO - add back in to remove borders
-        text_box_base_style = WidgetStyle(font=font, background_colour=bg_colour, font_colour=font_colour)
 
         # create child widgets
         frame_x = (width / 2) - (ICON_SIZE / 2)  # find centre and then move half the width of the icon to the left
         frame_y = edge
-        frame = Frame(base_style, frame_x, frame_y, ICON_SIZE, ICON_SIZE, [], "icon_frame")
+        frame = Frame(base_style1, frame_x, frame_y, ICON_SIZE, ICON_SIZE, [], "icon_frame")
         
         info_y = frame_y + ICON_SIZE + edge
-        info_height = base_style.font.size * 6  # size * 2 is same as a line's height, need 3 lines
-        info_text_box = TextBox(base_style, edge, info_y, width - (edge * 2), info_height - (edge * 2),  [],
+        info_height = base_style1.font.size * 6  # size * 2 is same as a line's height, need 3 lines
+        info_text_box = TextBox(base_style2, edge, info_y, width - (edge * 2), info_height - (edge * 2),  [],
                                 "current_info")
 
         primary_y = info_y + info_height + edge
         text_height = (height - primary_y - (edge * 2)) / 2
-        primary_text_box = TextBox(base_style, edge, primary_y, width - (edge * 2), text_height - (edge * 2),
+        primary_text_box = TextBox(base_style3, edge, primary_y, width - (edge * 2), text_height - (edge * 2),
                                    [], "primary_stats")
         secondary_y = primary_y + text_height + edge
-        secondary_text_box = TextBox(base_style, edge, secondary_y, width - (edge * 2), text_height - (edge * 2),
+        secondary_text_box = TextBox(base_style4, edge, secondary_y, width - (edge * 2), text_height - (edge * 2),
                                      [], "secondary_stats")
 
         # add children
@@ -63,7 +69,7 @@ class EntityInfo(UIElement):
         children.append(secondary_text_box)
 
         # complete base class init
-        super().__init__(x, y, width, height, base_style, children)
+        super().__init__(base_style5, x, y, width, height, children)
 
         # confirm init complete
         logging.debug(f"EntityInfo initialised.")
@@ -109,7 +115,7 @@ class EntityInfo(UIElement):
         """
         for child in self.children:
             if child.name == "icon_frame":
-                child.image = self.selected_entity.icon
+                child.base_style.background_image = self.selected_entity.icon
                 break
 
     def update_current_info(self):

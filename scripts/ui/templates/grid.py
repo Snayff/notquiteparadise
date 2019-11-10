@@ -1,5 +1,8 @@
 
 from typing import List
+
+import pygame
+
 from scripts.ui.templates.widget import Widget
 from scripts.ui.templates.widget_style import WidgetStyle
 
@@ -11,7 +14,7 @@ class Grid(Widget):
     """
 
     def __init__(self, base_style: WidgetStyle, x: int = 0, y: int = 0, width: int = 0, height: int = 0,
-            children: List = [],  name: str = "grid", rows: int = 1, columns: int = 1, gap_between_cells: int = 2):
+            children: List = None,  name: str = "grid", rows: int = 1, columns: int = 1, gap_between_cells: int = 2):
         super().__init__(base_style, x, y, width, height, children, name)
 
         self.rows = rows
@@ -43,10 +46,10 @@ class Grid(Widget):
 
         # draw all contained widgets
         for child in self.children:
-            y = int((row * (height + gap)) + gap)
-            x = int((column * (width + gap)) + gap)
-            child.base_style.draw(surface, [x, y, width, height])
-            child.draw(surface)
+            x = int((column * (width + gap)) + gap) + self.rect.x
+            y = int((row * (height + gap)) + gap) + self.rect.y
+            cell_rect = pygame.Rect(x, y, width, height)
+            child.base_style.draw(surface, cell_rect)
 
             row += 1
             if row >= rows:
@@ -64,4 +67,8 @@ class Grid(Widget):
         for child in self.children:
             child.rect.width = self.cell_width
             child.rect.height = self.cell_height
+
+            if child.base_style.background_image:
+                child.base_style.background_image = self.resize_image(child.base_style.background_image,
+                                                                    self.cell_width, self.cell_height)
 

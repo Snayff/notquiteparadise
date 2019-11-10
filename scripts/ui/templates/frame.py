@@ -10,13 +10,8 @@ class Frame(Widget):
     """
 
     def __init__(self, base_style: WidgetStyle, x: int = 0, y: int = 0, width: int = 0, height: int = 0,
-            children: List = [],  name: str = "frame", image=None):
+            children: List = None,  name: str = "frame"):
         super().__init__(base_style, x, y, width, height, children, name)
-
-        self.image = image
-
-        if self.image:
-            self.resize_image(self.image, self.rect.width, self.rect.height)
 
     def draw(self, surface):
         """
@@ -26,15 +21,3 @@ class Frame(Widget):
             surface ():
         """
         super().draw(surface)
-
-        if self.image:
-            surface.blit(self.image, self.rect)
-
-    def set_image(self, image):
-        """
-        Set the framed image
-
-        Args:
-            image ():
-        """
-        self.image = image

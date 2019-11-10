@@ -14,7 +14,7 @@ class TextBox(Widget):
     A widget to show text.
     """
     def __init__(self, base_style: WidgetStyle, x: int = 0, y: int = 0, width: int = 0, height: int = 0,
-            children: List = [], name: str = "text_box", text: str = ""):
+            children: List = None, name: str = "text_box", text: str = ""):
         super().__init__(base_style, x, y, width, height, children, name)
 
         # TODO - add text alignment

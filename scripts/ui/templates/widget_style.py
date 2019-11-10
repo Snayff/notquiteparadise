@@ -36,7 +36,7 @@ class WidgetStyle:
 
         Args:
             surface ():
-            rect ():
+            rect (pygame.Rect):
         """
         # add border and background
         if self.background_colour:
