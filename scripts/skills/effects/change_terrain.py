@@ -36,9 +36,9 @@ class ChangeTerrainEffect(Effect):
             data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.effect_type)
 
             # that the tags match
-            from scripts.global_singletons.managers import world_manager
-            if world_manager.Skill.has_required_tags(tile, data.required_tags):
-                world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
+            from scripts.global_singletons.managers import world
+            if world.Skill.has_required_tags(tile, data.required_tags):
+                world.Map.set_terrain_on_tile(tile, data.new_terrain)
 
                 # success text
                 entity = self.owner.owner.owner

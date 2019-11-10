@@ -6,8 +6,8 @@ import pstats
 import pygame
 
 from scripts.core.constants import GameStates
-from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
-    input_manager, start
+from scripts.global_singletons.managers import world, game, turn, ui, debug, \
+    input, start
 from scripts.global_singletons.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging, \
     initialise_ui_elements
@@ -73,25 +73,25 @@ def game_loop():
     The core game loop, handling input, rendering and logic.
     """
 
-    while not game_manager.game_state == GameStates.EXIT_GAME:
+    while not game.game_state == GameStates.EXIT_GAME:
 
         # limit frames
-        game_manager.internal_clock.tick(60)
+        game.internal_clock.tick(60)
 
-        if game_manager.game_state == GameStates.ENEMY_TURN:
-            turn_manager.turn_holder.ai.take_turn()
+        if game.game_state == GameStates.ENEMY_TURN:
+            turn.turn_holder.ai.take_turn()
 
         # HANDLE UPDATE
-        input_manager.update()
-        game_manager.update()
-        debug_manager.update()
-        world_manager.update()
-        ui_manager.update()
+        input.update()
+        game.update()
+        debug.update()
+        world.update()
+        ui.update()
         event_hub.update()
 
         # DRAW
-        debug_manager.draw()
-        ui_manager.Element.draw_visible_elements()
+        debug.draw()
+        ui.Element.draw_visible_elements()
 
 
 def dump_profiling_data(profiler):

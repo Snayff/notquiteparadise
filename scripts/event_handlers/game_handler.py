@@ -2,7 +2,7 @@ import logging
 
 from scripts.core.constants import GameEventTypes, GameStates
 from scripts.global_singletons.event_hub import publisher
-from scripts.global_singletons.managers import game_manager, turn_manager, world_manager
+from scripts.global_singletons.managers import game, turn, world
 from scripts.events.game_events import ChangeGameStateEvent, EndTurnEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
@@ -23,8 +23,8 @@ class GameHandler(Subscriber):
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
         elif event.event_type == GameEventTypes.END_TURN:
-            turn_manager.end_turn(event.time_spent)
-            turn_manager.next_turn()
+            turn.end_turn(event.time_spent)
+            turn.next_turn()
             publisher.publish(ChangeGameStateEvent(GameStates.NEW_TURN))
 
         elif event.event_type == GameEventTypes.CHANGE_GAME_STATE:
@@ -41,20 +41,20 @@ class GameHandler(Subscriber):
         if new_game_state == GameStates.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
-            publisher.publish(EndTurnEvent(world_manager.player, 1))  # trigger new turn actions (entity queue) fresh
+            publisher.publish(EndTurnEvent(world.player, 1))  # trigger new turn actions (entity queue) fresh
 
         elif new_game_state == GameStates.NEW_TURN:
             # if turn holder is the player then update to player turn
-            if turn_manager.turn_holder == world_manager.player:
+            if turn.turn_holder == world.player:
                 publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
             # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
             else:
                 publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
         # handle wasted attempt to change the game state
-        if new_game_state != game_manager.game_state:
-            game_manager.update_game_state(new_game_state)
+        if new_game_state != game.game_state:
+            game.update_game_state(new_game_state)
         else:
             log_string = f"-> new game state {new_game_state} is same as current" \
-                         f" {game_manager.game_state} so state not updated."
+                         f" {game.game_state} so state not updated."
             logging.info(log_string)

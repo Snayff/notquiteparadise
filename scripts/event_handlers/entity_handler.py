@@ -5,7 +5,7 @@ from scripts.events.entity_events import UseSkillEvent
 from scripts.events.message_events import MessageEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
-from scripts.global_singletons.managers import world_manager, turn_manager
+from scripts.global_singletons.managers import world, turn
 from scripts.events.game_events import EndTurnEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber, Event
 
@@ -63,9 +63,9 @@ class EntityHandler(Subscriber):
         old_x, old_y = entity.x, entity.y
 
         # is there something in the way?
-        in_bounds = world_manager.Map.is_tile_in_bounds(target_x, target_y)
-        tile_blocking_movement = world_manager.Map.is_tile_blocking_movement(target_x, target_y)
-        entity_blocking_movement = world_manager.Entity.get_blocking_entity_at_location(target_x, target_y)
+        in_bounds = world.Map.is_tile_in_bounds(target_x, target_y)
+        tile_blocking_movement = world.Map.is_tile_blocking_movement(target_x, target_y)
+        entity_blocking_movement = world.Entity.get_blocking_entity_at_location(target_x, target_y)
 
         if in_bounds:
 
@@ -83,20 +83,20 @@ class EntityHandler(Subscriber):
             elif not entity_blocking_movement and not tile_blocking_movement:
 
                 # clean up old tile
-                old_tile = world_manager.Map.get_tile(old_x, old_y)
-                world_manager.Map.set_entity_on_tile(old_tile, None)
+                old_tile = world.Map.get_tile(old_x, old_y)
+                world.Map.set_entity_on_tile(old_tile, None)
 
                 # move entity to new tile
-                new_tile = world_manager.Map.get_tile(target_x, target_y)
-                world_manager.Map.set_entity_on_tile(new_tile, entity)
+                new_tile = world.Map.get_tile(target_x, target_y)
+                world.Map.set_entity_on_tile(new_tile, entity)
 
                 # activate the tile's aspects affect
-                world_manager.Map.trigger_aspects_on_tile(new_tile)
+                world.Map.trigger_aspects_on_tile(new_tile)
 
                 # update fov if needed
                 if entity.player:
-                    player = world_manager.Entity.get_player()
-                    world_manager.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
+                    player = world.Entity.get_player()
+                    world.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
 
                 # end turn
                 publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
@@ -110,7 +110,7 @@ class EntityHandler(Subscriber):
         """
 
         skill_data = library.get_skill_data(event.skill.skill_tree_name, event.skill.name)
-        world_manager.Skill.pay_resource_cost(event.entity, skill_data.resource_type, skill_data.resource_cost)
+        world.Skill.pay_resource_cost(event.entity, skill_data.resource_type, skill_data.resource_cost)
         event.skill.use(event.target_pos)
 
     @staticmethod
@@ -130,14 +130,14 @@ class EntityHandler(Subscriber):
 
         # get the tile and remove the entity from it
         tile_x, tile_y = entity.x, entity.y
-        tile = world_manager.Map.get_tile(tile_x, tile_y)
-        world_manager.Map.set_entity_on_tile(tile, None)
+        tile = world.Map.get_tile(tile_x, tile_y)
+        world.Map.set_entity_on_tile(tile, None)
 
         # remove from turn queue
-        if entity in turn_manager.turn_queue:
-            turn_manager.turn_queue.pop(entity)
-        if turn_manager.turn_holder == entity:
-            turn_manager.build_new_turn_queue()
+        if entity in turn.turn_queue:
+            turn.turn_queue.pop(entity)
+        if turn.turn_holder == entity:
+            turn.build_new_turn_queue()
 
     @staticmethod
     def process_learn(event):

@@ -146,9 +146,9 @@ class EntityMethods:
 
         """
         max_path_length = 25
-        from scripts.global_singletons.managers import world_manager
-        game_map = world_manager.game_map
-        entities = world_manager.Entity.get_all_entities()
+        from scripts.global_singletons.managers import world
+        game_map = world.game_map
+        entities = world.Entity.get_all_entities()
         entity_to_move = start_entity
         target = target_entity
 

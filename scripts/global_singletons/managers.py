@@ -8,12 +8,12 @@ from scripts.managers.world_manager import WorldManager
 
 game_manager2: GameManager
 
-game_manager = GameManager()
-world_manager = WorldManager()
-turn_manager = TurnManager()
-debug_manager = DebugManager()
-ui_manager = UIManager()
-input_manager = InputManager()
+game = GameManager()
+world = WorldManager()
+turn = TurnManager()
+debug = DebugManager()
+ui = UIManager()
+input = InputManager()
 
 
 def start():

@@ -53,7 +53,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.statistic.project.settings" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -220,7 +220,9 @@
       <workItem from="1572615904898" duration="586000" />
       <workItem from="1572616503103" duration="11704000" />
       <workItem from="1572685573528" duration="14548000" />
-      <workItem from="1572776285043" duration="22642000" />
+      <workItem from="1572776285043" duration="22684000" />
+      <workItem from="1573398579070" duration="19000" />
+      <workItem from="1573398610610" duration="6949000" />
     </task>
     <servers />
   </component>
@@ -249,6 +251,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/NotQuiteParadise$engine.coverage" NAME="engine Coverage Results" MODIFIED="1572810243185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NotQuiteParadise$engine.coverage" NAME="engine Coverage Results" MODIFIED="1573405530761" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

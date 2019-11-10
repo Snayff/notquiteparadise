@@ -35,7 +35,7 @@ class MessageLog(UIElement):
         children = []
         edge = 5
         text_box_base_style = WidgetStyle(font=font, background_colour=bg_colour, font_colour=font_colour)
-        text_box = TextBox(edge, edge, width - (edge * 2), height - (edge * 2), text_box_base_style, [],
+        text_box = TextBox(text_box_base_style, edge, edge, width - (edge * 2), height - (edge * 2), [],
                            "message_box")
         children.append(text_box)
 
@@ -376,8 +376,8 @@ class MessageLog(UIElement):
 #
 #         for link in range(len(self.displayed_hyperlinks)):
 #
-#             from scripts.global_singletons.managers import ui_manager
-#             pos = ui_manager.get_relative_scaled_mouse_pos("message_log")
+#             from scripts.global_singletons.managers import ui
+#             pos = ui.get_relative_scaled_mouse_pos("message_log")
 #
 #             # get the link rect
 #             link_rect = self.displayed_hyperlinks[link][0]

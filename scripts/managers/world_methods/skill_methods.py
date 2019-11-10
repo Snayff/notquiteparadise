@@ -42,11 +42,11 @@ class SkillMethods:
         Returns:
             bool: True if can use the skill. Else False.
         """
-        from scripts.global_singletons.managers import world_manager
+        from scripts.global_singletons.managers import world
 
-        start_tile = world_manager.Map.get_tile(entity.x, entity.y)
+        start_tile = world.Map.get_tile(entity.x, entity.y)
         target_x, target_y = target_pos
-        target_tile = world_manager.Map.get_tile(target_x, target_y)
+        target_tile = world.Map.get_tile(target_x, target_y)
         skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
         # check we have everything we need and if so use the skill
@@ -54,7 +54,7 @@ class SkillMethods:
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
             if self.can_afford_cost(entity, resource_type, resource_cost):
-                distance = world_manager.Entity.get_chebyshev_distance_between_tiles(start_tile, target_tile)
+                distance = world.Entity.get_chebyshev_distance_between_tiles(start_tile, target_tile)
                 skill_range = skill_data.range
                 if distance <= skill_range:
                     return True

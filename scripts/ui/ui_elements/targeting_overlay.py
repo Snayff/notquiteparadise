@@ -50,8 +50,8 @@ class TargetingOverlay:
         Args:
             surface:
         """
-        from scripts.global_singletons.managers import ui_manager
-        palette = ui_manager.Palette.targeting_overlay
+        from scripts.global_singletons.managers import ui
+        palette = ui.Palette.targeting_overlay
 
         tile_colour = palette.highlighted_range_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)
@@ -71,8 +71,8 @@ class TargetingOverlay:
         Args:
             surface:
         """
-        from scripts.global_singletons.managers import ui_manager
-        palette = ui_manager.Palette.targeting_overlay
+        from scripts.global_singletons.managers import ui
+        palette = ui.Palette.targeting_overlay
 
         tile_colour = palette.highlighted_effect_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)
@@ -91,8 +91,8 @@ class TargetingOverlay:
         Args:
             surface:
         """
-        from scripts.global_singletons.managers import ui_manager
-        palette = ui_manager.Palette.targeting_overlay
+        from scripts.global_singletons.managers import ui
+        palette = ui.Palette.targeting_overlay
 
         tile_colour = palette.selected_tile_border
         rect = pygame.rect.Rect(0, 0, TILE_SIZE, TILE_SIZE)

@@ -37,11 +37,11 @@ class TurnManager:
         logging.info(f"Building a new turn queue...")
 
         # create a turn queue from the entities list
-        from scripts.global_singletons.managers import world_manager
-        entities = world_manager.Entity.get_all_entities()
+        from scripts.global_singletons.managers import world
+        entities = world.Entity.get_all_entities()
 
         for entity in entities:
-            if entity.ai or entity == world_manager.player:
+            if entity.ai or entity == world.player:
                 self.turn_queue[entity] = entity.actor.time_of_next_action
 
         # get the next entity in the queue

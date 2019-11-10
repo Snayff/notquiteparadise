@@ -9,8 +9,8 @@ class Widget(ABC):
     """
     A simple widget to display something on the UI. A base class.
     """
-    def __init__(self, x: int, y: int, width: int, height: int, base_style: WidgetStyle, children: List = [],
-            name: str = "widget"):
+    def __init__(self, base_style: WidgetStyle, x: int = 0, y: int = 0, width: int = 0, height: int = 0,
+            children: List = [], name: str = "widget"):
         # aesthetics
         self.base_style = base_style
 
@@ -22,7 +22,8 @@ class Widget(ABC):
         self.children = children
 
         # now that we know the size adjust the images to correct their sizes
-        self.resize_style_images()
+        if self.base_style.background_image:
+            self.resize_image(self.base_style.background_image, self.rect.width, self.rect.height )
 
     def draw(self, surface):
         """
@@ -34,13 +35,13 @@ class Widget(ABC):
         for child in self.children:
             child.draw(surface)
 
-    def resize_style_images(self):
+    def resize_image(self, image, desired_width, desired_height):
         """
-        Ensure the style images are the required size
+        Ensure the image is the expected size
         """
-        style = self.base_style
+        resized_image = image
 
-        if style.background_image:
-            if style.background_image.get_size() != self.rect.size:
-                style.background_image = pygame.transform.smoothscale(style.background_image, (self.rect.width,
-                self.rect.height))
+        if image.get_size() != (desired_width, desired_height):
+            resized_image = pygame.transform.smoothscale(image, (self.rect.width, self.rect.height))
+
+        return resized_image

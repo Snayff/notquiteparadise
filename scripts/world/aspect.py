@@ -61,6 +61,6 @@ class Aspect:
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
-            from scripts.global_singletons.managers import world_manager
-            effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
+            from scripts.global_singletons.managers import world
+            effect = world.Skill.create_effect(self, effect_data.effect_type)
             effect.trigger([self.owner])

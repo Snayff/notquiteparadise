@@ -23,8 +23,8 @@ class SkillBar:
         panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
         panel_y = 0
         panel_border = 2
-        from scripts.global_singletons.managers import ui_manager
-        palette = ui_manager.Palette.skill_bar
+        from scripts.global_singletons.managers import ui
+        palette = ui.Palette.skill_bar
         panel_background_colour = palette.background
         panel_border_colour = palette.border
         self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,

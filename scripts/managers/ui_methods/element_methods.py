@@ -57,8 +57,8 @@ class ElementMethods:
         """
         self.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
 
-        from scripts.global_singletons.managers import turn_manager
-        if turn_manager:
+        from scripts.global_singletons.managers import turn
+        if turn:
             self.update_entity_queue()
 
     def init_camera(self):
@@ -190,8 +190,8 @@ class ElementMethods:
             skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
             skill_range = skill_data.range
 
-            from scripts.global_singletons.managers import world_manager
-            tiles = world_manager.FOV.get_tiles_in_range_and_fov_of_player(skill_range)
+            from scripts.global_singletons.managers import world
+            tiles = world.FOV.get_tiles_in_range_and_fov_of_player(skill_range)
 
             self.set_tiles_in_targeting_overlay(tiles)
 
@@ -212,9 +212,9 @@ class ElementMethods:
             data = library.get_skill_data(targeting_overlay.skill_being_targeted.skill_tree_name,
                                           targeting_overlay.skill_being_targeted.name)
 
-            from scripts.global_singletons.managers import world_manager
-            coords = world_manager.Skill.create_shape(data.shape, data.shape_size)
-            effected_tiles = world_manager.Map.get_tiles(targeting_overlay.selected_tile.x,
+            from scripts.global_singletons.managers import world
+            coords = world.Skill.create_shape(data.shape, data.shape_size)
+            effected_tiles = world.Map.get_tiles(targeting_overlay.selected_tile.x,
                                                          targeting_overlay.selected_tile.y, coords)
 
             targeting_overlay.tiles_in_skill_effect_range = effected_tiles
@@ -227,8 +227,8 @@ class ElementMethods:
         skill_bar = self.get_ui_element(UIElementTypes.SKILL_BAR)
 
         # update info
-        from scripts.global_singletons.managers import world_manager
-        player = world_manager.player
+        from scripts.global_singletons.managers import world
+        player = world.player
 
         # if the player and the skill bar have been init'd update skill bar
         if player and skill_bar:
@@ -248,7 +248,7 @@ class ElementMethods:
 
     def update_entity_queue(self):
         """
-        Get info from the turn_manager and update the entity queue to be displayed
+        Get info from the turn and update the entity queue to be displayed
         """
         # TODO - convert to a set and set via en event
         entity_queue = self.get_ui_element(UIElementTypes.ENTITY_QUEUE)
@@ -261,8 +261,8 @@ class ElementMethods:
             counter = 0
 
             # loop entities in turn queue, up to max to show
-            from scripts.global_singletons.managers import turn_manager
-            for entity, time in turn_manager.turn_queue.items():
+            from scripts.global_singletons.managers import turn
+            for entity, time in turn.turn_queue.items():
                 if counter < entity_queue.max_entities_to_show:
                     icon = entity.icon
 
@@ -386,8 +386,8 @@ class ElementMethods:
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
-        from scripts.global_singletons.managers import world_manager
-        game_map = world_manager.Map.get_game_map()
+        from scripts.global_singletons.managers import world
+        game_map = world.Map.get_game_map()
 
         # clamp function: max(low, min(n, high))
         camera.x = max(0, min(camera.x + move_x, game_map.width))
@@ -406,9 +406,9 @@ class ElementMethods:
                 for y in range(camera.y, camera.y + camera.height):
                     coords.append((x, y))
 
-            from scripts.global_singletons.managers import world_manager
+            from scripts.global_singletons.managers import world
             # use 0,0 to stop the camera double jumping due to converting back and forth from world and physical space
-            tiles = world_manager.Map.get_tiles(0, 0, coords)
+            tiles = world.Map.get_tiles(0, 0, coords)
             self.set_tiles_in_camera(tiles)
 
     def add_to_message_log(self, message):

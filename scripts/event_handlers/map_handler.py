@@ -62,9 +62,9 @@ class MapHandler(Subscriber):
                     for interaction in aspect_data.interactions:
                         if event.cause == interaction.cause:
                             # change aspects
-                            from scripts.global_singletons.managers import world_manager
-                            world_manager.Map.remove_aspect_from_tile(tile, aspect.name)
-                            world_manager.Map.add_aspect_to_tile(tile, interaction.change_to)
+                            from scripts.global_singletons.managers import world
+                            world.Map.remove_aspect_from_tile(tile, aspect.name)
+                            world.Map.add_aspect_to_tile(tile, interaction.change_to)
 
                             # log the change
                             log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
@@ -84,11 +84,11 @@ class MapHandler(Subscriber):
             event(EndTurnEvent):
         """
         entity = event.entity
-        from scripts.global_singletons.managers import world_manager
-        tile = world_manager.Map.get_tile(entity.x, entity.y)
+        from scripts.global_singletons.managers import world
+        tile = world.Map.get_tile(entity.x, entity.y)
 
         # trigger aspects
-        world_manager.Map.trigger_aspects_on_tile(tile)
+        world.Map.trigger_aspects_on_tile(tile)
 
     @staticmethod
     def process_end_of_round_updates():
@@ -96,8 +96,8 @@ class MapHandler(Subscriber):
         Update aspect durations
         """
 
-        from scripts.global_singletons.managers import world_manager
-        game_map = world_manager.Map.get_game_map()
+        from scripts.global_singletons.managers import world
+        game_map = world.Map.get_game_map()
 
         # TODO - set to only apply within X range of player
         for row in game_map.tiles:
@@ -105,5 +105,5 @@ class MapHandler(Subscriber):
                 if tile.aspects:
 
                     # update durations
-                    world_manager.Map.reduce_aspect_durations_on_tile(tile)
-                    world_manager.Map.cleanse_expired_aspects(tile)
+                    world.Map.reduce_aspect_durations_on_tile(tile)
+                    world.Map.cleanse_expired_aspects(tile)

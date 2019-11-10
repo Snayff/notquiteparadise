@@ -1,5 +1,4 @@
 import logging
-
 from scripts.core.constants import InputStates, VisualInfo, ICON_SIZE, PrimaryStatTypes, SecondaryStatTypes
 from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
@@ -42,20 +41,20 @@ class EntityInfo(UIElement):
         # create child widgets
         frame_x = (width / 2) - (ICON_SIZE / 2)  # find centre and then move half the width of the icon to the left
         frame_y = edge
-        frame = Frame(frame_x, frame_y, ICON_SIZE, ICON_SIZE, base_style, [], "icon_frame")
+        frame = Frame(base_style, frame_x, frame_y, ICON_SIZE, ICON_SIZE, [], "icon_frame")
         
         info_y = frame_y + ICON_SIZE + edge
         info_height = base_style.font.size * 6  # size * 2 is same as a line's height, need 3 lines
-        info_text_box = TextBox(edge, info_y, width - (edge * 2), info_height - (edge * 2), base_style, [],
+        info_text_box = TextBox(base_style, edge, info_y, width - (edge * 2), info_height - (edge * 2),  [],
                                 "current_info")
 
         primary_y = info_y + info_height + edge
         text_height = (height - primary_y - (edge * 2)) / 2
-        primary_text_box = TextBox(edge, primary_y, width - (edge * 2), text_height - (edge * 2),
-                                   base_style, [], "primary_stats")
+        primary_text_box = TextBox(base_style, edge, primary_y, width - (edge * 2), text_height - (edge * 2),
+                                   [], "primary_stats")
         secondary_y = primary_y + text_height + edge
-        secondary_text_box = TextBox(edge, secondary_y, width - (edge * 2), text_height - (edge * 2),
-                                     base_style, [], "secondary_stats")
+        secondary_text_box = TextBox(base_style, edge, secondary_y, width - (edge * 2), text_height - (edge * 2),
+                                     [], "secondary_stats")
 
         # add children
         children.append(frame)
@@ -178,8 +177,8 @@ class EntityInfo(UIElement):
         """
         pass
 
-        # from scripts.global_singletons.managers import world_manager
-        # afflictions = world_manager.Affliction.get_afflictions_for_entity(entity)
+        # from scripts.global_singletons.managers import world
+        # afflictions = world.Affliction.get_afflictions_for_entity(entity)
         # affliction_info = []
         # for affliction in afflictions:
         #     affliction_info.append(affliction.name + ":" + str(affliction.duration))

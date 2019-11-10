@@ -60,7 +60,7 @@ class AfflictionMethods:
     def create_effect(self, owner, effect_type):
         """
         Create an effect and assign an owner.
-        Wrapper for the create effect under world_manager.Skill.
+        Wrapper for the create effect under world.Skill.
 
         Args:
             owner (object): Skill or Affliction

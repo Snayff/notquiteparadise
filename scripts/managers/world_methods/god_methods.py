@@ -32,7 +32,7 @@ class GodMethods:
 
     def add_god_to_central_list(self, god):
         """
-        Add a god to the world_manager list
+        Add a god to the world list
 
         Args:
             god (God):

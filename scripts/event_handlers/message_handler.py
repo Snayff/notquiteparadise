@@ -1,7 +1,7 @@
 
 import logging
 
-from scripts.global_singletons.managers import ui_manager
+from scripts.global_singletons.managers import ui
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
 
@@ -13,4 +13,4 @@ class MessageHandler(Subscriber):
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
-        ui_manager.Element.add_to_message_log(event.message)
+        ui.Element.add_to_message_log(event.message)

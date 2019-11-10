@@ -28,8 +28,8 @@ class AddAspectEffect(Effect):
 
         for tile in tiles:
 
-            from scripts.global_singletons.managers import world_manager
-            world_manager.Map.add_aspect_to_tile(tile, data.aspect_name)
+            from scripts.global_singletons.managers import world
+            world.Map.add_aspect_to_tile(tile, data.aspect_name)
 
             entity = self.owner.owner.owner
             msg = f"{entity.name} added {data.aspect_name} to {tile.terrain.name}."

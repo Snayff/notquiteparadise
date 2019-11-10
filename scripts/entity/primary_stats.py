@@ -34,8 +34,8 @@ class PrimaryStats:
             # TODO - add homeland data to stat
             component_changes += entity.homeland.vigour
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.global_singletons.managers import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, PrimaryStatTypes.VIGOUR)
         
         total = max(1, int(component_changes + base_value + affliction_changes))
@@ -65,8 +65,8 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.clout
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
+        from scripts.global_singletons.managers import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                                                                                 PrimaryStatTypes.CLOUT)
 
         total = max(1, int(component_changes + base_value + affliction_changes))
@@ -96,8 +96,8 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.skullduggery
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
+        from scripts.global_singletons.managers import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                 PrimaryStatTypes.SKULLDUGGERY)
 
         total = max(1, int(component_changes + base_value + affliction_changes))
@@ -127,8 +127,8 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.bustle
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
+        from scripts.global_singletons.managers import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                                                                         PrimaryStatTypes.BUSTLE)
 
         total = max(1, int(component_changes + base_value + affliction_changes))
@@ -158,8 +158,8 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
+        from scripts.global_singletons.managers import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                                                                             PrimaryStatTypes.EXACTITUDE)
 
         total = max(1, int(component_changes + base_value + affliction_changes))
