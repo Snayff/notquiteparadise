@@ -77,7 +77,7 @@ class EntityHandler(Subscriber):
             # check if entity blocking tile to attack
             elif entity_blocking_movement:
                 skill = entity.actor.known_skills[0]
-                publisher.publish((UseSkillEvent(entity, (target_x, target_y), skill)))
+                publisher.publish((UseSkillEvent(entity, skill, (target_x, target_y))))
 
             # if nothing in the way, time to move!
             elif not entity_blocking_movement and not tile_blocking_movement:

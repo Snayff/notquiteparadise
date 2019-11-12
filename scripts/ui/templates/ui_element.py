@@ -40,3 +40,11 @@ class UIElement(ABC):
         Base input method of the widget. Must be overridden.
         """
         raise NotImplementedError(f"handle_input method must be overridden for {self!r}")
+
+    def all_children(self):
+        """
+        Returns all children, recursively.
+        """
+        yield from self.children
+        for child in self.children:
+            yield from child.all_children()

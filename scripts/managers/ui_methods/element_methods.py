@@ -235,7 +235,6 @@ class ElementMethods:
             for counter, skill in enumerate(player.actor.known_skills):
                 skill_bar.set_skill(counter, skill)
 
-
     def update_entity_queue(self):
         """
         Get info from the turn and update the entity queue to be displayed

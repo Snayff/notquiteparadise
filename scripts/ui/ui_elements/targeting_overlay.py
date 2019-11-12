@@ -16,6 +16,7 @@ class TargetingOverlay:
     """
 
     def __init__(self):
+        # TODO - fold functionality into Camera
         # data
         self.skill_being_targeted = None
         self.tiles_in_range_and_fov = []

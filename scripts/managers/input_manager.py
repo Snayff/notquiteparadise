@@ -256,11 +256,10 @@ class InputManager:
 
                     # create a skill with a target, or activate targeting mode
                     if world.Skill.can_use_skill(player, (target_x, target_y), skill):
-                        publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
+                        publisher.publish((UseSkillEvent(player, skill, (target_x, target_y))))
                     else:
                         # can't use skill, is it due to being too poor?
-                        if world.Skill.can_afford_cost(player, skill_data.resource_type,
-                                                               skill_data.resource_cost):
+                        if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
                             publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
                 else:
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
@@ -326,8 +325,7 @@ class InputManager:
         # have we confirmed skill use on selected tile?
         if self.input_values["confirm"]:
             if world.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
-                publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                                 skill_being_targeted)))
+                publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x, selected_tile.y))))
             else:
                 # we already checked player can afford when triggering targeting mode so must be wrong target
                 msg = f"You can't do that there!"
@@ -345,8 +343,7 @@ class InputManager:
 
                     # confirm can use skill
                     if world.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
-                        publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                                         skill_being_targeted)))
+                        publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x, selected_tile.y))))
                     else:
                         # can't use skill, is it due to being too poor?
                         if world.Skill.can_afford_cost(player, skill_data.resource_type,

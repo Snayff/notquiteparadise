@@ -45,3 +45,11 @@ class Widget(ABC):
             resized_image = pygame.transform.smoothscale(image, (desired_width, desired_height))
 
         return resized_image
+
+    def all_children(self):
+        """
+        Returns all children, recursively.
+        """
+        yield from self.children
+        for child in self.children:
+            yield from child.all_children()

@@ -45,9 +45,9 @@ class MouseMethods:
         else:
             mouse_pos = self.get_scaled_mouse_pos()
 
-        ui_object = self.get_colliding_panel(mouse_pos[0], mouse_pos[1])
+        ui_object = self.get_colliding_ui_element(mouse_pos[0], mouse_pos[1])
 
-        relative_mouse_pos = mouse_pos[0] - ui_object.x, mouse_pos[1] - ui_object.y
+        relative_mouse_pos = mouse_pos[0] - ui_object.rect.x, mouse_pos[1] - ui_object.rect.y
 
         return relative_mouse_pos
 
@@ -102,6 +102,30 @@ class MouseMethods:
             if ui_object.is_visible and ui_object.rect.collidepoint(mouse_pos):
                 return UIElementTypes[key]
 
+    def get_colliding_ui_element(self, mouse_x=-1, mouse_y=-1):
+        """
+        Determine which ui element is colliding with mouse position. Current position used if one not provided.
+
+        Args:
+            mouse_x(int): Optional. Mouses x coord
+            mouse_y(int):  Optional. Mouses y coord.
+
+        Returns:
+            UIElement: UIElement
+        """
+
+        # if mouse pos was provided use it, else get it
+        if mouse_x != -1 and mouse_y != -1:
+            mouse_pos = (mouse_x, mouse_y)
+        else:
+            mouse_pos = self.get_scaled_mouse_pos()
+
+        # check if mouse collides with a visible ui element
+        ui_elements = self.manager.Element.get_ui_elements()
+        for key, ui_object in ui_elements.items():
+            if ui_object.is_visible and ui_object.rect.collidepoint(mouse_pos):
+                return ui_object
+
     def get_skill_index_from_skill_clicked(self, relative_x, relative_y):
         """
         Return the index of the skill clicked in the skill bar
@@ -118,9 +142,9 @@ class MouseMethods:
         """
         skill_bar = self.manager.Element.get_ui_element(UIElementTypes.SKILL_BAR)
 
-        for container in skill_bar.skill_containers:
-            if container.rect.collidepoint(relative_x, relative_y):
-                skill_index = skill_bar.skill_containers.index(container)
-                return skill_index
+        # for container in skill_bar.skill_containers:
+        #     if container.rect.collidepoint(relative_x, relative_y):
+        #         skill_index = skill_bar.skill_containers.index(container)
+        #         return skill_index
 
         return -1

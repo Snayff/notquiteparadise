@@ -36,21 +36,27 @@ class UiHandler(Subscriber):
                 game_state = game.game_state
 
                 # Selecting an entity
-                if button == MouseButtons.RIGHT_BUTTON and clicked_element == UIElementTypes.CAMERA:
-                    self.attempt_to_set_selected_entity(mouse_x, mouse_y)
-
-                # Selecting a skill
-                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.SKILL_BAR:
-                    self.attempt_to_trigger_targeting_mode(mouse_x, mouse_y)
-
-                # using a selected skill
-                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.CAMERA and game_state \
-                        == GameStates.TARGETING_MODE:
-                    self.attempt_to_use_targeted_skill()
+                # TODO - move to camera.handle_input
+                # if button == MouseButtons.RIGHT_BUTTON and clicked_element == UIElementTypes.CAMERA:
+                #     self.attempt_to_set_selected_entity(mouse_x, mouse_y)
+                #
+                # # Selecting a skill
+                # TODO - move to skill_bar.handle_input
+                # # elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.SKILL_BAR:
+                # #     self.attempt_to_trigger_targeting_mode(mouse_x, mouse_y)
+                #
+                # # using a selected skill
+                # TODO - move to camera.handle_input
+                # elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.CAMERA and game_state \
+                #         == GameStates.TARGETING_MODE:
+                #     self.attempt_to_use_targeted_skill()
 
                 # NEW APPROACH - remove if once all migrated  ############
                 # pass input to element
                 if clicked_element == UIElementTypes.MESSAGE_LOG:
+                    ui_element = ui.Element.get_ui_element(clicked_element)
+                    ui_element.handle_input(button)
+                elif clicked_element == UIElementTypes.SKILL_BAR:
                     ui_element = ui.Element.get_ui_element(clicked_element)
                     ui_element.handle_input(button)
 
@@ -143,13 +149,14 @@ class UiHandler(Subscriber):
         tile = world.Map.get_tile(player.x, player.y)
 
         # set the info needed to draw the overlay
-        ui.Element.set_skill_being_targeted(skill_to_be_used)
-        ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
-        ui.Element.set_selected_tile(tile)
-        ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
+        # TODO - re add the overlay when set up using ui widgets
+        # ui.Element.set_skill_being_targeted(skill_to_be_used)
+        # ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
+        # ui.Element.set_selected_tile(tile)
+        # ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
 
         # show the overlay
-        ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
+        # ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
 
         # show the entity info
         self.trigger_entity_info(tile)
@@ -177,8 +184,7 @@ class UiHandler(Subscriber):
 
         if world.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y),
                                              skill_being_targeted):
-            publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                             skill_being_targeted)))
+            publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x, selected_tile.y))))
         else:
             # we already checked player can afford when triggering targeting mode so must be wrong target
             msg = f"You can't do that there!"

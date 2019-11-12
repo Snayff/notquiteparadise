@@ -2,8 +2,10 @@ import logging
 
 import pygame
 
-from scripts.core.constants import InputStates, VisualInfo
+from scripts.core.constants import InputStates, VisualInfo, MouseButtons
+from scripts.events.entity_events import UseSkillEvent
 from scripts.global_singletons.data_library import library
+from scripts.global_singletons.event_hub import publisher
 from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.frame import Frame
@@ -79,15 +81,48 @@ class NewSkillBar(UIElement):
         main_surface.blit(self.surface, (self.rect.x, self.rect.y))
 
     def handle_input(self, input_key, input_state: InputStates = InputStates.PRESSED):
-        pass
+        """
+        Process received input
+
+        Args:
+            input_key (): input received. Mouse, keyboard, gamepad.
+            input_state (): pressed or released
+        """
+        # Use a skill
+        if input_key == MouseButtons.LEFT_BUTTON:
+            from scripts.global_singletons.managers import ui
+            mouse_pos = ui.Mouse.get_relative_scaled_mouse_pos()
+
+            for child in self.all_children():
+                if child.rect.collidepoint(mouse_pos) and child.name.startswith("skill"):
+                    from scripts.global_singletons.managers import world
+                    # get skill number by splitting the number from child's name
+                    skill_number = int(child.name.split("skill", 1)[1])
+
+                    # get the skill
+                    skill = world.player.actor.known_skills[skill_number]
+
+                    # attempt to use skill
+                    # TODO - put logic for testing if skill can be used in handler
+                    publisher.publish((UseSkillEvent(world.player, skill)))
+
+                    break
 
     def set_skill(self, slot_number, skill):
+        """
+        Set skill in the skill bar slot
+
+        Args:
+            slot_number ():
+            skill ():
+        """
         self.skills[slot_number] = skill
 
-        # TODO - find better way of recursively checking for children
-        for child in self.children[0].children:
+        for child in self.all_children():
             if child.name == f"skill{slot_number}":
                 data = library.get_skill_data(skill.skill_tree_name, skill.name)
                 icon = pygame.image.load("assets/skills/" + data.icon).convert_alpha()
                 icon = child.resize_image(icon, child.rect.width, child.rect.height)
                 child.base_style.background_image = icon
+
+                break
