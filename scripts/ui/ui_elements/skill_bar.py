@@ -1,88 +1,135 @@
-
 import logging
+import pygame
+from scripts.core.constants import InputStates, VisualInfo, MouseButtons
+from scripts.events.entity_events import UseSkillEvent
+from scripts.global_singletons.data_library import library
+from scripts.global_singletons.event_hub import publisher
+from scripts.ui.basic.fonts import Font
+from scripts.ui.basic.palette import Palette
+from scripts.ui.templates.grid import Grid
+from scripts.ui.templates.text_box import TextBox
+from scripts.ui.templates.ui_element import UIElement
+from scripts.ui.templates.widget_style import WidgetStyle
 
-from scripts.core.constants import VisualInfo
-from scripts.ui.templates.panel import Panel
-from scripts.ui.templates.skill_container import SkillContainer
 
-
-class SkillBar:
+class SkillBar(UIElement):
     """
-    Get and hold the info for the skill section
+    Display and hold the info for the skills in the skill bar.
     """
 
     def __init__(self):
-        # setup info
-        self.max_skills_in_bar = 5
-        self.skill_icon_size = 64
-        self.is_visible = False
+        # state info
+        self.skills = []
+        self.max_skills = 5
 
-        # panel info
-        panel_width = int(self.skill_icon_size * 1.5)
-        panel_height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
-        panel_x = VisualInfo.BASE_WINDOW_WIDTH - panel_width
-        panel_y = 0
-        panel_border = 2
-        from scripts.global_singletons.managers import ui
-        palette = ui.Palette.skill_bar
-        panel_background_colour = palette.background
-        panel_border_colour = palette.border
-        self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
-                           panel_border_colour)
+        # init skill list
+        for skill_slot in range(0, self.max_skills):
+            self.skills += [None]
 
-        # init the containers
-        # TODO - separate to own function
-        self.skill_containers = []
-        self.icon_x = int(panel_width / 4) - 5  # centre of the skill bar
-        self.gap_between_skill_icons = int((panel_height - (self.max_skills_in_bar * self.skill_icon_size)) /
-                                           self.max_skills_in_bar)
+        # size and position
+        width = 80
+        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        x = VisualInfo.BASE_WINDOW_WIDTH - width
+        y = 2
+        cell_gap = 2
+        edge = 5
 
-        size = self.skill_icon_size
+        # create style
+        palette = Palette().skill_bar
+        font = Font().skill_bar
+        font_colour = palette.text_default
         bg_colour = palette.background
-        bor_colour = palette.skill_border
-        bor_size = 1
-        skill_number = 1
+        border_colour = palette.border
+        border_size = 2
 
-        for y in range(0, self.max_skills_in_bar):
-            # ensure gap between skills
-            y = 10 + ((size * y) + self.gap_between_skill_icons)
+        # create grid's children
+        grid_rows = self.max_skills
+        grid_columns = 1
+        grid_children = []
 
-            skill_container = SkillContainer(self.icon_x, y, size, size, bg_colour, bor_size, bor_colour, None,
-                                             skill_number)
-            skill_container.owner = self
-            self.skill_containers.append(skill_container)
+        for skill_number in range(0, self.max_skills):
+            colour = (50, 50, 20*skill_number)
+            base_style = WidgetStyle(font=font, background_colour=colour, border_colour=border_colour,
+                                     font_colour=font_colour, border_size=border_size)
+            textbox = TextBox(base_style=base_style, name=f"skill{skill_number}", text=f"{skill_number}",
+                              width=width - (edge * 2), height=height - edge * 2)
+            grid_children.append(textbox)
 
-            # increment counter
-            skill_number += 1
+        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+        # create child Grid
+        children = []
+        grid = Grid(base_style, edge, edge, width - (edge * 2), height - (edge * 2), grid_children, "grid",
+                    grid_rows, grid_columns, cell_gap)
+        children.append(grid)
 
+        # complete base class init
+        super().__init__(base_style, x, y, width, height, children)
+
+        # confirm init complete
         logging.debug(f"SkillBar initialised.")
 
-    def draw(self, surface):
+    def update(self):
         """
-        Draw the skill bar, and skill containers
+        Ensure all the children update in response to changes.
+        """
+        super().update()
+
+    def draw(self, main_surface):
+        """
+        Draw the skill bar.
 
         Args:
-            surface:
+            main_surface ():
         """
-        panel_surface = self.panel.surface
+        super().draw(self.surface)
 
-        # panel background
-        self.panel.draw_background()
+        # blit to the main surface
+        main_surface.blit(self.surface, (self.rect.x, self.rect.y))
 
-        # skill containers
-        for container in self.skill_containers:
-            # draw the panel as normal then move to the panel surface
-            container.draw_background()
-            container.draw_border()
-            container.draw_skill_icon()
-            container.draw_skill_key()
-            container.draw_self_on_other_surface(panel_surface)
+    def handle_input(self, input_key, input_state: InputStates = InputStates.PRESSED):
+        """
+        Process received input
 
-        # panel border
-        self.panel.draw_border()
+        Args:
+            input_key (): input received. Mouse, keyboard, gamepad.
+            input_state (): pressed or released
+        """
+        # Use a skill
+        if input_key == MouseButtons.LEFT_BUTTON:
+            from scripts.global_singletons.managers import ui
+            mouse_pos = ui.Mouse.get_relative_scaled_mouse_pos()
 
-        # draw everything to the passed in surface
-        surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
+            for child in self.all_children():
+                if child.rect.collidepoint(mouse_pos) and child.name.startswith("skill"):
+                    from scripts.global_singletons.managers import world
+                    # get skill number by splitting the number from child's name
+                    skill_number = int(child.name.split("skill", 1)[1])
 
+                    # get the skill
+                    skill = world.player.actor.known_skills[skill_number]
 
+                    # attempt to use skill
+                    # TODO - put logic for testing if skill can be used in handler
+                    publisher.publish((UseSkillEvent(world.player, skill)))
 
+                    break
+
+    def set_skill(self, slot_number, skill):
+        """
+        Set skill in the skill bar slot
+
+        Args:
+            slot_number ():
+            skill ():
+        """
+        self.skills[slot_number] = skill
+
+        for child in self.all_children():
+            if child.name == f"skill{slot_number}":
+                data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                icon = pygame.image.load("assets/skills/" + data.icon).convert_alpha()
+                icon = child.resize_image(icon, child.rect.width, child.rect.height)
+                child.base_style.background_image = icon
+
+                break

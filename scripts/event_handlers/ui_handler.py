@@ -208,7 +208,7 @@ class UiHandler(Subscriber):
                 move_y = target_y - start_y
                 ui.Element.move_camera(move_x, move_y)
 
-        ui.Element.update_cameras_tiles_to_draw()
+        ui.Element.update_cameras_tiles()
 
     def init_ui(self):
         """

@@ -50,10 +50,6 @@ class Grid(Widget):
             child.rect.height = self.cell_height
 
             child.is_dirty = True
-            #
-            # if child.base_style.background_image:
-            #     child.base_style.background_image = self.resize_image(child.base_style.background_image,
-            #                                                         self.cell_width, self.cell_height)
 
     def update_childrens_pos(self):
         """

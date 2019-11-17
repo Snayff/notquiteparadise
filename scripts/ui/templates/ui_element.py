@@ -56,3 +56,19 @@ class UIElement(ABC):
         yield from self.children
         for child in self.children:
             yield from child.all_children()
+
+    def get_child(self, child_name: str):
+        """
+        Get a child from among all children. Returns first child with matching name.
+
+        Args:
+            child_name ():
+
+        Returns:
+            Widget: Returns found widget or None if nothing found.
+        """
+        for child in self.all_children():
+            if child.name == child_name:
+                return child
+
+        return None

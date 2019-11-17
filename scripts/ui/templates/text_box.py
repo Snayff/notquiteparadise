@@ -11,7 +11,7 @@ from scripts.ui.templates.widget_style import WidgetStyle
 
 class TextBox(Widget):
     """
-    A widget to show text.
+    A widget to show text. Must have width and height given for text to show as intended.
     """
     def __init__(self, base_style: WidgetStyle, x: int = 0, y: int = 0, width: int = 0, height: int = 0,
             children: List = None, name: str = "text_box", text: str = ""):

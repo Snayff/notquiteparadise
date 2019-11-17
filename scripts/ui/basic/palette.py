@@ -24,6 +24,7 @@ class Palette:
         self.targeting_overlay = self.TargetingOverlayPalette()
         self.skill_bar = self.SkillBarPalette()
         self.entity_queue = self.EntityQueuePalette()
+        self.camera = self.CameraPalette()
 
     class MessageLogPalette:
         """
@@ -106,4 +107,15 @@ class Palette:
             colour = Colour()
             self.background = colour.black
             self.border = colour.complement.darker
+            self.text_default = colour.white
+
+    class CameraPalette:
+        """
+        The palette for the camera
+        """
+        def __init__(self):
+            colour = Colour()
+            self.background = colour.black
+            self.border = colour.complement.darker
+            self.skill_border = colour.complement.lighter
             self.text_default = colour.white

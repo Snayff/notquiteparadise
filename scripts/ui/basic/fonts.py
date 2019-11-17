@@ -1,5 +1,6 @@
 import pygame.freetype
 
+
 class Font:
     """
     Renderable font.
@@ -28,3 +29,6 @@ class Font:
 
         self.entity_queue = pygame.freetype.Font(font_dir + "Barlow-Regular.otf", 8)
         self.entity_queue.pad = True
+
+        self.camera = pygame.freetype.Font(font_dir + "Barlow-Regular.otf", 8)
+        self.camera.pad = True

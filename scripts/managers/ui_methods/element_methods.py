@@ -3,12 +3,13 @@ from typing import Tuple
 
 import pygame
 
-from scripts.core.constants import UIElementTypes, VisualInfo
+from scripts.core.constants import UIElementTypes, VisualInfo, TILE_SIZE
 from scripts.global_singletons.data_library import library
 from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.entity_queue import EntityQueue
+from scripts.ui.ui_elements.new_camera import NewCamera
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
 
@@ -65,7 +66,7 @@ class ElementMethods:
         """
         Initialise the camera
         """
-        self.elements[UIElementTypes.CAMERA.name] = Camera()
+        self.elements[UIElementTypes.CAMERA.name] = NewCamera()
 
     def set_element_visibility(self, element_type, visible):
         """
@@ -276,17 +277,6 @@ class ElementMethods:
                 else:
                     break
 
-    def set_tiles_in_camera(self, tiles):
-        """
-        Set the tiles to be drawn by the camera based on the camera size.
-
-        Args:
-            tiles (list[Tile]): all of the tiles to draw.
-        """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
-
-        camera.tiles_to_draw = tiles
-
     def is_target_pos_in_camera_edge(self, target_pos: Tuple):
         """
         Determine if target position is within the edge of the camera
@@ -300,10 +290,10 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         player_x, player_y = target_pos
 
-        edge_start_x = camera.x
-        edge_end_x = camera.x + camera.width
-        edge_start_y = camera.y
-        edge_end_y = camera.y + camera.height
+        edge_start_x = camera.start_tile_x
+        edge_end_x = camera.start_tile_x + camera.columns
+        edge_start_y = camera.start_tile_y
+        edge_end_y = camera.start_tile_y + camera.rows
 
         if edge_start_x <= player_x < edge_start_x + camera.edge_size:
             return True
@@ -333,10 +323,10 @@ class ElementMethods:
 
         # if camera has been init'd
         if camera:
-            edge_start_x = camera.x
-            edge_end_x = camera.x + camera.width
-            edge_start_y = camera.y
-            edge_end_y = camera.y + camera.height
+            edge_start_x = camera.start_tile_x
+            edge_end_x = camera.start_tile_x + camera.columns
+            edge_start_y = camera.start_tile_y
+            edge_end_y = camera.start_tile_y + camera.rows
 
             start_pos_in_edge = self.is_target_pos_in_camera_edge(start_pos)
             target_pos_in_edge = self.is_target_pos_in_camera_edge(target_pos)
@@ -388,26 +378,47 @@ class ElementMethods:
         game_map = world.Map.get_game_map()
 
         # clamp function: max(low, min(n, high))
-        camera.x = max(0, min(camera.x + move_x, game_map.width))
-        camera.y = max(0, min(camera.y + move_y, game_map.height))
+        camera.start_tile_x = max(0, min(camera.start_tile_x + move_x, game_map.width))
+        camera.start_tile_y = max(0, min(camera.start_tile_y + move_y, game_map.height))
 
-    def update_cameras_tiles_to_draw(self):
+    def update_cameras_tiles(self):
         """
         Retrieve the tiles to draw within view of the camera
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        coords = []
+        from scripts.global_singletons.managers import world
 
-        # if camera has been init'd
         if camera:
-            for x in range(camera.x, camera.x + camera.width):
-                for y in range(camera.y, camera.y + camera.height):
-                    coords.append((x, y))
+            cell_x = 0
+            cell_y = 0
 
-            from scripts.global_singletons.managers import world
-            # use 0,0 to stop the camera double jumping due to converting back and forth from world and physical space
-            tiles = world.Map.get_tiles(0, 0, coords)
-            self.set_tiles_in_camera(tiles)
+            for x in range(camera.start_tile_x, camera.start_tile_x + camera.columns):
+                for y in range(camera.start_tile_y, camera.start_tile_y + camera.rows):
+
+                    tile = world.Map.get_tile(x, y)
+
+                    # create transparent surface to blit to
+                    image = pygame.Surface([TILE_SIZE, TILE_SIZE], pygame.SRCALPHA)
+                    image = image.convert_alpha()
+
+                    if tile.terrain:
+                        image.blit(tile.terrain.sprite, (0, 0))
+
+                    if tile.entity:
+                        image.blit(tile.entity.icon, (0, 0))
+
+                    if tile.aspects:
+                        for key, aspect in tile.aspects.items():
+                            image.blit(aspect.sprite, (0, 0))
+
+                    camera.set_cell_background_image(cell_x, cell_y, image)
+
+                    # increment camera cell
+                    cell_y += 1
+
+                # reset camera cell y and increment camera cell x
+                cell_y = 0
+                cell_x += 1
 
     def add_to_message_log(self, message):
         """

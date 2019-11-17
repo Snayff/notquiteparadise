@@ -124,6 +124,6 @@ def initialise_ui_elements():
     ui.Element.init_message_log()
     # ui.Element.init_skill_bar()
     # ui.Element.init_targeting_overlay()
-    from scripts.ui.ui_elements.new_skill_bar import NewSkillBar
-    ui.Element.elements[UIElementTypes.SKILL_BAR.name] = NewSkillBar()
+    from scripts.ui.ui_elements.skill_bar import SkillBar
+    ui.Element.elements[UIElementTypes.SKILL_BAR.name] = SkillBar()
     ui.Element.set_element_visibility(UIElementTypes.SKILL_BAR, True)
