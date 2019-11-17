@@ -27,8 +27,10 @@ class UIManager:
 
     def update(self):
         """
-        No updates currently needed but must have the method
+        Update all ui elements
         """
+        self.Element.update_visible_elements()
+
 
 
 def example_code():

@@ -1,8 +1,6 @@
-
-from typing import List
-
+import logging
 import pygame
-
+from typing import List
 from scripts.ui.templates.widget import Widget
 from scripts.ui.templates.widget_style import WidgetStyle
 
@@ -20,14 +18,19 @@ class Grid(Widget):
         self.rows = rows
         self.columns = columns
         self.gap_between_cells = gap_between_cells
+        self.cell_width = 0  # calculated in a moment
+        self.cell_height = 0  # calculated in a moment
 
-        # calc size
-        self.cell_width = int((self.rect.width / self.columns) - (self.gap_between_cells * 2))
-        self.cell_height = int((self.rect.height / self.rows) - (self.gap_between_cells * 2))
+    def update(self):
+        """
+        If dirty update cell size, child size and position.
+        """
+        if self.is_dirty:
+            self.update_cell_size()
+            self.resize_children()
+            self.update_childrens_pos()
 
-        # update children
-        self.resize_cells()
-        self.update_childrens_pos()
+        super().update()
 
     def draw(self, surface):
         """
@@ -37,33 +40,8 @@ class Grid(Widget):
             surface ():
         """
         super().draw(surface)
-        # self.base_style.draw(surface, self.rect)
-        #
-        # rows = self.rows
-        # cols = self.columns
-        # gap = self.gap_between_cells
-        # width = self.cell_width
-        # height = self.cell_height
-        # row = 0
-        # column = 0
-        #
-        # # draw all contained widgets
-        # for child in self.children:
-        #     x = int((column * (width + gap)) + gap) + self.rect.x
-        #     y = int((row * (height + gap)) + gap) + self.rect.y
-        #     cell_rect = pygame.Rect(x, y, width, height)
-        #     child.base_style.draw(surface, cell_rect)
-        #
-        #     row += 1
-        #     if row >= rows:
-        #         row = 0
-        #         column += 1
-        #
-        #         # check if all of the grid is full
-        #         if column >= cols:
-        #             break
 
-    def resize_cells(self):
+    def resize_children(self):
         """
         Resize the cells in line with the number of rows and columns
         """
@@ -71,9 +49,11 @@ class Grid(Widget):
             child.rect.width = self.cell_width
             child.rect.height = self.cell_height
 
-            if child.base_style.background_image:
-                child.base_style.background_image = self.resize_image(child.base_style.background_image,
-                                                                    self.cell_width, self.cell_height)
+            child.is_dirty = True
+            #
+            # if child.base_style.background_image:
+            #     child.base_style.background_image = self.resize_image(child.base_style.background_image,
+            #                                                         self.cell_width, self.cell_height)
 
     def update_childrens_pos(self):
         """
@@ -100,6 +80,17 @@ class Grid(Widget):
                 column += 1
 
                 # check if all of the grid is full
-                if column >= cols:
+                if column == cols:
                     break
+                elif column > cols:
+                    logging.warning(f"{self.name} tried to add more children than grid`s rows and cols.")
+                    break
+
+    def update_cell_size(self):
+        """
+        Ensure cells can fit based on rows and cols required
+        """
+        # calc size
+        self.cell_width = int((self.rect.width / self.columns) - (self.gap_between_cells * 2))
+        self.cell_height = int((self.rect.height / self.rows) - (self.gap_between_cells * 2))
 

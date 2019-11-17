@@ -33,6 +33,9 @@ class Camera:
                            panel_border_colour)
         self.rect = pygame.rect.Rect(self.x, self.y, panel_width, panel_height)
 
+    def update(self):
+        pass
+
     def draw(self, surface):
         """
         Draw the tiles in view

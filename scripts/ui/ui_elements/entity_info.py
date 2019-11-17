@@ -74,6 +74,19 @@ class EntityInfo(UIElement):
         # confirm init complete
         logging.debug(f"EntityInfo initialised.")
 
+    def update(self):
+        """
+        If dirty update entity's icon, info and stats
+        """
+        if self.is_dirty:
+            self.update_icon()
+            self.update_current_info()
+            self.update_primary_stats()
+            self.update_secondary_stats()
+            self.update_affliction_info()
+
+        super().update()
+
     def draw(self, main_surface):
         """
         Draw the text log.
@@ -96,7 +109,7 @@ class EntityInfo(UIElement):
         """
         pass
 
-    def update_entity_info(self, entity):
+    def set_selected_entity(self, entity):
         """
         Update the info held for the new entity
 
@@ -104,10 +117,7 @@ class EntityInfo(UIElement):
             entity ():
         """
         self.selected_entity = entity
-        self.update_icon()
-        self.update_current_info()
-        self.update_primary_stats()
-        self.update_secondary_stats()
+        self.is_dirty = True
 
     def update_icon(self):
         """

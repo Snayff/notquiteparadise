@@ -44,6 +44,12 @@ class MessageLog(UIElement):
         # confirm init complete
         logging.debug(f"MessageLog initialised.")
 
+    def update(self):
+        """
+        Ensure all the children update in response to changes.
+        """
+        super().update()
+
     def draw(self, main_surface):
         """
         Draw the message log.
@@ -90,7 +96,6 @@ class MessageLog(UIElement):
         for child in self.children:
             if child.name == "message_box":
                 child.add_text(message)
-                child.update_text_shown()
 
 
 

@@ -1,15 +1,13 @@
 import logging
-
 import pygame
-
 from scripts.core.constants import InputStates, VisualInfo, MouseButtons
 from scripts.events.entity_events import UseSkillEvent
 from scripts.global_singletons.data_library import library
 from scripts.global_singletons.event_hub import publisher
 from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
-from scripts.ui.templates.frame import Frame
 from scripts.ui.templates.grid import Grid
+from scripts.ui.templates.text_box import TextBox
 from scripts.ui.templates.ui_element import UIElement
 from scripts.ui.templates.widget_style import WidgetStyle
 
@@ -31,6 +29,8 @@ class NewSkillBar(UIElement):
         height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
         x = VisualInfo.BASE_WINDOW_WIDTH - width
         y = 2
+        cell_gap = 2
+        edge = 5
 
         # create style
         palette = Palette().skill_bar
@@ -45,19 +45,19 @@ class NewSkillBar(UIElement):
         grid_columns = 1
         grid_children = []
 
-        for skill_number in range(0, grid_rows + grid_columns):
-            base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+        for skill_number in range(0, self.max_skills):
+            colour = (50, 50, 20*skill_number)
+            base_style = WidgetStyle(font=font, background_colour=colour, border_colour=border_colour,
                                      font_colour=font_colour, border_size=border_size)
             # TODO - convert to text box to add skill number/hotkey
-            frame = Frame(base_style=base_style, name=f"skill{skill_number}")
-            grid_children.append(frame)
+            textbox = TextBox(base_style=base_style, name=f"skill{skill_number}", text=f"skill{skill_number}",
+                              width=width - (edge * 2), height=height - edge * 2)
+            grid_children.append(textbox)
 
         base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
                                  font_colour=font_colour, border_size=border_size)
         # create child Grid
         children = []
-        cell_gap = 2
-        edge = 5
         grid = Grid(base_style, edge, edge, width - (edge * 2), height - (edge * 2), grid_children, "grid",
                     grid_rows, grid_columns, cell_gap)
         children.append(grid)
@@ -65,8 +65,17 @@ class NewSkillBar(UIElement):
         # complete base class init
         super().__init__(base_style, x, y, width, height, children)
 
+        for child in self.all_children():
+            child.is_dirty = True
+
         # confirm init complete
         logging.debug(f"EntityInfo initialised.")
+
+    def update(self):
+        """
+        Ensure all the children update in response to changes.
+        """
+        super().update()
 
     def draw(self, main_surface):
         """

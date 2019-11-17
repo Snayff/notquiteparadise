@@ -22,13 +22,6 @@ class TextBox(Widget):
         # aesthetics
         self.line_gap = int(self.base_style.font.size / 3)
 
-        if self.base_style.border_size:
-            border_size = self.base_style.border_size
-        else:
-            border_size = 0
-
-        self.max_lines = int((self.rect.height - (border_size * 2)) / (self.base_style.font.size + self.line_gap))
-
         # state and info
         self.text_list = []
         self.text_to_draw = []
@@ -36,6 +29,12 @@ class TextBox(Widget):
         self.icons = {}  # TODO - move to library
         self.commands = {}  # TODO - move to library
         self.first_line_index = 0
+        # calc max lines
+        if self.base_style.border_size:
+            border_size = self.base_style.border_size
+        else:
+            border_size = 0
+        self.max_lines = int((self.rect.height - (border_size * 2)) / (self.base_style.font.size + self.line_gap))
 
         # init references
         self.init_commands()
@@ -43,9 +42,17 @@ class TextBox(Widget):
         self.init_keywords()
 
         # add the initial text
-        if text:
+        if text is not "":
             self.add_text(text)
+
+    def update(self):
+        """
+        If dirty update text shown
+        """
+        if self.is_dirty:
             self.update_text_shown()
+
+        super().update()
 
     def draw(self, surface):
         """
@@ -144,6 +151,9 @@ class TextBox(Widget):
         # update first text index
         if len(self.text_list) > self.max_lines:
             self.first_line_index = len(self.text_list) - self.max_lines
+
+        # make dirty
+        self.is_dirty = True
 
     @staticmethod
     def line_wrap_text(text, font, max_width):
@@ -338,9 +348,17 @@ class TextBox(Widget):
 
     def update_text_shown(self):
         """
-        Update the text in the text box, ensuring correct messages are shown
+        Update the text in the text box, ensuring correct messages are shown. Involves recalculating max_lines.
         """
         # TODO - register / unregister tooltips
+
+        # recalc max lines
+        if self.base_style.border_size:
+            border_size = self.base_style.border_size
+        else:
+            border_size = 0
+
+        self.max_lines = int((self.rect.height - (border_size * 2)) / (self.base_style.font.size + self.line_gap))
 
         # clear messages to draw
         self.text_to_draw.clear()
@@ -348,5 +366,8 @@ class TextBox(Widget):
         # update text to draw
         lines_to_draw = min(self.max_lines, len(self.text_list))
         for counter in range(0, lines_to_draw):
-            self.text_to_draw.append(self.text_list[counter + self.first_line_index])
+            try:
+                self.text_to_draw.append(self.text_list[counter + self.first_line_index])
+            except IndexError:
+                logging.warning(f"{self.name} tried to add more lines to text box than there were.")
 

@@ -79,11 +79,11 @@ class ElementMethods:
             element = self.elements[element_type.name]
             element.is_visible = visible
         except KeyError:
-            logging.debug(f"Tried to set {element_type.name} to {visible} but key doesn't exist.")
+            logging.warning(f"ui tried to set {element_type.name} to {visible} but key doesn`t exist.")
 
     def draw_visible_elements(self):
         """
-        Draw the visible ui elements based on is_visible attribute of the element
+        Draw the visible ui elements. Checks is_visible.
         """
         # TODO - add handling for dirty
 
@@ -101,6 +101,15 @@ class ElementMethods:
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
+    def update_visible_elements(self):
+        """
+        Update the visible ui elements. Checks is_visible.
+        """
+
+        for key, element in self.elements.items():
+            if element.is_visible:
+                element.update()
+
     def set_selected_entity(self, entity):
         """
         Set the selected entity
@@ -109,7 +118,7 @@ class ElementMethods:
             entity(Entity):
         """
         try:
-            self.elements[UIElementTypes.ENTITY_INFO.name].update_entity_info(entity)
+            self.elements[UIElementTypes.ENTITY_INFO.name].set_selected_entity(entity)
         except KeyError:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 

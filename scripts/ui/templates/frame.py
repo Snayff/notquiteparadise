@@ -13,6 +13,12 @@ class Frame(Widget):
             children: List = None,  name: str = "frame"):
         super().__init__(base_style, x, y, width, height, children, name)
 
+    def update(self):
+        """
+        Update frame
+        """
+        super().update()
+
     def draw(self, surface):
         """
         Draw the border, background and any children.

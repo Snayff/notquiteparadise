@@ -1,7 +1,6 @@
-from typing import List
-
 import pygame
-from abc import ABC
+from typing import List
+from abc import ABC, abstractmethod
 from scripts.ui.templates.widget_style import WidgetStyle
 
 
@@ -20,11 +19,22 @@ class Widget(ABC):
         # state and info
         self.name = name
         self.children = children or []
+        self.is_dirty = True
 
-        # now that we know the size adjust the images to correct their sizes
-        if self.base_style.background_image:
-            self.resize_image(self.base_style.background_image, self.rect.width, self.rect.height )
+    @abstractmethod
+    def update(self):
+        """
+        Base update method of the widget. Must be overridden. Super() must be last call in  overriding method.
+        """
+        for child in self.children:
+            child.update()
 
+        if self.is_dirty:
+            self.resize_base_style_image()
+
+            self.is_dirty = False
+
+    @abstractmethod
     def draw(self, surface):
         """
         Base base style and all children of the widget.
@@ -34,6 +44,13 @@ class Widget(ABC):
         # draw all contained widgets
         for child in self.children:
             child.draw(surface)
+
+    def resize_base_style_image(self):
+        """
+        Resize all images in the base style to fit their rect
+        """
+        if self.base_style.background_image:
+            self.resize_image(self.base_style.background_image, self.rect.width, self.rect.height)
 
     def resize_image(self, image, desired_width, desired_height):
         """

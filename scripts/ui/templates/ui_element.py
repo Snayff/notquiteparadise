@@ -21,9 +21,17 @@ class UIElement(ABC):
         self.surface = pygame.Surface((self.rect.width, self.rect.height))
 
     @abstractmethod
+    def update(self):
+        """
+        Base update method of the ui element. Must be overridden.
+        """
+        for child in self.children:
+            child.update()
+
+    @abstractmethod
     def draw(self, main_surface):
         """
-        Base draw method of the ui element.
+        Base draw method of the ui element. must be overridden
         """
         # adjust the rect of the ui element as it is absolute, not relative
         # we dont adjust the actual rect as that would change the ui elements position
@@ -37,7 +45,7 @@ class UIElement(ABC):
     @abstractmethod
     def handle_input(self, input_key, input_state):
         """
-        Base input method of the widget. Must be overridden.
+        Base input method of the element. Must be overridden.
         """
         raise NotImplementedError(f"handle_input method must be overridden for {self!r}")
 
