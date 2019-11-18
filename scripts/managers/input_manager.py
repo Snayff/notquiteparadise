@@ -299,7 +299,7 @@ class InputManager:
         if direction_x != 0 or direction_y != 0:
             tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
             tile = world.Map.get_tile(tile_x, tile_y)
-            ui.Element.update_targeting_overlays_tiles_in_range_and_fov()()
+            ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
             ui.targeting_overlay.set_selected_tile(tile)
             ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
             entity = world.Entity.get_blocking_entity_at_location(tile.x, tile.y)

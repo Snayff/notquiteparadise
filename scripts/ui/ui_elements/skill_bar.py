@@ -31,8 +31,11 @@ class SkillBar(UIElement):
         height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
         x = VisualInfo.BASE_WINDOW_WIDTH - width
         y = 2
-        cell_gap = 2
-        edge = 5
+
+        # create child Grid
+        children = []
+        grid = self.create_bar_widget()
+        children.append(grid)
 
         # create style
         palette = Palette().skill_bar
@@ -41,27 +44,8 @@ class SkillBar(UIElement):
         bg_colour = palette.background
         border_colour = palette.border
         border_size = 2
-
-        # create grid's children
-        grid_rows = self.max_skills
-        grid_columns = 1
-        grid_children = []
-
-        for skill_number in range(0, self.max_skills):
-            colour = (50, 50, 20*skill_number)
-            base_style = WidgetStyle(font=font, background_colour=colour, border_colour=border_colour,
-                                     font_colour=font_colour, border_size=border_size)
-            textbox = TextBox(base_style=base_style, name=f"skill{skill_number}", text=f"{skill_number}",
-                              width=width - (edge * 2), height=height - edge * 2)
-            grid_children.append(textbox)
-
         base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
                                  font_colour=font_colour, border_size=border_size)
-        # create child Grid
-        children = []
-        grid = Grid(base_style, edge, edge, width - (edge * 2), height - (edge * 2), grid_children, "grid",
-                    grid_rows, grid_columns, cell_gap)
-        children.append(grid)
 
         # complete base class init
         super().__init__(base_style, x, y, width, height, children)
@@ -133,3 +117,44 @@ class SkillBar(UIElement):
                 child.base_style.background_image = icon
 
                 break
+
+    def create_bar_widget(self) -> Grid:
+        """
+
+        Returns:
+
+        """
+        # size and position
+        width = 80
+        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        cell_gap = 2
+        edge = 5
+
+        # create style
+        palette = Palette().skill_bar
+        font = Font().skill_bar
+        font_colour = palette.text_default
+        bg_colour = palette.background
+        border_colour = palette.border
+        border_size = 2
+
+        # create grid's children
+        grid_rows = self.max_skills
+        grid_columns = 1
+        grid_children = []
+
+        for skill_number in range(0, self.max_skills):
+            colour = (50, 50, 20*skill_number)
+            base_style = WidgetStyle(font=font, background_colour=colour, border_colour=border_colour,
+                                     font_colour=font_colour, border_size=border_size)
+            textbox = TextBox(base_style=base_style, name=f"skill{skill_number}", text=f"{skill_number}",
+                              width=width - (edge * 2), height=height - edge * 2)
+            grid_children.append(textbox)
+
+        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+
+        grid = Grid(base_style, edge, edge, width - (edge * 2), height - (edge * 2), grid_children, "skillbar",
+                    grid_rows, grid_columns, cell_gap)
+
+        return grid

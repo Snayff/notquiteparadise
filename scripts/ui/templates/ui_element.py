@@ -31,7 +31,8 @@ class UIElement(ABC):
     @abstractmethod
     def draw(self, main_surface):
         """
-        Base draw method of the ui element. must be overridden
+        Base draw method of the ui element. Must be overridden. Override must also include a blit to the main surface
+         as the final step in the method.
         """
         # adjust the rect of the ui element as it is absolute, not relative
         # we dont adjust the actual rect as that would change the ui elements position
