@@ -6,6 +6,7 @@ from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.frame import Frame
 from scripts.ui.templates.grid import Grid
+from scripts.ui.templates.text_box import TextBox
 from scripts.ui.templates.ui_element import UIElement
 from scripts.ui.templates.widget_style import WidgetStyle
 
@@ -29,8 +30,8 @@ class NewCamera(UIElement):
         # size and position
         width = TILE_SIZE * self.columns
         height = TILE_SIZE * self.rows
-        x = 2
-        y = 2
+        x = 200
+        y = 200
 
         # style
         palette = Palette().camera
@@ -61,12 +62,6 @@ class NewCamera(UIElement):
         """
         super().update()
 
-        params = []
-        for child in self.all_children():
-            params.append(f"{child.name}:({child.rect.x},{child.rect.y})")
-        print(f"{params}")
-        pass
-
     def draw(self, main_surface):
         """
         Draw the camera. Overrides super.
@@ -75,12 +70,11 @@ class NewCamera(UIElement):
             main_surface ():
         """
         adjusted_rect = pygame.Rect(0, 0, self.rect.width, self.rect.height)
-        self.base_style.draw(main_surface, adjusted_rect)
+        self.base_style.draw(self.surface, adjusted_rect)
 
         # draw map
         game_map = self.get_child("map")
-        if not game_map.is_dirty:
-            game_map.draw(self.surface)
+        game_map.draw(self.surface)
 
         # draw overlay
         if self.is_overlay_visible:
@@ -143,12 +137,6 @@ class NewCamera(UIElement):
         # TODO - add selected tile widget
 
     def create_map_widget(self) -> Grid:
-        # size and position
-        width = TILE_SIZE * self.columns
-        height = TILE_SIZE * self.rows
-        cell_gap = 2
-        edge = 5
-
         # create map style
         palette = Palette().camera
         font = Font().camera
@@ -156,6 +144,13 @@ class NewCamera(UIElement):
         bg_colour = palette.background
         border_colour = palette.border
         border_size = 2
+
+        # size and position
+        cell_gap = 0
+        edge = 5
+        # +1 to prevent being rounded down
+        width = ((TILE_SIZE + cell_gap) * self.columns) + ((border_size + edge) * 2)
+        height = ((TILE_SIZE + cell_gap) * self.rows) + ((border_size + edge) * 2)
 
         # create maps' children
         grid_rows = self.rows
@@ -187,9 +182,9 @@ class NewCamera(UIElement):
         # size and position
         grid_rows = 3
         grid_columns = 3
-        width = TILE_SIZE * grid_columns
-        height = TILE_SIZE * grid_rows
-        cell_gap = 1
+        cell_gap = 0
+        width = (1 + TILE_SIZE + cell_gap * 2) * grid_columns
+        height = (1 + TILE_SIZE + cell_gap * 2) * grid_rows
         edge = 5
 
         # create overlay  style

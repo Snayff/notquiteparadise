@@ -37,11 +37,14 @@ class UIElement(ABC):
         # adjust the rect of the ui element as it is absolute, not relative
         # we dont adjust the actual rect as that would change the ui elements position
         adjusted_rect = pygame.Rect(0, 0, self.rect.width, self.rect.height)
-        self.base_style.draw(main_surface, adjusted_rect)
+        self.base_style.draw(self.surface, adjusted_rect)
 
         # draw all contained widgets
         for child in self.children:
             child.draw(self.surface)
+
+        # blit to the main surface
+        main_surface.blit(self.surface, (self.rect.x, self.rect.y))
 
     @abstractmethod
     def handle_input(self, input_key, input_state):

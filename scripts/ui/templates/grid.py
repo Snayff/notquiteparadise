@@ -21,6 +21,8 @@ class Grid(Widget):
         self.cell_width = 0  # calculated in a moment
         self.cell_height = 0  # calculated in a moment
 
+        self.update()
+
     def update(self):
         """
         If dirty update cell size, child size and position.
@@ -87,6 +89,8 @@ class Grid(Widget):
         Ensure cells can fit based on rows and cols required
         """
         # calc size
-        self.cell_width = int((self.rect.width / self.columns) - (self.gap_between_cells * 2))
-        self.cell_height = int((self.rect.height / self.rows) - (self.gap_between_cells * 2))
+        self.cell_width = int((self.rect.width - ((self.base_style.border_size + self.gap_between_cells) * 2)) /
+                              self.columns)
+        self.cell_height = int((self.rect.height - ((self.base_style.border_size + self.gap_between_cells) * 2)) /
+                              self.rows)
 

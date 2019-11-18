@@ -45,6 +45,8 @@ class TextBox(Widget):
         if text is not "":
             self.add_text(text)
 
+        self.update()
+
     def update(self):
         """
         If dirty update text shown

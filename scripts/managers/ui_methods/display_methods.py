@@ -24,6 +24,15 @@ class DisplayMethods:
         self.window = pygame.display.set_mode((self.desired_width, self.desired_height))
         self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
 
+        self.init_display_config()
+
+    def init_display_config(self):
+        """
+        Initialise display settings.
+        """
+        pygame.display.set_caption("Not Quite Paradise")
+        # pygame.display.set_icon() # TODO - add window icon
+
     def get_screen_scaling_mod(self):
         """
         Get the screen scaling modifier

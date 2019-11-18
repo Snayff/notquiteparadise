@@ -94,10 +94,7 @@ class EntityInfo(UIElement):
         Args:
             main_surface ():
         """
-        super().draw(self.surface)
-
-        # blit to the main surface
-        main_surface.blit(self.surface, (self.rect.x, self.rect.y))
+        super().draw(main_surface)
 
     def handle_input(self, input_key, input_state: InputStates = InputStates.PRESSED):
         """

@@ -88,14 +88,14 @@ class ElementMethods:
         """
         # TODO - add handling for dirty
 
-        surface = self.manager.Display.get_main_surface()
+        main_surface = self.manager.Display.get_main_surface()
 
         for key, element in self.elements.items():
             if element.is_visible:
-                element.draw(surface)
+                element.draw(main_surface)
 
         # resize the surface to the desired resolution
-        scaled_surface = pygame.transform.scale(surface, self.manager.Display.get_desired_resolution())
+        scaled_surface = pygame.transform.scale(main_surface, self.manager.Display.get_desired_resolution())
         window = self.manager.Display.get_window()
         window.blit(scaled_surface, (0, 0))
 

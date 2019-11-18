@@ -13,6 +13,8 @@ class Frame(Widget):
             children: List = None,  name: str = "frame"):
         super().__init__(base_style, x, y, width, height, children, name)
 
+        self.update()
+
     def update(self):
         """
         Update frame
