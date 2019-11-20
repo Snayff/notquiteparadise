@@ -15,6 +15,8 @@ class InputManager:
     Manager of Input Functions and data, such as which input method and recent key presses
     """
 
+    # TODO - clean up input passing (enums? the dict?)
+
     def __init__(self):
         self.input_mode = InputModes.MOUSE_AND_KB
         self.input_values = {
@@ -207,6 +209,13 @@ class InputManager:
             publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
                                                                      "reloaded~~"))
 
+        if self.input_values["mouse_moved"]:
+            from scripts.global_singletons.managers import ui
+            ui_element = ui.Mouse.get_colliding_ui_element()
+            if ui_element:
+                ui_element.handle_input(pygame.MOUSEMOTION)
+
+
     def process_player_turn_input(self):
         """
         Interpret Player Turn actions
@@ -292,7 +301,7 @@ class InputManager:
             ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
             ui.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
 
-        # if direction isn't 0 then we need to move selected_tile
+        # if direction isn't 0 then we need to move selected_child
         # TODO - move logic to event
         direction_x, direction_y = self.get_pressed_direction()
 

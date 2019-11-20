@@ -51,7 +51,7 @@ class UiHandler(Subscriber):
                 #         == GameStates.TARGETING_MODE:
                 #     self.attempt_to_use_targeted_skill()
 
-                # NEW APPROACH - remove if once all migrated  ############
+                # NEW APPROACH - remove once all migrated  ############
                 # pass input to element
                 if clicked_element == UIElementTypes.MESSAGE_LOG:
                     ui_element = ui.Element.get_ui_element(clicked_element)
@@ -124,7 +124,8 @@ class UiHandler(Subscriber):
             mouse_y (int):
         """
         relative_mouse_pos = ui.Mouse.get_relative_scaled_mouse_pos(mouse_x, mouse_y)
-        skill_number = ui.Mouse.get_skill_index_from_skill_clicked(relative_mouse_pos[0], relative_mouse_pos[1])
+        # TODO - replace skill get
+        skill_number = 0  # ui.Mouse.get_skill_index_from_skill_clicked(relative_mouse_pos[0], relative_mouse_pos[1])
 
         # if we clicked a skill in the skill bar create the targeting overlay
         player = world.player

@@ -30,21 +30,22 @@ class WidgetStyle:
         self.bottom_left_border = bottom_left_border
         self.bottom_right_border = bottom_right_border
 
-    def draw(self, surface, rect):
+    def draw(self, ui_element_surface, rect):
         """
         Draw the basic style info for the widget
 
         Args:
-            surface ():
+            ui_element_surface ():
             rect (pygame.Rect):
         """
+        # TODO - fix border drawing outside of surface on right and bottom
         # add border and background
         if self.background_colour:
-            pygame.draw.rect(surface, self.background_colour, rect)
+            pygame.draw.rect(ui_element_surface, self.background_colour, rect)
 
         if self.border_colour and self.border_size > 0:
-            pygame.draw.rect(surface, self.border_colour, rect, self.border_size)
+            pygame.draw.rect(ui_element_surface, self.border_colour, rect, self.border_size)
 
         # add images
         if self.background_image:
-            surface.blit(self.background_image, (rect.x, rect.y))
+            ui_element_surface.blit(self.background_image, (rect.x, rect.y))

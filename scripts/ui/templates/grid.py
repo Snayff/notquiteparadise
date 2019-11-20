@@ -1,6 +1,6 @@
 import logging
 import pygame
-from typing import List
+from typing import List, Tuple
 from scripts.ui.templates.widget import Widget
 from scripts.ui.templates.widget_style import WidgetStyle
 
@@ -20,6 +20,8 @@ class Grid(Widget):
         self.gap_between_cells = gap_between_cells
         self.cell_width = 0  # calculated in a moment
         self.cell_height = 0  # calculated in a moment
+
+        # TODO - add init flag to determine if cells resize or not
 
         self.update()
 
@@ -93,4 +95,14 @@ class Grid(Widget):
                               self.columns)
         self.cell_height = int((self.rect.height - ((self.base_style.border_size + self.gap_between_cells) * 2)) /
                               self.rows)
+
+    def get_cell_size(self) -> Tuple:
+        """
+        Get the size of the cells in the grid.
+
+        Returns:
+            Tuple: cell width, cell height
+
+        """
+        return self.cell_width, self.cell_height
 

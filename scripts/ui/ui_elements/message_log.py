@@ -72,7 +72,7 @@ class MessageLog(UIElement):
             for child in self.children:
                 if child.name == "message_box":
                     child.first_line_index = max(child.first_line_index - 1, 0)
-                    child.update_text_shown()
+                    child.is_dirty = True
                     break
 
         elif input_key == MouseButtons.WHEEL_DOWN:
@@ -80,7 +80,7 @@ class MessageLog(UIElement):
                 if child.name == "message_box":
                     max_index = max(len(child.text_list) - child.max_lines, 0)
                     child.first_line_index = min(child.first_line_index + 1, max_index)
-                    child.update_text_shown()
+                    child.is_dirty = True
                     break
 
     def add_message(self, message: str):

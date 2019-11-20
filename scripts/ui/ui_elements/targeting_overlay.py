@@ -88,7 +88,7 @@ class TargetingOverlay:
 
     def draw_selected_tile(self, surface):
         """
-        Draw the highlight on the selected_tile.
+        Draw the highlight on the selected_child.
         Args:
             surface:
         """

@@ -24,14 +24,15 @@ class NewCamera(UIElement):
         self.start_tile_y = 0
         self.edge_size = 3  # # of tiles to control camera movement
         self.is_overlay_visible = False
-        self.selected_tile = None
+        self.selected_child = None  # the child widget currently being selected
+        self.selected_tile_pos = (0, 0)  # tile x,y
         self.overlay_directions = []  # hold list of cardinal directions to show in the overlay
 
         # size and position
         width = TILE_SIZE * self.columns
         height = TILE_SIZE * self.rows
-        x = 200
-        y = 200
+        x = 10
+        y = 10
 
         # style
         palette = Palette().camera
@@ -47,8 +48,10 @@ class NewCamera(UIElement):
         camera_children = []
         game_map = self.create_map_widget()
         overlay = self.create_overlay_widget()
+        selected_tile = self.create_selected_tile_widget()
         camera_children.append(game_map)
         camera_children.append(overlay)
+        camera_children.append(selected_tile)
 
         # complete base class init
         super().__init__(base_style, x, y, width, height, camera_children)
@@ -86,8 +89,10 @@ class NewCamera(UIElement):
                 direction_frame = self.get_child(f"{direction}")
                 direction_frame.draw(self.surface)
 
-            # draw selected tile
-            # TODO - add selected tile
+        # draw selected tile
+        selected_tile = self.get_child("selected_child")
+        selected_tile.draw(self.surface)
+
 
         # blit to the main surface
         main_surface.blit(self.surface, (self.rect.x, self.rect.y))
@@ -100,8 +105,10 @@ class NewCamera(UIElement):
             input_key (): input received. Mouse, keyboard, gamepad.
             input_state (): pressed or released
         """
-
-        pass
+        if input_key == pygame.MOUSEMOTION:
+            from scripts.global_singletons.managers import ui
+            rel_x, rel_y = ui.Mouse.get_relative_scaled_mouse_pos()
+            self.set_selected_tile(rel_x, rel_y)
 
     def set_cell_background_image(self, row: int, col: int, image: pygame.Surface):
         """
@@ -129,14 +136,44 @@ class NewCamera(UIElement):
         self.is_overlay_visible = visible
         self.overlay_directions = possible_directions
 
-
     def set_selected_tile(self, x, y):
-        self.selected_tile = (x, y)
+        """
+        Check what tile collides with the xy given and set the selected tile to that
 
-        # move position of selected tile widget
-        # TODO - add selected tile widget
+        Args:
+            x (int): x inside the ui element
+            y (int): y inside the ui elementvulture --sort-by-size  scripts\
+        """
+        if not self.selected_child or not self.selected_child.rect.collidepoint((x, y)):
+            # check which cell we're over
+            for child in self.all_children():
+                if child.rect.collidepoint((x, y)) and child.name.startswith("cell"):
+                    self.selected_child = child
+
+                    # move position of selected tile widget
+                    selected_widget = self.get_child("selected_child")
+                    selected_widget.rect.x = child.rect.x
+                    selected_widget.rect.y = child.rect.y
+
+                    # update selected tile info
+                    child_name = child.name.replace(",", " ")
+                    child_name = child_name.replace("cell", "")
+                    split_name = [int(num) for num in child_name.split()]
+                    row, col = split_name[0], split_name[1]
+                    self.selected_tile_pos = (self.start_tile_x + row, self.start_tile_y + col)
+
+                    # TODO - have ui get the selected tile and set the entity info
+
+                    break
 
     def create_map_widget(self) -> Grid:
+        """
+        Create the map widget
+
+        Returns:
+            Grid: Grid widget
+
+        """
         # create map style
         palette = Palette().camera
         font = Font().camera
@@ -157,7 +194,6 @@ class NewCamera(UIElement):
         grid_columns = self.columns
         map_children = []
 
-        # TODO - fix the square drawing in the top left, above the grid.
         for row in range(0, grid_rows):
             for col in range(0, grid_columns):
                 base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
@@ -178,7 +214,15 @@ class NewCamera(UIElement):
 
         return game_map
 
-    def create_overlay_widget(self) -> Grid:
+    @staticmethod
+    def create_overlay_widget() -> Grid:
+        """
+        Create the target overlay widget
+
+        Returns:
+            Grid: grid widget
+
+        """
         # size and position
         grid_rows = 3
         grid_columns = 3
@@ -217,3 +261,27 @@ class NewCamera(UIElement):
                        grid_rows, grid_columns, cell_gap)
 
         return overlay
+
+    @staticmethod
+    def create_selected_tile_widget() -> Frame:
+        """
+        Create the widget for the selected tile
+
+        Returns:
+            Frame: frame widget
+
+        """
+        # create selected tile  style
+        palette = Palette().camera
+        font = Font().camera
+        font_colour = palette.text_default
+        border_size = 4
+        alpha = 127
+        border_colour = palette.selected_tile_border #+ (alpha,)
+
+        base_style = WidgetStyle(font=font, border_colour=border_colour, font_colour=font_colour,
+                                 border_size=border_size)
+
+        frame = Frame(base_style=base_style, name=f"selected_child",  width=TILE_SIZE, height=TILE_SIZE)
+
+        return frame
