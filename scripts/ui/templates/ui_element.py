@@ -1,7 +1,7 @@
 import pygame
 from abc import ABC, abstractmethod
 from typing import List
-
+from pygame.constants import SRCALPHA
 from scripts.core.constants import UIElementTypes
 from scripts.ui.templates.widget_style import WidgetStyle
 
@@ -23,7 +23,7 @@ class UIElement(ABC):
         self.children = children
         self.is_visible = False
         self.is_dirty = True
-        self.surface = pygame.Surface((self.rect.width, self.rect.height))
+        self.surface = pygame.Surface((self.rect.width, self.rect.height), SRCALPHA)
 
     @abstractmethod
     def update(self):

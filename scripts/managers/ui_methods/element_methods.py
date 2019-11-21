@@ -404,9 +404,8 @@ class ElementMethods:
 
                     tile = world.Map.get_tile(x, y)
 
-                    # create transparent surface to blit to
-                    image = pygame.Surface([TILE_SIZE, TILE_SIZE], pygame.SRCALPHA)
-                    image = image.convert_alpha()
+                    # create surface to blit to
+                    image = pygame.Surface((TILE_SIZE, TILE_SIZE))
 
                     if tile.terrain:
                         image.blit(tile.terrain.sprite, (0, 0))

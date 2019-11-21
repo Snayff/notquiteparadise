@@ -22,7 +22,6 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
 # TODO - change from use fps for timing to delta time
-# TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
 # TODO - Review closure

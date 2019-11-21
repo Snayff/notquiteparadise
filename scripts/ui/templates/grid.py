@@ -21,7 +21,7 @@ class Grid(Widget):
         self.cell_width = 0  # calculated in a moment
         self.cell_height = 0  # calculated in a moment
 
-        # TODO - add init flag to determine if cells resize or not
+        # TODO - add init flag to determine if cells resize or not. should be customisable.
 
         self.update()
 
@@ -57,7 +57,7 @@ class Grid(Widget):
 
     def update_childrens_pos(self):
         """
-        Align children's position to the grid
+        Align children's position to the grid. Rows then cols.
         """
         rows = self.rows
         cols = self.columns

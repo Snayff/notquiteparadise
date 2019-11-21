@@ -407,11 +407,15 @@ class Directions(Enum):
     UPLEFT = 0
     UP = 1
     UPRIGHT = 2
-    RIGHT = 3
-    DOWNRIGHT = 4
-    DOWN = 5
+    LEFT = 3
+    CENTRE = 4
+    RIGHT = 5
     DOWNLEFT = 6
-    LEFT = 7
+    DOWN = 7
+    DOWNRIGHT = 8
+
+
+
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

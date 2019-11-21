@@ -23,7 +23,7 @@ class Camera(UIElement):
         self.start_tile_x = 0
         self.start_tile_y = 0
         self.edge_size = 3  # # of tiles to control camera movement
-        self.is_overlay_visible = False
+        self.is_overlay_visible = True
         self.selected_child = None  # the child widget currently being selected
         self.selected_tile_pos = (0, 0)  # tile x,y
         self.overlay_directions = []  # hold list of cardinal directions to show in the overlay
@@ -92,7 +92,6 @@ class Camera(UIElement):
         # draw selected tile
         selected_tile = self.get_child("selected_child")
         selected_tile.draw(self.surface)
-
 
         # blit to the main surface
         main_surface.blit(self.surface, (self.rect.x, self.rect.y))
@@ -226,20 +225,21 @@ class Camera(UIElement):
         # size and position
         grid_rows = 3
         grid_columns = 3
-        cell_gap = 0
-        width = (1 + TILE_SIZE + cell_gap * 2) * grid_columns
-        height = (1 + TILE_SIZE + cell_gap * 2) * grid_rows
+        border_size = 2
         edge = 5
+        cell_gap = 0
+        width = ((TILE_SIZE + cell_gap) * grid_columns) + ((border_size + edge) * 2)
+        height = ((TILE_SIZE + cell_gap) * grid_rows) + ((border_size + edge) * 2)
 
         # create overlay  style
         palette = Palette().camera
         font = Font().camera
         font_colour = palette.text_default
-        border_size = 2
-        alpha = 127
+
+        alpha = 200
         bg_colour = palette.overlay + (alpha, )  # create new tuple from colour and alpha
         border_colour = palette.overlay_border + (alpha, )
-        number_of_directions = 8  # 8 cardinal directions
+        number_of_directions = 9  # 8 cardinal directions + centre
 
         # create maps' children
         overlay_children = []
@@ -252,8 +252,7 @@ class Camera(UIElement):
             frame = Frame(base_style=base_style, name=f"{direction_label}")
             overlay_children.append(frame)
 
-        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
-                                 font_colour=font_colour, border_size=border_size)
+        base_style = WidgetStyle(font=font, font_colour=font_colour, border_size=border_size)
 
         # create overlay
         # TODO - set the correct position, 1 tile up and left, from player

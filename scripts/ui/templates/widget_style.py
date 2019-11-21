@@ -1,6 +1,8 @@
 
 import pygame
 from pygame import surface, freetype
+from pygame.constants import SRCALPHA
+
 from scripts.ui.basic.colours import Colour
 
 
