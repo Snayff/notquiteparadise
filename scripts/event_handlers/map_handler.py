@@ -5,8 +5,8 @@ from scripts.core.constants import MapEventTypes, MessageEventTypes, GameEventTy
 from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.map_events import TileInteractionEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 
 
 class MapHandler(Subscriber):
@@ -62,7 +62,7 @@ class MapHandler(Subscriber):
                     for interaction in aspect_data.interactions:
                         if event.cause == interaction.cause:
                             # change aspects
-                            from scripts.global_singletons.managers import world
+                            from scripts.managers.world_manager import world
                             world.Map.remove_aspect_from_tile(tile, aspect.name)
                             world.Map.add_aspect_to_tile(tile, interaction.change_to)
 
@@ -84,7 +84,7 @@ class MapHandler(Subscriber):
             event(EndTurnEvent):
         """
         entity = event.entity
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         tile = world.Map.get_tile(entity.x, entity.y)
 
         # trigger aspects
@@ -96,7 +96,7 @@ class MapHandler(Subscriber):
         Update aspect durations
         """
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         game_map = world.Map.get_game_map()
 
         # TODO - set to only apply within X range of player

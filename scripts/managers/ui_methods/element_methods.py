@@ -1,17 +1,15 @@
 import logging
-from typing import Tuple
-
 import pygame
-
-from scripts.core.constants import UIElementTypes, VisualInfo, TILE_SIZE
-from scripts.global_singletons.data_library import library
+from typing import Tuple
+from scripts.core.constants import UIElementTypes, TILE_SIZE
+from scripts.core.data_library import library
 from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.message_log import MessageLog
-from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.entity_queue import EntityQueue
-from scripts.ui.ui_elements.new_camera import NewCamera
+from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
+from scripts.world.entity import Entity
 
 
 class ElementMethods:
@@ -58,7 +56,7 @@ class ElementMethods:
         """
         self.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
 
-        from scripts.global_singletons.managers import turn
+        from scripts.managers.turn_manager import turn
         if turn:
             self.update_entity_queue()
 
@@ -66,7 +64,7 @@ class ElementMethods:
         """
         Initialise the camera
         """
-        self.elements[UIElementTypes.CAMERA.name] = NewCamera()
+        self.elements[UIElementTypes.CAMERA.name] = Camera()
 
     def set_element_visibility(self, element_type, visible):
         """
@@ -102,16 +100,25 @@ class ElementMethods:
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
-    def update_visible_elements(self):
+    def update_elements(self):
         """
-        Update the visible ui elements. Checks is_visible.
+        Update the ui elements.
         """
 
         for key, element in self.elements.items():
-            if element.is_visible:
-                element.update()
+            element.update()
 
-    def set_selected_entity(self, entity):
+    def get_selected_tile_pos(self) -> Tuple:
+        """
+        Get the selected tile pos
+
+        Returns:
+            Tuple: tile x,y
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        return camera.selected_tile_pos
+
+    def set_selected_entity(self, entity: Entity):
         """
         Set the selected entity
 
@@ -200,7 +207,7 @@ class ElementMethods:
             skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
             skill_range = skill_data.range
 
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             tiles = world.FOV.get_tiles_in_range_and_fov_of_player(skill_range)
 
             self.set_tiles_in_targeting_overlay(tiles)
@@ -222,7 +229,7 @@ class ElementMethods:
             data = library.get_skill_data(targeting_overlay.skill_being_targeted.skill_tree_name,
                                           targeting_overlay.skill_being_targeted.name)
 
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             coords = world.Skill.create_shape(data.shape, data.shape_size)
             effected_tiles = world.Map.get_tiles(targeting_overlay.selected_tile.x,
                                                          targeting_overlay.selected_tile.y, coords)
@@ -237,7 +244,7 @@ class ElementMethods:
         skill_bar = self.get_ui_element(UIElementTypes.SKILL_BAR)
 
         # update info
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         player = world.player
 
         # if the player and the skill bar have been init'd update skill bar
@@ -260,7 +267,7 @@ class ElementMethods:
             counter = 0
 
             # loop entities in turn queue, up to max to show
-            from scripts.global_singletons.managers import turn
+            from scripts.managers.turn_manager import turn
             for entity, time in turn.turn_queue.items():
                 if counter < entity_queue.max_entities_to_show:
                     icon = entity.icon
@@ -374,7 +381,7 @@ class ElementMethods:
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         game_map = world.Map.get_game_map()
 
         # clamp function: max(low, min(n, high))
@@ -386,7 +393,7 @@ class ElementMethods:
         Retrieve the tiles to draw within view of the camera
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
 
         if camera:
             cell_x = 0

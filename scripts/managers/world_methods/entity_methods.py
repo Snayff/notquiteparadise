@@ -11,7 +11,7 @@ from scripts.components.homeland import Homeland
 from scripts.components.race import Race
 from scripts.components.savvy import Savvy
 from scripts.core.constants import TILE_SIZE
-from scripts.global_singletons.data_library import library
+from scripts.core.data_library import library
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -27,7 +27,7 @@ class EntityMethods:
         from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
-    def get_blocking_entity_at_location(self, tile_x, tile_y):
+    def get_blocking_entity(self, tile_x, tile_y):
         """
 
         Args:
@@ -37,6 +37,7 @@ class EntityMethods:
         Returns:
             Entity: returns entity if there is one, else None.
         """
+        # TODO - change to just get the entity
         tile = self.manager.Map.get_tile(tile_x, tile_y)
         entity = tile.entity
 
@@ -122,7 +123,7 @@ class EntityMethods:
         tile_is_blocked = self.manager.Map.is_tile_blocking_movement(start_entity.x + direction_x,
                                                                                 start_entity.y + direction_y)
 
-        if not (tile_is_blocked or self.get_blocking_entity_at_location(start_entity.x + direction_x,
+        if not (tile_is_blocked or self.get_blocking_entity(start_entity.x + direction_x,
                                                                           start_entity.y + direction_y)):
             log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
             logging.debug(log_string)
@@ -146,7 +147,7 @@ class EntityMethods:
 
         """
         max_path_length = 25
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         game_map = world.game_map
         entities = world.Entity.get_all_entities()
         entity_to_move = start_entity

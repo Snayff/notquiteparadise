@@ -1,9 +1,9 @@
 import logging
 import pygame
-from scripts.core.constants import InputStates, VisualInfo, MouseButtons
+from scripts.core.constants import InputStates, VisualInfo, MouseButtons, UIElementTypes
 from scripts.events.entity_events import UseSkillEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.grid import Grid
@@ -48,7 +48,7 @@ class SkillBar(UIElement):
                                  font_colour=font_colour, border_size=border_size)
 
         # complete base class init
-        super().__init__(base_style, x, y, width, height, children)
+        super().__init__(UIElementTypes.SKILL_BAR, base_style, x, y, width, height, children)
 
         # confirm init complete
         logging.debug(f"SkillBar initialised.")
@@ -78,12 +78,12 @@ class SkillBar(UIElement):
         """
         # Use a skill
         if input_key == MouseButtons.LEFT_BUTTON:
-            from scripts.global_singletons.managers import ui
+            from scripts.managers.ui_manager import ui
             mouse_pos = ui.Mouse.get_relative_scaled_mouse_pos()
 
             for child in self.all_children():
                 if child.rect.collidepoint(mouse_pos) and child.name.startswith("skill"):
-                    from scripts.global_singletons.managers import world
+                    from scripts.managers.world_manager import world
                     # get skill number by splitting the number from child's name
                     skill_number = int(child.name.split("skill", 1)[1])
 

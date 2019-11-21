@@ -1,7 +1,7 @@
 import logging
 import time
 
-from scripts.core.constants import EventTopics, GameStates, MessageEventTypes, UIElementTypes
+from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
 from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
@@ -11,8 +11,10 @@ from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
 from scripts.event_handlers.message_handler import MessageHandler
 from scripts.event_handlers.game_handler import GameHandler
-from scripts.global_singletons.event_hub import publisher, event_hub
-from scripts.global_singletons.managers import game, world, turn, ui
+from scripts.core.event_hub import publisher, event_hub
+from scripts.managers.ui_manager import ui
+from scripts.managers.turn_manager import turn
+from scripts.managers.world_manager import world
 from scripts.event_handlers.ui_handler import UiHandler
 
 
@@ -116,14 +118,11 @@ def initialise_event_handlers():
 
 def initialise_ui_elements():
     """
-    initialise all ui elements
+    initialise all ui elements. Order of load is important as it sets draw order. Later overwrites earlier.
     """
     ui.Element.init_camera()
-    ui.Element.init_entity_info()
     # ui.Element.init_entity_queue()
     ui.Element.init_message_log()
-    # ui.Element.init_skill_bar()
+    ui.Element.init_entity_info()
+    ui.Element.init_skill_bar()
     # ui.Element.init_targeting_overlay()
-    from scripts.ui.ui_elements.skill_bar import SkillBar
-    ui.Element.elements[UIElementTypes.SKILL_BAR.name] = SkillBar()
-    ui.Element.set_element_visibility(UIElementTypes.SKILL_BAR, True)

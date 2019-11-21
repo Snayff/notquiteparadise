@@ -29,7 +29,7 @@ class UIManager:
         """
         Update all ui elements
         """
-        self.Element.update_visible_elements()
+        self.Element.update_elements()
 
 
 
@@ -522,3 +522,4 @@ def example_code():
 #
 #         # update the display surface
 #         pygame.display.update()
+ui = UIManager()

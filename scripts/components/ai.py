@@ -1,16 +1,9 @@
 import logging
-import time
 
-import numpy
-
-from scripts.core.constants import MessageEventTypes
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.event_hub import publisher
 from scripts.world.entity import Entity
-from scripts.global_singletons.managers import world
-from scripts.events.entity_events import UseSkillEvent, MoveEvent
+from scripts.managers.world_manager import world
 from scripts.events.game_events import EndTurnEvent
-
-from scripts.events.message_events import MessageEvent
 
 
 class BasicMonster:
@@ -54,7 +47,7 @@ class BasicMonster:
         # # check target tile is valid
         # in_bounds = world.Map.is_tile_in_bounds(target_tile_x, target_tile_y)
         # tile_blocking_movement = is_tile_blocking_movement(target_tile_x, target_tile_y)
-        # entity_blocking_movement = world.Entity.get_blocking_entity_at_location(target_tile_x, target_tile_y)
+        # entity_blocking_movement = world.Entity.get_blocking_entity(target_tile_x, target_tile_y)
         # if in_bounds and not tile_blocking_movement and not entity_blocking_movement:
         #     if direction_x != 0 or direction_y != 0:
         #         # limit to only moving one tile then move

@@ -1,7 +1,7 @@
 
 from scripts.events.game_events import EndTurnEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 
 
 class Skill:
@@ -27,7 +27,7 @@ class Skill:
         Args:
             target_pos (tuple): x y of the target
         """
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         data = library.get_skill_data(self.skill_tree_name, self.name)
 
         target_x, target_y = target_pos

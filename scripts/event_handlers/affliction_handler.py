@@ -28,7 +28,7 @@ class AfflictionHandler(Subscriber):
             self.process_affliction_trigger(event.entity, AfflictionTriggers.END_TURN)
 
             # reduce duration and cleanse expired
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             world.Affliction.reduce_affliction_durations_on_entity(event.entity)
             world.Affliction.cleanse_expired_afflictions()
 
@@ -48,5 +48,5 @@ class AfflictionHandler(Subscriber):
             entity (Entity):
             trigger (AfflictionTriggers):
         """
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         world.Affliction.trigger_afflictions_on_entity(trigger, entity)

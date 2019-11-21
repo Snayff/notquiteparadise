@@ -1,13 +1,12 @@
 import logging
 from typing import List
 
-from scripts.core.constants import TargetTags, MessageEventTypes, SecondaryStatTypes, \
-    HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, EffectTypes
+from scripts.core.constants import TargetTags, MessageEventTypes, HitTypes, DamageTypes, PrimaryStatTypes, HitModifiers, EffectTypes
 from scripts.events.entity_events import DieEvent
 
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
 from scripts.world.aspect import Aspect
 from scripts.world.entity import Entity
@@ -54,7 +53,7 @@ class DamageEffect(Effect):
             defender = tile.entity
 
             # check that the tags match
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             if world.Skill.has_required_tags(tile, data.required_tags, attacker):
                 # if it needs to be another entity then it can't be looking at itself
                 if TargetTags.OTHER_ENTITY in data.required_tags:

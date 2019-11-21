@@ -1,6 +1,6 @@
 
 from scripts.core.constants import SecondaryStatTypes
-from scripts.global_singletons.data_library import library
+from scripts.core.data_library import library
 
 
 class SecondaryStats:
@@ -41,7 +41,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.MAX_HP)
 
@@ -78,7 +78,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.MAX_STAMINA)
 
@@ -115,7 +115,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.ACCURACY)
 
@@ -152,7 +152,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_BURN)
 
@@ -189,7 +189,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_COLD)
 
@@ -226,7 +226,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_CHEMICAL)
 
@@ -263,7 +263,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_ASTRAL)
 
@@ -300,7 +300,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_MUNDANE)
 
@@ -338,7 +338,7 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
                 self.owner.owner, SecondaryStatTypes.SIGHT_RANGE)
 

@@ -1,6 +1,6 @@
 import logging
 
-from scripts.core.constants import VisualInfo, InputStates, MouseButtons
+from scripts.core.constants import VisualInfo, InputStates, MouseButtons, UIElementTypes
 from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.text_box import TextBox
@@ -39,7 +39,7 @@ class MessageLog(UIElement):
                                  font_colour=font_colour, border_size=border_size)
 
         # complete base class init
-        super().__init__(base_style, x, y, width, height, children)
+        super().__init__(UIElementTypes.MESSAGE_LOG, base_style, x, y, width, height, children)
 
         # confirm init complete
         logging.debug(f"MessageLog initialised.")

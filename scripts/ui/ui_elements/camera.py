@@ -1,157 +1,287 @@
+import logging
 import pygame
-
-from scripts.ui.templates.panel import Panel
-from scripts.core.constants import VisualInfo, TILE_SIZE
-from scripts.ui.basic.colours import Colour
+from typing import List
+from scripts.core.constants import VisualInfo, InputStates, TILE_SIZE, Directions, UIElementTypes
+from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
+from scripts.ui.templates.frame import Frame
+from scripts.ui.templates.grid import Grid
+from scripts.ui.templates.text_box import TextBox
+from scripts.ui.templates.ui_element import UIElement
+from scripts.ui.templates.widget_style import WidgetStyle
 
 
-class Camera:
+class Camera(UIElement):
     """
     Hold the visual info for the Game Map
     """
 
     def __init__(self):
-        self.tiles_to_draw = []  # the tiles passed from the GameMap to draw
-        self.is_visible = False
 
-        self.x = 0
-        self.y = 0
-        self.width = 10
-        self.height = 10
-        self.edge_size = 3
+        self.rows = 10
+        self.columns = 10
+        self.start_tile_x = 0
+        self.start_tile_y = 0
+        self.edge_size = 3  # # of tiles to control camera movement
+        self.is_overlay_visible = False
+        self.selected_child = None  # the child widget currently being selected
+        self.selected_tile_pos = (0, 0)  # tile x,y
+        self.overlay_directions = []  # hold list of cardinal directions to show in the overlay
 
-        # setup the panel
-        panel_x = 0
-        panel_y = 0
-        panel_width = int((VisualInfo.BASE_WINDOW_WIDTH / 4) * 3)
-        panel_height = VisualInfo.BASE_WINDOW_HEIGHT
-        panel_border = 2
-        panel_background_colour = Palette().game_map.background
-        panel_border_colour = Palette().game_map.border
-        self.panel = Panel(panel_x, panel_y, panel_width, panel_height, panel_background_colour, panel_border,
-                           panel_border_colour)
-        self.rect = pygame.rect.Rect(self.x, self.y, panel_width, panel_height)
+        # size and position
+        width = TILE_SIZE * self.columns
+        height = TILE_SIZE * self.rows
+        x = 10
+        y = 10
+
+        # style
+        palette = Palette().camera
+        font = Font().camera
+        font_colour = palette.text_default
+        bg_colour = palette.background
+        border_colour = palette.border
+        border_size = 2
+        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+
+        # create children
+        camera_children = []
+        game_map = self.create_map_widget()
+        overlay = self.create_overlay_widget()
+        selected_tile = self.create_selected_tile_widget()
+        camera_children.append(game_map)
+        camera_children.append(overlay)
+        camera_children.append(selected_tile)
+
+        # complete base class init
+        super().__init__(UIElementTypes.CAMERA, base_style, x, y, width, height, camera_children)
+
+        # confirm init complete
+        logging.debug(f"Camera initialised.")
 
     def update(self):
-        pass
-
-    def draw(self, surface):
         """
-        Draw the tiles in view
+        Ensure all the children update in response to changes.
+        """
+        super().update()
+
+    def draw(self, main_surface):
+        """
+        Draw the camera. Overrides super.
 
         Args:
-            surface(Surface): Surface to draw to
+            main_surface ():
+        """
+        adjusted_rect = pygame.Rect(0, 0, self.rect.width, self.rect.height)
+        self.base_style.draw(self.surface, adjusted_rect)
+
+        # draw map
+        game_map = self.get_child("map")
+        game_map.draw(self.surface)
+
+        # draw overlay
+        if self.is_overlay_visible:
+            overlay = self.get_child("overlay")
+            overlay.draw(self.surface)
+
+            # only draw desired directions
+            for direction in self.overlay_directions:
+                direction_frame = self.get_child(f"{direction}")
+                direction_frame.draw(self.surface)
+
+        # draw selected tile
+        selected_tile = self.get_child("selected_child")
+        selected_tile.draw(self.surface)
+
+
+        # blit to the main surface
+        main_surface.blit(self.surface, (self.rect.x, self.rect.y))
+
+    def handle_input(self, input_key, input_state: InputStates = InputStates.PRESSED):
+        """
+        Process received input
+
+        Args:
+            input_key (): input received. Mouse, keyboard, gamepad.
+            input_state (): pressed or released
+        """
+        if input_key == pygame.MOUSEMOTION:
+            from scripts.managers.ui_manager import ui
+            rel_x, rel_y = ui.Mouse.get_relative_scaled_mouse_pos()
+            self.set_selected_tile(rel_x, rel_y)
+
+    def set_cell_background_image(self, row: int, col: int, image: pygame.Surface):
+        """
+        Set the background image of a cell in the camera
+
+        Args:
+            row ():
+            col ():
+            image ():
+        """
+        cell = self.get_child(f"cell{row},{col}")
+
+        if cell:
+            cell.base_style.background_image = image
+            cell.is_dirty = True
+
+    def set_targeting_overlay_visibility(self, visible: bool, possible_directions: List):
+        """
+        Set the targeting overlay's visibility.
+
+        Args:
+            possible_directions ():
+            visible ():
+        """
+        self.is_overlay_visible = visible
+        self.overlay_directions = possible_directions
+
+    def set_selected_tile(self, x, y):
+        """
+        Check what tile collides with the xy given and set the selected tile to that
+
+        Args:
+            x (int): x inside the ui element
+            y (int): y inside the ui element
+        """
+        if not self.selected_child or not self.selected_child.rect.collidepoint((x, y)):
+            # check which cell we're over
+            for child in self.all_children():
+                if child.rect.collidepoint((x, y)) and child.name.startswith("cell"):
+                    self.selected_child = child
+
+                    # move position of selected tile widget
+                    selected_widget = self.get_child("selected_child")
+                    selected_widget.rect.x = child.rect.x
+                    selected_widget.rect.y = child.rect.y
+
+                    # update selected tile info
+                    child_name = child.name.replace(",", " ")
+                    child_name = child_name.replace("cell", "")
+                    split_name = [int(num) for num in child_name.split()]
+                    row, col = split_name[0], split_name[1]
+                    self.selected_tile_pos = (self.start_tile_x + row, self.start_tile_y + col)
+
+                    # TODO - have ui get the selected tile and set the entity info
+
+                    break
+
+    def create_map_widget(self) -> Grid:
+        """
+        Create the map widget
+
+        Returns:
+            Grid: Grid widget
 
         """
-        # panel background
-        self.panel.surface.fill(Colour().black)
-        self.panel.draw_background()
+        # create map style
+        palette = Palette().camera
+        font = Font().camera
+        font_colour = palette.text_default
+        bg_colour = palette.background
+        border_colour = palette.border
+        border_size = 2
 
-        self.draw_cameras_tiles()
+        # size and position
+        cell_gap = 0
+        edge = 5
+        # +1 to prevent being rounded down
+        width = ((TILE_SIZE + cell_gap) * self.columns) + ((border_size + edge) * 2)
+        height = ((TILE_SIZE + cell_gap) * self.rows) + ((border_size + edge) * 2)
 
-        # panel border
-        self.panel.draw_border()
-        surface.blit(self.panel.surface, (self.panel.x, self.panel.y))
+        # create maps' children
+        grid_rows = self.rows
+        grid_columns = self.columns
+        map_children = []
 
-    def draw_cameras_tiles(self):
+        for row in range(0, grid_rows):
+            for col in range(0, grid_columns):
+                base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                         font_colour=font_colour, border_size=border_size)
+                frame = Frame(base_style=base_style, name=f"cell{row},{col}")
+                # use textbox for debugging, to show cell pos. It is VERY slow.
+                # frame = TextBox(base_style=base_style, name=f"cell{row},{col}", text=f"{row},{col}",
+                #                 width=TILE_SIZE, height=TILE_SIZE)
+                map_children.append(frame)
+
+        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
+
+        # create map
+        game_map = Grid(base_style=base_style, x=edge, y=edge, width=width - (edge * 2), height=height - (edge * 2),
+                        children=map_children, name="map", rows=grid_rows, columns=grid_columns,
+                        gap_between_cells=cell_gap)
+
+        return game_map
+
+    @staticmethod
+    def create_overlay_widget() -> Grid:
         """
-        Draw the game map on the panel surface
+        Create the target overlay widget
+
+        Returns:
+            Grid: grid widget
+
         """
-        # TODO - draw visible only
-        tiles = self.tiles_to_draw
+        # size and position
+        grid_rows = 3
+        grid_columns = 3
+        cell_gap = 0
+        width = (1 + TILE_SIZE + cell_gap * 2) * grid_columns
+        height = (1 + TILE_SIZE + cell_gap * 2) * grid_rows
+        edge = 5
 
-        y_pos = 0
-        x_pos = 0
+        # create overlay  style
+        palette = Palette().camera
+        font = Font().camera
+        font_colour = palette.text_default
+        border_size = 2
+        alpha = 127
+        bg_colour = palette.overlay + (alpha, )  # create new tuple from colour and alpha
+        border_colour = palette.overlay_border + (alpha, )
+        number_of_directions = 8  # 8 cardinal directions
 
-        for x in range(0, len(tiles)):
-            tile = tiles[x]
+        # create maps' children
+        overlay_children = []
 
-            if y_pos >= self.height:
-                y_pos = 0
-                x_pos += 1
+        # create a frame for each of the directions
+        for direction_number in range(0, number_of_directions):
+            base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                     font_colour=font_colour, border_size=border_size)
+            direction_label = Directions(direction_number)
+            frame = Frame(base_style=base_style, name=f"{direction_label}")
+            overlay_children.append(frame)
 
-            draw_position = (x_pos * TILE_SIZE, y_pos * TILE_SIZE)
+        base_style = WidgetStyle(font=font, background_colour=bg_colour, border_colour=border_colour,
+                                 font_colour=font_colour, border_size=border_size)
 
-            if tile.terrain:
-                self.panel.surface.blit(tile.terrain.sprite, draw_position)
+        # create overlay
+        # TODO - set the correct position, 1 tile up and left, from player
+        overlay = Grid(base_style, edge, edge, width - (edge * 2), height - (edge * 2), overlay_children, "overlay",
+                       grid_rows, grid_columns, cell_gap)
 
-            if tile.entity:
-                self.panel.surface.blit(tile.entity.icon, draw_position)
+        return overlay
 
-            if tile.aspects:
-                for key, aspect in tile.aspects.items():
-                    self.panel.surface.blit(aspect.sprite, draw_position)
+    @staticmethod
+    def create_selected_tile_widget() -> Frame:
+        """
+        Create the widget for the selected tile
 
-            y_pos += 1
+        Returns:
+            Frame: frame widget
 
+        """
+        # create selected tile  style
+        palette = Palette().camera
+        font = Font().camera
+        font_colour = palette.text_default
+        border_size = 4
+        alpha = 127
+        border_colour = palette.selected_tile_border #+ (alpha,)
 
-# Camera class from pygame tutorial
-# class obj_Camera:
-#
-#     def __init__(self):
-#
-#         self.width = constants.CAMERA_WIDTH
-#         self.height = constants.CAMERA_HEIGHT
-#         self.x, self.y = (0, 0)
-#
-#     @property
-#     def rectangle(self):
-#
-#         pos_rect = pygame.Rect((0, 0), (constants.CAMERA_WIDTH,
-#                                         constants.CAMERA_HEIGHT))
-#
-#         pos_rect.center = (self.x, self.y)
-#
-#         return pos_rect
-#
-#     @property
-#     def map_address(self):
-#
-#         map_x = self.x / constants.CELL_WIDTH
-#         map_y = self.y / constants.CELL_HEIGHT
-#
-#         return (map_x, map_y)
-#
-#     def update(self):
-#
-#         target_x = PLAYER.x * constants.CELL_WIDTH + (constants.CELL_WIDTH/2)
-#         target_y = PLAYER.y * constants.CELL_HEIGHT + (constants.CELL_HEIGHT/2)
-#
-#         distance_x, distance_y = self.map_dist((target_x, target_y))
-#
-#         self.x += int(distance_x)
-#         self.y += int(distance_y)
-#
-#     def win_to_map(self, coords):
-#
-#         tar_x, tar_y = coords
-#
-#         #convert window coords to distace from camera
-#         cam_d_x, cam_d_y = self.cam_dist((tar_x, tar_y))
-#
-#         #distance from cam -> map coord
-#         map_p_x = self.x + cam_d_x
-#         map_p_y = self.y + cam_d_y
-#
-#         return((map_p_x, map_p_y))
-#
-#
-#     def map_dist(self, coords):
-#
-#         new_x, new_y = coords
-#
-#         dist_x = new_x - self.x
-#         dist_y = new_y - self.y
-#
-#         return (dist_x, dist_y)
-#
-#     def cam_dist(self, coords):
-#
-#         win_x, win_y = coords
-#
-#         dist_x = win_x - (self.width / 2)
-#         dist_y = win_y - (self.height / 2)
-#
-#         return (dist_x, dist_y)
+        base_style = WidgetStyle(font=font, border_colour=border_colour, font_colour=font_colour,
+                                 border_size=border_size)
 
+        frame = Frame(base_style=base_style, name=f"selected_child",  width=TILE_SIZE, height=TILE_SIZE)
+
+        return frame

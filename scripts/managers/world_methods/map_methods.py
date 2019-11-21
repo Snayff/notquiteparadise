@@ -6,7 +6,7 @@ from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
 from typing import List, Tuple
-from scripts.global_singletons.data_library import library
+from scripts.core.data_library import library
 
 
 class MapMethods:

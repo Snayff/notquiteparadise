@@ -36,7 +36,7 @@ class DebugManager:
         """
         Draw the debug info
         """
-        from scripts.global_singletons.managers import ui
+        from scripts.managers.ui_manager import ui
         surface = ui.Display.get_main_surface()
 
         font = self.font
@@ -44,7 +44,7 @@ class DebugManager:
 
         # render tile coords
         if self.show_tile_xy:
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             panel = world.game_map.panel
 
             for tile_x in range(0, panel.width, TILE_SIZE):
@@ -68,20 +68,20 @@ class DebugManager:
         self.messages = []
 
         if self.show_game_time:
-            from scripts.global_singletons.managers import turn
+            from scripts.managers.turn_manager import turn
             msg = f"Game time is: {turn.time}, Round: {turn.round}, time in round: " \
                   f" {turn.round_time}"
             self.messages.append(msg)
 
         if self.show_fps:
-            from scripts.global_singletons.managers import game
+            from scripts.managers.game_manager import game
             clock = game.internal_clock
             fps = str(int(clock.get_fps()))
             msg = f"FPS : {fps}"
             self.messages.append(msg)
 
         if self.show_mouse_pos:
-            from scripts.global_singletons.managers import ui
+            from scripts.managers.ui_manager import ui
             pos = ui.Mouse.get_scaled_mouse_pos()
             msg = f"Abs mouse pos : {pos}, "
 
@@ -101,7 +101,7 @@ class DebugManager:
                 self.messages.append(msg)
 
         if self.show_game_state:
-            from scripts.global_singletons.managers import game
+            from scripts.managers.game_manager import game
             msg = f"Game state: {game.game_state}"
             self.messages.append(msg)
 
@@ -113,3 +113,6 @@ class DebugManager:
             visible (bool): Whether debug info is visible
         """
         self.visible = visible
+
+
+debug = DebugManager()

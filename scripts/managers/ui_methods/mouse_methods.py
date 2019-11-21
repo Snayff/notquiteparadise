@@ -1,6 +1,7 @@
 
 import pygame
 from scripts.core.constants import UIElementTypes
+from scripts.ui.templates.ui_element import UIElement
 
 
 class MouseMethods:
@@ -78,7 +79,7 @@ class MouseMethods:
 
         return colliding_panel
 
-    def get_colliding_ui_element_type(self, mouse_x=-1, mouse_y=-1):
+    def get_colliding_ui_element_type(self, mouse_x=-1, mouse_y=-1) -> UIElementTypes:
         """
         Determine which ui element is colliding with mouse position. Current position used if one not provided.
 
@@ -102,7 +103,7 @@ class MouseMethods:
             if ui_object.is_visible and ui_object.rect.collidepoint(mouse_pos):
                 return UIElementTypes[key]
 
-    def get_colliding_ui_element(self, mouse_x=-1, mouse_y=-1):
+    def get_colliding_ui_element(self, mouse_x=-1, mouse_y=-1) -> UIElement:
         """
         Determine which ui element is colliding with mouse position. Current position used if one not provided.
 
@@ -111,7 +112,7 @@ class MouseMethods:
             mouse_y(int):  Optional. Mouses y coord.
 
         Returns:
-            UIElement: UIElement
+            UIElement: UIElement derived class
         """
 
         # if mouse pos was provided use it, else get it

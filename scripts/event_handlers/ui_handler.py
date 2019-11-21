@@ -1,14 +1,15 @@
-
 import logging
 from typing import Tuple
 
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, MouseButtons, TILE_SIZE, MessageEventTypes, UIElementTypes
+    UIEventTypes, TILE_SIZE, MessageEventTypes, UIElementTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.event_hub import publisher
-from scripts.global_singletons.managers import game, ui, world
+from scripts.core.event_hub import publisher
+from scripts.managers.ui_manager import ui
+from scripts.managers.world_manager import world
+from scripts.managers.game_manager import game
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
 
@@ -143,7 +144,6 @@ class UiHandler(Subscriber):
         Args:
             skill_to_be_used ():
         """
-        from scripts.global_singletons.managers import world
         # get info for initial selected tile
         # TODO - get nearest entity in range, use player only if nothing in range
         player = world.player
@@ -170,7 +170,7 @@ class UiHandler(Subscriber):
         Args:
             tile (Tile):
         """
-        entity = world.Entity.get_blocking_entity_at_location(tile.x, tile.y)
+        entity = world.Entity.get_blocking_entity(tile.x, tile.y)
         ui.Element.set_selected_entity(entity)
         ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
 

@@ -13,7 +13,7 @@ class ClickUIEvent(Event):
     def __init__(self, button_pressed):
         Event.__init__(self, UIEventTypes.CLICK_UI, EventTopics.UI)
 
-        from scripts.global_singletons.managers import ui
+        from scripts.managers.ui_manager import ui
         mouse_pos = ui.Mouse.get_scaled_mouse_pos()
         self.mouse_x = mouse_pos[0]
         self.mouse_y = mouse_pos[1]

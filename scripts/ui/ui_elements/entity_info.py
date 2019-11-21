@@ -1,11 +1,13 @@
 import logging
-from scripts.core.constants import InputStates, VisualInfo, ICON_SIZE, PrimaryStatTypes, SecondaryStatTypes
+from scripts.core.constants import InputStates, VisualInfo, ICON_SIZE, PrimaryStatTypes, SecondaryStatTypes, \
+    UIElementTypes
 from scripts.ui.basic.fonts import Font
 from scripts.ui.basic.palette import Palette
 from scripts.ui.templates.frame import Frame
 from scripts.ui.templates.text_box import TextBox
 from scripts.ui.templates.ui_element import UIElement
 from scripts.ui.templates.widget_style import WidgetStyle
+from scripts.world.entity import Entity
 
 
 class EntityInfo(UIElement):
@@ -69,7 +71,7 @@ class EntityInfo(UIElement):
         children.append(secondary_text_box)
 
         # complete base class init
-        super().__init__(base_style5, x, y, width, height, children)
+        super().__init__(UIElementTypes.ENTITY_INFO, base_style5, x, y, width, height, children)
 
         # confirm init complete
         logging.debug(f"EntityInfo initialised.")
@@ -79,11 +81,16 @@ class EntityInfo(UIElement):
         If dirty update entity's icon, info and stats
         """
         if self.is_dirty:
-            self.update_icon()
-            self.update_current_info()
-            self.update_primary_stats()
-            self.update_secondary_stats()
-            self.update_affliction_info()
+            if self.selected_entity:
+                self.update_icon()
+                self.update_current_info()
+                self.update_primary_stats()
+                self.update_secondary_stats()
+                self.update_affliction_info()
+
+                self.is_visible = True
+            else:
+                self.is_visible = False
 
         super().update()
 
@@ -106,7 +113,7 @@ class EntityInfo(UIElement):
         """
         pass
 
-    def set_selected_entity(self, entity):
+    def set_selected_entity(self, entity: Entity):
         """
         Update the info held for the new entity
 

@@ -1,8 +1,10 @@
 import logging
 
 from scripts.core.constants import GameEventTypes, GameStates
-from scripts.global_singletons.event_hub import publisher
-from scripts.global_singletons.managers import game, turn, world
+from scripts.core.event_hub import publisher
+from scripts.managers.turn_manager import turn
+from scripts.managers.world_manager import world
+from scripts.managers.game_manager import game
 from scripts.events.game_events import ChangeGameStateEvent, EndTurnEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber
 

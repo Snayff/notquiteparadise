@@ -6,8 +6,8 @@ from typing import List
 from scripts.core.constants import MessageEventTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
     EffectTypes, SkillShapes
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 from scripts.skills.effects.add_aspect import AddAspectEffect
 from scripts.skills.effects.affect_stat import AffectStatEffect
 from scripts.skills.skill import Skill
@@ -42,7 +42,7 @@ class SkillMethods:
         Returns:
             bool: True if can use the skill. Else False.
         """
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
 
         start_tile = world.Map.get_tile(entity.x, entity.y)
         target_x, target_y = target_pos

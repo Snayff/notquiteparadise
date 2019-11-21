@@ -39,3 +39,6 @@ class WorldManager:
         """
         None but method must exist
         """
+
+
+world = WorldManager()

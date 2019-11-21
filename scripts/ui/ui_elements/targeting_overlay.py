@@ -51,7 +51,7 @@ class TargetingOverlay:
         Args:
             surface:
         """
-        from scripts.global_singletons.managers import ui
+        from scripts.managers.ui_manager import ui
         palette = ui.Palette.targeting_overlay
 
         tile_colour = palette.highlighted_range_border
@@ -72,7 +72,7 @@ class TargetingOverlay:
         Args:
             surface:
         """
-        from scripts.global_singletons.managers import ui
+        from scripts.managers.ui_manager import ui
         palette = ui.Palette.targeting_overlay
 
         tile_colour = palette.highlighted_effect_border
@@ -92,7 +92,7 @@ class TargetingOverlay:
         Args:
             surface:
         """
-        from scripts.global_singletons.managers import ui
+        from scripts.managers.ui_manager import ui
         palette = ui.Palette.targeting_overlay
 
         tile_colour = palette.selected_tile_border

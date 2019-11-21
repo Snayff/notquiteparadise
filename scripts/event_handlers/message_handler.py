@@ -1,7 +1,7 @@
 
 import logging
 
-from scripts.global_singletons.managers import ui
+from scripts.managers.ui_manager import ui
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
 

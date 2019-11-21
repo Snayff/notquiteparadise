@@ -1,8 +1,8 @@
 
 from scripts.core.constants import MessageEventTypes, EffectTypes
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
 
 
@@ -28,7 +28,7 @@ class AddAspectEffect(Effect):
 
         for tile in tiles:
 
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             world.Map.add_aspect_to_tile(tile, data.aspect_name)
 
             entity = self.owner.owner.owner

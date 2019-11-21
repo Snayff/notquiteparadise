@@ -1,8 +1,7 @@
 import logging
 
 from scripts.core.constants import EffectTypes
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
 from scripts.skills.effects.effect import Effect
 
 
@@ -20,7 +19,7 @@ class MoveEffect(Effect):
         """
         # FIXME - handle target and destination
         #  destination held in inherent values? e.g. distance to move AWAY = 1 ?
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
 
         data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.effect_type)
 
@@ -35,15 +34,15 @@ class MoveEffect(Effect):
             in_bounds = world.Map.is_tile_in_bounds(target_tile_x, target_tile_y)
             tile_blocking_movement = world.Map.is_tile_blocking_movement(target_tile_x,
                                                                target_tile_y)
-            entity_blocking_movement = world.Entity.get_blocking_entity_at_location(target_tile_x,
-                                                                                            target_tile_y)
+            entity_blocking_movement = world.Entity.get_blocking_entity(target_tile_x,
+                                                                        target_tile_y)
             if in_bounds and not tile_blocking_movement and not entity_blocking_movement:
                 # move the entity
                 entity_to_move.x += direction_x
                 entity_to_move.y += direction_y
 
         # update the fov if player moved
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         if entity_to_move == world.player:
             world.player_fov_is_dirty = True
 

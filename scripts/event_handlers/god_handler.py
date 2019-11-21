@@ -2,8 +2,8 @@ import logging
 
 from scripts.core.constants import EntityEventTypes, EffectTypes, EventTopics
 from scripts.event_handlers.pub_sub_hub import Subscriber
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.managers import world
+from scripts.core.data_library import library
+from scripts.managers.world_manager import world
 
 
 class GodHandler(Subscriber):

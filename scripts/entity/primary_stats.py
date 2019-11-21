@@ -1,5 +1,5 @@
 from scripts.core.constants import PrimaryStatTypes
-from scripts.global_singletons.data_library import library
+from scripts.core.data_library import library
 
 
 class PrimaryStats:
@@ -34,7 +34,7 @@ class PrimaryStats:
             # TODO - add homeland data to stat
             component_changes += entity.homeland.vigour
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, PrimaryStatTypes.VIGOUR)
         
@@ -65,7 +65,7 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.clout
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                                                                                 PrimaryStatTypes.CLOUT)
 
@@ -96,7 +96,7 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.skullduggery
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                 PrimaryStatTypes.SKULLDUGGERY)
 
@@ -127,7 +127,7 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.bustle
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                                                                         PrimaryStatTypes.BUSTLE)
 
@@ -158,7 +158,7 @@ class PrimaryStats:
         if entity.homeland:
             component_changes += entity.homeland.exactitude
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
                                                                                             PrimaryStatTypes.EXACTITUDE)
 

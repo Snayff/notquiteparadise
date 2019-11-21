@@ -3,9 +3,10 @@ import logging
 from scripts.core.constants import EntityEventTypes, MessageEventTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
-from scripts.global_singletons.managers import world, turn
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
+from scripts.managers.turn_manager import turn
+from scripts.managers.world_manager import world
 from scripts.events.game_events import EndTurnEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber, Event
 
@@ -65,7 +66,7 @@ class EntityHandler(Subscriber):
         # is there something in the way?
         in_bounds = world.Map.is_tile_in_bounds(target_x, target_y)
         tile_blocking_movement = world.Map.is_tile_blocking_movement(target_x, target_y)
-        entity_blocking_movement = world.Entity.get_blocking_entity_at_location(target_x, target_y)
+        entity_blocking_movement = world.Entity.get_blocking_entity(target_x, target_y)
 
         if in_bounds:
 

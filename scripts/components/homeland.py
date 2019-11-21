@@ -1,5 +1,5 @@
 
-from scripts.global_singletons.data_library import library
+from scripts.core.data_library import library
 
 
 class Homeland:

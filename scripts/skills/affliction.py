@@ -1,7 +1,7 @@
 import logging
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers, AfflictionLifespan
-from scripts.global_singletons.data_library import library
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers
+from scripts.core.data_library import library
 from scripts.world.entity import Entity
 
 
@@ -34,7 +34,7 @@ class Affliction:
         log_string = f"Triggering effects in {self.name}"
         logging.info( log_string)
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         data = library.get_affliction_data(self.name)
 
         # apply any effects

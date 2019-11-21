@@ -6,8 +6,9 @@ from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
+from scripts.managers.world_manager import world
 
 
 class InputManager:
@@ -177,7 +178,7 @@ class InputManager:
         """
         Process all input from input_values. Calls multiple sub methods based on current GameState.
         """
-        from scripts.global_singletons.managers import game
+        from scripts.managers.game_manager import game
         game_state = game.game_state
 
         self.process_generic_input()
@@ -196,7 +197,7 @@ class InputManager:
         Interpret none GameState-specific actions
         """
         if self.input_values["debug_toggle"]:
-            from scripts.global_singletons.managers import debug
+            from scripts.managers.debug_manager import debug
             if debug.visible:
                 debug.set_visibility(False)
             else:
@@ -204,23 +205,31 @@ class InputManager:
 
         if self.input_values["refresh_data"]:
             library.refresh_library_data()
-            from scripts.global_singletons.managers import ui
+            from scripts.managers.ui_manager import ui
             ui.Element.update_skill_bars_icons()
             publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
                                                                      "reloaded~~"))
 
         if self.input_values["mouse_moved"]:
-            from scripts.global_singletons.managers import ui
+            from scripts.managers.ui_manager import ui
             ui_element = ui.Mouse.get_colliding_ui_element()
+            # pass the input to the UI element, it will decide if it cares
             if ui_element:
                 ui_element.handle_input(pygame.MOUSEMOTION)
 
+                # if we have updated the camera we might be over a new tile with an entity
+                if ui_element.element_type == UIElementTypes.CAMERA:
+                    tile_x, tile_y = ui.Element.get_selected_tile_pos()
+
+                    # don't check if we have an entity as passing none will cause the entity info to hide
+                    entity = world.Entity.get_blocking_entity(tile_x, tile_y)
+                    ui.Element.set_selected_entity(entity)
 
     def process_player_turn_input(self):
         """
         Interpret Player Turn actions
         """
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         player = world.player
 
         # general actions
@@ -259,7 +268,7 @@ class InputManager:
                     skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
                     # check who we are moused over
-                    from scripts.global_singletons.managers import ui
+                    from scripts.managers.ui_manager import ui
                     mouse_x, mouse_y = ui.Mouse.get_relative_scaled_mouse_pos()
                     target_x, target_y = world.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
@@ -277,10 +286,10 @@ class InputManager:
         """
         Interpret Targeting Mode actions
         """
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         player = world.player
 
-        from scripts.global_singletons.managers import ui
+        from scripts.managers.ui_manager import ui
         targeting_overlay = ui.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
         selected_tile = targeting_overlay.selected_tile
 
@@ -295,7 +304,7 @@ class InputManager:
 
         # cancel out
         if self.input_values["cancel"] or self.input_values["right_click"]:
-            from scripts.global_singletons.managers import game
+            from scripts.managers.game_manager import game
             previous_state = game.previous_game_state
             publisher.publish(ChangeGameStateEvent(previous_state))
             ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
@@ -311,7 +320,7 @@ class InputManager:
             ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
             ui.targeting_overlay.set_selected_tile(tile)
             ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
-            entity = world.Entity.get_blocking_entity_at_location(tile.x, tile.y)
+            entity = world.Entity.get_blocking_entity(tile.x, tile.y)
             ui.Element.set_selected_entity(entity)
 
         # if mouse moved update selected tile
@@ -321,7 +330,7 @@ class InputManager:
             ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
             ui.Element.set_selected_tile(tile)
             ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
-            entity = world.Entity.get_blocking_entity_at_location(tile.x, tile.y)
+            entity = world.Entity.get_blocking_entity(tile.x, tile.y)
             ui.Element.set_selected_entity(entity)
             ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
             ui.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
@@ -458,3 +467,6 @@ class InputManager:
             return 4
         else:
             return -1
+
+
+input = InputManager()

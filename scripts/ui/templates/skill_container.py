@@ -20,7 +20,7 @@ class SkillContainer(Panel):
         """
         Draw the use key for the skills
         """
-        from scripts.global_singletons.managers import ui
+        from scripts.managers.ui_manager import ui
         font = ui.Font.skill_bar
         text_x = int(self.width - (font.size / 1.8))
         text_y = int(self.height - font.size * 1.2)

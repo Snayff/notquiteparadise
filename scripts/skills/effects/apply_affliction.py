@@ -4,8 +4,8 @@ import logging
 from scripts.core.constants import AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
     EffectTypes
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
 from scripts.world.entity import Entity
 
@@ -56,7 +56,7 @@ class ApplyAfflictionEffect(Effect):
             modified_duration = base_duration
 
             # check the tags match
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             if world.Skill.has_required_tags(tile, effect_data.required_tags, attacker):
 
                 # Roll for BANE application
@@ -111,7 +111,7 @@ class ApplyAfflictionEffect(Effect):
             effect_data = library.get_god_intervention_effect_data(self.owner.owner.name, self.owner.name,
                                                                    self.effect_type)
 
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         active_affliction = world.Affliction.get_affliction_for_entity(defending_entity,
                                                                                effect_data.affliction_name)
 

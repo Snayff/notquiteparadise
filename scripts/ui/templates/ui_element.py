@@ -1,6 +1,8 @@
 import pygame
 from abc import ABC, abstractmethod
 from typing import List
+
+from scripts.core.constants import UIElementTypes
 from scripts.ui.templates.widget_style import WidgetStyle
 
 
@@ -8,7 +10,8 @@ class UIElement(ABC):
     """
     A grouping of widgets to create a specific UI element.
     """
-    def __init__(self, base_style: WidgetStyle, x: int, y: int, width: int, height: int, children: List = None):
+    def __init__(self, element_type: UIElementTypes, base_style: WidgetStyle, x: int, y: int, width: int, height: int,
+            children: List = None):
         # aesthetics
         self.base_style = base_style
 
@@ -16,8 +19,10 @@ class UIElement(ABC):
         self.rect = pygame.rect.Rect(x, y, width, height)
 
         # state and info
+        self.element_type = element_type
         self.children = children
         self.is_visible = False
+        self.is_dirty = True
         self.surface = pygame.Surface((self.rect.width, self.rect.height))
 
     @abstractmethod
@@ -27,6 +32,9 @@ class UIElement(ABC):
         """
         for child in self.children:
             child.update()
+
+        if self.is_dirty:
+            self.is_dirty = False
 
     @abstractmethod
     def draw(self, main_surface):

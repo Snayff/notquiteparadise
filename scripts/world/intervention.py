@@ -1,10 +1,7 @@
-
-import logging
-
 from scripts.core.constants import MessageEventTypes
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.data_library import library
+from scripts.core.event_hub import publisher
 from scripts.world.god import God
 
 
@@ -29,7 +26,7 @@ class Intervention:
         Args:
             target_pos (tuple): x y of the target
         """
-        from scripts.global_singletons.managers import world
+        from scripts.managers.world_manager import world
         data = library.get_god_intervention_data(self.owner.name, self.name)
 
         target_x, target_y = target_pos

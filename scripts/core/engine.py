@@ -4,11 +4,14 @@ import io
 import logging
 import pstats
 import pygame
-
 from scripts.core.constants import GameStates
-from scripts.global_singletons.managers import world, game, turn, ui, debug, \
-    input, start
-from scripts.global_singletons.event_hub import event_hub
+from scripts.managers.input_manager import input
+from scripts.managers.ui_manager import ui
+from scripts.managers.debug_manager import debug
+from scripts.managers.turn_manager import turn
+from scripts.managers.world_manager import world
+from scripts.managers.game_manager import game
+from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging, \
     initialise_ui_elements
 
@@ -43,14 +46,6 @@ def main():
     # TODO - set to turn off for production builds
     profiler = cProfile.Profile()
     profiler.enable()
-
-    #################################################
-    # alternate approach to init the managers
-    # TODO - determine if alternate approach is worthwhile
-    start()
-    from scripts.global_singletons import managers
-    managers.game_manager2.update_game_state(GameStates.PLAYER_TURN)
-    #################################################
 
     # initialise the game
     initialise_ui_elements()

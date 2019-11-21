@@ -17,7 +17,7 @@ class God:
         self.opinions = {}
 
         from scripts.world.intervention import Intervention
-        from scripts.global_singletons.data_library import library
+        from scripts.core.data_library import library
         interventions_data = library.get_god_interventions_data(god_name)
         interventions = {}
         # create interventions for god

@@ -1,5 +1,5 @@
-from scripts.core.constants import TILE_SIZE, TargetTags
-from scripts.global_singletons.data_library import library
+from scripts.core.constants import TILE_SIZE
+from scripts.core.data_library import library
 from scripts.world.tile import Tile
 
 
@@ -61,6 +61,6 @@ class Aspect:
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
-            from scripts.global_singletons.managers import world
+            from scripts.managers.world_manager import world
             effect = world.Skill.create_effect(self, effect_data.effect_type)
             effect.trigger([self.owner])
