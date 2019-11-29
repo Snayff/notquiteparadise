@@ -1,8 +1,6 @@
 
 import pygame
 from pygame import surface, freetype
-from pygame.constants import SRCALPHA
-
 from scripts.ui.basic.colours import Colour
 
 
@@ -43,9 +41,12 @@ class WidgetStyle:
         # TODO - fix border drawing outside of surface on right and bottom
         # add border and background
         if self.background_colour:
-            pygame.draw.rect(ui_element_surface, self.background_colour, rect)
+            bg_colour = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+            bg_colour.fill(self.background_colour)
+            ui_element_surface.blit(bg_colour, (rect.x, rect.y))
 
         if self.border_colour and self.border_size > 0:
+            # TODO - fix transparency as not currently working for border
             pygame.draw.rect(ui_element_surface, self.border_colour, rect, self.border_size)
 
         # add images

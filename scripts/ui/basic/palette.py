@@ -106,6 +106,6 @@ class Palette:
             self.border = colour.complement.darker
             self.skill_border = colour.complement.lighter
             self.text_default = colour.white
-            self.selected_tile_border = colour.tertiary.neutral
-            self.overlay_border = colour.secondary.neutral
-            self.overlay = colour.secondary.lighter
+            self.selected_tile_border = colour.tertiary.neutral + (127,)  # add's alpha
+            self.overlay_border = colour.secondary.neutral + (50,)
+            self.overlay = colour.secondary.lighter + (50,)

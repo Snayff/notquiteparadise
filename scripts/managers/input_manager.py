@@ -8,6 +8,7 @@ from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
 from scripts.core.data_library import library
 from scripts.core.event_hub import publisher
+from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 
 
@@ -205,13 +206,11 @@ class InputManager:
 
         if self.input_values["refresh_data"]:
             library.refresh_library_data()
-            from scripts.managers.ui_manager import ui
             ui.Element.update_skill_bars_icons()
             publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
                                                                      "reloaded~~"))
 
         if self.input_values["mouse_moved"]:
-            from scripts.managers.ui_manager import ui
             ui_element = ui.Mouse.get_colliding_ui_element()
             # pass the input to the UI element, it will decide if it cares
             if ui_element:
@@ -224,6 +223,11 @@ class InputManager:
                     # don't check if we have an entity as passing none will cause the entity info to hide
                     entity = world.Entity.get_blocking_entity(tile_x, tile_y)
                     ui.Element.set_selected_entity(entity)
+
+        # TEST ONLY
+        if self.input_values["middle_click"]:
+            cam = ui.Element.get_ui_element(UIElementTypes.CAMERA)
+            cam.set_targeting_overlay_visibility(not cam.is_overlay_visible, [])
 
     def process_player_turn_input(self):
         """

@@ -22,7 +22,8 @@ class DisplayMethods:
         self.screen_scaling_mod_x = self.desired_width // VisualInfo.BASE_WINDOW_WIDTH
         self.screen_scaling_mod_y = self.desired_height // VisualInfo.BASE_WINDOW_HEIGHT
         self.window = pygame.display.set_mode((self.desired_width, self.desired_height))
-        self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
+        self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT),
+                                           pygame.SRCALPHA)
 
         self.init_display_config()
 

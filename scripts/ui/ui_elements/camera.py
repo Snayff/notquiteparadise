@@ -23,8 +23,9 @@ class Camera(UIElement):
         self.start_tile_x = 0
         self.start_tile_y = 0
         self.edge_size = 3  # # of tiles to control camera movement
-        self.is_overlay_visible = True
+        self.is_overlay_visible = False
         self.selected_child = None  # the child widget currently being selected
+        self.player_cell = None  # the child widget in which the player resides
         self.selected_tile_pos = (0, 0)  # tile x,y
         self.overlay_directions = []  # hold list of cardinal directions to show in the overlay
 
@@ -61,8 +62,16 @@ class Camera(UIElement):
 
     def update(self):
         """
-        Ensure all the children update in response to changes.
+        Ensure all the children update in response to changes. Update the overlay to be positioned over the player.
         """
+        if self.is_dirty:
+            # update overlay position to match player's
+            if self.player_cell:
+                overlay = self.get_child("overlay")
+                overlay.rect.x = self.player_cell.rect.x
+                overlay.rect.y = self.player_cell.rect.y
+                print(f"player:{self.player_cell.rect};  new overlay:{overlay.rect}")
+
         super().update()
 
     def draw(self, main_surface):
@@ -86,6 +95,7 @@ class Camera(UIElement):
 
             # only draw desired directions
             for direction in self.overlay_directions:
+                # TODO - don't draw centre tile
                 direction_frame = self.get_child(f"{direction}")
                 direction_frame.draw(self.surface)
 
@@ -165,6 +175,21 @@ class Camera(UIElement):
 
                     break
 
+    def set_player_cell(self, tile_x, tile_y):
+        """
+        Check what tile collides with the xy given and set the player pos to that
+
+        Args:
+            tile_x (int): x of player on the game map
+            tile_y (int): y of player on the game map
+        """
+        # get the cell player is in
+        row = tile_x - self.start_tile_x
+        col = tile_y - self.start_tile_y
+        child = self.get_child(f"cell{row},{col}")
+        self.player_cell = child
+        self.is_dirty = True
+
     def create_map_widget(self) -> Grid:
         """
         Create the map widget
@@ -184,7 +209,6 @@ class Camera(UIElement):
         # size and position
         cell_gap = 0
         edge = 5
-        # +1 to prevent being rounded down
         width = ((TILE_SIZE + cell_gap) * self.columns) + ((border_size + edge) * 2)
         height = ((TILE_SIZE + cell_gap) * self.rows) + ((border_size + edge) * 2)
 
@@ -236,9 +260,8 @@ class Camera(UIElement):
         font = Font().camera
         font_colour = palette.text_default
 
-        alpha = 200
-        bg_colour = palette.overlay + (alpha, )  # create new tuple from colour and alpha
-        border_colour = palette.overlay_border + (alpha, )
+        bg_colour = palette.overlay
+        border_colour = palette.overlay_border
         number_of_directions = 9  # 8 cardinal directions + centre
 
         # create maps' children
@@ -275,12 +298,11 @@ class Camera(UIElement):
         font = Font().camera
         font_colour = palette.text_default
         border_size = 4
-        alpha = 127
-        border_colour = palette.selected_tile_border #+ (alpha,)
+        border_colour = palette.selected_tile_border
 
         base_style = WidgetStyle(font=font, border_colour=border_colour, font_colour=font_colour,
                                  border_size=border_size)
 
-        frame = Frame(base_style=base_style, name=f"selected_child",  width=TILE_SIZE, height=TILE_SIZE)
+        frame = Frame(base_style=base_style, name=f"selected_child", width=TILE_SIZE, height=TILE_SIZE)
 
         return frame

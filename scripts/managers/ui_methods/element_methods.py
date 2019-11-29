@@ -3,6 +3,7 @@ import pygame
 from typing import Tuple
 from scripts.core.constants import UIElementTypes, TILE_SIZE
 from scripts.core.data_library import library
+from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.entity_queue import EntityQueue
@@ -87,6 +88,9 @@ class ElementMethods:
         # TODO - add handling for dirty
 
         main_surface = self.manager.Display.get_main_surface()
+
+        # clear previous frame
+        main_surface.fill((0, 0, 0))
 
         for key, element in self.elements.items():
             if element.is_visible:
@@ -393,7 +397,6 @@ class ElementMethods:
         Retrieve the tiles to draw within view of the camera
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        from scripts.managers.world_manager import world
 
         if camera:
             cell_x = 0
@@ -425,6 +428,17 @@ class ElementMethods:
                 # reset camera cell y and increment camera cell x
                 cell_y = 0
                 cell_x += 1
+
+    def set_player_pos_in_camera(self, x, y):
+        """
+        Use xy within camera to set the player's position within the camera.
+
+        Args:
+            x ():
+            y ():
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera.set_player_cell(x, y)
 
     def add_to_message_log(self, message):
         """

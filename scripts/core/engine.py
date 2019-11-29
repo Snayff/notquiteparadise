@@ -36,8 +36,9 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 
 def main():
     """
-    The parent_widget for the game initialisation and game loop
+    The entry for the game initialisation and game loop
     """
+
     # initialise logging
     initialise_logging()
 
@@ -108,7 +109,6 @@ def dump_profiling_data(profiler):
     out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + ".profile", "w")
     ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
-
 
 if __name__ == "__main__":  # prevents being run from other modules
     main()

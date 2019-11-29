@@ -71,8 +71,12 @@ class UiHandler(Subscriber):
                 ui.Element.update_skill_bars_icons()
             elif event.event_type == EntityEventTypes.DIE:
                 ui.Element.update_entity_queue()
+                self.update_camera()
             elif event.event_type == EntityEventTypes.MOVE:
-                self.update_camera(event.start_pos, event.target_pos)
+                if event.entity == world.Entity.get_player():
+                    self.update_camera(event.start_pos, event.target_pos)
+                else:
+                    self.update_camera()
 
         if event.topic == EventTopics.GAME:
             if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
@@ -201,14 +205,16 @@ class UiHandler(Subscriber):
             target_pos ():
         """
         if target_pos:
-            outcome = ui.Element.should_camera_move(start_pos, target_pos)
-            if outcome:
-                target_x, target_y = target_pos
+            should_move_camera = ui.Element.should_camera_move(start_pos, target_pos)
+            target_x, target_y = target_pos
+
+            if should_move_camera:
                 start_x, start_y = start_pos
                 move_x = target_x - start_x
                 move_y = target_y - start_y
                 ui.Element.move_camera(move_x, move_y)
 
+            ui.Element.set_player_pos_in_camera(target_x, target_y)
         ui.Element.update_cameras_tiles()
 
     def init_ui(self):
