@@ -1,6 +1,10 @@
 
 import logging
 
+import pygame
+import pygame_gui
+
+from scripts.core.constants import VisualInfo
 from scripts.ui.basic.fonts import Font
 from scripts.managers.ui_methods.display_methods import DisplayMethods
 from scripts.managers.ui_methods.element_methods import ElementMethods
@@ -22,14 +26,37 @@ class UIManager:
         self.Mouse = MouseMethods(self)
         self.Palette = Palette()  # doesnt need self as only holds data
         self.Font = Font()  # doesnt need self as only holds data
+        self.Gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
 
+        hello_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((350, 275), (100, 50)),
+                                                    text='Say Hello',
+                                                    manager=self.Gui)
+        self.Element.gui_elements["hello_button"] = hello_button
         logging.info(f"UIManager initialised.")
 
-    def update(self):
+    def update(self, delta_time: float):
         """
         Update all ui elements
         """
         self.Element.update_elements()
+        self.Gui.update(delta_time)
+
+    def draw(self):
+        main_surface = self.Display.get_main_surface()
+
+        # clear previous frame
+        main_surface.fill((0, 0, 0))
+
+        self.Gui.draw_ui(main_surface)
+        #self.Element.draw_visible_elements(main_surface)
+
+        # resize the surface to the desired resolution
+        scaled_surface = pygame.transform.scale(main_surface, self.Display.get_desired_resolution())
+        window = self.Display.get_window()
+        window.blit(scaled_surface, (0, 0))
+
+        # update the display
+        pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
 
 

@@ -70,23 +70,26 @@ def game_loop():
 
     while not game.game_state == GameStates.EXIT_GAME:
 
-        # limit frames
-        game.internal_clock.tick(60)
+        # get delta time and set frame rate with .tick()
+        delta_time = game.internal_clock.tick(60) / 1000.0
 
         if game.game_state == GameStates.ENEMY_TURN:
             turn.turn_holder.ai.take_turn()
 
         # HANDLE UPDATE
-        input.update()
+        for event in pygame.event.get():
+            input.update(event)
+            ui.Gui.process_events(event)
+
         game.update()
         debug.update()
         world.update()
-        ui.update()
+        ui.update(delta_time)
         event_hub.update()
 
         # DRAW
         debug.draw()
-        ui.Element.draw_visible_elements()
+        ui.draw()
 
 
 def dump_profiling_data(profiler):
@@ -109,6 +112,7 @@ def dump_profiling_data(profiler):
     out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + ".profile", "w")
     ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
+
 
 if __name__ == "__main__":  # prevents being run from other modules
     main()

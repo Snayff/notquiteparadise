@@ -7,6 +7,7 @@ class Font:
     """
     def __init__(self):
         pygame.freetype.init()
+        pygame.font.init()
 
         font_dir = "assets/fonts/"
         self.default = pygame.freetype.Font(font_dir + "Barlow-Regular.otf", 12)

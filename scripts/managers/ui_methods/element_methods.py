@@ -26,6 +26,7 @@ class ElementMethods:
         self.manager = manager  # type: UIManager
 
         self.elements = {}  # list of all init'd ui elements
+        self.gui_elements = {}  # TODO - combine with above once resolved and there is no diff between the elements
 
     def init_message_log(self):
         """
@@ -81,28 +82,23 @@ class ElementMethods:
         except KeyError:
             logging.warning(f"ui tried to set {element_type.name} to {visible} but key doesn`t exist.")
 
-    def draw_visible_elements(self):
+    def draw_visible_elements(self, main_surface):
         """
         Draw the visible ui elements. Checks is_visible.
         """
         # TODO - add handling for dirty
 
-        main_surface = self.manager.Display.get_main_surface()
-
-        # clear previous frame
-        main_surface.fill((0, 0, 0))
-
         for key, element in self.elements.items():
             if element.is_visible:
                 element.draw(main_surface)
 
-        # resize the surface to the desired resolution
-        scaled_surface = pygame.transform.scale(main_surface, self.manager.Display.get_desired_resolution())
-        window = self.manager.Display.get_window()
-        window.blit(scaled_surface, (0, 0))
-
-        # update the display
-        pygame.display.flip()  # make sure to do this as the last drawing element in a frame
+        # # resize the surface to the desired resolution
+        # scaled_surface = pygame.transform.scale(main_surface, self.manager.Display.get_desired_resolution())
+        # window = self.manager.Display.get_window()
+        # window.blit(scaled_surface, (0, 0))
+        #
+        # # update the display
+        # pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
     def update_elements(self):
         """

@@ -39,6 +39,10 @@ class Widget(ABC):
         """
         Base base style and all children of the widget.
         """
+        # print(f"{self.name}")
+        # if self.name == "overlay":
+        #     pass
+
         self.base_style.draw(surface, self.rect)
 
         # draw all contained widgets

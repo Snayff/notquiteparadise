@@ -1,8 +1,9 @@
-/* Python 2.x/3.x compitibility tools
+/* Python 2.x/3.x compatibility tools (internal)
  */
+#ifndef PGCOMPAT_INTERNAL_H
+#define PGCOMPAT_INTERNAL_H
 
-#if !defined(PGCOMPAT_H)
-#define PGCOMPAT_H
+#include "include/pgcompat.h"
 
 #if PY_MAJOR_VERSION >= 3
 
@@ -190,6 +191,24 @@
 #else
 #define PG_ENABLE_NEWBUF 0
 #endif
-#endif
+#endif /* !defined(PG_ENABLE_NEWBUF) */
 
-#endif /* #if !defined(PGCOMPAT_H) */
+
+#if defined(SDL_VERSION_ATLEAST)
+#if !(SDL_VERSION_ATLEAST(2, 0, 5))
+/* These functions require SDL 2.0.5 or greater.
+
+  https://wiki.libsdl.org/SDL_SetWindowResizable
+*/
+void SDL_SetWindowResizable(SDL_Window *window, SDL_bool resizable);
+int SDL_GetWindowOpacity(SDL_Window *window, float *opacity);
+int SDL_SetWindowOpacity(SDL_Window *window, float opacity);
+int SDL_SetWindowModalFor(SDL_Window *modal_window, SDL_Window *parent_window);
+int SDL_SetWindowInputFocus(SDL_Window *window);
+SDL_Surface * SDL_CreateRGBSurfaceWithFormat(Uint32 flags, int width, int height, int depth,
+                               Uint32 format);
+#endif
+#endif /* defined(SDL_VERSION_ATLEAST) */
+
+
+#endif /* ~PGCOMPAT_INTERNAL_H */

@@ -44,17 +44,18 @@ class InputManager:
             "skill2": False,
             "skill3": False,
             "skill4": False,
-            "refresh_data": False
+            "refresh_data": False,
+            "button_pressed": False
 
         }
 
         logging.info(f"InputManager initialised.")
 
-    def update(self):
+    def update(self, event):
         """
         Get the input and process it
         """
-        self.update_input_values()
+        self.update_input_values(event)
 
         # log input for debug
         input_received = ""
@@ -68,7 +69,7 @@ class InputManager:
 
         self.process_input()
 
-    def update_input_values(self):
+    def update_input_values(self, event):
         """
         Get the pygame event and update the input_values dictionary
 
@@ -76,23 +77,23 @@ class InputManager:
             dict: `self.input_values` containing True for all appropriate inputs.
 
         """
-        # gets mouse and key input as list of events
-        input_events = pygame.event.get()
-
+        # TODO - rebuild to use the local dict to handle key binding and then send off result to be processed directly
         # reset all input values
         for key in self.input_values:
             self.input_values[key] = False
 
         # check all input events
-        for event in input_events:
+        self.check_mouse_input(event)
 
-            self.check_mouse_input(event)
+        # is a KB KEY pressed?
+        if event.type == pygame.KEYDOWN:
+            self.check_kb_directional_input(event)
+            self.check_kb_interaction_input(event)
+            self.check_kb_general_input(event)
 
-            # is a KB KEY pressed?
-            if event.type == pygame.KEYDOWN:
-                self.check_kb_directional_input(event)
-                self.check_kb_interaction_input(event)
-                self.check_kb_general_input(event)
+        if event.type == pygame.USEREVENT:
+            if event.user_type == "ui_button_pressed":
+                self.process_button_input(event)
 
     def check_mouse_input(self, event):
         """
@@ -184,6 +185,9 @@ class InputManager:
 
         self.process_generic_input()
 
+        if self.input_values["button_pressed"]:
+            self.process_button_input()
+
         if game_state == GameStates.PLAYER_TURN:
             self.process_player_turn_input()
 
@@ -192,6 +196,16 @@ class InputManager:
 
         elif game_state == GameStates.PLAYER_DEAD:
             pass
+
+    def process_button_input(self, event):
+        """
+        Process input of a gui button
+
+        Args:
+            event ():
+        """
+        if event.ui_element == ui.Element.gui_elements.get("hello_button"):
+            print("button clicked")
 
     def process_generic_input(self):
         """
