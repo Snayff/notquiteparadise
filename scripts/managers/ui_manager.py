@@ -1,9 +1,7 @@
 
 import logging
-
 import pygame
 import pygame_gui
-
 from scripts.core.constants import VisualInfo
 from scripts.ui.basic.fonts import Font
 from scripts.managers.ui_methods.display_methods import DisplayMethods
@@ -26,12 +24,9 @@ class UIManager:
         self.Mouse = MouseMethods(self)
         self.Palette = Palette()  # doesnt need self as only holds data
         self.Font = Font()  # doesnt need self as only holds data
-        self.Gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
+        self.Gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT),
+                                        "data/ui/themes.json")
 
-        hello_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((350, 275), (100, 50)),
-                                                    text='Say Hello',
-                                                    manager=self.Gui)
-        self.Element.gui_elements["hello_button"] = hello_button
         logging.info(f"UIManager initialised.")
 
     def update(self, delta_time: float):
@@ -59,132 +54,7 @@ class UIManager:
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
 
-
-def example_code():
-    pass
-
-# button  from pygame tutorial
-# class ui_Button:
-#
-#     def __init__(self, surface, button_text, size, center_coords,
-#                  color_box_mouseover = constants.COLOR_RED,
-#                  color_box_default = constants.COLOR_GREEN,
-#                  color_text_mouseover = constants.COLOR_GREY,
-#                  color_text_default = constants.COLOR_GREY):
-#
-#         self.surface = surface
-#         self.button_text = button_text
-#         self.size = size
-#         self.center_coords = center_coords
-#
-#         self.c_box_mo = color_box_mouseover
-#         self.c_box_default = color_box_default
-#         self.c_text_mo = color_text_mouseover
-#         self.c_text_default = color_text_default
-#         self.c_c_box = color_box_default
-#         self.c_c_text = color_text_default
-#
-#         self.rect = pygame.Rect((0, 0), size)
-#         self.rect.center = center_coords
-#
-#     def update(self, player_input):
-#
-#         mouse_clicked = False
-#
-#         local_events, local_mousepos = player_input
-#         mouse_x, mouse_y = local_mousepos
-#
-#         mouse_over = (   mouse_x >= self.rect.left
-#                      and mouse_x <= self.rect.right
-#                      and mouse_y >= self.rect.top
-#                      and mouse_y <= self.rect.bottom )
-#
-#         for event in local_events:
-#             if event.event_type == pygame.MOUSEBUTTONDOWN:
-#                 if event.button == 1: mouse_clicked = True
-#
-#         if mouse_over and mouse_clicked:
-#             return True
-#
-#         if mouse_over:
-#             self.c_c_box = self.c_box_mo
-#             self.c_c_text = self.c_text_mo
-#         else:
-#             self.c_c_box = self.c_box_default
-#             self.c_c_text = self.c_text_default
-#
-#     def draw(self):
-#
-#         pygame.draw.rect(self.surface, self.c_c_box, self.rect)
-#         draw_text(self.surface,
-#                   self.button_text,
-#                   constants.FONT_DEBUG_MESSAGE,
-#                   self.center_coords,
-#                   self.c_c_text,
-#                   center = True)
-
-
-# slider from pygame tutorial
-# class ui_Slider:
-#
-#     def __init__(self,
-#                  surface,
-#                  size,
-#                  center_coords,
-#                  bg_color,
-#                  fg_color,
-#                  parameter_value):
-#
-#         self.surface = surface
-#         self.size = size
-#         self.bg_color = bg_color
-#         self.fg_color = fg_color
-#         self.current_val = parameter_value
-#
-#         self.bg_rect = pygame.Rect((0, 0), size)
-#         self.bg_rect.center = center_coords
-#         self.fg_rect = pygame.Rect((0, 0),
-#                             (self.bg_rect.w * self.current_val, self.bg_rect.h))
-#         self.fg_rect.topleft = self.bg_rect.topleft
-#
-#         self.grip_tab = pygame.Rect((0, 0), (20, self.bg_rect.h + 4))
-#         self.grip_tab.center = (self.fg_rect.right, self.bg_rect.centery)
-#
-#     def update(self, player_input):
-#
-#         mouse_down = pygame.mouse.get_pressed()[0]
-#
-#         local_events, local_mousepos = player_input
-#         mouse_x, mouse_y = local_mousepos
-#
-#         mouse_over = (   mouse_x >= self.bg_rect.left
-#                      and mouse_x <= self.bg_rect.right
-#                      and mouse_y >= self.bg_rect.top
-#                      and mouse_y <= self.bg_rect.bottom )
-#
-#         if mouse_down and mouse_over:
-#
-#             self.current_val = (float(mouse_x) - float(self.bg_rect.left)) / self.bg_rect.w
-#
-#             self.fg_rect.width = self.bg_rect.width * self.current_val
-#
-#             self.grip_tab.center = (self.fg_rect.right, self.bg_rect.centery)
-#
-#
-#
-#     def draw(self):
-#
-#         # draw background rectangle
-#         pygame.draw.rect(self.surface, self.bg_color, self.bg_rect)
-#
-#         # draw foreground rectangle
-#         pygame.draw.rect(self.surface, self.fg_color, self.fg_rect)
-#
-#         # draw slider tab
-#         pygame.draw.rect(self.surface, constants.COLOR_BLACK, self.grip_tab)
-#
-
-
+ui = UIManager()
 
 # menus from pygame tutorial
 # def menu_main():
@@ -549,4 +419,3 @@ def example_code():
 #
 #         # update the display surface
 #         pygame.display.update()
-ui = UIManager()

@@ -1,13 +1,14 @@
 import logging
 import pygame
 from typing import Tuple
-from scripts.core.constants import UIElementTypes, TILE_SIZE
+from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.core.data_library import library
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.entity_queue import EntityQueue
 from scripts.ui.ui_elements.camera import Camera
+from scripts.ui.ui_elements.pgui_skill_bar import PguiSkillBar
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
 from scripts.world.entity import Entity
@@ -26,7 +27,7 @@ class ElementMethods:
         self.manager = manager  # type: UIManager
 
         self.elements = {}  # list of all init'd ui elements
-        self.gui_elements = {}  # TODO - combine with above once resolved and there is no diff between the elements
+        self.pgui_elements = {}  # TODO - combine with above once resolved and there is no diff between the elements
 
     def init_message_log(self):
         """
@@ -45,6 +46,14 @@ class ElementMethods:
         Initialise the targeting_overlay
         """
         self.elements[UIElementTypes.TARGETING_OVERLAY.name] = TargetingOverlay()
+
+    def init_pgui_skill_bar(self):
+        width = 80
+        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        x = VisualInfo.BASE_WINDOW_WIDTH - width
+        y = 2
+        rect = pygame.Rect((x, y), (width, height))
+        self.pgui_elements[UIElementTypes.SKILL_BAR.name] = PguiSkillBar(rect, self.manager.Gui)
 
     def init_skill_bar(self):
         """
@@ -447,5 +456,5 @@ class ElementMethods:
             message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
             message_log.add_message(message)
 
-        except KeyError:
+        except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")

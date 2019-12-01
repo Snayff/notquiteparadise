@@ -120,9 +120,9 @@ def initialise_ui_elements():
     """
     initialise all ui elements. Order of load is important as it sets draw order. Later overwrites earlier.
     """
-    ui.Element.init_camera()
+    #ui.Element.init_camera()
     # ui.Element.init_entity_queue()
-    ui.Element.init_message_log()
-    ui.Element.init_entity_info()
-    ui.Element.init_skill_bar()
-    # ui.Element.init_targeting_overlay()
+    #ui.Element.init_message_log()
+    #ui.Element.init_entity_info()
+    #ui.Element.init_skill_bar()
+    ui.Element.init_pgui_skill_bar()

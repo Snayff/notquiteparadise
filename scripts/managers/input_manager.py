@@ -204,8 +204,16 @@ class InputManager:
         Args:
             event ():
         """
-        if event.ui_element == ui.Element.gui_elements.get("hello_button"):
-            print("button clicked")
+        if event.ui_element == ui.Element.pgui_elements.get("skill0"):
+            print(f"button clicked(skill0)")
+        elif event.ui_element == ui.Element.pgui_elements.get("skill1"):
+            print(f"button clicked(skill1)")
+        elif event.ui_element == ui.Element.pgui_elements.get("skill2"):
+            print(f"button clicked(skill2)")
+        elif event.ui_element == ui.Element.pgui_elements.get("skill3"):
+            print(f"button clicked(skill3)")
+        elif event.ui_element == ui.Element.pgui_elements.get("skill4"):
+            print(f"button clicked(skill4)")
 
     def process_generic_input(self):
         """
