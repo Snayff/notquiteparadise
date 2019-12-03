@@ -119,13 +119,13 @@ class MapMethods:
 
         return game_map.tiles[tile_x][tile_y]
 
-    def get_tiles(self, start_tile_x, start_tile_y, coords):
+    def get_tiles(self, start_tile_col, start_tile_row, coords):
         """
         Get multiple tiles based on starting position and coordinates given
 
         Args:
-            start_tile_x (int):
-            start_tile_y (int):
+            start_tile_col (int):
+            start_tile_row (int):
             coords (list[Tuple]): List of tuples holding x y. E.g. (x, y)
 
         Returns:
@@ -135,8 +135,8 @@ class MapMethods:
         tiles = []
 
         for coord in coords:
-            tile_x = coord[0] + start_tile_x
-            tile_y = coord[1] + start_tile_y
+            tile_x = coord[0] + start_tile_col
+            tile_y = coord[1] + start_tile_row
 
             # make sure it is in bounds
             if self.is_tile_in_bounds(tile_x, tile_y):

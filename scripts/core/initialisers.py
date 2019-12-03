@@ -126,3 +126,4 @@ def initialise_ui_elements():
     #ui.Element.init_entity_info()
     #ui.Element.init_skill_bar()
     ui.Element.init_pgui_skill_bar()
+    ui.Element.init_pgui_camera()

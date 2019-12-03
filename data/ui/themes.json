@@ -36,9 +36,9 @@
              "selected_bg":"#193754",
              "active_bg":"#193754",
              "dark_bg":"#15191e",
-             "normal_text":"#c5cbd8",
-             "hovered_text":"#FFFFFF",
-             "selected_text":"#FFFFFF",
+             "normal_text":"#FFFFFF",
+             "hovered_text":"#aa40e5",
+             "selected_text":"#f7f91c",
              "disabled_text":"#6d736f",
              "active_text":"#FFFFFF",
              "normal_border": "#DDDDDD",
@@ -51,6 +51,76 @@
          "misc":
          {
              "tool_tip_delay": "1.5"
+         }
+     },
+     "#skill0_button": {
+         "images": {
+             "normal_image": {
+                 "path": "assets/skills/placeholder/icon_00.png"
+             },
+             "hovered_image": {
+                 "path": "assets/skills/placeholder/icon_01.png"
+             }
+         },
+         "misc": {
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "bottom"
+         }
+     },
+     "#skill1_button": {
+         "images": {
+             "normal_image": {
+                 "path": "assets/skills/placeholder/icon_02.png"
+             },
+             "hovered_image": {
+                 "path": "assets/skills/placeholder/icon_03.png"
+             }
+         },
+         "misc": {
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "bottom"
+         }
+     },
+          "#skill2_button": {
+         "images": {
+             "normal_image": {
+                 "path": "assets/skills/placeholder/icon_04.png"
+             },
+             "hovered_image": {
+                 "path": "assets/skills/placeholder/icon_05.png"
+             }
+         },
+         "misc": {
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "bottom"
+         }
+     },
+          "#skill3_button": {
+         "images": {
+             "normal_image": {
+                 "path": "assets/skills/placeholder/icon_06.png"
+             },
+             "hovered_image": {
+                 "path": "assets/skills/placeholder/icon_07.png"
+             }
+         },
+         "misc": {
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "bottom"
+         }
+     },
+          "#skill4_button": {
+         "images": {
+             "normal_image": {
+                 "path": "assets/skills/placeholder/icon_08.png"
+             },
+             "hovered_image": {
+                 "path": "assets/skills/placeholder/icon_09.png"
+             }
+         },
+         "misc": {
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "bottom"
          }
      }
  }

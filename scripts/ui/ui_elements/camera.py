@@ -20,8 +20,8 @@ class Camera(UIElement):
 
         self.rows = 10
         self.columns = 10
-        self.start_tile_x = 0
-        self.start_tile_y = 0
+        self.start_tile_col = 0
+        self.start_tile_row = 0
         self.edge_size = 3  # # of tiles to control camera movement
         self.is_overlay_visible = False
         self.selected_child = None  # the child widget currently being selected
@@ -169,7 +169,7 @@ class Camera(UIElement):
                     child_name = child_name.replace("cell", "")
                     split_name = [int(num) for num in child_name.split()]
                     row, col = split_name[0], split_name[1]
-                    self.selected_tile_pos = (self.start_tile_x + row, self.start_tile_y + col)
+                    self.selected_tile_pos = (self.start_tile_col + row, self.start_tile_row + col)
 
                     # TODO - have ui get the selected tile and set the entity info
 
@@ -184,8 +184,8 @@ class Camera(UIElement):
             tile_y (int): y of player on the game map
         """
         # get the cell player is in
-        row = tile_x - self.start_tile_x
-        col = tile_y - self.start_tile_y
+        row = tile_x - self.start_tile_col
+        col = tile_y - self.start_tile_row
         child = self.get_child(f"cell{row},{col}")
         self.player_cell = child
         self.is_dirty = True

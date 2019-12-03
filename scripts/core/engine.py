@@ -32,6 +32,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - use seed for RNG
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
+# TODO - standardise use of xy and row cols. xy for pixels, row cols for grid
 
 
 def main():

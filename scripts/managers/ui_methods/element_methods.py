@@ -8,6 +8,7 @@ from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.entity_queue import EntityQueue
 from scripts.ui.ui_elements.camera import Camera
+from scripts.ui.ui_elements.pgui_camera import PguiCamera
 from scripts.ui.ui_elements.pgui_skill_bar import PguiSkillBar
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
@@ -48,12 +49,28 @@ class ElementMethods:
         self.elements[UIElementTypes.TARGETING_OVERLAY.name] = TargetingOverlay()
 
     def init_pgui_skill_bar(self):
+        """
+        Initialise the skill bar.
+        """
         width = 80
         height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
         x = VisualInfo.BASE_WINDOW_WIDTH - width
         y = 2
         rect = pygame.Rect((x, y), (width, height))
         self.pgui_elements[UIElementTypes.SKILL_BAR.name] = PguiSkillBar(rect, self.manager.Gui)
+
+    def init_pgui_camera(self):
+        """
+        Initialise the camera.
+        """
+        rows = 10
+        cols = 10
+        width = cols * TILE_SIZE
+        height = rows * TILE_SIZE
+        x = 5
+        y = 5
+        rect = pygame.Rect((x, y), (width, height))
+        self.pgui_elements[UIElementTypes.CAMERA.name] = PguiCamera(rect, self.manager.Gui, rows, cols)
 
     def init_skill_bar(self):
         """
@@ -181,7 +198,7 @@ class ElementMethods:
             any: ui element
         """
         try:
-            return self.elements[element_type.name]
+            return self.pgui_elements[element_type.name]
         except KeyError:
             return None
 
@@ -306,10 +323,10 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         player_x, player_y = target_pos
 
-        edge_start_x = camera.start_tile_x
-        edge_end_x = camera.start_tile_x + camera.columns
-        edge_start_y = camera.start_tile_y
-        edge_end_y = camera.start_tile_y + camera.rows
+        edge_start_x = camera.start_tile_col
+        edge_end_x = camera.start_tile_col + camera.columns
+        edge_start_y = camera.start_tile_row
+        edge_end_y = camera.start_tile_row + camera.rows
 
         if edge_start_x <= player_x < edge_start_x + camera.edge_size:
             return True
@@ -339,10 +356,10 @@ class ElementMethods:
 
         # if camera has been init'd
         if camera:
-            edge_start_x = camera.start_tile_x
-            edge_end_x = camera.start_tile_x + camera.columns
-            edge_start_y = camera.start_tile_y
-            edge_end_y = camera.start_tile_y + camera.rows
+            edge_start_x = camera.start_tile_col
+            edge_end_x = camera.start_tile_col + camera.columns
+            edge_start_y = camera.start_tile_row
+            edge_end_y = camera.start_tile_row + camera.rows
 
             start_pos_in_edge = self.is_target_pos_in_camera_edge(start_pos)
             target_pos_in_edge = self.is_target_pos_in_camera_edge(target_pos)
@@ -394,45 +411,28 @@ class ElementMethods:
         game_map = world.Map.get_game_map()
 
         # clamp function: max(low, min(n, high))
-        camera.start_tile_x = max(0, min(camera.start_tile_x + move_x, game_map.width))
-        camera.start_tile_y = max(0, min(camera.start_tile_y + move_y, game_map.height))
+        camera.start_tile_col = max(0, min(camera.start_tile_col + move_x, game_map.width))
+        camera.start_tile_row = max(0, min(camera.start_tile_row + move_y, game_map.height))
 
     def update_cameras_tiles(self):
         """
-        Retrieve the tiles to draw within view of the camera
+        Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
         if camera:
-            cell_x = 0
-            cell_y = 0
+            tiles = []
 
-            for x in range(camera.start_tile_x, camera.start_tile_x + camera.columns):
-                for y in range(camera.start_tile_y, camera.start_tile_y + camera.rows):
+            for x in range(camera.start_tile_col, camera.start_tile_col + camera.columns):
+                for y in range(camera.start_tile_row, camera.start_tile_row + camera.rows):
+                    if world.FOV.is_tile_in_fov(x, y):
+                        tiles.append(world.Map.get_tile(x, y))
 
-                    tile = world.Map.get_tile(x, y)
+            camera.set_tiles(tiles)
 
-                    # create surface to blit to
-                    image = pygame.Surface((TILE_SIZE, TILE_SIZE))
-
-                    if tile.terrain:
-                        image.blit(tile.terrain.sprite, (0, 0))
-
-                    if tile.entity:
-                        image.blit(tile.entity.icon, (0, 0))
-
-                    if tile.aspects:
-                        for key, aspect in tile.aspects.items():
-                            image.blit(aspect.sprite, (0, 0))
-
-                    camera.set_cell_background_image(cell_x, cell_y, image)
-
-                    # increment camera cell
-                    cell_y += 1
-
-                # reset camera cell y and increment camera cell x
-                cell_y = 0
-                cell_x += 1
+    def update_camera_game_map(self):
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera.update_game_map()
 
     def set_player_pos_in_camera(self, x, y):
         """
