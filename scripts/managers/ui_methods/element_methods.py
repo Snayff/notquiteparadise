@@ -64,7 +64,7 @@ class ElementMethods:
         Initialise the camera.
         """
         rows = 10
-        cols = 10
+        cols = 15
         width = cols * TILE_SIZE
         height = rows * TILE_SIZE
         x = 5

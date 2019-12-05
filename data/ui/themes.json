@@ -53,74 +53,118 @@
              "tool_tip_delay": "1.5"
          }
      },
-     "#skill0_button": {
-         "images": {
-             "normal_image": {
+     "#skill0_button":
+     {
+         "images":
+         {
+             "normal_image":
+             {
                  "path": "assets/skills/placeholder/icon_00.png"
              },
-             "hovered_image": {
+             "hovered_image":
+             {
                  "path": "assets/skills/placeholder/icon_01.png"
              }
          },
-         "misc": {
+         "misc":
+         {
              "text_horiz_alignment": "left",
              "text_vert_alignment": "bottom"
          }
      },
-     "#skill1_button": {
-         "images": {
-             "normal_image": {
+     "#skill1_button":
+     {
+         "images":
+         {
+             "normal_image":
+             {
                  "path": "assets/skills/placeholder/icon_02.png"
              },
-             "hovered_image": {
+             "hovered_image":
+             {
                  "path": "assets/skills/placeholder/icon_03.png"
              }
          },
-         "misc": {
+         "misc":
+         {
              "text_horiz_alignment": "left",
              "text_vert_alignment": "bottom"
          }
      },
-          "#skill2_button": {
-         "images": {
-             "normal_image": {
+          "#skill2_button":
+          {
+         "images":
+         {
+             "normal_image":
+             {
                  "path": "assets/skills/placeholder/icon_04.png"
              },
-             "hovered_image": {
+             "hovered_image":
+             {
                  "path": "assets/skills/placeholder/icon_05.png"
              }
          },
-         "misc": {
+         "misc":
+         {
              "text_horiz_alignment": "left",
              "text_vert_alignment": "bottom"
          }
      },
           "#skill3_button": {
-         "images": {
-             "normal_image": {
+          
+         "images":
+         {
+             "normal_image":
+             {
                  "path": "assets/skills/placeholder/icon_06.png"
              },
-             "hovered_image": {
+             "hovered_image":
+             {
                  "path": "assets/skills/placeholder/icon_07.png"
              }
          },
-         "misc": {
+         "misc":
+         {
              "text_horiz_alignment": "left",
              "text_vert_alignment": "bottom"
          }
      },
-          "#skill4_button": {
-         "images": {
-             "normal_image": {
+     "#skill4_button":
+     {
+         "images":
+         {
+             "normal_image":
+             {
                  "path": "assets/skills/placeholder/icon_08.png"
              },
-             "hovered_image": {
+             "hovered_image":
+             {
                  "path": "assets/skills/placeholder/icon_09.png"
              }
          },
-         "misc": {
+         "misc":
+         {
              "text_horiz_alignment": "left",
              "text_vert_alignment": "bottom"
+         }
+     },
+     "grid.button":
+     {
+         "colours":
+         {
+             "normal_bg": "#FFFFFF00",
+             "hovered_bg": "#FFFFFF00",
+             "selected_bg": "#FFFFFF00",
+             "active_bg": "#FFFFFF00",
+
+             "normal_border": "#FFFFFF00",
+             "selected_border":  "#FFFFFF00",
+             "active_border":  "#FFFFFF00",
+             "hovered_border": "#e28479F0"
+         },
+         "misc":
+         {
+             "border_width": "2"
          }
      }
  }

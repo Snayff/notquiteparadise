@@ -395,6 +395,7 @@ class UIElementTypes(Enum):
     SKILL_BAR = auto()
     ENTITY_QUEUE = auto()
     CAMERA = auto()
+    CAMERA_GRID = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

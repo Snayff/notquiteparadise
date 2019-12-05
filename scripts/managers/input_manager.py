@@ -206,6 +206,7 @@ class InputManager:
         Args:
             event ():
         """
+
         if event.ui_element == ui.Element.pgui_elements.get("skill0"):
             print(f"button clicked(skill0)")
             ui.Element.update_cameras_tiles()
@@ -219,6 +220,9 @@ class InputManager:
             print(f"button clicked(skill3)")
         elif event.ui_element == ui.Element.pgui_elements.get("skill4"):
             print(f"button clicked(skill4)")
+        elif event.ui_element.ui_container == ui.Element.get_ui_element(UIElementTypes.CAMERA_GRID):
+            print(f"button clicked(grid)")
+            # TODO - get the tile, check its in the right place i.e. clickable
 
     def process_generic_input(self):
         """

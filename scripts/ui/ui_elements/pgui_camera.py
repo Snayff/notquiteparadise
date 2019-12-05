@@ -1,18 +1,10 @@
 import logging
 import pygame
-from typing import List
-
 import pygame_gui
-from pygame_gui.core import UIWindow
-
-from scripts.core.constants import VisualInfo, InputStates, TILE_SIZE, Directions, UIElementTypes
-from scripts.ui.basic.fonts import Font
-from scripts.ui.basic.palette import Palette
-from scripts.ui.templates.frame import Frame
-from scripts.ui.templates.grid import Grid
-from scripts.ui.templates.text_box import TextBox
-from scripts.ui.templates.ui_element import UIElement
-from scripts.ui.templates.widget_style import WidgetStyle
+from typing import List
+from pygame_gui.core import UIWindow, UIContainer
+from pygame_gui.elements import UIButton, UIImage
+from scripts.core.constants import TILE_SIZE, UIElementTypes
 
 
 class PguiCamera(UIWindow):
@@ -42,14 +34,31 @@ class PguiCamera(UIWindow):
         # complete base class init
         super().__init__(rect, manager, ["camera"])
 
-        # TODO - need to add a game map for terrain, aspect, entity
-        # TODO - add invisible grid for identifying where the mouse is
         # TODO - add overlay for skill use (could this be the grid?)
 
         # create game map
         blank_surf = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
-        self.game_map = pygame_gui.elements.UIImage(relative_rect=rect, image_surface=blank_surf, manager=manager,
-                                                    container=self.get_container(), object_id="#game_map")
+        self.game_map = UIImage(relative_rect=rect, image_surface=blank_surf, manager=manager,
+                                container=self.get_container(), object_id="#game_map")
+
+        # create grid
+        self.grid = UIContainer(relative_rect=rect, manager=manager,  container=self.get_container(),
+                                object_id="grid")
+
+        from scripts.managers.ui_manager import ui  # imported locally to prevent circular import
+        ui.Element.pgui_elements[UIElementTypes.CAMERA_GRID.name] = self.grid
+
+        # create tiles in grid
+        for row in range(0, rows):
+            for col in range(0, cols):
+                tile_rect = pygame.Rect(TILE_SIZE * col, TILE_SIZE * row, TILE_SIZE, TILE_SIZE)
+                tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
+                                parent_element=self.grid, object_id=f"#tile({row},{col})")
+
+        # TODO - amend grid
+        #  allow being rebuiilt
+        #  only created in range of fov (for now...)
+        #  use start tile rather than 0, to start tile + row/col
 
         # confirm init complete
         logging.debug(f"Camera initialised.")
@@ -74,7 +83,6 @@ class PguiCamera(UIWindow):
 
             x = (tile.x - self.start_tile_col) * tile_width
             y = (tile.y - self.start_tile_row) * tile_height
-            print(f"{x},{y}")
 
             if tile.terrain:
                 map_surf.blit(tile.terrain.sprite, (x, y))
