@@ -217,6 +217,7 @@ class UiHandler(Subscriber):
             #ui.Element.set_player_pos_in_camera(target_x, target_y)
         ui.Element.update_cameras_tiles()
         ui.Element.update_camera_game_map()
+        ui.Element.update_camera_grid()
 
     def init_ui(self):
         """

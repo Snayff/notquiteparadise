@@ -96,5 +96,40 @@ class PguiCamera(UIWindow):
 
         self.game_map.image = map_surf
 
+    def update_grid(self):
+
+        # clear existing grid tiles
+        self.grid.clear()
+
+        # prep for loop
+        rows = self.rows
+        cols = self.columns
+        map_width = self.game_map.rect.width
+        map_height = self.game_map.rect.height
+        tile_width = int(map_width / cols)
+        tile_height = int(map_height / rows)
+        manager = self.ui_manager
+        tiles = self.tiles
+
+        # blit all tiles info to the new surface
+        for tile in tiles:
+            x = (tile.x - self.start_tile_col) * tile_width
+            y = (tile.y - self.start_tile_row) * tile_height
+
+            # get current row and col
+            if y == 0:
+                row = 0
+            else:
+                row = int(y / tile_height)
+            if x == 0:
+                col = 0
+            else:
+                col = int(x / tile_width)
+
+            tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+            tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
+                            parent_element=self.grid, object_id=f"#tile({row},{col})")
+
+
     def set_tiles(self, tiles: List):
         self.tiles = tiles

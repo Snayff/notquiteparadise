@@ -434,6 +434,10 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         camera.update_game_map()
 
+    def update_camera_grid(self):
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera.update_grid()
+
     def set_player_pos_in_camera(self, x, y):
         """
         Use xy within camera to set the player's position within the camera.

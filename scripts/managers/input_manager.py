@@ -210,8 +210,8 @@ class InputManager:
         if event.ui_element == ui.Element.pgui_elements.get("skill0"):
             print(f"button clicked(skill0)")
             ui.Element.update_cameras_tiles()
-            cam = ui.Element.get_ui_element(UIElementTypes.CAMERA)
-            cam.update_game_map()
+            ui.Element.update_camera_game_map()
+            ui.Element.update_camera_grid()
         elif event.ui_element == ui.Element.pgui_elements.get("skill1"):
             print(f"button clicked(skill1)")
         elif event.ui_element == ui.Element.pgui_elements.get("skill2"):
