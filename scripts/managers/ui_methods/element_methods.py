@@ -431,10 +431,16 @@ class ElementMethods:
             camera.set_tiles(tiles)
 
     def update_camera_game_map(self):
+        """
+        Update the camera game map to show what is in the tiles held by the camera.
+        """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         camera.update_game_map()
 
     def update_camera_grid(self):
+        """
+        Update the camera's grid. Controls tile hover highlighting.
+        """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         camera.update_grid()
 

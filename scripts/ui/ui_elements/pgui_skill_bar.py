@@ -35,7 +35,8 @@ class PguiSkillBar(UIWindow):
             y = start_y + (height * skill_slot) + (gap * skill_slot)
             skill = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((x, y), (width, height)),
                                                  text=f"{skill_slot}",  manager=manager,
-                                                 container=self.get_container(), object_id=f"#skill{skill_slot}_button")
+                                                 container=self.get_container(),
+                                                 object_id=f"#skill_button{skill_slot}")
 
             ui.Element.pgui_elements[f"skill{skill_slot}"] = skill
 

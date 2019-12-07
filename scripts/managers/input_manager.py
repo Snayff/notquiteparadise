@@ -206,23 +206,12 @@ class InputManager:
         Args:
             event ():
         """
+        if event.ui_object_id[:-1] == "#skill_button":
+            print(f"button clicked(skill{event.ui_object_id[-1:]})")
 
-        if event.ui_element == ui.Element.pgui_elements.get("skill0"):
-            print(f"button clicked(skill0)")
-            ui.Element.update_cameras_tiles()
-            ui.Element.update_camera_game_map()
-            ui.Element.update_camera_grid()
-        elif event.ui_element == ui.Element.pgui_elements.get("skill1"):
-            print(f"button clicked(skill1)")
-        elif event.ui_element == ui.Element.pgui_elements.get("skill2"):
-            print(f"button clicked(skill2)")
-        elif event.ui_element == ui.Element.pgui_elements.get("skill3"):
-            print(f"button clicked(skill3)")
-        elif event.ui_element == ui.Element.pgui_elements.get("skill4"):
-            print(f"button clicked(skill4)")
-        elif event.ui_element.ui_container == ui.Element.get_ui_element(UIElementTypes.CAMERA_GRID):
-            print(f"button clicked(grid)")
-            # TODO - get the tile, check its in the right place i.e. clickable
+        elif event.ui_object_id[:len("#tile")] == "#tile":
+            print(f"button clicked(grid.tile{ event.ui_object_id[len('#tile'):]})")
+            tile = world.Map.get_tile(tile_pos_string=event.ui_object_id)
 
     def process_generic_input(self):
         """

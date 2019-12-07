@@ -48,22 +48,13 @@ class PguiCamera(UIWindow):
         from scripts.managers.ui_manager import ui  # imported locally to prevent circular import
         ui.Element.pgui_elements[UIElementTypes.CAMERA_GRID.name] = self.grid
 
-        # create tiles in grid
-        for row in range(0, rows):
-            for col in range(0, cols):
-                tile_rect = pygame.Rect(TILE_SIZE * col, TILE_SIZE * row, TILE_SIZE, TILE_SIZE)
-                tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
-                                parent_element=self.grid, object_id=f"#tile({row},{col})")
-
-        # TODO - amend grid
-        #  allow being rebuiilt
-        #  only created in range of fov (for now...)
-        #  use start tile rather than 0, to start tile + row/col
-
         # confirm init complete
         logging.debug(f"Camera initialised.")
 
     def update_game_map(self):
+        """
+        Update the game map to show the current tiles
+        """
         rows = self.rows
         cols = self.columns
 
@@ -97,7 +88,9 @@ class PguiCamera(UIWindow):
         self.game_map.image = map_surf
 
     def update_grid(self):
-
+        """
+        Update the tile grid to only have grid options in line with the tiles set
+        """
         # clear existing grid tiles
         self.grid.clear()
 
@@ -128,8 +121,13 @@ class PguiCamera(UIWindow):
 
             tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
             tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
-                            parent_element=self.grid, object_id=f"#tile({row},{col})")
-
+                            parent_element=self.grid, object_id=f"#tile{row},{col}")
 
     def set_tiles(self, tiles: List):
+        """
+        Set the tiles in the camera.
+
+        Args:
+            tiles ():
+        """
         self.tiles = tiles

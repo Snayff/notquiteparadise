@@ -104,20 +104,30 @@ class MapMethods:
         else:
             return False
 
-    def get_tile(self, tile_x, tile_y):
+    def get_tile(self, row: int = 0, col: int = 0, tile_pos_string: str = ""):
         """
         Get the tile at the specified location
 
         Args:
-            tile_x(int): x position of tile
-            tile_y(int): y position of tile
+            row(int): row of tile
+            col(int): column of tile
+            tile_pos_string (str): expects "#tile(x,y)"
 
         Returns:
             Tile: the tile at the location
         """
         game_map = self.get_game_map()
 
-        return game_map.tiles[tile_x][tile_y]
+        if tile_pos_string:
+            cleaned_pos = tile_pos_string.replace("#tile", "")
+            _row, _col = cleaned_pos.split(",")
+            _row = int(_row)
+            _col = int(_col)
+        else:
+            _row = row
+            _col = col
+
+        return game_map.tiles[_row][_col]
 
     def get_tiles(self, start_tile_col, start_tile_row, coords):
         """

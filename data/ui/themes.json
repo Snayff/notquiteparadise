@@ -53,7 +53,7 @@
              "tool_tip_delay": "1.5"
          }
      },
-     "#skill0_button":
+     "#skill_button0":
      {
          "images":
          {
@@ -72,7 +72,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-     "#skill1_button":
+     "#skill_button1":
      {
          "images":
          {
@@ -91,7 +91,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-          "#skill2_button":
+          "#skill_button2":
           {
          "images":
          {
@@ -110,7 +110,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-          "#skill3_button": {
+          "#skill_button3": {
           
          "images":
          {
@@ -129,7 +129,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-     "#skill4_button":
+     "#skill_button4":
      {
          "images":
          {
