@@ -395,7 +395,6 @@ class UIElementTypes(Enum):
     SKILL_BAR = auto()
     ENTITY_QUEUE = auto()
     CAMERA = auto()
-    CAMERA_GRID = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -404,19 +403,17 @@ class UIElementTypes(Enum):
 
     __hash__ = None
 
+
 class Directions(Enum):
-    UPLEFT = 0
-    UP = 1
-    UPRIGHT = 2
-    LEFT = 3
-    CENTRE = 4
-    RIGHT = 5
-    DOWNLEFT = 6
-    DOWN = 7
-    DOWNRIGHT = 8
-
-
-
+    UPLEFT = (-1, -1)
+    UP = (0, -1)
+    UPRIGHT = (1, -1)
+    LEFT = (-1, 0)
+    CENTRE = (0, 0)
+    RIGHT = (1, 0)
+    DOWNLEFT = (-1, 1)
+    DOWN = (0, 1)
+    DOWNRIGHT = (1, 1)
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

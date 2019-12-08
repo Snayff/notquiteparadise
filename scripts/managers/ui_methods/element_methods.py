@@ -1,6 +1,6 @@
 import logging
 import pygame
-from typing import Tuple
+from typing import Tuple, List
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.core.data_library import library
 from scripts.managers.world_manager import world
@@ -13,6 +13,7 @@ from scripts.ui.ui_elements.pgui_skill_bar import PguiSkillBar
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
 from scripts.world.entity import Entity
+from scripts.world.tile import Tile
 
 
 class ElementMethods:
@@ -29,6 +30,8 @@ class ElementMethods:
 
         self.elements = {}  # list of all init'd ui elements
         self.pgui_elements = {}  # TODO - combine with above once resolved and there is no diff between the elements
+
+    ############### INIT ################
 
     def init_message_log(self):
         """
@@ -94,6 +97,8 @@ class ElementMethods:
         """
         self.elements[UIElementTypes.CAMERA.name] = Camera()
 
+    ################ ELEMENT ###################
+
     def set_element_visibility(self, element_type, visible):
         """
         Update whether an element is visible.
@@ -133,6 +138,32 @@ class ElementMethods:
 
         for key, element in self.elements.items():
             element.update()
+
+    def get_ui_element(self, element_type):
+        """
+        Get UI element. Returns nothing if not found. Won't be found if not init'd.
+
+        Args:
+            element_type (UIElementTypes):
+
+        Returns:
+            any: ui element
+        """
+        try:
+            return self.pgui_elements[element_type.name]
+        except KeyError:
+            return None
+
+    def get_ui_elements(self):
+        """
+        Get all the ui elements
+
+        Returns:
+            list: list of ui_elements
+        """
+        return self.elements
+
+    ############## CAMERA ###################
 
     def get_selected_tile_pos(self) -> Tuple:
         """
@@ -186,30 +217,6 @@ class ElementMethods:
         """
         targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
         targeting_overlay.tiles_in_range_and_fov = tiles
-
-    def get_ui_element(self, element_type):
-        """
-        Get UI element. Returns nothing if not found. Won't be found if not init'd.
-
-        Args:
-            element_type (UIElementTypes):
-
-        Returns:
-            any: ui element
-        """
-        try:
-            return self.pgui_elements[element_type.name]
-        except KeyError:
-            return None
-
-    def get_ui_elements(self):
-        """
-        Get all the ui elements
-
-        Returns:
-            list: list of ui_elements
-        """
-        return self.elements
 
     def get_skill_being_targeted(self):
         """
@@ -444,16 +451,35 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         camera.update_grid()
 
-    def set_player_pos_in_camera(self, x, y):
+    def set_player_tile(self, tile: Tile):
         """
-        Use xy within camera to set the player's position within the camera.
+        Set the player tile in the Camera ui element.
 
         Args:
-            x ():
-            y ():
+            tile ():
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        camera.set_player_cell(x, y)
+        camera.set_player_tile(tile)
+
+    def set_overlay_visibility(self, is_visible: bool):
+        """
+        Set the visibility of the targeting overlay in the Camera.
+
+        Args:
+            is_visible ():
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera.set_overlay_visibility(is_visible)
+
+    def set_overlay_directions(self, directions: List):
+        """
+        Set the overlay with possible targeting directions.
+
+        Args:
+            directions (): List of Directions
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera.set_overlay(directions)
 
     def add_to_message_log(self, message):
         """

@@ -214,7 +214,10 @@ class UiHandler(Subscriber):
                 move_y = target_y - start_y
                 ui.Element.move_camera(move_x, move_y)
 
-            #ui.Element.set_player_pos_in_camera(target_x, target_y)
+            # update player's pos in camera
+            tile = world.Map.get_tile(target_x, target_y)
+            ui.Element.set_player_tile(tile)
+
         ui.Element.update_cameras_tiles()
         ui.Element.update_camera_game_map()
         ui.Element.update_camera_grid()

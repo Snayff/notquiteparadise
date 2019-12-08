@@ -4,7 +4,7 @@ import pygame_gui
 from typing import List
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
-from scripts.core.constants import TILE_SIZE, UIElementTypes
+from scripts.core.constants import TILE_SIZE, UIElementTypes, Directions
 
 
 class PguiCamera(UIWindow):
@@ -21,12 +21,12 @@ class PguiCamera(UIWindow):
         self.edge_size = 3  # # of tiles to control camera movement
 
         # game map info
-        self.player_cell = None  # the tile in which the player resides
+        self.player_tile = None  # the tile in which the player resides
         self.tiles = []
 
         # overlay info
         self.is_overlay_visible = False
-        self.overlay_directions = []  # hold list of cardinal directions to show in the overlay
+        self.overlay_directions = []  # list of tuples
 
         # grid info
         self.selected_tile = None  # the tile in the grid currently being selected
@@ -43,10 +43,7 @@ class PguiCamera(UIWindow):
 
         # create grid
         self.grid = UIContainer(relative_rect=rect, manager=manager,  container=self.get_container(),
-                                object_id="grid")
-
-        from scripts.managers.ui_manager import ui  # imported locally to prevent circular import
-        ui.Element.pgui_elements[UIElementTypes.CAMERA_GRID.name] = self.grid
+                                object_id="#grid")
 
         # confirm init complete
         logging.debug(f"Camera initialised.")
@@ -89,45 +86,98 @@ class PguiCamera(UIWindow):
 
     def update_grid(self):
         """
-        Update the tile grid to only have grid options in line with the tiles set
+        Update the tile grid to only have  options in line with the tiles set OR the overlay
         """
         # clear existing grid tiles
         self.grid.clear()
 
-        # prep for loop
-        rows = self.rows
-        cols = self.columns
-        map_width = self.game_map.rect.width
-        map_height = self.game_map.rect.height
-        tile_width = int(map_width / cols)
-        tile_height = int(map_height / rows)
         manager = self.ui_manager
-        tiles = self.tiles
+        start_col = self.start_tile_col
+        start_row = self.start_tile_row
 
-        # blit all tiles info to the new surface
-        for tile in tiles:
-            x = (tile.x - self.start_tile_col) * tile_width
-            y = (tile.y - self.start_tile_row) * tile_height
-
-            # get current row and col
-            if y == 0:
-                row = 0
+        if self.is_overlay_visible:
+            if self.player_tile:
+                player_tile_x = self.player_tile.x
+                player_tile_y = self.player_tile.y
             else:
-                row = int(y / tile_height)
-            if x == 0:
-                col = 0
-            else:
-                col = int(x / tile_width)
+                player_tile_x = 0
+                player_tile_y = 0
 
-            tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
-            tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
-                            parent_element=self.grid, object_id=f"#tile{row},{col}")
+            directions = self.overlay_directions
+
+            # draw the overlay
+            for direction in directions:
+                offset_tile_x, offset_tile_y = direction.value
+                x = ((player_tile_x + offset_tile_x) - start_col) * TILE_SIZE
+                y = ((player_tile_y + offset_tile_y) - start_row) * TILE_SIZE
+                tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+
+                # get current row and col
+                if x == 0:
+                    tile_x = 0
+                else:
+                    tile_x = max(0, int(x / TILE_SIZE))
+                if y == 0:
+                    tile_y = 0
+                else:
+                    tile_y = max(0, int(y / TILE_SIZE))
+
+                tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
+                                parent_element=self.grid, object_id=f"#tile{tile_x},{tile_y}")
+        else:
+            tiles = self.tiles
+
+            # create a grid for the tiles needed
+            for tile in tiles:
+                x = (tile.x - start_col) * TILE_SIZE
+                y = (tile.y - start_row) * TILE_SIZE
+                tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+
+                # get current row and col
+                if x == 0:
+                    tile_x = 0
+                else:
+                    tile_x = max(0, int(x / TILE_SIZE))
+                if y == 0:
+                    tile_y = 0
+                else:
+                    tile_y = max(0, int(y / TILE_SIZE))
+
+                tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
+                                parent_element=self.grid, object_id=f"#tile{tile_x},{tile_y}")
 
     def set_tiles(self, tiles: List):
         """
         Set the tiles in the camera.
 
         Args:
-            tiles ():
+            tiles (): List of Tiles
         """
         self.tiles = tiles
+
+    def set_player_tile(self, tile):
+        """
+        Set the player tile
+
+        Args:
+            tile ():
+        """
+        self.player_tile = tile
+
+    def set_overlay_visibility(self, is_visible: bool):
+        """
+        Set whether the targeting overlay is visible or now.
+
+        Args:
+            is_visible ():
+        """
+        self.is_overlay_visible = is_visible
+
+    def set_overlay(self, directions: List):
+        """
+        Set the overlay with possible targeting directions.
+
+        Args:
+            directions (): List of Directions
+        """
+        self.overlay_directions = directions

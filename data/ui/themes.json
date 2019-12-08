@@ -148,7 +148,7 @@
              "text_vert_alignment": "bottom"
          }
      },
-     "grid.button":
+     "#grid.button":
      {
          "colours":
          {

@@ -1,7 +1,7 @@
 import logging
 import pygame
 
-from scripts.core.constants import InputModes, GameStates, MessageEventTypes, MouseButtons, UIElementTypes
+from scripts.core.constants import InputModes, GameStates, MessageEventTypes, MouseButtons, UIElementTypes, Directions
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
@@ -79,6 +79,8 @@ class InputManager:
         """
         # TODO - rebuild to use the local dict to handle key binding and then send off result to be processed directly
         #  consider bundling the event, too (tuple?)
+        #  as only one input taken at a time, what about checking the key assignment's then passing a tuple of a
+        #  contant denoting the input and the event
 
         # reset all input values
         for key in self.input_values:
@@ -174,6 +176,9 @@ class InputManager:
         elif event.key == pygame.K_ESCAPE:
             self.input_values["cancel"] = True
         elif event.key == pygame.K_TAB:
+            ui.Element.set_overlay_visibility(True)
+            ui.Element.set_overlay_directions([Directions.DOWN, Directions.RIGHT])
+            ui.Element.update_camera_grid()
             self.input_values["debug_toggle"] = True
         elif event.key == pygame.K_F5:
             self.input_values["refresh_data"] = True
