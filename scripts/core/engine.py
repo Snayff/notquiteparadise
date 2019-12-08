@@ -12,8 +12,7 @@ from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
 from scripts.core.event_hub import event_hub
-from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging, \
-    initialise_ui_elements
+from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
 
 # Project Wide to do list...
@@ -49,7 +48,6 @@ def main():
     profiler.enable()
 
     # initialise the game
-    initialise_ui_elements()
     initialise_event_handlers()
     initialise_game()
 

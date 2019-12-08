@@ -4,7 +4,7 @@ import pygame_gui
 from typing import List
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
-from scripts.core.constants import TILE_SIZE, UIElementTypes, Directions
+from scripts.core.constants import TILE_SIZE
 
 
 class Camera(UIWindow):
@@ -33,8 +33,6 @@ class Camera(UIWindow):
 
         # complete base class init
         super().__init__(rect, manager, ["camera"])
-
-        # TODO - add overlay for skill use (could this be the grid?)
 
         # create game map
         blank_surf = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)

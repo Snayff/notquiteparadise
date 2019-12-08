@@ -2,14 +2,12 @@ import logging
 import pygame
 from typing import Tuple, List
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
-from scripts.core.data_library import library
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.entity_queue import EntityQueue
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.skill_bar import SkillBar
-from scripts.ui.ui_elements.targeting_overlay import TargetingOverlay
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -27,7 +25,6 @@ class ElementMethods:
         self.manager = manager  # type: UIManager
 
         self.elements = {}  # list of all init'd ui elements
-        self.pgui_elements = {}  # TODO - combine with above once resolved and there is no diff between the elements
 
     ############### INIT ################
 
@@ -43,12 +40,6 @@ class ElementMethods:
         """
         self.elements[UIElementTypes.ENTITY_INFO.name] = EntityInfo()
 
-    def init_targeting_overlay(self):
-        """
-        Initialise the targeting_overlay
-        """
-        self.elements[UIElementTypes.TARGETING_OVERLAY.name] = TargetingOverlay()
-
     def init_skill_bar(self):
         """
         Initialise the skill bar.
@@ -58,7 +49,8 @@ class ElementMethods:
         x = VisualInfo.BASE_WINDOW_WIDTH - width
         y = 2
         rect = pygame.Rect((x, y), (width, height))
-        self.pgui_elements[UIElementTypes.SKILL_BAR.name] = SkillBar(rect, self.manager.Gui)
+        skill_bar = SkillBar(rect, self.manager.Gui)
+        self.add_ui_element(UIElementTypes.SKILL_BAR.name, skill_bar)
 
     def init_camera(self):
         """
@@ -71,7 +63,8 @@ class ElementMethods:
         x = 5
         y = 5
         rect = pygame.Rect((x, y), (width, height))
-        self.pgui_elements[UIElementTypes.CAMERA.name] = Camera(rect, self.manager.Gui, rows, cols)
+        camera = Camera(rect, self.manager.Gui, rows, cols)
+        self.add_ui_element(UIElementTypes.CAMERA.name, camera)
 
     def init_entity_queue(self):
         """
@@ -85,46 +78,6 @@ class ElementMethods:
 
     ################ ELEMENT ###################
 
-    def set_element_visibility(self, element_type, visible):
-        """
-        Update whether an element is visible.
-
-        Args:
-            element_type (UIElementTypes): 
-            visible (bool):
-        """
-        try:
-            element = self.elements[element_type.name]
-            element.is_visible = visible
-        except KeyError:
-            logging.warning(f"ui tried to set {element_type.name} to {visible} but key doesn`t exist.")
-
-    def draw_visible_elements(self, main_surface):
-        """
-        Draw the visible ui elements. Checks is_visible.
-        """
-        # TODO - add handling for dirty
-
-        for key, element in self.elements.items():
-            if element.is_visible:
-                element.draw(main_surface)
-
-        # # resize the surface to the desired resolution
-        # scaled_surface = pygame.transform.scale(main_surface, self.manager.Display.get_desired_resolution())
-        # window = self.manager.Display.get_window()
-        # window.blit(scaled_surface, (0, 0))
-        #
-        # # update the display
-        # pygame.display.flip()  # make sure to do this as the last drawing element in a frame
-
-    def update_elements(self):
-        """
-        Update the ui elements.
-        """
-
-        for key, element in self.elements.items():
-            element.update()
-
     def get_ui_element(self, element_type):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
@@ -136,7 +89,7 @@ class ElementMethods:
             any: ui element
         """
         try:
-            return self.pgui_elements[element_type.name]
+            return self.elements[element_type.name]
         except KeyError:
             return None
 
@@ -148,6 +101,16 @@ class ElementMethods:
             list: list of ui_elements
         """
         return self.elements
+
+    def add_ui_element(self, element_name, element):
+        """
+        Add ui element to the list of all elements.
+
+        Args:
+            element_name ():
+            element ():
+        """
+        self.elements[element_name] = element
 
     ############## CAMERA ###################
 

@@ -33,7 +33,7 @@ class UIManager:
         """
         Update all ui elements
         """
-        self.Element.update_elements()
+        #self.Element.update_elements()
         self.Gui.update(delta_time)
 
     def draw(self):

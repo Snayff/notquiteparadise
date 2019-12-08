@@ -28,8 +28,6 @@ class SkillBar(UIWindow):
         height = 64
         gap = 2
 
-        from scripts.managers.ui_manager import ui  # imported locally to prevent circular import
-
         for skill_slot in range(0, self.max_skills):
             x = start_x
             y = start_y + (height * skill_slot) + (gap * skill_slot)
@@ -37,8 +35,6 @@ class SkillBar(UIWindow):
                                                  text=f"{skill_slot}",  manager=manager,
                                                  container=self.get_container(),
                                                  object_id=f"#skill_button{skill_slot}")
-
-            ui.Element.pgui_elements[f"skill{skill_slot}"] = skill
 
         # confirm init complete
         logging.debug(f"SkillBar initialised.")

@@ -63,9 +63,6 @@ class UiHandler(Subscriber):
 
         if event.topic == EventTopics.ENTITY:
 
-            # if an entity acts then hide the entity info element
-            ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
-
             # update UI based on entity action taken
             if event.event_type == EntityEventTypes.LEARN:
                 pass
@@ -96,7 +93,8 @@ class UiHandler(Subscriber):
                 # if the previous game state was targeting mode we must be moving to something else, therefore the
                 # overlay is no longer needed
                 if game.previous_game_state == GameStates.TARGETING_MODE:
-                    ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
+                    pass
+                    # ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
 
     @staticmethod
     def attempt_to_set_selected_entity(mouse_x, mouse_y):
@@ -112,13 +110,6 @@ class UiHandler(Subscriber):
         tile_y = tile_pos[1] // TILE_SIZE
         entity = world.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
 
-        if entity:
-            ui.Element.set_selected_entity(entity)
-            ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
-            ui.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
-        else:
-            ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
-            ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
 
     @staticmethod
     def attempt_to_trigger_targeting_mode(mouse_x, mouse_y):
@@ -177,7 +168,7 @@ class UiHandler(Subscriber):
         """
         entity = world.Entity.get_blocking_entity(tile.x, tile.y)
         ui.Element.set_selected_entity(entity)
-        ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
+        #ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
 
     @staticmethod
     def attempt_to_use_targeted_skill():
@@ -227,11 +218,11 @@ class UiHandler(Subscriber):
         """
         Initialise the UI
         """
-        # show ui
-        ui.Element.set_element_visibility(UIElementTypes.CAMERA, True)
-        ui.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
-        ui.Element.set_element_visibility(UIElementTypes.ENTITY_QUEUE, True)
-        ui.Element.set_element_visibility(UIElementTypes.SKILL_BAR, True)
+        ui.Element.init_camera()
+        ui.Element.init_skill_bar()
+        # ui.Element.init_entity_queue()
+        # ui.Element.init_message_log()
+        # ui.Element.init_entity_info()
 
         # update camera
         self.update_camera()
