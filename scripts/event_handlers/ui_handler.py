@@ -68,7 +68,8 @@ class UiHandler(Subscriber):
 
             # update UI based on entity action taken
             if event.event_type == EntityEventTypes.LEARN:
-                ui.Element.update_skill_bars_icons()
+                pass
+                #ui.Element.update_skill_bars_icons()
             elif event.event_type == EntityEventTypes.DIE:
                 ui.Element.update_entity_queue()
                 self.update_camera()
