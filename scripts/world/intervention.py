@@ -1,6 +1,6 @@
 from scripts.core.constants import MessageEventTypes
 from scripts.events.message_events import MessageEvent
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.world.god import God
 

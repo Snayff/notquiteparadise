@@ -3,7 +3,7 @@ import logging
 from scripts.core.constants import EntityEventTypes, MessageEventTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.message_events import MessageEvent
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world

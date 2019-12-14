@@ -1,7 +1,7 @@
 import logging
 
 from scripts.core.constants import EffectTypes
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.skills.effects.effect import Effect
 
 

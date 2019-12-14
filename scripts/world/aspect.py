@@ -1,5 +1,5 @@
 from scripts.core.constants import TILE_SIZE
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.world.tile import Tile
 
 

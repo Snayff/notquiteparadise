@@ -4,7 +4,7 @@ import logging
 from scripts.core.constants import AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
     EffectTypes
 from scripts.events.message_events import MessageEvent
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
 from scripts.world.entity import Entity

@@ -1,4 +1,3 @@
-
 import logging
 import pygame
 import pygame_gui
@@ -33,7 +32,7 @@ class UIManager:
         """
         Update all ui elements
         """
-        #self.Element.update_elements()
+        # self.Element.update_elements()
         self.Gui.update(delta_time)
 
     def draw(self):
@@ -46,7 +45,6 @@ class UIManager:
         main_surface.fill((0, 0, 0))
 
         self.Gui.draw_ui(main_surface)
-        #self.Element.draw_visible_elements(main_surface)
 
         # resize the surface to the desired resolution
         scaled_surface = pygame.transform.scale(main_surface, self.Display.get_desired_resolution())

@@ -3,7 +3,7 @@ import random
 from enum import Enum
 from typing import List, Tuple
 
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.world.god import God
 
 

@@ -6,7 +6,7 @@ from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world

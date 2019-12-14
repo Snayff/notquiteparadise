@@ -1,6 +1,6 @@
 
 from scripts.core.constants import SecondaryStatTypes
-from scripts.core.data_library import library
+from scripts.core.library import library
 
 
 class SecondaryStats:

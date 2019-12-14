@@ -1,7 +1,7 @@
 import logging
 
 from scripts.core.constants import AfflictionCategory, AfflictionTriggers
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.world.entity import Entity
 
 

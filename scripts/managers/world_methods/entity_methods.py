@@ -11,7 +11,7 @@ from scripts.components.homeland import Homeland
 from scripts.components.race import Race
 from scripts.components.savvy import Savvy
 from scripts.core.constants import TILE_SIZE
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 

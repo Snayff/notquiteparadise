@@ -1,6 +1,6 @@
 
 from scripts.events.game_events import EndTurnEvent
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.core.event_hub import publisher
 
 

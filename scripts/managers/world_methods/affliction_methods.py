@@ -3,7 +3,7 @@ import logging
 from typing import List
 
 from scripts.core.constants import AfflictionTriggers, EffectTypes, AfflictionLifespan
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.skills.affliction import Affliction
 from scripts.world.entity import Entity
 

@@ -5,7 +5,7 @@ from scripts.core.constants import TargetTags, MessageEventTypes, HitTypes, Dama
 from scripts.events.entity_events import DieEvent
 
 from scripts.events.message_events import MessageEvent
-from scripts.core.data_library import library
+from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
 from scripts.world.aspect import Aspect

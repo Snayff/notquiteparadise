@@ -868,3 +868,6 @@ class LibraryOfAlexandria:
             data = json.load(file)
 
         return data
+
+
+library = LibraryOfAlexandria()

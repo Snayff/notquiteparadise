@@ -75,18 +75,19 @@ def game_loop():
         if game.game_state == GameStates.ENEMY_TURN:
             turn.turn_holder.ai.take_turn()
 
-        # HANDLE UPDATE
+        # update based on input events
         for event in pygame.event.get():
             input.update(event)
             ui.Gui.process_events(event)
 
+        # allow everything to update in response to new state
         game.update()
         debug.update()
         world.update()
         ui.update(delta_time)
         event_hub.update()
 
-        # DRAW
+        # show the new state
         debug.draw()
         ui.draw()
 
