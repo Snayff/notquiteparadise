@@ -33,7 +33,7 @@ class UiHandler(Subscriber):
                 button = event.button_pressed
                 mouse_x = event.mouse_x
                 mouse_y = event.mouse_y
-                clicked_element = ui.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
+                #clicked_element = ui.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
                 game_state = game.game_state
 
                 # Selecting an entity
@@ -54,12 +54,12 @@ class UiHandler(Subscriber):
 
                 # NEW APPROACH - remove once all migrated  ############
                 # pass input to element
-                if clicked_element == UIElementTypes.MESSAGE_LOG:
-                    ui_element = ui.Element.get_ui_element(clicked_element)
-                    ui_element.handle_input(button)
-                elif clicked_element == UIElementTypes.SKILL_BAR:
-                    ui_element = ui.Element.get_ui_element(clicked_element)
-                    ui_element.handle_input(button)
+                # if clicked_element == UIElementTypes.MESSAGE_LOG:
+                #     ui_element = ui.Element.get_ui_element(clicked_element)
+                #     ui_element.handle_input(button)
+                # elif clicked_element == UIElementTypes.SKILL_BAR:
+                #     ui_element = ui.Element.get_ui_element(clicked_element)
+                #     ui_element.handle_input(button)
 
         if event.topic == EventTopics.ENTITY:
 
@@ -109,7 +109,6 @@ class UiHandler(Subscriber):
         tile_x = tile_pos[0] // TILE_SIZE
         tile_y = tile_pos[1] // TILE_SIZE
         entity = world.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
-
 
     @staticmethod
     def attempt_to_trigger_targeting_mode(mouse_x, mouse_y):
@@ -221,7 +220,7 @@ class UiHandler(Subscriber):
         ui.Element.init_camera()
         ui.Element.init_skill_bar()
         # ui.Element.init_entity_queue()
-        # ui.Element.init_message_log()
+        ui.Element.init_message_log()
         # ui.Element.init_entity_info()
 
         # update camera

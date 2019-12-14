@@ -82,9 +82,6 @@ def initialise_game():
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
     turn.turn_holder = world.player
 
-    publisher.publish(MessageEvent(MessageEventTypes.BASIC, "Welcome to #col.info Not #col.info "
-                                                            "Quite  #col.info Paradise. "))
-
 
 def initialise_event_handlers():
     """

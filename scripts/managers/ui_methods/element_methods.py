@@ -4,9 +4,8 @@ from typing import Tuple, List
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.entity_info import EntityInfo
-from scripts.ui.ui_elements.message_log import MessageLog
-from scripts.ui.ui_elements.entity_queue import EntityQueue
 from scripts.ui.ui_elements.camera import Camera
+from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
@@ -23,7 +22,6 @@ class ElementMethods:
     def __init__(self, manager):
         from scripts.managers.ui_manager import UIManager
         self.manager = manager  # type: UIManager
-
         self.elements = {}  # list of all init'd ui elements
 
     ############### INIT ################
@@ -32,7 +30,13 @@ class ElementMethods:
         """
         Initialise the text log ui element.
         """
-        self.elements[UIElementTypes.MESSAGE_LOG.name] = MessageLog()
+        width = 300
+        height = 100
+        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
+        rect = pygame.Rect((x, y), (width, height))
+        message_log = MessageLog(rect, self.manager.Gui)
+        self.add_ui_element(UIElementTypes.MESSAGE_LOG.name, message_log)
 
     def init_entity_info(self):
         """
