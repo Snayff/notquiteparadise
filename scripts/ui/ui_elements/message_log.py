@@ -18,7 +18,7 @@ class MessageLog:
 
         # complete base class init
         self.text_box = UITextBox(html_text=self.text, relative_rect=rect, manager=self.gui_manager,
-                         wrap_to_height=False, layer_starting_height=1, object_id="message_log")
+                                  wrap_to_height=False, layer_starting_height=1, object_id="message_log")
 
         # TODO: update to use UIWindow like other elements
         #  inheriting from UIWindow prevents scrolling from working as focus is never applied.
@@ -50,6 +50,23 @@ class MessageLog:
         self.text_box.kill()
         self.text_box = UITextBox(html_text=self.text, relative_rect=self.rect, manager=self.gui_manager,
                                   wrap_to_height=False, layer_starting_height=1, object_id="message_log")
+
+        # update the position of the text in the text box
+        # N.B. this is taken from the UIVerticalScrollBar update method
+        if self.text_box.scroll_bar:
+            scroll_bar = self.text_box.scroll_bar
+            scroll_bar.scroll_wheel_down = False
+            scroll_bar.scroll_position += (250.0 * 1)
+            scroll_bar.scroll_position = min(scroll_bar.scroll_position,
+                                             scroll_bar.bottom_limit - scroll_bar.sliding_button.rect.height)
+            x_pos = scroll_bar.rect.x + scroll_bar.shadow_width + scroll_bar.border_width
+            y_pos = scroll_bar.scroll_position + scroll_bar.rect.y + scroll_bar.shadow_width + \
+                    scroll_bar.border_width + scroll_bar.button_height
+            scroll_bar.sliding_button.set_position(pygame.math.Vector2(x_pos, y_pos))
+
+            scroll_bar.start_percentage = scroll_bar.scroll_position / scroll_bar.scrollable_height
+            if not scroll_bar.has_moved_recently:
+                scroll_bar.has_moved_recently = True
 
 # REGARDING EXTENDING ON HOVER
 # You can do whatever you like by sub-classing the UITextBox class, it's just python code :)
