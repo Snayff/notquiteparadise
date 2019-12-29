@@ -31,7 +31,7 @@ class ElementMethods:
         """
         Initialise the text log ui element.
         """
-        width = 300
+        width = 400
         height = 100
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
@@ -43,10 +43,10 @@ class ElementMethods:
         """
         Initialise the selected entity info ui element.
         """
-        width = 300
-        height = 200
+        width = 200
+        height = 500
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
-        y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
+        y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
         rect = pygame.Rect((x, y), (width, height))
         info = PGEntityInfo(rect, self.manager.Gui)
         self.add_ui_element(UIElementTypes.ENTITY_INFO.name, info)
