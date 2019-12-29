@@ -249,7 +249,7 @@ class InputManager:
         #         if ui_element.element_type == UIElementTypes.CAMERA:
         #             tile_x, tile_y = ui.Element.get_selected_tile_pos()
         #
-        #             # don't check if we have an entity as passing none will cause the entity info to hide
+        #             # don't check if we have an entity as passing none will cause the entity info to cleanse
         #             entity = world.Entity.get_blocking_entity(tile_x, tile_y)
         #             ui.Element.set_selected_entity(entity)
         #

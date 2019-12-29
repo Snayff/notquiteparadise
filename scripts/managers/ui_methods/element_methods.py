@@ -317,12 +317,15 @@ class ElementMethods:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
     def hide_entity_info(self):
+        """
+        Hide the entity info ui element.
+        """
         entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
         if entity_info:
-            entity_info.hide()
+            entity_info.cleanse()
         else:
-            logging.warning(f"Tried to hide EntityInfo but key not found. Is it init'd?")
+            logging.warning(f"Tried to cleanse EntityInfo but key not found. Is it init'd?")
 
     ############## MESSAGE LOG ###################
 

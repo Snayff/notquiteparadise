@@ -41,24 +41,55 @@ class PGEntityInfo(UIWindow):
         logging.debug(f"Entity Info initialised.")
 
     def set_entity(self, entity: Union[Entity, None]):
+        """
+        Set the selected entity to show the info for that entity.
+
+        Args:
+            entity ():
+        """
         self.selected_entity = entity
 
     def show(self):
+        """
+        Show the entity info. Builds the sections required, after clearing any existing.
+        """
         if self.selected_entity:
+            # clear to refresh first
+            self.cleanse()
+
             # create the various boxes for the info
             self.entity_image = self.create_entity_image_section()
             self.core_info = self.create_core_info_section()
             self.primary_stats = self.create_primary_stats_section()
             self.secondary_stats = self.create_secondary_stats_section()
 
-    def hide(self):
+    def cleanse(self):
+        """
+        Cleanse existing section info.
+        """
         # kill the boxes
+        if self.entity_image:
+            self.entity_image.kill()
+        if self.core_info:
+            self.core_info.kill()
+        if self.primary_stats:
+            self.primary_stats.kill()
+        if self.secondary_stats:
+            self.secondary_stats.kill()
+
+        # clear the references
         self.entity_image = None
         self.core_info = None
         self.primary_stats = None
         self.secondary_stats = None
 
     def create_entity_image_section(self):
+        """
+        Create the image section.
+
+        Returns:
+            UIImage:
+        """
         image_width = self.entity_image_width
         image_height = self.entity_image_height
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
@@ -70,6 +101,12 @@ class PGEntityInfo(UIWindow):
         return entity_image
 
     def create_core_info_section(self):
+        """
+        Create the core info section.
+
+        Returns:
+            UITextBox:
+        """
         entity = self.selected_entity
         text = f"{entity.name.capitalize()}" + "<br>"
         text += f"Current Health: {entity.combatant.hp}" + "<br>"
@@ -87,6 +124,12 @@ class PGEntityInfo(UIWindow):
         return core_info
 
     def create_primary_stats_section(self):
+        """
+        Create the primary stats section.
+
+        Returns:
+            UITextBox:
+        """
         text = ""
         stats = self.selected_entity.combatant.primary_stats
 
@@ -113,6 +156,12 @@ class PGEntityInfo(UIWindow):
         return primary_stats
 
     def create_secondary_stats_section(self):
+        """
+        Create the secondary stats section.
+
+        Returns:
+            UITextBox:
+        """
         text = ""
         stats = self.selected_entity.combatant.secondary_stats
 
