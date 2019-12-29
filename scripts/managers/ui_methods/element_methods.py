@@ -44,7 +44,7 @@ class ElementMethods:
         Initialise the selected entity info ui element.
         """
         width = 300
-        height = 100
+        height = 200
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
         rect = pygame.Rect((x, y), (width, height))
@@ -303,7 +303,7 @@ class ElementMethods:
 
     def set_selected_entity(self, entity: Entity):
         """
-        Set the selected entity
+        Set the selected entity and show it.
 
         Args:
             entity(Entity):

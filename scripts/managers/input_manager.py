@@ -217,11 +217,14 @@ class InputManager:
         elif event.ui_object_id[:len("#tile")] == "#tile":
             print(f"button clicked(grid.tile{ event.ui_object_id[len('#tile'):]})")
             tile = world.Map.get_tile(tile_pos_string=event.ui_object_id)
+            entity = world.Map.get_entity_on_tile(tile)
+            ui.Element.set_selected_entity(entity)
 
     def process_generic_input(self):
         """
         Interpret none GameState-specific actions
         """
+
         pass
         # if self.input_values["debug_toggle"]:
         #     from scripts.managers.debug_manager import debug

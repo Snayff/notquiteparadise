@@ -38,7 +38,8 @@ class PGEntityInfo(UIWindow):
     def create_entity_image_element(self):
         image_width = 32
         image_height = 32
-        rect = pygame.Rect((self.rect.centerx, 5), (image_width, image_height))
+        centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
+        rect = pygame.Rect((centre_draw_x, 5), (image_width, image_height))
         image = pygame.transform.scale(self.selected_entity.icon, (image_width, image_height))
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
