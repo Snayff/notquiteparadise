@@ -68,7 +68,7 @@ class UiHandler(Subscriber):
                 pass
                 #ui.Element.update_skill_bars_icons()
             elif event.event_type == EntityEventTypes.DIE:
-                ui.Element.update_entity_queue()
+                #ui.Element.update_entity_queue()
                 self.update_camera()
             elif event.event_type == EntityEventTypes.MOVE:
                 if event.entity == world.Entity.get_player():
@@ -88,7 +88,8 @@ class UiHandler(Subscriber):
 
                 # new turn updates
                 elif event.new_game_state == GameStates.NEW_TURN:
-                    ui.Element.update_entity_queue()
+                    #ui.Element.update_entity_queue()
+                    pass
 
                 # if the previous game state was targeting mode we must be moving to something else, therefore the
                 # overlay is no longer needed
@@ -221,7 +222,7 @@ class UiHandler(Subscriber):
         ui.Element.init_skill_bar()
         # ui.Element.init_entity_queue()
         ui.Element.init_message_log()
-        # ui.Element.init_entity_info()
+        ui.Element.init_entity_info()
 
         # update camera
         self.update_camera()

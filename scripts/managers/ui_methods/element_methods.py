@@ -1,14 +1,12 @@
 import logging
 import pygame
 from typing import Tuple, List
-
-from pygame_gui.elements import UITextBox
-
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog
+from scripts.ui.ui_elements.pgui_entity_info import PGEntityInfo
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
@@ -43,9 +41,15 @@ class ElementMethods:
 
     def init_entity_info(self):
         """
-        Initialise the selected entity info ui element
+        Initialise the selected entity info ui element.
         """
-        self.elements[UIElementTypes.ENTITY_INFO.name] = EntityInfo()
+        width = 300
+        height = 100
+        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
+        rect = pygame.Rect((x, y), (width, height))
+        info = PGEntityInfo(rect, self.manager.Gui)
+        self.add_ui_element(UIElementTypes.ENTITY_INFO.name, info)
 
     def init_skill_bar(self):
         """
@@ -72,16 +76,6 @@ class ElementMethods:
         rect = pygame.Rect((x, y), (width, height))
         camera = Camera(rect, self.manager.Gui, rows, cols)
         self.add_ui_element(UIElementTypes.CAMERA.name, camera)
-
-    def init_entity_queue(self):
-        """
-        Initialise the entity queue
-        """
-        self.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
-
-        from scripts.managers.turn_manager import turn
-        if turn:
-            self.update_entity_queue()
 
     ################ ELEMENT ###################
 
@@ -132,22 +126,26 @@ class ElementMethods:
             bool:
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        player_x, player_y = target_pos
+        if camera:
+            player_x, player_y = target_pos
 
-        edge_start_x = camera.start_tile_col
-        edge_end_x = camera.start_tile_col + camera.columns
-        edge_start_y = camera.start_tile_row
-        edge_end_y = camera.start_tile_row + camera.rows
+            edge_start_x = camera.start_tile_col
+            edge_end_x = camera.start_tile_col + camera.columns
+            edge_start_y = camera.start_tile_row
+            edge_end_y = camera.start_tile_row + camera.rows
 
-        if edge_start_x <= player_x < edge_start_x + camera.edge_size:
-            return True
-        elif edge_end_x >= player_x > edge_end_x - camera.edge_size:
-            return True
-        elif edge_start_y <= player_y < edge_start_y + camera.edge_size:
-            return True
-        elif edge_end_y >= player_y > edge_end_y - camera.edge_size:
-            return True
+            if edge_start_x <= player_x < edge_start_x + camera.edge_size:
+                return True
+            elif edge_end_x >= player_x > edge_end_x - camera.edge_size:
+                return True
+            elif edge_start_y <= player_y < edge_start_y + camera.edge_size:
+                return True
+            elif edge_end_y >= player_y > edge_end_y - camera.edge_size:
+                return True
+            else:
+                return False
         else:
+            logging.warning(f"Tried to check target pos in Camera but key not found. Is it init'd?")
             return False
 
     def move_camera(self, move_x, move_y):
@@ -167,6 +165,8 @@ class ElementMethods:
             # clamp function: max(low, min(n, high))
             camera.start_tile_col = max(0, min(camera.start_tile_col + move_x, game_map.width))
             camera.start_tile_row = max(0, min(camera.start_tile_row + move_y, game_map.height))
+        else:
+            logging.warning(f"Tried to move Camera but key not found. Is it init'd?")
 
     def update_cameras_tiles(self):
         """
@@ -183,6 +183,8 @@ class ElementMethods:
                         tiles.append(world.Map.get_tile(x, y))
 
             camera.set_tiles(tiles)
+        else:
+            logging.warning(f"Tried to set camera tiles in Camera but key not found. Is it init'd?")
 
     def update_camera_game_map(self):
         """
@@ -200,6 +202,8 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         if camera:
             camera.update_grid()
+        else:
+            logging.warning(f"Tried to update camera grid in Camera move but key not found. Is it init'd?")
 
     def set_player_tile(self, tile: Tile):
         """
@@ -209,7 +213,11 @@ class ElementMethods:
             tile ():
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        camera.set_player_tile(tile)
+
+        if camera:
+            camera.set_player_tile(tile)
+        else:
+            logging.warning(f"Tried to set player tile in Camera but key not found. Is it init'd?")
 
     def set_overlay_visibility(self, is_visible: bool):
         """
@@ -288,8 +296,10 @@ class ElementMethods:
 
             else:
                 return False
+        else:
+            logging.warning(f"Tried to check if Camera should move but key not found. Is it init'd?")
 
-    ############## OTHER ELEMENTS ###################
+    ############## ENTITY INFO ###################
 
     def set_selected_entity(self, entity: Entity):
         """
@@ -298,42 +308,23 @@ class ElementMethods:
         Args:
             entity(Entity):
         """
-        try:
-            self.elements[UIElementTypes.ENTITY_INFO.name].set_selected_entity(entity)
-        except KeyError:
+        entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
+
+        if entity_info:
+            entity_info.set_entity(entity)
+            entity_info.show()
+        else:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
-    def update_entity_queue(self):
-        """
-        Get info from the turn and update the entity queue to be displayed
-        """
-        # TODO - convert to a set and set via en event
-        entity_queue = self.get_ui_element(UIElementTypes.ENTITY_QUEUE)
+    def hide_entity_info(self):
+        entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
-        # if entity queue has been init'd
-        if entity_queue:
-            # clear current queue
-            entity_queue.entity_queue.clear()
+        if entity_info:
+            entity_info.hide()
+        else:
+            logging.warning(f"Tried to hide EntityInfo but key not found. Is it init'd?")
 
-            counter = 0
-
-            # loop entities in turn queue, up to max to show
-            from scripts.managers.turn_manager import turn
-            for entity, time in turn.turn_queue.items():
-                if counter < entity_queue.max_entities_to_show:
-                    icon = entity.icon
-
-                    # catch any images not the right size and resize them
-                    if icon.get_size() != (entity_queue.entity_icon_size, entity_queue.entity_icon_size):
-                        icon = pygame.transform.smoothscale(icon, (entity_queue.entity_icon_size,
-                            entity_queue.entity_icon_size))
-
-                    entity_queue.entity_queue.append((icon, entity.name))
-
-                    counter += 1
-
-                else:
-                    break
+    ############## MESSAGE LOG ###################
 
     def add_to_message_log(self, message):
         """
