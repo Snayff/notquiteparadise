@@ -21,10 +21,10 @@ pipelines:
           # code analysis
           - echo "Code Metrics"
           # error: radon giving no results.
-          - radon cc -n C -s  scripts\
-          - radon  mi -m -s --min B -j  scripts\
-          - radon  raw -s  scripts\
-          - echo "Unused Scripts"
+          # - radon cc -n C -s  scripts\
+          # - radon  mi -m -s --min B -j  scripts\
+          # - radon  raw -s  scripts\
+          # - echo "Unused Scripts"
           # error: vulture errors for some reason
           # - vulture --sort-by-size  scripts\
           
@@ -34,7 +34,7 @@ pipelines:
           - make html
           - cd ..
           - git add .
-          - git commit -m "[skip ci] Added documentation"
+          - git commit -m "[skip ci] Updated documentation"
           - git push
         artifacts:
           - docs/**
