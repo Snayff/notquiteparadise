@@ -1,10 +1,11 @@
 import logging
 import pygame
 import pygame_gui
+from pygame_gui.core import UIWindow
 from pygame_gui.elements import UITextBox
 
 
-class MessageLog:
+class MessageLog(UIWindow):
     """
     Hold text relating to the game's events, to display to the player. Does not use UIWindow.
     """
@@ -16,12 +17,11 @@ class MessageLog:
         self.text_box = None
         self.gui_manager = manager
 
+        super().__init__(rect, manager, ["message_log"])
+
         # complete base class init
         self.text_box = UITextBox(html_text=self.text, relative_rect=rect, manager=self.gui_manager,
-                                  wrap_to_height=False, layer_starting_height=1, object_id="message_log")
-
-        # TODO: update to use UIWindow like other elements
-        #  inheriting from UIWindow prevents scrolling from working as focus is never applied.
+                                  wrap_to_height=False, layer_starting_height=1, object_id="#text_box")
 
         self.add_message("Welcome to Not Quite Paradise!")
 
@@ -48,8 +48,10 @@ class MessageLog:
         self.text += message + "<br>"
 
         self.text_box.kill()
-        self.text_box = UITextBox(html_text=self.text, relative_rect=self.rect, manager=self.gui_manager,
-                                  wrap_to_height=False, layer_starting_height=1, object_id="message_log")
+        rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
+        self.text_box = UITextBox(html_text=self.text, relative_rect=rect, manager=self.gui_manager,
+                                  wrap_to_height=False, layer_starting_height=1, object_id="#text_box",
+                                  container=self.get_container())
 
         # update the position of the text in the text box
         # N.B. this is taken from the UIVerticalScrollBar update method
