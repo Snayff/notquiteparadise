@@ -61,12 +61,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.library_of_alexandria">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
@@ -99,12 +99,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ui_elements.html">UI Elements</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ui_elements.html#templates">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.colours">Colours</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.entity_info">Entity Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.message_log">Message Log</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.palette">Palette</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.skill_bar">Skill Bar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.targeting_overlay">Targeting Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#colours">Colours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#entity-info">Entity Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#message-log">Message Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#palette">Palette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#skill-bar">Skill Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#targeting-overlay">Targeting Overlay</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a><ul>
@@ -210,8 +210,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the type of the afflictions</p></li>
-<li><p><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – amount of activations before expiry</p></li>
+<li><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the type of the afflictions</p></li>
+<li><p><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – amount of activations before expiry</p></li>
 <li><p><strong>affected_entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – the entity to be affected</p></li>
 </ul>
 </dd>
@@ -228,11 +228,11 @@
 <dt id="scripts.managers.world_methods.affliction_methods.AfflictionMethods.create_effect">
 <code class="descname">create_effect</code><span class="sig-paren">(</span><em>owner</em>, <em>effect_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/affliction_methods.html#AfflictionMethods.create_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.affliction_methods.AfflictionMethods.create_effect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an effect and assign an owner.
-Wrapper for the create effect under world_manager.Skill.</p>
+Wrapper for the create effect under world.Skill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>owner</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><em>object</em></a>) – Skill or Affliction</p></li>
+<li><p><strong>owner</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – Skill or Affliction</p></li>
 <li><p><strong>effect_type</strong> (<a class="reference internal" href="core.html#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
 </ul>
 </dd>
@@ -261,7 +261,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
-<li><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -305,7 +305,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>Amount of stat change</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,11 +393,11 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
-<li><p><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
-<li><p><strong>actor_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
-<li><p><strong>actor_template_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
-<li><p><strong>player</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – </p></li>
+<li><p><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+<li><p><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+<li><p><strong>actor_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
+<li><p><strong>actor_template_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
+<li><p><strong>player</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -421,14 +421,14 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-odd"><p>list of entities</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity_at_location">
-<code class="descname">get_blocking_entity_at_location</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.get_blocking_entity_at_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity_at_location" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity">
+<code class="descname">get_blocking_entity</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.get_blocking_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -460,7 +460,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>distance in tiles</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -514,7 +514,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>straight line distance</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -576,13 +576,13 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd><p>Get all of the tiles within a specified range of the player that are also in the FOV</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>range_from_centre</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p>
+<dd class="field-odd"><p><strong>range_from_centre</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A list of tiles</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>[<a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile">Tile</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a>[<a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile">Tile</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -602,7 +602,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>True if tile is in FOV</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -660,7 +660,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tile</strong> (<a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile"><em>Tile</em></a>) – </p></li>
-<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -733,8 +733,8 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – x position of the tile</p></li>
-<li><p><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – y position of the tile</p></li>
+<li><p><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – x position of the tile</p></li>
+<li><p><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – y position of the tile</p></li>
 </ul>
 </dd>
 </dl>
@@ -756,13 +756,14 @@ Wrapper for the create effect under world_manager.Skill.</p>
 
 <dl class="method">
 <dt id="scripts.managers.world_methods.map_methods.MapMethods.get_tile">
-<code class="descname">get_tile</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_tile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_tile</code><span class="sig-paren">(</span><em>row: int = 0</em>, <em>col: int = 0</em>, <em>tile_pos_string: str = ''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_tile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the tile at the specified location</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – x position of tile</p></li>
-<li><p><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – y position of tile</p></li>
+<li><p><strong>row</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – row of tile</p></li>
+<li><p><strong>col</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – column of tile</p></li>
+<li><p><strong>tile_pos_string</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – expects “#tile(x,y)”</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -776,14 +777,14 @@ Wrapper for the create effect under world_manager.Skill.</p>
 
 <dl class="method">
 <dt id="scripts.managers.world_methods.map_methods.MapMethods.get_tiles">
-<code class="descname">get_tiles</code><span class="sig-paren">(</span><em>start_tile_x</em>, <em>start_tile_y</em>, <em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_tiles" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_tiles</code><span class="sig-paren">(</span><em>start_tile_col</em>, <em>start_tile_row</em>, <em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_tiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get multiple tiles based on starting position and coordinates given</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start_tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
-<li><p><strong>start_tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
-<li><p><strong>coords</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>[</em><em>Tuple</em><em>]</em>) – List of tuples holding x y. E.g. (x, y)</p></li>
+<li><p><strong>start_tile_col</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+<li><p><strong>start_tile_row</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+<li><p><strong>coords</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><em>Tuple</em><em>]</em>) – List of tuples holding x y. E.g. (x, y)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -806,7 +807,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-odd"><p></p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -826,7 +827,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -846,7 +847,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -866,7 +867,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -890,7 +891,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tile</strong> (<a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile"><em>Tile</em></a>) – </p></li>
-<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p></li>
+<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -940,7 +941,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>True if tag applies.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -994,14 +995,14 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
 <li><p><strong>resource</strong> (<a class="reference internal" href="core.html#scripts.core.constants.SecondaryStatTypes" title="scripts.core.constants.SecondaryStatTypes"><em>SecondaryStatTypes</em></a>) – HP or Stamina</p></li>
-<li><p><strong>cost</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+<li><p><strong>cost</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True for success, False otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1014,7 +1015,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
-<li><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>)</em>) – </p></li>
+<li><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>)</em>) – </p></li>
 <li><p><strong>skill</strong> (<a class="reference internal" href="skills.html#scripts.skills.skill.Skill" title="scripts.skills.skill.Skill"><em>Skill</em></a>) – </p></li>
 </ul>
 </dd>
@@ -1022,7 +1023,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>True if can use the skill. Else False.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1034,7 +1035,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>owner</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><em>object</em></a>) – Skill or Affliction</p></li>
+<li><p><strong>owner</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – Skill or Affliction</p></li>
 <li><p><strong>effect_type</strong> (<a class="reference internal" href="core.html#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
 </ul>
 </dd>
@@ -1049,7 +1050,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>shape</strong> (<a class="reference internal" href="core.html#scripts.core.constants.SkillShapes" title="scripts.core.constants.SkillShapes"><em>SkillShapes</em></a>) – </p></li>
-<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1106,7 +1107,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-even"><p>True if tile has all tags</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1120,7 +1121,7 @@ Wrapper for the create effect under world_manager.Skill.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
 <li><p><strong>resource</strong> (<a class="reference internal" href="core.html#scripts.core.constants.SecondaryStatTypes" title="scripts.core.constants.SecondaryStatTypes"><em>SecondaryStatTypes</em></a>) – HP or STAMINA</p></li>
-<li><p><strong>cost</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+<li><p><strong>cost</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
 </ul>
 </dd>
 </dl>

@@ -61,12 +61,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.library_of_alexandria">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
@@ -99,12 +99,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ui_elements.html">UI Elements</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ui_elements.html#templates">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.colours">Colours</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.entity_info">Entity Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.message_log">Message Log</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.palette">Palette</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.skill_bar">Skill Bar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.targeting_overlay">Targeting Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#colours">Colours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#entity-info">Entity Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#message-log">Message Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#palette">Palette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#skill-bar">Skill Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#targeting-overlay">Targeting Overlay</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a><ul>
@@ -157,11 +157,84 @@
 	    <div id="content" class="hfeed entry-container hentry">
   <div class="section" id="event-handlers">
 <h1>Event Handlers<a class="headerlink" href="#event-handlers" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="entity">
-<h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.event_handlers.entity_handler">
+<span id="entity"></span><h2>Entity<a class="headerlink" href="#module-scripts.event_handlers.entity_handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.event_handlers.entity_handler.EntityHandler">
+<em class="property">class </em><code class="descclassname">scripts.event_handlers.entity_handler.</code><code class="descname">EntityHandler</code><span class="sig-paren">(</span><em>event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events affecting entities</p>
+<dl class="staticmethod">
+<dt id="scripts.event_handlers.entity_handler.EntityHandler.process_die">
+<em class="property">static </em><code class="descname">process_die</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_die"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_die" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the entity death
+:param event: the event to process
+:type event: EntityEvent</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scripts.event_handlers.entity_handler.EntityHandler.process_learn">
+<em class="property">static </em><code class="descname">process_learn</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Have an entity learn a skill.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scripts.event_handlers.entity_handler.EntityHandler.process_move">
+<em class="property">static </em><code class="descname">process_move</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
+target tile has entity) or move.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="events.html#scripts.events.entity_events.MoveEvent" title="scripts.events.entity_events.MoveEvent"><em>MoveEvent</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="scripts.event_handlers.entity_handler.EntityHandler.process_skill">
+<em class="property">static </em><code class="descname">process_skill</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the entity`s skill
+:param event: the event to process
+:type event: EntityEvent</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.event_handlers.entity_handler.EntityHandler.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process entity events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="#scripts.event_handlers.pub_sub_hub.Event" title="scripts.event_handlers.pub_sub_hub.Event"><em>Event</em></a>) – the event in need of processing</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="game">
-<h2>Game<a class="headerlink" href="#game" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.event_handlers.game_handler">
+<span id="game"></span><h2>Game<a class="headerlink" href="#module-scripts.event_handlers.game_handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.event_handlers.game_handler.GameHandler">
+<em class="property">class </em><code class="descclassname">scripts.event_handlers.game_handler.</code><code class="descname">GameHandler</code><span class="sig-paren">(</span><em>event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle core Game related actions, driven by events. Turn changes exist here, too.</p>
+<dl class="staticmethod">
+<dt id="scripts.event_handlers.game_handler.GameHandler.transition_to_another_game_state">
+<em class="property">static </em><code class="descname">transition_to_another_game_state</code><span class="sig-paren">(</span><em>new_game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler.transition_to_another_game_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler.transition_to_another_game_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transition to another game state as specified by the event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_game_state</strong> (<a class="reference internal" href="core.html#scripts.core.constants.GameStates" title="scripts.core.constants.GameStates"><em>GameStates</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="logging">
 <h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>

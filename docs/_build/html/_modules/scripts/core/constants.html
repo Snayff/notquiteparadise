@@ -60,12 +60,12 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.library_of_alexandria">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
@@ -98,12 +98,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ui_elements.html">UI Elements</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#templates">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.colours">Colours</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.entity_info">Entity Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.message_log">Message Log</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.palette">Palette</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.skill_bar">Skill Bar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.targeting_overlay">Targeting Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#colours">Colours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#entity-info">Entity Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#message-log">Message Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#palette">Palette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#skill-bar">Skill Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#targeting-overlay">Targeting Overlay</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../world.html">World</a><ul>
@@ -160,7 +160,7 @@
 
 <span class="n">TILE_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 <span class="n">ICON_IN_TEXT_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
-
+<span class="n">ICON_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 
 <div class="viewcode-block" id="VisualInfo"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.VisualInfo">[docs]</a><span class="k">class</span> <span class="nc">VisualInfo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -520,6 +520,19 @@
     <span class="n">LEFT_BUTTON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">RIGHT_BUTTON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">MIDDLE_BUTTON</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">WHEEL_UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">WHEEL_DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="InputStates"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.InputStates">[docs]</a><span class="k">class</span> <span class="nc">InputStates</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">PRESSED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RELEASED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
@@ -539,6 +552,25 @@
     <span class="n">SKILL_BAR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">ENTITY_QUEUE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">CAMERA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Directions"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.Directions">[docs]</a><span class="k">class</span> <span class="nc">Directions</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">UPLEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">UP</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">UPRIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">CENTRE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">DOWNLEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">DOWN</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">DOWNRIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>

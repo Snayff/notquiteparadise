@@ -61,12 +61,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.library_of_alexandria">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
@@ -99,12 +99,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ui_elements.html">UI Elements</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ui_elements.html#templates">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.colours">Colours</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.entity_info">Entity Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.message_log">Message Log</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.palette">Palette</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.skill_bar">Skill Bar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#module-scripts.ui_elements.targeting_overlay">Targeting Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#colours">Colours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#entity-info">Entity Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#message-log">Message Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#palette">Palette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#skill-bar">Skill Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements.html#targeting-overlay">Targeting Overlay</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a><ul>
@@ -187,13 +187,13 @@
 
 <dl class="class">
 <dt id="scripts.events.entity_events.UseSkillEvent">
-<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">UseSkillEvent</code><span class="sig-paren">(</span><em>entity_using_skill</em>, <em>target_pos</em>, <em>skill</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">scripts.events.entity_events.</code><code class="descname">UseSkillEvent</code><span class="sig-paren">(</span><em>entity_using_skill</em>, <em>skill</em>, <em>target_pos=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event for entity skill</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entity_using_skill</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
-<li><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – x, y</p></li>
+<li><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – x, y</p></li>
 <li><p><strong>skill</strong> (<a class="reference internal" href="skills.html#scripts.skills.skill.Skill" title="scripts.skills.skill.Skill"><em>Skill</em></a>) – </p></li>
 </ul>
 </dd>
@@ -223,7 +223,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>entity</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
-<li><p><strong>time_spent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – </p></li>
+<li><p><strong>time_spent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -256,7 +256,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mouse_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – </p></li>
+<li><p><strong>mouse_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – </p></li>
 <li><p><strong>button_pressed</strong> (<a class="reference internal" href="core.html#scripts.core.constants.MouseButtons" title="scripts.core.constants.MouseButtons"><em>MouseButtons</em></a>) – </p></li>
 </ul>
 </dd>

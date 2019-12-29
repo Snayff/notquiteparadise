@@ -60,12 +60,12 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.library_of_alexandria">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
@@ -98,12 +98,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ui_elements.html">UI Elements</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#templates">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.colours">Colours</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.entity_info">Entity Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.message_log">Message Log</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.palette">Palette</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.skill_bar">Skill Bar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#module-scripts.ui_elements.targeting_overlay">Targeting Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#colours">Colours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#entity-info">Entity Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#message-log">Message Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#palette">Palette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#skill-bar">Skill Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui_elements.html#targeting-overlay">Targeting Overlay</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../world.html">World</a><ul>
@@ -157,8 +157,8 @@
   <h1>Source code for scripts.skills.skill</h1><div class="highlight"><pre>
 <span></span>
 <span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="k">import</span> <span class="n">EndTurnEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.global_singletons.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="k">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
 
 
 <div class="viewcode-block" id="Skill"><a class="viewcode-back" href="../../../skills.html#scripts.skills.skill.Skill">[docs]</a><span class="k">class</span> <span class="nc">Skill</span><span class="p">:</span>
@@ -184,17 +184,17 @@
 <span class="sd">        Args:</span>
 <span class="sd">            target_pos (tuple): x y of the target</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span> <span class="o">=</span> <span class="n">target_pos</span>
 
-        <span class="n">coords</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_shape</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape_size</span><span class="p">)</span>
-        <span class="n">effected_tiles</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_shape</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape_size</span><span class="p">)</span>
+        <span class="n">effected_tiles</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
 
         <span class="c1"># apply any effects</span>
         <span class="k">for</span> <span class="n">effect_name</span><span class="p">,</span> <span class="n">effect_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">effect</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect_data</span><span class="o">.</span><span class="n">effect_type</span><span class="p">)</span>
+            <span class="n">effect</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect_data</span><span class="o">.</span><span class="n">effect_type</span><span class="p">)</span>
             <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">effected_tiles</span><span class="p">)</span>
 
         <span class="c1"># end the turn</span>

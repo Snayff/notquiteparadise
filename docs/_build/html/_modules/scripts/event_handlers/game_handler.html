@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.event_handlers.pub_sub_hub &mdash; NotQuiteParadise 0.0.1 documentation</title>
+  <title>scripts.event_handlers.game_handler &mdash; NotQuiteParadise 0.0.1 documentation</title>
   
 
   
@@ -154,76 +154,69 @@
           <div role="main" class="">
 
 	    <div id="content" class="hfeed entry-container hentry">
-  <h1>Source code for scripts.event_handlers.pub_sub_hub</h1><div class="highlight"><pre>
-<span></span>
+  <h1>Source code for scripts.event_handlers.game_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
 
-<div class="viewcode-block" id="EventHub"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.pub_sub_hub.EventHub">[docs]</a><span class="k">class</span> <span class="nc">EventHub</span><span class="p">:</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">GameEventTypes</span><span class="p">,</span> <span class="n">GameStates</span>
+<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.turn_manager</span> <span class="k">import</span> <span class="n">turn</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.game_manager</span> <span class="k">import</span> <span class="n">game</span>
+<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="k">import</span> <span class="n">ChangeGameStateEvent</span><span class="p">,</span> <span class="n">EndTurnEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="k">import</span> <span class="n">Subscriber</span>
+
+
+<div class="viewcode-block" id="GameHandler"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.game_handler.GameHandler">[docs]</a><span class="k">class</span> <span class="nc">GameHandler</span><span class="p">(</span><span class="n">Subscriber</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Event hub to handle the interactions between events and subscribers</span>
+<span class="sd">    Handle core Game related actions, driven by events. Turn changes exist here, too.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">subscriber</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subscriber</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">subscriber</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="p">[</span><span class="n">event</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">subscriber</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
-        <span class="c1"># loop every event and notify every subscriber</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
-            <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="p">[]):</span>
-                <span class="n">sub</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Publisher"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.pub_sub_hub.Publisher">[docs]</a><span class="k">class</span> <span class="nc">Publisher</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class to create events and log them with the event hub</span>
-<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_hub</span> <span class="o">=</span> <span class="n">event_hub</span>
+        <span class="n">Subscriber</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;game_handler&quot;</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_hub</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="c1"># log that event has been received</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.name}</span><span class="s2"> received </span><span class="si">{event.topic}</span><span class="s2">:</span><span class="si">{event.event_type}</span><span class="s2">...&quot;</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">EXIT</span><span class="p">:</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">))</span>
 
-<div class="viewcode-block" id="Subscriber"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.pub_sub_hub.Subscriber">[docs]</a><span class="k">class</span> <span class="nc">Subscriber</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class to set default behaviour for handlers listening for events</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_hub</span> <span class="o">=</span> <span class="n">event_hub</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">END_TURN</span><span class="p">:</span>
+            <span class="n">turn</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">time_spent</span><span class="p">)</span>
+            <span class="n">turn</span><span class="o">.</span><span class="n">next_turn</span><span class="p">()</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_hub</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">CHANGE_GAME_STATE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transition_to_another_game_state</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">new_game_state</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_hub</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.pub_sub_hub.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Events to cause top level actions to take place</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Event.__init__"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.pub_sub_hub.Event.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+<div class="viewcode-block" id="GameHandler.transition_to_another_game_state"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.game_handler.GameHandler.transition_to_another_game_state">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">transition_to_another_game_state</span><span class="p">(</span><span class="n">new_game_state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transition to another game state as specified by the event.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            event_type ():</span>
-<span class="sd">            topic ():</span>
+<span class="sd">            new_game_state (GameStates):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_type</span> <span class="o">=</span> <span class="n">event_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span></div></div>
+        <span class="k">if</span> <span class="n">new_game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">GAME_INITIALISING</span><span class="p">:</span>
+            <span class="c1"># transition to post-initialisation game state</span>
+            <span class="c1"># TODO - set default post-init game state</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">EndTurnEvent</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">player</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># trigger new turn actions (entity queue) fresh</span>
 
+        <span class="k">elif</span> <span class="n">new_game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">:</span>
+            <span class="c1"># if turn holder is the player then update to player turn</span>
+            <span class="k">if</span> <span class="n">turn</span><span class="o">.</span><span class="n">turn_holder</span> <span class="o">==</span> <span class="n">world</span><span class="o">.</span><span class="n">player</span><span class="p">:</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">PLAYER_TURN</span><span class="p">))</span>
+            <span class="c1"># if turn holder is not player and we aren&#39;t already in enemy turn then update to enemy turn</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">ENEMY_TURN</span><span class="p">))</span>
+
+        <span class="c1"># handle wasted attempt to change the game state</span>
+        <span class="k">if</span> <span class="n">new_game_state</span> <span class="o">!=</span> <span class="n">game</span><span class="o">.</span><span class="n">game_state</span><span class="p">:</span>
+            <span class="n">game</span><span class="o">.</span><span class="n">update_game_state</span><span class="p">(</span><span class="n">new_game_state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; new game state </span><span class="si">{new_game_state}</span><span class="s2"> is same as current&quot;</span> \
+                         <span class="n">f</span><span class="s2">&quot; </span><span class="si">{game.game_state}</span><span class="s2"> so state not updated.&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div></div>
 </pre></div>
 
 	    </div>

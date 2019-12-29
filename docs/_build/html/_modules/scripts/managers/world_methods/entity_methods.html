@@ -60,12 +60,12 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../core.html#module-scripts.core.library_of_alexandria">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
@@ -98,12 +98,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ui_elements.html">UI Elements</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#templates">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#module-scripts.ui_elements.colours">Colours</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#module-scripts.ui_elements.entity_info">Entity Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#module-scripts.ui_elements.message_log">Message Log</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#module-scripts.ui_elements.palette">Palette</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#module-scripts.ui_elements.skill_bar">Skill Bar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#module-scripts.ui_elements.targeting_overlay">Targeting Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#colours">Colours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#entity-info">Entity Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#message-log">Message Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#palette">Palette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#skill-bar">Skill Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui_elements.html#targeting-overlay">Targeting Overlay</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../world.html">World</a><ul>
@@ -168,7 +168,7 @@
 <span class="kn">from</span> <span class="nn">scripts.components.race</span> <span class="k">import</span> <span class="n">Race</span>
 <span class="kn">from</span> <span class="nn">scripts.components.savvy</span> <span class="k">import</span> <span class="n">Savvy</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span>
-<span class="kn">from</span> <span class="nn">scripts.global_singletons.data_library</span> <span class="k">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="k">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
 
@@ -184,7 +184,7 @@
         <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
 
-<div class="viewcode-block" id="EntityMethods.get_blocking_entity_at_location"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity_at_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_blocking_entity_at_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityMethods.get_blocking_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_blocking_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Args:</span>
@@ -194,6 +194,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Entity: returns entity if there is one, else None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - change to just get the entity</span>
         <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">)</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span>
 
@@ -279,7 +280,7 @@
         <span class="n">tile_is_blocked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">is_tile_blocking_movement</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
                                                                                 <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction_y</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tile_is_blocked</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_blocking_entity_at_location</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tile_is_blocked</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_blocking_entity</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
                                                                           <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction_y</span><span class="p">)):</span>
             <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> found a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
@@ -303,9 +304,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">max_path_length</span> <span class="o">=</span> <span class="mi">25</span>
-        <span class="kn">from</span> <span class="nn">scripts.global_singletons.managers</span> <span class="k">import</span> <span class="n">world_manager</span>
-        <span class="n">game_map</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">game_map</span>
-        <span class="n">entities</span> <span class="o">=</span> <span class="n">world_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_all_entities</span><span class="p">()</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
+        <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">game_map</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_all_entities</span><span class="p">()</span>
         <span class="n">entity_to_move</span> <span class="o">=</span> <span class="n">start_entity</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">target_entity</span>
 
