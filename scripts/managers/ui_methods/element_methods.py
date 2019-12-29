@@ -3,10 +3,9 @@ import pygame
 from typing import Tuple, List
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.managers.world_manager import world
-from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog
-from scripts.ui.ui_elements.pgui_entity_info import PGEntityInfo
+from scripts.ui.ui_elements.entity_info import EntityInfo
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
@@ -48,7 +47,7 @@ class ElementMethods:
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
         rect = pygame.Rect((x, y), (width, height))
-        info = PGEntityInfo(rect, self.manager.Gui)
+        info = EntityInfo(rect, self.manager.Gui)
         self.add_ui_element(UIElementTypes.ENTITY_INFO.name, info)
 
     def init_skill_bar(self):
