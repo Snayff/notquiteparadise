@@ -1,7 +1,5 @@
 import logging
-
 import pygame
-
 from scripts.core.constants import GameStates, VisualInfo
 
 
@@ -36,3 +34,6 @@ class GameManager:
 
         log_string = f"Game_state updated from {self.previous_game_state} to {self.game_state}"
         logging.info(log_string)
+
+
+game = GameManager()

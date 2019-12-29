@@ -1,7 +1,7 @@
 import logging
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers, AfflictionLifespan
-from scripts.global_singletons.data_library import library
+from scripts.core.constants import AfflictionCategory, AfflictionTriggers
+from scripts.core.library import library
 from scripts.world.entity import Entity
 
 
@@ -34,12 +34,12 @@ class Affliction:
         log_string = f"Triggering effects in {self.name}"
         logging.info( log_string)
 
-        from scripts.global_singletons.managers import world_manager
+        from scripts.managers.world_manager import world
         data = library.get_affliction_data(self.name)
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
-            effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
-            effected_tile = world_manager.Map.get_tile(self.affected_entity.x, self.affected_entity.y)
+            effect = world.Skill.create_effect(self, effect_data.effect_type)
+            effected_tile = world.Map.get_tile(self.affected_entity.x, self.affected_entity.y)
             effect.trigger([effected_tile])
 

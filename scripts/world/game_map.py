@@ -23,8 +23,8 @@ class GameMap:
 
         # TODO remove - only for test
         if self.width > 10 and self.height > 10:
-            from scripts.global_singletons.managers import world_manager
-            world_manager.Map.set_terrain_on_tile(self.tiles[0][5], TargetTags.WALL)
-            world_manager.Map.set_terrain_on_tile(self.tiles[10][2], TargetTags.WALL)
-            world_manager.Map.add_aspect_to_tile(self.tiles[0][2], "bog")
+            from scripts.managers.world_manager import world
+            world.Map.set_terrain_on_tile(self.tiles[0][5], TargetTags.WALL)
+            world.Map.set_terrain_on_tile(self.tiles[10][2], TargetTags.WALL)
+            world.Map.add_aspect_to_tile(self.tiles[0][2], "bog")
 

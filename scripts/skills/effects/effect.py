@@ -3,8 +3,6 @@ import logging
 
 from scripts.core.constants import EffectTypes
 
-from scripts.global_singletons.event_hub import publisher
-
 
 class Effect:
     """

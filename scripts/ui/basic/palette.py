@@ -1,5 +1,5 @@
 
-from scripts.ui_elements.colours import Colour
+from scripts.ui.basic.colours import Colour
 
 class Palette:
     """
@@ -19,11 +19,11 @@ class Palette:
         # debug
         self.debug_font_colour = colour.primary.lightest
         self.message_log = self.MessageLogPalette()
-        self.game_map = self.GameMapPalette()
         self.entity_info = self.EntityInfoPalette()
         self.targeting_overlay = self.TargetingOverlayPalette()
         self.skill_bar = self.SkillBarPalette()
         self.entity_queue = self.EntityQueuePalette()
+        self.camera = self.CameraPalette()
 
     class MessageLogPalette:
         """
@@ -54,18 +54,6 @@ class Palette:
             self.hyperlink = colour.black
             self.tooltip_text = colour.white
             self.tooltip_background = colour.black
-
-    class GameMapPalette:
-        """
-        The palette for the map
-
-        Attributes:
-            border (Colour): Colour of the game map border
-        """
-        def __init__(self):
-            colour = Colour()
-            self.background = colour.black
-            self.border = colour.complement.darker
 
     class EntityInfoPalette:
         """
@@ -107,3 +95,17 @@ class Palette:
             self.background = colour.black
             self.border = colour.complement.darker
             self.text_default = colour.white
+
+    class CameraPalette:
+        """
+        The palette for the camera
+        """
+        def __init__(self):
+            colour = Colour()
+            self.background = colour.black
+            self.border = colour.complement.darker
+            self.skill_border = colour.complement.lighter
+            self.text_default = colour.white
+            self.selected_tile_border = colour.tertiary.neutral + (127,)  # add's alpha
+            self.overlay_border = colour.secondary.neutral + (50,)
+            self.overlay = colour.secondary.lighter + (50,)

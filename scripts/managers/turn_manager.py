@@ -1,9 +1,8 @@
 import logging
 from typing import Dict, Tuple
 
-from scripts.core.constants import GameStates
-from scripts.events.game_events import ChangeGameStateEvent, EndRoundEvent
-from scripts.global_singletons.event_hub import publisher
+from scripts.events.game_events import EndRoundEvent
+from scripts.core.event_hub import publisher
 from scripts.world.entity import Entity
 
 
@@ -37,11 +36,11 @@ class TurnManager:
         logging.info(f"Building a new turn queue...")
 
         # create a turn queue from the entities list
-        from scripts.global_singletons.managers import world_manager
-        entities = world_manager.Entity.get_all_entities()
+        from scripts.managers.world_manager import world
+        entities = world.Entity.get_all_entities()
 
         for entity in entities:
-            if entity.ai or entity == world_manager.player:
+            if entity.ai or entity == world.player:
                 self.turn_queue[entity] = entity.actor.time_of_next_action
 
         # get the next entity in the queue
@@ -113,3 +112,6 @@ class TurnManager:
         self.round += 1
 
         logging.debug(f"It is now round {self.round}.")
+
+
+turn = TurnManager()

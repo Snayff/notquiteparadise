@@ -6,7 +6,7 @@ from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
 from typing import List, Tuple
-from scripts.global_singletons.data_library import library
+from scripts.core.library import library
 
 
 class MapMethods:
@@ -104,28 +104,38 @@ class MapMethods:
         else:
             return False
 
-    def get_tile(self, tile_x, tile_y):
+    def get_tile(self, row: int = 0, col: int = 0, tile_pos_string: str = ""):
         """
         Get the tile at the specified location
 
         Args:
-            tile_x(int): x position of tile
-            tile_y(int): y position of tile
+            row(int): row of tile
+            col(int): column of tile
+            tile_pos_string (str): expects "#tile(x,y)"
 
         Returns:
             Tile: the tile at the location
         """
         game_map = self.get_game_map()
 
-        return game_map.tiles[tile_x][tile_y]
+        if tile_pos_string:
+            cleaned_pos = tile_pos_string.replace("#tile", "")
+            _row, _col = cleaned_pos.split(",")
+            _row = int(_row)
+            _col = int(_col)
+        else:
+            _row = row
+            _col = col
 
-    def get_tiles(self, start_tile_x, start_tile_y, coords):
+        return game_map.tiles[_row][_col]
+
+    def get_tiles(self, start_tile_col, start_tile_row, coords):
         """
         Get multiple tiles based on starting position and coordinates given
 
         Args:
-            start_tile_x (int):
-            start_tile_y (int):
+            start_tile_col (int):
+            start_tile_row (int):
             coords (list[Tuple]): List of tuples holding x y. E.g. (x, y)
 
         Returns:
@@ -135,8 +145,8 @@ class MapMethods:
         tiles = []
 
         for coord in coords:
-            tile_x = coord[0] + start_tile_x
-            tile_y = coord[1] + start_tile_y
+            tile_x = coord[0] + start_tile_col
+            tile_y = coord[1] + start_tile_row
 
             # make sure it is in bounds
             if self.is_tile_in_bounds(tile_x, tile_y):

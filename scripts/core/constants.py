@@ -3,7 +3,7 @@ from enum import Enum, auto
 
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
-
+ICON_SIZE = 64
 
 class VisualInfo:
     """
@@ -363,6 +363,19 @@ class MouseButtons(Enum):
     LEFT_BUTTON = auto()
     RIGHT_BUTTON = auto()
     MIDDLE_BUTTON = auto()
+    WHEEL_UP = auto()
+    WHEEL_DOWN = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+class InputStates(Enum):
+    PRESSED = auto()
+    RELEASED = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -382,6 +395,25 @@ class UIElementTypes(Enum):
     SKILL_BAR = auto()
     ENTITY_QUEUE = auto()
     CAMERA = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
+
+
+class Directions(Enum):
+    UPLEFT = (-1, -1)
+    UP = (0, -1)
+    UPRIGHT = (1, -1)
+    LEFT = (-1, 0)
+    CENTRE = (0, 0)
+    RIGHT = (1, 0)
+    DOWNLEFT = (-1, 1)
+    DOWN = (0, 1)
+    DOWNRIGHT = (1, 1)
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

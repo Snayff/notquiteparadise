@@ -1,7 +1,7 @@
 
 from scripts.events.game_events import EndTurnEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.library import library
+from scripts.core.event_hub import publisher
 
 
 class Skill:
@@ -27,17 +27,17 @@ class Skill:
         Args:
             target_pos (tuple): x y of the target
         """
-        from scripts.global_singletons.managers import world_manager
+        from scripts.managers.world_manager import world
         data = library.get_skill_data(self.skill_tree_name, self.name)
 
         target_x, target_y = target_pos
 
-        coords = world_manager.Skill.create_shape(data.shape, data.shape_size)
-        effected_tiles = world_manager.Map.get_tiles(target_x, target_y, coords)
+        coords = world.Skill.create_shape(data.shape, data.shape_size)
+        effected_tiles = world.Map.get_tiles(target_x, target_y, coords)
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
-            effect = world_manager.Skill.create_effect(self, effect_data.effect_type)
+            effect = world.Skill.create_effect(self, effect_data.effect_type)
             effect.trigger(effected_tiles)
 
         # end the turn

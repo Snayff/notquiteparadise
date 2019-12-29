@@ -2,8 +2,8 @@
 import logging
 from typing import List
 
-from scripts.core.constants import AfflictionCategory, AfflictionTriggers, EffectTypes, AfflictionLifespan
-from scripts.global_singletons.data_library import library
+from scripts.core.constants import AfflictionTriggers, EffectTypes, AfflictionLifespan
+from scripts.core.library import library
 from scripts.skills.affliction import Affliction
 from scripts.world.entity import Entity
 
@@ -60,7 +60,7 @@ class AfflictionMethods:
     def create_effect(self, owner, effect_type):
         """
         Create an effect and assign an owner.
-        Wrapper for the create effect under world_manager.Skill.
+        Wrapper for the create effect under world.Skill.
 
         Args:
             owner (object): Skill or Affliction

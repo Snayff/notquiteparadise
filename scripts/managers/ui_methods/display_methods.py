@@ -1,6 +1,7 @@
 
 from typing import Tuple
 from scripts.core.constants import VisualInfo
+import pygame
 
 
 class DisplayMethods:
@@ -20,9 +21,18 @@ class DisplayMethods:
         # TODO - allow for selection by player but only multiples of base (16:9)
         self.screen_scaling_mod_x = self.desired_width // VisualInfo.BASE_WINDOW_WIDTH
         self.screen_scaling_mod_y = self.desired_height // VisualInfo.BASE_WINDOW_HEIGHT
-        import pygame
         self.window = pygame.display.set_mode((self.desired_width, self.desired_height))
-        self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT))
+        self.main_surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT),
+                                           pygame.SRCALPHA)
+
+        self.init_display_config()
+
+    def init_display_config(self):
+        """
+        Initialise display settings.
+        """
+        pygame.display.set_caption("Not Quite Paradise")
+        # pygame.display.set_icon() # TODO - add window icon
 
     def get_screen_scaling_mod(self):
         """

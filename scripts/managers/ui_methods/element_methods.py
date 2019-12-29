@@ -1,16 +1,14 @@
 import logging
-from typing import Tuple
-
 import pygame
-
-from scripts.core.constants import UIElementTypes, SkillShapes
-from scripts.global_singletons.data_library import library
-from scripts.ui_elements.camera import Camera
-from scripts.ui_elements.entity_info import SelectedEntityInfo
-from scripts.ui_elements.entity_queue import EntityQueue
-from scripts.ui_elements.message_log import MessageLog
-from scripts.ui_elements.skill_bar import SkillBar
-from scripts.ui_elements.targeting_overlay import TargetingOverlay
+from typing import Tuple, List
+from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
+from scripts.managers.world_manager import world
+from scripts.ui.ui_elements.camera import Camera
+from scripts.ui.ui_elements.message_log import MessageLog
+from scripts.ui.ui_elements.entity_info import EntityInfo
+from scripts.ui.ui_elements.skill_bar import SkillBar
+from scripts.world.entity import Entity
+from scripts.world.tile import Tile
 
 
 class ElementMethods:
@@ -24,122 +22,61 @@ class ElementMethods:
     def __init__(self, manager):
         from scripts.managers.ui_manager import UIManager
         self.manager = manager  # type: UIManager
-
         self.elements = {}  # list of all init'd ui elements
+
+    ############### INIT ################
 
     def init_message_log(self):
         """
-        Initialise the message log ui element.
+        Initialise the text log ui element.
         """
-        self.elements[UIElementTypes.MESSAGE_LOG.name] = MessageLog()
+        width = 400
+        height = 100
+        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
+        rect = pygame.Rect((x, y), (width, height))
+        message_log = MessageLog(rect, self.manager.Gui)
+        self.add_ui_element(UIElementTypes.MESSAGE_LOG.name, message_log)
 
     def init_entity_info(self):
         """
-        Initialise the selected entity info ui element
+        Initialise the selected entity info ui element.
         """
-        self.elements[UIElementTypes.ENTITY_INFO.name] = SelectedEntityInfo()
-
-    def init_targeting_overlay(self):
-        """
-        Initialise the targeting_overlay
-        """
-        self.elements[UIElementTypes.TARGETING_OVERLAY.name] = TargetingOverlay()
+        width = 200
+        height = 500
+        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
+        rect = pygame.Rect((x, y), (width, height))
+        info = EntityInfo(rect, self.manager.Gui)
+        self.add_ui_element(UIElementTypes.ENTITY_INFO.name, info)
 
     def init_skill_bar(self):
         """
-        Initialise the skill bar
+        Initialise the skill bar.
         """
-        self.elements[UIElementTypes.SKILL_BAR.name] = SkillBar()
-
-    def init_entity_queue(self):
-        """
-        Initialise the entity queue
-        """
-        self.elements[UIElementTypes.ENTITY_QUEUE.name] = EntityQueue()
-
-        from scripts.global_singletons.managers import turn_manager
-        if turn_manager:
-            self.update_entity_queue()
+        width = 80
+        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        x = VisualInfo.BASE_WINDOW_WIDTH - width
+        y = 2
+        rect = pygame.Rect((x, y), (width, height))
+        skill_bar = SkillBar(rect, self.manager.Gui)
+        self.add_ui_element(UIElementTypes.SKILL_BAR.name, skill_bar)
 
     def init_camera(self):
         """
-        Initialise the camera
+        Initialise the camera.
         """
-        self.elements[UIElementTypes.CAMERA.name] = Camera()
+        rows = 10
+        cols = 15
+        width = cols * TILE_SIZE
+        height = rows * TILE_SIZE
+        x = 5
+        y = 5
+        rect = pygame.Rect((x, y), (width, height))
+        camera = Camera(rect, self.manager.Gui, rows, cols)
+        self.add_ui_element(UIElementTypes.CAMERA.name, camera)
 
-    def set_element_visibility(self, element_type, visible):
-        """
-        Update whether an element is visible.
-
-        Args:
-            element_type (UIElementTypes): 
-            visible (bool):
-        """
-        try:
-            element = self.elements[element_type.name]
-            element.is_visible = visible
-        except KeyError:
-            logging.debug(f"Tried to set {element_type.name} to {visible} but key doesn't exist.")
-
-    def draw_visible_elements(self):
-        """
-        Draw the visible ui elements based on is_visible attribute of the element
-        """
-        # TODO - add handling for dirty
-
-        surface = self.manager.Display.get_main_surface()
-
-        for key, element in self.elements.items():
-            if element.is_visible:
-                element.draw(surface)
-
-        # resize the surface to the desired resolution
-        scaled_surface = pygame.transform.scale(surface, self.manager.Display.get_desired_resolution())
-        window = self.manager.Display.get_window()
-        window.blit(scaled_surface, (0, 0))
-
-        # update the display
-        pygame.display.flip()  # make sure to do this as the last drawing element in a frame
-
-    def set_selected_entity(self, entity):
-        """
-        Set the selected entity
-
-        Args:
-            entity(Entity):
-        """
-        self.elements[UIElementTypes.ENTITY_INFO.name].selected_entity = entity
-
-    def set_skill_being_targeted(self, skill):
-        """
-        Set the skill that the player is currently targeting
-
-        Args:
-            skill (Skill):
-        """
-        self.elements[UIElementTypes.TARGETING_OVERLAY.name].skill_being_targeted = skill
-
-    def set_selected_tile(self, tile):
-        """
-        Update the tile currently selected in the targeting overlay. Must be in the highlighted range.
-
-        Args:
-            tile(Tile):
-        """
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
-
-        if tile in targeting_overlay.tiles_in_range_and_fov:
-            targeting_overlay.selected_tile = tile
-
-    def set_tiles_in_targeting_overlay(self, tiles):
-        """
-        Set the tiles to be shown in the targeting overlay
-
-        Args:
-            tiles (list[Tiles]):
-        """
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
-        targeting_overlay.tiles_in_range_and_fov = tiles
+    ################ ELEMENT ###################
 
     def get_ui_element(self, element_type):
         """
@@ -151,7 +88,10 @@ class ElementMethods:
         Returns:
             any: ui element
         """
-        return self.elements[element_type.name]
+        try:
+            return self.elements[element_type.name]
+        except KeyError:
+            return None
 
     def get_ui_elements(self):
         """
@@ -162,124 +102,17 @@ class ElementMethods:
         """
         return self.elements
 
-    def get_skill_being_targeted(self):
+    def add_ui_element(self, element_name, element):
         """
-        Get the skill being targeted (held in targeting overlay).
-
-        Returns:
-            Skill:
-        """
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
-        return targeting_overlay.skill_being_targeted
-
-    def update_targeting_overlays_tiles_in_range_and_fov(self):
-        """
-        Update list of valid tiles within range based on currently selected skill's range.
-        """
-        skill_being_targeted = self.get_skill_being_targeted()
-
-        # if there is a skill being targeted
-        if skill_being_targeted:
-
-            skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
-            skill_range = skill_data.range
-
-            from scripts.global_singletons.managers import world_manager
-            tiles = world_manager.FOV.get_tiles_in_range_and_fov_of_player(skill_range)
-
-            self.set_tiles_in_targeting_overlay(tiles)
-
-    def update_targeting_overlays_tiles_in_skill_effect_range(self):
-        """
-        Update the list of Tiles for those effected by the skill effect range. Based on selected skill.
-        """
-        # TODO - convert to a set method and set via an event
-        targeting_overlay = self.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
-
-        # if there is a skill being targeted
-        if targeting_overlay.skill_being_targeted:
-
-            # clear current tiles
-            targeting_overlay.tiles_in_skill_effect_range = []
-
-            # get the skill data
-            data = library.get_skill_data(targeting_overlay.skill_being_targeted.skill_tree_name,
-                                          targeting_overlay.skill_being_targeted.name)
-
-            from scripts.global_singletons.managers import world_manager
-            coords = world_manager.Skill.create_shape(data.shape, data.shape_size)
-            effected_tiles = world_manager.Map.get_tiles(targeting_overlay.selected_tile.x,
-                                                         targeting_overlay.selected_tile.y, coords)
-
-            targeting_overlay.tiles_in_skill_effect_range = effected_tiles
-
-    def update_skill_bars_icons(self):
-        """
-        Get the player`s known skills to show in the skill bar.
-        """
-        # TODO - convert to a set and set via en event
-        skill_bar = self.get_ui_element(UIElementTypes.SKILL_BAR)
-
-        # update info
-        from scripts.global_singletons.managers import world_manager
-        player = world_manager.player
-
-        # if the player has been init'd update skill bar
-        if player:
-            for counter, skill in enumerate(player.actor.known_skills):
-
-                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
-                skill_icon = pygame.image.load("assets/skills/" + skill_data.icon).convert_alpha()
-
-                # catch any images not the right size and resize them
-                if skill_icon.get_size() != (skill_bar.skill_icon_size, skill_bar.skill_icon_size):
-                    icon = pygame.transform.smoothscale(skill_icon, (skill_bar.skill_icon_size,
-                            skill_bar.skill_icon_size))
-                else:
-                    icon = skill_icon
-
-                skill_bar.skill_containers[counter].skill_icon = icon
-
-    def update_entity_queue(self):
-        """
-        Get info from the turn_manager and update the entity queue to be displayed
-        """
-        # TODO - convert to a set and set via en event
-        entity_queue = self.get_ui_element(UIElementTypes.ENTITY_QUEUE)
-
-        # clear current queue
-        entity_queue.entity_queue.clear()
-
-        counter = 0
-
-        # loop entities in turn queue, up to max to show
-        from scripts.global_singletons.managers import turn_manager
-        for entity, time in turn_manager.turn_queue.items():
-            if counter < entity_queue.max_entities_to_show:
-                icon = entity.icon
-
-                # catch any images not the right size and resize them
-                if icon.get_size() != (entity_queue.entity_icon_size, entity_queue.entity_icon_size):
-                    icon = pygame.transform.smoothscale(icon, (entity_queue.entity_icon_size,
-                        entity_queue.entity_icon_size))
-
-                entity_queue.entity_queue.append((icon, entity.name))
-
-                counter += 1
-
-            else:
-                break
-
-    def set_tiles_in_camera(self, tiles):
-        """
-        Set the tiles to be drawn by the camera based on the camera size.
+        Add ui element to the list of all elements.
 
         Args:
-            tiles (list[Tile]): all of the tiles to draw.
+            element_name ():
+            element ():
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        self.elements[element_name] = element
 
-        camera.tiles_to_draw = tiles
+    ############## CAMERA ###################
 
     def is_target_pos_in_camera_edge(self, target_pos: Tuple):
         """
@@ -292,27 +125,118 @@ class ElementMethods:
             bool:
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        player_x, player_y = target_pos
+        if camera:
+            player_x, player_y = target_pos
 
-        edge_start_x = camera.x
-        edge_end_x = camera.x + camera.width
-        edge_start_y = camera.y
-        edge_end_y = camera.y + camera.height
+            edge_start_x = camera.start_tile_col
+            edge_end_x = camera.start_tile_col + camera.columns
+            edge_start_y = camera.start_tile_row
+            edge_end_y = camera.start_tile_row + camera.rows
 
-        if edge_start_x <= player_x < edge_start_x + camera.edge_size:
-            print("in left")
-            return True
-        elif edge_end_x >= player_x > edge_end_x - camera.edge_size:
-            print("in right")
-            return True
-        elif edge_start_y <= player_y < edge_start_y + camera.edge_size:
-            print("in up")
-            return True
-        elif edge_end_y >= player_y > edge_end_y - camera.edge_size:
-            print("in down")
-            return True
+            if edge_start_x <= player_x < edge_start_x + camera.edge_size:
+                return True
+            elif edge_end_x >= player_x > edge_end_x - camera.edge_size:
+                return True
+            elif edge_start_y <= player_y < edge_start_y + camera.edge_size:
+                return True
+            elif edge_end_y >= player_y > edge_end_y - camera.edge_size:
+                return True
+            else:
+                return False
         else:
+            logging.warning(f"Tried to check target pos in Camera but key not found. Is it init'd?")
             return False
+
+    def move_camera(self, move_x, move_y):
+        """
+        Increment camera's drawn tiles in the given direction. N.B. Physical position on screen does not change.
+
+        Args:
+            move_x ():
+            move_y ():
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        if camera:
+            from scripts.managers.world_manager import world
+            game_map = world.Map.get_game_map()
+
+            # clamp function: max(low, min(n, high))
+            camera.start_tile_col = max(0, min(camera.start_tile_col + move_x, game_map.width))
+            camera.start_tile_row = max(0, min(camera.start_tile_row + move_y, game_map.height))
+        else:
+            logging.warning(f"Tried to move Camera but key not found. Is it init'd?")
+
+    def update_cameras_tiles(self):
+        """
+        Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        if camera:
+            tiles = []
+
+            for x in range(camera.start_tile_col, camera.start_tile_col + camera.columns):
+                for y in range(camera.start_tile_row, camera.start_tile_row + camera.rows):
+                    if world.FOV.is_tile_in_fov(x, y):
+                        tiles.append(world.Map.get_tile(x, y))
+
+            camera.set_tiles(tiles)
+        else:
+            logging.warning(f"Tried to set camera tiles in Camera but key not found. Is it init'd?")
+
+    def update_camera_game_map(self):
+        """
+        Update the camera game map to show what is in the tiles held by the camera.
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        if camera:
+            camera.update_game_map()
+
+    def update_camera_grid(self):
+        """
+        Update the camera's grid. Controls tile hover highlighting.
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        if camera:
+            camera.update_grid()
+        else:
+            logging.warning(f"Tried to update camera grid in Camera move but key not found. Is it init'd?")
+
+    def set_player_tile(self, tile: Tile):
+        """
+        Set the player tile in the Camera ui element.
+
+        Args:
+            tile ():
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        if camera:
+            camera.set_player_tile(tile)
+        else:
+            logging.warning(f"Tried to set player tile in Camera but key not found. Is it init'd?")
+
+    def set_overlay_visibility(self, is_visible: bool):
+        """
+        Set the visibility of the targeting overlay in the Camera.
+
+        Args:
+            is_visible ():
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera.set_overlay_visibility(is_visible)
+
+    def set_overlay_directions(self, directions: List):
+        """
+        Set the overlay with possible targeting directions.
+
+        Args:
+            directions (): List of Directions
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera.set_overlay(directions)
 
     def should_camera_move(self, start_pos: Tuple, target_pos: Tuple):
         """
@@ -329,80 +253,91 @@ class ElementMethods:
         target_x, target_y = target_pos
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
-        edge_start_x = camera.x
-        edge_end_x = camera.x + camera.width
-        edge_start_y = camera.y
-        edge_end_y = camera.y + camera.height
+        # if camera has been init'd
+        if camera:
+            edge_start_x = camera.start_tile_col
+            edge_end_x = camera.start_tile_col + camera.columns
+            edge_start_y = camera.start_tile_row
+            edge_end_y = camera.start_tile_row + camera.rows
 
-        start_pos_in_edge = self.is_target_pos_in_camera_edge(start_pos)
-        target_pos_in_edge = self.is_target_pos_in_camera_edge(target_pos)
+            start_pos_in_edge = self.is_target_pos_in_camera_edge(start_pos)
+            target_pos_in_edge = self.is_target_pos_in_camera_edge(target_pos)
 
-        # are we currently in the edge (e.g. edge of world)
-        if start_pos_in_edge:
+            # are we currently in the edge (e.g. edge of world)
+            if start_pos_in_edge:
 
-            # will we still be in the edge after we move?
-            if target_pos_in_edge:
-                dir_x = target_x - start_x
-                dir_y = target_y - start_y
+                # will we still be in the edge after we move?
+                if target_pos_in_edge:
+                    dir_x = target_x - start_x
+                    dir_y = target_y - start_y
 
-                # are we moving to a worse position?
-                if edge_start_x <= start_x < edge_start_x + camera.edge_size:
-                    # player is on the left side, are we moving left?
-                    if dir_x < 0:
-                        print("moving left")
-                        return True
-                if edge_end_x > start_x >= edge_end_x - camera.edge_size:
-                    # player is on the right side, are we moving right?
-                    if 0 < dir_x:
-                        print("moving right")
-                        return True
-                if edge_start_y <= start_y < edge_start_y + camera.edge_size:
-                    # player is on the up side, are we moving up?
-                    if dir_y < 0:
-                        print("moving up")
-                        return True
-                if edge_end_y > start_y >= edge_end_y - camera.edge_size:
-                    # player is on the down side, are we moving down?
-                    if 0 < dir_y:
-                        print("moving down")
-                        return True
+                    # are we moving to a worse position?
+                    if edge_start_x <= start_x < edge_start_x + camera.edge_size:
+                        # player is on the left side, are we moving left?
+                        if dir_x < 0:
+                            return True
+                    if edge_end_x > start_x >= edge_end_x - camera.edge_size:
+                        # player is on the right side, are we moving right?
+                        if 0 < dir_x:
+                            return True
+                    if edge_start_y <= start_y < edge_start_y + camera.edge_size:
+                        # player is on the up side, are we moving up?
+                        if dir_y < 0:
+                            return True
+                    if edge_end_y > start_y >= edge_end_y - camera.edge_size:
+                        # player is on the down side, are we moving down?
+                        if 0 < dir_y:
+                            return True
 
-        elif target_pos_in_edge:
-            # we are moving into the edge
-            return True
+            elif target_pos_in_edge:
+                # we are moving into the edge
+                return True
 
+            else:
+                return False
         else:
-            return False
+            logging.warning(f"Tried to check if Camera should move but key not found. Is it init'd?")
 
-    def move_camera(self, move_x, move_y):
+    ############## ENTITY INFO ###################
+
+    def set_selected_entity(self, entity: Entity):
         """
-        Increment camera's drawn tiles in the given direction. N.B. Physical position on screen does not change.
+        Set the selected entity and show it.
 
         Args:
-            move_x ():
-            move_y ():
+            entity(Entity):
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
-        from scripts.global_singletons.managers import world_manager
-        game_map = world_manager.Map.get_game_map()
+        if entity_info:
+            entity_info.set_entity(entity)
+            entity_info.show()
+        else:
+            logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
-        # clamp function: max(low, min(n, high))
-        camera.x = max(0, min(camera.x + move_x, game_map.width))
-        camera.y = max(0, min(camera.y + move_y, game_map.height))
-
-    def update_cameras_tiles_to_draw(self):
+    def hide_entity_info(self):
         """
-        Retrieve the tiles to draw within view of the camera
+        Hide the entity info ui element.
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
-        coords = []
+        entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
-        for x in range(camera.x, camera.x + camera.width):
-            for y in range(camera.y, camera.y + camera.height):
-                coords.append((x, y))
+        if entity_info:
+            entity_info.cleanse()
+        else:
+            logging.warning(f"Tried to cleanse EntityInfo but key not found. Is it init'd?")
 
-        from scripts.global_singletons.managers import world_manager
-        # use 0,0 to stop the camera double jumping due to converting back and forth from world and physical space
-        tiles = world_manager.Map.get_tiles(0, 0, coords)
-        self.set_tiles_in_camera(tiles)
+    ############## MESSAGE LOG ###################
+
+    def add_to_message_log(self, message):
+        """
+        Add a text to the message log. Includes processing of the text.
+
+        Args:
+            message (str):
+        """
+        try:
+            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+            message_log.add_message(message)
+
+        except AttributeError:
+            logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")

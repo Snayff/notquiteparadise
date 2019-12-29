@@ -8,6 +8,14 @@
           <option value="E128" />
           <option value="W292" />
           <option value="W391" />
+          <option value="E266" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyShadowingBuiltinsInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredNames">
+        <list>
+          <option value="input" />
         </list>
       </option>
     </inspection_tool>

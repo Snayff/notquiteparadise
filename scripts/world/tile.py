@@ -25,16 +25,16 @@ class Tile:
         self.terrain = None
         self.aspects = {}
 
-        from scripts.global_singletons.managers import world_manager
+        from scripts.managers.world_manager import world
 
         if terrain:
-            world_manager.Map.set_terrain_on_tile(self, terrain)
+            world.Map.set_terrain_on_tile(self, terrain)
 
         if aspect:
-            world_manager.Map.add_aspect_to_tile(self, aspect)
+            world.Map.add_aspect_to_tile(self, aspect)
 
         if entity:
-            world_manager.Map.set_entity_on_tile(self, entity)
+            world.Map.set_entity_on_tile(self, entity)
 
     @property
     def is_floor(self):

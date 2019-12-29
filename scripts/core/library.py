@@ -37,6 +37,71 @@ class LibraryOfAlexandria:
 
         logging.info(f"Data Library initialised.")
 
+    def recursive_replace(self, obj, key, value_to_replace, new_value):
+        """
+        Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
+
+        Args:
+            obj (object): dict, list, string, or anything else to be checked.
+            key (str): The key to look for in the object
+            value_to_replace (): The value to look for, stored against the key.
+            new_value (): The value to set.
+        """
+        if isinstance(obj, dict):
+            # Break the dict out and run recursively against the elements
+            for k, v in obj.items():
+                if k == key:
+                    # The value may be a list so handle it if so
+                    if isinstance(v, list):
+                        # Loop the list and replace the required value
+                        for index, item in enumerate(v):
+                            if item == value_to_replace:
+                                v[index] = new_value
+                    elif v == value_to_replace:
+                        obj[key] = new_value
+                else:
+                    self.recursive_replace(v, key, value_to_replace, new_value)
+
+        elif isinstance(obj, list):
+            # Break the list out and run recursively against the elements
+            for element in obj:
+                self.recursive_replace(element, key, value_to_replace, new_value)
+
+    def refresh_library_data(self):
+        """
+        Load json data into the library, convert strings to enums and dicts to data classes.
+        """
+        self.load_data_into_library()
+        self.convert_external_strings_to_internal_enums()
+        self.convert_afflictions_to_data_classes()
+        self.convert_aspects_to_data_classes()
+        self.convert_stats_to_data_classes()
+        self.convert_gods_to_data_classes()
+        self.convert_homelands_to_data_classes()
+        self.convert_savvys_to_data_classes()
+        self.convert_races_to_data_classes()
+
+    def load_data_into_library(self):
+        """
+        Load data from all external jsons to this central data library
+        """
+        import os
+        # N.B. this is set in Sphinx config when Sphinx is running
+        if "GENERATING_SPHINX_DOCS" not in os.environ:
+            self.homelands = self.load_values_from_homeland_json()
+            self.races = self.load_values_from_race_json()
+            self.savvys = self.load_values_from_savvy_json()
+            self.afflictions = self.load_values_from_affliction_json()
+            self.aspects = self.load_values_from_aspect_json()
+            self.terrains = self.load_values_from_terrain_json()
+            self.actor_template = self.load_values_from_actor_json()
+            self.stats = self.load_values_from_stat_json()
+            self.gods = self.load_values_from_gods_json()
+
+        logging.info(f"Data Library refreshed.")
+
+    ####################### CONVERT ##############################
+
     def convert_afflictions_to_data_classes(self):
         """
         Take affliction data from library and convert to data classes
@@ -383,35 +448,7 @@ class LibraryOfAlexandria:
         # Aspect:duration
         self.recursive_replace(self.aspects, "duration", "none", None)  # need to add this as duration can be none
 
-    def recursive_replace(self, obj, key, value_to_replace, new_value):
-        """
-        Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
-
-        Args:
-            obj (object): dict, list, string, or anything else to be checked.
-            key (str): The key to look for in the object
-            value_to_replace (): The value to look for, stored against the key.
-            new_value (): The value to set.
-        """
-        if isinstance(obj, dict):
-            # Break the dict out and run recursively against the elements
-            for k, v in obj.items():
-                if k == key:
-                    # The value may be a list so handle it if so
-                    if isinstance(v, list):
-                        # Loop the list and replace the required value
-                        for index, item in enumerate(v):
-                            if item == value_to_replace:
-                                v[index] = new_value
-                    elif v == value_to_replace:
-                        obj[key] = new_value
-                else:
-                    self.recursive_replace(v, key, value_to_replace, new_value)
-
-        elif isinstance(obj, list):
-            # Break the list out and run recursively against the elements
-            for element in obj:
-                self.recursive_replace(element, key, value_to_replace, new_value)
+    ####################### GET ##############################
 
     def get_terrain_data(self, terrain_name):
         """
@@ -721,38 +758,7 @@ class LibraryOfAlexandria:
 
         return attitude_data
 
-    def refresh_library_data(self):
-        """
-        Load json data into the library, convert strings to enums and dicts to data classes.
-        """
-        self.load_data_into_library()
-        self.convert_external_strings_to_internal_enums()
-        self.convert_afflictions_to_data_classes()
-        self.convert_aspects_to_data_classes()
-        self.convert_stats_to_data_classes()
-        self.convert_gods_to_data_classes()
-        self.convert_homelands_to_data_classes()
-        self.convert_savvys_to_data_classes()
-        self.convert_races_to_data_classes()
-
-    def load_data_into_library(self):
-        """
-        Load data from all external jsons to this central data library
-        """
-        import os
-        # N.B. this is set in Sphinx config when Sphinx is running
-        if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.homelands = self.load_values_from_homeland_json()
-            self.races = self.load_values_from_race_json()
-            self.savvys = self.load_values_from_savvy_json()
-            self.afflictions = self.load_values_from_affliction_json()
-            self.aspects = self.load_values_from_aspect_json()
-            self.terrains = self.load_values_from_terrain_json()
-            self.actor_template = self.load_values_from_actor_json()
-            self.stats = self.load_values_from_stat_json()
-            self.gods = self.load_values_from_gods_json()
-
-        logging.info(f"Data Library refreshed.")
+    ####################### LOAD ##############################
 
     @staticmethod
     def load_values_from_affliction_json():
@@ -862,3 +868,6 @@ class LibraryOfAlexandria:
             data = json.load(file)
 
         return data
+
+
+library = LibraryOfAlexandria()

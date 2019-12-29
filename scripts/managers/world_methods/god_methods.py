@@ -3,7 +3,7 @@ import random
 from enum import Enum
 from typing import List, Tuple
 
-from scripts.global_singletons.data_library import library
+from scripts.core.library import library
 from scripts.world.god import God
 
 
@@ -32,7 +32,7 @@ class GodMethods:
 
     def add_god_to_central_list(self, god):
         """
-        Add a god to the world_manager list
+        Add a god to the world list
 
         Args:
             god (God):

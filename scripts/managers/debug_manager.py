@@ -1,10 +1,10 @@
 
 import logging
 
-from scripts.ui_elements.colours import Colour
-from scripts.ui_elements.palette import Palette
+from scripts.ui.basic.colours import Colour
+from scripts.ui.basic.palette import Palette
 from scripts.core.constants import TILE_SIZE
-from scripts.core.fonts import Font
+from scripts.ui.basic.fonts import Font
 
 
 class DebugManager:
@@ -36,16 +36,16 @@ class DebugManager:
         """
         Draw the debug info
         """
-        from scripts.global_singletons.managers import ui_manager
-        surface = ui_manager.Display.get_main_surface()
+        from scripts.managers.ui_manager import ui
+        surface = ui.Display.get_main_surface()
 
         font = self.font
         font_size = font.size
 
         # render tile coords
         if self.show_tile_xy:
-            from scripts.global_singletons.managers import world_manager
-            panel = world_manager.game_map.panel
+            from scripts.managers.world_manager import world
+            panel = world.game_map.panel
 
             for tile_x in range(0, panel.width, TILE_SIZE):
                 for tile_y in range(0, panel.height, TILE_SIZE):
@@ -68,28 +68,28 @@ class DebugManager:
         self.messages = []
 
         if self.show_game_time:
-            from scripts.global_singletons.managers import turn_manager
-            msg = f"Game time is: {turn_manager.time}, Round: {turn_manager.round}, time in round: " \
-                  f" {turn_manager.round_time}"
+            from scripts.managers.turn_manager import turn
+            msg = f"Game time is: {turn.time}, Round: {turn.round}, time in round: " \
+                  f" {turn.round_time}"
             self.messages.append(msg)
 
         if self.show_fps:
-            from scripts.global_singletons.managers import game_manager
-            clock = game_manager.internal_clock
+            from scripts.managers.game_manager import game
+            clock = game.internal_clock
             fps = str(int(clock.get_fps()))
             msg = f"FPS : {fps}"
             self.messages.append(msg)
 
         if self.show_mouse_pos:
-            from scripts.global_singletons.managers import ui_manager
-            pos = ui_manager.Mouse.get_scaled_mouse_pos()
+            from scripts.managers.ui_manager import ui
+            pos = ui.Mouse.get_scaled_mouse_pos()
             msg = f"Abs mouse pos : {pos}, "
 
             offset_x = 0
             offset_y = 0
             current_rect = ""
 
-            for key, ui_object in ui_manager.visible_elements.items():
+            for key, ui_object in ui.visible_elements.items():
                 if hasattr(ui_object, "panel"):
                     if ui_object.panel.rect.collidepoint(pos):
                         offset_x = ui_object.panel.x
@@ -101,8 +101,8 @@ class DebugManager:
                 self.messages.append(msg)
 
         if self.show_game_state:
-            from scripts.global_singletons.managers import game_manager
-            msg = f"Game state: {game_manager.game_state}"
+            from scripts.managers.game_manager import game
+            msg = f"Game state: {game.game_state}"
             self.messages.append(msg)
 
     def set_visibility(self, visible):
@@ -113,3 +113,6 @@ class DebugManager:
             visible (bool): Whether debug info is visible
         """
         self.visible = visible
+
+
+debug = DebugManager()

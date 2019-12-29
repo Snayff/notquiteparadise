@@ -1,13 +1,12 @@
 import logging
 from typing import List
 
-from scripts.core.constants import TargetTags, MessageEventTypes, SecondaryStatTypes, \
-    HitTypes, DamageTypes, PrimaryStatTypes, HitValues, HitModifiers, EffectTypes
+from scripts.core.constants import TargetTags, MessageEventTypes, HitTypes, DamageTypes, PrimaryStatTypes, HitModifiers, EffectTypes
 from scripts.events.entity_events import DieEvent
 
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.library import library
+from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
 from scripts.world.aspect import Aspect
 from scripts.world.entity import Entity
@@ -54,8 +53,8 @@ class DamageEffect(Effect):
             defender = tile.entity
 
             # check that the tags match
-            from scripts.global_singletons.managers import world_manager
-            if world_manager.Skill.has_required_tags(tile, data.required_tags, attacker):
+            from scripts.managers.world_manager import world
+            if world.Skill.has_required_tags(tile, data.required_tags, attacker):
                 # if it needs to be another entity then it can't be looking at itself
                 if TargetTags.OTHER_ENTITY in data.required_tags:
                     if attacker != defender:
@@ -64,9 +63,9 @@ class DamageEffect(Effect):
                         if is_guaranteed_hit:
                             hit_type = HitTypes.HIT
                         else:
-                            to_hit_score = world_manager.Skill.calculate_to_hit_score(defender,
+                            to_hit_score = world.Skill.calculate_to_hit_score(defender,
                                                                 data.accuracy, data.stat_to_target, attacker)
-                            hit_type = world_manager.Skill.get_hit_type(to_hit_score)
+                            hit_type = world.Skill.get_hit_type(to_hit_score)
 
                         # calculate damage
                         damage = self.calculate_damage(defender, hit_type, data, attacker)
@@ -91,7 +90,7 @@ class DamageEffect(Effect):
                                 attacker_name = self.owner.name
                             msg = f"{attacker_name} {hit_type_desc} {defender.name} for {damage}."
                             publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-                            # TODO - add the damage type to the message and replace the type with an icon
+                            # TODO - add the damage type to the text and replace the type with an icon
                             # TODO - add the explanation of the damage roll to a tooltip
 
                             # trigger tile interactions caused by damage type

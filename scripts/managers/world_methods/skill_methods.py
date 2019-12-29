@@ -6,8 +6,8 @@ from typing import List
 from scripts.core.constants import MessageEventTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
     EffectTypes, SkillShapes
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.library import library
+from scripts.core.event_hub import publisher
 from scripts.skills.effects.add_aspect import AddAspectEffect
 from scripts.skills.effects.affect_stat import AffectStatEffect
 from scripts.skills.skill import Skill
@@ -42,11 +42,11 @@ class SkillMethods:
         Returns:
             bool: True if can use the skill. Else False.
         """
-        from scripts.global_singletons.managers import world_manager
+        from scripts.managers.world_manager import world
 
-        start_tile = world_manager.Map.get_tile(entity.x, entity.y)
+        start_tile = world.Map.get_tile(entity.x, entity.y)
         target_x, target_y = target_pos
-        target_tile = world_manager.Map.get_tile(target_x, target_y)
+        target_tile = world.Map.get_tile(target_x, target_y)
         skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
         # check we have everything we need and if so use the skill
@@ -54,7 +54,7 @@ class SkillMethods:
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
             if self.can_afford_cost(entity, resource_type, resource_cost):
-                distance = world_manager.Entity.get_chebyshev_distance_between_tiles(start_tile, target_tile)
+                distance = world.Entity.get_chebyshev_distance_between_tiles(start_tile, target_tile)
                 skill_range = skill_data.range
                 if distance <= skill_range:
                     return True

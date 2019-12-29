@@ -1,14 +1,15 @@
-
 import logging
 from typing import Tuple
 
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, MouseButtons, TILE_SIZE, MessageEventTypes, UIElementTypes
+    UIEventTypes, TILE_SIZE, MessageEventTypes, UIElementTypes
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.event_hub import publisher
-from scripts.global_singletons.managers import game_manager, ui_manager, world_manager
+from scripts.core.event_hub import publisher
+from scripts.managers.ui_manager import ui
+from scripts.managers.world_manager import world
+from scripts.managers.game_manager import game
 from scripts.event_handlers.pub_sub_hub import Subscriber
 
 
@@ -32,34 +33,48 @@ class UiHandler(Subscriber):
                 button = event.button_pressed
                 mouse_x = event.mouse_x
                 mouse_y = event.mouse_y
-                clicked_element = ui_manager.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
-                game_state = game_manager.game_state
+                #clicked_element = ui.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
+                game_state = game.game_state
 
                 # Selecting an entity
-                if button == MouseButtons.RIGHT_BUTTON and clicked_element == UIElementTypes.CAMERA:
-                    self.attempt_to_set_selected_entity(mouse_x, mouse_y)
+                # TODO - move to camera.handle_input
+                # if button == MouseButtons.RIGHT_BUTTON and clicked_element == UIElementTypes.CAMERA:
+                #     self.attempt_to_set_selected_entity(mouse_x, mouse_y)
+                #
+                # # Selecting a skill
+                # TODO - move to skill_bar.handle_input
+                # # elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.SKILL_BAR:
+                # #     self.attempt_to_trigger_targeting_mode(mouse_x, mouse_y)
+                #
+                # # using a selected skill
+                # TODO - move to camera.handle_input
+                # elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.CAMERA and game_state \
+                #         == GameStates.TARGETING_MODE:
+                #     self.attempt_to_use_targeted_skill()
 
-                # Selecting a skill
-                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.SKILL_BAR:
-                    self.attempt_to_trigger_targeting_mode(mouse_x, mouse_y)
-
-                # using a selected skill
-                elif button == MouseButtons.LEFT_BUTTON and clicked_element == UIElementTypes.CAMERA  and game_state \
-                        == GameStates.TARGETING_MODE:
-                    self.attempt_to_use_targeted_skill()
+                # NEW APPROACH - remove once all migrated  ############
+                # pass input to element
+                # if clicked_element == UIElementTypes.MESSAGE_LOG:
+                #     ui_element = ui.Element.get_ui_element(clicked_element)
+                #     ui_element.handle_input(button)
+                # elif clicked_element == UIElementTypes.SKILL_BAR:
+                #     ui_element = ui.Element.get_ui_element(clicked_element)
+                #     ui_element.handle_input(button)
 
         if event.topic == EventTopics.ENTITY:
 
-            # if an entity acts then hide the entity info element
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
-
             # update UI based on entity action taken
             if event.event_type == EntityEventTypes.LEARN:
-                ui_manager.Element.update_skill_bars_icons()
+                pass
+                #ui.Element.update_skill_bars_icons()
             elif event.event_type == EntityEventTypes.DIE:
-                ui_manager.Element.update_entity_queue()
+                #ui.Element.update_entity_queue()
+                self.update_camera()
             elif event.event_type == EntityEventTypes.MOVE:
-                self.update_camera(event.start_pos, event.target_pos)
+                if event.entity == world.Entity.get_player():
+                    self.update_camera(event.start_pos, event.target_pos)
+                else:
+                    self.update_camera()
 
         if event.topic == EventTopics.GAME:
             if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
@@ -73,12 +88,14 @@ class UiHandler(Subscriber):
 
                 # new turn updates
                 elif event.new_game_state == GameStates.NEW_TURN:
-                    ui_manager.Element.update_entity_queue()
+                    #ui.Element.update_entity_queue()
+                    pass
 
                 # if the previous game state was targeting mode we must be moving to something else, therefore the
                 # overlay is no longer needed
-                if game_manager.previous_game_state == GameStates.TARGETING_MODE:
-                    ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
+                if game.previous_game_state == GameStates.TARGETING_MODE:
+                    pass
+                    # ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
 
     @staticmethod
     def attempt_to_set_selected_entity(mouse_x, mouse_y):
@@ -89,18 +106,10 @@ class UiHandler(Subscriber):
             mouse_x (int):
             mouse_y (int):
         """
-        tile_pos = ui_manager.Mouse.get_relative_scaled_mouse_pos(mouse_x, mouse_y)
+        tile_pos = ui.Mouse.get_relative_scaled_mouse_pos(mouse_x, mouse_y)
         tile_x = tile_pos[0] // TILE_SIZE
         tile_y = tile_pos[1] // TILE_SIZE
-        entity = world_manager.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
-
-        if entity:
-            ui_manager.Element.set_selected_entity(entity)
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
-            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
-        else:
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
+        entity = world.Entity.get_entity_in_fov_at_tile(tile_x, tile_y)
 
     @staticmethod
     def attempt_to_trigger_targeting_mode(mouse_x, mouse_y):
@@ -111,11 +120,12 @@ class UiHandler(Subscriber):
             mouse_x (int):
             mouse_y (int):
         """
-        relative_mouse_pos = ui_manager.Mouse.get_relative_scaled_mouse_pos(mouse_x, mouse_y)
-        skill_number = ui_manager.Mouse.get_skill_index_from_skill_clicked(relative_mouse_pos[0], relative_mouse_pos[1])
+        relative_mouse_pos = ui.Mouse.get_relative_scaled_mouse_pos(mouse_x, mouse_y)
+        # TODO - replace skill get
+        skill_number = 0  # ui.Mouse.get_skill_index_from_skill_clicked(relative_mouse_pos[0], relative_mouse_pos[1])
 
         # if we clicked a skill in the skill bar create the targeting overlay
-        player = world_manager.player
+        player = world.player
         skill = player.actor.known_skills[skill_number]
 
         if skill:
@@ -130,20 +140,20 @@ class UiHandler(Subscriber):
         Args:
             skill_to_be_used ():
         """
-        from scripts.global_singletons.managers import world_manager
         # get info for initial selected tile
         # TODO - get nearest entity in range, use player only if nothing in range
-        player = world_manager.player
-        tile = world_manager.Map.get_tile(player.x, player.y)
+        player = world.player
+        tile = world.Map.get_tile(player.x, player.y)
 
         # set the info needed to draw the overlay
-        ui_manager.Element.set_skill_being_targeted(skill_to_be_used)
-        ui_manager.Element.update_targeting_overlays_tiles_in_range_and_fov()
-        ui_manager.Element.set_selected_tile(tile)
-        ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
+        # TODO - re add the overlay when set up using ui widgets
+        # ui.Element.set_skill_being_targeted(skill_to_be_used)
+        # ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
+        # ui.Element.set_selected_tile(tile)
+        # ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
 
         # show the overlay
-        ui_manager.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
+        # ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
 
         # show the entity info
         self.trigger_entity_info(tile)
@@ -156,23 +166,22 @@ class UiHandler(Subscriber):
         Args:
             tile (Tile):
         """
-        entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
-        ui_manager.Element.set_selected_entity(entity)
-        ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
+        entity = world.Entity.get_blocking_entity(tile.x, tile.y)
+        ui.Element.set_selected_entity(entity)
+        #ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
 
     @staticmethod
     def attempt_to_use_targeted_skill():
         """
         Check if player can use the selected skill on the selected target and if so trigger use.
         """
-        selected_tile = ui_manager.targeting_overlay.selected_tile
-        player = world_manager.player
-        skill_being_targeted = ui_manager.targeting_overlay.skill_being_targeted
+        selected_tile = ui.targeting_overlay.selected_tile
+        player = world.player
+        skill_being_targeted = ui.targeting_overlay.skill_being_targeted
 
-        if world_manager.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y),
+        if world.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y),
                                              skill_being_targeted):
-            publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                             skill_being_targeted)))
+            publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x, selected_tile.y))))
         else:
             # we already checked player can afford when triggering targeting mode so must be wrong target
             msg = f"You can't do that there!"
@@ -188,25 +197,32 @@ class UiHandler(Subscriber):
             target_pos ():
         """
         if target_pos:
-            outcome = ui_manager.Element.should_camera_move(start_pos, target_pos)
-            if outcome:
-                target_x, target_y = target_pos
+            should_move_camera = ui.Element.should_camera_move(start_pos, target_pos)
+            target_x, target_y = target_pos
+
+            if should_move_camera:
                 start_x, start_y = start_pos
                 move_x = target_x - start_x
                 move_y = target_y - start_y
-                ui_manager.Element.move_camera(move_x, move_y)
+                ui.Element.move_camera(move_x, move_y)
 
-        ui_manager.Element.update_cameras_tiles_to_draw()
+            # update player's pos in camera
+            tile = world.Map.get_tile(target_x, target_y)
+            ui.Element.set_player_tile(tile)
+
+        ui.Element.update_cameras_tiles()
+        ui.Element.update_camera_game_map()
+        ui.Element.update_camera_grid()
 
     def init_ui(self):
         """
         Initialise the UI
         """
-        # show ui
-        ui_manager.Element.set_element_visibility(UIElementTypes.CAMERA, True)
-        ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
-        ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_QUEUE, True)
-        ui_manager.Element.set_element_visibility(UIElementTypes.SKILL_BAR, True)
+        ui.Element.init_camera()
+        ui.Element.init_skill_bar()
+        # ui.Element.init_entity_queue()
+        ui.Element.init_message_log()
+        ui.Element.init_entity_info()
 
         # update camera
         self.update_camera()

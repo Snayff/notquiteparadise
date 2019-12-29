@@ -1,13 +1,15 @@
 import logging
 import pygame
 
-from scripts.core.constants import InputModes, GameStates, TILE_SIZE, MessageEventTypes, MouseButtons, UIElementTypes
+from scripts.core.constants import InputModes, GameStates, MessageEventTypes, MouseButtons, UIElementTypes, Directions
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
 from scripts.events.ui_events import ClickUIEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.library import library
+from scripts.core.event_hub import publisher
+from scripts.managers.ui_manager import ui
+from scripts.managers.world_manager import world
 
 
 class InputManager:
@@ -15,12 +17,16 @@ class InputManager:
     Manager of Input Functions and data, such as which input method and recent key presses
     """
 
+    # TODO - clean up input passing (enums? the dict?)
+
     def __init__(self):
         self.input_mode = InputModes.MOUSE_AND_KB
         self.input_values = {
             "left_click": False,
             "right_click": False,
             "middle_click": False,
+            "wheel_up": False,
+            "wheel_down": False,
             "mouse_moved": False,
             "up": False,
             "down": False,
@@ -38,17 +44,18 @@ class InputManager:
             "skill2": False,
             "skill3": False,
             "skill4": False,
-            "refresh_data": False
+            "refresh_data": False,
+            "button_pressed": False
 
         }
 
         logging.info(f"InputManager initialised.")
 
-    def update(self):
+    def update(self, event):
         """
         Get the input and process it
         """
-        self.update_input_values()
+        self.update_input_values(event)
 
         # log input for debug
         input_received = ""
@@ -62,7 +69,7 @@ class InputManager:
 
         self.process_input()
 
-    def update_input_values(self):
+    def update_input_values(self, event):
         """
         Get the pygame event and update the input_values dictionary
 
@@ -70,23 +77,27 @@ class InputManager:
             dict: `self.input_values` containing True for all appropriate inputs.
 
         """
-        # gets mouse and key input as list of events
-        input_events = pygame.event.get()
+        # TODO - rebuild to use the local dict to handle key binding and then send off result to be processed directly
+        #  consider bundling the event, too (tuple?)
+        #  as only one input taken at a time, what about checking the key assignment's then passing a tuple of a
+        #  contant denoting the input and the event
 
         # reset all input values
         for key in self.input_values:
             self.input_values[key] = False
 
         # check all input events
-        for event in input_events:
+        self.check_mouse_input(event)
 
-            self.check_mouse_input(event)
+        # is a KB KEY pressed?
+        if event.type == pygame.KEYDOWN:
+            self.check_kb_directional_input(event)
+            self.check_kb_interaction_input(event)
+            self.check_kb_general_input(event)
 
-            # is a KB KEY pressed?
-            if event.type == pygame.KEYDOWN:
-                self.check_kb_directional_input(event)
-                self.check_kb_interaction_input(event)
-                self.check_kb_general_input(event)
+        if event.type == pygame.USEREVENT:
+            if event.user_type == "ui_button_pressed":
+                self.process_button_input(event)
 
     def check_mouse_input(self, event):
         """
@@ -96,14 +107,17 @@ class InputManager:
             event (pygame.event):
         """
         # update MOUSE input values based on event
-
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if pygame.mouse.get_pressed()[0]:
+            if event.button == 1:
                 self.input_values["left_click"] = True
-            elif pygame.mouse.get_pressed()[1]:
+            elif event.button == 2:
                 self.input_values["middle_click"] = True
-            elif pygame.mouse.get_pressed()[2]:
+            elif event.button == 3:
                 self.input_values["right_click"] = True
+            elif event.button == 4:
+                self.input_values["wheel_up"] = True
+            elif event.button == 5:
+                self.input_values["wheel_down"] = True
 
         if event.type == pygame.MOUSEMOTION:
             self.input_values["mouse_moved"] = True
@@ -162,6 +176,9 @@ class InputManager:
         elif event.key == pygame.K_ESCAPE:
             self.input_values["cancel"] = True
         elif event.key == pygame.K_TAB:
+            ui.Element.set_overlay_visibility(True)
+            ui.Element.set_overlay_directions([Directions.DOWN, Directions.RIGHT])
+            ui.Element.update_camera_grid()
             self.input_values["debug_toggle"] = True
         elif event.key == pygame.K_F5:
             self.input_values["refresh_data"] = True
@@ -170,10 +187,13 @@ class InputManager:
         """
         Process all input from input_values. Calls multiple sub methods based on current GameState.
         """
-        from scripts.global_singletons.managers import game_manager
-        game_state = game_manager.game_state
+        from scripts.managers.game_manager import game
+        game_state = game.game_state
 
         self.process_generic_input()
+
+        if self.input_values["button_pressed"]:
+            self.process_button_input()
 
         if game_state == GameStates.PLAYER_TURN:
             self.process_player_turn_input()
@@ -184,30 +204,66 @@ class InputManager:
         elif game_state == GameStates.PLAYER_DEAD:
             pass
 
+    def process_button_input(self, event):
+        """
+        Process input of a gui button
+
+        Args:
+            event ():
+        """
+        if event.ui_object_id[:-1] == "#skill_button":
+            print(f"button clicked(skill{event.ui_object_id[-1:]})")
+
+        elif event.ui_object_id[:len("#tile")] == "#tile":
+            print(f"button clicked(grid.tile{ event.ui_object_id[len('#tile'):]})")
+            tile = world.Map.get_tile(tile_pos_string=event.ui_object_id)
+            entity = world.Map.get_entity_on_tile(tile)
+            ui.Element.set_selected_entity(entity)
+
     def process_generic_input(self):
         """
         Interpret none GameState-specific actions
         """
-        if self.input_values["debug_toggle"]:
-            from scripts.global_singletons.managers import debug_manager
-            if debug_manager.visible:
-                debug_manager.set_visibility(False)
-            else:
-                debug_manager.set_visibility(True)
 
-        if self.input_values["refresh_data"]:
-            library.refresh_library_data()
-            from scripts.global_singletons.managers import ui_manager
-            ui_manager.Element.update_skill_bars_icons()
-            publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
-                                                                     "reloaded~~"))
+        pass
+        # if self.input_values["debug_toggle"]:
+        #     from scripts.managers.debug_manager import debug
+        #     if debug.visible:
+        #         debug.set_visibility(False)
+        #     else:
+        #         debug.set_visibility(True)
+        #
+        # if self.input_values["refresh_data"]:
+        #     library.refresh_library_data()
+        #     ui.Element.update_skill_bars_icons()
+        #     publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
+        #                                                              "reloaded~~"))
+        #
+        # if self.input_values["mouse_moved"]:
+        #     ui_element = ui.Mouse.get_colliding_ui_element()
+        #     # pass the input to the UI element, it will decide if it cares
+        #     if ui_element:
+        #         ui_element.handle_input(pygame.MOUSEMOTION)
+        #
+        #         # if we have updated the camera we might be over a new tile with an entity
+        #         if ui_element.element_type == UIElementTypes.CAMERA:
+        #             tile_x, tile_y = ui.Element.get_selected_tile_pos()
+        #
+        #             # don't check if we have an entity as passing none will cause the entity info to cleanse
+        #             entity = world.Entity.get_blocking_entity(tile_x, tile_y)
+        #             ui.Element.set_selected_entity(entity)
+        #
+        # # TEST ONLY
+        # if self.input_values["middle_click"]:
+        #     cam = ui.Element.get_ui_element(UIElementTypes.CAMERA)
+        #     cam.set_targeting_overlay_visibility(not cam.is_overlay_visible, [])
 
     def process_player_turn_input(self):
         """
         Interpret Player Turn actions
         """
-        from scripts.global_singletons.managers import world_manager
-        player = world_manager.player
+        from scripts.managers.world_manager import world
+        player = world.player
 
         # general actions
         if self.input_values["cancel"]:
@@ -245,17 +301,16 @@ class InputManager:
                     skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
                     # check who we are moused over
-                    from scripts.global_singletons.managers import ui_manager
-                    mouse_x, mouse_y = ui_manager.Mouse.get_relative_scaled_mouse_pos()
-                    target_x, target_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
+                    from scripts.managers.ui_manager import ui
+                    mouse_x, mouse_y = ui.Mouse.get_relative_scaled_mouse_pos()
+                    target_x, target_y = world.Map.convert_xy_to_tile(mouse_x, mouse_y)
 
                     # create a skill with a target, or activate targeting mode
-                    if world_manager.Skill.can_use_skill(player, (target_x, target_y), skill):
-                        publisher.publish((UseSkillEvent(player, (target_x, target_y), skill)))
+                    if world.Skill.can_use_skill(player, (target_x, target_y), skill):
+                        publisher.publish((UseSkillEvent(player, skill, (target_x, target_y))))
                     else:
                         # can't use skill, is it due to being too poor?
-                        if world_manager.Skill.can_afford_cost(player, skill_data.resource_type,
-                                                               skill_data.resource_cost):
+                        if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
                             publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
                 else:
                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, "There is nothing in that skill slot."))
@@ -264,111 +319,110 @@ class InputManager:
         """
         Interpret Targeting Mode actions
         """
-        from scripts.global_singletons.managers import world_manager
-        player = world_manager.player
-
-        from scripts.global_singletons.managers import ui_manager
-        targeting_overlay = ui_manager.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
-        selected_tile = targeting_overlay.selected_tile
-
-        # UI interactions
-        mouse_button = self.get_pressed_mouse_button()
-
-        if mouse_button:
-            publisher.publish(ClickUIEvent(mouse_button))
-
-        mouse_x, mouse_y = ui_manager.Mouse.get_scaled_mouse_pos()
-        mouse_tile_x, mouse_tile_y = world_manager.Map.convert_xy_to_tile(mouse_x, mouse_y)
-
-        # cancel out
-        if self.input_values["cancel"] or self.input_values["right_click"]:
-            from scripts.global_singletons.managers import game_manager
-            previous_state = game_manager.previous_game_state
-            publisher.publish(ChangeGameStateEvent(previous_state))
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
-            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
-
-        # if direction isn't 0 then we need to move selected_tile
-        # TODO - move logic to event
-        direction_x, direction_y = self.get_pressed_direction()
-
-        if direction_x != 0 or direction_y != 0:
-            tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
-            tile = world_manager.Map.get_tile(tile_x, tile_y)
-            ui_manager.Element.update_targeting_overlays_tiles_in_range_and_fov()()
-            ui_manager.targeting_overlay.set_selected_tile(tile)
-            ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
-            entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
-            ui_manager.Element.set_selected_entity(entity)
-
-        # if mouse moved update selected tile
-        # TODO - move logic to event
-        if self.input_values["mouse_moved"]:
-            tile = world_manager.Map.get_tile(mouse_tile_x, mouse_tile_y)
-            ui_manager.Element.update_targeting_overlays_tiles_in_range_and_fov()
-            ui_manager.Element.set_selected_tile(tile)
-            ui_manager.Element.update_targeting_overlays_tiles_in_skill_effect_range()
-            entity = world_manager.Entity.get_blocking_entity_at_location(tile.x, tile.y)
-            ui_manager.Element.set_selected_entity(entity)
-            ui_manager.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
-            ui_manager.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
-
-        #  SKILL USAGE
-        skill_number = self.get_pressed_skill_number()
-        targeting_overlay = ui_manager.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
-        skill_being_targeted = targeting_overlay.skill_being_targeted
-
-        # have we confirmed skill use on selected tile?
-        if self.input_values["confirm"]:
-            if world_manager.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
-                publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                                 skill_being_targeted)))
-            else:
-                # we already checked player can afford when triggering targeting mode so must be wrong target
-                msg = f"You can't do that there!"
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-        # has a skill input been pressed?
-        if skill_number != -1:
-            if skill_number <= len(player.actor.known_skills):
-                skill_selected = player.actor.known_skills[skill_number]
-
-                # if we chose a skill check if it is same one, or if we otherwise confirmed
-                if skill_being_targeted == skill_selected:
-
-                    skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
-
-                    # confirm can use skill
-                    if world_manager.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
-                        publisher.publish((UseSkillEvent(player, (selected_tile.x, selected_tile.y),
-                                                         skill_being_targeted)))
-                    else:
-                        # can't use skill, is it due to being too poor?
-                        if world_manager.Skill.can_afford_cost(player, skill_data.resource_type,
-                                                               skill_data.resource_cost):
-                            publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_being_targeted))
-                        else:
-                            # we already checked player can afford when triggering targeting mode so must be wrong target
-                            msg = f"You can't do that there!"
-                            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-                # pressed another skill so should we swap to that one?
-                elif skill_selected != player.actor.known_skills.index(skill_being_targeted):
-
-                    skill_data = library.get_skill_data(skill_selected.skill_tree_name, skill_selected.name)
-
-                    # can we afford the new skill selected?
-                    if world_manager.Skill.can_afford_cost(player, skill_data.resource_type,
-                                                           skill_data.resource_cost):
-                        # can afford so swap
-                        publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_selected))
-
-                    # can't afford so cancel targeting?
-                    else:
-                        msg = f"It seems you're too poor to do that."
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
-
-                        publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
+        pass
+        # from scripts.managers.world_manager import world
+        # player = world.player
+        #
+        # from scripts.managers.ui_manager import ui
+        # targeting_overlay = ui.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        # selected_tile = targeting_overlay.selected_tile
+        #
+        # # UI interactions
+        # mouse_button = self.get_pressed_mouse_button()
+        #
+        # if mouse_button:
+        #     publisher.publish(ClickUIEvent(mouse_button))
+        #
+        # mouse_x, mouse_y = ui.Mouse.get_scaled_mouse_pos()
+        # mouse_tile_x, mouse_tile_y = world.Map.convert_xy_to_tile(mouse_x, mouse_y)
+        #
+        # # cancel out
+        # if self.input_values["cancel"] or self.input_values["right_click"]:
+        #     from scripts.managers.game_manager import game
+        #     previous_state = game.previous_game_state
+        #     publisher.publish(ChangeGameStateEvent(previous_state))
+        #     ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, False)
+        #     ui.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, True)
+        #
+        # # if direction isn't 0 then we need to move selected_child
+        # # TODO - move logic to event
+        # direction_x, direction_y = self.get_pressed_direction()
+        #
+        # if direction_x != 0 or direction_y != 0:
+        #     tile_x, tile_y = direction_x + selected_tile.x, direction_y + selected_tile.y
+        #     tile = world.Map.get_tile(tile_x, tile_y)
+        #     ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
+        #     ui.targeting_overlay.set_selected_tile(tile)
+        #     ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
+        #     entity = world.Entity.get_blocking_entity(tile.x, tile.y)
+        #     ui.Element.set_selected_entity(entity)
+        #
+        # # if mouse moved update selected tile
+        # # TODO - move logic to event
+        # if self.input_values["mouse_moved"]:
+        #     tile = world.Map.get_tile(mouse_tile_x, mouse_tile_y)
+        #     ui.Element.update_targeting_overlays_tiles_in_range_and_fov()
+        #     ui.Element.set_selected_tile(tile)
+        #     ui.Element.update_targeting_overlays_tiles_in_skill_effect_range()
+        #     entity = world.Entity.get_blocking_entity(tile.x, tile.y)
+        #     ui.Element.set_selected_entity(entity)
+        #     ui.Element.set_element_visibility(UIElementTypes.ENTITY_INFO, True)
+        #     ui.Element.set_element_visibility(UIElementTypes.MESSAGE_LOG, False)
+        #
+        # #  SKILL USAGE
+        # skill_number = self.get_pressed_skill_number()
+        # targeting_overlay = ui.Element.get_ui_element(UIElementTypes.TARGETING_OVERLAY)
+        # skill_being_targeted = targeting_overlay.skill_being_targeted
+        #
+        # # have we confirmed skill use on selected tile?
+        # if self.input_values["confirm"]:
+        #     if world.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
+        #         publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x, selected_tile.y))))
+        #     else:
+        #         # we already checked player can afford when triggering targeting mode so must be wrong target
+        #         msg = f"You can't do that there!"
+        #         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+        #
+        # # has a skill input been pressed?
+        # if skill_number != -1:
+        #     if skill_number <= len(player.actor.known_skills):
+        #         skill_selected = player.actor.known_skills[skill_number]
+        #
+        #         # if we chose a skill check if it is same one, or if we otherwise confirmed
+        #         if skill_being_targeted == skill_selected:
+        #
+        #             skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
+        #
+        #             # confirm can use skill
+        #             if world.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
+        #                 publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x, selected_tile.y))))
+        #             else:
+        #                 # can't use skill, is it due to being too poor?
+        #                 if world.Skill.can_afford_cost(player, skill_data.resource_type,
+        #                                                        skill_data.resource_cost):
+        #                     publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_being_targeted))
+        #                 else:
+        #                     # we already checked player can afford when triggering targeting mode so must be wrong target
+        #                     msg = f"You can't do that there!"
+        #                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+        #
+        #         # pressed another skill so should we swap to that one?
+        #         elif skill_selected != player.actor.known_skills.index(skill_being_targeted):
+        #
+        #             skill_data = library.get_skill_data(skill_selected.skill_tree_name, skill_selected.name)
+        #
+        #             # can we afford the new skill selected?
+        #             if world.Skill.can_afford_cost(player, skill_data.resource_type,
+        #                                                    skill_data.resource_cost):
+        #                 # can afford so swap
+        #                 publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_selected))
+        #
+        #             # can't afford so cancel targeting?
+        #             else:
+        #                 msg = f"It seems you're too poor to do that."
+        #                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+        #
+        #                 publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
 
     def get_pressed_mouse_button(self):
         """
@@ -384,6 +438,10 @@ class InputManager:
             return MouseButtons.LEFT_BUTTON
         elif self.input_values["middle_click"]:
             return MouseButtons.MIDDLE_BUTTON
+        elif self.input_values["wheel_up"]:
+            return MouseButtons.WHEEL_UP
+        elif self.input_values["wheel_down"]:
+            return MouseButtons.WHEEL_DOWN
         else:
             return None
 
@@ -443,3 +501,6 @@ class InputManager:
             return 4
         else:
             return -1
+
+
+input = InputManager()

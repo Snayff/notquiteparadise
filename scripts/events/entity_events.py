@@ -14,7 +14,7 @@ class UseSkillEvent(Event):
         target_pos (tuple): x, y
         skill (Skill):
     """
-    def __init__(self, entity_using_skill, target_pos, skill):
+    def __init__(self, entity_using_skill, skill, target_pos=None):
         Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)
         self.entity = entity_using_skill
         self.target_pos = target_pos

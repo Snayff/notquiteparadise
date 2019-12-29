@@ -1,6 +1,6 @@
 
 from scripts.core.constants import SecondaryStatTypes
-from scripts.global_singletons.data_library import library
+from scripts.core.library import library
 
 
 class SecondaryStats:
@@ -41,8 +41,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.MAX_HP)
 
         # ensure 1 or above
@@ -78,8 +78,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.MAX_STAMINA)
 
         # ensure 1 or above
@@ -115,8 +115,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.ACCURACY)
 
         # ensure 1 or above
@@ -152,8 +152,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_BURN)
 
         # ensure 1 or above
@@ -189,8 +189,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_COLD)
 
         # ensure 1 or above
@@ -226,8 +226,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_CHEMICAL)
 
         # ensure 1 or above
@@ -263,8 +263,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_ASTRAL)
 
         # ensure 1 or above
@@ -300,8 +300,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
             self.owner.owner, SecondaryStatTypes.RESIST_MUNDANE)
 
         # ensure 1 or above
@@ -338,8 +338,8 @@ class SecondaryStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        from scripts.global_singletons.managers import world_manager
-        affliction_changes = world_manager.Affliction.get_stat_change_from_afflictions_on_entity(
+        from scripts.managers.world_manager import world
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
                 self.owner.owner, SecondaryStatTypes.SIGHT_RANGE)
 
         # ensure 1 or above

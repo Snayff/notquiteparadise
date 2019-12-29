@@ -4,13 +4,15 @@ import io
 import logging
 import pstats
 import pygame
-
 from scripts.core.constants import GameStates
-from scripts.global_singletons.managers import world_manager, game_manager, turn_manager, ui_manager, debug_manager, \
-    input_manager, start
-from scripts.global_singletons.event_hub import event_hub
-from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging, \
-    initialise_ui_elements
+from scripts.managers.input_manager import input
+from scripts.managers.ui_manager import ui
+from scripts.managers.debug_manager import debug
+from scripts.managers.turn_manager import turn
+from scripts.managers.world_manager import world
+from scripts.managers.game_manager import game
+from scripts.core.event_hub import event_hub
+from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
 
 # Project Wide to do list...
@@ -19,7 +21,6 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
 # TODO - change from use fps for timing to delta time
-# TODO - draw dirty for map section (use an array to store ref to dirty x,y OR dirty flag on each tile)
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
 # TODO - Review closure
@@ -30,12 +31,14 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - use seed for RNG
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
+# TODO - standardise use of xy and tile xy. xy for pixels, tile xy for grid
 
 
 def main():
     """
-    The container for the game initialisation and game loop
+    The entry for the game initialisation and game loop
     """
+
     # initialise logging
     initialise_logging()
 
@@ -44,16 +47,7 @@ def main():
     profiler = cProfile.Profile()
     profiler.enable()
 
-    #################################################
-    # alternate approach to init the managers
-    # TODO - determine if alternate approach is worthwhile
-    start()
-    from scripts.global_singletons import managers
-    managers.game_manager2.update_game_state(GameStates.PLAYER_TURN)
-    #################################################
-
     # initialise the game
-    initialise_ui_elements()
     initialise_event_handlers()
     initialise_game()
 
@@ -72,25 +66,30 @@ def game_loop():
     """
     The core game loop, handling input, rendering and logic.
     """
-    while not game_manager.game_state == GameStates.EXIT_GAME:
 
-        # limit frames
-        game_manager.internal_clock.tick(60)
+    while not game.game_state == GameStates.EXIT_GAME:
 
-        if game_manager.game_state == GameStates.ENEMY_TURN:
-            turn_manager.turn_holder.ai.take_turn()
+        # get delta time and set frame rate with .tick()
+        delta_time = game.internal_clock.tick(60) / 1000.0
 
-        # HANDLE UPDATE
-        input_manager.update()
-        game_manager.update()
-        debug_manager.update()
-        world_manager.update()
-        ui_manager.update()
+        if game.game_state == GameStates.ENEMY_TURN:
+            turn.turn_holder.ai.take_turn()
+
+        # update based on input events
+        for event in pygame.event.get():
+            input.update(event)
+            ui.process_events(event)
+
+        # allow everything to update in response to new state
+        game.update()
+        debug.update()
+        world.update()
+        ui.update(delta_time)
         event_hub.update()
 
-        # DRAW
-        debug_manager.draw()
-        ui_manager.Element.draw_visible_elements()
+        # show the new state
+        debug.draw()
+        ui.draw()
 
 
 def dump_profiling_data(profiler):

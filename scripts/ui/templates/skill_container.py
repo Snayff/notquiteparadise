@@ -1,5 +1,5 @@
 
-from scripts.ui_elements.templates.panel import Panel
+from scripts.ui.templates.panel import Panel
 
 
 class SkillContainer(Panel):
@@ -20,18 +20,18 @@ class SkillContainer(Panel):
         """
         Draw the use key for the skills
         """
-        from scripts.global_singletons.managers import ui_manager
-        font = ui_manager.Font.skill_bar
+        from scripts.managers.ui_manager import ui
+        font = ui.Font.skill_bar
         text_x = int(self.width - (font.size / 1.8))
         text_y = int(self.height - font.size * 1.2)
         text = str(self.skill_number)
-        text_colour = ui_manager.Palette.skill_bar.text_default
+        text_colour = ui.Palette.skill_bar.text_default
 
         font.render_to(self.surface, (text_x, text_y), text, text_colour)
 
     def draw_self_on_other_surface(self, surface):
         """
-        Draw the skill container on another surface
+        Draw the skill parent_widget on another surface
 
         Args:
             surface:

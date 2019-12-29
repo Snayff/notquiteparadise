@@ -1,12 +1,9 @@
 
 from scripts.core.constants import MessageEventTypes, EffectTypes
 from scripts.events.message_events import MessageEvent
-from scripts.global_singletons.data_library import library
-from scripts.global_singletons.event_hub import publisher
+from scripts.core.library import library
+from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
-from scripts.world.terrain.floor import Floor
-from scripts.world.terrain.terrain import Terrain
-from scripts.world.terrain.wall import Wall
 
 
 class ChangeTerrainEffect(Effect):
@@ -36,11 +33,11 @@ class ChangeTerrainEffect(Effect):
             data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name, self.effect_type)
 
             # that the tags match
-            from scripts.global_singletons.managers import world_manager
-            if world_manager.Skill.has_required_tags(tile, data.required_tags):
-                world_manager.Map.set_terrain_on_tile(tile, data.new_terrain)
+            from scripts.managers.world_manager import world
+            if world.Skill.has_required_tags(tile, data.required_tags):
+                world.Map.set_terrain_on_tile(tile, data.new_terrain)
 
-                # success message
+                # success text
                 entity = self.owner.owner.owner
                 msg = f"{entity.name} changed the {starting_terrain_name} to {tile.terrain.name}."
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
