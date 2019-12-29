@@ -78,7 +78,7 @@ def game_loop():
         # update based on input events
         for event in pygame.event.get():
             input.update(event)
-            ui.Gui.process_events(event)
+            ui.process_events(event)
 
         # allow everything to update in response to new state
         game.update()

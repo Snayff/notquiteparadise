@@ -35,6 +35,15 @@ class UIManager:
         # self.Element.update_elements()
         self.Gui.update(delta_time)
 
+    def process_events(self, event):
+        """
+        Process input events
+
+        Args:
+            event ():
+        """
+        self.Gui.process_events(event)
+
     def draw(self):
         """
         Draw the UI.

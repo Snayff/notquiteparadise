@@ -1,33 +1,37 @@
 import logging
-
 import pygame
 import pygame_gui
-from pygame_gui.core import UIWindow
 from pygame_gui.elements import UITextBox
 
 
-class MessageLog(UIWindow):
+class MessageLog:
     """
-    Hold text relating to the game's events, to display to the player.
+    Hold text relating to the game's events, to display to the player. Does not use UIWindow.
     """
-    def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager,):
 
+    def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager, ):
         # create empty attributes to hold state info
         self.text = ""
+        self.rect = rect
         self.text_box = None
+        self.gui_manager = manager
 
         # complete base class init
-        super().__init__(rect, manager, ["message_log"])
+        self.text_box = UITextBox(html_text=self.text, relative_rect=rect, manager=self.gui_manager,
+                         wrap_to_height=False, layer_starting_height=1, object_id="message_log")
+
+        # TODO: update to use UIWindow like other elements
+        #  inheriting from UIWindow prevents scrolling from working as focus is never applied.
 
         self.add_message("Welcome to Not Quite Paradise!")
+
         # confirm init complete
         logging.debug(f"MessageLog initialised.")
 
     def add_message(self, message: str):
         """
-        Add message to the message log.
-
-        Formatting the text is done via a subset of HTML tags. Currently supported tags are:
+        Add message to the message log. Formatting the text is done via a subset of HTML tags. Currently supported
+        tags are:
 
         <b></b> or <strong></strong> - to encase bold styled text.
         <i></i>, <em></em> or <var></var> - to encase italic styled text.
@@ -43,9 +47,9 @@ class MessageLog(UIWindow):
 
         self.text += message + "<br>"
 
-        self.text_box = UITextBox(html_text=self.text, relative_rect=self.rect, manager=self.ui_manager,
-                                  wrap_to_height=False, layer_starting_height=1,  object_id="#text_box")
-
+        self.text_box.kill()
+        self.text_box = UITextBox(html_text=self.text, relative_rect=self.rect, manager=self.gui_manager,
+                                  wrap_to_height=False, layer_starting_height=1, object_id="message_log")
 
 # REGARDING EXTENDING ON HOVER
 # You can do whatever you like by sub-classing the UITextBox class, it's just python code :)

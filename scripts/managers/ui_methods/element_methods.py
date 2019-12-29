@@ -1,6 +1,9 @@
 import logging
 import pygame
 from typing import Tuple, List
+
+from pygame_gui.elements import UITextBox
+
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.entity_info import EntityInfo
@@ -157,12 +160,13 @@ class ElementMethods:
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
-        from scripts.managers.world_manager import world
-        game_map = world.Map.get_game_map()
+        if camera:
+            from scripts.managers.world_manager import world
+            game_map = world.Map.get_game_map()
 
-        # clamp function: max(low, min(n, high))
-        camera.start_tile_col = max(0, min(camera.start_tile_col + move_x, game_map.width))
-        camera.start_tile_row = max(0, min(camera.start_tile_row + move_y, game_map.height))
+            # clamp function: max(low, min(n, high))
+            camera.start_tile_col = max(0, min(camera.start_tile_col + move_x, game_map.width))
+            camera.start_tile_row = max(0, min(camera.start_tile_row + move_y, game_map.height))
 
     def update_cameras_tiles(self):
         """
@@ -185,14 +189,17 @@ class ElementMethods:
         Update the camera game map to show what is in the tiles held by the camera.
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        camera.update_game_map()
+
+        if camera:
+            camera.update_game_map()
 
     def update_camera_grid(self):
         """
         Update the camera's grid. Controls tile hover highlighting.
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        camera.update_grid()
+        if camera:
+            camera.update_grid()
 
     def set_player_tile(self, tile: Tile):
         """
