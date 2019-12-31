@@ -28,7 +28,22 @@ class Skill:
         """
         data = library.get_skill_data(self.skill_tree_name, self.name)
 
+        # initial values
+        start_x = self.owner.x
+        start_y = self.owner.y
+        dir_x = target_direction[0]
+        dir_y = target_direction[1]
+
+        # determine travel method
+        
         # determine impact location
+        for distance in range(1, data.range):
+
+            current_x = start_x + (dir_x * distance)
+            current_y = start_y + (dir_y * distance)
+            tile = world.Map.get_tile(current_x, current_y)
+
+            # did we hit something?
 
         # determine what happens on impact
 
