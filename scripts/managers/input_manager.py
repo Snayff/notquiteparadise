@@ -316,7 +316,9 @@ class InputManager:
             button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
                 tile = world.Map.get_tile(tile_pos_string=button[1])
-                publisher.publish(UseSkillEvent(player, skill, (tile.x, tile.y)))
+                dir_x = tile.x - player.x
+                dir_y = tile.y - player.y
+                publisher.publish(UseSkillEvent(player, skill, (dir_x, dir_y)))
 
 
         # from scripts.managers.world_manager import world

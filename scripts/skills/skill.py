@@ -2,6 +2,7 @@
 from scripts.events.game_events import EndTurnEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
+from scripts.managers.world_manager import world
 
 
 class Skill:
@@ -18,17 +19,21 @@ class Skill:
         self.skill_tree_name = skill_tree_name
         self.name = skill_name
 
-        # TODO - add cooldown
-
-    def use(self, target_pos):
+    def use(self, target_direction):
         """
         Use the skill
 
         Args:
-            target_pos (tuple): x y of the target
+            target_direction (tuple): x y of the target direction
         """
-        from scripts.managers.world_manager import world
         data = library.get_skill_data(self.skill_tree_name, self.name)
+
+        # determine impact location
+
+        # determine what happens on impact
+
+        # deal with impact
+
 
         target_x, target_y = target_pos
 
