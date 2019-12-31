@@ -29,12 +29,15 @@ class UiHandler(Subscriber):
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         if event.topic == EventTopics.UI:
-            if event.event_type == UIEventTypes.CLICK_UI:
-                button = event.button_pressed
-                mouse_x = event.mouse_x
-                mouse_y = event.mouse_y
-                #clicked_element = ui.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
-                game_state = game.game_state
+            if event.event_type == UIEventTypes.SELECT_ENTITY:
+                self.select_entity(event.selected_entity)
+
+            # if event.event_type == UIEventTypes.CLICK_UI:
+            #     button = event.button_pressed
+            #     mouse_x = event.mouse_x
+            #     mouse_y = event.mouse_y
+            #     #clicked_element = ui.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
+            #     game_state = game.game_state
 
                 # Selecting an entity
                 # TODO - move to camera.handle_input
@@ -240,3 +243,13 @@ class UiHandler(Subscriber):
 
         # update camera
         self.update_camera()
+
+    @staticmethod
+    def select_entity(entity):
+        """
+        Set the selected entity
+
+        Args:
+            entity ():
+        """
+        ui.Element.set_selected_entity(entity)

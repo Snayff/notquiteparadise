@@ -5,9 +5,10 @@ from scripts.core.constants import InputModes, GameStates, MessageEventTypes, Mo
 from scripts.events.entity_events import UseSkillEvent, MoveEvent
 from scripts.events.game_events import ChangeGameStateEvent, ExitGameEvent
 from scripts.events.message_events import MessageEvent
-from scripts.events.ui_events import ClickUIEvent
+from scripts.events.ui_events import ClickUIEvent, SelectEntity
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
+from scripts.managers.game_manager import game
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 
@@ -239,7 +240,7 @@ class InputManager:
         """
         Interpret Player Turn actions
         """
-        from scripts.managers.world_manager import world
+
         player = world.player
 
         # exit game
@@ -247,11 +248,11 @@ class InputManager:
             publisher.publish(ExitGameEvent())
 
         if self.input_values["button_pressed"]:
-            button = self.get_pressed_button(event)
+            button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
                 tile = world.Map.get_tile(tile_pos_string=button[1])
                 entity = world.Map.get_entity_on_tile(tile)
-                ui.Element.set_selected_entity(entity)
+                publisher.publish(SelectEntity(entity))
 
         # # UI interactions
         # mouse_button = self.get_pressed_mouse_button()
@@ -308,7 +309,16 @@ class InputManager:
         """
         Interpret Targeting Mode actions
         """
-        pass
+        player = world.player
+        skill = game.active_skill
+
+        if self.input_values["button_pressed"]:
+            button = self.get_pressed_ui_button(event)
+            if button[0] == "tile":
+                tile = world.Map.get_tile(tile_pos_string=button[1])
+                publisher.publish(UseSkillEvent(player, skill, (tile.x, tile.y)))
+
+
         # from scripts.managers.world_manager import world
         # player = world.player
         #
@@ -493,7 +503,7 @@ class InputManager:
         else:
             return -1
 
-    def get_pressed_button(self, event):
+    def get_pressed_ui_button(self, event):
         """
         Process input of a gui button
 

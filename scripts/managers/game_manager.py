@@ -11,6 +11,7 @@ class GameManager:
         self.game_state = GameStates.GAME_INITIALISING
         self.previous_game_state = GameStates.GAME_INITIALISING
         self.internal_clock = pygame.time.Clock()
+        self.active_skill = None
 
         logging.info( f"GameManager initialised.")
 
