@@ -346,6 +346,17 @@ class SkillShapes(Enum):
 
     __hash__ = None
 
+class SkillTerrainCollisions(Enum):
+    REFLECT = auto()
+    END = auto()
+
+class SkillTravelTypes(Enum):
+    PROJECTILE = auto()
+    THROW = auto()
+
+class SkillExpiryTypes(Enum):
+    FIZZLE = auto()
+    ACTIVATE = auto()
 
 class InputModes(Enum):
     MOUSE_AND_KB = auto()

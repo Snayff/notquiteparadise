@@ -104,14 +104,14 @@ class MapMethods:
         else:
             return False
 
-    def get_tile(self, row: int = 0, col: int = 0, tile_pos_string: str = ""):
+    def get_tile(self, tile_x: int = 0, tile_y: int = 0, tile_pos_string: str = ""):
         """
-        Get the tile at the specified location
+        Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string
 
         Args:
-            row(int): row of tile
-            col(int): column of tile
-            tile_pos_string (str): expects "#tile(x,y)"
+            tile_x(int): x of tile
+            tile_y(int): y of tile
+            tile_pos_string (str): expects "x,y"
 
         Returns:
             Tile: the tile at the location
@@ -119,15 +119,14 @@ class MapMethods:
         game_map = self.get_game_map()
 
         if tile_pos_string:
-            cleaned_pos = tile_pos_string.replace("#tile", "")
-            _row, _col = cleaned_pos.split(",")
-            _row = int(_row)
-            _col = int(_col)
+            x, y = tile_pos_string.split(",")
+            x = int(x)  # str to int
+            y = int(y)
         else:
-            _row = row
-            _col = col
+            x = tile_x
+            y = tile_y
 
-        return game_map.tiles[_row][_col]
+        return game_map.tiles[x][y]
 
     def get_tiles(self, start_tile_col, start_tile_row, coords):
         """
