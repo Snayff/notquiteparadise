@@ -148,7 +148,7 @@
                 "time_cost": 20,
                 "cooldown": 0,
                 "target_directions": ["down"],
-                "range": 1,
+                "range": 5,
                 "terrain_collision": "none",
                 "travel_type": "projectile",
                 "expiry_type": "activate",
