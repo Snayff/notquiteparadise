@@ -4,7 +4,8 @@ import logging
 
 from scripts.components.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
-    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes, HitTypes
+    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
+    Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
 from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
 from scripts.skills.affliction_dataclass import AfflictionData
 from scripts.skills.skill_dataclass import SkillData
@@ -72,7 +73,7 @@ class LibraryOfAlexandria:
         Load json data into the library, convert strings to enums and dicts to data classes.
         """
         self.load_data_into_library()
-        self.convert_external_strings_to_internal_enums()
+        self.convert_external_strings_to_internal_values()
         self.convert_afflictions_to_data_classes()
         self.convert_aspects_to_data_classes()
         self.convert_stats_to_data_classes()
@@ -80,6 +81,8 @@ class LibraryOfAlexandria:
         self.convert_homelands_to_data_classes()
         self.convert_savvys_to_data_classes()
         self.convert_races_to_data_classes()
+
+        logging.info(f"Library refreshed.")
 
     def load_data_into_library(self):
         """
@@ -98,7 +101,7 @@ class LibraryOfAlexandria:
             self.stats = self.load_values_from_stat_json()
             self.gods = self.load_values_from_gods_json()
 
-        logging.info(f"Data Library refreshed.")
+        logging.info(f"Data loaded into the Library.")
 
     ####################### CONVERT ##############################
 
@@ -370,7 +373,7 @@ class LibraryOfAlexandria:
         self.gods = {}
         self.gods = converted_gods
 
-    def convert_external_strings_to_internal_enums(self):
+    def convert_external_strings_to_internal_values(self):
         """
         Where there are external values that are utilised internally convert them to the internal constant.
         """
@@ -409,7 +412,7 @@ class LibraryOfAlexandria:
                 self.recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
 
             # Effects:new_terrain
-            # plans to remove terrain from internal so dont update for all values
+            # TODO - plans to remove terrain from internal so dont update for all values
             self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
             self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
 
@@ -420,6 +423,22 @@ class LibraryOfAlexandria:
             # Skill:resource_type
             for value in SecondaryStatTypes:
                 self.recursive_replace(current_list, "resource_type", value.name.lower(), value)
+
+            # Skill:target_directions
+            for value in Directions:
+                self.recursive_replace(current_list, "target_directions", value.name.lower(), value)
+
+            # Skill:travel_type
+            for value in SkillTravelTypes:
+                self.recursive_replace(current_list, "travel_type", value.name.lower(), value)
+
+            # Skill:terrain_collision
+            for value in SkillTerrainCollisions:
+                self.recursive_replace(current_list, "terrain_collision", value.name.lower(), value)
+
+            # Skill:expiry_type
+            for value in SkillExpiryTypes:
+                self.recursive_replace(current_list, "expiry_type", value.name.lower(), value)
        
         # Affliction:category
         for value in AfflictionCategory:

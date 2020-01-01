@@ -3,6 +3,7 @@ from typing import Tuple
 
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, TILE_SIZE, MessageEventTypes, UIElementTypes, Directions
+from scripts.core.library import library
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
@@ -11,6 +12,7 @@ from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
 from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.skills.skill import Skill
 
 
 class UiHandler(Subscriber):
@@ -87,7 +89,7 @@ class UiHandler(Subscriber):
 
                 elif event.new_game_state == GameStates.TARGETING_MODE:
                     # if changing to targeting mode then turn on targeting overlay
-                    self.set_targeting_overlay(True)
+                    self.set_targeting_overlay(True, event.skill_to_be_used)
 
                 # new turn updates
                 elif event.new_game_state == GameStates.NEW_TURN:
@@ -100,11 +102,11 @@ class UiHandler(Subscriber):
                     pass
                     # ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
 
-    def set_targeting_overlay(self, is_visible: bool):
+    def set_targeting_overlay(self, is_visible: bool, skill: Skill = None):
         # update directions to either clear or use info from skill
         if is_visible:
-            directions = [Directions.RIGHT, Directions.DOWN]
-            # TODO - use directions from skill
+            data = library.get_skill_data(skill.skill_tree_name, skill.name)
+            directions = data.target_directions
         else:
             directions = []
 
