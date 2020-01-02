@@ -32,6 +32,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
 # TODO - standardise use of xy and tile xy. xy for pixels, tile xy for grid
+# TODO - convert interventions to skills, gods to entities
 
 
 def main():

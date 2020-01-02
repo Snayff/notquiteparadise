@@ -349,7 +349,8 @@ class SkillShapes(Enum):
 
 class SkillTerrainCollisions(Enum):
     REFLECT = auto()
-    END = auto()
+    ACTIVATE = auto()
+    FIZZLE = auto()
 
 class SkillTravelTypes(Enum):
     PROJECTILE = auto()
