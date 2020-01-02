@@ -2,7 +2,8 @@ import logging
 from typing import Tuple
 
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, TILE_SIZE, MessageEventTypes, UIElementTypes
+    UIEventTypes, TILE_SIZE, MessageEventTypes, UIElementTypes, Directions
+from scripts.core.library import library
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.message_events import MessageEvent
@@ -11,6 +12,7 @@ from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
 from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.skills.skill import Skill
 
 
 class UiHandler(Subscriber):
@@ -29,12 +31,15 @@ class UiHandler(Subscriber):
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         if event.topic == EventTopics.UI:
-            if event.event_type == UIEventTypes.CLICK_UI:
-                button = event.button_pressed
-                mouse_x = event.mouse_x
-                mouse_y = event.mouse_y
-                #clicked_element = ui.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
-                game_state = game.game_state
+            if event.event_type == UIEventTypes.SELECT_ENTITY:
+                self.select_entity(event.selected_entity)
+
+            # if event.event_type == UIEventTypes.CLICK_UI:
+            #     button = event.button_pressed
+            #     mouse_x = event.mouse_x
+            #     mouse_y = event.mouse_y
+            #     #clicked_element = ui.Mouse.get_colliding_ui_element_type(mouse_x, mouse_y)
+            #     game_state = game.game_state
 
                 # Selecting an entity
                 # TODO - move to camera.handle_input
@@ -82,9 +87,9 @@ class UiHandler(Subscriber):
                 if event.new_game_state == GameStates.GAME_INITIALISING:
                     self.init_ui()
 
-                # if changing to targeting mode then turn on targeting overlay
                 elif event.new_game_state == GameStates.TARGETING_MODE:
-                    self.trigger_targeting_overlay_and_entity_info(event.skill_to_be_used)
+                    # if changing to targeting mode then turn on targeting overlay
+                    self.set_targeting_overlay(True, event.skill_to_be_used)
 
                 # new turn updates
                 elif event.new_game_state == GameStates.NEW_TURN:
@@ -96,6 +101,19 @@ class UiHandler(Subscriber):
                 if game.previous_game_state == GameStates.TARGETING_MODE:
                     pass
                     # ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, False)
+
+    def set_targeting_overlay(self, is_visible: bool, skill: Skill = None):
+        # update directions to either clear or use info from skill
+        if is_visible:
+            data = library.get_skill_data(skill.skill_tree_name, skill.name)
+            directions = data.target_directions
+        else:
+            directions = []
+
+        ui.Element.set_overlay_directions(directions)
+        ui.Element.set_overlay_visibility(is_visible)
+        ui.Element.update_camera_grid()
+
 
     @staticmethod
     def attempt_to_set_selected_entity(mouse_x, mouse_y):
@@ -140,10 +158,11 @@ class UiHandler(Subscriber):
         Args:
             skill_to_be_used ():
         """
+        pass
         # get info for initial selected tile
         # TODO - get nearest entity in range, use player only if nothing in range
-        player = world.player
-        tile = world.Map.get_tile(player.x, player.y)
+        #player = world.player
+        #tile = world.Map.get_tile(player.x, player.y)
 
         # set the info needed to draw the overlay
         # TODO - re add the overlay when set up using ui widgets
@@ -156,7 +175,7 @@ class UiHandler(Subscriber):
         # ui.Element.set_element_visibility(UIElementTypes.TARGETING_OVERLAY, True)
 
         # show the entity info
-        self.trigger_entity_info(tile)
+        #self.trigger_entity_info(tile)
 
     @staticmethod
     def trigger_entity_info(tile):
@@ -226,3 +245,13 @@ class UiHandler(Subscriber):
 
         # update camera
         self.update_camera()
+
+    @staticmethod
+    def select_entity(entity):
+        """
+        Set the selected entity
+
+        Args:
+            entity ():
+        """
+        ui.Element.set_selected_entity(entity)

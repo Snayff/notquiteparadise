@@ -1,7 +1,8 @@
 
 from dataclasses import dataclass, field
 from typing import List, Dict
-from scripts.core.constants import TargetTags, SkillShapes
+from scripts.core.constants import TargetTags, SkillShapes, SkillTerrainCollisions, SkillTravelTypes, \
+    SkillExpiryTypes, Directions
 
 
 @dataclass()
@@ -9,17 +10,33 @@ class SkillData:
     """
     Data class for a skill
     """
+    # how do we know it?
     name: str = "None"
     description: str = "None"
     icon: str = "None"
-    range: int = 1
-    shape: SkillShapes = None
-    shape_size: int = 1
+
+    # what does it cost?
     resource_type: str = "None"
     resource_cost: int = 0
     time_cost: int = 0
     cooldown: int = 0
+
+    # how does it travel from the user?
+    target_directions: List[Directions] = field(default_factory=list)
+    range: int = 1
+    terrain_collision: SkillTerrainCollisions = None
+    travel_type: SkillTravelTypes = None
+
+    # when does it interact?
+    expiry_type: SkillExpiryTypes = None
     required_tags: List[TargetTags] = field(default_factory=list)
+
+    # how does it interact?
+    shape: SkillShapes = None
+    shape_size: int = 1
     effects: Dict = field(default_factory=dict)
+
+    # modifiers
+    modifiers: List = field(default_factory=list)
 
 

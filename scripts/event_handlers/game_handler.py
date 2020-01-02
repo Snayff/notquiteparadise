@@ -30,16 +30,18 @@ class GameHandler(Subscriber):
             publisher.publish(ChangeGameStateEvent(GameStates.NEW_TURN))
 
         elif event.event_type == GameEventTypes.CHANGE_GAME_STATE:
-            self.transition_to_another_game_state(event.new_game_state)
+            self.transition_to_another_game_state(event)
 
     @staticmethod
-    def transition_to_another_game_state(new_game_state):
+    def transition_to_another_game_state(event):
         """
         Transition to another game state as specified by the event.
 
         Args:
-            new_game_state (GameStates):
+            event ():
         """
+        new_game_state = event.new_game_state
+
         if new_game_state == GameStates.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
@@ -53,10 +55,14 @@ class GameHandler(Subscriber):
             else:
                 publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
-        # handle wasted attempt to change the game state
+        elif new_game_state == GameStates.TARGETING_MODE:
+            game.active_skill = event.skill_to_be_used
+
+        # update the game state to the intended state
         if new_game_state != game.game_state:
             game.update_game_state(new_game_state)
         else:
+            # handle wasted attempt to change the game state
             log_string = f"-> new game state {new_game_state} is same as current" \
                          f" {game.game_state} so state not updated."
             logging.info(log_string)

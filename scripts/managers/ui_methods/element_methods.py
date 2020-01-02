@@ -226,7 +226,10 @@ class ElementMethods:
             is_visible ():
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        camera.set_overlay_visibility(is_visible)
+        if camera:
+            camera.set_overlay_visibility(is_visible)
+        else:
+            logging.warning(f"Tried to set Camera overlay but key not found. Is it init'd?")
 
     def set_overlay_directions(self, directions: List):
         """
@@ -236,7 +239,10 @@ class ElementMethods:
             directions (): List of Directions
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
-        camera.set_overlay(directions)
+        if camera:
+            camera.set_overlay(directions)
+        else:
+            logging.warning(f"Tried to set Camera overlay directions but key not found. Is it init'd?")
 
     def should_camera_move(self, start_pos: Tuple, target_pos: Tuple):
         """

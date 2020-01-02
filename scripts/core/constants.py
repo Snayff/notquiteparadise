@@ -104,6 +104,7 @@ class UIEventTypes(Enum):
     Types of UI events
     """
     CLICK_UI = auto()
+    SELECT_ENTITY = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -346,6 +347,18 @@ class SkillShapes(Enum):
 
     __hash__ = None
 
+class SkillTerrainCollisions(Enum):
+    REFLECT = auto()
+    ACTIVATE = auto()
+    FIZZLE = auto()
+
+class SkillTravelTypes(Enum):
+    PROJECTILE = auto()
+    THROW = auto()
+
+class SkillExpiryTypes(Enum):
+    FIZZLE = auto()
+    ACTIVATE = auto()
 
 class InputModes(Enum):
     MOUSE_AND_KB = auto()

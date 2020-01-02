@@ -78,7 +78,9 @@ class EntityHandler(Subscriber):
             # check if entity blocking tile to attack
             elif entity_blocking_movement:
                 skill = entity.actor.known_skills[0]
-                publisher.publish((UseSkillEvent(entity, skill, (target_x, target_y))))
+                dir_x = target_x - entity.x
+                dir_y = target_y - entity.y
+                publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
 
             # if nothing in the way, time to move!
             elif not entity_blocking_movement and not tile_blocking_movement:
@@ -109,10 +111,20 @@ class EntityHandler(Subscriber):
         Args:
             event(EntityEvent): the event to process
         """
+        entity = event.entity
+        skill = event.skill
+        skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
-        skill_data = library.get_skill_data(event.skill.skill_tree_name, event.skill.name)
-        world.Skill.pay_resource_cost(event.entity, skill_data.resource_type, skill_data.resource_cost)
-        event.skill.use(event.target_pos)
+        # check it can be afforded
+        if world.Skill.can_afford_cost(entity, skill_data.resource_type, skill_data.resource_cost):
+            world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
+            event.skill.use(event.target_direction)
+        else:
+            # is it the player that's can't afford it?
+            if entity == world.player:
+                publisher.publish(MessageEvent(MessageEventTypes.BASIC, "You cannot afford to do that."))
+            else:
+                logging.warning(f"{entity} tried to use {skill.name}, which they can`t afford")
 
     @staticmethod
     def process_die(event):

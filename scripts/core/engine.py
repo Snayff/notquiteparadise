@@ -16,11 +16,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 
 
 # Project Wide to do list...
-# TODO - create global tooltip method - some relevant code in old message `log -
-#  when object created needs a tooltip: pass the rect and create link to a tooltip obj (ui_man?) to store and refer
-#  back to. Needs to be able to get updated strings (info not always static) and updated positions
 # TODO - swap out nose for pytest
-# TODO - change from use fps for timing to delta time
 # TODO - remember window position and resume at that place
 # TODO - move assignation of Owner to the init
 # TODO - Review closure
@@ -32,6 +28,11 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
 # TODO - standardise use of xy and tile xy. xy for pixels, tile xy for grid
+# TODO - convert interventions to skills, gods to entities
+# TODO - move skills to their own json and only hold skill names in the savvy, homeland etc.
+# TODO - add skill modifiers (blessings?)
+# TODO - ensure all skills in json have required fields
+# TODO - write tests / checking for json values
 
 
 def main():
