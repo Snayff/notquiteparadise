@@ -56,7 +56,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/core/library_of_alexandria.py" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="debugger.stepping" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -230,7 +230,7 @@
       <workItem from="1577624896406" duration="17075000" />
       <workItem from="1577795682161" duration="8560000" />
       <workItem from="1577901224166" duration="4622000" />
-      <workItem from="1577969595957" duration="7714000" />
+      <workItem from="1577969595957" duration="8252000" />
     </task>
     <servers />
   </component>
@@ -272,42 +272,42 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1576349988527" />
-    <state width="1085" height="291" key="GridCell.Tab.0.bottom" timestamp="1577982162571">
+    <state width="1085" height="291" key="GridCell.Tab.0.bottom" timestamp="1577983775894">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162571" />
-    <state width="1085" height="291" key="GridCell.Tab.0.center" timestamp="1577982162571">
+    <state width="1085" height="291" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775894" />
+    <state width="1085" height="291" key="GridCell.Tab.0.center" timestamp="1577983775894">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162571" />
-    <state width="1085" height="291" key="GridCell.Tab.0.left" timestamp="1577982162571">
+    <state width="1085" height="291" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775894" />
+    <state width="1085" height="291" key="GridCell.Tab.0.left" timestamp="1577983775894">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162571" />
-    <state width="1085" height="291" key="GridCell.Tab.0.right" timestamp="1577982162571">
+    <state width="1085" height="291" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775894" />
+    <state width="1085" height="291" key="GridCell.Tab.0.right" timestamp="1577983775894">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162571" />
-    <state width="1085" height="291" key="GridCell.Tab.1.bottom" timestamp="1577982162502">
+    <state width="1085" height="291" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775894" />
+    <state width="1085" height="291" key="GridCell.Tab.1.bottom" timestamp="1577983775895">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162502" />
-    <state width="1085" height="291" key="GridCell.Tab.1.center" timestamp="1577982162502">
+    <state width="1085" height="291" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775895" />
+    <state width="1085" height="291" key="GridCell.Tab.1.center" timestamp="1577983775894">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162502" />
-    <state width="1085" height="291" key="GridCell.Tab.1.left" timestamp="1577982162502">
+    <state width="1085" height="291" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775894" />
+    <state width="1085" height="291" key="GridCell.Tab.1.left" timestamp="1577983775894">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162502" />
-    <state width="1085" height="291" key="GridCell.Tab.1.right" timestamp="1577982162502">
+    <state width="1085" height="291" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775894" />
+    <state width="1085" height="291" key="GridCell.Tab.1.right" timestamp="1577983775895">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1085" height="291" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1577982162502" />
-    <state x="955" y="345" key="SettingsEditor" timestamp="1577635491021">
+    <state width="1085" height="291" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1577983775895" />
+    <state x="955" y="345" key="SettingsEditor" timestamp="1577984033193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="955" y="345" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1577635491021" />
+    <state x="955" y="345" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1577984033193" />
     <state x="1008" y="423" width="784" height="564" key="find.popup" timestamp="1577904293744">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>

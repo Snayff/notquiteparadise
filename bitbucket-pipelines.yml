@@ -16,6 +16,7 @@ pipelines:
           - echo "Deploying to develop environment"
           - apt-get update
           - apt-get install -y libsdl2-dev
+          - pip install --upgrade pip
           - pip install -r requirements.txt
           
           # code analysis
