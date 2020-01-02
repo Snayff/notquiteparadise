@@ -37,7 +37,7 @@ def initialise_logging():
     
     """
     log_file_name = "logs/" + "game.log"
-    log_level = logging.DEBUG
+    log_level = logging.INFO
     file_mode = "w"
 
     for handler in logging.root.handlers[:]:

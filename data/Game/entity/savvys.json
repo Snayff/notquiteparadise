@@ -144,7 +144,7 @@
                 "description": "Fungechists are not known for their physical prowess but you haven't got much choice.",
                 "icon": "placeholder/icon_00.png",
                 "resource_type": "stamina",
-                "resource_cost": 0,
+                "resource_cost": 10,
                 "time_cost": 20,
                 "cooldown": 0,
                 "target_directions": ["down", "downleft", "upleft"],

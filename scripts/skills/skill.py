@@ -1,11 +1,10 @@
 import logging
 
-from scripts.core.constants import SkillExpiryTypes, MessageEventTypes, Directions, SkillTravelTypes, TargetTags, \
+from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
     SkillTerrainCollisions
 from scripts.events.game_events import EndTurnEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
-from scripts.events.message_events import MessageEvent
 
 
 class Skill:
@@ -37,10 +36,9 @@ class Skill:
         # initial values
         start_x = entity.x
         start_y = entity.y
-        dir_x = target_direction[0]
-        dir_y = target_direction[1]
+        dir_x = abs(target_direction[0])  # abs to handle any mistaken values coming in
+        dir_y = abs(target_direction[1])
         direction = (dir_x, dir_y)
-        step = 1
 
         # flags
         activate = False
