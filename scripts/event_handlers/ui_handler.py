@@ -25,14 +25,16 @@ class UiHandler(Subscriber):
 
     def run(self, event):
         """
-        Process the events
+        Control the events
         """
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         if event.topic == EventTopics.UI:
-            if event.event_type == UIEventTypes.SELECT_ENTITY:
-                self.select_entity(event.selected_entity)
+            if event.event_type == UIEventTypes.CLICK_TILE:
+                tile = world.Map.get_tile(event.tile_pos_string)
+                entity = world.Map.get_entity_on_tile(tile)
+                self.select_entity(entity)
 
             # if event.event_type == UIEventTypes.CLICK_UI:
             #     button = event.button_pressed

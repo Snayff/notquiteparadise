@@ -28,7 +28,7 @@ class UIManager:
 
     def process_events(self, event):
         """
-        Process input events
+        Control input events
 
         Args:
             event ():

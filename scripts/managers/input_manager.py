@@ -186,7 +186,7 @@ class InputManager:
 
     def process_input(self, event):
         """
-        Process all input from input_values. Calls multiple sub methods based on current GameState.
+        Control all input from input_values. Calls multiple sub methods based on current GameState.
         """
         from scripts.managers.game_manager import game
         game_state = game.game_state
@@ -208,33 +208,33 @@ class InputManager:
         """
 
         pass
-        # if self.input_values["debug_toggle"]:
-        #     from scripts.managers.debug_manager import debug
-        #     if debug.visible:
-        #         debug.set_visibility(False)
-        #     else:
-        #         debug.set_visibility(True)
-        #
-        # if self.input_values["refresh_data"]:
-        #     library.refresh_library_data()
-        #     ui.Element.update_skill_bars_icons()
-        #     publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
-        #                                                              "reloaded~~"))
-        #
-        # if self.input_values["mouse_moved"]:
-        #     ui_element = ui.Mouse.get_colliding_ui_element()
-        #     # pass the input to the UI element, it will decide if it cares
-        #     if ui_element:
-        #         ui_element.handle_input(pygame.MOUSEMOTION)
-        #
-        #         # if we have updated the camera we might be over a new tile with an entity
-        #         if ui_element.element_type == UIElementTypes.CAMERA:
-        #             tile_x, tile_y = ui.Element.get_selected_tile_pos()
-        #
-        #             # don't check if we have an entity as passing none will cause the entity info to cleanse
-        #             entity = world.Entity.get_blocking_entity(tile_x, tile_y)
-        #             ui.Element.set_selected_entity(entity)
-        #
+        if self.input_values["debug_toggle"]:
+            from scripts.managers.debug_manager import debug
+            if debug.visible:
+                debug.set_visibility(False)
+            else:
+                debug.set_visibility(True)
+
+        if self.input_values["refresh_data"]:
+            library.refresh_library_data()
+            ui.Element.update_skill_bars_icons()
+            publisher.publish(MessageEvent(MessageEventTypes.SYSTEM, "#col.info ~~External #col.info data #col.info "
+                                                                     "reloaded~~"))
+
+        if self.input_values["mouse_moved"]:
+            ui_element = ui.Mouse.get_colliding_ui_element()
+            # pass the input to the UI element, it will decide if it cares
+            if ui_element:
+                ui_element.handle_input(pygame.MOUSEMOTION)
+
+                # if we have updated the camera we might be over a new tile with an entity
+                if ui_element.element_type == UIElementTypes.CAMERA:
+                    tile_x, tile_y = ui.Element.get_selected_tile_pos()
+
+                    # don't check if we have an entity as passing none will cause the entity info to cleanse
+                    entity = world.Entity.get_blocking_entity(tile_x, tile_y)
+                    ui.Element.set_selected_entity(entity)
+
 
     def process_player_turn_input(self, event):
         """
@@ -318,7 +318,7 @@ class InputManager:
                 tile = world.Map.get_tile(tile_pos_string=button[1])
                 dir_x = tile.x - player.x
                 dir_y = tile.y - player.y
-                publisher.publish(UseSkillEvent(player, skill, (dir_x, dir_y)))
+                publisher.publish(UseSkillEvent(player, skill, tile_pos_string=button[1]))
 
         # from scripts.managers.world_manager import world
         # player = world.player

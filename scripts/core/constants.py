@@ -107,6 +107,7 @@ class UIEventTypes(Enum):
     """
     CLICK_UI = auto()
     SELECT_ENTITY = auto()
+    CLICK_TILE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -417,6 +418,7 @@ class InputIntents(Enum):
     SKILL3 = auto()
     SKILL4 = auto()
     REFRESH_DATA = auto()
+    BUTTON_PRESSED = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

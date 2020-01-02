@@ -23,3 +23,4 @@ class Intents:
     skill3 = False
     skill4 = False
     refresh_data = False
+    button_pressed = False

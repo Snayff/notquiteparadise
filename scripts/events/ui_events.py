@@ -29,3 +29,13 @@ class SelectEntity(Event):
         Event.__init__(self, UIEventTypes.SELECT_ENTITY, EventTopics.UI)
 
         self.selected_entity = entity
+
+
+class ClickTile(Event):
+    """
+    Event for clicking a tile
+    """
+    def __init__(self, tile_pos_string):
+        Event.__init__(self, UIEventTypes.CLICK_TILE, EventTopics.UI)
+
+        self.tile_pos_string = tile_pos_string

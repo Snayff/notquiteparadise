@@ -20,7 +20,7 @@ class EntityHandler(Subscriber):
 
     def run(self, event):
         """
-        Process entity events
+        Control entity events
 
         Args:
             event(Event): the event in need of processing
@@ -118,7 +118,12 @@ class EntityHandler(Subscriber):
         # check it can be afforded
         if world.Skill.can_afford_cost(entity, skill_data.resource_type, skill_data.resource_cost):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
-            event.skill.use(event.target_direction)
+
+            # determine direction
+            tile = world.Map.get_tile(event.tile_pos_string)
+            dir_x = tile.x - entity.x
+            dir_y = tile.y - entity.y
+            event.skill.use((dir_x, dir_y))
         else:
             # is it the player that's can't afford it?
             if entity == world.player:
@@ -129,7 +134,7 @@ class EntityHandler(Subscriber):
     @staticmethod
     def process_die(event):
         """
-        Process the entity death
+        Control the entity death
         Args:
             event(EntityEvent): the event to process
         """
