@@ -157,13 +157,13 @@
   <h1>Source code for scripts.event_handlers.game_handler</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">GameEventTypes</span><span class="p">,</span> <span class="n">GameStates</span>
-<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.turn_manager</span> <span class="k">import</span> <span class="n">turn</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.game_manager</span> <span class="k">import</span> <span class="n">game</span>
-<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="k">import</span> <span class="n">ChangeGameStateEvent</span><span class="p">,</span> <span class="n">EndTurnEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="k">import</span> <span class="n">Subscriber</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">GameEventTypes</span><span class="p">,</span> <span class="n">GameStates</span>
+<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.turn_manager</span> <span class="kn">import</span> <span class="n">turn</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.game_manager</span> <span class="kn">import</span> <span class="n">game</span>
+<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">ChangeGameStateEvent</span><span class="p">,</span> <span class="n">EndTurnEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="kn">import</span> <span class="n">Subscriber</span>
 
 
 <div class="viewcode-block" id="GameHandler"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.game_handler.GameHandler">[docs]</a><span class="k">class</span> <span class="nc">GameHandler</span><span class="p">(</span><span class="n">Subscriber</span><span class="p">):</span>
@@ -171,12 +171,12 @@
 <span class="sd">    Handle core Game related actions, driven by events. Turn changes exist here, too.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">):</span>
         <span class="n">Subscriber</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;game_handler&quot;</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="c1"># log that event has been received</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.name}</span><span class="s2"> received </span><span class="si">{event.topic}</span><span class="s2">:</span><span class="si">{event.event_type}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.name}</span><span class="s2"> received </span><span class="si">{event.topic}</span><span class="s2">:</span><span class="si">{event.event_type}</span><span class="s2">...&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">EXIT</span><span class="p">:</span>
             <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">))</span>
@@ -187,16 +187,18 @@
             <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">))</span>
 
         <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">CHANGE_GAME_STATE</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">transition_to_another_game_state</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">new_game_state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transition_to_another_game_state</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GameHandler.transition_to_another_game_state"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.game_handler.GameHandler.transition_to_another_game_state">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">transition_to_another_game_state</span><span class="p">(</span><span class="n">new_game_state</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transition_to_another_game_state</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transition to another game state as specified by the event.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            new_game_state (GameStates):</span>
+<span class="sd">            event ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_game_state</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">new_game_state</span>
+
         <span class="k">if</span> <span class="n">new_game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">GAME_INITIALISING</span><span class="p">:</span>
             <span class="c1"># transition to post-initialisation game state</span>
             <span class="c1"># TODO - set default post-init game state</span>
@@ -210,12 +212,16 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">ENEMY_TURN</span><span class="p">))</span>
 
-        <span class="c1"># handle wasted attempt to change the game state</span>
+        <span class="k">elif</span> <span class="n">new_game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">TARGETING_MODE</span><span class="p">:</span>
+            <span class="n">game</span><span class="o">.</span><span class="n">active_skill</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">skill_to_be_used</span>
+
+        <span class="c1"># update the game state to the intended state</span>
         <span class="k">if</span> <span class="n">new_game_state</span> <span class="o">!=</span> <span class="n">game</span><span class="o">.</span><span class="n">game_state</span><span class="p">:</span>
             <span class="n">game</span><span class="o">.</span><span class="n">update_game_state</span><span class="p">(</span><span class="n">new_game_state</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; new game state </span><span class="si">{new_game_state}</span><span class="s2"> is same as current&quot;</span> \
-                         <span class="n">f</span><span class="s2">&quot; </span><span class="si">{game.game_state}</span><span class="s2"> so state not updated.&quot;</span>
+            <span class="c1"># handle wasted attempt to change the game state</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; new game state </span><span class="si">{new_game_state}</span><span class="s2"> is same as current&quot;</span> \
+                         <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{game.game_state}</span><span class="s2"> so state not updated.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div></div>
 </pre></div>
 

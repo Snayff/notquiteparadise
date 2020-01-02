@@ -162,15 +162,15 @@
 <span class="kn">import</span> <span class="nn">tcod</span>
 <span class="kn">import</span> <span class="nn">scipy.spatial</span>
 
-<span class="kn">from</span> <span class="nn">scripts.components.actor</span> <span class="k">import</span> <span class="n">Actor</span>
-<span class="kn">from</span> <span class="nn">scripts.components.combatant</span> <span class="k">import</span> <span class="n">Combatant</span>
-<span class="kn">from</span> <span class="nn">scripts.components.homeland</span> <span class="k">import</span> <span class="n">Homeland</span>
-<span class="kn">from</span> <span class="nn">scripts.components.race</span> <span class="k">import</span> <span class="n">Race</span>
-<span class="kn">from</span> <span class="nn">scripts.components.savvy</span> <span class="k">import</span> <span class="n">Savvy</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span>
-<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="k">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
+<span class="kn">from</span> <span class="nn">scripts.components.actor</span> <span class="kn">import</span> <span class="n">Actor</span>
+<span class="kn">from</span> <span class="nn">scripts.components.combatant</span> <span class="kn">import</span> <span class="n">Combatant</span>
+<span class="kn">from</span> <span class="nn">scripts.components.homeland</span> <span class="kn">import</span> <span class="n">Homeland</span>
+<span class="kn">from</span> <span class="nn">scripts.components.race</span> <span class="kn">import</span> <span class="n">Race</span>
+<span class="kn">from</span> <span class="nn">scripts.components.savvy</span> <span class="kn">import</span> <span class="n">Savvy</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span>
+<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
+<span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 
 <div class="viewcode-block" id="EntityMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods">[docs]</a><span class="k">class</span> <span class="nc">EntityMethods</span><span class="p">:</span>
@@ -180,8 +180,8 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        manager(WorldManager): the manager containing this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">WorldManager</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
 
 <div class="viewcode-block" id="EntityMethods.get_blocking_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_blocking_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
@@ -267,7 +267,7 @@
 <span class="sd">            target_entity (Entity):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> is looking for a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
+        <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> is looking for a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
         <span class="n">direction_x</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span>
@@ -282,12 +282,12 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tile_is_blocked</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_blocking_entity</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
                                                                           <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction_y</span><span class="p">)):</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> found a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> found a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> did NOT find a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> did NOT find a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span></div>
@@ -304,13 +304,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">max_path_length</span> <span class="o">=</span> <span class="mi">25</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
         <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">game_map</span>
         <span class="n">entities</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_all_entities</span><span class="p">()</span>
         <span class="n">entity_to_move</span> <span class="o">=</span> <span class="n">start_entity</span>
         <span class="n">target</span> <span class="o">=</span> <span class="n">target_entity</span>
 
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> is looking for a path to </span><span class="si">{target.name}</span><span class="s2"> with a*&quot;</span>
+        <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> is looking for a path to </span><span class="si">{target.name}</span><span class="s2"> with a*&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
         <span class="c1"># Create a FOV map that has the dimensions of the map</span>
@@ -351,16 +351,16 @@
             <span class="n">direction_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">x</span>
             <span class="n">direction_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">y</span>
 
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> found an a* path to </span><span class="si">{target.name}</span><span class="s2">...&quot;</span>
-            <span class="n">log_string2</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; will move from [</span><span class="si">{entity_to_move.x}</span><span class="s2">,</span><span class="si">{entity_to_move.y}</span><span class="s2">] towards [</span><span class="si">{x}</span><span class="s2">,</span><span class="si">{y}</span><span class="s2">] in direction &quot;</span>\
-                <span class="n">f</span><span class="s2">&quot;[</span><span class="si">{direction_x}</span><span class="s2">,</span><span class="si">{direction_y}</span><span class="s2">]&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> found an a* path to </span><span class="si">{target.name}</span><span class="s2">...&quot;</span>
+            <span class="n">log_string2</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; will move from [</span><span class="si">{entity_to_move.x}</span><span class="s2">,</span><span class="si">{entity_to_move.y}</span><span class="s2">] towards [</span><span class="si">{x}</span><span class="s2">,</span><span class="si">{y}</span><span class="s2">] in direction &quot;</span>\
+                <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{direction_x}</span><span class="s2">,</span><span class="si">{direction_y}</span><span class="s2">]&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">log_string2</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># no path found return no movement direction</span>
             <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> did NOT find an a* path to </span><span class="si">{target.name}</span><span class="s2">.&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> did NOT find an a* path to </span><span class="si">{target.name}</span><span class="s2">.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
         <span class="c1"># Delete the path to free memory</span>
@@ -455,7 +455,7 @@
 
         <span class="c1"># get the AI value and convert to relevant class</span>
         <span class="n">ai_value</span> <span class="o">=</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">ai_component</span>
-        <span class="kn">from</span> <span class="nn">scripts.components.ai</span> <span class="k">import</span> <span class="n">BasicMonster</span>
+        <span class="kn">from</span> <span class="nn">scripts.components.ai</span> <span class="kn">import</span> <span class="n">BasicMonster</span>
         <span class="k">if</span> <span class="n">ai_value</span> <span class="o">==</span> <span class="s2">&quot;basic_monster&quot;</span><span class="p">:</span>
             <span class="n">ai_component</span> <span class="o">=</span> <span class="n">BasicMonster</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>

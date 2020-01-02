@@ -159,21 +159,21 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">random</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> <span class="n">HitValues</span><span class="p">,</span> <span class="n">HitTypes</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> <span class="n">HitValues</span><span class="p">,</span> <span class="n">HitTypes</span><span class="p">,</span> \
     <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">SkillShapes</span>
-<span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="k">import</span> <span class="n">MessageEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="k">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effects.add_aspect</span> <span class="k">import</span> <span class="n">AddAspectEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effects.affect_stat</span> <span class="k">import</span> <span class="n">AffectStatEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill</span> <span class="k">import</span> <span class="n">Skill</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effects.apply_affliction</span> <span class="k">import</span> <span class="n">ApplyAfflictionEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effects.change_terrain</span> <span class="k">import</span> <span class="n">ChangeTerrainEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effects.damage</span> <span class="k">import</span> <span class="n">DamageEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effects.move</span> <span class="k">import</span> <span class="n">MoveEffect</span>
-<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="k">import</span> <span class="n">Tile</span>
+<span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="kn">import</span> <span class="n">MessageEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.add_aspect</span> <span class="kn">import</span> <span class="n">AddAspectEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.affect_stat</span> <span class="kn">import</span> <span class="n">AffectStatEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.skill</span> <span class="kn">import</span> <span class="n">Skill</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.apply_affliction</span> <span class="kn">import</span> <span class="n">ApplyAfflictionEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.change_terrain</span> <span class="kn">import</span> <span class="n">ChangeTerrainEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.damage</span> <span class="kn">import</span> <span class="n">DamageEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effects.move</span> <span class="kn">import</span> <span class="n">MoveEffect</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
+<span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
 
 <div class="viewcode-block" id="SkillMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods">[docs]</a><span class="k">class</span> <span class="nc">SkillMethods</span><span class="p">:</span>
@@ -183,8 +183,8 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        manager(WorldManager): the manager containing this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">WorldManager</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
 
 <div class="viewcode-block" id="SkillMethods.can_use_skill"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.can_use_skill">[docs]</a>    <span class="k">def</span> <span class="nf">can_use_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">,</span> <span class="n">skill</span><span class="p">):</span>
@@ -199,7 +199,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            bool: True if can use the skill. Else False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
 
         <span class="n">start_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span> <span class="o">=</span> <span class="n">target_pos</span>
@@ -216,11 +216,11 @@
                 <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="n">skill_range</span><span class="p">:</span>
                     <span class="k">return</span> <span class="kc">True</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">f</span><span class="s2">&quot;Target out of skill range, &quot;</span>
-                    <span class="n">f</span><span class="s2">&quot;range </span><span class="si">{skill_range}</span><span class="s2"> &lt; distance </span><span class="si">{distance}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="sa">f</span><span class="s2">&quot;Target out of skill range, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;range </span><span class="si">{skill_range}</span><span class="s2"> &lt; distance </span><span class="si">{distance}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;You can&#39;t afford the cost.&quot;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;You can&#39;t afford the cost.&quot;</span>
                 <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="kc">False</span></div>
@@ -288,10 +288,10 @@
         <span class="c1"># Check if cost can be paid</span>
         <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">value</span> <span class="o">-</span> <span class="n">cost</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; can afford cost.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; can afford cost.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; cannot afford cost.&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; cannot afford cost.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="SkillMethods.get_hit_type"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.get_hit_type">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -348,7 +348,7 @@
 <span class="sd">            stat_to_target (PrimaryStatTypes):</span>
 <span class="sd">            attacker (Entity):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Get to hit scores...&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Get to hit scores...&quot;</span><span class="p">)</span>
 
         <span class="n">roll</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
@@ -366,7 +366,7 @@
         <span class="n">mitigated_to_hit_score</span> <span class="o">=</span> <span class="n">modified_to_hit_score</span> <span class="o">-</span> <span class="n">defender_value</span>
 
         <span class="c1"># log the info</span>
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Roll:</span><span class="si">{roll}</span><span class="s2">, Modified:</span><span class="si">{modified_to_hit_score}</span><span class="s2">, Mitigated:</span><span class="si">{mitigated_to_hit_score}</span><span class="s2">.&quot;</span>
+        <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; Roll:</span><span class="si">{roll}</span><span class="s2">, Modified:</span><span class="si">{modified_to_hit_score}</span><span class="s2">, Mitigated:</span><span class="si">{mitigated_to_hit_score}</span><span class="s2">.&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">mitigated_to_hit_score</span></div>
@@ -402,7 +402,7 @@
 
         <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">combatant</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">resource_left</span><span class="p">)</span>
 
-        <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; paid </span><span class="si">{cost}</span><span class="s2"> </span><span class="si">{resource.name}</span><span class="s2"> and has </span><span class="si">{resource_left}</span><span class="s2"> left.&quot;</span>
+        <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{entity.name}</span><span class="s2">&#39; paid </span><span class="si">{cost}</span><span class="s2"> </span><span class="si">{resource.name}</span><span class="s2"> and has </span><span class="si">{resource_left}</span><span class="s2"> left.&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SkillMethods.create_shape"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.skill_methods.SkillMethods.create_shape">[docs]</a>    <span class="nd">@staticmethod</span>

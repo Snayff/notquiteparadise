@@ -157,15 +157,15 @@
   <h1>Source code for scripts.world.terrain.wall</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pygame</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">TILE_SIZE</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.terrain</span> <span class="k">import</span> <span class="n">Terrain</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span>
+<span class="kn">from</span> <span class="nn">scripts.world.terrain.terrain</span> <span class="kn">import</span> <span class="n">Terrain</span>
 
 
 <div class="viewcode-block" id="Wall"><a class="viewcode-back" href="../../../../world.html#scripts.world.terrain.wall.Wall">[docs]</a><span class="k">class</span> <span class="nc">Wall</span><span class="p">(</span><span class="n">Terrain</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wall tile, blocks movement and sight.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blocks_sight</span> <span class="o">=</span> <span class="kc">True</span>

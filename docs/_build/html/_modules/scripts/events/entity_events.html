@@ -155,11 +155,11 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.events.entity_events</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">EntityEventTypes</span><span class="p">,</span> <span class="n">EventTopics</span>
-<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="k">import</span> <span class="n">Event</span>
-<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">EntityEventTypes</span><span class="p">,</span> <span class="n">EventTopics</span>
+<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="kn">import</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
 
 
 <div class="viewcode-block" id="UseSkillEvent"><a class="viewcode-back" href="../../../events.html#scripts.events.entity_events.UseSkillEvent">[docs]</a><span class="k">class</span> <span class="nc">UseSkillEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
@@ -171,15 +171,15 @@
 <span class="sd">        target_pos (tuple): x, y</span>
 <span class="sd">        skill (Skill):</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_using_skill</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">target_pos</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_using_skill</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="n">target_direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">SKILL</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity_using_skill</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_pos</span> <span class="o">=</span> <span class="n">target_pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_direction</span> <span class="o">=</span> <span class="n">target_direction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill</span> <span class="o">=</span> <span class="n">skill</span></div>
 
 
 <div class="viewcode-block" id="DieEvent"><a class="viewcode-back" href="../../../events.html#scripts.events.entity_events.DieEvent">[docs]</a><span class="k">class</span> <span class="nc">DieEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dying_entity</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dying_entity</span><span class="p">):</span>
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">DIE</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dying_entity</span> <span class="o">=</span> <span class="n">dying_entity</span></div>
 
@@ -188,7 +188,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Event to move an entity as a basic move action</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_to_move</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_to_move</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">):</span>
 
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">MOVE</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity_to_move</span>
@@ -205,7 +205,7 @@
 <span class="sd">        skill_tree_name:</span>
 <span class="sd">        skill_name:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_to_learn_skill</span><span class="p">,</span> <span class="n">skill_tree_name</span><span class="p">,</span>  <span class="n">skill_name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_to_learn_skill</span><span class="p">,</span> <span class="n">skill_tree_name</span><span class="p">,</span>  <span class="n">skill_name</span><span class="p">):</span>
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">LEARN</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">ENTITY</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity_to_learn_skill</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span> <span class="o">=</span> <span class="n">skill_tree_name</span>

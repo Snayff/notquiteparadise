@@ -157,22 +157,22 @@
   <h1>Source code for scripts.event_handlers.entity_handler</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">EntityEventTypes</span><span class="p">,</span> <span class="n">MessageEventTypes</span>
-<span class="kn">from</span> <span class="nn">scripts.events.entity_events</span> <span class="k">import</span> <span class="n">UseSkillEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="k">import</span> <span class="n">MessageEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="k">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="k">import</span> <span class="n">publisher</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.turn_manager</span> <span class="k">import</span> <span class="n">turn</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="k">import</span> <span class="n">EndTurnEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="k">import</span> <span class="n">Subscriber</span><span class="p">,</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">EntityEventTypes</span><span class="p">,</span> <span class="n">MessageEventTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.events.entity_events</span> <span class="kn">import</span> <span class="n">UseSkillEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="kn">import</span> <span class="n">MessageEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.turn_manager</span> <span class="kn">import</span> <span class="n">turn</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">EndTurnEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="kn">import</span> <span class="n">Subscriber</span><span class="p">,</span> <span class="n">Event</span>
 
 
 <div class="viewcode-block" id="EntityHandler"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.entity_handler.EntityHandler">[docs]</a><span class="k">class</span> <span class="nc">EntityHandler</span><span class="p">(</span><span class="n">Subscriber</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Handle events affecting entities</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">):</span>
         <span class="n">Subscriber</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;entity_handler&quot;</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EntityHandler.run"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.entity_handler.EntityHandler.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
@@ -183,26 +183,26 @@
 <span class="sd">            event(Event): the event in need of processing</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># log that event has been received</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.name}</span><span class="s2"> received </span><span class="si">{event.topic}</span><span class="s2">:</span><span class="si">{event.event_type}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.name}</span><span class="s2"> received </span><span class="si">{event.topic}</span><span class="s2">:</span><span class="si">{event.event_type}</span><span class="s2">...&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">MOVE</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.entity.name}</span><span class="s2">&#39;`s move.&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.entity.name}</span><span class="s2">&#39;`s move.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_move</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">SKILL</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.entity.name}</span><span class="s2">&#39;`s skill: </span><span class="si">{event.skill.name}</span><span class="s2">.&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.entity.name}</span><span class="s2">&#39;`s skill: </span><span class="si">{event.skill.name}</span><span class="s2">.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_skill</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">DIE</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.dying_entity.name}</span><span class="s2">&#39;`s death.&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.dying_entity.name}</span><span class="s2">&#39;`s death.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_die</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">event_type</span> <span class="o">==</span> <span class="n">EntityEventTypes</span><span class="o">.</span><span class="n">LEARN</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.entity.name}</span><span class="s2">&#39;`s learning of </span><span class="si">{event.skill_name}</span><span class="s2"> from &quot;</span> \
-                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{event.skill_tree_name}</span><span class="s2">.&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; Processing &#39;</span><span class="si">{event.entity.name}</span><span class="s2">&#39;`s learning of </span><span class="si">{event.skill_name}</span><span class="s2"> from &quot;</span> \
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{event.skill_tree_name}</span><span class="s2">.&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_learn</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
@@ -229,13 +229,15 @@
 
             <span class="c1"># check for no entity in way but tile is blocked</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">entity_blocking_movement</span> <span class="ow">and</span> <span class="n">tile_blocking_movement</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;There`s something in the way!&quot;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;There`s something in the way!&quot;</span>
                 <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
 
             <span class="c1"># check if entity blocking tile to attack</span>
             <span class="k">elif</span> <span class="n">entity_blocking_movement</span><span class="p">:</span>
                 <span class="n">skill</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">known_skills</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">((</span><span class="n">UseSkillEvent</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="p">(</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">))))</span>
+                <span class="n">dir_x</span> <span class="o">=</span> <span class="n">target_x</span> <span class="o">-</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">dir_y</span> <span class="o">=</span> <span class="n">target_y</span> <span class="o">-</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">((</span><span class="n">UseSkillEvent</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="p">(</span><span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">))))</span>
 
             <span class="c1"># if nothing in the way, time to move!</span>
             <span class="k">elif</span> <span class="ow">not</span> <span class="n">entity_blocking_movement</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tile_blocking_movement</span><span class="p">:</span>
@@ -266,10 +268,20 @@
 <span class="sd">        Args:</span>
 <span class="sd">            event(EntityEvent): the event to process</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">entity</span>
+        <span class="n">skill</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">skill</span>
+        <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="n">skill</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">skill</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">skill</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">pay_resource_cost</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">)</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">skill</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target_pos</span><span class="p">)</span></div>
+        <span class="c1"># check it can be afforded</span>
+        <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">can_afford_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">):</span>
+            <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">pay_resource_cost</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">)</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">skill</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">target_direction</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># is it the player that&#39;s can&#39;t afford it?</span>
+            <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">world</span><span class="o">.</span><span class="n">player</span><span class="p">:</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="s2">&quot;You cannot afford to do that.&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity}</span><span class="s2"> tried to use </span><span class="si">{skill.name}</span><span class="s2">, which they can`t afford&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EntityHandler.process_die"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.entity_handler.EntityHandler.process_die">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process_die</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>

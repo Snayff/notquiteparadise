@@ -155,8 +155,8 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.events.game_events</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">GameEventTypes</span><span class="p">,</span> <span class="n">EventTopics</span>
-<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="k">import</span> <span class="n">Event</span>
+<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">GameEventTypes</span><span class="p">,</span> <span class="n">EventTopics</span>
+<span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="kn">import</span> <span class="n">Event</span>
 
 
 <div class="viewcode-block" id="EndTurnEvent"><a class="viewcode-back" href="../../../events.html#scripts.events.game_events.EndTurnEvent">[docs]</a><span class="k">class</span> <span class="nc">EndTurnEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
@@ -168,7 +168,7 @@
 <span class="sd">        time_spent(int):</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">):</span>
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">END_TURN</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_spent</span> <span class="o">=</span> <span class="n">time_spent</span></div>
@@ -178,7 +178,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Event to exit the game</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">EXIT</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span></div>
 
 
@@ -186,7 +186,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Event to change the current game state</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_game_state</span><span class="p">,</span> <span class="n">skill_to_be_used</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_game_state</span><span class="p">,</span> <span class="n">skill_to_be_used</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">CHANGE_GAME_STATE</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">new_game_state</span> <span class="o">=</span> <span class="n">new_game_state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skill_to_be_used</span> <span class="o">=</span> <span class="n">skill_to_be_used</span></div>
@@ -196,7 +196,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Event to process the end of a round</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GameEventTypes</span><span class="o">.</span><span class="n">END_ROUND</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">GAME</span><span class="p">)</span></div>
 </pre></div>
 

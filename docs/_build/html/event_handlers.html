@@ -161,19 +161,19 @@
 <span id="entity"></span><h2>Entity<a class="headerlink" href="#module-scripts.event_handlers.entity_handler" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.event_handlers.entity_handler.EntityHandler">
-<em class="property">class </em><code class="descclassname">scripts.event_handlers.entity_handler.</code><code class="descname">EntityHandler</code><span class="sig-paren">(</span><em>event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.entity_handler.</code><code class="sig-name descname">EntityHandler</code><span class="sig-paren">(</span><em class="sig-param">event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle events affecting entities</p>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="scripts.event_handlers.entity_handler.EntityHandler.process_die">
-<em class="property">static </em><code class="descname">process_die</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_die"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_die" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">process_die</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_die"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_die" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the entity death
 :param event: the event to process
 :type event: EntityEvent</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="scripts.event_handlers.entity_handler.EntityHandler.process_learn">
-<em class="property">static </em><code class="descname">process_learn</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_learn" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">process_learn</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_learn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Have an entity learn a skill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -182,9 +182,9 @@
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="scripts.event_handlers.entity_handler.EntityHandler.process_move">
-<em class="property">static </em><code class="descname">process_move</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_move" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">process_move</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_move" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
 target tile has entity) or move.</p>
 <dl class="field-list simple">
@@ -194,9 +194,9 @@ target tile has entity) or move.</p>
 </dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="scripts.event_handlers.entity_handler.EntityHandler.process_skill">
-<em class="property">static </em><code class="descname">process_skill</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_skill" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">process_skill</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.process_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.process_skill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the entity`s skill
 :param event: the event to process
 :type event: EntityEvent</p>
@@ -204,7 +204,7 @@ target tile has entity) or move.</p>
 
 <dl class="method">
 <dt id="scripts.event_handlers.entity_handler.EntityHandler.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/entity_handler.html#EntityHandler.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.entity_handler.EntityHandler.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process entity events</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -220,15 +220,15 @@ target tile has entity) or move.</p>
 <span id="game"></span><h2>Game<a class="headerlink" href="#module-scripts.event_handlers.game_handler" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.event_handlers.game_handler.GameHandler">
-<em class="property">class </em><code class="descclassname">scripts.event_handlers.game_handler.</code><code class="descname">GameHandler</code><span class="sig-paren">(</span><em>event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.game_handler.</code><code class="sig-name descname">GameHandler</code><span class="sig-paren">(</span><em class="sig-param">event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle core Game related actions, driven by events. Turn changes exist here, too.</p>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="scripts.event_handlers.game_handler.GameHandler.transition_to_another_game_state">
-<em class="property">static </em><code class="descname">transition_to_another_game_state</code><span class="sig-paren">(</span><em>new_game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler.transition_to_another_game_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler.transition_to_another_game_state" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">transition_to_another_game_state</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler.transition_to_another_game_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler.transition_to_another_game_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transition to another game state as specified by the event.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>new_game_state</strong> (<a class="reference internal" href="core.html#scripts.core.constants.GameStates" title="scripts.core.constants.GameStates"><em>GameStates</em></a>) – </p>
+<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>event</em>) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -246,11 +246,11 @@ target tile has entity) or move.</p>
 <span id="hub"></span><h2>Hub<a class="headerlink" href="#module-scripts.event_handlers.pub_sub_hub" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.event_handlers.pub_sub_hub.Event">
-<em class="property">class </em><code class="descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="descname">Event</code><span class="sig-paren">(</span><em>event_type</em>, <em>topic</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Event" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="sig-name descname">Event</code><span class="sig-paren">(</span><em class="sig-param">event_type</em>, <em class="sig-param">topic</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Events to cause top level actions to take place</p>
 <dl class="method">
 <dt id="scripts.event_handlers.pub_sub_hub.Event.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>event_type</em>, <em>topic</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Event.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Event.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">event_type</em>, <em class="sig-param">topic</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Event.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Event.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -265,19 +265,19 @@ target tile has entity) or move.</p>
 
 <dl class="class">
 <dt id="scripts.event_handlers.pub_sub_hub.EventHub">
-<em class="property">class </em><code class="descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="descname">EventHub</code><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#EventHub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.EventHub" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="sig-name descname">EventHub</code><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#EventHub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.EventHub" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event hub to handle the interactions between events and subscribers</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.event_handlers.pub_sub_hub.Publisher">
-<em class="property">class </em><code class="descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="descname">Publisher</code><span class="sig-paren">(</span><em>event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Publisher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Publisher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="sig-name descname">Publisher</code><span class="sig-paren">(</span><em class="sig-param">event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Publisher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Publisher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to create events and log them with the event hub</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.event_handlers.pub_sub_hub.Subscriber">
-<em class="property">class </em><code class="descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="descname">Subscriber</code><span class="sig-paren">(</span><em>name</em>, <em>event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Subscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Subscriber" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.pub_sub_hub.</code><code class="sig-name descname">Subscriber</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/pub_sub_hub.html#Subscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.pub_sub_hub.Subscriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to set default behaviour for handlers listening for events</p>
 </dd></dl>
 

@@ -157,12 +157,12 @@
   <h1>Source code for scripts.managers.world_methods.affliction_methods</h1><div class="highlight"><pre>
 <span></span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="k">import</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">AfflictionLifespan</span>
-<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="k">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.affliction</span> <span class="k">import</span> <span class="n">Affliction</span>
-<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">AfflictionLifespan</span>
+<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.affliction</span> <span class="kn">import</span> <span class="n">Affliction</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
 
 
 <div class="viewcode-block" id="AfflictionMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods">[docs]</a><span class="k">class</span> <span class="nc">AfflictionMethods</span><span class="p">:</span>
@@ -175,8 +175,8 @@
 <span class="sd">        expired_afflictions (): list containing the expired afflictions to be deleted. empties at end of GameLoop</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">WorldManager</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expired_afflictions</span> <span class="o">=</span> <span class="p">[]</span>
@@ -204,14 +204,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">active_afflictions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">affliction</span><span class="p">)</span>
 
             <span class="c1"># add info to logging</span>
-            <span class="n">removed_afflictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction.affected_entity.name}</span><span class="s2">:</span><span class="si">{affliction.name}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">removed_afflictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{affliction.affected_entity.name}</span><span class="s2">:</span><span class="si">{affliction.name}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="c1"># delete the instance</span>
             <span class="k">del</span> <span class="n">affliction</span>
 
         <span class="c1"># if we removed anything log it</span>
         <span class="k">if</span> <span class="n">removed_afflictions</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Removed the following afflictions: </span><span class="si">{removed_afflictions}</span><span class="s2">&quot;</span>
+            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Removed the following afflictions: </span><span class="si">{removed_afflictions}</span><span class="s2">&quot;</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AfflictionMethods.create_effect"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.affliction_methods.AfflictionMethods.create_effect">[docs]</a>    <span class="k">def</span> <span class="nf">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">effect_type</span><span class="p">):</span>
@@ -350,8 +350,8 @@
             <span class="c1"># reduce duration on all effects if they&#39;re not meant to be permanent</span>
             <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">!=</span> <span class="n">AfflictionLifespan</span><span class="o">.</span><span class="n">PERMANENT</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
                 <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="mi">1</span>
-                <span class="n">log_string</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{affliction.affected_entity.name}</span><span class="s2">`s </span><span class="si">{affliction.name}</span><span class="s2"> duration reduced to &quot;</span> \
-                             <span class="n">f</span><span class="s2">&quot; </span><span class="si">{affliction.duration}</span><span class="s2">&quot;</span>
+                <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{affliction.affected_entity.name}</span><span class="s2">`s </span><span class="si">{affliction.name}</span><span class="s2"> duration reduced to &quot;</span> \
+                             <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{affliction.duration}</span><span class="s2">&quot;</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div></div>
 </pre></div>
 

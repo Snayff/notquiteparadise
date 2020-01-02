@@ -156,9 +156,9 @@
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.world.tile</h1><div class="highlight"><pre>
 <span></span>
-<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="k">import</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="k">import</span> <span class="n">Floor</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="k">import</span> <span class="n">Wall</span>
+<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
+<span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="kn">import</span> <span class="n">Floor</span>
+<span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="kn">import</span> <span class="n">Wall</span>
 
 
 <div class="viewcode-block" id="Tile"><a class="viewcode-back" href="../../../world.html#scripts.world.tile.Tile">[docs]</a><span class="k">class</span> <span class="nc">Tile</span><span class="p">:</span>
@@ -174,7 +174,7 @@
 <span class="sd">        aspect(dict[Aspect]): the aspects of the tile, such as smoke or fire</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">terrain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">terrain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="kc">False</span>
@@ -182,7 +182,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="k">import</span> <span class="n">world</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
 
         <span class="k">if</span> <span class="n">terrain</span><span class="p">:</span>
             <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_terrain_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terrain</span><span class="p">)</span>
