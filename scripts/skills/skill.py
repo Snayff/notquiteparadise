@@ -68,20 +68,22 @@ class Skill:
                     collision_adj_x = world.Map.tile_has_tag(adj_tile, TargetTags.WALL)
 
                     # where did we collide?
-                    if collision_adj_x and collision_adj_y:
-                        # hit a corner, bounce back towards entity
-                        dir_x *= -1
-                        dir_y *= -1
-                    elif collision_adj_x and not collision_adj_y:
-                        # hit horizontal wall, revere y direction
-                        dir_y *= -1
-                    elif not collision_adj_x and collision_adj_y:
-                        # hit a vertical wall, reverse x direction
-                        dir_x *= -1
-                    elif not collision_adj_x and not collision_adj_y:
-                        # hit a single piece, on the corner, bounce back towards entity
-                        dir_x *= -1
-                        dir_y *= -1
+                    if collision_adj_x:
+                        if collision_adj_y:
+                            # hit a corner, bounce back towards entity
+                            dir_x *= -1
+                            dir_y *= -1
+                        else:
+                            # hit horizontal wall, revere y direction
+                            dir_y *= -1
+                    else:
+                        if collision_adj_y:
+                            # hit a vertical wall, reverse x direction
+                            dir_x *= -1
+                        else:  # not collision_adj_x and not collision_adj_y:
+                            # hit a single piece, on the corner, bounce back towards entity
+                            dir_x *= -1
+                            dir_y *= -1
 
                     logging.info(f"-> and hit a wall. Skill`s direction changed to ({dir_x},{dir_y}).")
                 elif data.terrain_collision == SkillTerrainCollisions.FIZZLE:

@@ -4,7 +4,7 @@ import io
 import logging
 import pstats
 import pygame
-from scripts.core.constants import GameStates
+from scripts.core.constants import GameStates, VERSION
 from scripts.managers.input_manager import input
 from scripts.managers.ui_manager import ui
 from scripts.managers.debug_manager import debug
@@ -95,7 +95,8 @@ def game_loop():
 
 def dump_profiling_data(profiler):
     """
-    End profiling
+    End profiling and dump data to a readable file
+
     Args:
         profiler: The profiler
     """
@@ -109,8 +110,7 @@ def dump_profiling_data(profiler):
     import datetime
     date_and_time = datetime.datetime.utcnow()
 
-    # TODO - add version number to profile logs
-    out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + ".profile", "w")
+    out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
     ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 

@@ -1,9 +1,11 @@
 
 from enum import Enum, auto
 
+VERSION = "0.86.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 64
+
 
 class VisualInfo:
     """
