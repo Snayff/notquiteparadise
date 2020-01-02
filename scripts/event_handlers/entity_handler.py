@@ -120,7 +120,7 @@ class EntityHandler(Subscriber):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
 
             # determine direction
-            tile = world.Map.get_tile(event.tile_pos_string)
+            tile = world.Map.get_tile(tile_pos_string=event.tile_pos_string)
             dir_x = tile.x - entity.x
             dir_y = tile.y - entity.y
             event.skill.use((dir_x, dir_y))

@@ -10,7 +10,7 @@ class ConfigMethods:
     """
 
     def __init__(self, manager):
-        from scripts.managers.new_input_manager import InputManager
+        from scripts.managers.input_manager import InputManager
         self.manager = manager  # type: InputManager
 
         self.mode = None
