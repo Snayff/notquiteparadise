@@ -67,17 +67,17 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\ui_elements" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\entity" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\core" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\basic" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\palettes" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\ui_elements" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\ui_elements" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\entity" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
     </key>
   </component>
   <component name="RunManager" selected="Python.engine">
@@ -230,7 +230,7 @@
       <workItem from="1577624896406" duration="17075000" />
       <workItem from="1577795682161" duration="8560000" />
       <workItem from="1577901224166" duration="4622000" />
-      <workItem from="1577969595957" duration="11760000" />
+      <workItem from="1577969595957" duration="12035000" />
     </task>
     <servers />
   </component>

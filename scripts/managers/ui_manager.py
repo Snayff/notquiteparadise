@@ -2,10 +2,8 @@ import logging
 import pygame
 import pygame_gui
 from scripts.core.constants import VisualInfo
-from scripts.ui.basic.fonts import Font
 from scripts.managers.ui_methods.display_methods import DisplayMethods
 from scripts.managers.ui_methods.element_methods import ElementMethods
-from scripts.ui.basic.palette import Palette
 
 
 class UIManager:
@@ -19,8 +17,6 @@ class UIManager:
     def __init__(self):
         self.Display = DisplayMethods(self)
         self.Element = ElementMethods(self)
-        self.Palette = Palette()  # doesnt need self as only holds data
-        self.Font = Font()  # doesnt need self as only holds data
         self.Gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT),
                                         "data/ui/themes.json")
 
