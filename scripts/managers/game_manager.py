@@ -13,7 +13,7 @@ class GameManager:
         self.internal_clock = pygame.time.Clock()
         self.active_skill = None
 
-        logging.info( f"GameManager initialised.")
+        logging.info(f"GameManager initialised.")
 
     def update(self):
         """
@@ -34,7 +34,7 @@ class GameManager:
         self.game_state = new_game_state
 
         log_string = f"Game_state updated from {self.previous_game_state} to {self.game_state}"
-        logging.info(log_string)
+        logging.debug(log_string)
 
 
 game = GameManager()

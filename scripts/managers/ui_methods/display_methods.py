@@ -16,6 +16,8 @@ class DisplayMethods:
         from scripts.managers.ui_manager import UIManager
         self.manager = manager  # type: UIManager
 
+        self.init_pygame()
+
         self.desired_width = VisualInfo.BASE_WINDOW_WIDTH
         self.desired_height = VisualInfo.BASE_WINDOW_HEIGHT
         # TODO - allow for selection by player but only multiples of base (16:9)
@@ -26,6 +28,12 @@ class DisplayMethods:
                                            pygame.SRCALPHA)
 
         self.init_display_config()
+
+    def init_pygame(self):
+        """
+        Init pygame
+        """
+        pygame.init()
 
     def init_display_config(self):
         """

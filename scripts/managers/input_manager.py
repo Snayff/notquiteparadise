@@ -320,7 +320,6 @@ class InputManager:
                 dir_y = tile.y - player.y
                 publisher.publish(UseSkillEvent(player, skill, (dir_x, dir_y)))
 
-
         # from scripts.managers.world_manager import world
         # player = world.player
         #
@@ -392,18 +391,21 @@ class InputManager:
         #         # if we chose a skill check if it is same one, or if we otherwise confirmed
         #         if skill_being_targeted == skill_selected:
         #
-        #             skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name, skill_being_targeted.name)
+        #             skill_data = library.get_skill_data(skill_being_targeted.skill_tree_name,
+        #             skill_being_targeted.name)
         #
         #             # confirm can use skill
         #             if world.Skill.can_use_skill(player, (selected_tile.x, selected_tile.y), skill_being_targeted):
-        #                 publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x, selected_tile.y))))
+        #                 publisher.publish((UseSkillEvent(entity, skill_being_targeted, (selected_tile.x,
+        #                 selected_tile.y))))
         #             else:
         #                 # can't use skill, is it due to being too poor?
         #                 if world.Skill.can_afford_cost(player, skill_data.resource_type,
         #                                                        skill_data.resource_cost):
         #                     publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_being_targeted))
         #                 else:
-        #                     # we already checked player can afford when triggering targeting mode so must be wrong target
+        #                     # we already checked player can afford when triggering targeting mode so must be wrong
+        #                     target
         #                     msg = f"You can't do that there!"
         #                     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
         #
@@ -522,7 +524,6 @@ class InputManager:
         elif event.ui_object_id[:len("#tile")] == "#tile":
             print(f"button clicked(grid.tile{event.ui_object_id[len('#tile'):]})")
             return "tile", event.ui_object_id[len('#tile'):]
-
 
 
 input = InputManager()
