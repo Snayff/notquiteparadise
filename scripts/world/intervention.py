@@ -40,7 +40,7 @@ class Intervention:
             effect.trigger(effected_tiles)
 
         # logging
-        tile = world.Map.get_tile(target_x, target_y)
+        tile = world.Map.get_tile((target_x, target_y))
         entity = world.Map.get_entity_on_tile(tile)
         msg = f"#col.info {self.owner.name} intervened, using {self.name} on {entity.name}."
         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))

@@ -38,7 +38,7 @@ class EntityMethods:
             Entity: returns entity if there is one, else None.
         """
         # TODO - change to just get the entity
-        tile = self.manager.Map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile((tile_x, tile_y))
         entity = tile.entity
 
         if entity:
@@ -58,7 +58,7 @@ class EntityMethods:
         Returns:
             entity: Entity or None if no entity found
         """
-        tile = self.manager.Map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile((tile_x, tile_y))
         entity = tile.entity
 
         if entity:
@@ -239,7 +239,7 @@ class EntityMethods:
             entity:
         """
         self.manager.entities.append(entity)
-        tile = self.manager.Map.get_tile(tile_x, tile_y)
+        tile = self.manager.Map.get_tile((tile_x, tile_y))
         self.manager.Map.set_entity_on_tile(tile, entity)
 
     def add_player_to_central_list(self, tile_x, tile_y, entity):
@@ -262,7 +262,7 @@ class EntityMethods:
             entity:
         """
         # remove from tile
-        tile = self.manager.Map.get_tile(entity.x, entity.y)
+        tile = self.manager.Map.get_tile((entity.x, entity.y))
         self.manager.Map.remove_entity(tile)
 
         # remove from entities list

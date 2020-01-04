@@ -273,8 +273,7 @@ class ControlMethods:
         if get_intent(intent.BUTTON_PRESSED):
             button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
-                tile = world.Map.get_tile(tile_pos_string=button[1])
-                publisher.publish(UseSkillEvent(player, skill, tile_pos_string=button[1]))
+                publisher.publish(UseSkillEvent(player, skill, button[1]))
 
         # Cancel use
         if get_intent(intent.CANCEL):

@@ -44,9 +44,9 @@ class SkillMethods:
         """
         from scripts.managers.world_manager import world
 
-        start_tile = world.Map.get_tile(entity.x, entity.y)
+        start_tile = world.Map.get_tile((entity.x, entity.y))
         target_x, target_y = target_pos
-        target_tile = world.Map.get_tile(target_x, target_y)
+        target_tile = world.Map.get_tile((target_x, target_y))
         skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
 
         # check we have everything we need and if so use the skill
@@ -59,7 +59,7 @@ class SkillMethods:
                 if distance <= skill_range:
                     return True
                 else:
-                    logging.debug( f"Target out of skill range, "
+                    logging.debug(f"Target out of skill range, "
                     f"range {skill_range} < distance {distance}")
 
             else:

@@ -1,7 +1,8 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 from scripts.core.constants import EntityEventTypes, EventTopics
 from scripts.event_handlers.pub_sub_hub import Event
+from scripts.skills.skill import Skill
 from scripts.world.entity import Entity
 
 
@@ -14,10 +15,10 @@ class UseSkillEvent(Event):
         target_pos (tuple): x, y
         skill (Skill):
     """
-    def __init__(self, entity_using_skill, skill, tile_pos_string):
+    def __init__(self, entity_using_skill: Entity, skill: Skill, tile_pos: Union[Tuple[int, int], str]):
         Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)
         self.entity = entity_using_skill
-        self.tile_pos_string = tile_pos_string
+        self.tile_pos = tile_pos
         self.skill = skill
 
 

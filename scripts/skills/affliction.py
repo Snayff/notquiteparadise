@@ -40,6 +40,6 @@ class Affliction:
         # apply any effects
         for effect_name, effect_data in data.effects.items():
             effect = world.Skill.create_effect(self, effect_data.effect_type)
-            effected_tile = world.Map.get_tile(self.affected_entity.x, self.affected_entity.y)
+            effected_tile = world.Map.get_tile((self.affected_entity.x, self.affected_entity.y))
             effect.trigger([effected_tile])
 

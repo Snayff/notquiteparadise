@@ -179,7 +179,7 @@ class ElementMethods:
             for x in range(camera.start_tile_col, camera.start_tile_col + camera.columns):
                 for y in range(camera.start_tile_row, camera.start_tile_row + camera.rows):
                     if world.FOV.is_tile_in_fov(x, y):
-                        tiles.append(world.Map.get_tile(x, y))
+                        tiles.append(world.Map.get_tile((x, y)))
 
             camera.set_tiles(tiles)
         else:

@@ -86,11 +86,11 @@ class EntityHandler(Subscriber):
             elif not entity_blocking_movement and not tile_blocking_movement:
 
                 # clean up old tile
-                old_tile = world.Map.get_tile(old_x, old_y)
+                old_tile = world.Map.get_tile((old_x, old_y))
                 world.Map.set_entity_on_tile(old_tile, None)
 
                 # move entity to new tile
-                new_tile = world.Map.get_tile(target_x, target_y)
+                new_tile = world.Map.get_tile((target_x, target_y))
                 world.Map.set_entity_on_tile(new_tile, entity)
 
                 # activate the tile's aspects affect
@@ -120,7 +120,7 @@ class EntityHandler(Subscriber):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
 
             # determine direction
-            tile = world.Map.get_tile(tile_pos_string=event.tile_pos_string)
+            tile = world.Map.get_tile(event.tile_pos)
             dir_x = tile.x - entity.x
             dir_y = tile.y - entity.y
             event.skill.use((dir_x, dir_y))
@@ -148,7 +148,7 @@ class EntityHandler(Subscriber):
 
         # get the tile and remove the entity from it
         tile_x, tile_y = entity.x, entity.y
-        tile = world.Map.get_tile(tile_x, tile_y)
+        tile = world.Map.get_tile((tile_x, tile_y))
         world.Map.set_entity_on_tile(tile, None)
 
         # remove from turn queue

@@ -228,7 +228,7 @@ class UiHandler(Subscriber):
                 ui.Element.move_camera(move_x, move_y)
 
             # update player's pos in camera
-            tile = world.Map.get_tile(target_x, target_y)
+            tile = world.Map.get_tile((target_x, target_y))
             ui.Element.set_player_tile(tile)
 
         ui.Element.update_cameras_tiles()
