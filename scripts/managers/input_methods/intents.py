@@ -6,21 +6,21 @@ class Intents:
     """
     Hold the input intents
     """
-    up = False
-    down = False
-    left = False
-    right = False
-    up_right = False
-    up_left = False
-    down_right = False
-    down_left = False
-    confirm = False
-    cancel = False
-    debug_toggle = False
-    skill0 = False
-    skill1 = False
-    skill2 = False
-    skill3 = False
-    skill4 = False
-    refresh_data = False
-    button_pressed = False
+    up: bool = False
+    down: bool = False
+    left: bool = False
+    right: bool = False
+    up_right: bool = False
+    up_left: bool = False
+    down_right: bool = False
+    down_left: bool = False
+    confirm: bool = False
+    cancel: bool = False
+    debug_toggle: bool = False
+    skill0: bool = False
+    skill1: bool = False
+    skill2: bool = False
+    skill3: bool = False
+    skill4: bool = False
+    refresh_data: bool = False
+    button_pressed: bool = False

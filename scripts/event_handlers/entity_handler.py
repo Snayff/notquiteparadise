@@ -59,50 +59,49 @@ class EntityHandler(Subscriber):
             event(MoveEvent):
         """
         # get info from event
-        target_x, target_y = event.target_pos
+        dir_x, dir_y = event.direction
+        distance = event.distance
         entity = event.entity
         old_x, old_y = entity.x, entity.y
 
-        # is there something in the way?
-        in_bounds = world.Map.is_tile_in_bounds(target_x, target_y)
-        tile_blocking_movement = world.Map.is_tile_blocking_movement(target_x, target_y)
-        entity_blocking_movement = world.Entity.get_blocking_entity(target_x, target_y)
+        for step in range(0, distance):
+            target_x = old_x + dir_x
+            target_y = old_y + dir_y
 
-        if in_bounds:
+            # is there something in the way?
+            if world.Map.is_tile_in_bounds(target_x, target_y):
+                is_tile_blocking_movement = world.Map.is_tile_blocking_movement(target_x, target_y)
+                entity_blocking_movement = world.Entity.get_blocking_entity(target_x, target_y)
 
-            # check for no entity in way but tile is blocked
-            if not entity_blocking_movement and tile_blocking_movement:
-                msg = f"There`s something in the way!"
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                # check for no entity in way but tile is blocked
+                if not entity_blocking_movement and is_tile_blocking_movement:
+                    msg = f"There`s something in the way!"
+                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
 
-            # check if entity blocking tile to attack
-            elif entity_blocking_movement:
-                skill = entity.actor.known_skills[0]
-                dir_x = target_x - entity.x
-                dir_y = target_y - entity.y
-                publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
+                # check if entity blocking tile to attack
+                elif entity_blocking_movement:
+                    skill = entity.actor.known_skills[0]
+                    publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
 
-            # if nothing in the way, time to move!
-            elif not entity_blocking_movement and not tile_blocking_movement:
+                # if nothing in the way, time to move!
+                elif not entity_blocking_movement and not is_tile_blocking_movement:
+                    # clean up old tile
+                    old_tile = world.Map.get_tile((old_x, old_y))
+                    world.Map.set_entity_on_tile(old_tile, None)
 
-                # clean up old tile
-                old_tile = world.Map.get_tile((old_x, old_y))
-                world.Map.set_entity_on_tile(old_tile, None)
+                    # move entity to new tile
+                    new_tile = world.Map.get_tile((target_x, target_y))
+                    world.Map.set_entity_on_tile(new_tile, entity)
 
-                # move entity to new tile
-                new_tile = world.Map.get_tile((target_x, target_y))
-                world.Map.set_entity_on_tile(new_tile, entity)
-
-                # activate the tile's aspects affect
-                world.Map.trigger_aspects_on_tile(new_tile)
+                    # activate the tile's aspects affect
+                    world.Map.trigger_aspects_on_tile(new_tile)
 
                 # update fov if needed
                 if entity.player:
-                    player = world.Entity.get_player()
-                    world.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
+                    world.FOV.recompute_player_fov(entity.x, entity.y, entity.sight_range)
 
-                # end turn
-                publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
+        # end turn
+        publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
 
     @staticmethod
     def process_skill(event):

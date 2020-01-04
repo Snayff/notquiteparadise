@@ -1,4 +1,5 @@
 import logging
+import math
 
 from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
     SkillTerrainCollisions
@@ -36,8 +37,8 @@ class Skill:
         # initial values
         start_x = entity.x
         start_y = entity.y
-        dir_x = abs(target_direction[0])  # abs to handle any mistaken values coming in
-        dir_y = abs(target_direction[1])
+        dir_x = int(math.copysign(1, target_direction[0]))  # sign to handle any mistaken values coming in
+        dir_y = int(math.copysign(1, target_direction[1]))
         direction = (dir_x, dir_y)
 
         # flags

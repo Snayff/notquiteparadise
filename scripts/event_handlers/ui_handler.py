@@ -78,8 +78,9 @@ class UiHandler(Subscriber):
                 #ui.Element.update_entity_queue()
                 self.update_camera()
             elif event.event_type == EntityEventTypes.MOVE:
-                if event.entity == world.Entity.get_player():
-                    self.update_camera(event.start_pos, event.target_pos)
+                player = world.Entity.get_player()
+                if event.entity == player:
+                    self.update_camera(event.start_pos, (player.x, player.y))
                 else:
                     self.update_camera()
 

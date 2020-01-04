@@ -26,9 +26,10 @@ class InputManager:
         self.Control.reset_intents()
 
         # convert input to intent
-        self.Control.check_actions(event)
-        self.Control.check_directions(event)
-        self.Control.check_dev_actions(event)
+        if event.type == pygame.KEYDOWN or event.type == pygame.USEREVENT:
+            self.Control.check_actions(event)
+            self.Control.check_directions(event)
+            self.Control.check_dev_actions(event)
 
         # process intent
         self.Control.process_stateless_intents(event)

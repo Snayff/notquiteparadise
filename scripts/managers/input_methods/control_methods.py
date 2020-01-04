@@ -32,25 +32,23 @@ class ControlMethods:
             event (pygame.event):
         """
         # TODO - refer to key mapping to enable key rebinding
-        try:
-            if event.key == pygame.K_UP or event.key == pygame.K_KP8 or event.key == pygame.K_k:
-                self.set_intent(InputIntents.UP)
-            elif event.key == pygame.K_DOWN or event.key == pygame.K_KP2 or event.key == pygame.K_j:
-                self.set_intent(InputIntents.DOWN)
-            elif event.key == pygame.K_LEFT or event.key == pygame.K_KP4 or event.key == pygame.K_h:
-                self.set_intent(InputIntents.LEFT)
-            elif event.key == pygame.K_RIGHT or event.key == pygame.K_KP6 or event.key == pygame.K_l:
-                self.set_intent(InputIntents.RIGHT)
-            elif event.key == pygame.K_KP7 or event.key == pygame.K_y:
-                self.set_intent(InputIntents.UP_LEFT)
-            elif event.key == pygame.K_KP9 or event.key == pygame.K_u:
-                self.set_intent(InputIntents.UP_RIGHT)
-            elif event.key == pygame.K_KP1 or event.key == pygame.K_b:
-                self.set_intent(InputIntents.DOWN_LEFT)
-            elif event.key == pygame.K_KP3 or event.key == pygame.K_n:
-                self.set_intent(InputIntents.DOWN_RIGHT)
-        except AttributeError:
-            pass
+
+        if event.key == pygame.K_UP or event.key == pygame.K_KP8 or event.key == pygame.K_k:
+            self.set_intent(InputIntents.UP)
+        elif event.key == pygame.K_DOWN or event.key == pygame.K_KP2 or event.key == pygame.K_j:
+            self.set_intent(InputIntents.DOWN)
+        elif event.key == pygame.K_LEFT or event.key == pygame.K_KP4 or event.key == pygame.K_h:
+            self.set_intent(InputIntents.LEFT)
+        elif event.key == pygame.K_RIGHT or event.key == pygame.K_KP6 or event.key == pygame.K_l:
+            self.set_intent(InputIntents.RIGHT)
+        elif event.key == pygame.K_KP7 or event.key == pygame.K_y:
+            self.set_intent(InputIntents.UP_LEFT)
+        elif event.key == pygame.K_KP9 or event.key == pygame.K_u:
+            self.set_intent(InputIntents.UP_RIGHT)
+        elif event.key == pygame.K_KP1 or event.key == pygame.K_b:
+            self.set_intent(InputIntents.DOWN_LEFT)
+        elif event.key == pygame.K_KP3 or event.key == pygame.K_n:
+            self.set_intent(InputIntents.DOWN_RIGHT)
 
     def check_actions(self, event):
         """
@@ -60,23 +58,20 @@ class ControlMethods:
             event (pygame.event):
         """
         # TODO - refer to key mapping to enable key rebinding
-        try:
-            if event.key == pygame.K_1:
-                self.set_intent(InputIntents.SKILL0)
-            elif event.key == pygame.K_2:
-                self.set_intent(InputIntents.SKILL1)
-            elif event.key == pygame.K_3:
-                self.set_intent(InputIntents.SKILL2)
-            elif event.key == pygame.K_4:
-                self.set_intent(InputIntents.SKILL3)
-            elif event.key == pygame.K_5:
-                self.set_intent(InputIntents.SKILL4)
-            elif event.key == pygame.K_RETURN:
-                self.set_intent(InputIntents.CONFIRM)
-            elif event.key == pygame.K_ESCAPE:
-                self.set_intent(InputIntents.CANCEL)
-        except AttributeError:
-            pass
+        if event.key == pygame.K_1:
+            self.set_intent(InputIntents.SKILL0)
+        elif event.key == pygame.K_2:
+            self.set_intent(InputIntents.SKILL1)
+        elif event.key == pygame.K_3:
+            self.set_intent(InputIntents.SKILL2)
+        elif event.key == pygame.K_4:
+            self.set_intent(InputIntents.SKILL3)
+        elif event.key == pygame.K_5:
+            self.set_intent(InputIntents.SKILL4)
+        elif event.key == pygame.K_RETURN:
+            self.set_intent(InputIntents.CONFIRM)
+        elif event.key == pygame.K_ESCAPE:
+            self.set_intent(InputIntents.CANCEL)
 
     def check_dev_actions(self, event):
         """
@@ -85,13 +80,10 @@ class ControlMethods:
         Args:
             event (pygame.event):
         """
-        try:
-            if event.key == pygame.K_TAB:
-                self.set_intent(InputIntents.DEBUG_TOGGLE)
-            elif event.key == pygame.K_F5:
-                self.set_intent(InputIntents.REFRESH_DATA)
-        except AttributeError:
-            pass
+        if event.key == pygame.K_TAB:
+            self.set_intent(InputIntents.DEBUG_TOGGLE)
+        elif event.key == pygame.K_F5:
+            self.set_intent(InputIntents.REFRESH_DATA)
 
     ############### GET INFO ABOUT AN INPUT #########
     @staticmethod
@@ -179,6 +171,7 @@ class ControlMethods:
             intent ():
         """
         setattr(self.manager.Intents, intent.name.lower(), True)
+        print(f"Set {intent.name.lower()} Intent to True")
 
     def get_intent(self, intent: InputIntents):
         """
@@ -198,7 +191,7 @@ class ControlMethods:
         """
         for field in dataclasses.fields(self.manager.Intents):
             if field.type is bool:
-                setattr(self.manager.Intent, field.name, False)
+                setattr(self.manager.Intents, field.name, False)
 
     ############### PROCESS INTENT ###############
 
@@ -245,8 +238,7 @@ class ControlMethods:
         # Player movement
         dir_x, dir_y = self.get_pressed_direction()
         if dir_x != 0 or dir_y != 0:
-            target_x, target_y = dir_x + player.x, dir_y + player.y
-            publisher.publish(MoveEvent(player, (player.x, player.y), (target_x, target_y)))
+            publisher.publish(MoveEvent(player, (dir_x, dir_y)))
 
         # Use a skill
         skill_number = self.get_pressed_skills_number()
