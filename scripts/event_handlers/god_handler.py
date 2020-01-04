@@ -1,10 +1,14 @@
-import logging
+from __future__ import annotations
 
+import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import EntityEventTypes, EffectTypes, EventTopics
 from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.core.library import library
-from scripts.events.entity_events import UseSkillEvent
 from scripts.managers.world_manager import world
+
+if TYPE_CHECKING:
+    from scripts.events.entity_events import UseSkillEvent
 
 
 class GodHandler(Subscriber):

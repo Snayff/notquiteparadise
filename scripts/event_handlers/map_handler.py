@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import MapEventTypes, MessageEventTypes, GameEventTypes
 from scripts.event_handlers.pub_sub_hub import Subscriber
-from scripts.events.game_events import EndTurnEvent, EndRoundEvent
-from scripts.events.map_events import TileInteractionEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
-from scripts.events.message_events import MessageEvent
 from scripts.managers.world_manager import world
+
+if TYPE_CHECKING:
+    from scripts.events.game_events import EndTurnEvent, EndRoundEvent
+    from scripts.events.map_events import TileInteractionEvent
+    from scripts.events.message_events import MessageEvent
 
 
 class MapHandler(Subscriber):

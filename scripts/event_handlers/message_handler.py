@@ -1,9 +1,14 @@
-import logging
+from __future__ import annotations
 
+import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import MessageEventTypes
-from scripts.events.message_events import MessageEvent
+
 from scripts.managers.ui_manager import ui
 from scripts.event_handlers.pub_sub_hub import Subscriber
+
+if TYPE_CHECKING:
+    from scripts.events.message_events import MessageEvent
 
 
 class MessageHandler(Subscriber):

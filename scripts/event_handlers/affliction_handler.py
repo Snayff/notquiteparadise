@@ -1,12 +1,15 @@
+from __future__ import annotations
 
 import logging
-
+from typing import TYPE_CHECKING
 from scripts.core.constants import GameEventTypes, AfflictionTriggers, EntityEventTypes
-from scripts.event_handlers.pub_sub_hub import Subscriber, Event
-from scripts.events.entity_events import MoveEvent, UseSkillEvent
-from scripts.events.game_events import EndTurnEvent
+from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.managers.world_manager import world
-from scripts.world.entity import Entity
+
+if TYPE_CHECKING:
+    from scripts.events.entity_events import MoveEvent, UseSkillEvent
+    from scripts.events.game_events import EndTurnEvent
+    from scripts.world.entity import Entity
 
 
 class AfflictionHandler(Subscriber):
@@ -21,7 +24,7 @@ class AfflictionHandler(Subscriber):
         Control events related to afflictions
 
         Args:
-            event(Event): the event in need of processing
+            event(): the event in need of processing
         """
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
@@ -31,7 +34,6 @@ class AfflictionHandler(Subscriber):
             event: EndTurnEvent
             self.process_affliction_trigger(event.entity, AfflictionTriggers.END_TURN)
             self.process_end_of_turn_updates(event)
-
 
         elif event.event_type == EntityEventTypes.MOVE:
             event: MoveEvent

@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import logging
-from typing import Tuple
-from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes
+from typing import TYPE_CHECKING, Tuple
 from scripts.core.library import library
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.event_handlers.pub_sub_hub import Subscriber
-from scripts.skills.skill import Skill
-from scripts.world.entity import Entity
+from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
+        UIEventTypes
+
+if TYPE_CHECKING:
+    from scripts.skills.skill import Skill
+    from scripts.world.entity import Entity
 
 
 class UiHandler(Subscriber):

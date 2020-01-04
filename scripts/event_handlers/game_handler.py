@@ -1,11 +1,17 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import GameEventTypes, GameStates
 from scripts.core.event_hub import publisher
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
 from scripts.event_handlers.pub_sub_hub import Subscriber
-from scripts.events.game_events import ChangeGameStateEvent, EndTurnEvent, ExitGameEvent
+from scripts.events.game_events import ChangeGameStateEvent
+
+if TYPE_CHECKING:
+    from scripts.events.game_events import EndTurnEvent, ExitGameEvent
 
 
 class GameHandler(Subscriber):
