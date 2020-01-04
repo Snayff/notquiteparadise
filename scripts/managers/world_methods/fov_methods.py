@@ -19,7 +19,7 @@ class FOVMethods:
 
         for x in range(width):
             for y in range(height):
-                tile = self.manager.Map.get_tile(x, y)
+                tile = self.manager.Map.get_tile((x, y))
                 tcod.map_set_properties(fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
 
     def recompute_player_fov(self, x, y, radius):

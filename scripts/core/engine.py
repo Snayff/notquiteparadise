@@ -33,6 +33,10 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - add skill modifiers (blessings?)
 # TODO - ensure all skills in json have required fields
 # TODO - write tests / checking for json values
+# TODO - Message system;
+#  Change basic to message log
+#  Add a type to show small message above player
+#  Add another to show bug message on centre of screen.
 
 
 def main():
@@ -78,7 +82,7 @@ def game_loop():
 
         # update based on input events
         for event in pygame.event.get():
-            input.update(event)
+            input.update(event, game.game_state)
             ui.process_events(event)
 
         # allow everything to update in response to new state

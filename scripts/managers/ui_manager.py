@@ -9,9 +9,6 @@ from scripts.managers.ui_methods.element_methods import ElementMethods
 class UIManager:
     """
     Manage the UI, such as windows, resource bars etc
-
-    Attributes:
-        main_surface (pygame.surface): The main surface to render to
     """
 
     def __init__(self):
@@ -31,7 +28,7 @@ class UIManager:
 
     def process_events(self, event):
         """
-        Process input events
+        Control input events
 
         Args:
             event ():

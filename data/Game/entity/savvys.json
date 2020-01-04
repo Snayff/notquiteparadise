@@ -147,7 +147,7 @@
                 "resource_cost": 10,
                 "time_cost": 20,
                 "cooldown": 0,
-                "target_directions": ["down", "downleft", "upleft"],
+                "target_directions": ["down", "down_left", "up_left"],
                 "range": 5,
                 "terrain_collision": "reflect",
                 "travel_type": "projectile",

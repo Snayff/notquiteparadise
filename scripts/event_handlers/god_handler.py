@@ -16,7 +16,7 @@ class GodHandler(Subscriber):
 
     def run(self, event):
         """
-        Process god actions from events
+        Control god actions from events
 
         Args:
             event(Event): the event in need of processing

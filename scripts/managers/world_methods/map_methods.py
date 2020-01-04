@@ -5,7 +5,7 @@ from scripts.world.game_map import GameMap
 from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from scripts.core.library import library
 
 
@@ -104,27 +104,25 @@ class MapMethods:
         else:
             return False
 
-    def get_tile(self, tile_x: int = 0, tile_y: int = 0, tile_pos_string: str = ""):
+    def get_tile(self, tile_pos: Union[Tuple[int, int], str]) -> Tile:
         """
         Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string
 
         Args:
-            tile_x(int): x of tile
-            tile_y(int): y of tile
-            tile_pos_string (str): expects "x,y"
+            tile_pos (): str expects "x,y", or handles tuples (x, y)
 
         Returns:
             Tile: the tile at the location
         """
         game_map = self.get_game_map()
 
-        if tile_pos_string:
-            x, y = tile_pos_string.split(",")
+        if isinstance(tile_pos, str):
+            x, y = tile_pos.split(",")
             x = int(x)  # str to int
             y = int(y)
         else:
-            x = tile_x
-            y = tile_y
+            x = tile_pos[0]
+            y = tile_pos[1]
 
         return game_map.tiles[x][y]
 

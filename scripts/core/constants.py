@@ -107,6 +107,7 @@ class UIEventTypes(Enum):
     """
     CLICK_UI = auto()
     SELECT_ENTITY = auto()
+    CLICK_TILE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -399,6 +400,32 @@ class InputStates(Enum):
 
     __hash__ = None
 
+class InputIntents(Enum):
+    UP = auto()
+    DOWN = auto()
+    LEFT = auto()
+    RIGHT = auto()
+    UP_RIGHT = auto()
+    UP_LEFT = auto()
+    DOWN_RIGHT = auto()
+    DOWN_LEFT = auto()
+    CONFIRM = auto()
+    CANCEL = auto()
+    DEBUG_TOGGLE = auto()
+    SKILL0 = auto()
+    SKILL1 = auto()
+    SKILL2 = auto()
+    SKILL3 = auto()
+    SKILL4 = auto()
+    REFRESH_DATA = auto()
+    BUTTON_PRESSED = auto()
+
+    def __eq__(self, other):
+        if other.__class__ is self.__class__:
+            return self.name == other.name and self.value == other.value
+        return NotImplemented
+
+    __hash__ = None
 
 class UIElementTypes(Enum):
     """
@@ -420,15 +447,15 @@ class UIElementTypes(Enum):
 
 
 class Directions(Enum):
-    UPLEFT = (-1, -1)
+    UP_LEFT = (-1, -1)
     UP = (0, -1)
-    UPRIGHT = (1, -1)
+    UP_RIGHT = (1, -1)
     LEFT = (-1, 0)
     CENTRE = (0, 0)
     RIGHT = (1, 0)
-    DOWNLEFT = (-1, 1)
+    DOWN_LEFT = (-1, 1)
     DOWN = (0, 1)
-    DOWNRIGHT = (1, 1)
+    DOWN_RIGHT = (1, 1)
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

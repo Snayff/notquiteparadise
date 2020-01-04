@@ -15,7 +15,7 @@ class AfflictionHandler(Subscriber):
 
     def run(self, event):
         """
-        Process events related to afflictions
+        Control events related to afflictions
 
         Args:
             event(Event): the event in need of processing
@@ -42,7 +42,7 @@ class AfflictionHandler(Subscriber):
     @staticmethod
     def process_affliction_trigger(entity, trigger):
         """
-        Process the required affliction trigger
+        Control the required affliction trigger
 
         Args:
             entity (Entity):

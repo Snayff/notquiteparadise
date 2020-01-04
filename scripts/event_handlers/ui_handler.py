@@ -25,14 +25,16 @@ class UiHandler(Subscriber):
 
     def run(self, event):
         """
-        Process the events
+        Control the events
         """
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         if event.topic == EventTopics.UI:
-            if event.event_type == UIEventTypes.SELECT_ENTITY:
-                self.select_entity(event.selected_entity)
+            if event.event_type == UIEventTypes.CLICK_TILE:
+                tile = world.Map.get_tile(event.tile_pos_string)
+                entity = world.Map.get_entity_on_tile(tile)
+                self.select_entity(entity)
 
             # if event.event_type == UIEventTypes.CLICK_UI:
             #     button = event.button_pressed
@@ -76,8 +78,9 @@ class UiHandler(Subscriber):
                 #ui.Element.update_entity_queue()
                 self.update_camera()
             elif event.event_type == EntityEventTypes.MOVE:
-                if event.entity == world.Entity.get_player():
-                    self.update_camera(event.start_pos, event.target_pos)
+                player = world.Entity.get_player()
+                if event.entity == player:
+                    self.update_camera(event.start_pos, (player.x, player.y))
                 else:
                     self.update_camera()
 
@@ -226,7 +229,7 @@ class UiHandler(Subscriber):
                 ui.Element.move_camera(move_x, move_y)
 
             # update player's pos in camera
-            tile = world.Map.get_tile(target_x, target_y)
+            tile = world.Map.get_tile((target_x, target_y))
             ui.Element.set_player_tile(tile)
 
         ui.Element.update_cameras_tiles()

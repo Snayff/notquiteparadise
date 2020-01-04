@@ -1,4 +1,5 @@
 import logging
+import math
 
 from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
     SkillTerrainCollisions
@@ -36,8 +37,8 @@ class Skill:
         # initial values
         start_x = entity.x
         start_y = entity.y
-        dir_x = abs(target_direction[0])  # abs to handle any mistaken values coming in
-        dir_y = abs(target_direction[1])
+        dir_x = int(math.copysign(1, target_direction[0]))  # sign to handle any mistaken values coming in
+        dir_y = int(math.copysign(1, target_direction[1]))
         direction = (dir_x, dir_y)
 
         # flags
@@ -51,7 +52,7 @@ class Skill:
         for distance in range(1, data.range + 1):
             current_x = start_x + (dir_x * distance)
             current_y = start_y + (dir_y * distance)
-            tile = world.Map.get_tile(current_x, current_y)
+            tile = world.Map.get_tile((current_x, current_y))
 
             # did we hit terrain?
             if world.Map.tile_has_tag(tile, TargetTags.WALL, entity):
@@ -62,9 +63,9 @@ class Skill:
                     break
                 elif data.terrain_collision == SkillTerrainCollisions.REFLECT:
                     # work out position of adjacent walls
-                    adj_tile = world.Map.get_tile(current_x, current_y - dir_y)
+                    adj_tile = world.Map.get_tile((current_x, current_y - dir_y))
                     collision_adj_y = world.Map.tile_has_tag(adj_tile, TargetTags.WALL)
-                    adj_tile = world.Map.get_tile(current_x - dir_x, current_y)
+                    adj_tile = world.Map.get_tile((current_x - dir_x, current_y))
                     collision_adj_x = world.Map.tile_has_tag(adj_tile, TargetTags.WALL)
 
                     # where did we collide?

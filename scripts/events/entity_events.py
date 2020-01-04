@@ -1,7 +1,8 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 from scripts.core.constants import EntityEventTypes, EventTopics
 from scripts.event_handlers.pub_sub_hub import Event
+from scripts.skills.skill import Skill
 from scripts.world.entity import Entity
 
 
@@ -14,14 +15,17 @@ class UseSkillEvent(Event):
         target_pos (tuple): x, y
         skill (Skill):
     """
-    def __init__(self, entity_using_skill, skill, target_direction=None):
+    def __init__(self, entity_using_skill: Entity, skill: Skill, tile_pos: Union[Tuple[int, int], str]):
         Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)
         self.entity = entity_using_skill
-        self.target_direction = target_direction
+        self.tile_pos = tile_pos
         self.skill = skill
 
 
 class DieEvent(Event):
+    """
+    Event for handling the death of an entity.
+    """
     def __init__(self, dying_entity):
         Event.__init__(self, EntityEventTypes.DIE, EventTopics.ENTITY)
         self.dying_entity = dying_entity
@@ -31,12 +35,13 @@ class MoveEvent(Event):
     """
     Event to move an entity as a basic move action
     """
-    def __init__(self, entity_to_move: Entity, start_pos: Tuple, target_pos: Tuple):
+    def __init__(self, entity_to_move: Entity, direction: Tuple, distance: int = 1):
 
         Event.__init__(self, EntityEventTypes.MOVE, EventTopics.ENTITY)
         self.entity = entity_to_move
-        self.start_pos = start_pos
-        self.target_pos = target_pos
+        self.direction = direction
+        self.distance = distance
+        self.start_pos = (self.entity.x, self.entity.y)
 
 
 class LearnEvent(Event):

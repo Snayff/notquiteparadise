@@ -18,7 +18,7 @@ class MapHandler(Subscriber):
 
     def run(self, event):
         """
-        Process world events
+        Control world events
 
         Args:
             event(Event): the event in need of processing
@@ -85,7 +85,7 @@ class MapHandler(Subscriber):
         """
         entity = event.entity
         from scripts.managers.world_manager import world
-        tile = world.Map.get_tile(entity.x, entity.y)
+        tile = world.Map.get_tile((entity.x, entity.y))
 
         # trigger aspects
         world.Map.trigger_aspects_on_tile(tile)
