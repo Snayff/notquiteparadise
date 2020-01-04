@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import EntityEventTypes, MessageEventTypes
+from scripts.core.constants import EntityEventTypes, MessageEventTypes, Directions
 from scripts.events.message_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
@@ -74,13 +74,17 @@ class EntityHandler(Subscriber):
 
                 # check for no entity in way but tile is blocked
                 if not entity_blocking_movement and is_tile_blocking_movement:
-                    msg = f"There`s something in the way!"
-                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, f"There`s something in the way!"))
 
                 # check if entity blocking tile to attack
                 elif entity_blocking_movement:
                     skill = entity.actor.known_skills[0]
-                    publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
+                    skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                    direction = Directions((dir_x, dir_y))
+                    if direction in skill_data.target_directions:
+                        publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
+                    else:
+                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, f"{skill.name} doesn't go that way!"))
 
                 # if nothing in the way, time to move!
                 elif not entity_blocking_movement and not is_tile_blocking_movement:
