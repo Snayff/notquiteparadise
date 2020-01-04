@@ -32,7 +32,9 @@ class Skill:
         """
 
         data = library.get_skill_data(self.skill_tree_name, self.name)
+        skill_range = data.range
         entity = self.owner.owner
+
 
         # initial values
         start_x = entity.x
@@ -50,7 +52,7 @@ class Skill:
 
         # determine impact location N.B. +1 to make inclusive
         from scripts.managers.world_manager import world
-        for distance in range(1, data.range + 1):
+        for distance in range(1, skill_range + 1):
             current_x = start_x + (dir_x * distance)
             current_y = start_y + (dir_y * distance)
             tile = world.Map.get_tile((current_x, current_y))

@@ -142,10 +142,19 @@ class MapMethods:
         start_tile = self.get_tile(start_pos)
         target_tile = self.get_tile(target_pos)
 
-        dir_x = start_tile.x - target_tile.x
-        dir_x = int(math.copysign(1, dir_x))  # sign to handle any mistaken values coming in
-        dir_y = start_tile.y - target_tile.y
-        dir_y = int(math.copysign(1, dir_y))
+        dir_x = target_tile.x - start_tile.x
+        dir_y = target_tile.y - start_tile.y
+
+        # handle any mistaken values coming in
+        if dir_x > 1:
+            dir_x = 1
+        elif dir_x < -1:
+            dir_x = -1
+
+        if dir_y > 1:
+            dir_y = 1
+        elif dir_y < -1:
+            dir_y = -1
 
         return dir_x, dir_y
 
