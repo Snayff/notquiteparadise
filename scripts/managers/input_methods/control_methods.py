@@ -4,7 +4,7 @@ from scripts.core.constants import InputIntents, Directions, GameStates
 from scripts.core.event_hub import publisher
 from scripts.core.library import library
 from scripts.events.entity_events import MoveEvent, UseSkillEvent
-from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent
+from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent, EndTurnEvent
 from scripts.events.ui_events import ClickTile
 from scripts.managers.game_manager import game
 from scripts.managers.world_manager import world
@@ -239,6 +239,7 @@ class ControlMethods:
         dir_x, dir_y = self.get_pressed_direction()
         if dir_x != 0 or dir_y != 0:
             publisher.publish(MoveEvent(player, (dir_x, dir_y)))
+            publisher.publish(EndTurnEvent(player, 10))  # TODO - replace magic number with cost to move
 
         # Use a skill
         skill_number = self.get_pressed_skills_number()
@@ -266,6 +267,8 @@ class ControlMethods:
             button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
                 publisher.publish(UseSkillEvent(player, skill, button[1]))
+                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                publisher.publish(EndTurnEvent(player, skill_data.time_cost))
 
         # Cancel use
         if get_intent(intent.CANCEL):

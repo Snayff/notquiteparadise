@@ -100,9 +100,6 @@ class EntityHandler(Subscriber):
                 if entity.player:
                     world.FOV.recompute_player_fov(entity.x, entity.y, entity.sight_range)
 
-        # end turn
-        publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
-
     @staticmethod
     def process_skill(event):
         """
