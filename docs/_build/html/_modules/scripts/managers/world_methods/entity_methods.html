@@ -195,7 +195,7 @@
 <span class="sd">            Entity: returns entity if there is one, else None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO - change to just get the entity</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span>
 
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
@@ -215,7 +215,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            entity: Entity or None if no entity found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span>
 
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
@@ -396,7 +396,7 @@
 <span class="sd">            entity:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_entity_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EntityMethods.add_player_to_central_list"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_player_to_central_list">[docs]</a>    <span class="k">def</span> <span class="nf">add_player_to_central_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
@@ -419,7 +419,7 @@
 <span class="sd">            entity:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># remove from tile</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">remove_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
 
         <span class="c1"># remove from entities list</span>

@@ -162,7 +162,8 @@
 <dl class="class">
 <dt id="scripts.events.entity_events.DieEvent">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">DieEvent</code><span class="sig-paren">(</span><em class="sig-param">dying_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#DieEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.DieEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Event for handling the death of an entity.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="scripts.events.entity_events.LearnEvent">
@@ -181,13 +182,13 @@
 
 <dl class="class">
 <dt id="scripts.events.entity_events.MoveEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_move: scripts.world.entity.Entity</em>, <em class="sig-param">start_pos: Tuple</em>, <em class="sig-param">target_pos: Tuple</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_move: scripts.world.entity.Entity</em>, <em class="sig-param">direction: Tuple</em>, <em class="sig-param">distance: int = 1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event to move an entity as a basic move action</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.events.entity_events.UseSkillEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">UseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_using_skill</em>, <em class="sig-param">skill</em>, <em class="sig-param">target_direction=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">UseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_using_skill: scripts.world.entity.Entity, skill: scripts.skills.skill.Skill, tile_pos: Union[Tuple[int, int], str]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event for entity skill</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -249,6 +250,12 @@
 </div>
 <div class="section" id="module-scripts.events.ui_events">
 <span id="ui"></span><h2>UI<a class="headerlink" href="#module-scripts.events.ui_events" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.events.ui_events.ClickTile">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">ClickTile</code><span class="sig-paren">(</span><em class="sig-param">tile_pos_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#ClickTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.ClickTile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event for clicking a tile</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="scripts.events.ui_events.ClickUIEvent">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">ClickUIEvent</code><span class="sig-paren">(</span><em class="sig-param">button_pressed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#ClickUIEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.ClickUIEvent" title="Permalink to this definition">¶</a></dt>

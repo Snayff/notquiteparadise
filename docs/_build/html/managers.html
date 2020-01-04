@@ -756,15 +756,11 @@ Wrapper for the create effect under world.Skill.</p>
 
 <dl class="method">
 <dt id="scripts.managers.world_methods.map_methods.MapMethods.get_tile">
-<code class="sig-name descname">get_tile</code><span class="sig-paren">(</span><em class="sig-param">tile_x: int = 0</em>, <em class="sig-param">tile_y: int = 0</em>, <em class="sig-param">tile_pos_string: str = ''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_tile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_tile</code><span class="sig-paren">(</span><em class="sig-param">tile_pos: Union[Tuple[int, int], str]</em><span class="sig-paren">)</span> &#x2192; scripts.world.tile.Tile<a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_tile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – x of tile</p></li>
-<li><p><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – y of tile</p></li>
-<li><p><strong>tile_pos_string</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – expects “x,y”</p></li>
-</ul>
+<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>tile_pos</em>) – str expects “x,y”, or handles tuples (x, y)</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the tile at the location</p>

@@ -158,9 +158,11 @@
 <span></span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 
+<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.86.0&quot;</span>
 <span class="n">TILE_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 <span class="n">ICON_IN_TEXT_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="n">ICON_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
+
 
 <div class="viewcode-block" id="VisualInfo"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.VisualInfo">[docs]</a><span class="k">class</span> <span class="nc">VisualInfo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -262,6 +264,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">CLICK_UI</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">SELECT_ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CLICK_TILE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
@@ -554,6 +557,32 @@
 
     <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
 
+<div class="viewcode-block" id="InputIntents"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.InputIntents">[docs]</a><span class="k">class</span> <span class="nc">InputIntents</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">UP_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DOWN_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CONFIRM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CANCEL</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DEBUG_TOGGLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SKILL0</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SKILL1</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SKILL2</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SKILL3</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SKILL4</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">REFRESH_DATA</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">BUTTON_PRESSED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="UIElementTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.UIElementTypes">[docs]</a><span class="k">class</span> <span class="nc">UIElementTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -575,15 +604,15 @@
 
 
 <div class="viewcode-block" id="Directions"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.Directions">[docs]</a><span class="k">class</span> <span class="nc">Directions</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="n">UPLEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">UP</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">UPRIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">UP_RIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">LEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">CENTRE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">RIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">DOWNLEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">DOWN_LEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">DOWN</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">DOWNRIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
