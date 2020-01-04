@@ -222,7 +222,7 @@ class ControlMethods:
         """
         get_intent = self.get_intent
         intent = InputIntents
-        player = world.player
+        player = world.Entity.get_player()
 
         # Exit game
         if get_intent(intent.CANCEL):
@@ -258,7 +258,7 @@ class ControlMethods:
         """
         get_intent = self.get_intent
         intent = InputIntents
-        player = world.player
+        player = world.Entity.get_player()
         skill = game.active_skill
 
         # Use skill on tile
