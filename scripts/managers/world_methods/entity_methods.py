@@ -101,9 +101,9 @@ class EntityMethods:
         target_tile_position = [end_tile.x, end_tile.y]
         return scipy.spatial.distance.chebyshev(start_tile_position, target_tile_position)
 
-    def get_direct_direction_between_entities(self, start_entity, target_entity):
+    def get_direction_between_entities(self, start_entity, target_entity):
         """
-        get direction from an entity towards another entity`s location
+        Get direction from an entity towards another entity`s location. Respects blocked tiles.
 
         Args:
             start_entity (Entity):

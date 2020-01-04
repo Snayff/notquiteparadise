@@ -58,6 +58,7 @@ class ControlMethods:
             event (pygame.event):
         """
         # TODO - refer to key mapping to enable key rebinding
+        
         if event.key == pygame.K_1:
             self.set_intent(InputIntents.SKILL0)
         elif event.key == pygame.K_2:
@@ -266,7 +267,8 @@ class ControlMethods:
         if get_intent(intent.BUTTON_PRESSED):
             button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
-                publisher.publish(UseSkillEvent(player, skill, button[1]))
+                direction = world.Map.get_direction((player.x, player.y), button[1])
+                publisher.publish(UseSkillEvent(player, skill, direction))
                 skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
                 publisher.publish(EndTurnEvent(player, skill_data.time_cost))
 

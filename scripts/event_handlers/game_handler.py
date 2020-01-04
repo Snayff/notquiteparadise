@@ -9,9 +9,10 @@ from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
 from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.events.game_events import ChangeGameStateEvent
+from scripts.events.game_events import EndTurnEvent
 
 if TYPE_CHECKING:
-    from scripts.events.game_events import EndTurnEvent, ExitGameEvent
+    from scripts.events.game_events import ExitGameEvent
 
 
 class GameHandler(Subscriber):

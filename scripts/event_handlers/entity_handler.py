@@ -9,9 +9,10 @@ from scripts.core.event_hub import publisher
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.event_handlers.pub_sub_hub import Subscriber, Event
+from scripts.events.entity_events import UseSkillEvent
 
 if TYPE_CHECKING:
-    from scripts.events.entity_events import UseSkillEvent, DieEvent, LearnEvent, MoveEvent
+    from scripts.events.entity_events import DieEvent, LearnEvent, MoveEvent
 
 
 class EntityHandler(Subscriber):
@@ -113,17 +114,14 @@ class EntityHandler(Subscriber):
         if world.Skill.can_afford_cost(entity, skill_data.resource_type, skill_data.resource_cost):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
 
-            # determine direction
-            tile = world.Map.get_tile(event.tile_pos)
-            dir_x = tile.x - entity.x
-            dir_y = tile.y - entity.y
-            event.skill.use((dir_x, dir_y))
+            # use skill
+            event.skill.use(event.direction)
         else:
             # is it the player that's can't afford it?
-            if entity == world.player:
+            if entity == world.Entity.get_player():
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, "You cannot afford to do that."))
             else:
-                logging.warning(f"{entity} tried to use {skill.name}, which they can`t afford")
+                logging.warning(f"{entity.name} tried to use {skill.name}, which they can`t afford")
 
     @staticmethod
     def process_die(event: DieEvent):

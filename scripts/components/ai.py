@@ -91,6 +91,6 @@ class BasicMonster:
 
         # if direction == 0 then we aren't intending to move, did something fail?
         if direction[0] == 0 and direction[1] == 0:
-            direction = world.Entity.get_direct_direction_between_entities(entity, target)
+            direction = world.Entity.get_direction_between_entities(entity, target)
 
         return direction
