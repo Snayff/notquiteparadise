@@ -187,16 +187,18 @@
 <span class="sd">        Args:</span>
 <span class="sd">            target_direction (tuple): x y of the target direction</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+
         <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">skill_range</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">range</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">owner</span>
+
 
         <span class="c1"># initial values</span>
         <span class="n">start_x</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span>
         <span class="n">start_y</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span>
-        <span class="n">dir_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>  <span class="c1"># sign to handle any mistaken values coming in</span>
-        <span class="n">dir_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">)</span>
+        <span class="n">dir_x</span> <span class="o">=</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dir_y</span> <span class="o">=</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># flags</span>
         <span class="n">activate</span> <span class="o">=</span> <span class="kc">False</span>
@@ -206,7 +208,8 @@
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity.name}</span><span class="s2"> used </span><span class="si">{self.name}</span><span class="s2"> at (</span><span class="si">{start_x}</span><span class="s2">,</span><span class="si">{start_y}</span><span class="s2">) in {Directions(direction)}...&quot;</span><span class="p">)</span>
 
         <span class="c1"># determine impact location N.B. +1 to make inclusive</span>
-        <span class="k">for</span> <span class="n">distance</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+        <span class="k">for</span> <span class="n">distance</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">skill_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">current_x</span> <span class="o">=</span> <span class="n">start_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">dir_x</span> <span class="o">*</span> <span class="n">distance</span><span class="p">)</span>
             <span class="n">current_y</span> <span class="o">=</span> <span class="n">start_y</span> <span class="o">+</span> <span class="p">(</span><span class="n">dir_y</span> <span class="o">*</span> <span class="n">distance</span><span class="p">)</span>
             <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">))</span>

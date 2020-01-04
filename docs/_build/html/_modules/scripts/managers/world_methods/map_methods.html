@@ -156,6 +156,7 @@
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.managers.world_methods.map_methods</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
 
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
 <span class="kn">from</span> <span class="nn">scripts.world.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
@@ -282,6 +283,37 @@
             <span class="n">y</span> <span class="o">=</span> <span class="n">tile_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="MapMethods.get_direction"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_direction">[docs]</a>    <span class="k">def</span> <span class="nf">get_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the direction between two locations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_pos (): str expects &quot;x,y&quot;, or handles tuples (x, y)</span>
+<span class="sd">            target_pos (): str expects &quot;x,y&quot;, or handles tuples (x, y)</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">start_pos</span><span class="p">)</span>
+        <span class="n">target_tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">(</span><span class="n">target_pos</span><span class="p">)</span>
+
+        <span class="n">dir_x</span> <span class="o">=</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">start_tile</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">dir_y</span> <span class="o">=</span> <span class="n">target_tile</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">start_tile</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="c1"># handle any mistaken values coming in</span>
+        <span class="k">if</span> <span class="n">dir_x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dir_x</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">dir_x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">dir_x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">dir_y</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dir_y</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">dir_y</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">dir_y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span></div>
 
 <div class="viewcode-block" id="MapMethods.get_tiles"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tiles">[docs]</a>    <span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_tile_col</span><span class="p">,</span> <span class="n">start_tile_row</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

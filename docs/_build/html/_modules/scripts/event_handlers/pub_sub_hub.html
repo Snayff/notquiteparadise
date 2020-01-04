@@ -181,7 +181,7 @@
             <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscribers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="p">[]):</span>
-                <span class="n">sub</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+                <span class="n">sub</span><span class="o">.</span><span class="n">process_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Publisher"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.pub_sub_hub.Publisher">[docs]</a><span class="k">class</span> <span class="nc">Publisher</span><span class="p">:</span>

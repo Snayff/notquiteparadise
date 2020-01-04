@@ -258,9 +258,9 @@
         <span class="n">target_tile_position</span> <span class="o">=</span> <span class="p">[</span><span class="n">end_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end_tile</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">chebyshev</span><span class="p">(</span><span class="n">start_tile_position</span><span class="p">,</span> <span class="n">target_tile_position</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EntityMethods.get_direct_direction_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_direct_direction_between_entities">[docs]</a>    <span class="k">def</span> <span class="nf">get_direct_direction_between_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityMethods.get_direction_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_direction_between_entities">[docs]</a>    <span class="k">def</span> <span class="nf">get_direction_between_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get direction from an entity towards another entity`s location</span>
+<span class="sd">        Get direction from an entity towards another entity`s location. Respects blocked tiles.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            start_entity (Entity):</span>

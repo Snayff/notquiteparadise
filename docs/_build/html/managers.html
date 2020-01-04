@@ -466,9 +466,9 @@ Wrapper for the create effect under world.Skill.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.get_direct_direction_between_entities">
-<code class="sig-name descname">get_direct_direction_between_entities</code><span class="sig-paren">(</span><em class="sig-param">start_entity</em>, <em class="sig-param">target_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.get_direct_direction_between_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.get_direct_direction_between_entities" title="Permalink to this definition">¶</a></dt>
-<dd><p>get direction from an entity towards another entity`s location</p>
+<dt id="scripts.managers.world_methods.entity_methods.EntityMethods.get_direction_between_entities">
+<code class="sig-name descname">get_direction_between_entities</code><span class="sig-paren">(</span><em class="sig-param">start_entity</em>, <em class="sig-param">target_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/entity_methods.html#EntityMethods.get_direction_between_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.entity_methods.EntityMethods.get_direction_between_entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get direction from an entity towards another entity`s location. Respects blocked tiles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -699,6 +699,21 @@ Wrapper for the create effect under world.Skill.</p>
 <dt id="scripts.managers.world_methods.map_methods.MapMethods.create_game_map">
 <code class="sig-name descname">create_game_map</code><span class="sig-paren">(</span><em class="sig-param">width</em>, <em class="sig-param">height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.create_game_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.create_game_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new GameMap and create player FOV</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_methods.map_methods.MapMethods.get_direction">
+<code class="sig-name descname">get_direction</code><span class="sig-paren">(</span><em class="sig-param">start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int], str]</em><span class="sig-paren">)</span> &#x2192; Tuple[int, int]<a class="reference internal" href="_modules/scripts/managers/world_methods/map_methods.html#MapMethods.get_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_methods.map_methods.MapMethods.get_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the direction between two locations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>target_pos</em>) – str expects “x,y”, or handles tuples (x, y)</p></li>
+<li><p><strong>(</strong><strong>)</strong> – str expects “x,y”, or handles tuples (x, y)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
 </dd></dl>
 
 <dl class="method">
