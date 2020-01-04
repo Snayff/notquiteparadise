@@ -4,7 +4,7 @@ from scripts.core.constants import InputIntents, Directions, GameStates
 from scripts.core.event_hub import publisher
 from scripts.core.library import library
 from scripts.events.entity_events import MoveEvent, UseSkillEvent
-from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent
+from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent, EndTurnEvent
 from scripts.events.ui_events import ClickTile
 from scripts.managers.game_manager import game
 from scripts.managers.world_manager import world
@@ -33,22 +33,24 @@ class ControlMethods:
         """
         # TODO - refer to key mapping to enable key rebinding
 
-        if event.key == pygame.K_UP or event.key == pygame.K_KP8 or event.key == pygame.K_k:
-            self.set_intent(InputIntents.UP)
-        elif event.key == pygame.K_DOWN or event.key == pygame.K_KP2 or event.key == pygame.K_j:
-            self.set_intent(InputIntents.DOWN)
-        elif event.key == pygame.K_LEFT or event.key == pygame.K_KP4 or event.key == pygame.K_h:
-            self.set_intent(InputIntents.LEFT)
-        elif event.key == pygame.K_RIGHT or event.key == pygame.K_KP6 or event.key == pygame.K_l:
-            self.set_intent(InputIntents.RIGHT)
-        elif event.key == pygame.K_KP7 or event.key == pygame.K_y:
-            self.set_intent(InputIntents.UP_LEFT)
-        elif event.key == pygame.K_KP9 or event.key == pygame.K_u:
-            self.set_intent(InputIntents.UP_RIGHT)
-        elif event.key == pygame.K_KP1 or event.key == pygame.K_b:
-            self.set_intent(InputIntents.DOWN_LEFT)
-        elif event.key == pygame.K_KP3 or event.key == pygame.K_n:
-            self.set_intent(InputIntents.DOWN_RIGHT)
+        # handle key press events
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP or event.key == pygame.K_KP8 or event.key == pygame.K_k:
+                self.set_intent(InputIntents.UP)
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_KP2 or event.key == pygame.K_j:
+                self.set_intent(InputIntents.DOWN)
+            elif event.key == pygame.K_LEFT or event.key == pygame.K_KP4 or event.key == pygame.K_h:
+                self.set_intent(InputIntents.LEFT)
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_KP6 or event.key == pygame.K_l:
+                self.set_intent(InputIntents.RIGHT)
+            elif event.key == pygame.K_KP7 or event.key == pygame.K_y:
+                self.set_intent(InputIntents.UP_LEFT)
+            elif event.key == pygame.K_KP9 or event.key == pygame.K_u:
+                self.set_intent(InputIntents.UP_RIGHT)
+            elif event.key == pygame.K_KP1 or event.key == pygame.K_b:
+                self.set_intent(InputIntents.DOWN_LEFT)
+            elif event.key == pygame.K_KP3 or event.key == pygame.K_n:
+                self.set_intent(InputIntents.DOWN_RIGHT)
 
     def check_actions(self, event):
         """
@@ -58,20 +60,26 @@ class ControlMethods:
             event (pygame.event):
         """
         # TODO - refer to key mapping to enable key rebinding
-        if event.key == pygame.K_1:
-            self.set_intent(InputIntents.SKILL0)
-        elif event.key == pygame.K_2:
-            self.set_intent(InputIntents.SKILL1)
-        elif event.key == pygame.K_3:
-            self.set_intent(InputIntents.SKILL2)
-        elif event.key == pygame.K_4:
-            self.set_intent(InputIntents.SKILL3)
-        elif event.key == pygame.K_5:
-            self.set_intent(InputIntents.SKILL4)
-        elif event.key == pygame.K_RETURN:
-            self.set_intent(InputIntents.CONFIRM)
-        elif event.key == pygame.K_ESCAPE:
-            self.set_intent(InputIntents.CANCEL)
+        # handle key press events
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_1:
+                self.set_intent(InputIntents.SKILL0)
+            elif event.key == pygame.K_2:
+                self.set_intent(InputIntents.SKILL1)
+            elif event.key == pygame.K_3:
+                self.set_intent(InputIntents.SKILL2)
+            elif event.key == pygame.K_4:
+                self.set_intent(InputIntents.SKILL3)
+            elif event.key == pygame.K_5:
+                self.set_intent(InputIntents.SKILL4)
+            elif event.key == pygame.K_RETURN:
+                self.set_intent(InputIntents.CONFIRM)
+            elif event.key == pygame.K_ESCAPE:
+                self.set_intent(InputIntents.CANCEL)
+
+        # handle mouse click events
+        if event.type == pygame.USEREVENT:
+            self.set_intent(InputIntents.BUTTON_PRESSED)
 
     def check_dev_actions(self, event):
         """
@@ -80,10 +88,12 @@ class ControlMethods:
         Args:
             event (pygame.event):
         """
-        if event.key == pygame.K_TAB:
-            self.set_intent(InputIntents.DEBUG_TOGGLE)
-        elif event.key == pygame.K_F5:
-            self.set_intent(InputIntents.REFRESH_DATA)
+        # handle key press events
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_TAB:
+                self.set_intent(InputIntents.DEBUG_TOGGLE)
+            elif event.key == pygame.K_F5:
+                self.set_intent(InputIntents.REFRESH_DATA)
 
     ############### GET INFO ABOUT AN INPUT #########
     @staticmethod
@@ -222,7 +232,7 @@ class ControlMethods:
         """
         get_intent = self.get_intent
         intent = InputIntents
-        player = world.player
+        player = world.Entity.get_player()
 
         # Exit game
         if get_intent(intent.CANCEL):
@@ -239,6 +249,7 @@ class ControlMethods:
         dir_x, dir_y = self.get_pressed_direction()
         if dir_x != 0 or dir_y != 0:
             publisher.publish(MoveEvent(player, (dir_x, dir_y)))
+            publisher.publish(EndTurnEvent(player, 10))  # TODO - replace magic number with cost to move
 
         # Use a skill
         skill_number = self.get_pressed_skills_number()
@@ -258,14 +269,17 @@ class ControlMethods:
         """
         get_intent = self.get_intent
         intent = InputIntents
-        player = world.player
+        player = world.Entity.get_player()
         skill = game.active_skill
 
         # Use skill on tile
         if get_intent(intent.BUTTON_PRESSED):
             button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
-                publisher.publish(UseSkillEvent(player, skill, button[1]))
+                direction = world.Map.get_direction((player.x, player.y), button[1])
+                publisher.publish(UseSkillEvent(player, skill, direction))
+                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                publisher.publish(EndTurnEvent(player, skill_data.time_cost))
 
         # Cancel use
         if get_intent(intent.CANCEL):

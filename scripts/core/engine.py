@@ -37,6 +37,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  Change basic to message log
 #  Add a type to show small message above player
 #  Add another to show bug message on centre of screen.
+# TODO - could turn manager sit under game?
 
 
 def main():

@@ -1,9 +1,15 @@
+from __future__ import annotations
 
 import logging
-
+from typing import TYPE_CHECKING
 from scripts.core.constants import GameEventTypes, AfflictionTriggers, EntityEventTypes
-from scripts.event_handlers.pub_sub_hub import Subscriber, Event
-from scripts.world.entity import Entity
+from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.managers.world_manager import world
+
+if TYPE_CHECKING:
+    from scripts.events.entity_events import MoveEvent, UseSkillEvent
+    from scripts.events.game_events import EndTurnEvent
+    from scripts.world.entity import Entity
 
 
 class AfflictionHandler(Subscriber):
@@ -13,34 +19,33 @@ class AfflictionHandler(Subscriber):
     def __init__(self, event_hub):
         Subscriber.__init__(self, "affliction_handler", event_hub)
 
-    def run(self, event):
+    def process_event(self, event):
         """
         Control events related to afflictions
 
         Args:
-            event(Event): the event in need of processing
+            event(): the event in need of processing
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
 
         if event.event_type == GameEventTypes.END_TURN:
             # trigger end of turn afflictions
+            event: EndTurnEvent
             self.process_affliction_trigger(event.entity, AfflictionTriggers.END_TURN)
-
-            # reduce duration and cleanse expired
-            from scripts.managers.world_manager import world
-            world.Affliction.reduce_affliction_durations_on_entity(event.entity)
-            world.Affliction.cleanse_expired_afflictions()
+            self.process_end_of_turn_updates(event)
 
         elif event.event_type == EntityEventTypes.MOVE:
+            event: MoveEvent
             self.process_affliction_trigger(event.entity, AfflictionTriggers.MOVE)
             self.process_affliction_trigger(event.entity, AfflictionTriggers.ACTION)
 
         elif event.event_type == EntityEventTypes.SKILL:
+            event: UseSkillEvent
             self.process_affliction_trigger(event.entity, AfflictionTriggers.ACTION)
 
     @staticmethod
-    def process_affliction_trigger(entity, trigger):
+    def process_affliction_trigger(entity: Entity, trigger: AfflictionTriggers):
         """
         Control the required affliction trigger
 
@@ -48,5 +53,16 @@ class AfflictionHandler(Subscriber):
             entity (Entity):
             trigger (AfflictionTriggers):
         """
-        from scripts.managers.world_manager import world
         world.Affliction.trigger_afflictions_on_entity(trigger, entity)
+
+    @staticmethod
+    def process_end_of_turn_updates(event: EndTurnEvent):
+        """
+        Reduce durations, cleanse expired.
+
+        Args:
+            event ():
+        """
+        # reduce duration and cleanse expired
+        world.Affliction.reduce_affliction_durations_on_entity(event.entity)
+        world.Affliction.cleanse_expired_afflictions()

@@ -1,12 +1,18 @@
-import logging
+from __future__ import annotations
 
+import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import GameEventTypes, GameStates
 from scripts.core.event_hub import publisher
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
-from scripts.events.game_events import ChangeGameStateEvent, EndTurnEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.events.game_events import ChangeGameStateEvent
+from scripts.events.game_events import EndTurnEvent
+
+if TYPE_CHECKING:
+    from scripts.events.game_events import ExitGameEvent
 
 
 class GameHandler(Subscriber):
@@ -17,23 +23,30 @@ class GameHandler(Subscriber):
     def __init__(self, event_hub):
         Subscriber.__init__(self, "game_handler", event_hub)
 
-    def run(self, event):
+    def process_event(self, event):
+        """
+        Process game events.
+
+        Args:
+            event ():
+        """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
 
         if event.event_type == GameEventTypes.EXIT:
+            event: ExitGameEvent
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
         elif event.event_type == GameEventTypes.END_TURN:
-            turn.end_turn(event.time_spent)
-            turn.next_turn()
-            publisher.publish(ChangeGameStateEvent(GameStates.NEW_TURN))
+            event: EndTurnEvent
+            self.process_end_turn(event)
 
         elif event.event_type == GameEventTypes.CHANGE_GAME_STATE:
-            self.transition_to_another_game_state(event)
+            event: ChangeGameStateEvent
+            self.process_change_game_state(event)
 
     @staticmethod
-    def transition_to_another_game_state(event):
+    def process_change_game_state(event: ChangeGameStateEvent):
         """
         Transition to another game state as specified by the event.
 
@@ -66,3 +79,15 @@ class GameHandler(Subscriber):
             log_string = f"-> new game state {new_game_state} is same as current" \
                          f" {game.game_state} so state not updated."
             logging.info(log_string)
+
+    @staticmethod
+    def process_end_turn(event: EndTurnEvent):
+        """
+        End turn, move to next turn, change game state to new turn.
+
+        Args:
+            event (EndTurnEvent):
+        """
+        turn.end_turn(event.time_spent)
+        turn.next_turn()
+        publisher.publish(ChangeGameStateEvent(GameStates.NEW_TURN))

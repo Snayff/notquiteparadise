@@ -1,4 +1,5 @@
 import logging
+import math
 
 from scripts.core.constants import TargetTags, TILE_SIZE
 from scripts.world.game_map import GameMap
@@ -125,6 +126,37 @@ class MapMethods:
             y = tile_pos[1]
 
         return game_map.tiles[x][y]
+
+    def get_direction(self, start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int],
+    str]) -> Tuple[int, int]:
+        """
+        Get the direction between two locations.
+
+        Args:
+            start_pos (): str expects "x,y", or handles tuples (x, y)
+            target_pos (): str expects "x,y", or handles tuples (x, y)
+
+        Returns:
+
+        """
+        start_tile = self.get_tile(start_pos)
+        target_tile = self.get_tile(target_pos)
+
+        dir_x = target_tile.x - start_tile.x
+        dir_y = target_tile.y - start_tile.y
+
+        # handle any mistaken values coming in
+        if dir_x > 1:
+            dir_x = 1
+        elif dir_x < -1:
+            dir_x = -1
+
+        if dir_y > 1:
+            dir_y = 1
+        elif dir_y < -1:
+            dir_y = -1
+
+        return dir_x, dir_y
 
     def get_tiles(self, start_tile_col, start_tile_row, coords):
         """

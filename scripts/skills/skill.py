@@ -30,16 +30,18 @@ class Skill:
         Args:
             target_direction (tuple): x y of the target direction
         """
-        from scripts.managers.world_manager import world
+
         data = library.get_skill_data(self.skill_tree_name, self.name)
+        skill_range = data.range
         entity = self.owner.owner
+
 
         # initial values
         start_x = entity.x
         start_y = entity.y
-        dir_x = int(math.copysign(1, target_direction[0]))  # sign to handle any mistaken values coming in
-        dir_y = int(math.copysign(1, target_direction[1]))
-        direction = (dir_x, dir_y)
+        dir_x = target_direction[0]
+        dir_y = target_direction[1]
+        direction = (target_direction[0], target_direction[1])
 
         # flags
         activate = False
@@ -49,7 +51,8 @@ class Skill:
         logging.info(f"{entity.name} used {self.name} at ({start_x},{start_y}) in {Directions(direction)}...")
 
         # determine impact location N.B. +1 to make inclusive
-        for distance in range(1, data.range + 1):
+        from scripts.managers.world_manager import world
+        for distance in range(1, skill_range + 1):
             current_x = start_x + (dir_x * distance)
             current_y = start_y + (dir_y * distance)
             tile = world.Map.get_tile((current_x, current_y))

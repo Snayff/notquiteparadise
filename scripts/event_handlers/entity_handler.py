@@ -1,14 +1,18 @@
-import logging
+from __future__ import annotations
 
-from scripts.core.constants import EntityEventTypes, MessageEventTypes
-from scripts.events.entity_events import UseSkillEvent
+import logging
+from typing import TYPE_CHECKING
+from scripts.core.constants import EntityEventTypes, MessageEventTypes, Directions
 from scripts.events.message_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
-from scripts.events.game_events import EndTurnEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber, Event
+from scripts.events.entity_events import UseSkillEvent
+
+if TYPE_CHECKING:
+    from scripts.events.entity_events import DieEvent, LearnEvent, MoveEvent
 
 
 class EntityHandler(Subscriber):
@@ -18,7 +22,7 @@ class EntityHandler(Subscriber):
     def __init__(self, event_hub):
         Subscriber.__init__(self, "entity_handler", event_hub)
 
-    def run(self, event):
+    def process_event(self, event):
         """
         Control entity events
 
@@ -26,31 +30,26 @@ class EntityHandler(Subscriber):
             event(Event): the event in need of processing
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
 
         if event.event_type == EntityEventTypes.MOVE:
-            log_string = f"-> Processing '{event.entity.name}'`s move."
-            logging.debug(log_string)
+            event: MoveEvent
             self.process_move(event)
 
         if event.event_type == EntityEventTypes.SKILL:
-            log_string = f"-> Processing '{event.entity.name}'`s skill: {event.skill.name}."
-            logging.debug(log_string)
+            event: UseSkillEvent
             self.process_skill(event)
 
         if event.event_type == EntityEventTypes.DIE:
-            log_string = f"-> Processing '{event.dying_entity.name}'`s death."
-            logging.debug(log_string)
+            event: DieEvent
             self.process_die(event)
 
         if event.event_type == EntityEventTypes.LEARN:
-            log_string = f"-> Processing '{event.entity.name}'`s learning of {event.skill_name} from " \
-                f"{event.skill_tree_name}."
-            logging.debug(log_string)
+            event: LearnEvent
             self.process_learn(event)
 
     @staticmethod
-    def process_move(event):
+    def process_move(event: MoveEvent):
         """
         Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
         target tile has entity) or move.
@@ -75,13 +74,17 @@ class EntityHandler(Subscriber):
 
                 # check for no entity in way but tile is blocked
                 if not entity_blocking_movement and is_tile_blocking_movement:
-                    msg = f"There`s something in the way!"
-                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, f"There`s something in the way!"))
 
                 # check if entity blocking tile to attack
                 elif entity_blocking_movement:
                     skill = entity.actor.known_skills[0]
-                    publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
+                    skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                    direction = Directions((dir_x, dir_y))
+                    if direction in skill_data.target_directions:
+                        publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
+                    else:
+                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, f"{skill.name} doesn't go that way!"))
 
                 # if nothing in the way, time to move!
                 elif not entity_blocking_movement and not is_tile_blocking_movement:
@@ -100,11 +103,8 @@ class EntityHandler(Subscriber):
                 if entity.player:
                     world.FOV.recompute_player_fov(entity.x, entity.y, entity.sight_range)
 
-        # end turn
-        publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
-
     @staticmethod
-    def process_skill(event):
+    def process_skill(event: UseSkillEvent):
         """
         Process the entity`s skill
         Args:
@@ -118,20 +118,17 @@ class EntityHandler(Subscriber):
         if world.Skill.can_afford_cost(entity, skill_data.resource_type, skill_data.resource_cost):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
 
-            # determine direction
-            tile = world.Map.get_tile(event.tile_pos)
-            dir_x = tile.x - entity.x
-            dir_y = tile.y - entity.y
-            event.skill.use((dir_x, dir_y))
+            # use skill
+            event.skill.use(event.direction)
         else:
             # is it the player that's can't afford it?
-            if entity == world.player:
+            if entity == world.Entity.get_player():
                 publisher.publish(MessageEvent(MessageEventTypes.BASIC, "You cannot afford to do that."))
             else:
-                logging.warning(f"{entity} tried to use {skill.name}, which they can`t afford")
+                logging.warning(f"{entity.name} tried to use {skill.name}, which they can`t afford")
 
     @staticmethod
-    def process_die(event):
+    def process_die(event: DieEvent):
         """
         Control the entity death
         Args:
@@ -157,7 +154,7 @@ class EntityHandler(Subscriber):
             turn.build_new_turn_queue()
 
     @staticmethod
-    def process_learn(event):
+    def process_learn(event: LearnEvent):
         """
         Have an entity learn a skill.
 
