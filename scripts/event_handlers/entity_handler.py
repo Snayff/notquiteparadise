@@ -1,14 +1,17 @@
-import logging
+from __future__ import annotations
 
+import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import EntityEventTypes, MessageEventTypes
-from scripts.events.entity_events import UseSkillEvent
 from scripts.events.message_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
-from scripts.events.game_events import EndTurnEvent
 from scripts.event_handlers.pub_sub_hub import Subscriber, Event
+
+if TYPE_CHECKING:
+    from scripts.events.entity_events import UseSkillEvent, DieEvent, LearnEvent, MoveEvent
 
 
 class EntityHandler(Subscriber):
@@ -18,7 +21,7 @@ class EntityHandler(Subscriber):
     def __init__(self, event_hub):
         Subscriber.__init__(self, "entity_handler", event_hub)
 
-    def run(self, event):
+    def process_event(self, event):
         """
         Control entity events
 
@@ -26,31 +29,26 @@ class EntityHandler(Subscriber):
             event(Event): the event in need of processing
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
 
         if event.event_type == EntityEventTypes.MOVE:
-            log_string = f"-> Processing '{event.entity.name}'`s move."
-            logging.debug(log_string)
+            event: MoveEvent
             self.process_move(event)
 
         if event.event_type == EntityEventTypes.SKILL:
-            log_string = f"-> Processing '{event.entity.name}'`s skill: {event.skill.name}."
-            logging.debug(log_string)
+            event: UseSkillEvent
             self.process_skill(event)
 
         if event.event_type == EntityEventTypes.DIE:
-            log_string = f"-> Processing '{event.dying_entity.name}'`s death."
-            logging.debug(log_string)
+            event: DieEvent
             self.process_die(event)
 
         if event.event_type == EntityEventTypes.LEARN:
-            log_string = f"-> Processing '{event.entity.name}'`s learning of {event.skill_name} from " \
-                f"{event.skill_tree_name}."
-            logging.debug(log_string)
+            event: LearnEvent
             self.process_learn(event)
 
     @staticmethod
-    def process_move(event):
+    def process_move(event: MoveEvent):
         """
         Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
         target tile has entity) or move.
@@ -101,7 +99,7 @@ class EntityHandler(Subscriber):
                     world.FOV.recompute_player_fov(entity.x, entity.y, entity.sight_range)
 
     @staticmethod
-    def process_skill(event):
+    def process_skill(event: UseSkillEvent):
         """
         Process the entity`s skill
         Args:
@@ -128,7 +126,7 @@ class EntityHandler(Subscriber):
                 logging.warning(f"{entity} tried to use {skill.name}, which they can`t afford")
 
     @staticmethod
-    def process_die(event):
+    def process_die(event: DieEvent):
         """
         Control the entity death
         Args:
@@ -154,7 +152,7 @@ class EntityHandler(Subscriber):
             turn.build_new_turn_queue()
 
     @staticmethod
-    def process_learn(event):
+    def process_learn(event: LearnEvent):
         """
         Have an entity learn a skill.
 

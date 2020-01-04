@@ -24,7 +24,7 @@ class EventHub:
             event = self.events.pop(0)
 
             for sub in self.subscribers.get(event.topic, []):
-                sub.run(event)
+                sub.process_event(event)
 
 
 class Publisher:

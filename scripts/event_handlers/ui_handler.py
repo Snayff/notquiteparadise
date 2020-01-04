@@ -18,7 +18,7 @@ class UiHandler(Subscriber):
     def __init__(self, event_hub):
         Subscriber.__init__(self, "ui_handler", event_hub)
 
-    def run(self, event):
+    def process_event(self, event):
         """
         Control the events
         """

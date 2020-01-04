@@ -3,6 +3,7 @@ import logging
 from scripts.core.constants import EntityEventTypes, EffectTypes, EventTopics
 from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.core.library import library
+from scripts.events.entity_events import UseSkillEvent
 from scripts.managers.world_manager import world
 
 
@@ -14,7 +15,7 @@ class GodHandler(Subscriber):
     def __init__(self, event_hub):
         Subscriber.__init__(self, "god_handler", event_hub)
 
-    def run(self, event):
+    def process_event(self, event):
         """
         Control god actions from events
 
@@ -34,6 +35,7 @@ class GodHandler(Subscriber):
             self.process_interventions(event)
 
         if event.event_type == EntityEventTypes.SKILL:
+            event: UseSkillEvent
             self.process_judgements(event)
 
     @staticmethod
