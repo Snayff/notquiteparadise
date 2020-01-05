@@ -28,9 +28,9 @@ class UIManager:
         # self.Element.update_elements()
         self.Gui.update(delta_time)
 
-    def process_events(self, event):
+    def process_pgui_events(self, event):
         """
-        Control input events
+        Process input events
 
         Args:
             event ():

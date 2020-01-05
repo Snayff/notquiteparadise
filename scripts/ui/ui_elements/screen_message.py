@@ -17,6 +17,7 @@ class ScreenMessage(UITextBox):
     """
     def __init__(self, text, manager: pygame_gui.ui_manager.UIManager,):
 
+        # TODO - centre the text on the screen
         x = VisualInfo.BASE_WINDOW_WIDTH / 4
         y = VisualInfo.BASE_WINDOW_HEIGHT / 3
         width = VisualInfo.BASE_WINDOW_WIDTH / 4

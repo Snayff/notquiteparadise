@@ -317,8 +317,11 @@ class ElementMethods:
         entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
         if entity_info:
-            entity_info.set_entity(entity)
-            entity_info.show()
+            if entity:
+                entity_info.set_entity(entity)
+                entity_info.show()
+            else:
+                entity_info.cleanse()
         else:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
