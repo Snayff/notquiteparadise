@@ -5,10 +5,9 @@ from typing import TYPE_CHECKING
 from scripts.core.constants import EntityEventTypes, MessageTypes, Directions
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
-from scripts.core.event_hub import publisher
+from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
-from scripts.event_handlers.pub_sub_hub import Subscriber, Event
 from scripts.events.entity_events import UseSkillEvent
 
 if TYPE_CHECKING:

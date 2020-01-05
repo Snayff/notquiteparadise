@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Tuple
 from scripts.core.library import library
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
-from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.core.event_hub import Subscriber
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MessageTypes, VisualInfo
 

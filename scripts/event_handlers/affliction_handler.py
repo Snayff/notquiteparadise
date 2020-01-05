@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.core.constants import GameEventTypes, AfflictionTriggers, EntityEventTypes
-from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.core.event_hub import Subscriber
 from scripts.managers.world_manager import world
 
 if TYPE_CHECKING:

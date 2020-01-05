@@ -1,7 +1,7 @@
 from typing import Tuple, Union
 
 from scripts.core.constants import EntityEventTypes, EventTopics
-from scripts.event_handlers.pub_sub_hub import Event
+from scripts.core.event_hub import Event
 from scripts.skills.skill import Skill
 from scripts.world.entity import Entity
 

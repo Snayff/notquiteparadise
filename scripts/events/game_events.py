@@ -1,5 +1,5 @@
 from scripts.core.constants import GameEventTypes, EventTopics
-from scripts.event_handlers.pub_sub_hub import Event
+from scripts.core.event_hub import Event
 
 
 class EndTurnEvent(Event):
