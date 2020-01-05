@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.entity_events">Entity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.game_events">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.message_events">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.ui_events">UI</a></li>
 </ul>
 </li>
@@ -240,13 +240,8 @@
 <div class="section" id="logging">
 <h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.events.message_events">
-<span id="message"></span><h2>Message<a class="headerlink" href="#module-scripts.events.message_events" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.events.message_events.MessageEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.message_events.</code><code class="sig-name descname">MessageEvent</code><span class="sig-paren">(</span><em class="sig-param">event_type</em>, <em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/message_events.html#MessageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.message_events.MessageEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<div class="section" id="message">
+<h2>Message<a class="headerlink" href="#message" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-scripts.events.ui_events">
 <span id="ui"></span><h2>UI<a class="headerlink" href="#module-scripts.events.ui_events" title="Permalink to this headline">¶</a></h2>
@@ -257,17 +252,9 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="scripts.events.ui_events.ClickUIEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">ClickUIEvent</code><span class="sig-paren">(</span><em class="sig-param">button_pressed</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#ClickUIEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.ClickUIEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Event for clicking the UI</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mouse_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – </p></li>
-<li><p><strong>button_pressed</strong> (<a class="reference internal" href="core.html#scripts.core.constants.MouseButtons" title="scripts.core.constants.MouseButtons"><em>MouseButtons</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
+<dt id="scripts.events.ui_events.MessageEvent">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">MessageEvent</code><span class="sig-paren">(</span><em class="sig-param">message_type: MessageTypes</em>, <em class="sig-param">message: str</em>, <em class="sig-param">colour: str = None</em>, <em class="sig-param">size: int = 4</em>, <em class="sig-param">entity: Entity = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#MessageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.MessageEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to share messages with the player</p>
 </dd></dl>
 
 <dl class="class">

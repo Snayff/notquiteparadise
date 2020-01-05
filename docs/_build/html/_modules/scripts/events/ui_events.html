@@ -76,7 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.entity_events">Entity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.game_events">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#logging">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.message_events">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.ui_events">UI</a></li>
 </ul>
 </li>
@@ -155,27 +155,15 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.events.ui_events</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">UIEventTypes</span><span class="p">,</span> <span class="n">EventTopics</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">UIEventTypes</span><span class="p">,</span> <span class="n">EventTopics</span>
 <span class="kn">from</span> <span class="nn">scripts.event_handlers.pub_sub_hub</span> <span class="kn">import</span> <span class="n">Event</span>
 
-
-<div class="viewcode-block" id="ClickUIEvent"><a class="viewcode-back" href="../../../events.html#scripts.events.ui_events.ClickUIEvent">[docs]</a><span class="k">class</span> <span class="nc">ClickUIEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Event for clicking the UI</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        mouse_pos(tuple):</span>
-<span class="sd">        button_pressed (MouseButtons):</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button_pressed</span><span class="p">):</span>
-        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">UIEventTypes</span><span class="o">.</span><span class="n">CLICK_UI</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">UI</span><span class="p">)</span>
-
-        <span class="kn">from</span> <span class="nn">scripts.managers.ui_manager</span> <span class="kn">import</span> <span class="n">ui</span>
-        <span class="n">mouse_pos</span> <span class="o">=</span> <span class="n">ui</span><span class="o">.</span><span class="n">Mouse</span><span class="o">.</span><span class="n">get_scaled_mouse_pos</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mouse_x</span> <span class="o">=</span> <span class="n">mouse_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mouse_y</span> <span class="o">=</span> <span class="n">mouse_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">button_pressed</span> <span class="o">=</span> <span class="n">button_pressed</span></div>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">MessageTypes</span>
+    <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
 
 
 <div class="viewcode-block" id="SelectEntity"><a class="viewcode-back" href="../../../events.html#scripts.events.ui_events.SelectEntity">[docs]</a><span class="k">class</span> <span class="nc">SelectEntity</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
@@ -196,6 +184,25 @@
         <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">UIEventTypes</span><span class="o">.</span><span class="n">CLICK_TILE</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">UI</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">tile_pos_string</span> <span class="o">=</span> <span class="n">tile_pos_string</span></div>
+
+
+<div class="viewcode-block" id="MessageEvent"><a class="viewcode-back" href="../../../events.html#scripts.events.ui_events.MessageEvent">[docs]</a><span class="k">class</span> <span class="nc">MessageEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Event to share messages with the player</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message_type</span><span class="p">:</span> <span class="n">MessageTypes</span><span class="p">,</span>  <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">colour</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="n">entity</span><span class="p">:</span> <span class="n">Entity</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">UIEventTypes</span><span class="o">.</span><span class="n">MESSAGE</span><span class="p">,</span> <span class="n">EventTopics</span><span class="o">.</span><span class="n">UI</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_type</span> <span class="o">=</span> <span class="n">message_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span> <span class="o">=</span> <span class="n">colour</span>
+
+        <span class="c1"># max size is 7</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span></div>
 </pre></div>
 
 	    </div>

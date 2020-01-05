@@ -76,7 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.entity_events">Entity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.game_events">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#logging">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.message_events">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.ui_events">UI</a></li>
 </ul>
 </li>
@@ -208,7 +208,6 @@
 <span class="sd">    Topics that Events can be associated with.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">GAME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">MESSAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">UI</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">MAP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
@@ -230,10 +229,11 @@
     <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="MessageEventTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.MessageEventTypes">[docs]</a><span class="k">class</span> <span class="nc">MessageEventTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="MessageTypes"><a class="viewcode-back" href="../../../core.html#scripts.core.constants.MessageTypes">[docs]</a><span class="k">class</span> <span class="nc">MessageTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Types of Message Events&quot;&quot;&quot;</span>
-    <span class="n">BASIC</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">SYSTEM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">LOG</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
@@ -262,9 +262,9 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Types of UI events</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">CLICK_UI</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">SELECT_ENTITY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">CLICK_TILE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MESSAGE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>

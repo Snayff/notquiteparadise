@@ -76,7 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.entity_events">Entity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.game_events">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#logging">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.message_events">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#message">Message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.ui_events">UI</a></li>
 </ul>
 </li>
@@ -159,8 +159,8 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">EntityEventTypes</span><span class="p">,</span> <span class="n">MessageEventTypes</span><span class="p">,</span> <span class="n">Directions</span>
-<span class="kn">from</span> <span class="nn">scripts.events.message_events</span> <span class="kn">import</span> <span class="n">MessageEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">EntityEventTypes</span><span class="p">,</span> <span class="n">MessageTypes</span><span class="p">,</span> <span class="n">Directions</span>
+<span class="kn">from</span> <span class="nn">scripts.events.ui_events</span> <span class="kn">import</span> <span class="n">MessageEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.turn_manager</span> <span class="kn">import</span> <span class="n">turn</span>
@@ -231,7 +231,7 @@
 
                 <span class="c1"># check for no entity in way but tile is blocked</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">entity_blocking_movement</span> <span class="ow">and</span> <span class="n">is_tile_blocking_movement</span><span class="p">:</span>
-                    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;There`s something in the way!&quot;</span><span class="p">))</span>
+                    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageTypes</span><span class="o">.</span><span class="n">LOG</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;There`s something in the way!&quot;</span><span class="p">))</span>
 
                 <span class="c1"># check if entity blocking tile to attack</span>
                 <span class="k">elif</span> <span class="n">entity_blocking_movement</span><span class="p">:</span>
@@ -241,7 +241,7 @@
                     <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">target_directions</span><span class="p">:</span>
                         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">((</span><span class="n">UseSkillEvent</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">skill</span><span class="p">,</span> <span class="p">(</span><span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">))))</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{skill.name}</span><span class="s2"> doesn&#39;t go that way!&quot;</span><span class="p">))</span>
+                        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageTypes</span><span class="o">.</span><span class="n">LOG</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{skill.name}</span><span class="s2"> doesn&#39;t go that way!&quot;</span><span class="p">))</span>
 
                 <span class="c1"># if nothing in the way, time to move!</span>
                 <span class="k">elif</span> <span class="ow">not</span> <span class="n">entity_blocking_movement</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_tile_blocking_movement</span><span class="p">:</span>
@@ -280,7 +280,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># is it the player that&#39;s can&#39;t afford it?</span>
             <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageEventTypes</span><span class="o">.</span><span class="n">BASIC</span><span class="p">,</span> <span class="s2">&quot;You cannot afford to do that.&quot;</span><span class="p">))</span>
+                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MessageEvent</span><span class="p">(</span><span class="n">MessageTypes</span><span class="o">.</span><span class="n">LOG</span><span class="p">,</span> <span class="s2">&quot;You cannot afford to do that.&quot;</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity.name}</span><span class="s2"> tried to use </span><span class="si">{skill.name}</span><span class="s2">, which they can`t afford&quot;</span><span class="p">)</span></div>
 
