@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from scripts.world.entity import Entity
     from scripts.world.game_map import GameMap
 
+
 class WorldManager:
     """
     Contains all world related functionality

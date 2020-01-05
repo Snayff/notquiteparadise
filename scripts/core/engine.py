@@ -14,6 +14,10 @@ from scripts.managers.game_manager import game
 from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
+# Immediate TO DO list
+# TODO - move to esper and ecs
+# TODO - remove legacy "terrain"
+# TODO - add projectiles
 
 # Project Wide to do list...
 # TODO - swap out nose for pytest
