@@ -33,8 +33,16 @@ class MessageEvent(Event):
     """
     Event to share messages with the player
     """
-    def __init__(self, message_type: MessageTypes,  message: str, entity: Entity = None):
+    def __init__(self, message_type: MessageTypes,  message: str, colour: str = None, size: int = 4,
+            entity: Entity = None):
         Event.__init__(self, UIEventTypes.MESSAGE, EventTopics.UI)
         self.message = message
         self.message_type = message_type
         self.entity = entity
+        self.colour = colour
+
+        # max size is 7
+        if size > 7:
+            self.size = 7
+        else:
+            self.size = size

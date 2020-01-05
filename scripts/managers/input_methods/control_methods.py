@@ -1,11 +1,11 @@
 import dataclasses
 import pygame
-from scripts.core.constants import InputIntents, Directions, GameStates
+from scripts.core.constants import InputIntents, Directions, GameStates, MessageTypes
 from scripts.core.event_hub import publisher
 from scripts.core.library import library
 from scripts.events.entity_events import MoveEvent, UseSkillEvent
 from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent, EndTurnEvent
-from scripts.events.ui_events import ClickTile
+from scripts.events.ui_events import ClickTile, MessageEvent
 from scripts.managers.game_manager import game
 from scripts.managers.world_manager import world
 
@@ -240,6 +240,7 @@ class ControlMethods:
 
         # Button press
         if get_intent(intent.BUTTON_PRESSED):
+            publisher.publish(MessageEvent(MessageTypes.SCREEN, "This is a test", size=7))
             button = self.get_pressed_ui_button(event)
             # Click tile
             if button[0] == "tile":

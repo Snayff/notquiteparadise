@@ -6,6 +6,7 @@ from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.entity_info import EntityInfo
+from scripts.ui.ui_elements.screen_message import ScreenMessage
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
@@ -332,7 +333,7 @@ class ElementMethods:
         else:
             logging.warning(f"Tried to cleanse EntityInfo but key not found. Is it init'd?")
 
-    ############## MESSAGE LOG ###################
+    ############## MESSAGES #####################
 
     def add_to_message_log(self, message):
         """
@@ -347,3 +348,9 @@ class ElementMethods:
 
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")
+
+    def create_screen_message(self, message: str, colour, size: int):
+        # TODO - respect colour chosen
+        col = "#531B75"
+        text = f"<font face=’verdana’ color=’{col}’ size={size}>{message}</font>"
+        screen_message = ScreenMessage(text, self.manager.Gui)

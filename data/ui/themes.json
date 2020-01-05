@@ -91,8 +91,8 @@
              "text_vert_alignment": "bottom"
          }
      },
-          "#skill_button2":
-          {
+     "#skill_button2":
+     {
          "images":
          {
              "normal_image":
@@ -110,7 +110,8 @@
              "text_vert_alignment": "bottom"
          }
      },
-          "#skill_button3": {
+     "#skill_button3":
+     {
           
          "images":
          {
@@ -165,6 +166,21 @@
          "misc":
          {
              "border_width": "2"
+         }
+     },
+     "screen_message":
+     {
+         "colours":
+         {
+             "dark_bg":"#FFFFFF00",
+             "border": "#FFFFFF00",
+             "link_text": "#FFFFFF00",
+             "link_hover": "#FFFFFF00",
+             "link_selected": "#FFFFFF00"
+         },
+         "misc":
+         {
+             "padding": "1, 1"
          }
      }
  }

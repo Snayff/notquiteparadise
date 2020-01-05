@@ -7,7 +7,7 @@ from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, MessageTypes
+    UIEventTypes, MessageTypes, VisualInfo
 
 if TYPE_CHECKING:
     from scripts.skills.skill import Skill
@@ -186,3 +186,13 @@ class UiHandler(Subscriber):
         """
         if event.message_type == MessageTypes.LOG:
             ui.Element.add_to_message_log(event.message)
+
+        elif event.message_type == MessageTypes.SCREEN:
+            ui.Element.create_screen_message(event.message, event.colour, event.size)
+
+        elif event.message_type == MessageTypes.ENTITY:
+            # TODO - create message over entity
+            #  can we reuse screen message but provide xy?
+            pass
+
+
