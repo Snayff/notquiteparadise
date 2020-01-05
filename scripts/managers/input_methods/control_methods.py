@@ -240,7 +240,6 @@ class ControlMethods:
 
         # Button press
         if get_intent(intent.BUTTON_PRESSED):
-            publisher.publish(MessageEvent(MessageTypes.SCREEN, "This is a test", size=7))
             button = self.get_pressed_ui_button(event)
             # Click tile
             if button[0] == "tile":

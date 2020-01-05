@@ -350,7 +350,14 @@ class ElementMethods:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")
 
     def create_screen_message(self, message: str, colour, size: int):
-        # TODO - respect colour chosen
+        """
+        Create a message on the screen
+        Args:
+            message ():
+            colour ():
+            size ():
+        """
+        # TODO - respect colour chosen. Use colour mapping.
         col = "#531B75"
-        text = f"<font face=’verdana’ color=’{col}’ size={size}>{message}</font>"
+        text = f"<font face=barlow color={col} size={size}>{message}</font>"
         screen_message = ScreenMessage(text, self.manager.Gui)

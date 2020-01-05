@@ -20,7 +20,7 @@ class ScreenMessage(UITextBox):
         x = VisualInfo.BASE_WINDOW_WIDTH / 4
         y = VisualInfo.BASE_WINDOW_HEIGHT / 3
         width = VisualInfo.BASE_WINDOW_WIDTH / 4
-        height = 50
+        height = -1  # force auto size
         rect = pygame.Rect((x, y), (width, height))
 
         super().__init__(html_text=text, relative_rect=rect, manager=manager, wrap_to_height=True,
