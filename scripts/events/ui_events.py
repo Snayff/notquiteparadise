@@ -1,24 +1,12 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from scripts.core.constants import UIEventTypes, EventTopics
 from scripts.event_handlers.pub_sub_hub import Event
 
-
-class ClickUIEvent(Event):
-    """
-    Event for clicking the UI
-
-    Args:
-        mouse_pos(tuple):
-        button_pressed (MouseButtons):
-    """
-
-    def __init__(self, button_pressed):
-        Event.__init__(self, UIEventTypes.CLICK_UI, EventTopics.UI)
-
-        from scripts.managers.ui_manager import ui
-        mouse_pos = ui.Mouse.get_scaled_mouse_pos()
-        self.mouse_x = mouse_pos[0]
-        self.mouse_y = mouse_pos[1]
-        self.button_pressed = button_pressed
+if TYPE_CHECKING:
+    from scripts.core.constants import MessageTypes
+    from scripts.world.entity import Entity
 
 
 class SelectEntity(Event):
@@ -39,3 +27,14 @@ class ClickTile(Event):
         Event.__init__(self, UIEventTypes.CLICK_TILE, EventTopics.UI)
 
         self.tile_pos_string = tile_pos_string
+
+
+class MessageEvent(Event):
+    """
+    Event to share messages with the player
+    """
+    def __init__(self, message_type: MessageTypes,  message: str, entity: Entity = None):
+        Event.__init__(self, UIEventTypes.MESSAGE, EventTopics.UI)
+        self.message = message
+        self.message_type = message_type
+        self.entity = entity

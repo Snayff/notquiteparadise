@@ -1,6 +1,6 @@
 
-from scripts.core.constants import MessageEventTypes, EffectTypes
-from scripts.events.message_events import MessageEvent
+from scripts.core.constants import MessageTypes, EffectTypes
+from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
@@ -33,4 +33,4 @@ class AddAspectEffect(Effect):
 
             entity = self.owner.owner.owner
             msg = f"{entity.name} added {data.aspect_name} to {tile.terrain.name}."
-            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+            publisher.publish(MessageEvent(MessageTypes.LOG, msg))

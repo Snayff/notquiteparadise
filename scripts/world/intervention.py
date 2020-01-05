@@ -1,5 +1,5 @@
-from scripts.core.constants import MessageEventTypes
-from scripts.events.message_events import MessageEvent
+from scripts.core.constants import MessageTypes
+from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.world.god import God
@@ -43,4 +43,4 @@ class Intervention:
         tile = world.Map.get_tile((target_x, target_y))
         entity = world.Map.get_entity_on_tile(tile)
         msg = f"#col.info {self.owner.name} intervened, using {self.name} on {entity.name}."
-        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+        publisher.publish(MessageEvent(MessageTypes.LOG, msg))

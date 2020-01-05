@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import EntityEventTypes, MessageEventTypes, Directions
-from scripts.events.message_events import MessageEvent
+from scripts.core.constants import EntityEventTypes, MessageTypes, Directions
+from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.managers.turn_manager import turn
@@ -74,7 +74,7 @@ class EntityHandler(Subscriber):
 
                 # check for no entity in way but tile is blocked
                 if not entity_blocking_movement and is_tile_blocking_movement:
-                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, f"There`s something in the way!"))
+                    publisher.publish(MessageEvent(MessageTypes.LOG, f"There`s something in the way!"))
 
                 # check if entity blocking tile to attack
                 elif entity_blocking_movement:
@@ -84,7 +84,7 @@ class EntityHandler(Subscriber):
                     if direction in skill_data.target_directions:
                         publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
                     else:
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, f"{skill.name} doesn't go that way!"))
+                        publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill.name} doesn't go that way!"))
 
                 # if nothing in the way, time to move!
                 elif not entity_blocking_movement and not is_tile_blocking_movement:
@@ -123,7 +123,7 @@ class EntityHandler(Subscriber):
         else:
             # is it the player that's can't afford it?
             if entity == world.Entity.get_player():
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, "You cannot afford to do that."))
+                publisher.publish(MessageEvent(MessageTypes.LOG, "You cannot afford to do that."))
             else:
                 logging.warning(f"{entity.name} tried to use {skill.name}, which they can`t afford")
 

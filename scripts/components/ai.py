@@ -56,11 +56,11 @@ class BasicMonster:
         #     else:
         #         # TODO - if they can't move where they want move in a random direction before deciding to pass.
         #         msg_string = f"{entity.name} passed their turn."
-        #         publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg_string))
+        #         publisher.publish(MessageEvent(MessageTypes.LOG, msg_string))
         #         publisher.publish(EndTurnEvent(10))  # TODO -replace with pass turn skill
         # else:
         #     msg_string = f"{entity.name} passed their turn."
-        #     publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg_string))
+        #     publisher.publish(MessageEvent(MessageTypes.LOG, msg_string))
         #     publisher.publish(EndTurnEvent(10))  # TODO -replace with pass turn skill
 
     def get_target(self):

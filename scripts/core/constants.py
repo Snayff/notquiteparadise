@@ -51,7 +51,6 @@ class EventTopics(Enum):
     Topics that Events can be associated with.
     """
     GAME = auto()
-    MESSAGE = auto()
     ENTITY = auto()
     UI = auto()
     MAP = auto()
@@ -73,10 +72,11 @@ class GameEventTypes(Enum):
     __hash__ = None
 
 
-class MessageEventTypes(Enum):
+class MessageTypes(Enum):
     """Types of Message Events"""
-    BASIC = auto()
-    SYSTEM = auto()
+    LOG = auto()
+    ENTITY = auto()
+    SCREEN = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -105,9 +105,9 @@ class UIEventTypes(Enum):
     """
     Types of UI events
     """
-    CLICK_UI = auto()
     SELECT_ENTITY = auto()
     CLICK_TILE = auto()
+    MESSAGE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

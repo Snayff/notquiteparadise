@@ -181,7 +181,7 @@ class ControlMethods:
             intent ():
         """
         setattr(self.manager.Intents, intent.name.lower(), True)
-        print(f"Set {intent.name.lower()} Intent to True")
+        # print(f"Set {intent.name.lower()} Intent to True")
 
     def get_intent(self, intent: InputIntents):
         """
