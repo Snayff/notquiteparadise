@@ -3,9 +3,9 @@ import logging
 import random
 
 from typing import List
-from scripts.core.constants import MessageEventTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
+from scripts.core.constants import MessageTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
     EffectTypes, SkillShapes
-from scripts.events.message_events import MessageEvent
+from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effects.add_aspect import AddAspectEffect
@@ -64,7 +64,7 @@ class SkillMethods:
 
             else:
                 msg = f"You can't afford the cost."
-                publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
         return False
 

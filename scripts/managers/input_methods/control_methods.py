@@ -1,11 +1,11 @@
 import dataclasses
 import pygame
-from scripts.core.constants import InputIntents, Directions, GameStates
+from scripts.core.constants import InputIntents, Directions, GameStates, MessageTypes
 from scripts.core.event_hub import publisher
 from scripts.core.library import library
 from scripts.events.entity_events import MoveEvent, UseSkillEvent
 from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent, EndTurnEvent
-from scripts.events.ui_events import ClickTile
+from scripts.events.ui_events import ClickTile, MessageEvent
 from scripts.managers.game_manager import game
 from scripts.managers.world_manager import world
 
@@ -181,7 +181,7 @@ class ControlMethods:
             intent ():
         """
         setattr(self.manager.Intents, intent.name.lower(), True)
-        print(f"Set {intent.name.lower()} Intent to True")
+        # print(f"Set {intent.name.lower()} Intent to True")
 
     def get_intent(self, intent: InputIntents):
         """

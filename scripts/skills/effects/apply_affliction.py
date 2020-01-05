@@ -1,9 +1,9 @@
 
 import logging
 
-from scripts.core.constants import AfflictionCategory, HitTypes, MessageEventTypes, HitModifiers, \
+from scripts.core.constants import AfflictionCategory, HitTypes, MessageTypes, HitModifiers, \
     EffectTypes
-from scripts.events.message_events import MessageEvent
+from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
@@ -68,7 +68,7 @@ class ApplyAfflictionEffect(Effect):
                     # check if afflictions applied
                     if hit_type == HitTypes.GRAZE:
                         msg = f"{defender.name} resisted {effect_data.affliction_name}."
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
                     else:
                         hit_msg = ""
 
@@ -78,7 +78,7 @@ class ApplyAfflictionEffect(Effect):
                             hit_msg = f"a critical "
 
                         msg = f"{defender.name} succumbed to {hit_msg}{effect_data.affliction_name}."
-                        publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
                         self.apply_affliction(defender, modified_duration)
 

@@ -1,18 +1,15 @@
 import logging
 import time
 
-from scripts.core.constants import EventTopics, GameStates, MessageEventTypes
+from scripts.core.constants import EventTopics, GameStates
 from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
 from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
 from scripts.events.game_events import ChangeGameStateEvent
-from scripts.events.message_events import MessageEvent
-from scripts.event_handlers.message_handler import MessageHandler
 from scripts.event_handlers.game_handler import GameHandler
 from scripts.core.event_hub import publisher, event_hub
-from scripts.managers.ui_manager import ui
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.event_handlers.ui_handler import UiHandler
@@ -36,6 +33,8 @@ def initialise_logging():
         'a' - open for writing, appending to the end of the file if it exists
     
     """
+    # TODO - move to engine
+
     log_file_name = "logs/" + "game.log"
     log_level = logging.INFO
     file_mode = "w"
@@ -54,6 +53,7 @@ def initialise_game():
     """
     Init the game`s required info
     """
+    # TODO - move to events
 
     map_width = 50
     map_height = 30
@@ -87,11 +87,9 @@ def initialise_event_handlers():
     """
     Create the various event handlers and subscribe to required events.
     """
+    # TODO - move to engine
     game_handler = GameHandler(event_hub)
     game_handler.subscribe(EventTopics.GAME)
-
-    message_handler = MessageHandler(event_hub)
-    message_handler.subscribe(EventTopics.MESSAGE)
 
     entity_handler = EntityHandler(event_hub)
     entity_handler.subscribe(EventTopics.ENTITY)

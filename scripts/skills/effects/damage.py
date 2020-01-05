@@ -1,10 +1,10 @@
 import logging
 from typing import List
 
-from scripts.core.constants import TargetTags, MessageEventTypes, HitTypes, DamageTypes, PrimaryStatTypes, HitModifiers, EffectTypes
+from scripts.core.constants import TargetTags, MessageTypes, HitTypes, DamageTypes, PrimaryStatTypes, HitModifiers, EffectTypes
 from scripts.events.entity_events import DieEvent
 
-from scripts.events.message_events import MessageEvent
+from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effects.effect import Effect
@@ -89,7 +89,7 @@ class DamageEffect(Effect):
                             else:
                                 attacker_name = self.owner.name
                             msg = f"{attacker_name} {hit_type_desc} {defender.name} for {damage}."
-                            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                            publisher.publish(MessageEvent(MessageTypes.LOG, msg))
                             # TODO - add the damage type to the text and replace the type with an icon
                             # TODO - add the explanation of the damage roll to a tooltip
 
@@ -105,11 +105,11 @@ class DamageEffect(Effect):
 
                         else:
                             msg = f" {defender.name} resists damage from {self.owner.name}."
-                            publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                            publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
                 else:
                     msg = f"{attacker.name} uses {self.owner.name} and deals no damage to {defender.name}."
-                    publisher.publish(MessageEvent(MessageEventTypes.BASIC, msg))
+                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
     @staticmethod
     def calculate_damage(defending_entity, hit_type, effect_data, attacking_entity=None):

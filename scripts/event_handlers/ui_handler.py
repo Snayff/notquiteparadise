@@ -7,11 +7,12 @@ from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-        UIEventTypes
+    UIEventTypes, MessageTypes, VisualInfo
 
 if TYPE_CHECKING:
     from scripts.skills.skill import Skill
     from scripts.world.entity import Entity
+    from scripts.events.ui_events import MessageEvent
 
 
 class UiHandler(Subscriber):
@@ -30,43 +31,93 @@ class UiHandler(Subscriber):
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
         if event.topic == EventTopics.UI:
-            if event.event_type == UIEventTypes.CLICK_TILE:
-                tile = world.Map.get_tile(event.tile_pos_string)
-                entity = world.Map.get_entity_on_tile(tile)
-                self.select_entity(entity)
+            self.process_ui_event(event)
 
         if event.topic == EventTopics.ENTITY:
-
-            # update UI based on entity action taken
-            if event.event_type == EntityEventTypes.LEARN:
-                # TODO - update UI to reflect new skills
-                pass
-
-            elif event.event_type == EntityEventTypes.DIE:
-                # remove the entity from the camera
-                self.update_camera()
-
-            elif event.event_type == EntityEventTypes.MOVE:
-                # show the entity in the new tile
-                player = world.Entity.get_player()
-                if event.entity == player:
-                    self.update_camera(event.start_pos, (player.x, player.y))
-                else:
-                    self.update_camera()
+            self.process_entity_event(event)
 
         if event.topic == EventTopics.GAME:
-            if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
-                if event.new_game_state == GameStates.GAME_INITIALISING:
-                    self.init_ui()
+            self.process_game_event(event)
 
-                elif event.new_game_state == GameStates.TARGETING_MODE:
-                    # turn on targeting overlay
-                    self.set_targeting_overlay(True, event.skill_to_be_used)
+    ############# HANDLE ENTITY EVENTS ##############
 
-                # new turn updates
-                elif event.new_game_state == GameStates.NEW_TURN:
-                    # TODO - reflect new turn info
-                    pass
+    def process_entity_event(self, event):
+        """
+        Process entity topic event
+
+        Args:
+            event ():
+        """
+        # update UI based on entity action taken
+        if event.event_type == EntityEventTypes.LEARN:
+            # TODO - update UI to reflect new skills
+            pass
+
+        elif event.event_type == EntityEventTypes.DIE:
+            # remove the entity from the camera
+            self.update_camera()
+
+        elif event.event_type == EntityEventTypes.MOVE:
+            # show the entity in the new tile
+            player = world.Entity.get_player()
+            if event.entity == player:
+                self.update_camera(event.start_pos, (player.x, player.y))
+            else:
+                self.update_camera()
+
+    ############# HANDLE GAME EVENTS ###############
+
+    def process_game_event(self, event):
+        """
+        Process Game topic event
+
+        Args:
+            event ():
+        """
+        if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
+            if event.new_game_state == GameStates.GAME_INITIALISING:
+                self.init_ui()
+
+            elif event.new_game_state == GameStates.TARGETING_MODE:
+                # turn on targeting overlay
+                self.set_targeting_overlay(True, event.skill_to_be_used)
+
+            # new turn updates
+            elif event.new_game_state == GameStates.NEW_TURN:
+                # TODO - reflect new turn info
+                pass
+
+    def init_ui(self):
+        """
+        Initialise the UI elements
+        """
+        ui.Element.init_camera()
+        ui.Element.init_skill_bar()
+        ui.Element.init_message_log()
+        ui.Element.init_entity_info()
+
+        # update camera
+        self.update_camera()
+
+    ############# HANDLE UI EVENTS #################
+
+    def process_ui_event(self, event):
+        """
+        Process UI topic event
+
+        Args:
+            event ():
+        """
+        if event.event_type == UIEventTypes.CLICK_TILE:
+            # Select an entity
+            tile = world.Map.get_tile(event.tile_pos_string)
+            entity = world.Map.get_entity_on_tile(tile)
+            self.select_entity(entity)
+
+        if event.event_type == UIEventTypes.MESSAGE:
+            # process a message
+            event: MessageEvent
+            self.process_message(event)
 
     @staticmethod
     def set_targeting_overlay(is_visible: bool, skill: Skill = None):
@@ -115,18 +166,6 @@ class UiHandler(Subscriber):
         ui.Element.update_camera_game_map()
         ui.Element.update_camera_grid()
 
-    def init_ui(self):
-        """
-        Initialise the UI elements
-        """
-        ui.Element.init_camera()
-        ui.Element.init_skill_bar()
-        ui.Element.init_message_log()
-        ui.Element.init_entity_info()
-
-        # update camera
-        self.update_camera()
-
     @staticmethod
     def select_entity(entity: Entity):
         """
@@ -136,3 +175,24 @@ class UiHandler(Subscriber):
             entity ():
         """
         ui.Element.set_selected_entity(entity)
+
+    @staticmethod
+    def process_message(event: MessageEvent):
+        """
+        Process a message event
+
+        Args:
+            event ():
+        """
+        if event.message_type == MessageTypes.LOG:
+            ui.Element.add_to_message_log(event.message)
+
+        elif event.message_type == MessageTypes.SCREEN:
+            ui.Element.create_screen_message(event.message, event.colour, event.size)
+
+        elif event.message_type == MessageTypes.ENTITY:
+            # TODO - create message over entity
+            #  can we reuse screen message but provide xy?
+            pass
+
+

@@ -6,6 +6,7 @@ from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.entity_info import EntityInfo
+from scripts.ui.ui_elements.screen_message import ScreenMessage
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
@@ -316,8 +317,11 @@ class ElementMethods:
         entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
         if entity_info:
-            entity_info.set_entity(entity)
-            entity_info.show()
+            if entity:
+                entity_info.set_entity(entity)
+                entity_info.show()
+            else:
+                entity_info.cleanse()
         else:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
@@ -332,7 +336,7 @@ class ElementMethods:
         else:
             logging.warning(f"Tried to cleanse EntityInfo but key not found. Is it init'd?")
 
-    ############## MESSAGE LOG ###################
+    ############## MESSAGES #####################
 
     def add_to_message_log(self, message):
         """
@@ -347,3 +351,16 @@ class ElementMethods:
 
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")
+
+    def create_screen_message(self, message: str, colour, size: int):
+        """
+        Create a message on the screen
+        Args:
+            message ():
+            colour ():
+            size ():
+        """
+        # TODO - respect colour chosen. Use colour mapping.
+        col = "#531B75"
+        text = f"<font face=barlow color={col} size={size}>{message}</font>"
+        screen_message = ScreenMessage(text, self.manager.Gui)

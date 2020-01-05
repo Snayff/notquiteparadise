@@ -17,6 +17,8 @@ class UIManager:
         self.Gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT),
                                         "data/ui/themes.json")
 
+        self.Gui.add_font_paths("barlow", "assets/fonts/Barlow-Light.otf")
+
         logging.info(f"UIManager initialised.")
 
     def update(self, delta_time: float):
@@ -26,9 +28,9 @@ class UIManager:
         # self.Element.update_elements()
         self.Gui.update(delta_time)
 
-    def process_events(self, event):
+    def process_pgui_events(self, event):
         """
-        Control input events
+        Process input events
 
         Args:
             event ():
