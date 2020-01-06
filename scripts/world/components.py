@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    pass
+    import pygame
 
 
 class Position:
@@ -15,3 +15,10 @@ class Position:
         self.x = x
         self.y = y
 
+
+class Aesthetic:
+    """
+    An entity's sprite.
+    """
+    def __init__(self, sprite: pygame.Surface):
+        self.sprite = sprite

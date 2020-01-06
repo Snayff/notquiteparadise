@@ -80,6 +80,14 @@ class Camera(UIWindow):
                 for key, aspect in tile.aspects.items():
                     map_surf.blit(aspect.sprite, (x, y))
 
+        ##### ECS approach
+        from scripts.managers.world_manager import world
+        from scripts.world.components import Position
+        from scripts.world.components import Aesthetic
+        for entity, (pos, aesthetic) in world.World.get_components(Position, Aesthetic):
+            map_surf.blit(aesthetic.sprite, (pos.x, pos.y))
+        ##########
+
         self.game_map.image = map_surf
 
     def update_grid(self):

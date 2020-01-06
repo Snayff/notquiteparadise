@@ -1,10 +1,14 @@
+from __future__ import annotations
+
+import logging
+from typing import TYPE_CHECKING
+
 
 import logging
 import math
 import pygame
 import tcod
 import scipy.spatial
-
 from scripts.components.actor import Actor
 from scripts.components.combatant import Combatant
 from scripts.components.homeland import Homeland
@@ -15,6 +19,10 @@ from scripts.core.library import library
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
+if TYPE_CHECKING:
+    from typing import List
+    from scripts.managers.world_manager import WorldManager
+
 
 class EntityMethods:
     """
@@ -24,7 +32,6 @@ class EntityMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
     def get_blocking_entity(self, tile_x, tile_y):
@@ -317,3 +324,17 @@ class EntityMethods:
         else:
             self.manager.Entity.add_entity_to_central_list(tile_x, tile_y, actor)
 
+    def create_entity(self, components: List = []) -> int:
+        """
+        Use each component in a list of components to create an entity
+
+        Args:
+            components ():
+        """
+        world = self.manager.World
+        entity = world.create_entity()
+
+        for component in components:
+            world.add_component(entity, component)
+
+        return entity

@@ -82,6 +82,15 @@ def initialise_game():
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
     turn.turn_holder = world.player
 
+    ######################
+    from scripts.world.components import Position
+    from scripts.world.components import Aesthetic
+    c = []
+    c.append(Position(1, 2))
+    import pygame
+    c.append(Aesthetic(pygame.image.load("assets/actor/placeholder/Mobs_addons_091.png").convert_alpha()))
+    entity = world.Entity.create_entity(c)
+
 
 def initialise_event_handlers():
     """
