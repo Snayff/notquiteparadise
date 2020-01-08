@@ -11,5 +11,5 @@ setup(
     license='',
     author='Gabriel',
     author_email='',
-    description='', install_requires=['pygame', 'esper', 'tcod']
+    description='', install_requires=['pygame', 'esper', 'tcod', 'scipy']
 )

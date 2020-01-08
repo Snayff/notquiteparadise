@@ -7,10 +7,17 @@ if TYPE_CHECKING:
     import pygame
 
 
+class IsPlayer:
+    """
+    [Component] Whether the entity is the player.
+    """
+
+
 class Position:
     """
-    An entity's position on the map.
+    [Component] An entity's position on the map.
     """
+
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
@@ -18,7 +25,72 @@ class Position:
 
 class Aesthetic:
     """
-    An entity's sprite.
+    [Component] An entity's sprite.
     """
-    def __init__(self, sprite: pygame.Surface):
+
+    def __init__(self, sprite: pygame.Surface, icon: pygame.Surface):
+        self.icon = icon
         self.sprite = sprite
+
+
+class Resources:
+    """
+    [Component] An entity's resources.
+    """
+
+    def __init__(self, health: int, stamina: int):
+        self.health = health
+        self.stamina = stamina
+
+
+class Blocking:
+    """
+    [Component] An entity's blocking of other objects.
+    """
+
+    def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
+        self.blocks_movement = blocks_movement
+        self.blocks_sight = blocks_sight
+
+
+class Identity:
+    """
+    [Component] An entity's identity, such as name and description.
+    """
+
+    def __init__(self, name: str, description: str = ""):
+        self.name = name
+        self.description = description
+
+
+class Race:
+    """
+    [Component] An entity's race.
+    """
+
+    def __init__(self, race_name: str):
+        self.name = race_name
+
+
+class Savvy:
+    """
+    [Component] An entity's savvy.
+    """
+
+    def __init__(self, savvy_name: str):
+        self.name = savvy_name
+
+
+class Homeland:
+    """
+    [Component] An entity's homeland.
+    """
+
+    def __init__(self, homeland_name: str):
+        self.name = homeland_name
+
+
+class AIBasic:
+    """
+    [Component] An ai to control an entity.
+    """
