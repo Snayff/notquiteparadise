@@ -41,6 +41,7 @@ class Resources:
     def __init__(self, health: int, stamina: int):
         self.health = health
         self.stamina = stamina
+        self.time_spent = 0
 
 
 class Blocking:
@@ -94,3 +95,7 @@ class AIBasic:
     """
     [Component] An ai to control an entity.
     """
+
+
+class IsTurnHolder:
+    """[Component] Entity is the current turn holder."""

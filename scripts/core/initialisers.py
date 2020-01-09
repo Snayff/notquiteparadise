@@ -1,7 +1,8 @@
 import logging
 import time
+import pygame
 
-from scripts.core.constants import EventTopics, GameStates
+from scripts.core.constants import EventTopics, GameStates, TILE_SIZE
 from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
@@ -13,6 +14,7 @@ from scripts.core.event_hub import publisher, event_hub
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.event_handlers.ui_handler import UiHandler
+from scripts.world.components import IsPlayer, Resources, Blocking, Identity
 
 
 def initialise_logging():
@@ -60,36 +62,44 @@ def initialise_game():
     world.Map.create_game_map(map_width, map_height)
     world.FOV.create_player_fov_map(map_width, map_height)
 
-    # TODO - remove when map generation is in
-    world.Entity.create_actor_entity(0, 0, "player", "player", True)
-    player = world.Entity.get_player()
-    world.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
 
-    world.Entity.create_actor_entity(0, 3, "goblinn_hand", "steve")
-    world.Entity.create_actor_entity(1, 4, "goblinn_hand", "bob")
-    world.Entity.create_actor_entity(2, 3, "goblinn_hand", "estaban")
-    world.God.create_god("the small gods")
-
-    # TODO - remove when skill learning is in
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "basic attack"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "throw dice"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "bring down the mountain"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "burn the deck"))
-    publisher.publish(LearnEvent(world.player, "Fungechist", "Flail"))
-    publisher.publish(LearnEvent(world.player, "Fungechist", "Eye-watering Mistake"))
-    publisher.publish(LearnEvent(world.player, "Fungechist", "Fractious Fungi"))
-
-    publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
-    turn.turn_holder = world.player
 
     ######################
     from scripts.world.components import Position
     from scripts.world.components import Aesthetic
     c = []
     c.append(Position(1, 2))
-    import pygame
-    c.append(Aesthetic(pygame.image.load("assets/actor/placeholder/Mobs_addons_091.png").convert_alpha()))
+    image = pygame.image.load("assets/actor/placeholder/Mobs_skeleton_06.png").convert_alpha()
+    pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
+    c.append(Aesthetic(image, image))
+    c.append(IsPlayer())
+    c.append(Resources(10, 90))
+    c.append(Blocking(True, True))
+    c.append(Identity("player", "a desc"))
     entity = world.Entity.create_entity(c)
+
+
+    # world.Entity.create_actor_entity(0, 0, "player", "player", True)
+    # player = world.Entity.get_player()
+    # world.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
+
+    # TODO - remove when map generation is in
+    # world.Entity.create_actor_entity(0, 3, "goblinn_hand", "steve")
+    # world.Entity.create_actor_entity(1, 4, "goblinn_hand", "bob")
+    # world.Entity.create_actor_entity(2, 3, "goblinn_hand", "estaban")
+    # world.God.create_god("the small gods")
+
+    # TODO - remove when skill learning is in
+    # publisher.publish(LearnEvent(world.player, "cleromancer", "basic attack"))
+    # publisher.publish(LearnEvent(world.player, "cleromancer", "throw dice"))
+    # publisher.publish(LearnEvent(world.player, "cleromancer", "bring down the mountain"))
+    # publisher.publish(LearnEvent(world.player, "cleromancer", "burn the deck"))
+    # publisher.publish(LearnEvent(world.player, "Fungechist", "Flail"))
+    # publisher.publish(LearnEvent(world.player, "Fungechist", "Eye-watering Mistake"))
+    # publisher.publish(LearnEvent(world.player, "Fungechist", "Fractious Fungi"))
+
+    publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
+    # turn.turn_holder = world.player
 
 
 def initialise_event_handlers():

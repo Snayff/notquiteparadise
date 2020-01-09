@@ -15,6 +15,7 @@ from scripts.components.race import Race
 from scripts.components.savvy import Savvy
 from scripts.core.constants import TILE_SIZE
 from scripts.core.library import library
+from scripts.world.components import IsPlayer, Position, Blocking, Resources
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -90,9 +91,48 @@ class EntityMethods:
         Get the player.
 
         Returns:
-            Entity:
+            int: Entity ID
         """
-        return self.manager.player
+        for entity, flag in self.manager.World.get_component(IsPlayer):
+            return entity
+
+    def get_entity(self, unique_component):
+        """
+        Get a single entity that has a component. If multiple entities have the given component only the first found
+        is returned.
+
+        Args:
+            unique_component ():
+
+        Returns:
+            int: Entity ID.
+        """
+        entities = []
+        for entity, flag in self.manager.World.get_component(unique_component):
+            entities.append(entity)
+
+        if len(entities) != 1:
+            logging.warning(f"Tried to get an entity with {unique_component} component but found {len(entities)} "
+                            f"entities with that component.")
+
+        return entities[0]
+
+    def get_entitys_component(self, entity, component):
+        """
+        Get an entity's component.
+
+        Args:
+            entity ():
+            component ():
+
+        Returns:
+
+        """
+        if self.manager.World.has_component(entity, component):
+            return self.manager.World.component_for_entity(entity, component)
+
+
+
 
     ############## ENTITY CREATION ################
 
@@ -269,8 +309,7 @@ class EntityMethods:
 
             return start_entity.x, start_entity.y
 
-    @staticmethod
-    def get_a_star_direction_between_entities(start_entity, target_entity):
+    def get_a_star_direction_between_entities(self, start_entity, target_entity):
         """
         Use a* pathfinding to get a direction from one entity to another
         Args:
@@ -281,9 +320,11 @@ class EntityMethods:
 
         """
         max_path_length = 25
-        from scripts.managers.world_manager import world
-        game_map = world.game_map
-        entities = world.Entity.get_all_entities()
+        game_map = self.manager.game_map
+        entities = []
+        # TODO - update to use ECS
+        for ent, (pos, blocking) in self.manager.World.get_components(Position, Blocking):
+            entities.append(ent)
         entity_to_move = start_entity
         target = target_entity
 
@@ -343,3 +384,16 @@ class EntityMethods:
         # Delete the path to free memory
         tcod.path_delete(my_path)
         return direction_x, direction_y
+
+    ############### COMPONENT MANAGEMENT ##########
+
+    def spend_time(self, entity: int, time_spent: int):
+        """
+        Add time_spent to the entity's total time spent.
+
+        Args:
+            entity ():
+            time_spent ():
+        """
+        resources = self.manager.World.component_for_entity(entity, Resources)
+        resources.time_spent += time_spent
