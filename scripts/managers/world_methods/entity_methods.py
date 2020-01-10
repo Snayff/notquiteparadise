@@ -31,6 +31,7 @@ class EntityMethods:
     Attributes:
         manager(WorldManager): the manager containing this class.
     """
+
     def __init__(self, manager):
         self.manager = manager  # type: WorldManager
 
@@ -76,16 +77,6 @@ class EntityMethods:
 
         return None
 
-    def get_all_entities(self):
-        """
-        Get the list of all entities
-
-        Returns:
-            list: list of entities
-
-        """
-        return self.manager.entities
-
     def get_player(self):
         """
         Get the player.
@@ -96,7 +87,7 @@ class EntityMethods:
         for entity, flag in self.manager.World.get_component(IsPlayer):
             return entity
 
-    def get_entity(self, unique_component):
+    def get_entity(self, unique_component) -> int:
         """
         Get a single entity that has a component. If multiple entities have the given component only the first found
         is returned.
@@ -117,6 +108,32 @@ class EntityMethods:
 
         return entities[0]
 
+    def get_entities(self, component1, component2=None, component3=None) -> List[int]:
+        """
+        Get entities with the specified components.
+
+        Args:
+            component1 ():
+            component2 ():
+            component3 ():
+
+        Returns:
+            List[int]: List of Entity IDs
+        """
+        entities = []
+
+        if not component2 and not component3:
+            for entity, c1 in self.manager.World.get_component(component1):
+                entities.append(entity)
+        elif component2 and not component3:
+            for entity, (c1, c2) in self.manager.World.get_components(component1, component2):
+                entities.append(entity)
+        elif component2 and component3:
+            for entity, (c1, c2, c3) in self.manager.World.get_components(component1, component2, component3):
+                entities.append(entity)
+
+        return entities
+
     def get_entitys_component(self, entity, component):
         """
         Get an entity's component.
@@ -131,98 +148,16 @@ class EntityMethods:
         if self.manager.World.has_component(entity, component):
             return self.manager.World.component_for_entity(entity, component)
 
-
-
-
     ############## ENTITY CREATION ################
 
-    def add_entity_to_central_list(self, tile_x, tile_y, entity):
+    def remove_entity(self, entity: int):
         """
-        Add entity to game map
-
-        Args:
-            tile_x:
-            tile_y:
-            entity:
-        """
-        self.manager.entities.append(entity)
-        tile = self.manager.Map.get_tile((tile_x, tile_y))
-        self.manager.Map.set_entity_on_tile(tile, entity)
-
-    def add_player_to_central_list(self, tile_x, tile_y, entity):
-        """
-
-        Args:
-            tile_x:
-            tile_y:
-            entity:
-        """
-        # TODO - fold into create actor, use player arg default to false
-        self.manager.player = entity
-        self.manager.Entity.add_entity_to_central_list(tile_x, tile_y, entity)
-
-    def remove_entity(self, entity):
-        """
-        Remove entity from entities list and current tile.
+        Queues entity for removal from the world. Happens at the next run of World.process.
 
         Args:
             entity:
         """
-        # remove from tile
-        tile = self.manager.Map.get_tile((entity.x, entity.y))
-        self.manager.Map.remove_entity(tile)
-
-        # remove from entities list
-        self.manager.entities.remove(entity)
-
-    def create_actor_entity(self, tile_x, tile_y, actor_template_name, actor_name, player=False):
-        """
-        Create an entity from an actor template
-
-        Args:
-            tile_x (int):
-            tile_y (int):
-            actor_name (str):
-            actor_template_name (str):
-            player (bool):
-        """
-        actor_template = library.get_actor_template_data(actor_template_name)
-
-        actor_name = actor_name
-
-        sprite = pygame.image.load("assets/actor/" + actor_template.spritesheet).convert_alpha()
-        icon = pygame.image.load("assets/actor/" + actor_template.icon).convert_alpha()
-
-        # catch any images not resized and resize them
-        if icon.get_size() != (TILE_SIZE, TILE_SIZE):
-            icon = pygame.transform.smoothscale(icon, (TILE_SIZE, TILE_SIZE))
-
-        combatant_component = Combatant()
-        savvy_component = Savvy(actor_template.savvy_component)
-        homeland_component = Homeland(actor_template.homeland_component)
-        race_component = Race(actor_template.race_component)
-        actor_component = Actor()
-
-        # get the AI value and convert to relevant class
-        ai_value = actor_template.ai_component
-        from scripts.components.ai import BasicMonster
-        if ai_value == "basic_monster":
-            ai_component = BasicMonster()
-        else:
-            ai_component = None
-
-        # create the Entity
-        actor = Entity(sprite, actor_name, blocks_movement=True, combatant=combatant_component, race=race_component,
-                       savvy=savvy_component, homeland=homeland_component, ai=ai_component,
-                       actor=actor_component, player=player, icon=icon)
-
-        actor.combatant.hp = actor.combatant.secondary_stats.max_hp
-        actor.combatant.stamina = actor.combatant.secondary_stats.max_stamina
-
-        if player:
-            self.add_player_to_central_list(tile_x, tile_y, actor)
-        else:
-            self.manager.Entity.add_entity_to_central_list(tile_x, tile_y, actor)
+        self.manager.World.delete_entity(entity)
 
     def create_entity(self, components: List = []) -> int:
         """

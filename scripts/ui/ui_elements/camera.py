@@ -5,6 +5,8 @@ from typing import List
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
 from scripts.core.constants import TILE_SIZE
+from scripts.managers.world_manager import world
+from scripts.world.components import Position, Aesthetic
 
 
 class Camera(UIWindow):
@@ -62,31 +64,13 @@ class Camera(UIWindow):
         tile_width = int(map_width / cols)
         tile_height = int(map_height / rows)
 
-        tiles = self.tiles
-
-        # blit all tiles info to the new surface
-        for tile in tiles:
-
-            x = (tile.x - self.start_tile_col) * tile_width
-            y = (tile.y - self.start_tile_row) * tile_height
-
-            if tile.terrain:
-                map_surf.blit(tile.terrain.sprite, (x, y))
-
-            if tile.entity:
-                map_surf.blit(tile.entity.icon, (x, y))
-
-            if tile.aspects:
-                for key, aspect in tile.aspects.items():
-                    map_surf.blit(aspect.sprite, (x, y))
-
-        ##### ECS approach
-        from scripts.managers.world_manager import world
-        from scripts.world.components import Position
-        from scripts.world.components import Aesthetic
         for entity, (pos, aesthetic) in world.World.get_components(Position, Aesthetic):
-            map_surf.blit(aesthetic.sprite, (pos.x, pos.y))
-        ##########
+            # if in camera view
+            if self.start_tile_col < pos.x < self.start_tile_col + self.columns:
+                if self.start_tile_row < pos.y < self.start_tile_row + self.rows:
+                    screen_x = (pos.x - self.start_tile_col) * tile_width
+                    screen_y = (pos.y - self.start_tile_row) * tile_height
+                    map_surf.blit(aesthetic.sprite, (screen_x, screen_y))
 
         self.game_map.image = map_surf
 

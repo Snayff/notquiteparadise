@@ -30,29 +30,6 @@ class Actor:
         # place skill at next free slot
         self.known_skills.append(skill)
 
-    def spend_time(self, time_spent):
-        """
-        Apply time spent from last action.
-
-        Args:
-            time_spent (int) : amount of time expended by last action
-
-        """
-        # TODO - apply any modifiers to time
-        self.time_of_next_action += time_spent
-
-    def is_at_max_known_skills(self):
-        """
-        Check if known skills >= max known
-
-        Returns:
-            bool: True if learnt max number of skills
-        """
-        if len(self.known_skills) >= self.max_known_skills:
-            return True
-        else:
-            return False
-
     def get_skill_from_known_skills(self, skill_name):
         """
         Get a skill from the known skills

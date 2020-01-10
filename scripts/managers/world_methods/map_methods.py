@@ -1,9 +1,7 @@
 import logging
-import math
 
 from scripts.core.constants import TargetTags, TILE_SIZE
 from scripts.world.game_map import GameMap
-from scripts.world.terrain.floor import Floor
 from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
 from typing import List, Tuple, Union
@@ -82,10 +80,12 @@ class MapMethods:
         if not self.is_tile_in_bounds(tile_x, tile_y):
             return TargetTags.OUT_OF_BOUNDS
 
-        if type(tile.terrain) is Wall:
-            return TargetTags.WALL
-        elif type(tile.terrain) is Floor:
-            return TargetTags.FLOOR
+        # TODO - rewrite as terrain no longer an object
+        # if type(tile.terrain) is Wall:
+        #
+        #     return TargetTags.WALL
+        # elif type(tile.terrain) is Floor:
+        #     return TargetTags.FLOOR
 
     def is_tile_in_bounds(self, tile_x, tile_y):
         """
@@ -296,14 +296,15 @@ class MapMethods:
         """
         new_terrain = None
 
-        if terrain == TargetTags.WALL:
-            new_terrain = Wall()
-        elif terrain == TargetTags.FLOOR:
-            new_terrain = Floor()
-
-        if new_terrain:
-            tile.terrain = new_terrain
-            tile.terrain.owner = tile
+        # TODO - rewrite for EC
+        # if terrain == TargetTags.WALL:
+        #     new_terrain = Wall()
+        # elif terrain == TargetTags.FLOOR:
+        #     new_terrain = Floor()
+        #
+        # if new_terrain:
+        #     tile.terrain = new_terrain
+        #     tile.terrain.owner = tile
 
     @staticmethod
     def get_terrain_on_tile(tile):

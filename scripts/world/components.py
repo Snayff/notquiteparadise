@@ -31,6 +31,7 @@ class Aesthetic:
     def __init__(self, sprite: pygame.Surface, icon: pygame.Surface):
         self.icon = icon
         self.sprite = sprite
+        # TODO - add screen pos here and use that in drawing
 
 
 class Resources:
