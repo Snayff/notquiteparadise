@@ -14,13 +14,14 @@ class FOVMethods:
         """
         Create the fov map for the player
         """
-        self.manager.player_fov_map = tcod.map_new(width, height)
-        fov_map = self.get_player_fov()
+        fov_map = tcod.map_new(width, height)
 
         for x in range(width):
             for y in range(height):
                 tile = self.manager.Map.get_tile((x, y))
                 tcod.map_set_properties(fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
+
+        self.manager.player_fov_map = fov_map
 
     def recompute_player_fov(self, x, y, radius):
         """

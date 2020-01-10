@@ -50,7 +50,7 @@ class Camera(UIWindow):
 
     def update_game_map(self):
         """
-        Update the game map to show the current tiles
+        Update the game map to show the current tiles and entities
         """
         rows = self.rows
         cols = self.columns
@@ -64,10 +64,17 @@ class Camera(UIWindow):
         tile_width = int(map_width / cols)
         tile_height = int(map_height / rows)
 
+        # draw tiles
+        for tile in self.tiles:
+            screen_x = (tile.x - self.start_tile_col) * tile_width
+            screen_y = (tile.y - self.start_tile_row) * tile_height
+            map_surf.blit(tile.sprite, (screen_x, screen_y))
+
+        # draw entities
         for entity, (pos, aesthetic) in world.World.get_components(Position, Aesthetic):
             # if in camera view
-            if self.start_tile_col < pos.x < self.start_tile_col + self.columns:
-                if self.start_tile_row < pos.y < self.start_tile_row + self.rows:
+            if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:
+                if self.start_tile_row <= pos.y < self.start_tile_row + self.rows:
                     screen_x = (pos.x - self.start_tile_col) * tile_width
                     screen_y = (pos.y - self.start_tile_row) * tile_height
                     map_surf.blit(aesthetic.sprite, (screen_x, screen_y))

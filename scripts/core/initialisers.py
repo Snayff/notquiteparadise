@@ -70,14 +70,15 @@ def initialise_game():
     c = []
     c.append(Position(1, 2))
     image = pygame.image.load("assets/actor/placeholder/Mobs_skeleton_06.png").convert_alpha()
-    pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
+    image = pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
     c.append(Aesthetic(image, image))
     c.append(IsPlayer())
     c.append(Resources(10, 90))
     c.append(Blocking(True, True))
     c.append(Identity("player", "a desc"))
     entity = world.Entity.create_entity(c)
-    turn.turn_holder = world.Entity.get_player()
+    world.FOV.recompute_player_fov(1, 2, 3)
+    turn.turn_holder = entity
 
     # world.Entity.create_actor_entity(0, 0, "player", "player", True)
     # player = world.Entity.get_player()

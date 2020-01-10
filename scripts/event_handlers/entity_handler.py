@@ -8,11 +8,11 @@ from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
-from scripts.events.entity_events import UseSkillEvent
 from scripts.world.components import Position
 
 if TYPE_CHECKING:
     from scripts.events.entity_events import DieEvent, LearnEvent, MoveEvent
+    from scripts.events.entity_events import UseSkillEvent
 
 
 class EntityHandler(Subscriber):
