@@ -71,7 +71,7 @@ class BasicMonster:
 
         """
         # TODO - actually get a target
-        target = world.player
+        target = world.Entity.get_player()
 
         log_string = f"{self.owner.name} chose '{target.name}' as a target."
         logging.info(log_string)

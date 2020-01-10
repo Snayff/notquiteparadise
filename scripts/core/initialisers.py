@@ -77,7 +77,7 @@ def initialise_game():
     c.append(Blocking(True, True))
     c.append(Identity("player", "a desc"))
     entity = world.Entity.create_entity(c)
-
+    turn.turn_holder = world.Entity.get_player()
 
     # world.Entity.create_actor_entity(0, 0, "player", "player", True)
     # player = world.Entity.get_player()
@@ -99,7 +99,7 @@ def initialise_game():
     # publisher.publish(LearnEvent(world.player, "Fungechist", "Fractious Fungi"))
 
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
-    # turn.turn_holder = world.player
+
 
 
 def initialise_event_handlers():

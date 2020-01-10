@@ -1,9 +1,14 @@
-from typing import Tuple, Union
+from __future__ import annotations
 
+import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import EntityEventTypes, EventTopics
 from scripts.core.event_hub import Event
-from scripts.skills.skill import Skill
-from scripts.world.entity import Entity
+
+if TYPE_CHECKING:
+    from typing import Tuple
+    from scripts.skills.skill import Skill
+    from scripts.world.entity import Entity
 
 
 class UseSkillEvent(Event):
@@ -41,7 +46,13 @@ class MoveEvent(Event):
         self.entity = entity_to_move
         self.direction = direction
         self.distance = distance
-        self.start_pos = (self.entity.x, self.entity.y)
+
+        # TODO - move this outside of events
+        from scripts.managers.world_manager import world
+        from scripts.world.components import Position
+        position = world.Entity.get_entitys_component(self.entity, Position)
+
+        self.start_pos = (position.x, position.y)
 
 
 class LearnEvent(Event):

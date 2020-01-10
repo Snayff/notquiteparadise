@@ -4,8 +4,7 @@ from typing import Dict, Tuple
 from scripts.events.game_events import EndRoundEvent
 from scripts.core.event_hub import publisher
 from scripts.managers.world_manager import world
-from scripts.world.components import Resources, Identity, IsTurnHolder
-from scripts.world.entity import Entity
+from scripts.world.components import Resources, Identity
 
 
 class TurnManager:
@@ -25,6 +24,7 @@ class TurnManager:
         self.time_of_last_turn = 0
         self.time_in_round = 100  # time units in a round
         self.round_time = 0  # tracker of time progressed in current round
+        self.turn_holder = None  # current acting entity
 
         logging.info(f"TurnManager initialised.")
 
@@ -38,13 +38,9 @@ class TurnManager:
         for entity, resource in world.World.get_component(Resources):
             self.turn_queue[entity] = resource.time_spent
 
-        # remove turn holder component from existing turn holder
-        old_turn_holder = world.Entity.get_entity(IsTurnHolder)
-        world.World.remove_component(old_turn_holder, IsTurnHolder)
-
         # get the next entity in the queue
         new_turn_holder = min(self.turn_queue, key=self.turn_queue.get)
-        world.World.add_component(new_turn_holder, IsTurnHolder)
+        self.turn_holder = new_turn_holder
 
         # log result
         queue = []
@@ -63,17 +59,14 @@ class TurnManager:
             spent_time:
         """
         # get turn holder
-        turn_holder = world.Entity.get_entity(IsTurnHolder)
+        turn_holder = self.turn_holder
 
         #  update turn holder`s time spent
-        world.Entity.spend_time(spent_time)
+        world.Entity.spend_time(turn_holder, spent_time)
 
         # update turn holders time in queue
         resources = world.Entity.get_entitys_component(turn_holder, Resources)
         self.turn_queue[turn_holder] = resources.time_spent
-
-        # remove turn holder component
-        world.World.remove_component(turn_holder, IsTurnHolder)
 
         # log result
         identity = world.Entity.get_entitys_component(turn_holder, Identity)
@@ -90,6 +83,7 @@ class TurnManager:
 
         # get the next entity in the queue
         new_turn_holder = min(self.turn_queue, key=self.turn_queue.get)
+        self.turn_holder = new_turn_holder
 
         # update time using last action and when new turn holder can act
         resources = world.Entity.get_entitys_component(new_turn_holder, Resources)

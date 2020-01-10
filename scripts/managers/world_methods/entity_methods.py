@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 import logging
 import math
@@ -77,7 +77,7 @@ class EntityMethods:
 
         return None
 
-    def get_player(self):
+    def get_player(self) -> Union[int, None]:
         """
         Get the player.
 
@@ -86,8 +86,9 @@ class EntityMethods:
         """
         for entity, flag in self.manager.World.get_component(IsPlayer):
             return entity
+        return None
 
-    def get_entity(self, unique_component) -> int:
+    def get_entity(self, unique_component) -> Union[int, None]:
         """
         Get a single entity that has a component. If multiple entities have the given component only the first found
         is returned.
@@ -102,9 +103,14 @@ class EntityMethods:
         for entity, flag in self.manager.World.get_component(unique_component):
             entities.append(entity)
 
-        if len(entities) != 1:
+        num_entities = len(entities)
+
+        if num_entities > 1:
             logging.warning(f"Tried to get an entity with {unique_component} component but found {len(entities)} "
                             f"entities with that component.")
+        elif num_entities == 0:
+            logging.warning(f"Tried to get an entity with {unique_component} component but found none.")
+            return None
 
         return entities[0]
 
@@ -147,17 +153,10 @@ class EntityMethods:
         """
         if self.manager.World.has_component(entity, component):
             return self.manager.World.component_for_entity(entity, component)
+        else:
+            return None
 
     ############## ENTITY CREATION ################
-
-    def remove_entity(self, entity: int):
-        """
-        Queues entity for removal from the world. Happens at the next run of World.process.
-
-        Args:
-            entity:
-        """
-        self.manager.World.delete_entity(entity)
 
     def create_entity(self, components: List = []) -> int:
         """
@@ -173,6 +172,18 @@ class EntityMethods:
             world.add_component(entity, component)
 
         return entity
+
+    def delete_entity(self, entity: int):
+        """
+        Queues entity for removal from the world. Happens at the next run of World.process.
+
+        Args:
+            entity:
+        """
+        if entity:
+            self.manager.World.delete_entity(entity)
+        else:
+            logging.error("Tried to delete an entity but entity was None.")
 
     ############## LOCATION QUERIES ##############
 
@@ -330,5 +341,8 @@ class EntityMethods:
             entity ():
             time_spent ():
         """
-        resources = self.manager.World.component_for_entity(entity, Resources)
-        resources.time_spent += time_spent
+        if entity:
+            resources = self.manager.World.component_for_entity(entity, Resources)
+            resources.time_spent += time_spent
+        else:
+            logging.error("Tried to spend entity's time but entity was None.")

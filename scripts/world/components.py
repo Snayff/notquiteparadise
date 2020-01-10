@@ -96,7 +96,3 @@ class AIBasic:
     """
     [Component] An ai to control an entity.
     """
-
-
-class IsTurnHolder:
-    """[Component] Entity is the current turn holder."""

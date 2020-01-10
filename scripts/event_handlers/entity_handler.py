@@ -9,6 +9,7 @@ from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.events.entity_events import UseSkillEvent
+from scripts.world.components import Position
 
 if TYPE_CHECKING:
     from scripts.events.entity_events import DieEvent, LearnEvent, MoveEvent
@@ -60,7 +61,7 @@ class EntityHandler(Subscriber):
         dir_x, dir_y = event.direction
         distance = event.distance
         entity = event.entity
-        old_x, old_y = entity.x, entity.y
+        old_x, old_y = event.start_pos[0], event.start_pos[1]
 
         for step in range(0, distance):
             target_x = old_x + dir_x
@@ -68,15 +69,17 @@ class EntityHandler(Subscriber):
 
             # is there something in the way?
             if world.Map.is_tile_in_bounds(target_x, target_y):
-                is_tile_blocking_movement = world.Map.is_tile_blocking_movement(target_x, target_y)
-                entity_blocking_movement = world.Entity.get_blocking_entity(target_x, target_y)
+                target_tile = world.Map.get_tile((target_x, target_y))
+                is_tile_blocking_movement = target_tile.blocks_movement
+                entity_on_tile = target_tile.has_entity
 
                 # check for no entity in way but tile is blocked
-                if not entity_blocking_movement and is_tile_blocking_movement:
+                if not entity_on_tile and is_tile_blocking_movement:
                     publisher.publish(MessageEvent(MessageTypes.LOG, f"There`s something in the way!"))
 
                 # check if entity blocking tile to attack
-                elif entity_blocking_movement:
+                elif entity_on_tile:
+                    # TODO - change to EC approach
                     skill = entity.actor.known_skills[0]
                     skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
                     direction = Directions((dir_x, dir_y))
@@ -86,21 +89,15 @@ class EntityHandler(Subscriber):
                         publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill.name} doesn't go that way!"))
 
                 # if nothing in the way, time to move!
-                elif not entity_blocking_movement and not is_tile_blocking_movement:
-                    # clean up old tile
-                    old_tile = world.Map.get_tile((old_x, old_y))
-                    world.Map.set_entity_on_tile(old_tile, None)
+                elif not entity_on_tile and not is_tile_blocking_movement:
+                    position = world.Entity.get_entitys_component(entity, Position)
+                    position.x = target_x
+                    position.y = target_y
 
-                    # move entity to new tile
-                    new_tile = world.Map.get_tile((target_x, target_y))
-                    world.Map.set_entity_on_tile(new_tile, entity)
-
-                    # activate the tile's aspects affect
-                    world.Map.trigger_aspects_on_tile(new_tile)
-
-                # update fov if needed
-                if entity.player:
-                    world.FOV.recompute_player_fov(entity.x, entity.y, entity.sight_range)
+                    # update fov if needed
+                    if entity == world.Entity.get_player():
+                        sight_range = 3  # TODO - update to get sight_range from entity components
+                        world.FOV.recompute_player_fov(position.x, position.y, sight_range)
 
     @staticmethod
     def process_skill(event: UseSkillEvent):
@@ -137,20 +134,14 @@ class EntityHandler(Subscriber):
         # TODO add player death
         entity = event.dying_entity
 
-        # just in case... remove the ai
-        if entity.ai:
-            entity.ai = None
-
-        # get the tile and remove the entity from it
-        tile_x, tile_y = entity.x, entity.y
-        tile = world.Map.get_tile((tile_x, tile_y))
-        world.Map.set_entity_on_tile(tile, None)
-
         # remove from turn queue
         if entity in turn.turn_queue:
             turn.turn_queue.pop(entity)
         if turn.turn_holder == entity:
             turn.build_new_turn_queue()
+
+        # delete from world
+        world.Entity.delete_entity(entity)
 
     @staticmethod
     def process_learn(event: LearnEvent):

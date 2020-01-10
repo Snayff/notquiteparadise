@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-
-from scripts.managers.world_manager import world
 from scripts.world.components import Position, Blocking
 
 if TYPE_CHECKING:
@@ -38,6 +36,9 @@ class Tile:
         Returns:
             bool: True if tag is applicable
         """
+        # TODO - moving this import to the top creates a circular import. Resolve it.
+        from scripts.managers.world_manager import world
+
         entities = world.Entity.get_entities(Position)
         for entity in entities:
             pos = world.Entity.get_entitys_component(entity, Position)
@@ -57,6 +58,8 @@ class Tile:
         if self._blocks_movement:
             return True
 
+        # TODO - moving this import to the top creates a circular import. Resolve it.
+        from scripts.managers.world_manager import world
         entities = world.Entity.get_entities(Position, Blocking)
         for entity in entities:
             pos = world.Entity.get_entitys_component(entity, Position)
@@ -77,6 +80,8 @@ class Tile:
         if self._blocks_sight:
             return True
 
+        # TODO - moving this import to the top creates a circular import. Resolve it.
+        from scripts.managers.world_manager import world
         entities = world.Entity.get_entities(Position, Blocking)
         for entity in entities:
             pos = world.Entity.get_entitys_component(entity, Position)

@@ -12,8 +12,6 @@ from scripts.managers.world_methods.skill_methods import SkillMethods
 
 if TYPE_CHECKING:
     import tcod
-    from scripts.world.entity import Entity
-    from scripts.world.game_map import GameMap
 
 
 class WorldManager:
@@ -31,9 +29,6 @@ class WorldManager:
         self.God = GodMethods(self)
 
         # TODO -  move into the relevant method groups
-        self.game_map = None  # type: GameMap
-        self.player = None  # type: Entity
-        self.entities = []
         self.gods = []
         self.player_fov_map = None  # type: tcod.map.Map
 

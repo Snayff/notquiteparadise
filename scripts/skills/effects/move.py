@@ -43,7 +43,7 @@ class MoveEffect(Effect):
 
         # update the fov if player moved
         from scripts.managers.world_manager import world
-        if entity_to_move == world.player:
+        if entity_to_move == world.Entity.get_player():
             world.player_fov_is_dirty = True
 
         # log the movement

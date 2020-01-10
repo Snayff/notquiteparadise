@@ -2,7 +2,6 @@ import logging
 
 from scripts.core.constants import TargetTags, TILE_SIZE
 from scripts.world.game_map import GameMap
-from scripts.world.terrain.wall import Wall
 from scripts.world.tile import Tile
 from typing import List, Tuple, Union
 from scripts.core.library import library
@@ -18,6 +17,7 @@ class MapMethods:
     def __init__(self, manager):
         from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
+        self.game_map = None
 
     def get_game_map(self) -> GameMap:
         """
@@ -26,7 +26,13 @@ class MapMethods:
         Returns:
             GameMap
         """
-        return self.manager.game_map
+        return self.game_map
+
+    def create_game_map(self, width, height):
+        """
+        Create new GameMap and create player FOV
+        """
+        self.game_map = GameMap(width, height)
 
     def is_tile_blocking_sight(self, tile_x, tile_y):
         """
@@ -202,30 +208,6 @@ class MapMethods:
             return True
 
     @staticmethod
-    def convert_xy_to_tile(x, y):
-        """
-        Convert an x y position to a tile ref
-
-        Args:
-            x:
-            y:
-
-        Returns :
-            Tuple[int, int]
-
-        """
-        tile_x = int(x / TILE_SIZE)
-        tile_y = int(y / TILE_SIZE)
-
-        return tile_x, tile_y
-
-    def create_game_map(self, width, height):
-        """
-        Create new GameMap and create player FOV
-        """
-        self.manager.game_map = GameMap(width, height)
-
-    @staticmethod
     def tile_has_tag(tile, target_tag, active_entity=None):
         """
         Check if a given tag applies to the tile
@@ -260,19 +242,6 @@ class MapMethods:
             return True
         else:
             return False  # catch all
-
-    @staticmethod
-    def set_entity_on_tile(tile, entity):
-        """
-        Set the new entity on the tile.
-
-        Args:
-            tile ():
-            entity:
-        """
-        tile.entity = entity
-        if entity:
-            tile.entity.owner = tile
 
     @staticmethod
     def get_entity_on_tile(tile):
@@ -356,9 +325,11 @@ class MapMethods:
         """
         Trigger the effect of the Aspect
         """
-        if tile.aspects:
-            for key, aspect in tile.aspects.items():
-                aspect.trigger()
+        # TODO - change to EC approach
+        pass
+        # if tile.aspects:
+        #     for key, aspect in tile.aspects.items():
+        #         aspect.trigger()
 
     @staticmethod
     def reduce_aspect_durations_on_tile(tile):

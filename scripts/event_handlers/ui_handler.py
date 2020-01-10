@@ -8,6 +8,7 @@ from scripts.managers.world_manager import world
 from scripts.core.event_hub import Subscriber
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MessageTypes, VisualInfo
+from scripts.world.components import Position
 
 if TYPE_CHECKING:
     from scripts.skills.skill import Skill
@@ -61,7 +62,8 @@ class UiHandler(Subscriber):
             # show the entity in the new tile
             player = world.Entity.get_player()
             if event.entity == player:
-                self.update_camera(event.start_pos, (player.x, player.y))
+                position = world.Entity.get_entitys_component(player, Position)
+                self.update_camera(event.start_pos, (position.x, position.y))
             else:
                 self.update_camera()
 
