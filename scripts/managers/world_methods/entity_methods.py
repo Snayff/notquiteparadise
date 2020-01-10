@@ -156,7 +156,7 @@ class EntityMethods:
         else:
             return None
 
-    ############## ENTITY CREATION ################
+    ############## ENTITY EXISTENCE ################
 
     def create_entity(self, components: List = []) -> int:
         """
@@ -346,3 +346,5 @@ class EntityMethods:
             resources.time_spent += time_spent
         else:
             logging.error("Tried to spend entity's time but entity was None.")
+
+    def get_entitys_stats(self, entity: int):

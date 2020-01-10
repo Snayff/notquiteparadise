@@ -77,7 +77,7 @@ def initialise_game():
     c.append(Blocking(True, True))
     c.append(Identity("player", "a desc"))
     entity = world.Entity.create_entity(c)
-    world.FOV.recompute_player_fov(1, 2, 3)
+    world.FOV.recompute_player_fov(1, 2, 3)  # must recompute after player init
     turn.turn_holder = entity
 
     # world.Entity.create_actor_entity(0, 0, "player", "player", True)
