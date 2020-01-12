@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import pygame
+    from typing import TYPE_CHECKING, List
 
 
 class IsPlayer:
@@ -97,5 +98,12 @@ class AIBasic:
     [Component] An ai to control an entity.
     """
 
+
 class HasCombatStats:
-    """"[Component] An entity's stats used for combat."""
+    """[Component] An entity's stats used for combat."""
+
+
+class Knowledge:
+    """[Component] An entity's knowledge, including skills."""
+    def __init__(self, skills: List = []):
+        self.skills = skills

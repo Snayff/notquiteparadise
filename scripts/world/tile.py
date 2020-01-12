@@ -41,7 +41,7 @@ class Tile:
 
         entities = world.Entity.get_entities(Position)
         for entity in entities:
-            pos = world.Entity.get_entitys_component(entity, Position)
+            pos = world.Entity.get_component(entity, Position)
             if pos.x == self.x and pos.y == self.y:
                 return True
 
@@ -62,8 +62,8 @@ class Tile:
         from scripts.managers.world_manager import world
         entities = world.Entity.get_entities(Position, Blocking)
         for entity in entities:
-            pos = world.Entity.get_entitys_component(entity, Position)
-            blocking = world.Entity.get_entitys_component(entity, Blocking)
+            pos = world.Entity.get_component(entity, Position)
+            blocking = world.Entity.get_component(entity, Blocking)
             if pos.x == self.x and pos.y == self.y and blocking.blocks_movement:
                 return True
 
@@ -84,8 +84,8 @@ class Tile:
         from scripts.managers.world_manager import world
         entities = world.Entity.get_entities(Position, Blocking)
         for entity in entities:
-            pos = world.Entity.get_entitys_component(entity, Position)
-            blocking = world.Entity.get_entitys_component(entity, Blocking)
+            pos = world.Entity.get_component(entity, Position)
+            blocking = world.Entity.get_component(entity, Blocking)
             if pos.x == self.x and pos.y == self.y and blocking.blocks_sight:
                 return True
 

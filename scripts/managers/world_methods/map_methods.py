@@ -1,10 +1,16 @@
-import logging
+from __future__ import annotations
 
+import logging
+from typing import TYPE_CHECKING
 from scripts.core.constants import TargetTags, TILE_SIZE
+from scripts.world.components import Position
 from scripts.world.game_map import GameMap
 from scripts.world.tile import Tile
-from typing import List, Tuple, Union
 from scripts.core.library import library
+
+if TYPE_CHECKING:
+    from typing import List, Tuple, Union
+    from scripts.managers.world_manager import WorldManager
 
 
 class MapMethods:
@@ -15,7 +21,6 @@ class MapMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
         self.game_map = None
 
@@ -243,16 +248,21 @@ class MapMethods:
         else:
             return False  # catch all
 
-    @staticmethod
-    def get_entity_on_tile(tile):
+    def get_entity_on_tile(self, tile) -> Union[int, None]:
         """
         Get the entity from the Tile
 
         Returns:
-            Entity: The Entity on the tile
+            int: The entity on the tile
 
         """
-        return tile.entity
+        entities = self.manager.Entity.get_entities(Position)
+        for entity in entities:
+            pos = self.manager.Entity.get_component(entity, Position)
+            if pos.x == tile.x and pos.y == tile.y:
+                return entity
+        else:
+            return None
 
     @staticmethod
     def set_terrain_on_tile(tile, terrain):

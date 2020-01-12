@@ -65,11 +65,11 @@ class TurnManager:
         world.Entity.spend_time(turn_holder, spent_time)
 
         # update turn holders time in queue
-        resources = world.Entity.get_entitys_component(turn_holder, Resources)
+        resources = world.Entity.get_component(turn_holder, Resources)
         self.turn_queue[turn_holder] = resources.time_spent
 
         # log result
-        identity = world.Entity.get_entitys_component(turn_holder, Identity)
+        identity = world.Entity.get_component(turn_holder, Identity)
         logging.debug(f"Ended '{identity.name}'`s turn.")
 
     def next_turn(self):
@@ -86,7 +86,7 @@ class TurnManager:
         self.turn_holder = new_turn_holder
 
         # update time using last action and when new turn holder can act
-        resources = world.Entity.get_entitys_component(new_turn_holder, Resources)
+        resources = world.Entity.get_component(new_turn_holder, Resources)
         time_progressed = resources.time_spent - self.time_of_last_turn
         self.time += time_progressed
         self.time_of_last_turn = self.time
@@ -98,7 +98,7 @@ class TurnManager:
             self.round_time += time_progressed
 
         # log result
-        identity = world.Entity.get_entitys_component(new_turn_holder, Identity)
+        identity = world.Entity.get_component(new_turn_holder, Identity)
         logging.debug(f"-> It is now '{identity.name}'`s turn.")
 
     def next_round(self, time_progressed):

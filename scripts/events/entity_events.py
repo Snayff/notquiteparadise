@@ -50,7 +50,7 @@ class MoveEvent(Event):
         # TODO - move this outside of events
         from scripts.managers.world_manager import world
         from scripts.world.components import Position
-        position = world.Entity.get_entitys_component(self.entity, Position)
+        position = world.Entity.get_component(self.entity, Position)
 
         self.start_pos = (position.x, position.y)
 

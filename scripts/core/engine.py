@@ -1,4 +1,3 @@
-
 import cProfile
 import io
 import logging
@@ -15,9 +14,8 @@ from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
 # Immediate TO DO list
-# TODO - move to esper and ecs
 # TODO - remove legacy "terrain"
-# TODO - add projectiles
+# TODO - add projectiles, i.e. entity creation, movement and collision
 
 # Project Wide to do list...
 # TODO - swap out nose for pytest
@@ -31,15 +29,17 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - use seed for RNG
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
-# TODO - standardise use of xy and tile xy. xy for pixels, tile xy for grid
+# TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
 # TODO - convert interventions to skills, gods to entities
 # TODO - move skills to their own json and only hold skill names in the savvy, homeland etc.
+#   create flat list of skills, without "trees"
+#   ensure all skills in json have required fields
 # TODO - add skill modifiers (blessings?)
-# TODO - ensure all skills in json have required fields
 # TODO - write tests / checking for json values
 # TODO - could turn manager sit under game?
 # TODO - add piercing so projectile can damage and keep going
 # TODO - add sight range to characteristics (homeland, savvy, race) jsons
+
 
 
 def main():

@@ -1,9 +1,6 @@
 
 from dataclasses import dataclass, field
-from typing import List, Dict
-
-from scripts.world.attitude_dataclass import AttitudeData
-from scripts.world.intervention_dataclass import InterventionData
+from typing import Dict
 
 
 @dataclass()

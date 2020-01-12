@@ -14,7 +14,7 @@ from scripts.core.event_hub import publisher, event_hub
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.event_handlers.ui_handler import UiHandler
-from scripts.world.components import IsPlayer, Resources, Blocking, Identity
+from scripts.world.components import IsPlayer, Resources, Blocking, Identity, Knowledge, Race, Homeland, Savvy
 
 
 def initialise_logging():
@@ -76,7 +76,11 @@ def initialise_game():
     c.append(Resources(10, 90))
     c.append(Blocking(True, True))
     c.append(Identity("player", "a desc"))
-    entity = world.Entity.create_entity(c)
+    c.append(Knowledge(["flail"]))
+    c.append(Race("herraculen"))
+    c.append((Homeland("aristo pirate")))
+    c.append((Savvy("fungechist")))
+    entity = world.Entity.create(c)
     world.FOV.recompute_player_fov(1, 2, 3)  # must recompute after player init
     turn.turn_holder = entity
 

@@ -1,4 +1,6 @@
 import dataclasses
+import logging
+
 import pygame
 from scripts.core.constants import InputIntents, Directions, GameStates, MessageTypes
 from scripts.core.event_hub import publisher
@@ -114,6 +116,10 @@ class ControlMethods:
         elif event.ui_object_id[:len("#tile")] == "#tile":
             print(f"button clicked(grid.tile{event.ui_object_id[len('#tile'):]})")
             return "tile", event.ui_object_id[len('#tile'):]
+
+        else:
+            logging.warning(f"Clicked {event.ui_object_id} but not sure what to do.")
+            return "", event.ui_object_id
 
     def get_pressed_direction(self):
         """

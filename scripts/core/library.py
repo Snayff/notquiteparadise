@@ -1,19 +1,19 @@
 
 import json
 import logging
-from scripts.world.characteristic_dataclass import CharacteristicData
+from scripts.world.data_classes.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
     Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
-from scripts.world.combat_stats import StatData, PrimaryStatData, SecondaryStatData
+from scripts.world.data_classes.stat_dataclass import StatData, PrimaryStatData, SecondaryStatData
 from scripts.skills.affliction_dataclass import AfflictionData
 from scripts.skills.skill_dataclass import SkillData
 from scripts.skills.effects.effect_dataclass import EffectData
-from scripts.world.aspect_dataclass import AspectData
-from scripts.world.attitude_dataclass import AttitudeData
-from scripts.world.god_dataclass import GodData
-from scripts.world.interaction_dataclass import InteractionData
-from scripts.world.intervention_dataclass import InterventionData
+from scripts.world.data_classes.aspect_dataclass import AspectData
+from scripts.world.data_classes.attitude_dataclass import AttitudeData
+from scripts.world.data_classes.god_dataclass import GodData
+from scripts.world.data_classes.interaction_dataclass import InteractionData
+from scripts.world.data_classes.intervention_dataclass import InterventionData
 
 
 class LibraryOfAlexandria:
@@ -102,6 +102,21 @@ class LibraryOfAlexandria:
 
         logging.info(f"Data loaded into the Library.")
 
+    @staticmethod
+    def cleanse_name(name: str):
+        """
+        Force name to lowercase, replace underscores with spaces, turn double space to single
+        Args:
+            name ():
+
+        Returns:
+
+        """
+        cleansed_name = name.lower()
+        cleansed_name = cleansed_name.replace("_", " ")
+        cleansed_name = cleansed_name.replace("  ", " ")
+        return cleansed_name
+
     ####################### CONVERT ##############################
 
     def convert_afflictions_to_data_classes(self):
@@ -127,6 +142,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the afflictions data to the data class
             affliction = AfflictionData(**new_affliction_dict)
+            affliction.name = self.cleanse_name(affliction.name)
             converted_afflictions[affliction.name] = affliction
 
         # delete all info from afflictions and replace with the converted data
@@ -164,6 +180,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             aspect = AspectData(**new_aspect_dict)
+            aspect.name = self.cleanse_name(aspect.name)
             converted_aspects[aspect.name] = aspect
 
         # delete all info from aspects and replace with the converted data
@@ -205,6 +222,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             race = CharacteristicData(**new_race_dict)
+            race.name = self.cleanse_name(race.name)
             converted_races[race.name] = race
 
         # delete all info from aspects and replace with the converted data
@@ -246,6 +264,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             savvy = CharacteristicData(**new_savvy_dict)
+            savvy.name = self.cleanse_name(savvy.name)
             converted_savvys[savvy.name] = savvy
 
         # delete all info from aspects and replace with the converted data
@@ -287,6 +306,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             homeland = CharacteristicData(**new_homeland_dict)
+            homeland.name = self.cleanse_name(homeland.name)
             converted_homelands[homeland.name] = homeland
 
         # delete all info from aspects and replace with the converted data
@@ -366,6 +386,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             god = GodData(**new_god_dict)
+            god.name = self.cleanse_name(god.name)
             converted_gods[god.name] = god
 
         # delete all info from aspects and replace with the converted data

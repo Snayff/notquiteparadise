@@ -2,18 +2,16 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-
 import logging
 import math
 import tcod
 import scipy.spatial
-
-from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
+from scripts.core.constants import PrimaryStatTypes
 from scripts.core.library import library
-from scripts.world.combat_stats import CombatStats
-from scripts.world.components import IsPlayer, Position, Blocking, Resources, Race, Savvy, Homeland
+from scripts.world.components import IsPlayer, Position, Blocking, Resources, Race, Savvy, Homeland, Knowledge
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
+from scripts.world.combat_stats import CombatStats
 
 if TYPE_CHECKING:
     from typing import List
@@ -139,7 +137,7 @@ class EntityMethods:
 
     ############## ENTITY EXISTENCE ################
 
-    def create_entity(self, components: List = []) -> int:
+    def create(self, components: List = []) -> int:
         """
         Use each component in a list of components to create an entity
 
@@ -154,7 +152,7 @@ class EntityMethods:
 
         return entity
 
-    def delete_entity(self, entity: int):
+    def delete(self, entity: int):
         """
         Queues entity for removal from the world. Happens at the next run of World.process.
 
@@ -162,7 +160,7 @@ class EntityMethods:
             entity:
         """
         if entity:
-            self.manager.World.delete_entity(entity)
+            self.manager.World.delete(entity)
         else:
             logging.error("Tried to delete an entity but entity was None.")
 
@@ -328,9 +326,23 @@ class EntityMethods:
         else:
             logging.error("Tried to spend entity's time but entity was None.")
 
+    def learn_skill(self, entity: int, skill_name: str):
+        """
+        Add the skill name to the entity's knowledge component.
+
+        Args:
+            entity ():
+            skill_name ():
+        """
+        if not self.manager.World.has_component(entity, Knowledge()):
+            self.manager.World.add_component(entity, Knowledge())
+
+        knowledge = self.get_component(entity, Knowledge())
+        knowledge.skills.append(skill_name)
+
     ############### GET ENTITY INFO ##########
 
-    def get_entitys_component(self, entity, component):
+    def get_component(self, entity, component):
         """
         Get an entity's component.
 
@@ -347,7 +359,7 @@ class EntityMethods:
             return None
 
     @staticmethod
-    def get_entitys_stats(entity: int) -> CombatStats:
+    def get_stats(entity: int) -> CombatStats:
         """
         Get a stat object  for an entity.
 
@@ -359,7 +371,7 @@ class EntityMethods:
         """
         return CombatStats(entity)
 
-    def get_entitys_primary_stat(self, entity: int, primary_stat: PrimaryStatTypes) -> int:
+    def get_primary_stat(self, entity: int, primary_stat: PrimaryStatTypes) -> int:
         """
         Get an entity's primary stat.
 
@@ -391,3 +403,5 @@ class EntityMethods:
         value = max(1, int(value))
 
         return value
+
+

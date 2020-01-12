@@ -2,7 +2,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, List
 
-from scripts.world.interaction_dataclass import InteractionData
+from scripts.world.data_classes.interaction_dataclass import InteractionData
 
 
 @dataclass()

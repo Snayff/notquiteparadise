@@ -90,7 +90,7 @@ class EntityHandler(Subscriber):
 
                 # if nothing in the way, time to move!
                 elif not entity_on_tile and not is_tile_blocking_movement:
-                    position = world.Entity.get_entitys_component(entity, Position)
+                    position = world.Entity.get_component(entity, Position)
                     position.x = target_x
                     position.y = target_y
 
@@ -141,7 +141,7 @@ class EntityHandler(Subscriber):
             turn.build_new_turn_queue()
 
         # delete from world
-        world.Entity.delete_entity(entity)
+        world.Entity.delete(entity)
 
     @staticmethod
     def process_learn(event: LearnEvent):

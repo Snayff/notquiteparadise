@@ -62,7 +62,7 @@ class UiHandler(Subscriber):
             # show the entity in the new tile
             player = world.Entity.get_player()
             if event.entity == player:
-                position = world.Entity.get_entitys_component(player, Position)
+                position = world.Entity.get_component(player, Position)
                 self.update_camera(event.start_pos, (position.x, position.y))
             else:
                 self.update_camera()
