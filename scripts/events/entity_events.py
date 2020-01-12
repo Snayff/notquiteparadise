@@ -20,11 +20,11 @@ class UseSkillEvent(Event):
         target_pos (tuple): x, y
         skill (Skill):
     """
-    def __init__(self, entity_using_skill: Entity, skill: Skill, direction: Tuple[int, int]):
+    def __init__(self, entity_using_skill: Entity, skill_name: Skill, direction: Tuple[int, int]):
         Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)
         self.entity = entity_using_skill
         self.direction = direction
-        self.skill = skill
+        self.skill_name = skill_name
 
 
 class DieEvent(Event):

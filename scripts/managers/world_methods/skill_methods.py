@@ -1,10 +1,11 @@
+from __future__ import annotations
 
 import logging
 import random
-
-from typing import List
+from typing import TYPE_CHECKING
 from scripts.core.constants import MessageTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
-    EffectTypes, SkillShapes
+    EffectTypes, SkillShapes, Directions, TargetTags, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
+from scripts.events.game_events import EndTurnEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
@@ -15,8 +16,13 @@ from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
 from scripts.skills.effects.change_terrain import ChangeTerrainEffect
 from scripts.skills.effects.damage import DamageEffect
 from scripts.skills.effects.move import MoveEffect
+from scripts.world.components import Resources, Identity, Position
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
+
+if TYPE_CHECKING:
+    from scripts.managers.world_manager import WorldManager
+    from typing import List, Tuple
 
 
 class SkillMethods:
@@ -27,7 +33,6 @@ class SkillMethods:
         manager(WorldManager): the manager containing this class.
     """
     def __init__(self, manager):
-        from scripts.managers.world_manager import WorldManager
         self.manager = manager  # type: WorldManager
 
     def can_use_skill(self, entity, target_pos, skill):
@@ -114,27 +119,28 @@ class SkillMethods:
             # logging.debug(log_string)
             return False
 
-    @staticmethod
-    def can_afford_cost(entity, resource, cost):
+    def can_afford_cost(self, entity: int, resource: SecondaryStatTypes, cost: int):
         """
         Check if entity can afford the resource cost
 
         Args:
-            entity (Entity):
+            entity (int):
             resource (SecondaryStatTypes): HP or Stamina
             cost (int):
 
         Returns:
             bool: True for success, False otherwise.
         """
+        resources = self.manager.Entity.get_component(entity, Resources)
+        identity = self.manager.Entity.get_component(entity, Identity)
 
         # Check if cost can be paid
-        value = getattr(entity.combatant, resource.name.lower())
+        value = getattr(resources, resource.name.lower())
         if value - cost >= 0:
-            logging.debug(f"'{entity.name}' can afford cost.")
+            logging.debug(f"'{identity.name}' can afford cost.")
             return True
         else:
-            logging.debug(f"'{entity.name}' cannot afford cost.")
+            logging.debug(f"'{identity.name}' cannot afford cost.")
             return False
 
     @staticmethod
@@ -230,8 +236,7 @@ class SkillMethods:
 
         return skill
 
-    @staticmethod
-    def pay_resource_cost(entity, resource, cost):
+    def pay_resource_cost(self, entity, resource, cost):
         """
         Remove the resource cost from the using entity
 
@@ -240,12 +245,15 @@ class SkillMethods:
             resource (SecondaryStatTypes): HP or STAMINA
             cost (int):
         """
-        resource_value = getattr(entity.combatant, resource.name.lower())
+        resources = self.manager.Entity.get_component(entity, Resources)
+        identity = self.manager.Entity.get_component(entity, Identity)
+
+        resource_value = getattr(resources, resource.name.lower())
         resource_left = resource_value - cost
 
-        setattr(entity.combatant, resource.name.lower(), resource_left)
+        setattr(resources, resource.name.lower(), resource_left)
 
-        log_string = f"'{entity.name}' paid {cost} {resource.name} and has {resource_left} left."
+        log_string = f"'{identity.name}' paid {cost} {resource.name} and has {resource_left} left."
         logging.debug(log_string)
 
     @staticmethod
@@ -295,3 +303,126 @@ class SkillMethods:
             list_of_coords.append((0, 0))  # add selection back in
 
         return list_of_coords
+
+    def use(self, entity: int, skill_name: str, target_direction: Tuple):
+
+        """
+        Use the skill
+
+        Args:
+            skill_name ():
+            entity ():
+            target_direction (tuple): x y of the target direction
+        """
+
+        data = library.get_skill_data("fungechist", skill_name)  # TODO - remove skill stree
+        skill_range = data.range
+
+        # initial values
+        position = self.manager.Entity.get_component(entity, Position)
+        identity = self.manager.Entity.get_component(entity, Identity)
+        start_x = position.x
+        start_y = position.y
+        dir_x = target_direction[0]
+        dir_y = target_direction[1]
+        direction = (target_direction[0], target_direction[1])
+
+        # flags
+        activate = False
+        found_target = False
+        check_for_target = False
+
+        logging.info(f"{identity.name} used {skill_name} at ({start_x},{start_y}) in {Directions(direction)}...")
+
+        # determine impact location N.B. +1 to make inclusive
+        for distance in range(1, skill_range + 1):
+            current_x = start_x + (dir_x * distance)
+            current_y = start_y + (dir_y * distance)
+            tile = self.manager.Map.get_tile((current_x, current_y))
+
+            # did we hit terrain?
+            if self.manager.Map.tile_has_tag(tile, TargetTags.WALL, entity):
+                # do we need to activate, reflect or fizzle?
+                if data.terrain_collision == SkillTerrainCollisions.ACTIVATE:
+                    activate = True
+                    logging.debug(f"-> and hit a wall. Skill will activate at ({current_x},{current_y}).")
+                    break
+                elif data.terrain_collision == SkillTerrainCollisions.REFLECT:
+                    # work out position of adjacent walls
+                    adj_tile = self.manager.Map.get_tile((current_x, current_y - dir_y))
+                    collision_adj_y = self.manager.Map.tile_has_tag(adj_tile, TargetTags.WALL)
+                    adj_tile = self.manager.Map.get_tile((current_x - dir_x, current_y))
+                    collision_adj_x = self.manager.Map.tile_has_tag(adj_tile, TargetTags.WALL)
+
+                    # where did we collide?
+                    if collision_adj_x:
+                        if collision_adj_y:
+                            # hit a corner, bounce back towards entity
+                            dir_x *= -1
+                            dir_y *= -1
+                        else:
+                            # hit horizontal wall, revere y direction
+                            dir_y *= -1
+                    else:
+                        if collision_adj_y:
+                            # hit a vertical wall, reverse x direction
+                            dir_x *= -1
+                        else:  # not collision_adj_x and not collision_adj_y:
+                            # hit a single piece, on the corner, bounce back towards entity
+                            dir_x *= -1
+                            dir_y *= -1
+
+                    logging.info(f"-> and hit a wall. Skill`s direction changed to ({dir_x},{dir_y}).")
+                elif data.terrain_collision == SkillTerrainCollisions.FIZZLE:
+                    activate = False
+                    logging.info(f"-> and hit a wall. Skill fizzled at ({current_x},{current_y}).")
+                    break
+
+            # determine travel method
+            if data.travel_type == SkillTravelTypes.PROJECTILE:
+                # projectile can hit a target at any point during travel
+                check_for_target = True
+            elif data.travel_type == SkillTravelTypes.THROW:
+                # throw can only hit target at end of travel
+                if distance == data.range:
+                    check_for_target = True
+                else:
+                    check_for_target = False
+
+            # did we hit something that has the tags we need?
+            if check_for_target:
+                for tag in data.required_tags:
+                    if not self.manager.Map.tile_has_tag(tile, tag, entity):
+                        found_target = False
+                        break
+                    else:
+                        found_target = True
+                        logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
+
+            # have we found a suitable target?
+            if found_target:
+                activate = True
+                break
+
+        # if at end of range and activate not triggered
+        if distance >= data.range and not activate:
+            if data.expiry_type == SkillExpiryTypes.FIZZLE:
+                activate = False
+                logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
+            elif data.expiry_type == SkillExpiryTypes.ACTIVATE:
+                activate = True
+                logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
+
+        # deal with activation
+        if activate:
+            coords = self.manager.Skill.create_shape(data.shape, data.shape_size)
+            effected_tiles = self.manager.Map.get_tiles(current_x, current_y, coords)
+
+            # apply any effects
+            for effect_name, effect_data in data.effects.items():
+                effect = self.manager.Skill.create_effect(self, effect_data.effect_type)
+                effect.trigger(effected_tiles)
+
+            # end the turn
+            publisher.publish(EndTurnEvent(entity, data.time_cost))
+

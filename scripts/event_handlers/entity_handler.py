@@ -8,11 +8,12 @@ from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
-from scripts.world.components import Position
+from scripts.world.components import Position, Knowledge, Identity
+from scripts.events.entity_events import UseSkillEvent
 
 if TYPE_CHECKING:
     from scripts.events.entity_events import DieEvent, LearnEvent, MoveEvent
-    from scripts.events.entity_events import UseSkillEvent
+
 
 
 class EntityHandler(Subscriber):
@@ -71,17 +72,18 @@ class EntityHandler(Subscriber):
             if world.Map.is_tile_in_bounds(target_x, target_y):
                 target_tile = world.Map.get_tile((target_x, target_y))
                 is_tile_blocking_movement = target_tile.blocks_movement
-                entity_on_tile = target_tile.has_entity
+                is_entity_on_tile = target_tile.has_entity
 
                 # check for no entity in way but tile is blocked
-                if not entity_on_tile and is_tile_blocking_movement:
+                if not is_entity_on_tile and is_tile_blocking_movement:
                     publisher.publish(MessageEvent(MessageTypes.LOG, f"There`s something in the way!"))
 
                 # check if entity blocking tile to attack
-                elif entity_on_tile:
+                elif is_entity_on_tile:
                     # TODO - change to EC approach
-                    skill = entity.actor.known_skills[0]
-                    skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                    knowledge = world.Entity.get_component(entity, Knowledge)
+                    skill = knowledge.skills[0]
+                    skill_data = library.get_skill_data("fungechist", skill)  # TODO - update to remove skill tree
                     direction = Directions((dir_x, dir_y))
                     if direction in skill_data.target_directions:
                         publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
@@ -89,7 +91,7 @@ class EntityHandler(Subscriber):
                         publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill.name} doesn't go that way!"))
 
                 # if nothing in the way, time to move!
-                elif not entity_on_tile and not is_tile_blocking_movement:
+                elif not is_entity_on_tile and not is_tile_blocking_movement:
                     position = world.Entity.get_component(entity, Position)
                     position.x = target_x
                     position.y = target_y
@@ -107,21 +109,23 @@ class EntityHandler(Subscriber):
             event(EntityEvent): the event to process
         """
         entity = event.entity
-        skill = event.skill
-        skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+        skill = event.skill_name
+        skill_data = library.get_skill_data("fungechist", skill)
 
         # check it can be afforded
         if world.Skill.can_afford_cost(entity, skill_data.resource_type, skill_data.resource_cost):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
 
             # use skill
-            event.skill.use(event.direction)
+            world.Skill.use(entity, skill, event.direction)
+
         else:
             # is it the player that's can't afford it?
             if entity == world.Entity.get_player():
                 publisher.publish(MessageEvent(MessageTypes.LOG, "You cannot afford to do that."))
             else:
-                logging.warning(f"{entity.name} tried to use {skill.name}, which they can`t afford")
+                identity = world.Entity.get_component(entity, Identity)
+                logging.warning(f"{identity.name} tried to use {skill}, which they can`t afford")
 
     @staticmethod
     def process_die(event: DieEvent):

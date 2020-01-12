@@ -1,6 +1,8 @@
+from __future__ import annotations
 
 import json
 import logging
+from typing import TYPE_CHECKING
 from scripts.world.data_classes.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
@@ -14,6 +16,9 @@ from scripts.world.data_classes.attitude_dataclass import AttitudeData
 from scripts.world.data_classes.god_dataclass import GodData
 from scripts.world.data_classes.interaction_dataclass import InteractionData
 from scripts.world.data_classes.intervention_dataclass import InterventionData
+
+if TYPE_CHECKING:
+    pass
 
 
 class LibraryOfAlexandria:
@@ -36,6 +41,59 @@ class LibraryOfAlexandria:
         self.refresh_library_data()
 
         logging.info(f"Data Library initialised.")
+
+    ####################### LIBRARY MANAGEMENT ####################
+    def refresh_library_data(self):
+        """
+        Load json data into the library, convert strings to enums and dicts to data classes.
+        """
+        self.load_data_into_library()
+        self.convert_external_strings_to_internal_values()
+        self.convert_afflictions_to_data_classes()
+        self.convert_aspects_to_data_classes()
+        self.convert_stats_to_data_classes()
+        self.convert_gods_to_data_classes()
+        self.convert_homelands_to_data_classes()
+        self.convert_savvys_to_data_classes()
+        self.convert_races_to_data_classes()
+
+        logging.info(f"Library refreshed.")
+
+    def load_data_into_library(self):
+        """
+        Load data from all external jsons to this central data library
+        """
+        import os
+        # N.B. this is set in Sphinx config when Sphinx is running
+        if "GENERATING_SPHINX_DOCS" not in os.environ:
+            self.homelands = self.load_values_from_homeland_json()
+            self.races = self.load_values_from_race_json()
+            self.savvys = self.load_values_from_savvy_json()
+            self.afflictions = self.load_values_from_affliction_json()
+            self.aspects = self.load_values_from_aspect_json()
+            self.terrains = self.load_values_from_terrain_json()
+            self.actor_template = self.load_values_from_actor_json()  # TODO - remove
+            self.stats = self.load_values_from_stat_json()
+            self.gods = self.load_values_from_gods_json()
+
+        logging.info(f"Data loaded into the Library.")
+
+    ####################### UTILITY ##############################
+
+    @staticmethod
+    def cleanse_name(name: str):
+        """
+        Force name to lowercase, replace underscores with spaces, turn double space to single
+        Args:
+            name ():
+
+        Returns:
+
+        """
+        cleansed_name = name.lower()
+        cleansed_name = cleansed_name.replace("_", " ")
+        cleansed_name = cleansed_name.replace("  ", " ")
+        return cleansed_name
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """
@@ -66,56 +124,6 @@ class LibraryOfAlexandria:
             # Break the list out and run recursively against the elements
             for element in obj:
                 self.recursive_replace(element, key, value_to_replace, new_value)
-
-    def refresh_library_data(self):
-        """
-        Load json data into the library, convert strings to enums and dicts to data classes.
-        """
-        self.load_data_into_library()
-        self.convert_external_strings_to_internal_values()
-        self.convert_afflictions_to_data_classes()
-        self.convert_aspects_to_data_classes()
-        self.convert_stats_to_data_classes()
-        self.convert_gods_to_data_classes()
-        self.convert_homelands_to_data_classes()
-        self.convert_savvys_to_data_classes()
-        self.convert_races_to_data_classes()
-
-        logging.info(f"Library refreshed.")
-
-    def load_data_into_library(self):
-        """
-        Load data from all external jsons to this central data library
-        """
-        import os
-        # N.B. this is set in Sphinx config when Sphinx is running
-        if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.homelands = self.load_values_from_homeland_json()
-            self.races = self.load_values_from_race_json()
-            self.savvys = self.load_values_from_savvy_json()
-            self.afflictions = self.load_values_from_affliction_json()
-            self.aspects = self.load_values_from_aspect_json()
-            self.terrains = self.load_values_from_terrain_json()
-            self.actor_template = self.load_values_from_actor_json()
-            self.stats = self.load_values_from_stat_json()
-            self.gods = self.load_values_from_gods_json()
-
-        logging.info(f"Data loaded into the Library.")
-
-    @staticmethod
-    def cleanse_name(name: str):
-        """
-        Force name to lowercase, replace underscores with spaces, turn double space to single
-        Args:
-            name ():
-
-        Returns:
-
-        """
-        cleansed_name = name.lower()
-        cleansed_name = cleansed_name.replace("_", " ")
-        cleansed_name = cleansed_name.replace("  ", " ")
-        return cleansed_name
 
     ####################### CONVERT ##############################
 
@@ -214,6 +222,7 @@ class LibraryOfAlexandria:
 
                 # unpack the temp dict and convert the data to the data class
                 skill = SkillData(**new_skill_dict)
+                skill.name = self.cleanse_name(skill.name)
                 converted_skills[skill.name] = skill
 
             # set the temp dict to contain the converted skill effects
@@ -256,6 +265,7 @@ class LibraryOfAlexandria:
 
                 # unpack the temp dict and convert the data to the data class
                 skill = SkillData(**new_skill_dict)
+                skill.name = self.cleanse_name(skill.name)
                 converted_skills[skill.name] = skill
 
             # set the temp dict to contain the converted skill effects
@@ -298,6 +308,7 @@ class LibraryOfAlexandria:
 
                 # unpack the temp dict and convert the data to the data class
                 skill = SkillData(**new_skill_dict)
+                skill.name = self.cleanse_name(skill.name)
                 converted_skills[skill.name] = skill
 
             # set the temp dict to contain the converted skill effects
@@ -640,6 +651,7 @@ class LibraryOfAlexandria:
         Returns:
             SkillData: data for a specified skill.
         """
+        # TODO - update to remove skill tree
 
         if skill_tree in self.homelands:
             skill_data = self.homelands[skill_tree].skills[skill_name]

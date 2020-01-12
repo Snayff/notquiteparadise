@@ -40,7 +40,7 @@ class Resources:
     [Component] An entity's resources.
     """
 
-    def __init__(self, health: int, stamina: int):
+    def __init__(self, health: int = 1, stamina: int = 1):
         self.health = health
         self.stamina = stamina
         self.time_spent = 0

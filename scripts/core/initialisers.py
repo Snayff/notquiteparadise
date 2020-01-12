@@ -73,7 +73,7 @@ def initialise_game():
     image = pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
     c.append(Aesthetic(image, image))
     c.append(IsPlayer())
-    c.append(Resources(10, 90))
+    c.append(Resources(100, 110))
     c.append(Blocking(True, True))
     c.append(Identity("player", "a desc"))
     c.append(Knowledge(["flail"]))
@@ -83,6 +83,21 @@ def initialise_game():
     entity = world.Entity.create(c)
     world.FOV.recompute_player_fov(1, 2, 3)  # must recompute after player init
     turn.turn_holder = entity
+
+    e = []
+    e.append(Position(1, 4))
+    image = pygame.image.load("assets/actor/placeholder/Mobs_goblin_02.png").convert_alpha()
+    image = pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
+    e.append(Aesthetic(image, image))
+    e.append(Resources(10, 90))
+    e.append(Blocking(True, False))
+    e.append(Identity("steve", "a desc"))
+    e.append(Race("goblinn"))
+    e.append((Homeland("bog refugee")))
+    e.append((Savvy("cleromancer")))
+    entity = world.Entity.create(e)
+    
+    
 
     # world.Entity.create_actor_entity(0, 0, "player", "player", True)
     # player = world.Entity.get_player()
