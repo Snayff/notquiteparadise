@@ -39,6 +39,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - write tests / checking for json values
 # TODO - could turn manager sit under game?
 # TODO - add piercing so projectile can damage and keep going
+# TODO - add sight range to characteristics (homeland, savvy, race) jsons
 
 
 def main():

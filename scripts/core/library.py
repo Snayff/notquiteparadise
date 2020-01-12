@@ -1,11 +1,11 @@
 
 import json
 import logging
-from scripts.components.characteristic_dataclass import CharacteristicData
+from scripts.world.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
-    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
+    AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
     Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
-from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
+from scripts.world.combat_stats import StatData, PrimaryStatData, SecondaryStatData
 from scripts.skills.affliction_dataclass import AfflictionData
 from scripts.skills.skill_dataclass import SkillData
 from scripts.skills.effects.effect_dataclass import EffectData
@@ -316,7 +316,7 @@ class LibraryOfAlexandria:
                     stat = SecondaryStatData(**stat_data)
                     converted_secondary_stats[stat.secondary_stat_type.name] = stat
 
-        # delete all info from skill and replace with the converted data
+        # delete all info from stat and replace with the converted data
         converted_data = StatData(primary=converted_primary_stats, secondary=converted_secondary_stats)
         self.stats = {}
         self.stats = converted_data

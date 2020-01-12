@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
-
-from scripts.core.constants import PrimaryStatTypes
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Dict
+from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
 from scripts.core.library import library
+from scripts.managers.world_manager import world
 
 if TYPE_CHECKING:
     pass
@@ -25,30 +26,9 @@ class CombatStats:
         Returns:
             int: How vigorous. Never below 1.
         """
-        stat_data = library.get_primary_stat_data(PrimaryStatTypes.VIGOUR)
-        base_value = stat_data.base_value
-        entity = self.entity
-        component_changes = 0
+        stat = PrimaryStatTypes.VIGOUR
 
-        if entity.race:
-            race_data = library.get_race_data(entity.race.name)
-            component_changes += race_data.vigour
-
-        if entity.savvy:
-            # TODO - add savvy data to stat
-            component_changes += entity.savvy.vigour
-
-        if entity.homeland:
-            # TODO - add homeland data to stat
-            component_changes += entity.homeland.vigour
-
-        from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(
-            self.owner.owner, PrimaryStatTypes.VIGOUR)
-
-        total = max(1, int(component_changes + base_value + affliction_changes))
-
-        return total
+        return world.Entity.get_entitys_primary_stat(self.entity, stat)
 
     @property
     def clout(self):
@@ -58,28 +38,9 @@ class CombatStats:
         Returns:
             int: How much clout. Never below 1.
         """
-        stat_data = library.get_primary_stat_data(PrimaryStatTypes.CLOUT)
-        base_value = stat_data.base_value
-        entity = self.owner.owner
-        component_changes = 0
+        stat = PrimaryStatTypes.CLOUT
 
-        if entity.race:
-            race_data = library.get_race_data(entity.race.name)
-            component_changes += race_data.clout
-
-        if entity.savvy:
-            component_changes += entity.savvy.clout
-
-        if entity.homeland:
-            component_changes += entity.homeland.clout
-
-        from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
-                                                                                         PrimaryStatTypes.CLOUT)
-
-        total = max(1, int(component_changes + base_value + affliction_changes))
-
-        return total
+        return world.Entity.get_entitys_primary_stat(self.entity, stat)
 
     @property
     def skullduggery(self):
@@ -89,28 +50,9 @@ class CombatStats:
         Returns:
             int: How skullduggery-y. Never below 1.
         """
-        stat_data = library.get_primary_stat_data(PrimaryStatTypes.SKULLDUGGERY)
-        base_value = stat_data.base_value
-        entity = self.owner.owner
-        component_changes = 0
+        stat = PrimaryStatTypes.SKULLDUGGERY
 
-        if entity.race:
-            race_data = library.get_race_data(entity.race.name)
-            component_changes += race_data.skullduggery
-
-        if entity.savvy:
-            component_changes += entity.savvy.skullduggery
-
-        if entity.homeland:
-            component_changes += entity.homeland.skullduggery
-
-        from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
-                                                                                         PrimaryStatTypes.SKULLDUGGERY)
-
-        total = max(1, int(component_changes + base_value + affliction_changes))
-
-        return total
+        return world.Entity.get_entitys_primary_stat(self.entity, stat)
 
     @property
     def bustle(self):
@@ -120,28 +62,9 @@ class CombatStats:
         Returns:
             int: How much bustle. Never below 1.
         """
-        stat_data = library.get_primary_stat_data(PrimaryStatTypes.BUSTLE)
-        base_value = stat_data.base_value
-        entity = self.owner.owner
-        component_changes = 0
+        stat = PrimaryStatTypes.BUSTLE
 
-        if entity.race:
-            race_data = library.get_race_data(entity.race.name)
-            component_changes += race_data.bustle
-
-        if entity.savvy:
-            component_changes += entity.savvy.bustle
-
-        if entity.homeland:
-            component_changes += entity.homeland.bustle
-
-        from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
-                                                                                         PrimaryStatTypes.BUSTLE)
-
-        total = max(1, int(component_changes + base_value + affliction_changes))
-
-        return total
+        return world.Entity.get_entitys_primary_stat(self.entity, stat)
 
     @property
     def exactitude(self):
@@ -151,25 +74,283 @@ class CombatStats:
         Returns:
             int: How exacting. Never below 1.
         """
-        stat_data = library.get_primary_stat_data(PrimaryStatTypes.EXACTITUDE)
+        stat = PrimaryStatTypes.EXACTITUDE
+
+        return world.Entity.get_entitys_primary_stat(self.entity, stat)
+
+    @property
+    def max_hp(self):
+        """
+        Total damage an entity can take before death.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.MAX_HP
+        stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
-        entity = self.owner.owner
-        component_changes = 0
 
-        if entity.race:
-            race_data = library.get_race_data(entity.race.name)
-            component_changes += race_data.exactitude
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
 
-        if entity.savvy:
-            component_changes += entity.savvy.exactitude
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        if entity.homeland:
-            component_changes += entity.homeland.exactitude
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
-        from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.owner.owner,
-                                                                                         PrimaryStatTypes.EXACTITUDE)
-
-        total = max(1, int(component_changes + base_value + affliction_changes))
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
 
         return total
+
+    @property
+    def max_stamina(self):
+        """
+        an entities energy to take actions.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.MAX_STAMINA
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+    @property
+    def accuracy(self):
+        """
+        an entities likelihood to hit.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.ACCURACY
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+    @property
+    def resist_burn(self):
+        """
+        an entities resistance to burn damage.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.RESIST_BURN
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+    @property
+    def resist_cold(self):
+        """
+        an entities resistance to cold damage.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.RESIST_COLD
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+    @property
+    def resist_chemical(self):
+        """
+        an entities resistance to chemical damage.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.RESIST_CHEMICAL
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+    @property
+    def resist_astral(self):
+        """
+        an entities resistance to astral damage.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.RESIST_ASTRAL
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+    @property
+    def resist_mundane(self):
+        """
+        an entities resistance to mundane damage.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.RESIST_MUNDANE
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+    @property
+    def sight_range(self):
+        """
+        Highest value among base contributions then modifiers applied. Cant be less than 0.
+
+        Returns:
+            int:
+        """
+        stat = SecondaryStatTypes.SIGHT_RANGE
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
+
+
+@dataclass
+class StatData:
+    """
+    Data class to contain primary and secondary stats
+    """
+    primary: Dict = field(default_factory=dict)
+    secondary: Dict = field(default_factory=dict)
+
+
+@dataclass
+class PrimaryStatData:
+    """
+    Data class for primary  stats
+    """
+    name: str = "None"
+    primary_stat_type: PrimaryStatTypes = None
+    base_value: int = 0
+
+
+@dataclass
+class SecondaryStatData:
+    """
+    Data class for secondary stats
+    """
+    name: str = "None"
+    secondary_stat_type: SecondaryStatTypes = None
+    base_value: int = 0
+    vigour_mod: int = 0
+    clout_mod: int = 0
+    skullduggery_mod: int = 0
+    bustle_mod: int = 0
+    exactitude_mod: int = 0

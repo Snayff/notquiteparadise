@@ -1,27 +1,24 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 import logging
 import math
-import pygame
 import tcod
 import scipy.spatial
-from scripts.components.actor import Actor
-from scripts.components.combatant import Combatant
-from scripts.components.homeland import Homeland
-from scripts.components.race import Race
-from scripts.components.savvy import Savvy
-from scripts.core.constants import TILE_SIZE
+
+from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
 from scripts.core.library import library
-from scripts.world.components import IsPlayer, Position, Blocking, Resources
+from scripts.world.combat_stats import CombatStats
+from scripts.world.components import IsPlayer, Position, Blocking, Resources, Race, Savvy, Homeland
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
 if TYPE_CHECKING:
     from typing import List
     from scripts.managers.world_manager import WorldManager
+    from typing import Union
 
 
 class EntityMethods:
@@ -139,22 +136,6 @@ class EntityMethods:
                 entities.append(entity)
 
         return entities
-
-    def get_entitys_component(self, entity, component):
-        """
-        Get an entity's component.
-
-        Args:
-            entity ():
-            component ():
-
-        Returns:
-
-        """
-        if self.manager.World.has_component(entity, component):
-            return self.manager.World.component_for_entity(entity, component)
-        else:
-            return None
 
     ############## ENTITY EXISTENCE ################
 
@@ -347,4 +328,66 @@ class EntityMethods:
         else:
             logging.error("Tried to spend entity's time but entity was None.")
 
-    def get_entitys_stats(self, entity: int):
+    ############### GET ENTITY INFO ##########
+
+    def get_entitys_component(self, entity, component):
+        """
+        Get an entity's component.
+
+        Args:
+            entity ():
+            component ():
+
+        Returns:
+
+        """
+        if self.manager.World.has_component(entity, component):
+            return self.manager.World.component_for_entity(entity, component)
+        else:
+            return None
+
+    @staticmethod
+    def get_entitys_stats(entity: int) -> CombatStats:
+        """
+        Get a stat object  for an entity.
+
+        Args:
+            entity ():
+
+        Returns:
+
+        """
+        return CombatStats(entity)
+
+    def get_entitys_primary_stat(self, entity: int, primary_stat: PrimaryStatTypes) -> int:
+        """
+        Get an entity's primary stat.
+
+        Args:
+            entity ():
+            primary_stat ():
+
+        Returns:
+
+        """
+        stat = primary_stat.name.lower()
+        value = 0
+
+        for race in self.manager.World.try_component(entity, Race):
+            race_data = library.get_race_data(race.name)
+            value += getattr(race_data, stat)
+
+        for savvy in self.manager.World.try_component(entity, Savvy):
+            savvy_data = library.get_savvy_data(savvy.name)
+            value += getattr(savvy_data, stat)
+
+        for homeland in self.manager.World.try_component(entity, Homeland):
+            homeland_data = library.get_homeland_data(homeland.name)
+            value += getattr(homeland_data, stat)
+
+        value += self.manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+
+        # ensure no dodgy numbers, like floats or negative
+        value = max(1, int(value))
+
+        return value

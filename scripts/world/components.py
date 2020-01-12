@@ -96,3 +96,6 @@ class AIBasic:
     """
     [Component] An ai to control an entity.
     """
+
+class HasCombatStats:
+    """"[Component] An entity's stats used for combat."""
