@@ -1,9 +1,8 @@
 import logging
 from typing import List
-
-from scripts.core.constants import TargetTags, MessageTypes, HitTypes, DamageTypes, PrimaryStatTypes, HitModifiers, EffectTypes
+from scripts.core.constants import TargetTags, MessageTypes, HitTypes, DamageTypes, PrimaryStatTypes, HitModifiers, \
+    EffectTypes
 from scripts.events.entity_events import DieEvent
-
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
@@ -29,9 +28,11 @@ class DamageEffect(Effect):
         Args:
             tiles (List[Tile]):
         """
+        # TODO - Rebuild effects using EC
         super().trigger()
 
         # determine if the damage is from an Affliction or a Skill
+        # TODO - moving to top causes circular import. Resolve it.
         from scripts.skills.skill import Skill
         from scripts.skills.affliction import Affliction
         if isinstance(self.owner, Skill):
@@ -50,9 +51,11 @@ class DamageEffect(Effect):
 
         # loop all tiles in list
         for tile in tiles:
+
             defender = tile.entity
 
             # check that the tags match
+            # TODO - moving to top causes circular import. Resolve it.
             from scripts.managers.world_manager import world
             if world.Skill.has_required_tags(tile, data.required_tags, attacker):
                 # if it needs to be another entity then it can't be looking at itself

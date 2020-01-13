@@ -19,7 +19,7 @@ class Effect:
         """
         Trigger the effect
         """
-        log_string = f"Applying {self.name} skill effect from '{self.owner.name}'."
+        log_string = f"Applying {self.name} skill effect from 'entity'."
         logging.debug(log_string)
 
 

@@ -45,8 +45,8 @@ class TurnManager:
         # log result
         queue = []
         for entity, time in self.turn_queue.items():
-            if world.World.has_component(entity, Identity):
-                identity = world.World.component_for_entity(entity, Identity)
+            identity = world.Entity.get_identity(entity)
+            if identity:
                 queue.append((identity.name, time))
 
         logging.debug(f"-> Queue built. {queue}")
@@ -69,7 +69,7 @@ class TurnManager:
         self.turn_queue[turn_holder] = resources.time_spent
 
         # log result
-        identity = world.Entity.get_component(turn_holder, Identity)
+        identity = world.Entity.get_identity(turn_holder)
         logging.debug(f"Ended '{identity.name}'`s turn.")
 
     def next_turn(self):

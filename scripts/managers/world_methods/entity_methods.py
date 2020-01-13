@@ -8,7 +8,7 @@ import tcod
 import scipy.spatial
 from scripts.core.constants import PrimaryStatTypes
 from scripts.core.library import library
-from scripts.world.components import IsPlayer, Position, Blocking, Resources, Race, Savvy, Homeland, Knowledge
+from scripts.world.components import IsPlayer, Position, Blocking, Resources, Race, Savvy, Homeland, Knowledge, Identity
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
@@ -312,6 +312,22 @@ class EntityMethods:
 
     ############### COMPONENT MANAGEMENT ##########
 
+    def get_component(self, entity, component):
+        """
+        Get an entity's component.
+
+        Args:
+            entity ():
+            component ():
+
+        Returns:
+
+        """
+        if self.manager.World.has_component(entity, component):
+            return self.manager.World.component_for_entity(entity, component)
+        else:
+            return None
+
     def spend_time(self, entity: int, time_spent: int):
         """
         Add time_spent to the entity's total time spent.
@@ -342,21 +358,10 @@ class EntityMethods:
 
     ############### GET ENTITY INFO ##########
 
-    def get_component(self, entity, component):
-        """
-        Get an entity's component.
+    def get_identity(self, entity: int) -> Identity:
+        """Get an entity's Identity component."""
 
-        Args:
-            entity ():
-            component ():
-
-        Returns:
-
-        """
-        if self.manager.World.has_component(entity, component):
-            return self.manager.World.component_for_entity(entity, component)
-        else:
-            return None
+        return self.get_component(entity, Identity)
 
     @staticmethod
     def get_stats(entity: int) -> CombatStats:

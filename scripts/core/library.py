@@ -444,8 +444,8 @@ class LibraryOfAlexandria:
 
             # Effects:new_terrain
             # TODO - plans to remove terrain from internal so dont update for all values
-            self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
-            self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
+            self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.OPEN_SPACE)
+            self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.BLOCKED_SPACE)
 
             # Skill:shape
             for value in SkillShapes:

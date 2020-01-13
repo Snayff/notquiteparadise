@@ -94,9 +94,9 @@ class MapMethods:
         # TODO - rewrite as terrain no longer an object
         # if type(tile.terrain) is Wall:
         #
-        #     return TargetTags.WALL
+        #     return TargetTags.BLOCKED_SPACE
         # elif type(tile.terrain) is Floor:
-        #     return TargetTags.FLOOR
+        #     return TargetTags.OPEN_SPACE
 
     def is_tile_in_bounds(self, tile_x, tile_y):
         """
@@ -212,8 +212,7 @@ class MapMethods:
         else:
             return True
 
-    @staticmethod
-    def tile_has_tag(tile, target_tag, active_entity=None):
+    def tile_has_tag(self, tile, target_tag, active_entity=None):
         """
         Check if a given tag applies to the tile
 
@@ -225,22 +224,28 @@ class MapMethods:
         Returns:
             bool: True if tag applies.
         """
-        if target_tag == TargetTags.FLOOR:
-            return tile.is_floor
-        elif target_tag == TargetTags.WALL:
-            return tile.is_wall
+
+        if target_tag == TargetTags.OPEN_SPACE:
+            return not tile.blocks_movement
+        elif target_tag == TargetTags.BLOCKED_SPACE:
+            return tile.blocks_movement
         elif target_tag == TargetTags.SELF:
             # ensure active entity is the same as the targeted one
-            if active_entity == tile.entity:
-                return True
-            else:
-                return False
+            for entity, position in self.manager.World.get_components(Position):
+                if position.x == tile.x and position.y == tile.y:
+                    if active_entity == entity:
+                        return True
+
+            # no matching entity found
+            return False
         elif target_tag == TargetTags.OTHER_ENTITY:
             # ensure active entity is NOT the same as the targeted one
-            if active_entity != tile.entity and tile.has_entity:
-                return True
-            else:
-                return False
+            for entity, position in self.manager.World.get_component(Position):
+                if position.x == tile.x and position.y == tile.y:
+                    if active_entity != entity:
+                        return True
+            # no different entity found
+            return False
         elif target_tag == TargetTags.NO_ENTITY:
             return not tile.has_entity
         elif target_tag == TargetTags.ANY:
@@ -276,9 +281,9 @@ class MapMethods:
         new_terrain = None
 
         # TODO - rewrite for EC
-        # if terrain == TargetTags.WALL:
+        # if terrain == TargetTags.BLOCKED_SPACE:
         #     new_terrain = Wall()
-        # elif terrain == TargetTags.FLOOR:
+        # elif terrain == TargetTags.OPEN_SPACE:
         #     new_terrain = Floor()
         #
         # if new_terrain:

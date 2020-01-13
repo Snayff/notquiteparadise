@@ -140,10 +140,8 @@ class TargetTags(Enum):
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
     ANY = auto()
-
-    # TODO - externalise terrain types
-    FLOOR = auto()
-    WALL = auto()
+    OPEN_SPACE = auto()
+    BLOCKED_SPACE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

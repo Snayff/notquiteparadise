@@ -35,7 +35,7 @@ class SkillMethods:
     def __init__(self, manager):
         self.manager = manager  # type: WorldManager
 
-    def can_use_skill(self, entity, target_pos, skill):
+    def can_use(self, entity, target_pos, skill):
         """
         Confirm entity can use skill on targeted position
 
@@ -132,7 +132,7 @@ class SkillMethods:
             bool: True for success, False otherwise.
         """
         resources = self.manager.Entity.get_component(entity, Resources)
-        identity = self.manager.Entity.get_component(entity, Identity)
+        identity = self.manager.Entity.get_identity(entity)
 
         # Check if cost can be paid
         value = getattr(resources, resource.name.lower())
@@ -220,22 +220,6 @@ class SkillMethods:
 
         return mitigated_to_hit_score
 
-    @staticmethod
-    def create_skill(actor, skill_tree_name, skill_name):
-        """
-        Create a SKill object
-        Args:
-            actor ():
-            skill_tree_name ():
-            skill_name ():
-
-        Returns:
-            Skill: The created skill
-        """
-        skill = Skill(actor, skill_tree_name, skill_name)
-
-        return skill
-
     def pay_resource_cost(self, entity, resource, cost):
         """
         Remove the resource cost from the using entity
@@ -246,7 +230,7 @@ class SkillMethods:
             cost (int):
         """
         resources = self.manager.Entity.get_component(entity, Resources)
-        identity = self.manager.Entity.get_component(entity, Identity)
+        identity = self.manager.Entity.get_identity(entity)
 
         resource_value = getattr(resources, resource.name.lower())
         resource_left = resource_value - cost
@@ -320,7 +304,7 @@ class SkillMethods:
 
         # initial values
         position = self.manager.Entity.get_component(entity, Position)
-        identity = self.manager.Entity.get_component(entity, Identity)
+        identity = self.manager.Entity.get_identity(entity)
         start_x = position.x
         start_y = position.y
         dir_x = target_direction[0]
@@ -341,7 +325,7 @@ class SkillMethods:
             tile = self.manager.Map.get_tile((current_x, current_y))
 
             # did we hit terrain?
-            if self.manager.Map.tile_has_tag(tile, TargetTags.WALL, entity):
+            if self.manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_SPACE, entity):
                 # do we need to activate, reflect or fizzle?
                 if data.terrain_collision == SkillTerrainCollisions.ACTIVATE:
                     activate = True
@@ -350,9 +334,9 @@ class SkillMethods:
                 elif data.terrain_collision == SkillTerrainCollisions.REFLECT:
                     # work out position of adjacent walls
                     adj_tile = self.manager.Map.get_tile((current_x, current_y - dir_y))
-                    collision_adj_y = self.manager.Map.tile_has_tag(adj_tile, TargetTags.WALL)
+                    collision_adj_y = self.manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
                     adj_tile = self.manager.Map.get_tile((current_x - dir_x, current_y))
-                    collision_adj_x = self.manager.Map.tile_has_tag(adj_tile, TargetTags.WALL)
+                    collision_adj_x = self.manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
 
                     # where did we collide?
                     if collision_adj_x:

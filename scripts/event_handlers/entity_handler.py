@@ -124,7 +124,7 @@ class EntityHandler(Subscriber):
             if entity == world.Entity.get_player():
                 publisher.publish(MessageEvent(MessageTypes.LOG, "You cannot afford to do that."))
             else:
-                identity = world.Entity.get_component(entity, Identity)
+                identity = world.Entity.get_identity(entity)
                 logging.warning(f"{identity.name} tried to use {skill}, which they can`t afford")
 
     @staticmethod
