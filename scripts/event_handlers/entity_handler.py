@@ -82,13 +82,13 @@ class EntityHandler(Subscriber):
                 elif is_entity_on_tile:
                     # TODO - change to EC approach
                     knowledge = world.Entity.get_component(entity, Knowledge)
-                    skill = knowledge.skills[0]
-                    skill_data = library.get_skill_data(skill)
+                    skill_name = knowledge.skills[0]
+                    skill_data = library.get_skill_data(skill_name)
                     direction = Directions((dir_x, dir_y))
                     if direction in skill_data.target_directions:
-                        publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
+                        publisher.publish((UseSkillEvent(entity, skill_name, (dir_x, dir_y))))
                     else:
-                        publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill.name} doesn't go that way!"))
+                        publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill_name} doesn't go that way!"))
 
                 # if nothing in the way, time to move!
                 elif not is_entity_on_tile and not is_tile_blocking_movement:

@@ -24,6 +24,16 @@ class MapMethods:
         self.manager = manager  # type: WorldManager
         self.game_map = None
 
+    ########## CREATE ###############
+    
+    def create_game_map(self, width, height):
+        """
+        Create new GameMap and create player FOV
+        """
+        self.game_map = GameMap(width, height)
+        
+    ############# GET ###############
+    
     def get_game_map(self) -> GameMap:
         """
         Get current game_map
@@ -32,90 +42,7 @@ class MapMethods:
             GameMap
         """
         return self.game_map
-
-    def create_game_map(self, width, height):
-        """
-        Create new GameMap and create player FOV
-        """
-        self.game_map = GameMap(width, height)
-
-    def is_tile_blocking_sight(self, tile_x, tile_y):
-        """
-        Check if a tile is blocking sight
-
-        Args:
-            tile_x:
-            tile_y:
-
-        Returns:
-            bool:
-        """
-        game_map = self.get_game_map()
-
-        if 0 <= tile_x < game_map.width and 0 <= tile_y < game_map.height:
-            return game_map.tiles[tile_x][tile_y].blocks_sight
-        else:
-            return True
-
-    def is_tile_visible_to_player(self, tile_x, tile_y):
-        """
-        Check if the specified tile is visible to the player
-
-        Args:
-            tile_x:
-            tile_y:
-
-        Returns:
-            bool:
-        """
-        game_map = self.get_game_map()
-
-        if 0 <= tile_x < game_map.width and 0 <= tile_y < game_map.height:
-            return game_map.tiles[tile_x][tile_y].is_visible
-        else:
-            return False
-
-    def get_target_type_from_tile(self, tile_x, tile_y):
-        """
-        Get type of target tile
-
-        Args:
-            tile_x(int):  x position of the tile
-            tile_y(int):  y position of the tile
-        """
-        # TODO - convert to properties of tile class
-
-        game_map = self.get_game_map()
-        tile = game_map.tiles[tile_x][tile_y]
-
-        if not self.is_tile_in_bounds(tile_x, tile_y):
-            return TargetTags.OUT_OF_BOUNDS
-
-        # TODO - rewrite as terrain no longer an object
-        # if type(tile.terrain) is Wall:
-        #
-        #     return TargetTags.BLOCKED_SPACE
-        # elif type(tile.terrain) is Floor:
-        #     return TargetTags.OPEN_SPACE
-
-    def is_tile_in_bounds(self, tile_x, tile_y):
-        """
-        Check if specified tile is in the map.
-
-        Args:
-            tile_x:
-            tile_y:
-
-        Returns:
-            bool:
-        """
-        game_map = self.get_game_map()
-
-        if (0 <= tile_x < game_map.width) and (0 <= tile_y < game_map.height):
-            return True
-        else:
-            return False
-
+    
     def get_tile(self, tile_pos: Union[Tuple[int, int], str]) -> Tile:
         """
         Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string
@@ -194,6 +121,85 @@ class MapMethods:
 
         return tiles
 
+    ############# CHECKS ############
+
+    def is_tile_blocking_sight(self, tile_x, tile_y):
+        """
+        Check if a tile is blocking sight
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+        """
+        game_map = self.get_game_map()
+
+        if 0 <= tile_x < game_map.width and 0 <= tile_y < game_map.height:
+            return game_map.tiles[tile_x][tile_y].blocks_sight
+        else:
+            return True
+
+    def is_tile_visible_to_player(self, tile_x, tile_y):
+        """
+        Check if the specified tile is visible to the player
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+        """
+        game_map = self.get_game_map()
+
+        if 0 <= tile_x < game_map.width and 0 <= tile_y < game_map.height:
+            return game_map.tiles[tile_x][tile_y].is_visible
+        else:
+            return False
+
+    def get_target_type_from_tile(self, tile_x, tile_y):
+        """
+        Get type of target tile
+
+        Args:
+            tile_x(int):  x position of the tile
+            tile_y(int):  y position of the tile
+        """
+        # TODO - convert to properties of tile class
+
+        game_map = self.get_game_map()
+        tile = game_map.tiles[tile_x][tile_y]
+
+        if not self.is_tile_in_bounds(tile_x, tile_y):
+            return TargetTags.OUT_OF_BOUNDS
+
+        # TODO - rewrite as terrain no longer an object
+        # if type(tile.terrain) is Wall:
+        #
+        #     return TargetTags.BLOCKED_SPACE
+        # elif type(tile.terrain) is Floor:
+        #     return TargetTags.OPEN_SPACE
+
+    def is_tile_in_bounds(self, tile_x, tile_y):
+        """
+        Check if specified tile is in the map.
+
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+        """
+        game_map = self.get_game_map()
+
+        if (0 <= tile_x < game_map.width) and (0 <= tile_y < game_map.height):
+            return True
+        else:
+            return False
+
     def is_tile_blocking_movement(self, tile_x, tile_y):
         """
         Check if the specified tile is blocking movement
@@ -212,24 +218,24 @@ class MapMethods:
         else:
             return True
 
-    def tile_has_tag(self, tile: Tile, target_tag: TargetTags, active_entity: int = None):
+    def tile_has_tag(self, tile: Tile, tag: TargetTags, active_entity: int = None):
         """
         Check if a given tag applies to the tile
 
         Args:
             tile ():
-            target_tag (TargetTags): tag to check
+            tag (TargetTags): tag to check
             active_entity (int): entity using a skill
 
         Returns:
             bool: True if tag applies.
         """
 
-        if target_tag == TargetTags.OPEN_SPACE:
+        if tag == TargetTags.OPEN_SPACE:
             return not tile.blocks_movement
-        elif target_tag == TargetTags.BLOCKED_SPACE:
+        elif tag == TargetTags.BLOCKED_SPACE:
             return tile.blocks_movement
-        elif target_tag == TargetTags.SELF:
+        elif tag == TargetTags.SELF:
             # ensure active entity is the same as the targeted one
             for entity, position in self.manager.World.get_components(Position):
                 if position.x == tile.x and position.y == tile.y:
@@ -238,7 +244,7 @@ class MapMethods:
 
             # no matching entity found
             return False
-        elif target_tag == TargetTags.OTHER_ENTITY:
+        elif tag == TargetTags.OTHER_ENTITY:
             # ensure active entity is NOT the same as the targeted one
             for entity, position in self.manager.World.get_component(Position):
                 if position.x == tile.x and position.y == tile.y:
@@ -246,170 +252,20 @@ class MapMethods:
                         return True
             # no different entity found
             return False
-        elif target_tag == TargetTags.NO_ENTITY:
+        elif tag == TargetTags.NO_ENTITY:
             return not tile.has_entity
-        elif target_tag == TargetTags.ANY:
+        elif tag == TargetTags.ANY:
             return True
         else:
             return False  # catch all
 
-    def get_entity_on_tile(self, tile) -> Union[int, None]:
-        """
-        Get the entity from the Tile
-
-        Returns:
-            int: The entity on the tile
-
-        """
-        entities = self.manager.Entity.get_entities(Position)
-        for entity in entities:
-            pos = self.manager.Entity.get_component(entity, Position)
-            if pos.x == tile.x and pos.y == tile.y:
-                return entity
-        else:
-            return None
-
-    @staticmethod
-    def set_terrain_on_tile(tile, terrain):
-        """
-        Set the new terrain on the tile.
-
-        Args:
-            tile (Tile):
-            terrain (TargetTags):
-        """
-        new_terrain = None
-
-        # TODO - rewrite for EC
-        # if terrain == TargetTags.BLOCKED_SPACE:
-        #     new_terrain = Wall()
-        # elif terrain == TargetTags.OPEN_SPACE:
-        #     new_terrain = Floor()
-        #
-        # if new_terrain:
-        #     tile.terrain = new_terrain
-        #     tile.terrain.owner = tile
-
-    @staticmethod
-    def get_terrain_on_tile(tile):
-        """
-        Get the terrain from the Tile
-
-        Returns:
-            Terrain: The terrain on the tile
-
-        """
-        return tile.terrain
-
-    @staticmethod
-    def add_aspect_to_tile(tile, aspect_name):
-        """
-        Add a new aspects on the tile. If it already exists reset duration.
-
-        Args:
-            tile (Tile):
-            aspect_name(str):
-        """
-        data = library.get_aspect_data(aspect_name)
-
-        # check if the aspect already exists
-        if aspect_name in tile.aspects:
-            # reset duration
-            tile.aspects[aspect_name].duration = data.duration
-        else:
-            from scripts.world.aspect import Aspect
-            if data.duration:
-                tile.aspects[aspect_name] = Aspect(tile, aspect_name, data.duration)
-            else:
-                tile.aspects[aspect_name] = Aspect(tile, aspect_name)
-
-    @staticmethod
-    def remove_aspect_from_tile(tile, aspect_name):
-        """
-        Aspect is removed from the tile.
-
-        Args:
-            tile (Tile):
-            aspect_name(str):
-        """
-        if aspect_name in tile.aspects:
-            del tile.aspects[aspect_name]
-
-    @staticmethod
-    def trigger_aspects_on_tile(tile):
-        """
-        Trigger the effect of the Aspect
-        """
-        # TODO - change to EC approach
-        pass
-        # if tile.aspects:
-        #     for key, aspect in tile.aspects.items():
-        #         aspect.trigger()
-
-    @staticmethod
-    def reduce_aspect_durations_on_tile(tile):
-        """
-        Reduce duration of all non-permanent afflictions on an entity.
-
-        Args:
-            tile (Tile):
-        """
-        for key, aspect in tile.aspects.items():
-            if aspect.duration is not None:
-                aspect.duration -= 1
-
-                log_string = f"({aspect.x},{aspect.y}) {aspect.name}`s duration reduced to " \
-                             f" {aspect.duration}"
-                logging.debug(log_string)
-
-    @staticmethod
-    def cleanse_expired_aspects(tile):
-        """
-        Delete expired aspects
-
-        Args:
-            tile (Tile):
-        """
-        removed_aspects = []
-        expired_aspects = []
-
-        # check if aspects has expired
-        for key, aspect in tile.aspects.items():
-
-            # make sure it isnt none before checking duration
-            if aspect.duration is not None:
-                if aspect.duration <= 0:
-                    # log on expired list. Not removing now to avoid amending the currently iterating list
-                    expired_aspects.append(aspect)
-
-        # remove all expired aspects from the tile and delete each instance
-        # pop removes the element so we keep looking at element 0 and popping it
-        index = 0
-        while index < len(expired_aspects):
-            # get the aspect
-            aspect = expired_aspects.pop(index)
-
-            # remove from tile
-            del tile.aspects[aspect.name]
-
-            # add info to logging
-            removed_aspects.append(f"{aspect.x},{aspect.y}:{aspect.name}")
-
-            # delete the instance
-            del aspect
-
-        # if we removed anything log it
-        if removed_aspects:
-            log_string = f"Removed the following aspects: {removed_aspects}"
-            logging.debug(log_string)
-
-    def has_required_tags(self, target_tile: Tile, required_tags: List[TargetTags], active_entity: int = None):
+    def tile_has_tags(self, target_tile: Tile, tags: List[TargetTags], active_entity: int = None):
         """
         Check a tile has all required tags
 
         Args:
             target_tile(Tile):
-            required_tags(List):
+            tags(List):
             active_entity(int):
 
         Returns:
@@ -418,7 +274,7 @@ class MapMethods:
         tags_checked = {}
 
         # assess all tags
-        for tag in required_tags:
+        for tag in tags:
             tags_checked[tag.name] = self.tile_has_tag(target_tile, tag, active_entity)
 
         # if all tags came back true return true

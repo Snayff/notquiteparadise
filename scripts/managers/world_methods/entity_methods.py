@@ -134,10 +134,12 @@ class EntityMethods:
 
         return entities
 
-    def get_entities_and_components_in_area(self, area: List[Tile], component1, component2=None,
+    def get_entities_and_components_in_area(self, area: List[Tile], component1=None, component2=None,
             component3=None) -> Dict:
         """
-        Return a list of entities and their specified components, plus Position. e.g. (Position, component1)
+        Return a list of entities and their specified components, plus Position. e.g. (Position, component1). If no
+        components are specified the return will be (Position, None).
+
         N.B. Do not specify Position as a component.
 
         Args:
@@ -151,17 +153,22 @@ class EntityMethods:
         """
         entities = {}
 
-        if not component2 and not component3:
+        if not component1 and not component2 and not component3:
+            for entity, pos in self.manager.World.get_component(Position):
+                for tile in area:
+                    if tile.x == pos.x and tile.y == pos.y:
+                        entities[entity] = (pos, None)
+        elif component1 and not component2 and not component3:
             for entity, (pos, c1) in self.manager.World.get_components(Position, component1):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1)
-        elif component2 and not component3:
+        elif component1 and component2 and not component3:
             for entity, (pos, c1, c2) in self.manager.World.get_components(Position, component1, component2):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1, c2)
-        elif component2 and component3:
+        elif component1 and component2 and component3:
             for entity, (pos, c1, c2, c3) in self.manager.World.get_components(component1, component2, component3):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:

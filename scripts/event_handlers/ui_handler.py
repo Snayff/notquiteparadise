@@ -113,8 +113,12 @@ class UiHandler(Subscriber):
         if event.event_type == UIEventTypes.CLICK_TILE:
             # Select an entity
             tile = world.Map.get_tile(event.tile_pos_string)
-            entity = world.Map.get_entity_on_tile(tile)
-            self.select_entity(entity)
+            entities = world.Entity.get_entities_and_components_in_area([tile])
+
+            # there should only be one entity, but just in case...
+            for entity in entities:
+                self.select_entity(entity)
+                break
 
         if event.event_type == UIEventTypes.MESSAGE:
             # process a message

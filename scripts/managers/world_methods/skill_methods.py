@@ -55,7 +55,7 @@ class SkillMethods:
         skill_data = library.get_skill_data(skill_name)
 
         # check we have everything we need and if so use the skill
-        if world.Map.has_required_tags(target_tile, skill_data.required_tags, entity):
+        if world.Map.tile_has_tags(target_tile, skill_data.required_tags, entity):
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
             if self.can_afford_cost(entity, resource_type, resource_cost):
@@ -325,7 +325,7 @@ class SkillMethods:
             # increase duration to initial value
             aspects.aspects[aspect_name] = data.duration
         else:
-            self.manager.World.create_entity(Position(position.x, position.y), Aspects({aspect_name: data.duration}))
+            self.manager.Entity.create([Position(position.x, position.y), Aspects({aspect_name: data.duration})])
 
     def _apply_affliction_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
         world = self.manager
@@ -345,7 +345,7 @@ class SkillMethods:
 
             # check we have all tags
             tile = world.Map.get_tile(position.x, position.y)
-            if world.Map.has_required_tags(tile, effect_data.required_tags, attacker):
+            if world.Map.tile_has_tags(tile, effect_data.required_tags, attacker):
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
                     to_hit_score = self._calculate_to_hit_score(defender, effect_data.accuracy,
@@ -432,7 +432,7 @@ class SkillMethods:
         # loop all relevant entities
         for defender, (position, resources, has_stats) in entities.items():
             tile = world.Map.get_tile(position.x, position.y)
-            if world.Map.has_required_tags(tile, data.required_tags, attacker):
+            if world.Map.tile_has_tags(tile, data.required_tags, attacker):
                 # get the info to apply the damage
                 entitys_stats = world.Entity.get_stats(defender)
                 to_hit_score = self._calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,

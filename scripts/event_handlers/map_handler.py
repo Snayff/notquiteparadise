@@ -90,7 +90,7 @@ class MapHandler(Subscriber):
         tile = world.Map.get_tile((position.x, position.y))
 
         # trigger aspects
-        world.Map.trigger_aspects_on_tile(tile)
+        #world.Map.trigger_aspects_on_tile(tile)
 
     @staticmethod
     def process_end_of_round_updates():

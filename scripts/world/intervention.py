@@ -26,6 +26,7 @@ class Intervention:
         Args:
             target_pos (tuple): x y of the target
         """
+        # TODO - rebuild using EC
         from scripts.managers.world_manager import world
         data = library.get_god_intervention_data(self.owner.name, self.name)
 
@@ -40,6 +41,6 @@ class Intervention:
 
         # logging
         tile = world.Map.get_tile((target_x, target_y))
-        entity = world.Map.get_entity_on_tile(tile)
+        entity = 0 #world.Map.get_entity_on_tile(tile)
         msg = f"#col.info {self.owner.name} intervened, using {self.name} on {entity.name}."
         publisher.publish(MessageEvent(MessageTypes.LOG, msg))
