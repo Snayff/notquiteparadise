@@ -6,6 +6,7 @@ from scripts.core.constants import AfflictionCategory, HitTypes, MessageTypes, H
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
+from scripts.managers.world_methods.map_methods import has_required_tags
 from scripts.skills.effects.effect import Effect
 from scripts.world.entity import Entity
 
@@ -57,13 +58,13 @@ class ApplyAfflictionEffect(Effect):
 
             # check the tags match
             from scripts.managers.world_manager import world
-            if world.Skill.has_required_tags(tile, effect_data.required_tags, attacker):
+            if has_required_tags(world.Skill.manager, tile, effect_data.required_tags, attacker):
 
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
-                    to_hit_score = world.Skill.calculate_to_hit_score(defender, effect_data.accuracy,
-                                                                              effect_data.stat_to_target,  attacker)
-                    hit_type = world.Skill.get_hit_type(to_hit_score)
+                    to_hit_score = world.Skill._calculate_to_hit_score(defender, effect_data.accuracy,
+                                                                       effect_data.stat_to_target, attacker)
+                    hit_type = world.Skill._get_hit_type(to_hit_score)
 
                     # check if afflictions applied
                     if hit_type == HitTypes.GRAZE:

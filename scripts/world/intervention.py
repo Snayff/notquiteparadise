@@ -36,8 +36,7 @@ class Intervention:
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
-            effect = world.Skill.create_effect(self, effect_data.effect_type)
-            effect.trigger(effected_tiles)
+            world.Skill.apply_effect(effect_data.effect_type, data.name, effected_tiles)
 
         # logging
         tile = world.Map.get_tile((target_x, target_y))

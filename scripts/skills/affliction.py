@@ -31,6 +31,7 @@ class Affliction:
         Trigger all afflictions effects and decrement duration by 1 (Except for Permanent). Duration reduced at end
         of turn.
         """
+        # TODO - convert to component
         log_string = f"Triggering effects in {self.name}"
         logging.info( log_string)
 
@@ -39,7 +40,7 @@ class Affliction:
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
-            effect = world.Skill.create_effect(self, effect_data.effect_type)
+            #effect = world.Skill.create_effect(self, effect_data.effect_type)
             effected_tile = world.Map.get_tile((self.affected_entity.x, self.affected_entity.y))
             effect.trigger([effected_tile])
 

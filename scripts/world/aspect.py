@@ -58,9 +58,11 @@ class Aspect:
         Trigger any effects for the aspects
         """
         data = library.get_aspect_data(self.name)
+        # TODO - convert to component
 
         # apply any effects
         for effect_name, effect_data in data.effects.items():
             from scripts.managers.world_manager import world
-            effect = world.Skill.create_effect(self, effect_data.effect_type)
-            effect.trigger([self.owner])
+
+            #effect = world.Skill.create_effect(self, effect_data.effect_type)
+            #effect.trigger([self.owner])

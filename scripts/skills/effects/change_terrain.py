@@ -3,6 +3,7 @@ from scripts.core.constants import MessageTypes, EffectTypes
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
+from scripts.managers.world_methods.map_methods import has_required_tags
 from scripts.skills.effects.effect import Effect
 
 
@@ -34,7 +35,7 @@ class ChangeTerrainEffect(Effect):
 
             # that the tags match
             from scripts.managers.world_manager import world
-            if world.Skill.has_required_tags(tile, data.required_tags):
+            if has_required_tags(world.Skill.manager, tile, data.required_tags):
                 world.Map.set_terrain_on_tile(tile, data.new_terrain)
 
                 # success text

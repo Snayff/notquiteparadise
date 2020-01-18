@@ -5,23 +5,6 @@ from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelType
     SkillTerrainCollisions, SkillShapes
 
 
-
-class Skill:
-    """
-    A skill to be used by an actor
-
-    Attributes:
-            name(str):
-            owner():
-            skill_tree_name():
-    """
-
-    def __init__(self, owner, skill_tree_name, skill_name):
-        self.owner = owner
-        self.skill_tree_name = skill_tree_name
-        self.name = skill_name
-
-
 @dataclass()
 class SkillData:
     """

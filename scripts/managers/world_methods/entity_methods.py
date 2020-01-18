@@ -366,7 +366,7 @@ class EntityMethods:
     @staticmethod
     def get_stats(entity: int) -> CombatStats:
         """
-        Get a stat object  for an entity.
+        Create and return a stat object  for an entity.
 
         Args:
             entity ():
