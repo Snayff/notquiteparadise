@@ -260,11 +260,11 @@ class ControlMethods:
         # Use a skill
         skill_number = self.get_pressed_skills_number()
         if skill_number != -1:
-            skill = player.actor.known_skills[skill_number]
-            skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+            skill_name = player.actor.known_skills[skill_number]
+            skill_data = library.get_skill_data(skill_name)
 
             if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+                publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))
 
     def process_targeting_mode_intents(self, event):
         """
@@ -276,15 +276,15 @@ class ControlMethods:
         get_intent = self.get_intent
         intent = InputIntents
         player = world.Entity.get_player()
-        skill = game.active_skill
+        skill_name = game.active_skill
 
         # Use skill on tile
         if get_intent(intent.BUTTON_PRESSED):
             button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
                 direction = world.Map.get_direction((player.x, player.y), button[1])
-                publisher.publish(UseSkillEvent(player, skill, direction))
-                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+                publisher.publish(UseSkillEvent(player, skill_name, direction))
+                skill_data = library.get_skill_data(skill_name)
                 publisher.publish(EndTurnEvent(player, skill_data.time_cost))
 
         # Cancel use
@@ -296,9 +296,9 @@ class ControlMethods:
         if skill_number != -1:
             skill_pressed = player.actor.known_skills[skill_number]
             # confirm skill pressed doesn't match skill already pressed
-            if skill_pressed != skill:
-                skill = player.actor.known_skills[skill_number]
-                skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+            if skill_pressed != skill_name:
+                skill_name = player.actor.known_skills[skill_number]
+                skill_data = library.get_skill_data(skill_name)
 
                 if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                    publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill))
+                    publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))

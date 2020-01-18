@@ -576,36 +576,26 @@ class LibraryOfAlexandria:
         data = self.homelands[homeland_name]
         return data
 
-    def get_skill_data(self, skill_tree, skill_name):
+    def get_skill_data(self, skill_name):
         """
         Get data for a skill from the central library
 
         Args:
-            skill_tree (str):
             skill_name (str):
 
         Returns:
             SkillData: data for a specified skill.
         """
-        # TODO - update to remove skill tree
-
-        if skill_tree in self.homelands:
-            skill_data = self.homelands[skill_tree].skills[skill_name]
-        elif skill_tree in self.savvys:
-            skill_data = self.savvys[skill_tree].skills[skill_name]
-        elif skill_tree in self.races:
-            skill_data = self.races[skill_tree].skills[skill_name]
-        else:
-            skill_data = None
+        skill_data = self.skills[skill_name]
 
         return skill_data
 
-    def get_skill_effect_data(self, skill_tree, skill_name, effect_type):
+    def get_skill_effect_data(self, skill_name, effect_type):
         """
         Get data for a skill from the central library
 
         Args:
-            skill_tree(str):
+
             skill_name(str):
             effect_type(EffectTypes):
 
@@ -613,14 +603,8 @@ class LibraryOfAlexandria:
             EffectData: data for a specified skill effect.
         """
         try:
-            if skill_tree in self.homelands:
-                effect_data = self.homelands[skill_tree].skills[skill_name].effects[effect_type.name]
-            elif skill_tree in self.savvys:
-                effect_data = self.savvys[skill_tree].skills[skill_name].effects[effect_type.name]
-            elif skill_tree in self.races:
-                effect_data = self.races[skill_tree].skills[skill_name].effects[effect_type.name]
-            else:
-                effect_data = None
+            effect_data = self.skills[skill_name].effects[effect_type.name]
+
         except KeyError:
             effect_data = None
 

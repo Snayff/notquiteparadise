@@ -212,14 +212,14 @@ class MapMethods:
         else:
             return True
 
-    def tile_has_tag(self, tile, target_tag, active_entity=None):
+    def tile_has_tag(self, tile: Tile, target_tag: TargetTags, active_entity: int = None):
         """
         Check if a given tag applies to the tile
 
         Args:
             tile ():
             target_tag (TargetTags): tag to check
-            active_entity (Entity): entity using a skill
+            active_entity (int): entity using a skill
 
         Returns:
             bool: True if tag applies.

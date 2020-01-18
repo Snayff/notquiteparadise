@@ -35,24 +35,24 @@ class SkillMethods:
     def __init__(self, manager):
         self.manager = manager  # type: WorldManager
 
-    def can_use(self, entity, target_pos, skill):
+    def can_use(self, entity: int, target_pos: Tuple[int, int], skill_name: str):
         """
         Confirm entity can use skill on targeted position
 
         Args:
-            entity (Entity):
+            entity ():
             target_pos (tuple(int, int)):
-            skill (Skill):
+            skill_name (Skill):
 
         Returns:
             bool: True if can use the skill. Else False.
         """
-        from scripts.managers.world_manager import world
-
-        start_tile = world.Map.get_tile((entity.x, entity.y))
+        world = self.manager
+        position = world.Entity.get_component(entity, Position)
+        start_tile = world.Map.get_tile((position.x, position.y))
         target_x, target_y = target_pos
         target_tile = world.Map.get_tile((target_x, target_y))
-        skill_data = library.get_skill_data(skill.skill_tree_name, skill.name)
+        skill_data = library.get_skill_data(skill_name)
 
         # check we have everything we need and if so use the skill
         if self.has_required_tags(target_tile, skill_data.required_tags, entity):
@@ -73,36 +73,18 @@ class SkillMethods:
 
         return False
 
-    def has_required_tags(self, target_tile, required_tags, active_entity=None):
+    def has_required_tags(self, target_tile: Tile, required_tags: List[TargetTags], active_entity: int = None):
         """
         Check a tile has all required tags
 
         Args:
             target_tile(Tile):
             required_tags(List):
-            active_entity(Entity):
+            active_entity(int):
 
         Returns:
             bool: True if tile has all tags
         """
-        # log what is being targeted
-        target = ""
-        if target_tile.entity:
-            if target_tile.entity.name == "player":
-                pass
-            target += target_tile.entity.name + ", "
-        else:
-            target += "no entity, "
-        if target_tile.aspects:
-            for key, aspect in target_tile.aspects.items():
-                target += aspect.name + ", "
-        else:
-            target += "no aspects, "
-        target += target_tile.terrain.name  # all tiles have terrain
-
-        # log_string = f"Checking ({target}) for tags {required_tags}..."
-        # logging.debug(log_string)
-
         tags_checked = {}
 
         # assess all tags
@@ -111,12 +93,8 @@ class SkillMethods:
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):
-            # log_string = f"-> All tags OK! Tags checked are {tags_checked}"
-            # logging.debug(log_string)
             return True
         else:
-            # log_string = f"-> Some tags WRONG! Tags checked are {tags_checked}"
-            # logging.debug(log_string)
             return False
 
     def can_afford_cost(self, entity: int, resource: SecondaryStatTypes, cost: int):

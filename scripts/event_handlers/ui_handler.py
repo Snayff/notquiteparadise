@@ -122,17 +122,17 @@ class UiHandler(Subscriber):
             self.process_message(event)
 
     @staticmethod
-    def set_targeting_overlay(is_visible: bool, skill: Skill = None):
+    def set_targeting_overlay(is_visible: bool, skill_name):
         """
         Show or hide targeting overlay, using Directions possible in the skill.
 
         Args:
+            skill_name ():
             is_visible ():
-            skill ():
         """
         # update directions to either clear or use info from skill
         if is_visible:
-            data = library.get_skill_data(skill.skill_tree_name, skill.name)
+            data = library.get_skill_data(skill_name)
             directions = data.target_directions
         else:
             directions = []

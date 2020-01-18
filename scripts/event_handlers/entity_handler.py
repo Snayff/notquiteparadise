@@ -83,7 +83,7 @@ class EntityHandler(Subscriber):
                     # TODO - change to EC approach
                     knowledge = world.Entity.get_component(entity, Knowledge)
                     skill = knowledge.skills[0]
-                    skill_data = library.get_skill_data("fungechist", skill)  # TODO - update to remove skill tree
+                    skill_data = library.get_skill_data(skill)
                     direction = Directions((dir_x, dir_y))
                     if direction in skill_data.target_directions:
                         publisher.publish((UseSkillEvent(entity, skill, (dir_x, dir_y))))
@@ -109,15 +109,15 @@ class EntityHandler(Subscriber):
             event(EntityEvent): the event to process
         """
         entity = event.entity
-        skill = event.skill_name
-        skill_data = library.get_skill_data("fungechist", skill)
+        skill_name = event.skill_name
+        skill_data = library.get_skill_data(skill_name)
 
         # check it can be afforded
         if world.Skill.can_afford_cost(entity, skill_data.resource_type, skill_data.resource_cost):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
 
             # use skill
-            world.Skill.use(entity, skill, event.direction)
+            world.Skill.use(entity, skill_name, event.direction)
 
         else:
             # is it the player that's can't afford it?
@@ -125,7 +125,7 @@ class EntityHandler(Subscriber):
                 publisher.publish(MessageEvent(MessageTypes.LOG, "You cannot afford to do that."))
             else:
                 identity = world.Entity.get_identity(entity)
-                logging.warning(f"{identity.name} tried to use {skill}, which they can`t afford")
+                logging.warning(f"{identity.name} tried to use {skill_name}, which they can`t afford")
 
     @staticmethod
     def process_die(event: DieEvent):
