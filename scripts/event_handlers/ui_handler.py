@@ -11,7 +11,7 @@ from scripts.core.constants import EventTopics, GameEventTypes, GameStates, Enti
 from scripts.world.components import Position
 
 if TYPE_CHECKING:
-    from scripts.skills.skill import Skill
+
     from scripts.world.entity import Entity
     from scripts.events.ui_events import MessageEvent
 

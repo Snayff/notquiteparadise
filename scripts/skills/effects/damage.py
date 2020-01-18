@@ -33,7 +33,7 @@ class DamageEffect(Effect):
 
         # determine if the damage is from an Affliction or a Skill
         # TODO - moving to top causes circular import. Resolve it.
-        from scripts.skills.skill import Skill
+
         from scripts.skills.affliction import Affliction
         if isinstance(self.owner, Skill):
             attacker = self.owner.owner.owner  # entity:actor:skill:skill_effect

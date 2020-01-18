@@ -11,7 +11,7 @@ from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effects.add_aspect import AddAspectEffect
 from scripts.skills.effects.affect_stat import AffectStatEffect
-from scripts.skills.skill import Skill
+
 from scripts.skills.effects.apply_affliction import ApplyAfflictionEffect
 from scripts.skills.effects.change_terrain import ChangeTerrainEffect
 from scripts.skills.effects.damage import DamageEffect
@@ -41,8 +41,8 @@ class SkillMethods:
 
         Args:
             entity ():
-            target_pos (tuple(int, int)):
-            skill_name (Skill):
+            target_pos ():
+            skill_name ():
 
         Returns:
             bool: True if can use the skill. Else False.

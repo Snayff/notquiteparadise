@@ -288,10 +288,10 @@ class LibraryOfAlexandria:
         converted_primary_stats = {}
         converted_secondary_stats = {}
 
-        # loop all skill trees
+        # loop all stats types
         for stat_type_name, stat_type_data in all_stat_data.items():
 
-            # loop all skills in each skill tree
+            # loop all individual stats
             for stat_name, stat_data in stat_type_data.items():
 
                 # unpack the dict and convert the stat data to the data class

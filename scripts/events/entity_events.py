@@ -7,7 +7,6 @@ from scripts.core.event_hub import Event
 
 if TYPE_CHECKING:
     from typing import Tuple
-    from scripts.skills.skill import Skill
     from scripts.world.entity import Entity
 
 
@@ -16,9 +15,9 @@ class UseSkillEvent(Event):
     Event for entity skill
 
     Args:
-        entity_using_skill(Entity):
-        target_pos (tuple): x, y
-        skill (Skill):
+        entity_using_skill(int): entity id
+        direction (Tuple): x, y
+        skill_name (str): skill name
     """
     def __init__(self, entity_using_skill: Entity, skill_name: str, direction: Tuple[int, int]):
         Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)

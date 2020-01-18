@@ -29,7 +29,7 @@ class ApplyAfflictionEffect(Effect):
         super().trigger()
 
         # determine who triggered this effect to articulate the attacker and get the effect data
-        from scripts.skills.skill import Skill
+
         from scripts.world.aspect import Aspect
         from scripts.world.intervention import Intervention
         if isinstance(self.owner, Skill):
@@ -98,22 +98,11 @@ class ApplyAfflictionEffect(Effect):
             modified_duration (int):
             defending_entity (Entity):
         """
-        # determine who triggered this effect to articulate the attacker and get the effect data
-        from scripts.skills.skill import Skill
-        from scripts.world.aspect import Aspect
-        from scripts.world.intervention import Intervention
-        if isinstance(self.owner, Skill):
-            effect_data = library.get_skill_effect_data(self.owner.skill_tree_name, self.owner.name,
-                                                        self.effect_type)
-        elif isinstance(self.owner, Aspect):
-            effect_data = library.get_aspect_effect_data(self.owner.name, self.effect_type)
-        elif isinstance(self.owner, Intervention):
-            effect_data = library.get_god_intervention_effect_data(self.owner.owner.name, self.owner.name,
-                                                                   self.effect_type)
+        effect_data = library.get_skill_effect_data(self.owner.name, self.effect_type)
 
+        # TODO - moving this to the top causes import error. Resolve this.
         from scripts.managers.world_manager import world
-        active_affliction = world.Affliction.get_affliction_for_entity(defending_entity,
-                                                                               effect_data.affliction_name)
+        active_affliction = world.Affliction.get_affliction_for_entity(defending_entity, effect_data.affliction_name)
 
         # check if entity already has the afflictions
         if active_affliction:
@@ -143,7 +132,7 @@ class ApplyAfflictionEffect(Effect):
 
             # create the afflictions
             affliction = world.Affliction.create_affliction(effect_data.affliction_name, modified_duration,
-                                                                    defending_entity)
+                                                            defending_entity)
 
             # add afflictions to the central list
             world.Affliction.register_active_affliction(affliction)
