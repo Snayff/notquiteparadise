@@ -268,7 +268,6 @@ class EffectTypes(Enum):
     APPLY_AFFLICTION = auto()
     DAMAGE = auto()
     MOVE = auto()
-    CHANGE_TERRAIN = auto()
     AFFECT_STAT = auto()
     ADD_ASPECT = auto()
 

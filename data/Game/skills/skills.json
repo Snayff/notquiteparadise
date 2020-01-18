@@ -123,38 +123,6 @@
             }
         ]
     },
-    "bring_down_the_mountain": {
-        "name": "Bring Down the Mountain",
-        "description": "Turn a wall into a floor.",
-        "icon": "placeholder/icon_41.png",
-        "resource_type": "stamina",
-        "resource_cost": 10,
-        "time_cost": 40,
-        "cooldown": 5,
-        "target_directions": [
-            "down"
-        ],
-        "range": 6,
-        "terrain_collision": "reflect",
-        "travel_type": "projectile",
-        "expiry_type": "activate",
-        "required_tags": [
-            "wall",
-            "no_entity"
-        ],
-        "shape": "target",
-        "shape_size": 1,
-        "effects": [
-            {
-                "effect_type": "change_terrain",
-                "required_tags": [
-                    "wall",
-                    "no_entity"
-                ],
-                "new_terrain": "floor"
-            }
-        ]
-    },
     "burn_the_deck": {
         "name": "Burn the Deck",
         "description": "Apply burning affliction.",

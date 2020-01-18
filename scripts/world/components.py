@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 
 if TYPE_CHECKING:
     import pygame
@@ -100,10 +100,23 @@ class AIBasic:
 
 
 class HasCombatStats:
-    """[Component] An entity's stats used for combat."""
+    """[Component] A flag to show if an entity has stats used for combat."""
 
 
 class Knowledge:
     """[Component] An entity's knowledge, including skills."""
-    def __init__(self, skills: List = [str]):
+    def __init__(self, skills: List[str] = []):
         self.skills = skills
+
+
+class Afflictions:
+    """[Component] An entity's Boons and Banes. e.g. {boon_name: duration}"""
+    def __init__(self, boons: Dict = {}, banes: Dict = {}):
+        self.boons = boons
+        self.banes = banes
+
+
+class Aspects:
+    """[Component] An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
+    def __init__(self, aspects: Dict = {}):
+        self.aspects = aspects

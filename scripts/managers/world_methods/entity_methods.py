@@ -14,9 +14,8 @@ from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import List, Union, Dict
     from scripts.managers.world_manager import WorldManager
-    from typing import Union
 
 
 class EntityMethods:
@@ -132,6 +131,41 @@ class EntityMethods:
         elif component2 and component3:
             for entity, (c1, c2, c3) in self.manager.World.get_components(component1, component2, component3):
                 entities.append(entity)
+
+        return entities
+
+    def get_entities_and_components_in_area(self, area: List[Tile], component1, component2=None,
+            component3=None) -> Dict:
+        """
+        Return a list of entities and their specified components, plus Position. e.g. (Position, component1)
+        N.B. Do not specify Position as a component.
+
+        Args:
+            area ():
+            component1 ():
+            component2 ():
+            component3 ():
+
+        Returns:
+
+        """
+        entities = {}
+
+        if not component2 and not component3:
+            for entity, (pos, c1) in self.manager.World.get_components(Position, component1):
+                for tile in area:
+                    if tile.x == pos.x and tile.y == pos.y:
+                        entities[entity] = (pos, c1)
+        elif component2 and not component3:
+            for entity, (pos, c1, c2) in self.manager.World.get_components(Position, component1, component2):
+                for tile in area:
+                    if tile.x == pos.x and tile.y == pos.y:
+                        entities[entity] = (pos, c1, c2)
+        elif component2 and component3:
+            for entity, (pos, c1, c2, c3) in self.manager.World.get_components(component1, component2, component3):
+                for tile in area:
+                    if tile.x == pos.x and tile.y == pos.y:
+                        entities[entity] = (pos, c1, c2, c3)
 
         return entities
 

@@ -9,9 +9,9 @@ from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
     Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
 from scripts.world.data_classes.stat_dataclass import StatData, PrimaryStatData, SecondaryStatData
-from scripts.skills.affliction_dataclass import AfflictionData
+from scripts.skills.affliction import AfflictionData
 from scripts.skills.skill import SkillData
-from scripts.skills.effects.effect_dataclass import EffectData
+from scripts.skills.effect import EffectData
 from scripts.world.data_classes.aspect_dataclass import AspectData
 from scripts.world.data_classes.attitude_dataclass import AttitudeData
 from scripts.world.data_classes.god_dataclass import GodData

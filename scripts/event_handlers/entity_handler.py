@@ -118,6 +118,7 @@ class EntityHandler(Subscriber):
 
             # use skill
             world.Skill.use(entity, skill_name, event.direction)
+            # TODO - trigger terrain effects
 
         else:
             # is it the player that's can't afford it?

@@ -4,9 +4,8 @@ from typing import List
 
 from scripts.core.constants import AfflictionTriggers, EffectTypes, AfflictionLifespan
 from scripts.core.library import library
-from scripts.skills.affliction import Affliction
 from scripts.world.entity import Entity
-
+# TODO - move to skill methods
 
 class AfflictionMethods:
     """

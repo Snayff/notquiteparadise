@@ -403,27 +403,26 @@ class MapMethods:
             log_string = f"Removed the following aspects: {removed_aspects}"
             logging.debug(log_string)
 
+    def has_required_tags(self, target_tile: Tile, required_tags: List[TargetTags], active_entity: int = None):
+        """
+        Check a tile has all required tags
 
-def has_required_tags(manager, target_tile: Tile, required_tags: List[TargetTags], active_entity: int = None):
-    """
-    Check a tile has all required tags
+        Args:
+            target_tile(Tile):
+            required_tags(List):
+            active_entity(int):
 
-    Args:
-        target_tile(Tile):
-        required_tags(List):
-        active_entity(int):
+        Returns:
+            bool: True if tile has all tags
+        """
+        tags_checked = {}
 
-    Returns:
-        bool: True if tile has all tags
-    """
-    tags_checked = {}
+        # assess all tags
+        for tag in required_tags:
+            tags_checked[tag.name] = self.tile_has_tag(target_tile, tag, active_entity)
 
-    # assess all tags
-    for tag in required_tags:
-        tags_checked[tag.name] = manager.Map.tile_has_tag(target_tile, tag, active_entity)
-
-    # if all tags came back true return true
-    if all(value for value in tags_checked.values()):
-        return True
-    else:
-        return False
+        # if all tags came back true return true
+        if all(value for value in tags_checked.values()):
+            return True
+        else:
+            return False

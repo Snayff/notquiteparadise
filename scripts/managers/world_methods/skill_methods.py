@@ -5,16 +5,15 @@ import random
 from typing import TYPE_CHECKING
 from scripts.core.constants import MessageTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
     EffectTypes, SkillShapes, Directions, TargetTags, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
-    HitModifiers
+    HitModifiers, AfflictionCategory
 from scripts.events.entity_events import DieEvent
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
-from scripts.managers.world_methods.map_methods import has_required_tags
-from scripts.skills.effects.effect_dataclass import EffectData
+from scripts.skills.effect import EffectData
 from scripts.world.combat_stats import CombatStats
-from scripts.world.components import Resources, Position, HasCombatStats
+from scripts.world.components import Resources, Position, HasCombatStats, Afflictions, Aspects
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -33,6 +32,8 @@ class SkillMethods:
 
     def __init__(self, manager):
         self.manager = manager  # type: WorldManager
+
+    ############## CHECKS ###############
 
     def can_use(self, entity: int, target_pos: Tuple[int, int], skill_name: str):
         """
@@ -54,7 +55,7 @@ class SkillMethods:
         skill_data = library.get_skill_data(skill_name)
 
         # check we have everything we need and if so use the skill
-        if has_required_tags(self.manager, target_tile, skill_data.required_tags, entity):
+        if world.Map.has_required_tags(target_tile, skill_data.required_tags, entity):
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
             if self.can_afford_cost(entity, resource_type, resource_cost):
@@ -96,58 +97,7 @@ class SkillMethods:
             logging.debug(f"'{identity.name}' cannot afford cost.")
             return False
 
-    @staticmethod
-    def _get_hit_type(to_hit_score):
-        """
-        Get the hit type from the to hit score
-        Args:
-            to_hit_score:
-
-        Returns:
-            HitTypes:
-        """
-        if to_hit_score >= HitValues.CRIT.value:
-            return HitTypes.CRIT
-        elif to_hit_score >= HitValues.HIT.value:
-            return HitTypes.HIT
-        else:
-            return HitTypes.GRAZE
-
-    @staticmethod
-    def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int, stat_to_target: PrimaryStatTypes,
-            attackers_stats: CombatStats = None):
-        """
-        Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
-
-        Args:
-
-            defenders_stats (CombatStats):
-            skill_accuracy (int):
-            stat_to_target (PrimaryStatTypes):
-            attackers_stats (CombatStats):
-        """
-        logging.debug(f"Get to hit scores...")
-
-        roll = random.randint(-3, 3)  # TODO - move hit variance to somewhere more easily configurable
-
-        # if attacker get their accuracy
-        if attackers_stats:
-            attacker_accuracy = attackers_stats.accuracy
-        else:
-            attacker_accuracy = 0
-
-        modified_to_hit_score = attacker_accuracy + skill_accuracy + roll
-
-        # mitigate the to hit
-        defender_value = getattr(defenders_stats, stat_to_target.name.lower())
-
-        mitigated_to_hit_score = modified_to_hit_score - defender_value
-
-        # log the info
-        log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
-        logging.debug(log_string)
-
-        return mitigated_to_hit_score
+    ################ ACTIONS #############
 
     def pay_resource_cost(self, entity, resource, cost):
         """
@@ -338,6 +288,8 @@ class SkillMethods:
             # end the turn
             publisher.publish(EndTurnEvent(using_entity, skill_data.time_cost))
 
+    ############ EFFECTS ################
+
     def apply_effect(self, effect_type: EffectTypes, skill_name: str, effected_tiles: List[Tile], using_entity: int):
         """
         Apply an effect to all tiles in a list.
@@ -350,63 +302,182 @@ class SkillMethods:
         """
         log_string = f"Applying {effect_type.name} effect; caused by `{skill_name}` from `{using_entity}`."
         logging.debug(log_string)
+
         if effect_type == EffectTypes.DAMAGE:
             self._apply_damage_effect(skill_name, effected_tiles, using_entity)
+        elif effect_type == EffectTypes.APPLY_AFFLICTION:
+            self._apply_affliction_effect(skill_name, effected_tiles, using_entity)
+        elif effect_type == EffectTypes.ADD_ASPECT:
+            self._apply_aspect_effect(skill_name, effected_tiles)
 
-    def _apply_damage_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
-        data = library.get_skill_effect_data(skill_name, EffectTypes.DAMAGE)
-        attackers_stats = self.manager.Entity.get_stats(attacker)
+    def _apply_aspect_effect(self, skill_name: str, effected_tiles: List[Tile]):
+        data = library.get_skill_effect_data(skill_name, EffectTypes.ADD_ASPECT)
+
+        for tile in effected_tiles:
+            self._create_aspect(data.aspect_name, tile)
+
+    def _create_aspect(self, aspect_name: str, tile: Tile):
+        data = library.get_aspect_data(aspect_name)
+        entity, position, aspects = self.manager.Entity.get_entities_and_components_in_area([tile], Aspects)
+
+        # if there is an active version of the same aspect already
+        if aspects:
+            # increase duration to initial value
+            aspects.aspects[aspect_name] = data.duration
+        else:
+            self.manager.World.create_entity(Position(position.x, position.y), Aspects({aspect_name: data.duration}))
+
+    def _apply_affliction_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
+        world = self.manager
+        effect_data = library.get_skill_effect_data(skill_name, EffectTypes.APPLY_AFFLICTION)
+        affliction_data = library.get_affliction_data(effect_data.affliction_name)
+        attackers_stats = world.Entity.get_stats(attacker)
+
+        # get relevant entities
+        entities = world.Entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
 
         # loop all relevant entities
-        for defender, (position, resources, stats) in self.manager.World.get_components(Position, Resources,
-                                                                                      HasCombatStats):
-            # check entities are on the tiles
-            for tile in effected_tiles:
-                if position.x == tile.x and position.y == tile.y:
-                    if has_required_tags(self.manager, tile, data.required_tags, attacker):
-                        # get the info to apply the damage
-                        entitys_stats = self.manager.Entity.get_stats(defender)
-                        to_hit_score = self._calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
-                                                                    attackers_stats)
-                        hit_type = self._get_hit_type(to_hit_score)
-                        damage = self._calculate_damage(entitys_stats, hit_type, data, attackers_stats)
+        for defender, (position, resources, has_stats) in entities.items():
 
-                        # who did the damage? (for informing the player)
-                        if attacker:
-                            identity = self.manager.Entity.get_identity(attacker)
-                            attacker_name = identity.name
-                        else:
-                            attacker_name = "???"
-                        identity = self.manager.Entity.get_identity(defender)
-                        defender_name = identity.name
+            # create var to hold the modified duration, if it does change, or the base duration
+            base_duration = effect_data.duration
+            modified_duration = base_duration
 
-                        # resolve the damage
-                        if damage > 0:
-                            resources.health -= damage
+            # check we have all tags
+            tile = world.Map.get_tile(position.x, position.y)
+            if world.Map.has_required_tags(tile, effect_data.required_tags, attacker):
+                # Roll for BANE application
+                if affliction_data.category == AfflictionCategory.BANE:
+                    to_hit_score = self._calculate_to_hit_score(defender, effect_data.accuracy,
+                                                                effect_data.stat_to_target, attackers_stats)
+                    hit_type = self._get_hit_type(to_hit_score)
 
-                            # log the outcome
-                            if hit_type == HitTypes.GRAZE:
-                                hit_type_desc = "grazes"
-                            elif hit_type == HitTypes.HIT:
-                                hit_type_desc = "hits"
-                            elif hit_type == HitTypes.CRIT:
-                                hit_type_desc = "crits"
-                            else:
-                                hit_type_desc = "does something unknown" # catch all
+                    # check if afflictions applied
+                    if hit_type == HitTypes.GRAZE:
+                        msg = f"{defender.name} resisted {effect_data.affliction_name}."
+                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                    else:
+                        hit_msg = ""
 
-                            msg = f"{attacker_name} {hit_type_desc} {defender_name} for {damage}."
-                            publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                        # check if there was a crit and if so modify the duration of the afflictions
+                        if hit_type == HitTypes.CRIT:
+                            modified_duration = int(base_duration * HitModifiers.CRIT.value)
+                            hit_msg = f"a critical "
 
-                            # TODO - add the damage type to the text and replace the type with an icon
-                            # TODO - add the explanation of the damage roll to a tooltip
+                        msg = f"{defender.name} succumbed to {hit_msg}{effect_data.affliction_name}."
+                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
-                            if resources.health <= 0:
-                                publisher.publish(DieEvent(defender))
+                        self._create_affliction(defender, modified_duration)
 
-                        else:
-                            # log no damage
-                            msg = f" {defender_name} resists damage from {attacker_name}."
-                            publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                # Just apply the BOON
+                elif affliction_data.affliction_category == AfflictionCategory.BOON:
+                    self._create_affliction(defender, modified_duration)
+
+    def _create_affliction(self, entity: int, affliction_name: str, duration: int):
+        data = library.get_affliction_data(affliction_name)
+        identity = self.manager.Entity.get_identity(entity)
+        afflictions = self.manager.Entity.get_component(entity, Afflictions)
+        active_affliction = False
+
+        # check if entity already has the afflictions
+        if data.category == AfflictionCategory.BANE:
+            if afflictions.banes[affliction_name]:
+                active_affliction = afflictions.banes[affliction_name]
+            else:
+                active_affliction = False
+        elif data.category == AfflictionCategory.BOON:
+            if afflictions.boons[affliction_name]:
+                active_affliction = afflictions.boons[affliction_name]
+            else:
+                active_affliction = False
+
+        # if affliction exists
+        if active_affliction:
+            logging.debug(f"{identity.name} already has {affliction_name}:{active_affliction.duration}...")
+
+            # alter the duration of the current afflictions if the new one will last longer
+            if active_affliction.duration < duration:
+                active_affliction.duration = duration
+
+                log_string = f"-> Active duration {active_affliction.duration} is less than new duration " \
+                             f"{duration} so duration updated."
+                logging.debug(log_string)
+            else:
+                # no action taken if duration already longer
+                log_string = f"-> Active duration {active_affliction.duration} is less than new duration {duration} " \
+                             f"so duration remains the same."
+                logging.debug(log_string)
+
+        # no current afflictions of same type so apply new one
+        else:
+            logging.info(f"Applying {affliction_name} afflictions to '{identity.name}' with duration of {duration}.")
+
+        if data.category == AfflictionCategory.BANE:
+            bane = {affliction_name: duration}
+            boon = {}
+        elif data.category == AfflictionCategory.BOON:
+            bane = {}
+            boon = {affliction_name: duration}
+
+        self.manager.World.add_component(entity, Afflictions(boon, bane))
+
+    def _apply_damage_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
+        world = self.manager
+        data = library.get_skill_effect_data(skill_name, EffectTypes.DAMAGE)
+        attackers_stats = world.Entity.get_stats(attacker)
+
+        # get relevant entities
+        entities = world.Entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
+
+        # loop all relevant entities
+        for defender, (position, resources, has_stats) in entities.items():
+            tile = world.Map.get_tile(position.x, position.y)
+            if world.Map.has_required_tags(tile, data.required_tags, attacker):
+                # get the info to apply the damage
+                entitys_stats = world.Entity.get_stats(defender)
+                to_hit_score = self._calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
+                                                            attackers_stats)
+                hit_type = self._get_hit_type(to_hit_score)
+                damage = self._calculate_damage(entitys_stats, hit_type, data, attackers_stats)
+
+                # who did the damage? (for informing the player)
+                if attacker:
+                    identity = world.Entity.get_identity(attacker)
+                    attacker_name = identity.name
+                else:
+                    attacker_name = "???"
+                identity = world.Entity.get_identity(defender)
+                defender_name = identity.name
+
+                # resolve the damage
+                if damage > 0:
+                    resources.health -= damage
+
+                    # log the outcome
+                    if hit_type == HitTypes.GRAZE:
+                        hit_type_desc = "grazes"
+                    elif hit_type == HitTypes.HIT:
+                        hit_type_desc = "hits"
+                    elif hit_type == HitTypes.CRIT:
+                        hit_type_desc = "crits"
+                    else:
+                        hit_type_desc = "does something unknown"  # catch all
+
+                    msg = f"{attacker_name} {hit_type_desc} {defender_name} for {damage}."
+                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+
+                    # TODO - add the damage type to the text and replace the type with an icon
+                    # TODO - add the explanation of the damage roll to a tooltip
+
+                    if resources.health <= 0:
+                        publisher.publish(DieEvent(defender))
+
+                else:
+                    # log no damage
+                    msg = f" {defender_name} resists damage from {attacker_name}."
+                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+
+    ############ UTILITY ################
 
     @staticmethod
     def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypes, effect_data: EffectData,
@@ -457,8 +528,61 @@ class SkillMethods:
         int_modified_damage = int(modified_damage)
 
         # log the info
-        log_string = f"-> Initial:{initial_damage}, Mitigated: {format(mitigated_damage,'.2f')},  Modified" \
-                     f":{format(modified_damage,'.2f')}, Final: {int_modified_damage}"
+        log_string = f"-> Initial:{initial_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified" \
+                     f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
         logging.debug(log_string)
 
         return int_modified_damage
+
+    @staticmethod
+    def _get_hit_type(to_hit_score):
+        """
+        Get the hit type from the to hit score
+        Args:
+            to_hit_score:
+
+        Returns:
+            HitTypes:
+        """
+        if to_hit_score >= HitValues.CRIT.value:
+            return HitTypes.CRIT
+        elif to_hit_score >= HitValues.HIT.value:
+            return HitTypes.HIT
+        else:
+            return HitTypes.GRAZE
+
+    @staticmethod
+    def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int, stat_to_target: PrimaryStatTypes,
+            attackers_stats: CombatStats = None):
+        """
+        Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
+
+        Args:
+
+            defenders_stats (CombatStats):
+            skill_accuracy (int):
+            stat_to_target (PrimaryStatTypes):
+            attackers_stats (CombatStats):
+        """
+        logging.debug(f"Get to hit scores...")
+
+        roll = random.randint(-3, 3)  # TODO - move hit variance to somewhere more easily configurable
+
+        # if attacker get their accuracy
+        if attackers_stats:
+            attacker_accuracy = attackers_stats.accuracy
+        else:
+            attacker_accuracy = 0
+
+        modified_to_hit_score = attacker_accuracy + skill_accuracy + roll
+
+        # mitigate the to hit
+        defender_value = getattr(defenders_stats, stat_to_target.name.lower())
+
+        mitigated_to_hit_score = modified_to_hit_score - defender_value
+
+        # log the info
+        log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
+        logging.debug(log_string)
+
+        return mitigated_to_hit_score
