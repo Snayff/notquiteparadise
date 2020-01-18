@@ -1,7 +1,6 @@
-
 from enum import Enum, auto
 
-VERSION = "0.86.0"
+VERSION = "0.91.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 64
@@ -11,7 +10,7 @@ class VisualInfo:
     """
     Constant info about visual aspects such as resolution and frame rate
     """
-    # TODO -  should this be in game manager?
+    # TODO -  should this be in game manager? or UI?
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
     GAME_FPS = 60

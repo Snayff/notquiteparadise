@@ -344,7 +344,7 @@ class SkillMethods:
             modified_duration = base_duration
 
             # check we have all tags
-            tile = world.Map.get_tile(position.x, position.y)
+            tile = world.Map.get_tile((position.x, position.y))
             if world.Map.tile_has_tags(tile, effect_data.required_tags, attacker):
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
@@ -431,7 +431,7 @@ class SkillMethods:
 
         # loop all relevant entities
         for defender, (position, resources, has_stats) in entities.items():
-            tile = world.Map.get_tile(position.x, position.y)
+            tile = world.Map.get_tile((position.x, position.y))
             if world.Map.tile_has_tags(tile, data.required_tags, attacker):
                 # get the info to apply the damage
                 entitys_stats = world.Entity.get_stats(defender)

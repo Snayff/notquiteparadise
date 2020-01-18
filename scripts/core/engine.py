@@ -13,10 +13,6 @@ from scripts.managers.game_manager import game
 from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
-# Immediate TO DO list
-# TODO - remove legacy "terrain"
-# TODO - add projectiles, i.e. entity creation, movement and collision
-
 # Project Wide to do list...
 # TODO - swap out nose for pytest
 # TODO - remember window position and resume at that place
@@ -25,22 +21,17 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - move the docstring annotations to the function line, then install mypy
+# TODO - install mypy
 # TODO - use seed for RNG
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
 # TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
 # TODO - convert interventions to skills, gods to entities
-# TODO - move skills to their own json and only hold skill names in the savvy, homeland etc.
-#   create flat list of skills, without "trees"
-#   ensure all skills in json have required fields
 # TODO - add skill modifiers (blessings?)
 # TODO - write tests / checking for json values
 # TODO - could turn manager sit under game?
 # TODO - add piercing so projectile can damage and keep going
-# TODO - add sight range to characteristics (homeland, savvy, race) jsons
-
-
+# TODO - add projectiles, i.e. entity creation, movement and collision
 
 def main():
     """
