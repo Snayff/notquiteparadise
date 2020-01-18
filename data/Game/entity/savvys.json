@@ -2,251 +2,31 @@
 	"cleromancer" : {
         "name": "cleromancer",
         "description": "A cleromancer description",
+        "sprite": "",
+        "sight_range": 5,
         "vigour": 1,
         "clout": 1,
         "skullduggery": 2,
         "bustle": 0,
         "exactitude": -1,
         "skills": [
-            {
-                "name": "basic attack",
-                "description": "This is the basic attack. It does damage.",
-                "icon": "placeholder/icon_00.png",
-                "required_tags": ["other_entity"],
-                "range": 1,
-                "shape": "target",
-                "shape_size": 1,
-                "resource_type": "stamina",
-                "resource_cost": 1,
-                "time_cost": 15,
-                "cooldown": 0,
-                "effects": [
-                        {
-                            "effect_type": "damage",
-                            "required_tags": ["other_entity"
-                            ],
-                            "damage": 15,
-                            "mod_stat": "bustle",
-                            "mod_amount": 0.2,
-                            "damage_type": "mundane",
-                            "accuracy": 0,
-                            "stat_to_target": "bustle"
-                        }
-                ]
-            },
-            {
-                "name": "throw dice",
-                "description": "Time to throw the dice. It does damage.",
-                "icon": "placeholder/icon_29.png",
-                "required_tags": [
-                    "other_entity"
-                ],
-                "range": 3,
-                "shape": "cross",
-                "shape_size": 2,
-                "resource_type": "stamina",
-                "resource_cost": 2,
-                "time_cost": 20,
-                "cooldown": 2,
-                "effects": [
-                    {
-                        "effect_type": "damage",
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "damage": 15,
-                        "mod_stat": "bustle",
-                        "mod_amount": 0.2,
-                        "damage_type": "mundane",
-                        "accuracy": 0,
-                        "stat_to_target": "skullduggery"
-                    }
-                ]
-            },
-            {
-                "name": "bring down the mountain",
-                "description": "Turn a wall into a floor.",
-                "icon": "placeholder/icon_40.png",
-                "required_tags": [
-                    "wall",
-                    "no_entity"
-                ],
-                "range": 6,
-                "shape": "target",
-                "shape_size": 1,
-                "resource_type": "stamina",
-                "resource_cost": 10,
-                "time_cost": 40,
-                "cooldown": 3,
-                "effects": [
-                    {
-                        "effect_type": "change_terrain",
-                        "required_tags": [
-                            "wall",
-                            "no_entity"
-                        ],
-                        "new_terrain": "floor"
-                    }
-                ]
-            },
-            {
-                "name": "burn the deck",
-                "description": "Apply burning affliction",
-                "icon": "placeholder/icon_05.png",
-                "required_tags": [
-                    "other_entity"
-                ],
-                "range": 4,
-                "shape": "circle",
-                "shape_size": 2,
-                "resource_type": "stamina",
-                "resource_cost": 1,
-                "time_cost": 1,
-                "cooldown": 2,
-                "effects": [
-                    {
-                        "effect_type": "damage",
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "damage": 5,
-                        "mod_stat": "bustle",
-                        "mod_amount": 0.2,
-                        "damage_type": "mundane",
-                        "accuracy": -5,
-                        "stat_to_target": "skullduggery"
-                    },
-                    {
-                        "effect_type": "apply_affliction",
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "accuracy": 100,
-                        "stat_to_target": "skullduggery",
-                        "affliction_name": "flaming",
-                        "duration": 3
-                    }
-                ]
-            }
+            "Burn the Deck",
+            "Bring Down the Mountain"
         ]
     },
 	"fungechist" : {
         "name": "Fungechist",
         "description": "Drafted into service as a chemist to the Mushroom Barons the fungechists always keep Ou in their minds.",
+        "sprite": "",
+        "sight_range": 5,
         "vigour": -1,
         "clout": -1,
         "skullduggery": 4,
         "bustle": 1,
         "exactitude": 1,
         "skills": [
-            {
-                "name": "Flail",
-                "description": "Fungechists are not known for their physical prowess but you haven't got much choice.",
-                "icon": "placeholder/icon_00.png",
-                "resource_type": "stamina",
-                "resource_cost": 10,
-                "time_cost": 20,
-                "cooldown": 0,
-                "target_directions": ["down", "down_left", "up_left"],
-                "range": 5,
-                "terrain_collision": "reflect",
-                "travel_type": "projectile",
-                "expiry_type": "activate",
-                "required_tags": ["other_entity"],
-                "shape": "target",
-                "shape_size": 1,
-                
-                "effects": [
-                        {
-                            "effect_type": "damage",
-                            "required_tags": [
-                                "other_entity"
-                            ],
-                            "damage": 10,
-                            "mod_stat": "clout",
-                            "mod_amount": 0.2,
-                            "damage_type": "mundane",
-                            "accuracy": -5,
-                            "stat_to_target": "bustle"
-                        }
-                ]
-            },
-            {
-                "name": "Eye-watering Mistake",
-                "description": "Use all your sneakiness to irritate your enemies.",
-                "icon": "placeholder/icon_37.png",
-                "required_tags": [
-                    "other_entity"
-                ],
-                "range": 2,
-                "shape": "circle",
-                "shape_size": 2,
-                "resource_type": "stamina",
-                "resource_cost": 10,
-                "time_cost": 30,
-                "cooldown": 2,
-                "effects": [
-                    {
-                        "effect_type": "damage",
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "damage": 2,
-                        "mod_stat": "skullduggery",
-                        "mod_amount": 0.2,
-                        "damage_type": "chemical",
-                        "accuracy": 0,
-                        "stat_to_target": "skullduggery"
-                    },
-                    {
-                        "effect_type": "apply_affliction",
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "accuracy": 100,
-                        "stat_to_target": "vigour",
-                        "affliction_name": "myopic",
-                        "duration": 10
-                    }
-
-                ]
-            },
-            {
-                "name": "Fractious Fungi",
-                "description": "Hurl a dried toadstool and watch it leave a gift that keeps on giving.",
-                "icon": "placeholder/icon_40.png",
-                "required_tags": [
-                    "other_entity"
-                ],
-                "range": 3,
-                "shape": "target",
-                "shape_size": 1,
-                "resource_type": "stamina",
-                "resource_cost": 10,
-                "time_cost": 40,
-                "cooldown": 5,
-                "effects": [
-                    {
-                        "effect_type": "damage",
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "damage": 1,
-                        "mod_stat": "clout",
-                        "mod_amount": 0.3,
-                        "damage_type": "mundane",
-                        "accuracy": -5,
-                        "stat_to_target": "bustle"
-                    },
-                    {
-                        "effect_type": "add_aspect",
-                        "required_tags": [
-                            "any"
-                        ],
-                        "aspect_name": "shrapnel"
-                    }
-                ]
-            }
+            "Flail",
+            "Eye-watering Mistake"
         ]
     }
 }

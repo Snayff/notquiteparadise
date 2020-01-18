@@ -2,75 +2,29 @@
 	"aristo_pirate" : {
         "name": "aristo pirate",
         "description": "A aristo pirate description",
+        "sprite": "",
+        "sight_range": 5,
         "vigour": 1,
         "clout": 3,
         "skullduggery": 0,
         "bustle": 1,
         "exactitude": -1,
         "skills": [
-            {
-                "name": "basic attack",
-                "description": "This is the basic attack. It does damage.",
-                "icon": "placeholder/icon_00.png",
-                "required_tags": ["other_entity"],
-                "range": 1,
-                "shape": "target",
-                "shape_size": 1,
-                "resource_type": "stamina",
-                "resource_cost": 1,
-                "time_cost": 15,
-                "cooldown": 0,
-                "effects": [
-                        {
-                            "effect_type": "damage",
-                            "required_tags": ["other_entity"
-                            ],
-                            "damage": 15,
-                            "mod_stat": "bustle",
-                            "mod_amount": 0.2,
-                            "damage_type": "mundane",
-                            "accuracy": 0,
-                            "stat_to_target": "bustle"
-                        }
-                ]
-            }
+            "none"
         ]
     },
 	"bog_refugee" : {
         "name": "bog refugee",
         "description": "A bog refugee description",
+        "sprite": "",
+        "sight_range": 5,
         "vigour": -2,
         "clout": 1,
         "skullduggery": 2,
         "bustle": 1,
         "exactitude": 1,
         "skills": [
-            {
-                "name": "basic attack",
-                "description": "This is the basic attack. It does damage.",
-                "icon": "placeholder/icon_00.png",
-                "required_tags": ["other_entity"],
-                "range": 1,
-                "shape": "target",
-                "shape_size": 1,
-                "resource_type": "stamina",
-                "resource_cost": 1,
-                "time_cost": 15,
-                "cooldown": 0,
-                "effects": [
-                        {
-                            "effect_type": "damage",
-                            "required_tags": ["other_entity"
-                            ],
-                            "damage": 15,
-                            "mod_stat": "bustle",
-                            "mod_amount": 0.2,
-                            "damage_type": "mundane",
-                            "accuracy": 0,
-                            "stat_to_target": "bustle"
-                        }
-                ]
-            }
+            "none"
         ]
     }
 }

@@ -1,11 +1,9 @@
-import logging
-import math
+from dataclasses import dataclass, field
+from typing import List, Dict
 
 from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
-    SkillTerrainCollisions
-from scripts.events.game_events import EndTurnEvent
-from scripts.core.library import library
-from scripts.core.event_hub import publisher
+    SkillTerrainCollisions, SkillShapes
+
 
 
 class Skill:
@@ -24,3 +22,36 @@ class Skill:
         self.name = skill_name
 
 
+@dataclass()
+class SkillData:
+    """
+    Data class for a skill. Used by the library to load from json.
+    """
+    # how do we know it?
+    name: str = "None"
+    description: str = "None"
+    icon: str = "None"
+
+    # what does it cost?
+    resource_type: str = "None"
+    resource_cost: int = 0
+    time_cost: int = 0
+    cooldown: int = 0
+
+    # how does it travel from the user?
+    target_directions: List[Directions] = field(default_factory=list)
+    range: int = 1
+    terrain_collision: SkillTerrainCollisions = None
+    travel_type: SkillTravelTypes = None
+
+    # when does it interact?
+    expiry_type: SkillExpiryTypes = None
+    required_tags: List[TargetTags] = field(default_factory=list)
+
+    # how does it interact?
+    shape: SkillShapes = None
+    shape_size: int = 1
+    effects: Dict = field(default_factory=dict)
+
+    # modifiers
+    modifiers: List = field(default_factory=list)

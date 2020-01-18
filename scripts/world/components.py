@@ -105,5 +105,5 @@ class HasCombatStats:
 
 class Knowledge:
     """[Component] An entity's knowledge, including skills."""
-    def __init__(self, skills: List = []):
+    def __init__(self, skills: List = [str]):
         self.skills = skills
