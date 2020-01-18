@@ -14,7 +14,7 @@ from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
 
 if TYPE_CHECKING:
-    from typing import List, Union, Dict
+    from typing import List, Union, Dict, Tuple
     from scripts.managers.world_manager import WorldManager
 
 
@@ -29,7 +29,7 @@ class EntityMethods:
     def __init__(self, manager):
         self.manager = manager  # type: WorldManager
 
-    ############### GET ENTITY ###################
+    ############### GET ###################
 
     def get_blocking_entity(self, tile_x, tile_y):
         """
@@ -175,6 +175,34 @@ class EntityMethods:
                         entities[entity] = (pos, c1, c2, c3)
 
         return entities
+
+    def get_component(self, entity, component):
+        """
+        Get an entity's component.
+
+        Args:
+            entity ():
+            component ():
+
+        Returns:
+
+        """
+        if self.manager.World.has_component(entity, component):
+            return self.manager.World.component_for_entity(entity, component)
+        else:
+            return None
+
+    def get_components(self, entity) -> Tuple:
+        """
+        Get all of an entity's components.
+
+        Args:
+            entity ():
+
+        Returns:
+
+        """
+        return self.manager.World.components_for_entity(entity)
 
     ############## ENTITY EXISTENCE ################
 
@@ -352,23 +380,6 @@ class EntityMethods:
         return direction_x, direction_y
 
     ############### COMPONENT MANAGEMENT ##########
-
-    def get_component(self, entity, component):
-        """
-        Get an entity's component.
-
-        Args:
-            entity ():
-            component ():
-
-        Returns:
-
-        """
-        if self.manager.World.has_component(entity, component):
-            return self.manager.World.component_for_entity(entity, component)
-        else:
-            return None
-
     def spend_time(self, entity: int, time_spent: int):
         """
         Add time_spent to the entity's total time spent.

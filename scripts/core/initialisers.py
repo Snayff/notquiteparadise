@@ -64,6 +64,7 @@ def initialise_game():
 
 
 
+
     ######################
     from scripts.world.components import Position
     from scripts.world.components import Aesthetic
@@ -83,6 +84,8 @@ def initialise_game():
     entity = world.Entity.create(c)
     world.FOV.recompute_player_fov(1, 2, 3)  # must recompute after player init
     turn.turn_holder = entity
+    stats = world.Entity.get_stats(entity)
+    world.FOV.recompute_player_fov(1, 2, stats.sight_range)
 
     e = []
     e.append(Position(1, 4))

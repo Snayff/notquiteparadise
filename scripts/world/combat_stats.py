@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
 from scripts.core.library import library
+from scripts.world.components import Race, Homeland, Savvy
 
 if TYPE_CHECKING:
     pass
@@ -320,10 +321,27 @@ class CombatStats:
         Returns:
             int:
         """
+        # TODO - moving to the top creates an import error. Resolve it.
+        from scripts.managers.world_manager import world
+
         stat = SecondaryStatTypes.SIGHT_RANGE
         stat_data = library.get_secondary_stat_data(stat)
-        base_value = stat_data.base_value
 
+        # from characteristics
+        components = world.Entity.get_components(self.entity)
+        base_value = stat_data.base_value
+        for component in components:
+            if isinstance(component, Homeland):
+                data = library.get_homeland_data(component.name)
+                base_value = max(base_value, data.sight_range)
+            elif isinstance(component, Savvy):
+                data = library.get_savvy_data(component.name)
+                base_value = max(base_value, data.sight_range)
+            elif isinstance(component, Race):
+                data = library.get_race_data(component.name)
+                base_value = max(base_value, data.sight_range)
+
+        # from stats
         from_vigour = self.vigour * stat_data.vigour_mod
         from_clout = self.clout * stat_data.clout_mod
         from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
@@ -332,8 +350,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
         affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above

@@ -80,7 +80,6 @@ class EntityHandler(Subscriber):
 
                 # check if entity blocking tile to attack
                 elif is_entity_on_tile:
-                    # TODO - change to EC approach
                     knowledge = world.Entity.get_component(entity, Knowledge)
                     skill_name = knowledge.skills[0]
                     skill_data = library.get_skill_data(skill_name)
@@ -98,7 +97,8 @@ class EntityHandler(Subscriber):
 
                     # update fov if needed
                     if entity == world.Entity.get_player():
-                        sight_range = 3  # TODO - update to get sight_range from entity components
+                        stats = world.Entity.get_stats(entity)
+                        sight_range = max(0, stats.sight_range)
                         world.FOV.recompute_player_fov(position.x, position.y, sight_range)
 
     @staticmethod

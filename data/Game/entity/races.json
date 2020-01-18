@@ -3,7 +3,7 @@
 		"name": "herraculen",
 		"description" : "A herraculen description",
         "sprite": "",
-        "sight_range": 5,
+        "sight_range": 4,
 		"vigour": 0,
 		"clout": 0,
 		"skullduggery": 0,
