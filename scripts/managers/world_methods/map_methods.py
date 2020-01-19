@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import tcod
 import logging
+import math
+import scipy.spatial
 from typing import TYPE_CHECKING
 from scripts.core.constants import TargetTags, TILE_SIZE
 from scripts.world.components import Position
@@ -20,20 +23,21 @@ class MapMethods:
     Attributes:
         manager(WorldManager): the manager containing this class.
     """
+
     def __init__(self, manager):
-        self.manager = manager  # type: WorldManager
-        self.game_map = None
+        self._manager = manager  # type: WorldManager
+        self._current_game_map = None
 
     ########## CREATE ###############
-    
+
     def create_game_map(self, width, height):
         """
         Create new GameMap and create player FOV
         """
-        self.game_map = GameMap(width, height)
-        
+        self._current_game_map = GameMap(width, height)
+
     ############# GET ###############
-    
+
     def get_game_map(self) -> GameMap:
         """
         Get current game_map
@@ -41,8 +45,8 @@ class MapMethods:
         Returns:
             GameMap
         """
-        return self.game_map
-    
+        return self._current_game_map
+
     def get_tile(self, tile_pos: Union[Tuple[int, int], str]) -> Tile:
         """
         Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string
@@ -121,6 +125,158 @@ class MapMethods:
 
         return tiles
 
+    @staticmethod
+    def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> float:
+        """
+        Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+        This returns a float indicating the straight line distance between the two points.
+
+        Args:
+            start_pos ():
+            target_pos ():
+
+        Returns:
+            float: straight line distance
+
+        """
+        dx = target_pos[0] - start_pos[0]
+        dy = target_pos[1] - start_pos[1]
+        return math.sqrt(dx ** 2 + dy ** 2)
+
+    @staticmethod
+    def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+        """
+        Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+        This returns an int indicating the number of tile moves between the two points.
+
+        Args:
+            start_pos ():
+            target_pos ():
+
+        Returns:
+            int: distance in tiles
+
+        """
+
+        return scipy.spatial.distance.chebyshev(start_pos, target_pos)
+
+    def get_direct_direction(self, start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+        """
+        Get direction from an entity towards another entity`s location. Respects blocked tiles.
+
+        Args:
+            start_pos ():
+            target_pos ():
+
+        """
+        # TODO - update to use EC
+        pass
+        #
+        # log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
+        # logging.debug(log_string)
+        #
+        # direction_x = target_entity.x - start_entity.x
+        # direction_y = target_entity.y - start_entity.y
+        # distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
+        #
+        # direction_x = int(round(direction_x / distance))
+        # direction_y = int(round(direction_y / distance))
+        #
+        # tile_is_blocked = self._manager.Map.is_tile_blocking_movement(start_entity.x + direction_x,
+        #                                                               start_entity.y + direction_y)
+        #
+        # if not (tile_is_blocked or self.get_blocking_entity(start_entity.x + direction_x,
+        #                                                     start_entity.y + direction_y)):
+        #     log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
+        #     logging.debug(log_string)
+        #
+        #     return direction_x, direction_y
+        # else:
+        #     log_string = f"{start_entity.name} did NOT find a direct path to {target_entity.name}."
+        #     logging.debug(log_string)
+        #
+        #     return start_entity.x, start_entity.y
+
+    def get_a_star_direction(self, start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+        """
+        Use a* pathfinding to get a direction from one entity to another
+        Args:
+            start_pos ():
+            target_pos ():
+
+        Returns:
+
+        """
+        # TODO - update to use EC
+        pass
+        #
+        # max_path_length = 25
+        # game_map = self._manager.game_map
+        # entities = []
+        # # TODO - update to use ECS
+        # for ent, (pos, blocking) in self._manager.World.get_components(Position, Blocking):
+        #     entities.append(ent)
+        # entity_to_move = start_entity
+        # target = target_entity
+        #
+        # log_string = f"{entity_to_move.name} is looking for a path to {target.name} with a*"
+        # logging.debug(log_string)
+        #
+        # # Create a FOV map that has the dimensions of the map
+        # fov = tcod.map_new(game_map.width, game_map.height)
+        #
+        # # Scan the current map each turn and set all the walls as unwalkable
+        # for y1 in range(game_map.height):
+        #     for x1 in range(game_map.width):
+        #         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,
+        #                                 not game_map.tiles[x1][y1].blocks_movement)
+        #
+        # # Scan all the objects to see if there are objects that must be navigated around
+        # # Check also that the object isn't self or the target (so that the start and the end points are free)
+        # # The AI class handles the situation if self is next to the target so it will not use this A* function
+        # # anyway
+        # for entity in entities:
+        #     if entity.blocks_movement and entity != entity_to_move and entity != target:
+        #         # Set the tile as a wall so it must be navigated around
+        #         tcod.map_set_properties(fov, entity.x, entity.y, True, False)
+        #
+        # # Allocate a A* path
+        # # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited
+        # my_path = tcod.path_new_using_map(fov, 1.41)
+        #
+        # # Compute the path between self`s coordinates and the target`s coordinates
+        # tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)
+        #
+        # # Check if the path exists, and in this case, also the path is shorter than max_path_length
+        # # The path size matters if you want the monster to use alternative longer paths (for example through
+        # # other rooms) if for example the player is in a corridor
+        # # It makes sense to keep path size relatively low to keep the monsters from running around the map if
+        # # there`s an alternative path really far away
+        # if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) < max_path_length:
+        #     # Find the next coordinates in the computed full path
+        #     x, y = tcod.path_walk(my_path, True)
+        #
+        #     # convert to direction
+        #     direction_x = x - entity_to_move.x
+        #     direction_y = y - entity_to_move.y
+        #
+        #     log_string = f"{entity_to_move.name} found an a* path to {target.name}..."
+        #     log_string2 = f"-> will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x}," \
+        #                   f"{y}] in direction " \
+        #                   f"[{direction_x},{direction_y}]"
+        #     logging.debug(log_string)
+        #     logging.debug(log_string2)
+        #
+        # else:
+        #     # no path found return no movement direction
+        #     direction_x, direction_y = 0, 0
+        #     log_string = f"{entity_to_move.name} did NOT find an a* path to {target.name}."
+        #     logging.debug(log_string)
+        #
+        # # Delete the path to free memory
+        # tcod.path_delete(my_path)
+        # return direction_x, direction_y
+
     ############# CHECKS ############
 
     def is_tile_blocking_sight(self, tile_x, tile_y):
@@ -158,29 +314,6 @@ class MapMethods:
             return game_map.tiles[tile_x][tile_y].is_visible
         else:
             return False
-
-    def get_target_type_from_tile(self, tile_x, tile_y):
-        """
-        Get type of target tile
-
-        Args:
-            tile_x(int):  x position of the tile
-            tile_y(int):  y position of the tile
-        """
-        # TODO - convert to properties of tile class
-
-        game_map = self.get_game_map()
-        tile = game_map.tiles[tile_x][tile_y]
-
-        if not self.is_tile_in_bounds(tile_x, tile_y):
-            return TargetTags.OUT_OF_BOUNDS
-
-        # TODO - rewrite as terrain no longer an object
-        # if type(tile.terrain) is Wall:
-        #
-        #     return TargetTags.BLOCKED_SPACE
-        # elif type(tile.terrain) is Floor:
-        #     return TargetTags.OPEN_SPACE
 
     def is_tile_in_bounds(self, tile_x, tile_y):
         """
@@ -237,7 +370,7 @@ class MapMethods:
             return tile.blocks_movement
         elif tag == TargetTags.SELF:
             # ensure active entity is the same as the targeted one
-            for entity, position in self.manager.World.get_components(Position):
+            for entity, position in self._manager.World.get_components(Position):
                 if position.x == tile.x and position.y == tile.y:
                     if active_entity == entity:
                         return True
@@ -246,7 +379,7 @@ class MapMethods:
             return False
         elif tag == TargetTags.OTHER_ENTITY:
             # ensure active entity is NOT the same as the targeted one
-            for entity, position in self.manager.World.get_component(Position):
+            for entity, position in self._manager.World.get_component(Position):
                 if position.x == tile.x and position.y == tile.y:
                     if active_entity != entity:
                         return True

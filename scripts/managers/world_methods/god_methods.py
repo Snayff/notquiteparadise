@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 import logging
 import random
+from typing import TYPE_CHECKING
 from enum import Enum
-from typing import List, Tuple
-
 from scripts.core.library import library
 from scripts.world.god import God
+
+if TYPE_CHECKING:
+    from scripts.managers.world_manager import WorldManager
+    from typing import List, Tuple
 
 
 class GodMethods:
@@ -16,8 +21,7 @@ class GodMethods:
     """
 
     def __init__(self, manager):
-        from scripts.managers.world_manager import WorldManager
-        self.manager = manager  # type: WorldManager
+        self._manager = manager  # type: WorldManager
 
     def create_god(self, god_name):
         """
@@ -38,7 +42,7 @@ class GodMethods:
             god (God):
         """
 
-        self.manager.gods.append(god)
+        self._manager.gods.append(god)
 
     def get_gods(self):
         """
@@ -48,7 +52,7 @@ class GodMethods:
             List[God]:
         """
 
-        return self.manager.gods
+        return self._manager.gods
 
     def judge_action(self, entity, action):
         """

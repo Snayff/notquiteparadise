@@ -31,7 +31,7 @@ class SkillMethods:
     """
 
     def __init__(self, manager):
-        self.manager = manager  # type: WorldManager
+        self._manager = manager  # type: WorldManager
 
     ############## CHECKS ###############
 
@@ -47,7 +47,7 @@ class SkillMethods:
         Returns:
             bool: True if can use the skill. Else False.
         """
-        world = self.manager
+        world = self._manager
         position = world.Entity.get_component(entity, Position)
         start_tile = world.Map.get_tile((position.x, position.y))
         target_x, target_y = target_pos
@@ -59,7 +59,7 @@ class SkillMethods:
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
             if self.can_afford_cost(entity, resource_type, resource_cost):
-                distance = world.Entity.get_chebyshev_distance_between_tiles(start_tile, target_tile)
+                distance = world.Map.get_chebyshev_distance((start_tile.x, start_tile.y), target_pos)
                 skill_range = skill_data.range
                 if distance <= skill_range:
                     return True
@@ -85,8 +85,8 @@ class SkillMethods:
         Returns:
             bool: True for success, False otherwise.
         """
-        resources = self.manager.Entity.get_component(entity, Resources)
-        identity = self.manager.Entity.get_identity(entity)
+        resources = self._manager.Entity.get_component(entity, Resources)
+        identity = self._manager.Entity.get_identity(entity)
 
         # Check if cost can be paid
         value = getattr(resources, resource.name.lower())
@@ -108,8 +108,8 @@ class SkillMethods:
             resource (SecondaryStatTypes): HP or STAMINA
             cost (int):
         """
-        resources = self.manager.Entity.get_component(entity, Resources)
-        identity = self.manager.Entity.get_identity(entity)
+        resources = self._manager.Entity.get_component(entity, Resources)
+        identity = self._manager.Entity.get_identity(entity)
 
         resource_value = getattr(resources, resource.name.lower())
         resource_left = resource_value - cost
@@ -182,8 +182,8 @@ class SkillMethods:
         skill_range = skill_data.range
 
         # initial values
-        position = self.manager.Entity.get_component(using_entity, Position)
-        identity = self.manager.Entity.get_identity(using_entity)
+        position = self._manager.Entity.get_component(using_entity, Position)
+        identity = self._manager.Entity.get_identity(using_entity)
         start_x = position.x
         start_y = position.y
         dir_x = target_direction[0]
@@ -201,10 +201,10 @@ class SkillMethods:
         for distance in range(1, skill_range + 1):
             current_x = start_x + (dir_x * distance)
             current_y = start_y + (dir_y * distance)
-            tile = self.manager.Map.get_tile((current_x, current_y))
+            tile = self._manager.Map.get_tile((current_x, current_y))
 
             # did we hit terrain?
-            if self.manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_SPACE, using_entity):
+            if self._manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_SPACE, using_entity):
                 # do we need to activate, reflect or fizzle?
                 if skill_data.terrain_collision == SkillTerrainCollisions.ACTIVATE:
                     activate = True
@@ -212,10 +212,10 @@ class SkillMethods:
                     break
                 elif skill_data.terrain_collision == SkillTerrainCollisions.REFLECT:
                     # work out position of adjacent walls
-                    adj_tile = self.manager.Map.get_tile((current_x, current_y - dir_y))
-                    collision_adj_y = self.manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
-                    adj_tile = self.manager.Map.get_tile((current_x - dir_x, current_y))
-                    collision_adj_x = self.manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
+                    adj_tile = self._manager.Map.get_tile((current_x, current_y - dir_y))
+                    collision_adj_y = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
+                    adj_tile = self._manager.Map.get_tile((current_x - dir_x, current_y))
+                    collision_adj_x = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
 
                     # where did we collide?
                     if collision_adj_x:
@@ -255,7 +255,7 @@ class SkillMethods:
             # did we hit something that has the tags we need?
             if check_for_target:
                 for tag in skill_data.required_tags:
-                    if not self.manager.Map.tile_has_tag(tile, tag, using_entity):
+                    if not self._manager.Map.tile_has_tag(tile, tag, using_entity):
                         found_target = False
                         break
                     else:
@@ -278,8 +278,8 @@ class SkillMethods:
 
         # deal with activation
         if activate:
-            coords = self.manager.Skill.create_shape(skill_data.shape, skill_data.shape_size)
-            effected_tiles = self.manager.Map.get_tiles(current_x, current_y, coords)
+            coords = self._manager.Skill.create_shape(skill_data.shape, skill_data.shape_size)
+            effected_tiles = self._manager.Map.get_tiles(current_x, current_y, coords)
 
             # apply any effects
             for effect_name, effect_data in skill_data.effects.items():
@@ -318,17 +318,17 @@ class SkillMethods:
 
     def _create_aspect(self, aspect_name: str, tile: Tile):
         data = library.get_aspect_data(aspect_name)
-        entity, position, aspects = self.manager.Entity.get_entities_and_components_in_area([tile], Aspects)
+        entity, position, aspects = self._manager.Entity.get_entities_and_components_in_area([tile], Aspects)
 
         # if there is an active version of the same aspect already
         if aspects:
             # increase duration to initial value
             aspects.aspects[aspect_name] = data.duration
         else:
-            self.manager.Entity.create([Position(position.x, position.y), Aspects({aspect_name: data.duration})])
+            self._manager.Entity.create([Position(position.x, position.y), Aspects({aspect_name: data.duration})])
 
     def _apply_affliction_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
-        world = self.manager
+        world = self._manager
         effect_data = library.get_skill_effect_data(skill_name, EffectTypes.APPLY_AFFLICTION)
         affliction_data = library.get_affliction_data(effect_data.affliction_name)
         attackers_stats = world.Entity.get_stats(attacker)
@@ -375,8 +375,8 @@ class SkillMethods:
 
     def _create_affliction(self, entity: int, affliction_name: str, duration: int):
         data = library.get_affliction_data(affliction_name)
-        identity = self.manager.Entity.get_identity(entity)
-        afflictions = self.manager.Entity.get_component(entity, Afflictions)
+        identity = self._manager.Entity.get_identity(entity)
+        afflictions = self._manager.Entity.get_component(entity, Afflictions)
         active_affliction = False
 
         # check if entity already has the afflictions
@@ -419,10 +419,10 @@ class SkillMethods:
             bane = {}
             boon = {affliction_name: duration}
 
-        self.manager.World.add_component(entity, Afflictions(boon, bane))
+        self._manager.World.add_component(entity, Afflictions(boon, bane))
 
     def _apply_damage_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
-        world = self.manager
+        world = self._manager
         data = library.get_skill_effect_data(skill_name, EffectTypes.DAMAGE)
         attackers_stats = world.Entity.get_stats(attacker)
 
