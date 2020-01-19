@@ -206,6 +206,7 @@ class SkillMethods:
             # did we hit terrain?
             if self._manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_SPACE, using_entity):
                 # do we need to activate, reflect or fizzle?
+                # TODO - "hit a wall" is wrong. Triggering on entity. We need to check the space for an entity, too.
                 if skill_data.terrain_collision == SkillTerrainCollisions.ACTIVATE:
                     activate = True
                     logging.debug(f"-> and hit a wall. Skill will activate at ({current_x},{current_y}).")

@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+import random
+from typing import TYPE_CHECKING, Any
 import logging
-
 import pygame
-
-from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT
+from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
 from scripts.core.library import library
 from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
+from enum import Enum
 
 if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
@@ -205,6 +205,58 @@ class EntityMethods:
         """
         return self._manager.World.components_for_entity(entity)
 
+    def get_identity(self, entity: int) -> Identity:
+        """Get an entity's Identity component."""
+
+        return self.get_component(entity, Identity)
+
+    @staticmethod
+    def get_stats(entity: int) -> CombatStats:
+        """
+        Create and return a stat object  for an entity.
+
+        Args:
+            entity ():
+
+        Returns:
+
+        """
+        return CombatStats(entity)
+
+    def get_primary_stat(self, entity: int, primary_stat: PrimaryStatTypes) -> int:
+        """
+        Get an entity's primary stat.
+
+        Args:
+            entity ():
+            primary_stat ():
+
+        Returns:
+
+        """
+        stat = primary_stat.name.lower()
+        value = 0
+
+        for race in self._manager.World.try_component(entity, Race):
+            race_data = library.get_race_data(race.name)
+            value += getattr(race_data, stat)
+
+        for savvy in self._manager.World.try_component(entity, Savvy):
+            savvy_data = library.get_savvy_data(savvy.name)
+            value += getattr(savvy_data, stat)
+
+        for homeland in self._manager.World.try_component(entity, Homeland):
+            homeland_data = library.get_homeland_data(homeland.name)
+            value += getattr(homeland_data, stat)
+
+        # TODO - re add afflicitons
+        #value += self._manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+
+        # ensure no dodgy numbers, like floats or negative
+        value = max(1, int(value))
+
+        return value
+
     ############## ENTITY EXISTENCE ################
 
     def create(self, components: List = []) -> int:
@@ -257,8 +309,8 @@ class EntityMethods:
 
         return entity
 
-    def create_actor(self, name: str, description: str, x: int, y: int, sprite: pygame.Surface, icon: pygame.Surface,
-            race_name: str, homeland_name: str,  savvy_name: str, is_player: bool = False) -> int:
+    def create_actor(self, name: str, description: str, x: int, y: int, race_name: str, homeland_name: str,
+            savvy_name: str, is_player: bool = False) -> int:
         """
         Create an entity with all of the components to be an actor.
 
@@ -266,9 +318,7 @@ class EntityMethods:
             name (): 
             description (): 
             x (): 
-            y (): 
-            sprite (): 
-            icon (): 
+            y ():
             race_name (): 
             homeland_name (): 
             savvy_name (): 
@@ -286,7 +336,6 @@ class EntityMethods:
         # actor components
         actor.append(Identity(name, description))
         actor.append(Position(x, y))  # TODO - check position not blocked
-        actor.append(Aesthetic(sprite, icon))
         actor.append(HasCombatStats())
         actor.append(Blocking(True, ENTITY_BLOCKS_SIGHT))
         actor.append(Race(race_name))
@@ -301,28 +350,35 @@ class EntityMethods:
 
         # get skills from characteristics
         skills = []
-        data = library.get_race_data(race_name)
-        if data.skills != ["none"]:
-            skills += data.skills
+        race_data = library.get_race_data(race_name)
+        if race_data.skills != ["none"]:
+            skills += race_data.skills
 
-        data = library.get_homeland_data(homeland_name)
-        if data.skills != ["none"]:
-            skills += data.skills
+        homeland_data = library.get_homeland_data(homeland_name)
+        if homeland_data.skills != ["none"]:
+            skills += homeland_data.skills
 
-        data = library.get_savvy_data(savvy_name)
-        if data.skills != ["none"]:
-            skills += data.skills
+        savvy_data = library.get_savvy_data(savvy_name)
+        if savvy_data.skills != ["none"]:
+            skills += savvy_data.skills
 
         # add skills to entity
         self._manager.World.add_component(entity, Knowledge(skills))
+
+        # add aesthetic
+        # TODO - build final sprite from all characteristics
+        sprite = pygame.image.load(race_data.sprite).convert_alpha()
+        icon = pygame.transform.smoothscale(sprite, (ICON_SIZE, ICON_SIZE))
+        sprite = pygame.transform.smoothscale(sprite, (TILE_SIZE, TILE_SIZE))
+        self._manager.World.add_component(entity, Aesthetic(sprite, icon))
 
         # player fov
         if is_player:
             self._manager.FOV.recompute_player_fov(x, y, stats.sight_range)
 
         return entity
-        
-    ############### COMPONENT MANAGEMENT ##########
+
+    ############### COMPONENT ACTIONS ##########
 
     def spend_time(self, entity: int, time_spent: int):
         """
@@ -352,59 +408,101 @@ class EntityMethods:
         knowledge = self.get_component(entity, Knowledge())
         knowledge.skills.append(skill_name)
 
-    ############### GET ENTITY INFO ##########
-
-    def get_identity(self, entity: int) -> Identity:
-        """Get an entity's Identity component."""
-
-        return self.get_component(entity, Identity)
-
-    @staticmethod
-    def get_stats(entity: int) -> CombatStats:
+    def judge_action(self, entity: int, action: Any):
         """
-        Create and return a stat object  for an entity.
+        Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards
+        that  action.
 
         Args:
             entity ():
-
-        Returns:
+            action (): Can be str if matching name, e.g. affliction name, or Enum, e.g. Hit Type name.
 
         """
-        return CombatStats(entity)
+        entity_identity = self.get_identity(entity)
 
-    def get_primary_stat(self, entity: int, primary_stat: PrimaryStatTypes) -> int:
+        for ent, (is_god, opinion, identity) in self._manager.World.get_components(IsGod, Opinion, Identity):
+
+            attitudes = library.get_god_attitudes_data(identity.name)
+
+            # handle enums and str being passed in
+            if isinstance(action, Enum):
+                action_name = action.name
+            else:
+                action_name = action
+
+            # check if the god has an attitude towards the action and apply the opinion change,
+            # adding the entity to the dict if necessary
+            if action_name in attitudes:
+                if entity in opinion.opinions:
+                    opinion.opinions[entity] += attitudes[action_name].opinion_change
+                else:
+                    opinion.opinions[entity] = attitudes[action_name].opinion_change
+
+                logging.info(f"'{identity.name}' reacted to '{entity_identity.name}' using {action_name}.  New "
+                              f"opinion = {opinion.opinions[entity]}")
+
+    def consider_intervening(self, entity, action=None):
         """
-        Get an entity's primary stat.
+        Loop all gods and check if they will intervene
 
         Args:
-            entity ():
-            primary_stat ():
+            entity (Entity):
+            action (object): Can be str if matching name, e.g. affliction name, or Enum name, e.g. Hit Type name.
 
         Returns:
-
+            List[Tuple]: List of tuples containing (God.name, intervention, entity) as strings.
         """
-        stat = primary_stat.name.lower()
-        value = 0
+        # TODO - move to event handler
+        gods = self.get_gods()
 
-        for race in self._manager.World.try_component(entity, Race):
-            race_data = library.get_race_data(race.name)
-            value += getattr(race_data, stat)
+        all_interventions_taken = []
 
-        for savvy in self._manager.World.try_component(entity, Savvy):
-            savvy_data = library.get_savvy_data(savvy.name)
-            value += getattr(savvy_data, stat)
+        if action:
+            # handle enums and str being passed in
+            if isinstance(action, Enum):
+                action_name = action.name
+            else:
+                action_name = action
+        else:
+            action_name = "None"
 
-        for homeland in self._manager.World.try_component(entity, Homeland):
-            homeland_data = library.get_homeland_data(homeland.name)
-            value += getattr(homeland_data, stat)
+        # action taken by an entity so start consideration
+        for god in gods:
 
-        # TODO - re add afflicitons
-        #value += self._manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+            # does the god care about the entity?
+            if entity in god.opinions:
+                # what are the possible interventions
+                interventions = god.interventions
+                attitudes = library.get_god_attitudes_data(god.name)
+                possible_interventions = []
+                intervention_weightings = []
+                base_inaction_value = 75  # weighting for doing nothing # TODO - move magic number to config
+                inaction_modifier = 1  # TODO - move magic number to config
 
-        # ensure no dodgy numbers, like floats or negative
-        value = max(1, int(value))
+                for name, intervention in interventions.items():
+                    intervention_data = library.get_god_intervention_data(intervention.owner.name, name)
 
-        return value
+                    # is the god willing to intervene (meet required opinion)
+                    if abs(god.opinions[entity]) >= abs(intervention_data.required_opinion):
+                        possible_interventions.append(intervention)
+                        intervention_weightings.append(abs(intervention_data.required_opinion))
+
+                # make no intervention less likely if god cares about action taken by entity
+                if action_name in attitudes:
+                    inaction_modifier = 0.5
+                # add inaction to list of choices
+                possible_interventions.append("None")
+                intervention_weightings.append(base_inaction_value * inaction_modifier)
+
+                # which intervention, if any,  shall the god consider using?
+                chosen_intervention_list = random.choices(possible_interventions)
+                chosen_intervention = chosen_intervention_list.pop()
+
+                # if god has chosen to take an action then add to list
+                if chosen_intervention != "None":
+                    all_interventions_taken.append((god, chosen_intervention, entity))
+
+            return all_interventions_taken
 
 
 

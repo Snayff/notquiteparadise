@@ -50,27 +50,23 @@ class GodHandler(Subscriber):
         Args:
             event ():
         """
-        pass
-        # TODO - change to use EC approach
-        # tree_name = event.skill.skill_tree_name
-        # skill_name = event.skill.name
-        # entity = event.entity
-        # skill_data = library.get_skill_data(tree_name, skill_name)
-        #
-        # # check effect types used
-        # for effect_name, effect_data in skill_data.effects.items():
-        #     world.God.judge_action(entity, effect_data.effect_type)
-        #
-        # # check damage type used
-        # if EffectTypes.DAMAGE.name in skill_data.effects:
-        #     damage_type = skill_data.effects[EffectTypes.DAMAGE.name].damage_type
-        #     world.God.judge_action(entity, damage_type)
-        #
-        # # check afflictions applied
-        # # TODO - this should apply to each instance applied
-        # if EffectTypes.APPLY_AFFLICTION.name in skill_data.effects:
-        #     affliction_name = skill_data.effects[EffectTypes.APPLY_AFFLICTION.name].affliction_name
-        #     world.God.judge_action(entity, affliction_name)
+        skill_name = event.skill_name
+        entity = event.entity
+        skill_data = library.get_skill_data(skill_name)
+
+        # check effect types used
+        for effect_name, effect_data in skill_data.effects.items():
+            world.Entity.judge_action(entity, effect_data.effect_type)
+
+        # check damage type used
+        if EffectTypes.DAMAGE.name in skill_data.effects:
+            damage_type = skill_data.effects[EffectTypes.DAMAGE.name].damage_type
+            world.Entity.judge_action(entity, damage_type)
+
+        # check afflictions applied
+        if EffectTypes.APPLY_AFFLICTION.name in skill_data.effects:
+            affliction_name = skill_data.effects[EffectTypes.APPLY_AFFLICTION.name].affliction_name
+            world.Entity.judge_action(entity, affliction_name)
 
     @staticmethod
     def process_interventions(event):

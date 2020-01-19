@@ -5,7 +5,6 @@ import esper
 from typing import TYPE_CHECKING
 from scripts.managers.world_methods.entity_methods import EntityMethods
 from scripts.managers.world_methods.fov_methods import FOVMethods
-from scripts.managers.world_methods.god_methods import GodMethods
 from scripts.managers.world_methods.map_methods import MapMethods
 from scripts.managers.world_methods.skill_methods import SkillMethods
 
@@ -24,7 +23,6 @@ class WorldManager:
         self.Skill = SkillMethods(self)
         self.Map = MapMethods(self)
         self.FOV = FOVMethods(self)
-        self.God = GodMethods(self)
 
         logging.info(f"WorldManager initialised.")
 

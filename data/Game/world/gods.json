@@ -2,10 +2,10 @@
     "small_gods": {
         "name": "the small gods",
         "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
-        "sprite": "placeholder/Mobs_crow_01.png",
+        "sprite": "assets/world/placeholder/Mobs_crow_01.png",
         "attitudes": [
             {
-                "action": "flaming",
+                "action": "damage",
                 "opinion_change": -80
             },
             {
