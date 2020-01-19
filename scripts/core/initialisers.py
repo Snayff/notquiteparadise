@@ -3,10 +3,8 @@ import time
 import pygame
 
 from scripts.core.constants import EventTopics, GameStates, TILE_SIZE
-from scripts.event_handlers.affliction_handler import AfflictionHandler
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
-from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.event_handlers.game_handler import GameHandler
@@ -142,10 +140,6 @@ def initialise_event_handlers():
     map_handler = MapHandler(event_hub)
     map_handler.subscribe(EventTopics.MAP)
     map_handler.subscribe(EventTopics.GAME)
-
-    affliction_handler = AfflictionHandler(event_hub)
-    affliction_handler.subscribe(EventTopics.ENTITY)
-    affliction_handler.subscribe(EventTopics.GAME)
 
     god_handler = GodHandler(event_hub)
     god_handler.subscribe(EventTopics.ENTITY)

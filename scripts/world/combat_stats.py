@@ -103,7 +103,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -132,7 +133,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -161,7 +163,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -190,7 +193,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -219,7 +223,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -248,7 +253,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -277,7 +283,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -306,7 +313,8 @@ class CombatStats:
 
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -350,7 +358,8 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        affliction_changes = world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        # TODO - readd afflictions
+        affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))

@@ -229,7 +229,8 @@ class EntityMethods:
             entity:
         """
         if entity:
-            self.manager.World.delete(entity)
+            self.manager.World.delete_entity(entity)
+            logging.info(f"Entity ({entity}) deleted.")
         else:
             logging.error("Tried to delete an entity but entity was None.")
 
@@ -454,7 +455,8 @@ class EntityMethods:
             homeland_data = library.get_homeland_data(homeland.name)
             value += getattr(homeland_data, stat)
 
-        value += self.manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+        # TODO - re add afflicitons
+        #value += self.manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
 
         # ensure no dodgy numbers, like floats or negative
         value = max(1, int(value))
