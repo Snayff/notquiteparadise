@@ -4,7 +4,12 @@ import logging
 import random
 from typing import TYPE_CHECKING
 from enum import Enum
+
+import pygame
+
+from scripts.core.constants import TILE_SIZE
 from scripts.core.library import library
+from scripts.world.components import Identity, Aesthetic, IsGod, Opinion
 from scripts.world.god import God
 
 if TYPE_CHECKING:
@@ -23,16 +28,11 @@ class GodMethods:
     def __init__(self, manager):
         self._manager = manager  # type: WorldManager
 
-    def create_god(self, god_name):
-        """
 
-        Args:
-            god_name ():
-        """
-        from scripts.world.god import God
-        god = God(god_name)
 
-        self.add_god_to_central_list(god)
+
+
+
 
     def add_god_to_central_list(self, god):
         """

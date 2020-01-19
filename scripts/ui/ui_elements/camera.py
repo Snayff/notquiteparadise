@@ -66,6 +66,7 @@ class Camera(UIWindow):
 
         # draw tiles
         for tile in self.tiles:
+            # TODO - determine where this is using FOV
             screen_x = (tile.x - self.start_tile_col) * tile_width
             screen_y = (tile.y - self.start_tile_row) * tile_height
             map_surf.blit(tile.sprite, (screen_x, screen_y))
@@ -73,6 +74,7 @@ class Camera(UIWindow):
         # draw entities
         for entity, (pos, aesthetic) in world.World.get_components(Position, Aesthetic):
             # if in camera view
+            # TODO - use FOV
             if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:
                 if self.start_tile_row <= pos.y < self.start_tile_row + self.rows:
                     screen_x = (pos.x - self.start_tile_col) * tile_width
@@ -170,7 +172,7 @@ class Camera(UIWindow):
         """
         self.is_overlay_visible = is_visible
 
-    def set_overlay(self, directions: List):
+    def set_overlay_directions(self, directions: List):
         """
         Set the overlay with possible targeting directions.
 

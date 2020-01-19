@@ -26,9 +26,6 @@ class WorldManager:
         self.FOV = FOVMethods(self)
         self.God = GodMethods(self)
 
-        # TODO -  move into the relevant method groups
-        self.gods = []
-
         logging.info(f"WorldManager initialised.")
 
     def update(self):

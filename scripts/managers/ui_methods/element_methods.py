@@ -23,7 +23,7 @@ class ElementMethods:
     def __init__(self, manager):
         from scripts.managers.ui_manager import UIManager
         self._manager = manager  # type: UIManager
-        self.elements = {}  # list of all init'd ui elements
+        self._elements = {}  # list of all init'd ui elements
 
     ############### INIT ################
 
@@ -90,7 +90,7 @@ class ElementMethods:
             any: ui element
         """
         try:
-            return self.elements[element_type.name]
+            return self._elements[element_type.name]
         except KeyError:
             return None
 
@@ -101,7 +101,7 @@ class ElementMethods:
         Returns:
             list: list of ui_elements
         """
-        return self.elements
+        return self._elements
 
     def add_ui_element(self, element_name, element):
         """
@@ -111,7 +111,7 @@ class ElementMethods:
             element_name ():
             element ():
         """
-        self.elements[element_name] = element
+        self._elements[element_name] = element
 
     ############## CAMERA ###################
 
@@ -241,7 +241,7 @@ class ElementMethods:
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
         if camera:
-            camera.set_overlay(directions)
+            camera.set_overlay_directions(directions)
         else:
             logging.warning(f"Tried to set Camera overlay directions but key not found. Is it init'd?")
 

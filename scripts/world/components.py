@@ -7,6 +7,10 @@ if TYPE_CHECKING:
     import pygame
     from typing import TYPE_CHECKING, List
 
+##########################################################
+# Components are to hold data that is subject to change.
+#########################################################
+
 
 class IsPlayer:
     """
@@ -109,14 +113,28 @@ class Knowledge:
         self.skills = skills
 
 
-class Afflictions:
+class Affliction:
     """[Component] An entity's Boons and Banes. e.g. {boon_name: duration}"""
     def __init__(self, boons: Dict = {}, banes: Dict = {}):
         self.boons = boons
         self.banes = banes
 
 
-class Aspects:
+class Aspect:
     """[Component] An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
     def __init__(self, aspects: Dict = {}):
         self.aspects = aspects
+
+
+class IsGod:
+    """
+    [Component] Whether the entity is a god.
+    """
+
+
+class Opinion:
+    """
+    [Component] An entity's views on other entities.
+    """
+    def __init__(self):
+        self.opinions = {}

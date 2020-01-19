@@ -13,7 +13,7 @@ from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effect import EffectData
 from scripts.world.combat_stats import CombatStats
-from scripts.world.components import Resources, Position, HasCombatStats, Afflictions, Aspects
+from scripts.world.components import Resources, Position, HasCombatStats, Affliction, Aspect
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -318,14 +318,14 @@ class SkillMethods:
 
     def _create_aspect(self, aspect_name: str, tile: Tile):
         data = library.get_aspect_data(aspect_name)
-        entity, position, aspects = self._manager.Entity.get_entities_and_components_in_area([tile], Aspects)
+        entity, position, aspects = self._manager.Entity.get_entities_and_components_in_area([tile], Aspect)
 
         # if there is an active version of the same aspect already
         if aspects:
             # increase duration to initial value
             aspects.aspects[aspect_name] = data.duration
         else:
-            self._manager.Entity.create([Position(position.x, position.y), Aspects({aspect_name: data.duration})])
+            self._manager.Entity.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
 
     def _apply_affliction_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
         world = self._manager
@@ -376,7 +376,7 @@ class SkillMethods:
     def _create_affliction(self, entity: int, affliction_name: str, duration: int):
         data = library.get_affliction_data(affliction_name)
         identity = self._manager.Entity.get_identity(entity)
-        afflictions = self._manager.Entity.get_component(entity, Afflictions)
+        afflictions = self._manager.Entity.get_component(entity, Affliction)
         active_affliction = False
 
         # check if entity already has the afflictions
@@ -419,7 +419,7 @@ class SkillMethods:
             bane = {}
             boon = {affliction_name: duration}
 
-        self._manager.World.add_component(entity, Afflictions(boon, bane))
+        self._manager.World.add_component(entity, Affliction(boon, bane))
 
     def _apply_damage_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
         world = self._manager

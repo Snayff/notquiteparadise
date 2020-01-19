@@ -3,9 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 import logging
-from scripts.core.constants import PrimaryStatTypes
+
+import pygame
+
+from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT
 from scripts.core.library import library
-from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity
+from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
+    Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
@@ -231,6 +235,93 @@ class EntityMethods:
         else:
             logging.error("Tried to delete an entity but entity was None.")
 
+    def create_god(self, god_name: str) -> int:
+        """
+        Create an entity with all of the components to be a god.
+
+        Args:
+            god_name (): god_name must be in the gods json file.
+
+        Returns:
+            int: Entity ID
+        """
+        data = library.get_god_data(god_name)
+        god = []
+        god.append(Identity(data.name, data.description))
+        image = pygame.image.load(data.sprite).convert_alpha()
+        image = pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
+        god.append(Aesthetic(image, image))
+        god.append(IsGod())
+        god.append(Opinion())
+        entity = self._manager.Entity.create(god)
+
+        return entity
+
+    def create_actor(self, name: str, description: str, x: int, y: int, sprite: pygame.Surface, icon: pygame.Surface,
+            race_name: str, homeland_name: str,  savvy_name: str, is_player: bool = False) -> int:
+        """
+        Create an entity with all of the components to be an actor.
+
+        Args:
+            name (): 
+            description (): 
+            x (): 
+            y (): 
+            sprite (): 
+            icon (): 
+            race_name (): 
+            homeland_name (): 
+            savvy_name (): 
+            is_player (): Optional. Defaults to false.
+
+        Returns:
+            int: Entity ID
+        """
+        actor = []
+
+        # player components
+        if is_player:
+            actor.append(IsPlayer())
+
+        # actor components
+        actor.append(Identity(name, description))
+        actor.append(Position(x, y))  # TODO - check position not blocked
+        actor.append(Aesthetic(sprite, icon))
+        actor.append(HasCombatStats())
+        actor.append(Blocking(True, ENTITY_BLOCKS_SIGHT))
+        actor.append(Race(race_name))
+        actor.append(Homeland(homeland_name))
+        actor.append(Savvy(savvy_name))
+
+        entity = self.create(actor)
+
+        # give full resources
+        stats = self.get_stats(entity)
+        self._manager.World.add_component(entity, Resources(stats.max_hp, stats.max_stamina))
+
+        # get skills from characteristics
+        skills = []
+        data = library.get_race_data(race_name)
+        if data.skills != ["none"]:
+            skills += data.skills
+
+        data = library.get_homeland_data(homeland_name)
+        if data.skills != ["none"]:
+            skills += data.skills
+
+        data = library.get_savvy_data(savvy_name)
+        if data.skills != ["none"]:
+            skills += data.skills
+
+        # add skills to entity
+        self._manager.World.add_component(entity, Knowledge(skills))
+
+        # player fov
+        if is_player:
+            self._manager.FOV.recompute_player_fov(x, y, stats.sight_range)
+
+        return entity
+        
     ############### COMPONENT MANAGEMENT ##########
 
     def spend_time(self, entity: int, time_spent: int):

@@ -4,6 +4,7 @@ VERSION = "0.91.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 64
+ENTITY_BLOCKS_SIGHT = False
 
 
 class VisualInfo:

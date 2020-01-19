@@ -59,71 +59,26 @@ def initialise_game():
     map_width = 50
     map_height = 30
     world.Map.create_game_map(map_width, map_height)
+
+    # init the player
     world.FOV.create_player_fov_map(map_width, map_height)
-
-
-
-
-    ######################
-    from scripts.world.components import Position
-    from scripts.world.components import Aesthetic
-    c = []
-    c.append(Position(1, 2))
     image = pygame.image.load("assets/actor/placeholder/Mobs_skeleton_06.png").convert_alpha()
     image = pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
-    c.append(Aesthetic(image, image))
-    c.append(IsPlayer())
-    c.append(Resources(100, 110))
-    c.append(Blocking(True, True))
-    c.append(Identity("player", "a desc"))
-    c.append(Knowledge(["flail"]))
-    c.append(Race("herraculen"))
-    c.append((Homeland("aristo pirate")))
-    c.append((Savvy("fungechist")))
-    c.append(HasCombatStats())
-    entity = world.Entity.create(c)
-    world.FOV.recompute_player_fov(1, 2, 3)  # must recompute after player init
-    turn.turn_holder = entity
-    stats = world.Entity.get_stats(entity)
+    player = world.Entity.create_actor("player", "a desc", 1, 2, image, image, "herraculen", "aristo pirate",
+                                       "fungechist", True)
+
+    turn.turn_holder = player
+    stats = world.Entity.get_stats(player)
     world.FOV.recompute_player_fov(1, 2, stats.sight_range)
 
-    e = []
-    e.append(Position(1, 4))
+    # create an enemy
+    # TODO - remove when enemy gen is in
     image = pygame.image.load("assets/actor/placeholder/Mobs_goblin_02.png").convert_alpha()
     image = pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
-    e.append(Aesthetic(image, image))
-    e.append(Resources(10, 90))
-    e.append(Blocking(True, False))
-    e.append(Identity("steve", "a desc"))
-    e.append(Race("goblinn"))
-    e.append((Homeland("bog refugee")))
-    e.append((Savvy("cleromancer")))
-    e.append(HasCombatStats())
-    entity = world.Entity.create(e)
-    
-    
-
-    # world.Entity.create_actor_entity(0, 0, "player", "player", True)
-    # player = world.Entity.get_player()
-    # world.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
-
-    # TODO - remove when map generation is in
-    # world.Entity.create_actor_entity(0, 3, "goblinn_hand", "steve")
-    # world.Entity.create_actor_entity(1, 4, "goblinn_hand", "bob")
-    # world.Entity.create_actor_entity(2, 3, "goblinn_hand", "estaban")
-    # world.God.create_god("the small gods")
-
-    # TODO - remove when skill learning is in
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "basic attack"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "throw dice"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "bring down the mountain"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "burn the deck"))
-    # publisher.publish(LearnEvent(world.player, "Fungechist", "Flail"))
-    # publisher.publish(LearnEvent(world.player, "Fungechist", "Eye-watering Mistake"))
-    # publisher.publish(LearnEvent(world.player, "Fungechist", "Fractious Fungi"))
+    enemy = world.Entity.create_actor("steve", "steve's desc", 1, 4, image, image, "goblinn", "bog refugee",
+                                      "cleromancer")
 
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
-
 
 
 def initialise_event_handlers():
@@ -148,5 +103,3 @@ def initialise_event_handlers():
     ui_handler.subscribe(EventTopics.ENTITY)
     ui_handler.subscribe(EventTopics.GAME)
     ui_handler.subscribe(EventTopics.UI)
-
-
