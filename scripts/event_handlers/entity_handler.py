@@ -15,7 +15,6 @@ if TYPE_CHECKING:
     from scripts.events.entity_events import DieEvent, LearnEvent, MoveEvent
 
 
-
 class EntityHandler(Subscriber):
     """
     Handle events affecting entities

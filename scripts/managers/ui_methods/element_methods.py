@@ -22,7 +22,7 @@ class ElementMethods:
 
     def __init__(self, manager):
         from scripts.managers.ui_manager import UIManager
-        self.manager = manager  # type: UIManager
+        self._manager = manager  # type: UIManager
         self.elements = {}  # list of all init'd ui elements
 
     ############### INIT ################
@@ -36,7 +36,7 @@ class ElementMethods:
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
         rect = pygame.Rect((x, y), (width, height))
-        message_log = MessageLog(rect, self.manager.Gui)
+        message_log = MessageLog(rect, self._manager.Gui)
         self.add_ui_element(UIElementTypes.MESSAGE_LOG.name, message_log)
 
     def init_entity_info(self):
@@ -48,7 +48,7 @@ class ElementMethods:
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
         rect = pygame.Rect((x, y), (width, height))
-        info = EntityInfo(rect, self.manager.Gui)
+        info = EntityInfo(rect, self._manager.Gui)
         self.add_ui_element(UIElementTypes.ENTITY_INFO.name, info)
 
     def init_skill_bar(self):
@@ -60,7 +60,7 @@ class ElementMethods:
         x = VisualInfo.BASE_WINDOW_WIDTH - width
         y = 2
         rect = pygame.Rect((x, y), (width, height))
-        skill_bar = SkillBar(rect, self.manager.Gui)
+        skill_bar = SkillBar(rect, self._manager.Gui)
         self.add_ui_element(UIElementTypes.SKILL_BAR.name, skill_bar)
 
     def init_camera(self):
@@ -74,7 +74,7 @@ class ElementMethods:
         x = 5
         y = 5
         rect = pygame.Rect((x, y), (width, height))
-        camera = Camera(rect, self.manager.Gui, rows, cols)
+        camera = Camera(rect, self._manager.Gui, rows, cols)
         self.add_ui_element(UIElementTypes.CAMERA.name, camera)
 
     ################ ELEMENT ###################
@@ -346,7 +346,7 @@ class ElementMethods:
             message (str):
         """
         try:
-            message_log = self.manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+            message_log = self._manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
             message_log.add_message(message)
 
         except AttributeError:
@@ -363,4 +363,4 @@ class ElementMethods:
         # TODO - respect colour chosen. Use colour mapping.
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
-        screen_message = ScreenMessage(text, self.manager.Gui)
+        screen_message = ScreenMessage(text, self._manager.Gui)

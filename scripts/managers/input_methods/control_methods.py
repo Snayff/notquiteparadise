@@ -10,6 +10,7 @@ from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent, EndT
 from scripts.events.ui_events import ClickTile, MessageEvent
 from scripts.managers.game_manager import game
 from scripts.managers.world_manager import world
+from scripts.world.components import Knowledge, Position
 
 
 class ControlMethods:
@@ -22,7 +23,7 @@ class ControlMethods:
 
     def __init__(self, manager):
         from scripts.managers.input_manager import InputManager
-        self.manager = manager  # type: InputManager
+        self._manager = manager  # type: InputManager
 
     ############### INPUT CHECKS ####################
 
@@ -186,7 +187,7 @@ class ControlMethods:
         Args:
             intent ():
         """
-        setattr(self.manager.Intents, intent.name.lower(), True)
+        setattr(self._manager.Intents, intent.name.lower(), True)
         # print(f"Set {intent.name.lower()} Intent to True")
 
     def get_intent(self, intent: InputIntents):
@@ -199,15 +200,15 @@ class ControlMethods:
         Returns:
             bool: True if intent is True.
         """
-        return getattr(self.manager.Intents, intent.name.lower())
+        return getattr(self._manager.Intents, intent.name.lower())
 
     def reset_intents(self):
         """
         Reset all input intents to false
         """
-        for field in dataclasses.fields(self.manager.Intents):
+        for field in dataclasses.fields(self._manager.Intents):
             if field.type is bool:
-                setattr(self.manager.Intents, field.name, False)
+                setattr(self._manager.Intents, field.name, False)
 
     ############### PROCESS INTENT ###############
 
@@ -260,7 +261,8 @@ class ControlMethods:
         # Use a skill
         skill_number = self.get_pressed_skills_number()
         if skill_number != -1:
-            skill_name = player.actor.known_skills[skill_number]
+            knowledge = world.Entity.get_component(player, Knowledge)
+            skill_name = knowledge.skills[skill_number]
             skill_data = library.get_skill_data(skill_name)
 
             if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
@@ -282,7 +284,8 @@ class ControlMethods:
         if get_intent(intent.BUTTON_PRESSED):
             button = self.get_pressed_ui_button(event)
             if button[0] == "tile":
-                direction = world.Map.get_direction((player.x, player.y), button[1])
+                position = world.Entity.get_component(player, Position)
+                direction = world.Map.get_direction((position.x, position.y), button[1])
                 publisher.publish(UseSkillEvent(player, skill_name, direction))
                 skill_data = library.get_skill_data(skill_name)
                 publisher.publish(EndTurnEvent(player, skill_data.time_cost))
@@ -297,7 +300,8 @@ class ControlMethods:
             skill_pressed = player.actor.known_skills[skill_number]
             # confirm skill pressed doesn't match skill already pressed
             if skill_pressed != skill_name:
-                skill_name = player.actor.known_skills[skill_number]
+                knowledge = world.Entity.get_component(player, Knowledge)
+                skill_name = knowledge.skills[skill_number]
                 skill_data = library.get_skill_data(skill_name)
 
                 if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):

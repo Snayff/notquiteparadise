@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Tuple
 from scripts.core.library import library
+from scripts.managers.game_manager import game
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.core.event_hub import Subscriber
@@ -84,6 +85,14 @@ class UiHandler(Subscriber):
                 # turn on targeting overlay
                 self.set_targeting_overlay(True, event.skill_to_be_used)
 
+            # check if we are moving to player turn and we are either in, or were just in, targeting
+            # this is due to processing order of events
+            elif event.new_game_state == GameStates.PLAYER_TURN and (game.game_state == GameStates.TARGETING_MODE or
+                game.previous_game_state == GameStates.TARGETING_MODE):
+
+                # turn off the targeting overlay
+                self.set_targeting_overlay(False)
+
             # new turn updates
             elif event.new_game_state == GameStates.NEW_TURN:
                 # TODO - reflect new turn info
@@ -126,7 +135,7 @@ class UiHandler(Subscriber):
             self.process_message(event)
 
     @staticmethod
-    def set_targeting_overlay(is_visible: bool, skill_name):
+    def set_targeting_overlay(is_visible: bool, skill_name: str = None):
         """
         Show or hide targeting overlay, using Directions possible in the skill.
 

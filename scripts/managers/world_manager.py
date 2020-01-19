@@ -29,7 +29,6 @@ class WorldManager:
         # TODO -  move into the relevant method groups
         self.gods = []
 
-
         logging.info(f"WorldManager initialised.")
 
     def update(self):

@@ -231,9 +231,8 @@ class EntityMethods:
         else:
             logging.error("Tried to delete an entity but entity was None.")
 
-
-
     ############### COMPONENT MANAGEMENT ##########
+
     def spend_time(self, entity: int, time_spent: int):
         """
         Add time_spent to the entity's total time spent.
@@ -309,7 +308,7 @@ class EntityMethods:
             value += getattr(homeland_data, stat)
 
         # TODO - re add afflicitons
-        #value += self.manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+        #value += self._manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
 
         # ensure no dodgy numbers, like floats or negative
         value = max(1, int(value))

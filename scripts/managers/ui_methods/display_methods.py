@@ -14,7 +14,7 @@ class DisplayMethods:
 
     def __init__(self, manager):
         from scripts.managers.ui_manager import UIManager
-        self.manager = manager  # type: UIManager
+        self._manager = manager  # type: UIManager
 
         self.init_pygame()
 
