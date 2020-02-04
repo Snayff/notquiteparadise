@@ -255,7 +255,8 @@ class ControlMethods:
         # Player movement
         dir_x, dir_y = self.get_pressed_direction()
         if dir_x != 0 or dir_y != 0:
-            publisher.publish(MoveEvent(player, (dir_x, dir_y)))
+            position = world.Entity.get_component(player, Position)
+            publisher.publish(MoveEvent(player, (position.x, position.y), (dir_x, dir_y)))
             publisher.publish(EndTurnEvent(player, 10))  # TODO - replace magic number with cost to move
 
         # Use a skill

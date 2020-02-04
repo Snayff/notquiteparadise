@@ -12,7 +12,7 @@ from scripts.world.components import Position, Knowledge, Identity
 from scripts.events.entity_events import UseSkillEvent
 
 if TYPE_CHECKING:
-    from scripts.events.entity_events import DieEvent, LearnEvent, MoveEvent
+    from scripts.events.entity_events import DieEvent, MoveEvent
 
 
 class EntityHandler(Subscriber):
@@ -36,17 +36,13 @@ class EntityHandler(Subscriber):
             event: MoveEvent
             self.process_move(event)
 
-        if event.event_type == EntityEventTypes.SKILL:
+        elif event.event_type == EntityEventTypes.SKILL:
             event: UseSkillEvent
             self.process_skill(event)
 
-        if event.event_type == EntityEventTypes.DIE:
+        elif event.event_type == EntityEventTypes.DIE:
             event: DieEvent
             self.process_die(event)
-
-        if event.event_type == EntityEventTypes.LEARN:
-            event: LearnEvent
-            self.process_learn(event)
 
     @staticmethod
     def process_move(event: MoveEvent):
@@ -146,13 +142,3 @@ class EntityHandler(Subscriber):
 
         # delete from world
         world.Entity.delete(entity)
-
-    @staticmethod
-    def process_learn(event: LearnEvent):
-        """
-        Have an entity learn a skill.
-
-        Args:
-            event:
-        """
-        event.entity.actor.learn_skill(event.skill_tree_name, event.skill_name)
