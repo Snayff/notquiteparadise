@@ -13,7 +13,7 @@ from scripts.core.library import library
 from scripts.core.event_hub import publisher
 from scripts.skills.effect import EffectData
 from scripts.world.combat_stats import CombatStats
-from scripts.world.components import Resources, Position, HasCombatStats, Affliction, Aspect
+from scripts.world.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity, IsGod
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
 
@@ -167,12 +167,13 @@ class SkillMethods:
 
         return list_of_coords
 
-    def use(self, using_entity: int, skill_name: str, target_direction: Tuple):
+    def use(self, using_entity: int, skill_name: str, start_pos: Tuple[int, int], target_direction: Tuple[int, int]):
 
         """
         Use the skill
 
         Args:
+            start_pos ():
             skill_name ():
             using_entity ():
             target_direction (tuple): x y of the target direction
@@ -182,13 +183,17 @@ class SkillMethods:
         skill_range = skill_data.range
 
         # initial values
-        position = self._manager.Entity.get_component(using_entity, Position)
         identity = self._manager.Entity.get_identity(using_entity)
-        start_x = position.x
-        start_y = position.y
+        start_x = start_pos[0]
+        start_y = start_pos[1]
         dir_x = target_direction[0]
         dir_y = target_direction[1]
         direction = (target_direction[0], target_direction[1])
+
+        # these values are either overridden by collision check or remain same
+        distance = 0
+        current_x = start_x
+        current_y = start_y
 
         # flags
         activate = False
@@ -286,8 +291,9 @@ class SkillMethods:
             for effect_name, effect_data in skill_data.effects.items():
                 self.apply_effect(effect_data.effect_type, skill_name, effected_tiles, using_entity)
 
-            # end the turn
-            publisher.publish(EndTurnEvent(using_entity, skill_data.time_cost))
+            # end the turn if the entity isnt a god
+            if not self._manager.Entity.has_component(using_entity, IsGod):
+                publisher.publish(EndTurnEvent(using_entity, skill_data.time_cost))
 
     ############ EFFECTS ################
 
@@ -335,27 +341,28 @@ class SkillMethods:
         attackers_stats = world.Entity.get_stats(attacker)
 
         # get relevant entities
-        entities = world.Entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
+        entities = world.Entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats, Identity)
 
         # loop all relevant entities
-        for defender, (position, resources, has_stats) in entities.items():
+        for defender, (position, resources, has_stats, identity) in entities.items():
 
             # create var to hold the modified duration, if it does change, or the base duration
             base_duration = effect_data.duration
             modified_duration = base_duration
+            defender_stats = world.Entity.get_stats(defender)
 
             # check we have all tags
             tile = world.Map.get_tile((position.x, position.y))
             if world.Map.tile_has_tags(tile, effect_data.required_tags, attacker):
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
-                    to_hit_score = self._calculate_to_hit_score(defender, effect_data.accuracy,
+                    to_hit_score = self._calculate_to_hit_score(defender_stats, effect_data.accuracy,
                                                                 effect_data.stat_to_target, attackers_stats)
                     hit_type = self._get_hit_type(to_hit_score)
 
                     # check if afflictions applied
                     if hit_type == HitTypes.GRAZE:
-                        msg = f"{defender.name} resisted {effect_data.affliction_name}."
+                        msg = f"{identity.name} resisted {effect_data.affliction_name}."
                         publisher.publish(MessageEvent(MessageTypes.LOG, msg))
                     else:
                         hit_msg = ""
@@ -365,14 +372,14 @@ class SkillMethods:
                             modified_duration = int(base_duration * HitModifiers.CRIT.value)
                             hit_msg = f"a critical "
 
-                        msg = f"{defender.name} succumbed to {hit_msg}{effect_data.affliction_name}."
+                        msg = f"{identity.name} succumbed to {hit_msg}{effect_data.affliction_name}."
                         publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
-                        self._create_affliction(defender, modified_duration)
+                        self._create_affliction(defender, effect_data.affliction_name, modified_duration)
 
                 # Just apply the BOON
                 elif affliction_data.affliction_category == AfflictionCategory.BOON:
-                    self._create_affliction(defender, modified_duration)
+                    self._create_affliction(defender, effect_data.affliction_name, modified_duration)
 
     def _create_affliction(self, entity: int, affliction_name: str, duration: int):
         data = library.get_affliction_data(affliction_name)
@@ -381,16 +388,17 @@ class SkillMethods:
         active_affliction = False
 
         # check if entity already has the afflictions
-        if data.category == AfflictionCategory.BANE:
-            if afflictions.banes[affliction_name]:
-                active_affliction = afflictions.banes[affliction_name]
-            else:
-                active_affliction = False
-        elif data.category == AfflictionCategory.BOON:
-            if afflictions.boons[affliction_name]:
-                active_affliction = afflictions.boons[affliction_name]
-            else:
-                active_affliction = False
+        if afflictions:
+            if data.category == AfflictionCategory.BANE:
+                if afflictions.banes[affliction_name]:
+                    active_affliction = afflictions.banes[affliction_name]
+                else:
+                    active_affliction = False
+            elif data.category == AfflictionCategory.BOON:
+                if afflictions.boons[affliction_name]:
+                    active_affliction = afflictions.boons[affliction_name]
+                else:
+                    active_affliction = False
 
         # if affliction exists
         if active_affliction:

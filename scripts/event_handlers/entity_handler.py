@@ -112,7 +112,7 @@ class EntityHandler(Subscriber):
             world.Skill.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
 
             # use skill
-            world.Skill.use(entity, skill_name, event.direction)
+            world.Skill.use(entity, skill_name, event.start_pos, event.direction)
             # TODO - trigger terrain effects
 
         else:

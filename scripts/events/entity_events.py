@@ -32,7 +32,7 @@ class DieEvent(Event):
     """
     Event for handling the death of an entity.
     """
-    def __init__(self, dying_entity):
+    def __init__(self, dying_entity: int):
         Event.__init__(self, EntityEventTypes.DIE, EventTopics.ENTITY)
         self.dying_entity = dying_entity
 

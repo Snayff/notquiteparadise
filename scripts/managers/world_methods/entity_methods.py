@@ -170,7 +170,8 @@ class EntityMethods:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1, c2)
         elif component1 and component2 and component3:
-            for entity, (pos, c1, c2, c3) in self._manager.World.get_components(component1, component2, component3):
+            for entity, (pos, c1, c2, c3) in self._manager.World.get_components(Position, component1, component2,
+                                                                                component3):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1, c2, c3)
@@ -257,6 +258,23 @@ class EntityMethods:
 
         return value
 
+    ############## ENTITY QUERY  ################
+    def has_component(self, entity, component):
+        """
+        Confirm if an entity has a component
+
+        Args:
+            entity ():
+            component ():
+
+        Returns:
+
+        """
+        if self._manager.World.has_component(entity, component):
+            return True
+        else:
+            return False
+
     ############## ENTITY EXISTENCE ################
 
     def create(self, components: List = []) -> int:
@@ -307,7 +325,7 @@ class EntityMethods:
         # get knowledge info
         interventions = data.interventions
         intervention_names = []
-        for intervention in interventions:
+        for name, intervention in interventions.items():
             intervention_names.append(intervention.name)
 
         god.append(Identity(data.name, data.description))
@@ -315,6 +333,7 @@ class EntityMethods:
         god.append(IsGod())
         god.append(Opinion())
         god.append(Knowledge(intervention_names))
+        god.append((Resources(9999, 9999)))
         entity = self._manager.Entity.create(god)
 
         return entity
@@ -487,7 +506,7 @@ class EntityMethods:
                 intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
 
                 # is the god willing to intervene i.e. does the opinion score meet the required opinion
-                opinion_score = opinion[entity]
+                opinion_score = opinion.opinions[entity]
                 required_opinion = intervention_data.required_opinion
                 # check if greater or lower, depending on whether required opinion is positive or negative
                 if 0 <= required_opinion < opinion_score:

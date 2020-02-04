@@ -6,10 +6,11 @@ from scripts.core.constants import EntityEventTypes, EffectTypes, EventTopics
 from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.library import library
 from scripts.managers.world_manager import world
-from scripts.world.components import Position
+from scripts.world.components import Position, IsGod
+from scripts.events.entity_events import UseSkillEvent
 
 if TYPE_CHECKING:
-    from scripts.events.entity_events import UseSkillEvent
+    pass
 
 
 class GodHandler(Subscriber):
@@ -38,8 +39,10 @@ class GodHandler(Subscriber):
 
         if event.event_type == EntityEventTypes.SKILL:
             event: UseSkillEvent
-            self.process_judgements(event)
-            self.process_interventions(event)
+            # if the entity isnt another god then judge it
+            if not world.Entity.has_component(event.entity, IsGod):
+                self.process_judgements(event)
+                self.process_interventions(event)
 
     @staticmethod
     def process_judgements(event):
