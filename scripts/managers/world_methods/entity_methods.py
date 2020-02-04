@@ -250,7 +250,7 @@ class EntityMethods:
             value += getattr(homeland_data, stat)
 
         # TODO - re add afflicitons
-        #value += self._manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+        # value += self._manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
 
         # ensure no dodgy numbers, like floats or negative
         value = max(1, int(value))
@@ -299,12 +299,22 @@ class EntityMethods:
         """
         data = library.get_god_data(god_name)
         god = []
-        god.append(Identity(data.name, data.description))
+
+        # get aesthetic info
         image = pygame.image.load(data.sprite).convert_alpha()
         image = pygame.transform.smoothscale(image, (TILE_SIZE, TILE_SIZE))
+
+        # get knowledge info
+        interventions = data.interventions
+        intervention_names = []
+        for intervention in interventions:
+            intervention_names.append(intervention.name)
+
+        god.append(Identity(data.name, data.description))
         god.append(Aesthetic(image, image))
         god.append(IsGod())
         god.append(Opinion())
+        god.append(Knowledge(intervention_names))
         entity = self._manager.Entity.create(god)
 
         return entity
@@ -418,7 +428,6 @@ class EntityMethods:
             action (): Can be str if matching name, e.g. affliction name, or Enum, e.g. Hit Type name.
 
         """
-        entity_identity = self.get_identity(entity)
 
         for ent, (is_god, opinion, identity) in self._manager.World.get_components(IsGod, Opinion, Identity):
 
@@ -438,71 +447,123 @@ class EntityMethods:
                 else:
                     opinion.opinions[entity] = attitudes[action_name].opinion_change
 
+                entity_identity = self.get_identity(entity)
                 logging.info(f"'{identity.name}' reacted to '{entity_identity.name}' using {action_name}.  New "
-                              f"opinion = {opinion.opinions[entity]}")
+                             f"opinion = {opinion.opinions[entity]}")
 
-    def consider_intervening(self, entity, action=None):
+    def consider_intervening(self, entity: int, action: Any) -> List[Tuple[str, int]]:
         """
-        Loop all gods and check if they will intervene
+        Have all entities consider intervening
 
         Args:
-            entity (Entity):
+            entity (): entity who acted
             action (object): Can be str if matching name, e.g. affliction name, or Enum name, e.g. Hit Type name.
 
         Returns:
-            List[Tuple]: List of tuples containing (God.name, intervention, entity) as strings.
+            List[Tuple]: List of tuples containing (god_entity_id, intervention name).
         """
-        # TODO - move to event handler
-        gods = self.get_gods()
+        chosen_interventions = []
+        desire_to_intervene = 10
+        desire_to_do_nothing = 75  # weighting for doing nothing # TODO - move magic number to config
 
-        all_interventions_taken = []
+        for ent, (is_god, opinion, identity, knowledge) in self._manager.World.get_components(IsGod, Opinion,
+                                                                                              Identity, Knowledge):
+            attitudes = library.get_god_attitudes_data(identity.name)
 
-        if action:
             # handle enums and str being passed in
             if isinstance(action, Enum):
                 action_name = action.name
             else:
                 action_name = action
-        else:
-            action_name = "None"
 
-        # action taken by an entity so start consideration
-        for god in gods:
+            # check if the god has an attitude towards the action and increase likelihood of intervening
+            if action_name in attitudes:
+                desire_to_intervene = 30
 
-            # does the god care about the entity?
-            if entity in god.opinions:
-                # what are the possible interventions
-                interventions = god.interventions
-                attitudes = library.get_god_attitudes_data(god.name)
-                possible_interventions = []
-                intervention_weightings = []
-                base_inaction_value = 75  # weighting for doing nothing # TODO - move magic number to config
-                inaction_modifier = 1  # TODO - move magic number to config
+            # get eligible interventions and their weightings. Need separate lists for random.choices
+            eligible_interventions = []
+            intervention_weightings = []
+            for intervention_name in knowledge.skills:
+                intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
 
-                for name, intervention in interventions.items():
-                    intervention_data = library.get_god_intervention_data(intervention.owner.name, name)
+                # is the god willing to intervene i.e. does the opinion score meet the required opinion
+                opinion_score = opinion[entity]
+                required_opinion = intervention_data.required_opinion
+                # check if greater or lower, depending on whether required opinion is positive or negative
+                if 0 <= required_opinion < opinion_score:
+                    amount_exceeding_requirement = opinion_score - required_opinion
 
-                    # is the god willing to intervene (meet required opinion)
-                    if abs(god.opinions[entity]) >= abs(intervention_data.required_opinion):
-                        possible_interventions.append(intervention)
-                        intervention_weightings.append(abs(intervention_data.required_opinion))
+                    eligible_interventions.append(intervention_name)
+                    intervention_weightings.append(amount_exceeding_requirement)
 
-                # make no intervention less likely if god cares about action taken by entity
-                if action_name in attitudes:
-                    inaction_modifier = 0.5
-                # add inaction to list of choices
-                possible_interventions.append("None")
-                intervention_weightings.append(base_inaction_value * inaction_modifier)
+                elif 0 > required_opinion > opinion_score:
+                    amount_exceeding_requirement = required_opinion - opinion_score  # N.B. opposite to above
+                    eligible_interventions.append(intervention_name)
+                    intervention_weightings.append(amount_exceeding_requirement)
 
-                # which intervention, if any,  shall the god consider using?
-                chosen_intervention_list = random.choices(possible_interventions)
-                chosen_intervention = chosen_intervention_list.pop()
+            # add chance to do nothing
+            eligible_interventions.append("Nothing")
+            intervention_weightings.append(desire_to_do_nothing - desire_to_intervene)
 
-                # if god has chosen to take an action then add to list
-                if chosen_intervention != "None":
-                    all_interventions_taken.append((god, chosen_intervention, entity))
+            # which intervention, if any, shall the god consider using?
+            chosen_intervention,  = random.choices(eligible_interventions, intervention_weightings)
+            # N.B. use , to unpack the result
 
-            return all_interventions_taken
+            # if god has chosen to take an action then add to list
+            if chosen_intervention != "Nothing":
+                chosen_interventions.append((ent, chosen_intervention))
 
+        return chosen_interventions
 
-
+        #
+        # ##########################################################
+        # gods = self.get_gods()
+        #
+        # all_interventions_taken = []
+        #
+        # if action:
+        #     # handle enums and str being passed in
+        #     if isinstance(action, Enum):
+        #         action_name = action.name
+        #     else:
+        #         action_name = action
+        # else:
+        #     action_name = "None"
+        #
+        # # action taken by an entity so start consideration
+        # for god in gods:
+        #
+        #     # does the god care about the entity?
+        #     if entity in god.opinions:
+        #         # what are the possible interventions
+        #         interventions = god.interventions
+        #         attitudes = library.get_god_attitudes_data(god.name)
+        #         possible_interventions = []
+        #         intervention_weightings = []
+        #         base_inaction_value = 75  # weighting for doing nothing # TODO - move magic number to config
+        #         inaction_modifier = 1  # TODO - move magic number to config
+        #
+        #         for name, intervention in interventions.items():
+        #             intervention_data = library.get_god_intervention_data(intervention.owner.name, name)
+        #
+        #             # is the god willing to intervene (meet required opinion)
+        #             if abs(god.opinions[entity]) >= abs(intervention_data.required_opinion):
+        #                 possible_interventions.append(intervention)
+        #                 intervention_weightings.append(abs(intervention_data.required_opinion))
+        #
+        #         # make no intervention less likely if god cares about action taken by entity
+        #         if action_name in attitudes:
+        #             inaction_modifier = 0.5
+        #         # add inaction to list of choices
+        #         possible_interventions.append("None")
+        #         intervention_weightings.append(base_inaction_value * inaction_modifier)
+        #
+        #         # which intervention, if any,  shall the god consider using?
+        #         chosen_intervention_list = random.choices(possible_interventions)
+        #         chosen_intervention = chosen_intervention_list.pop()
+        #
+        #         # if god has chosen to take an action then add to list
+        #         if chosen_intervention != "None":
+        #             all_interventions_taken.append((god, chosen_intervention, entity))
+        #
+        #     return all_interventions_taken

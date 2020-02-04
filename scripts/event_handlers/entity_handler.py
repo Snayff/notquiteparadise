@@ -84,7 +84,7 @@ class EntityHandler(Subscriber):
                     skill_data = library.get_skill_data(skill_name)
                     direction = Directions((dir_x, dir_y))
                     if direction in skill_data.target_directions:
-                        publisher.publish((UseSkillEvent(entity, skill_name, (dir_x, dir_y))))
+                        publisher.publish((UseSkillEvent(entity, skill_name, event.start_pos, (dir_x, dir_y))))
                     else:
                         publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill_name} doesn't go that way!"))
 

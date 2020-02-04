@@ -3,9 +3,10 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.core.constants import EntityEventTypes, EffectTypes, EventTopics
-from scripts.core.event_hub import Subscriber
+from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.library import library
 from scripts.managers.world_manager import world
+from scripts.world.components import Position
 
 if TYPE_CHECKING:
     from scripts.events.entity_events import UseSkillEvent
@@ -35,12 +36,10 @@ class GodHandler(Subscriber):
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
 
-        if event.topic == EventTopics.ENTITY:
-            self.process_interventions(event)
-
         if event.event_type == EntityEventTypes.SKILL:
             event: UseSkillEvent
             self.process_judgements(event)
+            self.process_interventions(event)
 
     @staticmethod
     def process_judgements(event):
@@ -76,12 +75,14 @@ class GodHandler(Subscriber):
         Args:
             event ():
         """
-        pass
+        skill_name = event.skill_name
+        entity = event.entity
+        position = world.Entity.get_component(entity, Position)
 
-        # TODO - update to pass action to consider_intervening
-        # TODO - change to use EC approach
-        # chosen_interventions = world.God.consider_intervening(event.entity)
-        #
-        # for god, intervention, entity in chosen_interventions:
-        #     world.God.intervene(god, intervention, entity)
+        interventions = world.Entity.consider_intervening(entity, skill_name)
+
+        for god_entity_id, intervention_name in interventions:
+            # create use skill event with direction of centre
+            publisher.publish(UseSkillEvent(god_entity_id, intervention_name, (position.x, position.y), (0, 0)))
+
 

@@ -286,7 +286,7 @@ class ControlMethods:
             if button[0] == "tile":
                 position = world.Entity.get_component(player, Position)
                 direction = world.Map.get_direction((position.x, position.y), button[1])
-                publisher.publish(UseSkillEvent(player, skill_name, direction))
+                publisher.publish(UseSkillEvent(player, skill_name, (position.x, position.y), direction))
                 skill_data = library.get_skill_data(skill_name)
                 publisher.publish(EndTurnEvent(player, skill_data.time_cost))
 

@@ -19,12 +19,13 @@ class UseSkillEvent(Event):
         direction (Tuple): x, y
         skill_name (str): skill name
     """
-    def __init__(self, entity_using_skill: Entity, skill_name: str, direction: Tuple[int, int]):
+    def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int], direction: Tuple[
+        int, int]):
         Event.__init__(self, EntityEventTypes.SKILL, EventTopics.ENTITY)
-        # TODO - consider adding start location; will enable gods to just use that and direction of centre
         self.entity = entity_using_skill
         self.direction = direction
         self.skill_name = skill_name
+        self.start_pos = start_pos
 
 
 class DieEvent(Event):
