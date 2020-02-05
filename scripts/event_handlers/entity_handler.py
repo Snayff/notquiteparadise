@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import EntityEventTypes, MessageTypes, Directions
+from scripts.core.constants import EntityEventTypes, MessageTypes, Directions, TargetTags
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
@@ -64,37 +64,36 @@ class EntityHandler(Subscriber):
             target_y = old_y + dir_y
 
             # is there something in the way?
-            if world.Map.is_tile_in_bounds(target_x, target_y):
-                target_tile = world.Map.get_tile((target_x, target_y))
-                is_tile_blocking_movement = target_tile.blocks_movement
-                is_entity_on_tile = target_tile.has_entity
+            target_tile = world.Map.get_tile((target_x, target_y))
+            is_tile_blocking_movement = world.Map.tile_has_tag(target_tile, TargetTags.BLOCKED_SPACE, entity)
+            is_entity_on_tile = world.Map.tile_has_tag(target_tile, TargetTags.OTHER_ENTITY, entity)
 
-                # check for no entity in way but tile is blocked
-                if not is_entity_on_tile and is_tile_blocking_movement:
-                    publisher.publish(MessageEvent(MessageTypes.LOG, f"There`s something in the way!"))
+            # check for no entity in way but tile is blocked
+            if not is_entity_on_tile and is_tile_blocking_movement:
+                publisher.publish(MessageEvent(MessageTypes.LOG, f"There`s something in the way!"))
 
-                # check if entity blocking tile to attack
-                elif is_entity_on_tile:
-                    knowledge = world.Entity.get_component(entity, Knowledge)
-                    skill_name = knowledge.skills[0]
-                    skill_data = library.get_skill_data(skill_name)
-                    direction = Directions((dir_x, dir_y))
-                    if direction in skill_data.target_directions:
-                        publisher.publish((UseSkillEvent(entity, skill_name, event.start_pos, (dir_x, dir_y))))
-                    else:
-                        publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill_name} doesn't go that way!"))
+            # check if entity blocking tile to attack
+            elif is_entity_on_tile:
+                knowledge = world.Entity.get_component(entity, Knowledge)
+                skill_name = knowledge.skills[0]
+                skill_data = library.get_skill_data(skill_name)
+                direction = Directions((dir_x, dir_y))
+                if direction in skill_data.target_directions:
+                    publisher.publish((UseSkillEvent(entity, skill_name, event.start_pos, (dir_x, dir_y))))
+                else:
+                    publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill_name} doesn't go that way!"))
 
-                # if nothing in the way, time to move!
-                elif not is_entity_on_tile and not is_tile_blocking_movement:
-                    position = world.Entity.get_component(entity, Position)
-                    position.x = target_x
-                    position.y = target_y
+            # if nothing in the way, time to move!
+            elif not is_entity_on_tile and not is_tile_blocking_movement:
+                position = world.Entity.get_component(entity, Position)
+                position.x = target_x
+                position.y = target_y
 
-                    # update fov if needed
-                    if entity == world.Entity.get_player():
-                        stats = world.Entity.get_stats(entity)
-                        sight_range = max(0, stats.sight_range)
-                        world.FOV.recompute_player_fov(position.x, position.y, sight_range)
+                # update fov if needed
+                if entity == world.Entity.get_player():
+                    stats = world.Entity.get_stats(entity)
+                    sight_range = max(0, stats.sight_range)
+                    world.FOV.recompute_player_fov(position.x, position.y, sight_range)
 
     @staticmethod
     def process_skill(event: UseSkillEvent):

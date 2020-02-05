@@ -385,36 +385,38 @@ class SkillMethods:
         data = library.get_affliction_data(affliction_name)
         identity = self._manager.Entity.get_identity(entity)
         afflictions = self._manager.Entity.get_component(entity, Affliction)
-        active_affliction = False
+        active_affliction_duration = False
+        boon = {}
+        bane = {}
 
         # check if entity already has the afflictions
         if afflictions:
             if data.category == AfflictionCategory.BANE:
                 if afflictions.banes[affliction_name]:
-                    active_affliction = afflictions.banes[affliction_name]
+                    active_affliction_duration = afflictions.banes[affliction_name]
                 else:
-                    active_affliction = False
+                    active_affliction_duration = False
             elif data.category == AfflictionCategory.BOON:
                 if afflictions.boons[affliction_name]:
-                    active_affliction = afflictions.boons[affliction_name]
+                    active_affliction_duration = afflictions.boons[affliction_name]
                 else:
-                    active_affliction = False
+                    active_affliction_duration = False
 
         # if affliction exists
-        if active_affliction:
-            logging.debug(f"{identity.name} already has {affliction_name}:{active_affliction.duration}...")
+        if active_affliction_duration:
+            logging.debug(f"{identity.name} already has {affliction_name}:{active_affliction_duration}...")
 
             # alter the duration of the current afflictions if the new one will last longer
-            if active_affliction.duration < duration:
-                active_affliction.duration = duration
+            if active_affliction_duration.duration < duration:
+                active_affliction_duration.duration = duration
 
-                log_string = f"-> Active duration {active_affliction.duration} is less than new duration " \
+                log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
                              f"{duration} so duration updated."
                 logging.debug(log_string)
             else:
                 # no action taken if duration already longer
-                log_string = f"-> Active duration {active_affliction.duration} is less than new duration {duration} " \
-                             f"so duration remains the same."
+                log_string = f"-> Active duration {active_affliction_duration.duration} is less than new duration " \
+                             f" {duration} so duration remains the same."
                 logging.debug(log_string)
 
         # no current afflictions of same type so apply new one
@@ -423,9 +425,7 @@ class SkillMethods:
 
         if data.category == AfflictionCategory.BANE:
             bane = {affliction_name: duration}
-            boon = {}
         elif data.category == AfflictionCategory.BOON:
-            bane = {}
             boon = {affliction_name: duration}
 
         self._manager.World.add_component(entity, Affliction(boon, bane))

@@ -6,7 +6,7 @@ import math
 import scipy.spatial
 from typing import TYPE_CHECKING
 from scripts.core.constants import TargetTags, TILE_SIZE
-from scripts.world.components import Position
+from scripts.world.components import Position, Blocking
 from scripts.world.game_map import GameMap
 from scripts.world.tile import Tile
 from scripts.core.library import library
@@ -120,7 +120,7 @@ class MapMethods:
             tile_y = coord[1] + start_tile_row
 
             # make sure it is in bounds
-            if self.is_tile_in_bounds(tile_x, tile_y):
+            if self._is_tile_in_bounds(tile_x, tile_y):
                 tiles.append(game_map.tiles[tile_x][tile_y])
 
         return tiles
@@ -182,7 +182,7 @@ class MapMethods:
         # direction_x = int(round(direction_x / distance))
         # direction_y = int(round(direction_y / distance))
         #
-        # tile_is_blocked = self._manager.Map.is_tile_blocking_movement(start_entity.x + direction_x,
+        # tile_is_blocked = self._manager.Map._is_tile_blocking_movement(start_entity.x + direction_x,
         #                                                               start_entity.y + direction_y)
         #
         # if not (tile_is_blocked or self.get_blocking_entity(start_entity.x + direction_x,
@@ -279,7 +279,7 @@ class MapMethods:
 
     ############# CHECKS ############
 
-    def is_tile_blocking_sight(self, tile_x, tile_y):
+    def _is_tile_blocking_sight(self, tile_x: int, tile_y: int) -> bool:
         """
         Check if a tile is blocking sight
 
@@ -290,14 +290,21 @@ class MapMethods:
         Returns:
             bool:
         """
-        game_map = self.get_game_map()
+        tile = self.get_tile((tile_x, tile_y))
 
-        if 0 <= tile_x < game_map.width and 0 <= tile_y < game_map.height:
-            return game_map.tiles[tile_x][tile_y].blocks_sight
-        else:
+        # Does the tile block movement?
+        if tile.blocks_sight:
             return True
 
-    def is_tile_visible_to_player(self, tile_x, tile_y):
+        # Any entities that block movement?
+        for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
+            if position.x == tile.x and position.y == tile.y and blocking.blocks_sight:
+                return True
+
+        # We found nothing blocking the tile
+        return False
+
+    def _is_tile_visible_to_player(self, tile_x: int, tile_y: int) -> bool:
         """
         Check if the specified tile is visible to the player
 
@@ -308,14 +315,10 @@ class MapMethods:
         Returns:
             bool:
         """
-        game_map = self.get_game_map()
+        tile = self.get_tile((tile_x, tile_y))
+        return tile.is_visible
 
-        if 0 <= tile_x < game_map.width and 0 <= tile_y < game_map.height:
-            return game_map.tiles[tile_x][tile_y].is_visible
-        else:
-            return False
-
-    def is_tile_in_bounds(self, tile_x, tile_y):
+    def _is_tile_in_bounds(self, tile_x: int, tile_y: int) -> bool:
         """
         Check if specified tile is in the map.
 
@@ -333,7 +336,7 @@ class MapMethods:
         else:
             return False
 
-    def is_tile_blocking_movement(self, tile_x, tile_y):
+    def _is_tile_blocking_movement(self, tile_x: int, tile_y: int) -> bool:
         """
         Check if the specified tile is blocking movement
         Args:
@@ -344,30 +347,88 @@ class MapMethods:
             bool:
 
         """
-        game_map = self.get_game_map()
+        tile = self.get_tile((tile_x, tile_y))
 
-        if 0 <= tile_x < game_map.width and 0 <= tile_y < game_map.height:
-            return game_map.tiles[tile_x][tile_y].blocks_movement
-        else:
+        # Does the tile block movement?
+        if tile.blocks_movement:
             return True
 
-    def tile_has_tag(self, tile: Tile, tag: TargetTags, active_entity: int = None):
+        # Any entities that block movement?
+        for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
+            if position.x == tile.x and position.y == tile.y and blocking.blocks_movement:
+                return True
+
+        # We found nothing blocking the tile
+        return False
+
+    def _tile_has_any_entity(self, tile_x: int, tile_y: int) -> bool:
+        """
+        Check if the specified tile  has an entity on it
+        Args:
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+
+        """
+        tile = self.get_tile((tile_x, tile_y))
+
+        # Any entities on the tile?
+        for ent, position in self._manager.World.get_component(Position):
+            if position.x == tile.x and position.y == tile.y:
+                return True
+
+        # We found no entities on the tile
+        return False
+
+    def _tile_has_other_entity(self, tile_x: int, tile_y: int, entity: int) -> bool:
+        """
+        Check if the specified tile  has an entity on it
+        Args:
+            entity :
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+
+        """
+        tile = self.get_tile((tile_x, tile_y))
+
+        # ensure active entity is the same as the targeted one
+        for other_entity, position in self._manager.World.get_components(Position):
+            if position.x == tile.x and position.y == tile.y:
+                if entity != other_entity:
+                    return True
+
+        # no matching entity found
+        return False
+
+    def tile_has_tag(self, tile: Tile, tag: TargetTags, active_entity: int = None) -> bool:
         """
         Check if a given tag applies to the tile
 
         Args:
             tile ():
-            tag (TargetTags): tag to check
-            active_entity (int): entity using a skill
+            tag (): tag to check
+            active_entity (): entity using a skill
 
         Returns:
             bool: True if tag applies.
         """
-
         if tag == TargetTags.OPEN_SPACE:
-            return not tile.blocks_movement
+            # If in bounds check if anything is blocking
+            if self._is_tile_in_bounds(tile.x, tile.y):
+                return not self._is_tile_blocking_movement(tile.x, tile.y)
+            else:
+                return False
         elif tag == TargetTags.BLOCKED_SPACE:
-            return tile.blocks_movement
+            # If in bounds check if anything is blocking
+            if self._is_tile_in_bounds(tile.x, tile.y):
+                return self._is_tile_blocking_movement(tile.x, tile.y)
+            else:
+                return True
         elif tag == TargetTags.SELF:
             # ensure active entity is the same as the targeted one
             for entity, position in self._manager.World.get_components(Position):
@@ -378,28 +439,25 @@ class MapMethods:
             # no matching entity found
             return False
         elif tag == TargetTags.OTHER_ENTITY:
-            # ensure active entity is NOT the same as the targeted one
-            for entity, position in self._manager.World.get_component(Position):
-                if position.x == tile.x and position.y == tile.y:
-                    if active_entity != entity:
-                        return True
-            # no different entity found
-            return False
+            self._tile_has_other_entity(tile.x, tile.y, active_entity)
         elif tag == TargetTags.NO_ENTITY:
-            return not tile.has_entity
+            return not self._tile_has_any_entity(tile.x, tile.y)
         elif tag == TargetTags.ANY:
             return True
+        elif tag == TargetTags.IS_VISIBLE:
+            return self._is_tile_visible_to_player(tile.x, tile.y)
         else:
-            return False  # catch all
+            # catch all
+            return False
 
-    def tile_has_tags(self, target_tile: Tile, tags: List[TargetTags], active_entity: int = None):
+    def tile_has_tags(self, tile: Tile, tags: List[TargetTags], active_entity: int = None) -> bool:
         """
         Check a tile has all required tags
 
         Args:
-            target_tile(Tile):
-            tags(List):
-            active_entity(int):
+            tile():
+            tags():
+            active_entity():
 
         Returns:
             bool: True if tile has all tags
@@ -408,7 +466,7 @@ class MapMethods:
 
         # assess all tags
         for tag in tags:
-            tags_checked[tag.name] = self.tile_has_tag(target_tile, tag, active_entity)
+            tags_checked[tag.name] = self.tile_has_tag(tile, tag, active_entity)
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):

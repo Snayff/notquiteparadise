@@ -1,8 +1,50 @@
 {
+    "basic_attack": {
+        "name": "Basic Attack",
+        "description": "A simple attack.",
+        "icon": "placeholder/icon_00.png",
+        "resource_type": "stamina",
+        "resource_cost": 0,
+        "time_cost": 20,
+        "cooldown": 1,
+        "target_directions": [
+            "down",
+            "down_left",
+            "down_right",
+            "left",
+            "right",
+            "up",
+            "up_left",
+            "up_right"
+        ],
+        "range": 1,
+        "terrain_collision": "fizzle",
+        "travel_type": "projectile",
+        "expiry_type": "fizzle",
+        "required_tags": [
+            "other_entity"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "effects": [
+            {
+                "effect_type": "damage",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "damage": 10,
+                "mod_stat": "clout",
+                "mod_amount": 0.1,
+                "damage_type": "mundane",
+                "accuracy": 0,
+                "stat_to_target": "bustle"
+            }
+        ]
+    },
     "flail": {
         "name": "Flail",
         "description": "Fungechists aren`t known for their physical prowess but you haven't got much choice.",
-        "icon": "placeholder/icon_00.png",
+        "icon": "placeholder/icon_01.png",
         "resource_type": "stamina",
         "resource_cost": 10,
         "time_cost": 20,

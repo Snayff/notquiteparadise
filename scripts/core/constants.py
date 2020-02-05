@@ -63,7 +63,6 @@ class GameEventTypes(Enum):
     CHANGE_GAME_STATE = auto()  # move from one game state to another
     END_ROUND = auto()  # end of round
 
-
     def __eq__(self, other):
         if other.__class__ is self.__class__:
             return self.name == other.name and self.value == other.value
@@ -142,6 +141,7 @@ class TargetTags(Enum):
     ANY = auto()
     OPEN_SPACE = auto()
     BLOCKED_SPACE = auto()
+    IS_VISIBLE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

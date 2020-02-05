@@ -259,6 +259,7 @@ class EntityMethods:
         return value
 
     ############## ENTITY QUERY  ################
+
     def has_component(self, entity, component):
         """
         Confirm if an entity has a component
@@ -378,7 +379,7 @@ class EntityMethods:
         self._manager.World.add_component(entity, Resources(stats.max_hp, stats.max_stamina))
 
         # get skills from characteristics
-        skills = []
+        skills = ["basic attack"]  # N.B. All actors start with basic attack
         race_data = library.get_race_data(race_name)
         if race_data.skills != ["none"]:
             skills += race_data.skills

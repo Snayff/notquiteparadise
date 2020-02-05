@@ -25,71 +25,8 @@ class Tile:
         self.y = y
         self.sprite = sprite
         self.is_visible = False
-        self._blocks_sight = blocks_sight
-        self._blocks_movement = blocks_movement
-
-    @property
-    def has_entity(self):
-        """
-        Check if the tag is applicable
-
-        Returns:
-            bool: True if tag is applicable
-        """
-        # TODO - moving this import to the top creates a circular import. Resolve it.
-        from scripts.managers.world_manager import world
-
-        entities = world.Entity.get_entities(Position)
-        for entity in entities:
-            pos = world.Entity.get_component(entity, Position)
-            if pos.x == self.x and pos.y == self.y:
-                return True
-
-        return False
-
-    @property
-    def blocks_movement(self):
-        """
-        If anything on tile blocks ability to move
-
-        Returns:
-            bool: True if movement is blocked.
-        """
-        if self._blocks_movement:
-            return True
-
-        # TODO - moving this import to the top creates a circular import. Resolve it.
-        from scripts.managers.world_manager import world
-        entities = world.Entity.get_entities(Position, Blocking)
-        for entity in entities:
-            pos = world.Entity.get_component(entity, Position)
-            blocking = world.Entity.get_component(entity, Blocking)
-            if pos.x == self.x and pos.y == self.y and blocking.blocks_movement:
-                return True
-
-        return False
-
-    @property
-    def blocks_sight(self):
-        """
-        If anything on tile blocks ability to see
-
-        Returns:
-            bool: True if sight is blocked.
-        """
-        if self._blocks_sight:
-            return True
-
-        # TODO - moving this import to the top creates a circular import. Resolve it.
-        from scripts.managers.world_manager import world
-        entities = world.Entity.get_entities(Position, Blocking)
-        for entity in entities:
-            pos = world.Entity.get_component(entity, Position)
-            blocking = world.Entity.get_component(entity, Blocking)
-            if pos.x == self.x and pos.y == self.y and blocking.blocks_sight:
-                return True
-
-        return False
+        self.blocks_sight = blocks_sight
+        self.blocks_movement = blocks_movement
 
 
 
