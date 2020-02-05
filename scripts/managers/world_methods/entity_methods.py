@@ -258,7 +258,7 @@ class EntityMethods:
 
         return value
 
-    ############## ENTITY QUERY  ################
+    ############## QUERIES  ################
 
     def has_component(self, entity, component):
         """

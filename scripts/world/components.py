@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import pygame
-    from typing import TYPE_CHECKING, List
+    from typing import List, Dict
 
 ##########################################################
 # Components are to hold data that is subject to change.

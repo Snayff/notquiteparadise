@@ -59,6 +59,8 @@ class EntityHandler(Subscriber):
         entity = event.entity
         old_x, old_y = event.start_pos[0], event.start_pos[1]
 
+        # FIXME - skill fizzling at end of range instead of when nothing hit at end of range
+
         for step in range(0, distance):
             target_x = old_x + dir_x
             target_y = old_y + dir_y

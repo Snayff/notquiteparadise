@@ -277,7 +277,69 @@ class MapMethods:
         # tcod.path_delete(my_path)
         # return direction_x, direction_y
 
-    ############# CHECKS ############
+    ############# QUERIES ############
+
+    def tile_has_tag(self, tile: Tile, tag: TargetTags, active_entity: int = None) -> bool:
+        """
+        Check if a given tag applies to the tile
+
+        Args:
+            tile ():
+            tag (): tag to check
+            active_entity (): entity using a skill
+
+        Returns:
+            bool: True if tag applies.
+        """
+        if tag == TargetTags.OPEN_SPACE:
+            # If in bounds check if anything is blocking
+            if self._is_tile_in_bounds(tile.x, tile.y):
+                return not self._is_tile_blocking_movement(tile.x, tile.y)
+            else:
+                return False
+        elif tag == TargetTags.BLOCKED_SPACE:
+            # If in bounds check if anything is blocking
+            if self._is_tile_in_bounds(tile.x, tile.y):
+                return self._is_tile_blocking_movement(tile.x, tile.y)
+            else:
+                return True
+        elif tag == TargetTags.SELF:
+            return self._tile_has_entity(tile.x, tile.y, active_entity)
+        elif tag == TargetTags.OTHER_ENTITY:
+            return self._tile_has_other_entity(tile.x, tile.y, active_entity)
+        elif tag == TargetTags.NO_ENTITY:
+            return not self._tile_has_any_entity(tile.x, tile.y)
+        elif tag == TargetTags.ANY:
+            return True
+        elif tag == TargetTags.IS_VISIBLE:
+            return self._is_tile_visible_to_player(tile.x, tile.y)
+        else:
+            # catch all
+            return False
+
+    def tile_has_tags(self, tile: Tile, tags: List[TargetTags], active_entity: int = None) -> bool:
+        """
+        Check a tile has all required tags
+
+        Args:
+            tile():
+            tags():
+            active_entity():
+
+        Returns:
+            bool: True if tile has all tags
+        """
+        tags_checked = {}
+
+        # assess all tags
+        for tag in tags:
+            tags_checked[tag.name] = self.tile_has_tag(tile, tag, active_entity)
+
+        # if all tags came back true return true
+        if all(value for value in tags_checked.values()):
+            return True
+        else:
+            return False
 
     def _is_tile_blocking_sight(self, tile_x: int, tile_y: int) -> bool:
         """
@@ -382,11 +444,11 @@ class MapMethods:
         # We found no entities on the tile
         return False
 
-    def _tile_has_other_entity(self, tile_x: int, tile_y: int, entity: int) -> bool:
+    def _tile_has_other_entity(self, tile_x: int, tile_y: int, active_entity: int) -> bool:
         """
-        Check if the specified tile  has an entity on it
+        Check if the specified tile  has an entity that isnt the active entity on it
         Args:
-            entity :
+            active_entity :
             tile_x:
             tile_y:
 
@@ -397,79 +459,35 @@ class MapMethods:
         tile = self.get_tile((tile_x, tile_y))
 
         # ensure active entity is the same as the targeted one
-        for other_entity, position in self._manager.World.get_components(Position):
+        for entity, position in self._manager.World.get_component(Position):
             if position.x == tile.x and position.y == tile.y:
-                if entity != other_entity:
+                if active_entity != entity:
+                    return True
+
+        # no other entity found
+        return False
+
+    def _tile_has_entity(self, tile_x: int, tile_y: int, active_entity: int) -> bool:
+        """
+        Check if the specified tile  has the active entity on it
+        Args:
+            active_entity :
+            tile_x:
+            tile_y:
+
+        Returns:
+            bool:
+
+        """
+        tile = self.get_tile((tile_x, tile_y))
+
+        # ensure active entity is the same as the targeted one
+        for entity, position in self._manager.World.get_component(Position):
+            if position.x == tile.x and position.y == tile.y:
+                if active_entity == entity:
                     return True
 
         # no matching entity found
         return False
 
-    def tile_has_tag(self, tile: Tile, tag: TargetTags, active_entity: int = None) -> bool:
-        """
-        Check if a given tag applies to the tile
 
-        Args:
-            tile ():
-            tag (): tag to check
-            active_entity (): entity using a skill
-
-        Returns:
-            bool: True if tag applies.
-        """
-        if tag == TargetTags.OPEN_SPACE:
-            # If in bounds check if anything is blocking
-            if self._is_tile_in_bounds(tile.x, tile.y):
-                return not self._is_tile_blocking_movement(tile.x, tile.y)
-            else:
-                return False
-        elif tag == TargetTags.BLOCKED_SPACE:
-            # If in bounds check if anything is blocking
-            if self._is_tile_in_bounds(tile.x, tile.y):
-                return self._is_tile_blocking_movement(tile.x, tile.y)
-            else:
-                return True
-        elif tag == TargetTags.SELF:
-            # ensure active entity is the same as the targeted one
-            for entity, position in self._manager.World.get_components(Position):
-                if position.x == tile.x and position.y == tile.y:
-                    if active_entity == entity:
-                        return True
-
-            # no matching entity found
-            return False
-        elif tag == TargetTags.OTHER_ENTITY:
-            self._tile_has_other_entity(tile.x, tile.y, active_entity)
-        elif tag == TargetTags.NO_ENTITY:
-            return not self._tile_has_any_entity(tile.x, tile.y)
-        elif tag == TargetTags.ANY:
-            return True
-        elif tag == TargetTags.IS_VISIBLE:
-            return self._is_tile_visible_to_player(tile.x, tile.y)
-        else:
-            # catch all
-            return False
-
-    def tile_has_tags(self, tile: Tile, tags: List[TargetTags], active_entity: int = None) -> bool:
-        """
-        Check a tile has all required tags
-
-        Args:
-            tile():
-            tags():
-            active_entity():
-
-        Returns:
-            bool: True if tile has all tags
-        """
-        tags_checked = {}
-
-        # assess all tags
-        for tag in tags:
-            tags_checked[tag.name] = self.tile_has_tag(tile, tag, active_entity)
-
-        # if all tags came back true return true
-        if all(value for value in tags_checked.values()):
-            return True
-        else:
-            return False

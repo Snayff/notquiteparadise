@@ -389,7 +389,7 @@ class SkillMethods:
         boon = {}
         bane = {}
 
-        # check if entity already has the afflictions
+        # check if entity already has the afflictions component
         if afflictions:
             if data.category == AfflictionCategory.BANE:
                 if afflictions.banes[affliction_name]:
@@ -407,15 +407,18 @@ class SkillMethods:
             logging.debug(f"{identity.name} already has {affliction_name}:{active_affliction_duration}...")
 
             # alter the duration of the current afflictions if the new one will last longer
-            if active_affliction_duration.duration < duration:
-                active_affliction_duration.duration = duration
+            if active_affliction_duration < duration:
+                if data.category == AfflictionCategory.BANE:
+                    afflictions.banes[affliction_name] = duration
+                elif data.category == AfflictionCategory.BOON:
+                    afflictions.boons[affliction_name] = duration
 
                 log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
                              f"{duration} so duration updated."
                 logging.debug(log_string)
             else:
                 # no action taken if duration already longer
-                log_string = f"-> Active duration {active_affliction_duration.duration} is less than new duration " \
+                log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
                              f" {duration} so duration remains the same."
                 logging.debug(log_string)
 
