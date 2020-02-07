@@ -1,16 +1,15 @@
+from __future__ import annotations
 
 import logging
-import tcod
-
-from scripts.managers.world_methods.affliction_methods import AfflictionMethods
+import esper
+from typing import TYPE_CHECKING
 from scripts.managers.world_methods.entity_methods import EntityMethods
 from scripts.managers.world_methods.fov_methods import FOVMethods
-from scripts.managers.world_methods.god_methods import GodMethods
 from scripts.managers.world_methods.map_methods import MapMethods
 from scripts.managers.world_methods.skill_methods import SkillMethods
 
-from scripts.world.entity import Entity
-from scripts.world.game_map import GameMap
+if TYPE_CHECKING:
+    pass
 
 
 class WorldManager:
@@ -19,19 +18,11 @@ class WorldManager:
     """
     def __init__(self):
 
+        self.World = esper.World()
         self.Entity = EntityMethods(self)
         self.Skill = SkillMethods(self)
-        self.Affliction = AfflictionMethods(self)
         self.Map = MapMethods(self)
         self.FOV = FOVMethods(self)
-        self.God = GodMethods(self)
-
-        # TODO -  move into the relevant method groups
-        self.game_map = None  # type: GameMap
-        self.player = None  # type: Entity
-        self.entities = []
-        self.gods = []
-        self.player_fov_map = None  # type: tcod.map.Map
 
         logging.info(f"WorldManager initialised.")
 

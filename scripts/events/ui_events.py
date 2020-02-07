@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from scripts.core.constants import UIEventTypes, EventTopics
-from scripts.event_handlers.pub_sub_hub import Event
+from scripts.core.event_hub import Event
 
 if TYPE_CHECKING:
     from scripts.core.constants import MessageTypes

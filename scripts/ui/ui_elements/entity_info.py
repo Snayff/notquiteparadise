@@ -5,6 +5,8 @@ import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
+from scripts.managers.world_manager import world
+from scripts.world.components import Aesthetic, Identity, Resources
 from scripts.world.entity import Entity
 
 
@@ -93,7 +95,8 @@ class EntityInfo(UIWindow):
         image_height = self.entity_image_height
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
-        image = pygame.transform.scale(self.selected_entity.icon, (image_width, image_height))
+        aesthetic = world.Entity.get_component(self.selected_entity, Aesthetic)
+        image = pygame.transform.scale(aesthetic.icon, (image_width, image_height))
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
                                container=self.get_container(), object_id="#entity_image")
@@ -107,9 +110,11 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         entity = self.selected_entity
-        text = f"{entity.name.capitalize()}" + "<br>"
-        text += f"Current Health: {entity.combatant.hp}" + "<br>"
-        text += f"Current Stamina: {entity.combatant.stamina}" + "<br>"
+        identity = world.Entity.get_component(self.selected_entity, Identity)
+        resources = world.Entity.get_component(self.selected_entity, Resources)
+        text = f"{identity.name.capitalize()}" + "<br>"
+        text += f"Current Health: {resources.health}" + "<br>"
+        text += f"Current Stamina: {resources.stamina}" + "<br>"
 
         x = self.indent
         y = (self.gap_between_sections * 2) + self.indent + self.entity_image_height
@@ -130,7 +135,7 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
-        stats = self.selected_entity.combatant.primary_stats
+        stats = world.Entity.get_stats(self.selected_entity)
 
         for stat in PrimaryStatTypes:
             try:
@@ -162,7 +167,7 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
-        stats = self.selected_entity.combatant.secondary_stats
+        stats = world.Entity.get_stats(self.selected_entity)
 
         for stat in SecondaryStatTypes:
             try:

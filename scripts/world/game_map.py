@@ -1,6 +1,8 @@
+from typing import List
 
+import pygame
 
-from scripts.core.constants import TargetTags
+from scripts.core.constants import TILE_SIZE
 from scripts.world.tile import Tile
 
 
@@ -9,22 +11,25 @@ class GameMap:
     object to hold tile and fov
     """
     def __init__(self, width, height):
-        self.tiles = []
+        self.tiles = []  # type: List[List[Tile]]
         self.width = width
         self.height = height
 
-        # populate map with floor terrain
+        floor_sprite = pygame.image.load("assets/world/placeholder/_test.png").convert_alpha()
+        floor_sprite = pygame.transform.scale(floor_sprite, (TILE_SIZE, TILE_SIZE))
+        wall_sprite = pygame.image.load("assets/world/placeholder/_testWall.png").convert_alpha()
+        wall_sprite = pygame.transform.scale(wall_sprite, (TILE_SIZE, TILE_SIZE))
+
+        # populate map with tiles
         for x in range(self.width):
             # give each new row an empty list
             self.tiles.append([])
             for y in range(self.height):
                 # add to the column
-                self.tiles[x].append(Tile(x, y, terrain=TargetTags.FLOOR))
+                self.tiles[x].append(Tile(x, y, floor_sprite))
 
-        # TODO remove - only for test
-        if self.width > 10 and self.height > 10:
-            from scripts.managers.world_manager import world
-            world.Map.set_terrain_on_tile(self.tiles[0][5], TargetTags.WALL)
-            world.Map.set_terrain_on_tile(self.tiles[10][2], TargetTags.WALL)
-            world.Map.add_aspect_to_tile(self.tiles[0][2], "bog")
-
+        # create some walls for testing
+        wall1 = self.tiles[3][4]
+        wall1._blocks_sight = True
+        wall1._blocks_movement = True
+        wall1.sprite = wall_sprite

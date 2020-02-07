@@ -1,20 +1,25 @@
+from __future__ import annotations
 
 import json
 import logging
-
-from scripts.components.characteristic_dataclass import CharacteristicData
+import os
+from typing import TYPE_CHECKING
+from scripts.world.data_classes.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
-    AfflictionCategory, AfflictionTriggers, DamageTypes, StatTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
+    AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
     Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
-from scripts.entity.stat_dataclasses import PrimaryStatData, SecondaryStatData, StatData
-from scripts.skills.affliction_dataclass import AfflictionData
-from scripts.skills.skill_dataclass import SkillData
-from scripts.skills.effects.effect_dataclass import EffectData
-from scripts.world.aspect_dataclass import AspectData
-from scripts.world.attitude_dataclass import AttitudeData
-from scripts.world.god_dataclass import GodData
-from scripts.world.interaction_dataclass import InteractionData
-from scripts.world.intervention_dataclass import InterventionData
+from scripts.world.data_classes.stat_dataclass import StatData, PrimaryStatData, SecondaryStatData
+from scripts.skills.affliction import AfflictionData
+from scripts.skills.skill import SkillData
+from scripts.skills.effect import EffectData
+from scripts.world.data_classes.aspect_dataclass import AspectData
+from scripts.world.data_classes.attitude_dataclass import AttitudeData
+from scripts.world.data_classes.god_dataclass import GodData
+from scripts.world.data_classes.interaction_dataclass import InteractionData
+from scripts.world.data_classes.intervention_dataclass import InterventionData
+
+if TYPE_CHECKING:
+    pass
 
 
 class LibraryOfAlexandria:
@@ -23,20 +28,73 @@ class LibraryOfAlexandria:
     """
 
     def __init__(self):
-        # TODO - add conversion to data class for remaining dicts
-        self.homelands = {}  # conversion done
-        self.races = {}  # conversion done
-        self.savvys = {}  # conversion done
-        self.afflictions = {}  # conversion done
-        self.aspects = {}  # conversion done
+        self.homelands = {}
+        self.races = {}  
+        self.savvys = {}  
+        self.afflictions = {}  
+        self.aspects = {}  
         self.terrains = {}
-        self.actor_template = {}
-        self.stats = {}  # conversion done
-        self.gods = {}  # conversion done
+        self.stats = {}  
+        self.gods = {}
+        self.skills = {}
 
         self.refresh_library_data()
 
         logging.info(f"Data Library initialised.")
+
+    ####################### LIBRARY MANAGEMENT ####################
+    def refresh_library_data(self):
+        """
+        Load json data into the library, convert strings to enums and dicts to data classes.
+        """
+        self.load_data_into_library()
+        self.convert_external_strings_to_internal_values()
+        self.convert_afflictions_to_data_classes()
+        self.convert_aspects_to_data_classes()
+        self.convert_stats_to_data_classes()
+        self.convert_gods_to_data_classes()
+        self.convert_homelands_to_data_classes()
+        self.convert_savvys_to_data_classes()
+        self.convert_races_to_data_classes()
+        self.convert_skills_to_data_classes()
+
+
+        logging.info(f"Library refreshed.")
+
+    def load_data_into_library(self):
+        """
+        Load data from all external jsons to this central data library
+        """
+        # N.B. this is set in Sphinx config when Sphinx is running
+        if "GENERATING_SPHINX_DOCS" not in os.environ:
+            self.homelands = self.load_homeland_json()
+            self.races = self.load_race_json()
+            self.savvys = self.load_savvy_json()
+            self.afflictions = self.load_affliction_json()
+            self.aspects = self.load_aspect_json()
+            self.terrains = self.load_terrain_json()
+            self.stats = self.load_base_stat_json()
+            self.gods = self.load_gods_json()
+            self.skills = self.load_skills_json()
+
+        logging.info(f"Data loaded into the Library.")
+
+    ####################### UTILITY ##############################
+
+    @staticmethod
+    def cleanse_name(name: str):
+        """
+        Force name to lowercase, replace underscores with spaces, turn double space to single
+        Args:
+            name ():
+
+        Returns:
+
+        """
+        cleansed_name = name.lower()
+        cleansed_name = cleansed_name.replace("_", " ")
+        cleansed_name = cleansed_name.replace("  ", " ")
+        return cleansed_name
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """
@@ -68,41 +126,6 @@ class LibraryOfAlexandria:
             for element in obj:
                 self.recursive_replace(element, key, value_to_replace, new_value)
 
-    def refresh_library_data(self):
-        """
-        Load json data into the library, convert strings to enums and dicts to data classes.
-        """
-        self.load_data_into_library()
-        self.convert_external_strings_to_internal_values()
-        self.convert_afflictions_to_data_classes()
-        self.convert_aspects_to_data_classes()
-        self.convert_stats_to_data_classes()
-        self.convert_gods_to_data_classes()
-        self.convert_homelands_to_data_classes()
-        self.convert_savvys_to_data_classes()
-        self.convert_races_to_data_classes()
-
-        logging.info(f"Library refreshed.")
-
-    def load_data_into_library(self):
-        """
-        Load data from all external jsons to this central data library
-        """
-        import os
-        # N.B. this is set in Sphinx config when Sphinx is running
-        if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.homelands = self.load_values_from_homeland_json()
-            self.races = self.load_values_from_race_json()
-            self.savvys = self.load_values_from_savvy_json()
-            self.afflictions = self.load_values_from_affliction_json()
-            self.aspects = self.load_values_from_aspect_json()
-            self.terrains = self.load_values_from_terrain_json()
-            self.actor_template = self.load_values_from_actor_json()
-            self.stats = self.load_values_from_stat_json()
-            self.gods = self.load_values_from_gods_json()
-
-        logging.info(f"Data loaded into the Library.")
-
     ####################### CONVERT ##############################
 
     def convert_afflictions_to_data_classes(self):
@@ -128,6 +151,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the afflictions data to the data class
             affliction = AfflictionData(**new_affliction_dict)
+            affliction.name = self.cleanse_name(affliction.name)
             converted_afflictions[affliction.name] = affliction
 
         # delete all info from afflictions and replace with the converted data
@@ -165,6 +189,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             aspect = AspectData(**new_aspect_dict)
+            aspect.name = self.cleanse_name(aspect.name)
             converted_aspects[aspect.name] = aspect
 
         # delete all info from aspects and replace with the converted data
@@ -180,25 +205,11 @@ class LibraryOfAlexandria:
 
         # loop all races
         for race_name, race_data in all_race_data.items():
-            converted_skills = {}
+            converted_skills = []
 
             # loop skills and convert to data class
-            for index, skill_data in enumerate(race_data["skills"]):
-                converted_effects = {}
-
-                # loop effects
-                for index, effect_data in enumerate(skill_data["effects"]):
-                    # convert the effect data to the data class
-                    effect = EffectData(**effect_data)
-                    converted_effects[effect.effect_type.name] = effect
-
-                # set the temp dict to contain the converted effects
-                new_skill_dict = skill_data.copy()
-                new_skill_dict["effects"] = converted_effects
-
-                # unpack the temp dict and convert the data to the data class
-                skill = SkillData(**new_skill_dict)
-                converted_skills[skill.name] = skill
+            for index, skill_name in enumerate(race_data["skills"]):
+                converted_skills.append(self.cleanse_name(skill_name))
 
             # set the temp dict to contain the converted skill effects
             new_race_dict = race_data.copy()
@@ -206,6 +217,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             race = CharacteristicData(**new_race_dict)
+            race.name = self.cleanse_name(race.name)
             converted_races[race.name] = race
 
         # delete all info from aspects and replace with the converted data
@@ -221,25 +233,11 @@ class LibraryOfAlexandria:
 
         # loop all savvys
         for savvy_name, savvy_data in all_savvy_data.items():
-            converted_skills = {}
+            converted_skills = []
 
             # loop skills and convert to data class
-            for index, skill_data in enumerate(savvy_data["skills"]):
-                converted_effects = {}
-
-                # loop effects
-                for index, effect_data in enumerate(skill_data["effects"]):
-                    # convert the effect data to the data class
-                    effect = EffectData(**effect_data)
-                    converted_effects[effect.effect_type.name] = effect
-
-                # set the temp dict to contain the converted effects
-                new_skill_dict = skill_data.copy()
-                new_skill_dict["effects"] = converted_effects
-
-                # unpack the temp dict and convert the data to the data class
-                skill = SkillData(**new_skill_dict)
-                converted_skills[skill.name] = skill
+            for index, skill_name in enumerate(savvy_data["skills"]):
+                converted_skills.append(self.cleanse_name(skill_name))
 
             # set the temp dict to contain the converted skill effects
             new_savvy_dict = savvy_data.copy()
@@ -247,6 +245,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             savvy = CharacteristicData(**new_savvy_dict)
+            savvy.name = self.cleanse_name(savvy.name)
             converted_savvys[savvy.name] = savvy
 
         # delete all info from aspects and replace with the converted data
@@ -262,25 +261,11 @@ class LibraryOfAlexandria:
 
         # loop all homelands
         for homeland_name, homeland_data in all_homeland_data.items():
-            converted_skills = {}
+            converted_skills = []
 
             # loop skills and convert to data class
-            for index, skill_data in enumerate(homeland_data["skills"]):
-                converted_effects = {}
-
-                # loop effects
-                for index, effect_data in enumerate(skill_data["effects"]):
-                    # convert the effect data to the data class
-                    effect = EffectData(**effect_data)
-                    converted_effects[effect.effect_type.name] = effect
-
-                # set the temp dict to contain the converted effects
-                new_skill_dict = skill_data.copy()
-                new_skill_dict["effects"] = converted_effects
-
-                # unpack the temp dict and convert the data to the data class
-                skill = SkillData(**new_skill_dict)
-                converted_skills[skill.name] = skill
+            for index, skill_name in enumerate(homeland_data["skills"]):
+                converted_skills.append(self.cleanse_name(skill_name))
 
             # set the temp dict to contain the converted skill effects
             new_homeland_dict = homeland_data.copy()
@@ -288,6 +273,7 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             homeland = CharacteristicData(**new_homeland_dict)
+            homeland.name = self.cleanse_name(homeland.name)
             converted_homelands[homeland.name] = homeland
 
         # delete all info from aspects and replace with the converted data
@@ -302,10 +288,10 @@ class LibraryOfAlexandria:
         converted_primary_stats = {}
         converted_secondary_stats = {}
 
-        # loop all skill trees
+        # loop all stats types
         for stat_type_name, stat_type_data in all_stat_data.items():
 
-            # loop all skills in each skill tree
+            # loop all individual stats
             for stat_name, stat_data in stat_type_data.items():
 
                 # unpack the dict and convert the stat data to the data class
@@ -317,7 +303,7 @@ class LibraryOfAlexandria:
                     stat = SecondaryStatData(**stat_data)
                     converted_secondary_stats[stat.secondary_stat_type.name] = stat
 
-        # delete all info from skill and replace with the converted data
+        # delete all info from stat and replace with the converted data
         converted_data = StatData(primary=converted_primary_stats, secondary=converted_secondary_stats)
         self.stats = {}
         self.stats = converted_data
@@ -344,20 +330,9 @@ class LibraryOfAlexandria:
 
             # loop interventions and convert to data class
             for index, intervention_data in enumerate(god_data["interventions"]):
-                converted_effects = {}
 
-                # loop effects
-                for index, effect_data in enumerate(intervention_data["effects"]):
-                    # convert the skill effect data to the data class
-                    effect = EffectData(**effect_data)
-                    converted_effects[effect.effect_type.name] = effect
-
-                # set the temp dict to contain the converted effects
-                new_intervention_dict = intervention_data.copy()
-                new_intervention_dict["effects"] = converted_effects
-
-                # unpack the temp dict and convert the skill data to the data class
-                intervention = InterventionData(**new_intervention_dict)
+                # unpack the dict and convert the intervention data to the data class
+                intervention = InterventionData(**intervention_data)
                 converted_interventions[intervention.name] = intervention
 
             # set the temp dict to contain the converted skill effects
@@ -367,19 +342,50 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             god = GodData(**new_god_dict)
+            god.name = self.cleanse_name(god.name)
             converted_gods[god.name] = god
 
         # delete all info from aspects and replace with the converted data
         self.gods = {}
         self.gods = converted_gods
 
+    def convert_skills_to_data_classes(self):
+        """
+         Take homeland data from library and convert to data classes
+         """
+        all_skill_data = self.skills
+        converted_skills = {}
+
+        # loop all skills
+        for skill_name, skill_data in all_skill_data.items():
+            converted_effects = {}
+
+            # loop effects
+            for index, effect_data in enumerate(skill_data["effects"]):
+                # convert the effect data to the data class
+                effect = EffectData(**effect_data)
+                converted_effects[effect.effect_type.name] = effect
+
+            # set the temp dict to contain the converted effects
+            new_skill_dict = skill_data.copy()
+            new_skill_dict["effects"] = converted_effects
+
+            # unpack the temp dict and convert the data to the data class
+            skill = SkillData(**new_skill_dict)
+            skill.name = self.cleanse_name(skill.name)
+            converted_skills[skill.name] = skill
+
+        # delete all info from self and replace with the converted data
+        self.skills = {}
+        self.skills = converted_skills
+        
     def convert_external_strings_to_internal_values(self):
         """
         Where there are external values that are utilised internally convert them to the internal constant.
         """
         # Update shared values
         lists_to_convert = [self.aspects, self.afflictions, self.gods, self.savvys, self.races,
-            self.homelands]
+            self.homelands, self.skills]
         
         for current_list in lists_to_convert:
             # Effects:required_tags
@@ -410,11 +416,6 @@ class LibraryOfAlexandria:
                 self.recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
             for value in SecondaryStatTypes:
                 self.recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
-
-            # Effects:new_terrain
-            # TODO - plans to remove terrain from internal so dont update for all values
-            self.recursive_replace(current_list, "new_terrain", "floor", TargetTags.FLOOR)
-            self.recursive_replace(current_list, "new_terrain", "wall", TargetTags.WALL)
 
             # Skill:shape
             for value in SkillShapes:
@@ -468,40 +469,6 @@ class LibraryOfAlexandria:
         self.recursive_replace(self.aspects, "duration", "none", None)  # need to add this as duration can be none
 
     ####################### GET ##############################
-
-    def get_terrain_data(self, terrain_name):
-        """
-        Get data for a terrains from the central library
-
-        Args:
-            terrain_name (str):
-
-        Returns:
-            tuple: named tuple of values.
-        """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(terrain_name, self.terrains[terrain_name])
-        data = named_tuple(**self.terrains[terrain_name])
-
-        return data
-
-    def get_actor_template_data(self, actor_template_name):
-        """
-        Get data for a actor_templates from the central library
-
-        Args:
-            actor_template_name (str):
-
-        Returns:
-            tuple: named tuple of values.
-        """
-        # NOTE: I do not know how any of this works.  Let's live in hope that fact never cause a problem.
-        from collections import namedtuple
-        named_tuple = namedtuple(actor_template_name, self.actor_template[actor_template_name])
-        data = named_tuple(**self.actor_template[actor_template_name])
-
-        return data
 
     def get_aspect_data(self, aspect_name):
         """
@@ -609,35 +576,26 @@ class LibraryOfAlexandria:
         data = self.homelands[homeland_name]
         return data
 
-    def get_skill_data(self, skill_tree, skill_name):
+    def get_skill_data(self, skill_name):
         """
         Get data for a skill from the central library
 
         Args:
-            skill_tree (str):
             skill_name (str):
 
         Returns:
             SkillData: data for a specified skill.
         """
-
-        if skill_tree in self.homelands:
-            skill_data = self.homelands[skill_tree].skills[skill_name]
-        elif skill_tree in self.savvys:
-            skill_data = self.savvys[skill_tree].skills[skill_name]
-        elif skill_tree in self.races:
-            skill_data = self.races[skill_tree].skills[skill_name]
-        else:
-            skill_data = None
+        skill_data = self.skills[skill_name]
 
         return skill_data
 
-    def get_skill_effect_data(self, skill_tree, skill_name, effect_type):
+    def get_skill_effect_data(self, skill_name, effect_type):
         """
         Get data for a skill from the central library
 
         Args:
-            skill_tree(str):
+
             skill_name(str):
             effect_type(EffectTypes):
 
@@ -645,14 +603,8 @@ class LibraryOfAlexandria:
             EffectData: data for a specified skill effect.
         """
         try:
-            if skill_tree in self.homelands:
-                effect_data = self.homelands[skill_tree].skills[skill_name].effects[effect_type.name]
-            elif skill_tree in self.savvys:
-                effect_data = self.savvys[skill_tree].skills[skill_name].effects[effect_type.name]
-            elif skill_tree in self.races:
-                effect_data = self.races[skill_tree].skills[skill_name].effects[effect_type.name]
-            else:
-                effect_data = None
+            effect_data = self.skills[skill_name].effects[effect_type.name]
+
         except KeyError:
             effect_data = None
 
@@ -780,7 +732,7 @@ class LibraryOfAlexandria:
     ####################### LOAD ##############################
 
     @staticmethod
-    def load_values_from_affliction_json():
+    def load_affliction_json():
         """
 
         Returns:
@@ -792,7 +744,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_values_from_aspect_json():
+    def load_aspect_json():
         """
 
         Returns:
@@ -804,7 +756,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_values_from_terrain_json():
+    def load_terrain_json():
         """
 
         Returns:
@@ -816,7 +768,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_values_from_homeland_json():
+    def load_homeland_json():
         """
 
         Returns:
@@ -828,7 +780,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_values_from_savvy_json():
+    def load_savvy_json():
         """
 
         Returns:
@@ -840,7 +792,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_values_from_race_json():
+    def load_race_json():
         """
 
         Returns:
@@ -852,38 +804,37 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_values_from_actor_json():
+    def load_base_stat_json():
         """
 
         Returns:
 
         """
-
-        with open('data/game/entity/actor_templates.json') as file:
+        with open('data/game/entity/base_stats.json') as file:
             data = json.load(file)
 
         return data
 
     @staticmethod
-    def load_values_from_stat_json():
-        """
-
-        Returns:
-
-        """
-        with open('data/game/entity/stats.json') as file:
-            data = json.load(file)
-
-        return data
-
-    @staticmethod
-    def load_values_from_gods_json():
+    def load_gods_json():
         """
 
         Returns:
 
         """
         with open('data/game/world/gods.json') as file:
+            data = json.load(file)
+
+        return data
+    
+    @staticmethod
+    def load_skills_json():
+        """
+
+        Returns:
+
+        """
+        with open('data/game/skills/skills.json') as file:
             data = json.load(file)
 
         return data

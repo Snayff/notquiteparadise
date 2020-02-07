@@ -11,7 +11,7 @@ class ConfigMethods:
 
     def __init__(self, manager):
         from scripts.managers.input_manager import InputManager
-        self.manager = manager  # type: InputManager
+        self._manager = manager  # type: InputManager
 
         self.mode = None
 

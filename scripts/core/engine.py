@@ -1,4 +1,3 @@
-
 import cProfile
 import io
 import logging
@@ -14,7 +13,6 @@ from scripts.managers.game_manager import game
 from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
-
 # Project Wide to do list...
 # TODO - swap out nose for pytest
 # TODO - remember window position and resume at that place
@@ -23,22 +21,17 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - move the docstring annotations to the function line, then install mypy
+# TODO - install mypy
 # TODO - use seed for RNG
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
-# TODO - standardise use of xy and tile xy. xy for pixels, tile xy for grid
+# TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
 # TODO - convert interventions to skills, gods to entities
-# TODO - move skills to their own json and only hold skill names in the savvy, homeland etc.
 # TODO - add skill modifiers (blessings?)
-# TODO - ensure all skills in json have required fields
 # TODO - write tests / checking for json values
-# TODO - Message system;
-#  Change basic to message log
-#  Add a type to show small message above player
-#  Add another to show bug message on centre of screen.
 # TODO - could turn manager sit under game?
-
+# TODO - add piercing so projectile can damage and keep going
+# TODO - add projectiles, i.e. entity creation, movement and collision
 
 def main():
     """

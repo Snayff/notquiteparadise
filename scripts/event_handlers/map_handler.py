@@ -3,10 +3,10 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.core.constants import MapEventTypes, MessageTypes, GameEventTypes
-from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.core.library import library
-from scripts.core.event_hub import publisher
+from scripts.core.event_hub import publisher, Subscriber
 from scripts.managers.world_manager import world
+from scripts.world.components import Position
 
 if TYPE_CHECKING:
     from scripts.events.game_events import EndTurnEvent, EndRoundEvent
@@ -86,10 +86,11 @@ class MapHandler(Subscriber):
             event(EndTurnEvent):
         """
         entity = event.entity
-        tile = world.Map.get_tile((entity.x, entity.y))
+        position = world.Entity.get_component(entity, Position)
+        tile = world.Map.get_tile((position.x, position.y))
 
         # trigger aspects
-        world.Map.trigger_aspects_on_tile(tile)
+        #world.Map.trigger_aspects_on_tile(tile)
 
     @staticmethod
     def process_end_of_round_updates():
@@ -99,10 +100,10 @@ class MapHandler(Subscriber):
         game_map = world.Map.get_game_map()
 
         # TODO - set to only apply within X range of player
-        for row in game_map.tiles:
-            for tile in row:
-                if tile.aspects:
-
-                    # update durations
-                    world.Map.reduce_aspect_durations_on_tile(tile)
-                    world.Map.cleanse_expired_aspects(tile)
+        #  TODO - update to EC approach
+        # for row in game_map.tiles:
+        #     for tile in row:
+        #         if tile.aspects:
+        #             # update durations
+        #             world.Map.reduce_aspect_durations_on_tile(tile)
+        #             world.Map.cleanse_expired_aspects(tile)

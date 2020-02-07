@@ -1,11 +1,10 @@
 import logging
 import time
+import pygame
 
-from scripts.core.constants import EventTopics, GameStates
-from scripts.event_handlers.affliction_handler import AfflictionHandler
+from scripts.core.constants import EventTopics, GameStates, TILE_SIZE
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
-from scripts.events.entity_events import LearnEvent
 from scripts.event_handlers.entity_handler import EntityHandler
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.event_handlers.game_handler import GameHandler
@@ -53,34 +52,28 @@ def initialise_game():
     """
     Init the game`s required info
     """
-    # TODO - move to events
+    # TODO - move to event handlers
 
     map_width = 50
     map_height = 30
     world.Map.create_game_map(map_width, map_height)
+
+    # init the player
     world.FOV.create_player_fov_map(map_width, map_height)
+    player = world.Entity.create_actor("player", "a desc", 1, 2, "herraculen", "aristo pirate",
+                                       "fungechist", True)
 
-    # TODO - remove when map generation is in
-    world.Entity.create_actor_entity(0, 0, "player", "player", True)
-    player = world.Entity.get_player()
-    world.FOV.recompute_player_fov(player.x, player.y, player.sight_range)
+    turn.turn_holder = player
 
-    world.Entity.create_actor_entity(0, 3, "goblinn_hand", "steve")
-    world.Entity.create_actor_entity(1, 4, "goblinn_hand", "bob")
-    world.Entity.create_actor_entity(2, 3, "goblinn_hand", "estaban")
-    world.God.create_god("the small gods")
+    # create an enemy
+    # TODO - remove when enemy gen is in
+    enemy = world.Entity.create_actor("steve", "steve's desc", 1, 4, "goblinn", "bog refugee",
+                                      "cleromancer")
 
-    # TODO - remove when skill learning is in
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "basic attack"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "throw dice"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "bring down the mountain"))
-    # publisher.publish(LearnEvent(world.player, "cleromancer", "burn the deck"))
-    publisher.publish(LearnEvent(world.player, "Fungechist", "Flail"))
-    publisher.publish(LearnEvent(world.player, "Fungechist", "Eye-watering Mistake"))
-    publisher.publish(LearnEvent(world.player, "Fungechist", "Fractious Fungi"))
+    # create a god
+    god = world.Entity.create_god("the small gods")
 
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
-    turn.turn_holder = world.player
 
 
 def initialise_event_handlers():
@@ -98,10 +91,6 @@ def initialise_event_handlers():
     map_handler.subscribe(EventTopics.MAP)
     map_handler.subscribe(EventTopics.GAME)
 
-    affliction_handler = AfflictionHandler(event_hub)
-    affliction_handler.subscribe(EventTopics.ENTITY)
-    affliction_handler.subscribe(EventTopics.GAME)
-
     god_handler = GodHandler(event_hub)
     god_handler.subscribe(EventTopics.ENTITY)
 
@@ -109,5 +98,3 @@ def initialise_event_handlers():
     ui_handler.subscribe(EventTopics.ENTITY)
     ui_handler.subscribe(EventTopics.GAME)
     ui_handler.subscribe(EventTopics.UI)
-
-

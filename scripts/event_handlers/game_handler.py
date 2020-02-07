@@ -3,11 +3,10 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.core.constants import GameEventTypes, GameStates
-from scripts.core.event_hub import publisher
+from scripts.core.event_hub import publisher, Subscriber
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
-from scripts.event_handlers.pub_sub_hub import Subscriber
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.game_events import EndTurnEvent
 
@@ -58,11 +57,11 @@ class GameHandler(Subscriber):
         if new_game_state == GameStates.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
-            publisher.publish(EndTurnEvent(world.player, 1))  # trigger new turn actions (entity queue) fresh
+            publisher.publish(EndTurnEvent(world.Entity.get_player(), 1))  # trigger new turn actions (entity queue)
 
         elif new_game_state == GameStates.NEW_TURN:
             # if turn holder is the player then update to player turn
-            if turn.turn_holder == world.player:
+            if turn.turn_holder == world.Entity.get_player():
                 publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
             # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
             else:

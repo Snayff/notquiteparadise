@@ -1,17 +1,17 @@
-
 from enum import Enum, auto
 
-VERSION = "0.86.0"
+VERSION = "0.91.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 64
+ENTITY_BLOCKS_SIGHT = False
 
 
 class VisualInfo:
     """
     Constant info about visual aspects such as resolution and frame rate
     """
-    # TODO -  should this be in game manager?
+    # TODO -  should this be in game manager? or UI?
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
     GAME_FPS = 60
@@ -62,7 +62,6 @@ class GameEventTypes(Enum):
     END_TURN = auto()  # end of turn
     CHANGE_GAME_STATE = auto()  # move from one game state to another
     END_ROUND = auto()  # end of round
-
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -140,10 +139,9 @@ class TargetTags(Enum):
     NO_ENTITY = auto()
     OUT_OF_BOUNDS = auto()
     ANY = auto()
-
-    # TODO - externalise terrain types
-    FLOOR = auto()
-    WALL = auto()
+    OPEN_SPACE = auto()
+    BLOCKED_MOVEMENT = auto()
+    IS_VISIBLE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -270,7 +268,6 @@ class EffectTypes(Enum):
     APPLY_AFFLICTION = auto()
     DAMAGE = auto()
     MOVE = auto()
-    CHANGE_TERRAIN = auto()
     AFFECT_STAT = auto()
     ADD_ASPECT = auto()
 

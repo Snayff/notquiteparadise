@@ -2,44 +2,21 @@
 	"herraculen" : {
 		"name": "herraculen",
 		"description" : "A herraculen description",
-        "sight_range": 5,
+        "sprite": "assets/actor/placeholder/Mobs_skeleton_06.png",
+        "sight_range": 4,
 		"vigour": 0,
 		"clout": 0,
 		"skullduggery": 0,
         "bustle": 3,
         "exactitude": 0,
         "skills": [
-            {
-                "name": "basic attack",
-                "description": "This is the basic attack. It does damage.",
-                "icon": "placeholder/icon_00.png",
-                "required_tags": ["other_entity"],
-                "range": 1,
-                "shape": "target",
-                "shape_size": 1,
-                "resource_type": "stamina",
-                "resource_cost": 1,
-                "time_cost": 15,
-                "cooldown": 0,
-                "effects": [
-                        {
-                            "effect_type": "damage",
-                            "required_tags": ["other_entity"
-                            ],
-                            "damage": 15,
-                            "mod_stat": "bustle",
-                            "mod_amount": 0.2,
-                            "damage_type": "mundane",
-                            "accuracy": 0,
-                            "stat_to_target": "bustle"
-                        }
-                ]
-            }
+            "none"
         ]
     },
     "goblinn" : {
     "name": "goblinn",
     "description" : "A goblinn description",
+    "sprite": "assets/actor/placeholder/Mobs_goblin_02.png",
     "sight_range": 3,
     "vigour": 0,
     "clout": 0,
@@ -47,32 +24,7 @@
     "bustle": 0,
     "exactitude": 0,
         "skills": [
-            {
-                "name": "basic attack",
-                "description": "This is the basic attack. It does damage.",
-                "icon": "placeholder/icon_00.png",
-                "required_tags": ["other_entity"],
-                "range": 1,
-                "shape": "target",
-                "shape_size": 1,
-                "resource_type": "stamina",
-                "resource_cost": 1,
-                "time_cost": 15,
-                "cooldown": 0,
-                "effects": [
-                        {
-                            "effect_type": "damage",
-                            "required_tags": ["other_entity"
-                            ],
-                            "damage": 15,
-                            "mod_stat": "bustle",
-                            "mod_amount": 0.2,
-                            "damage_type": "mundane",
-                            "accuracy": 0,
-                            "stat_to_target": "bustle"
-                        }
-                ]
-            }
+            "none"
         ]
     }
 }

@@ -15,6 +15,8 @@ class GameManager:
 
         logging.info(f"GameManager initialised.")
 
+        # TODO - break out into methods / sub sections, in line with the others.
+
     def update(self):
         """
         Update the GameManager:

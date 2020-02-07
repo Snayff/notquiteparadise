@@ -1,144 +1,40 @@
-import logging
-import math
+from dataclasses import dataclass, field
+from typing import List, Dict
 
 from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
-    SkillTerrainCollisions
-from scripts.events.game_events import EndTurnEvent
-from scripts.core.library import library
-from scripts.core.event_hub import publisher
+    SkillTerrainCollisions, SkillShapes
 
 
-class Skill:
+@dataclass()
+class SkillData:
     """
-    A skill to be used by an actor
-
-    Attributes:
-            name(str):
-            owner():
-            skill_tree_name():
+    Data class for a skill. Used by the library to load from json.
     """
+    # how do we know it?
+    name: str = "None"
+    description: str = "None"
+    icon: str = "None"
 
-    def __init__(self, owner, skill_tree_name, skill_name):
-        self.owner = owner
-        self.skill_tree_name = skill_tree_name
-        self.name = skill_name
+    # what does it cost?
+    resource_type: str = "None"
+    resource_cost: int = 0
+    time_cost: int = 0
+    cooldown: int = 0
 
-    def use(self, target_direction):
-        """
-        Use the skill
+    # how does it travel from the user?
+    target_directions: List[Directions] = field(default_factory=list)
+    range: int = 1
+    terrain_collision: SkillTerrainCollisions = None
+    travel_type: SkillTravelTypes = None
 
-        Args:
-            target_direction (tuple): x y of the target direction
-        """
+    # when does it interact?
+    expiry_type: SkillExpiryTypes = None
+    required_tags: List[TargetTags] = field(default_factory=list)
 
-        data = library.get_skill_data(self.skill_tree_name, self.name)
-        skill_range = data.range
-        entity = self.owner.owner
+    # how does it interact?
+    shape: SkillShapes = None
+    shape_size: int = 1
+    effects: Dict = field(default_factory=dict)
 
-
-        # initial values
-        start_x = entity.x
-        start_y = entity.y
-        dir_x = target_direction[0]
-        dir_y = target_direction[1]
-        direction = (target_direction[0], target_direction[1])
-
-        # flags
-        activate = False
-        found_target = False
-        check_for_target = False
-
-        logging.info(f"{entity.name} used {self.name} at ({start_x},{start_y}) in {Directions(direction)}...")
-
-        # determine impact location N.B. +1 to make inclusive
-        from scripts.managers.world_manager import world
-        for distance in range(1, skill_range + 1):
-            current_x = start_x + (dir_x * distance)
-            current_y = start_y + (dir_y * distance)
-            tile = world.Map.get_tile((current_x, current_y))
-
-            # did we hit terrain?
-            if world.Map.tile_has_tag(tile, TargetTags.WALL, entity):
-                # do we need to activate, reflect or fizzle?
-                if data.terrain_collision == SkillTerrainCollisions.ACTIVATE:
-                    activate = True
-                    logging.debug(f"-> and hit a wall. Skill will activate at ({current_x},{current_y}).")
-                    break
-                elif data.terrain_collision == SkillTerrainCollisions.REFLECT:
-                    # work out position of adjacent walls
-                    adj_tile = world.Map.get_tile((current_x, current_y - dir_y))
-                    collision_adj_y = world.Map.tile_has_tag(adj_tile, TargetTags.WALL)
-                    adj_tile = world.Map.get_tile((current_x - dir_x, current_y))
-                    collision_adj_x = world.Map.tile_has_tag(adj_tile, TargetTags.WALL)
-
-                    # where did we collide?
-                    if collision_adj_x:
-                        if collision_adj_y:
-                            # hit a corner, bounce back towards entity
-                            dir_x *= -1
-                            dir_y *= -1
-                        else:
-                            # hit horizontal wall, revere y direction
-                            dir_y *= -1
-                    else:
-                        if collision_adj_y:
-                            # hit a vertical wall, reverse x direction
-                            dir_x *= -1
-                        else:  # not collision_adj_x and not collision_adj_y:
-                            # hit a single piece, on the corner, bounce back towards entity
-                            dir_x *= -1
-                            dir_y *= -1
-
-                    logging.info(f"-> and hit a wall. Skill`s direction changed to ({dir_x},{dir_y}).")
-                elif data.terrain_collision == SkillTerrainCollisions.FIZZLE:
-                    activate = False
-                    logging.info(f"-> and hit a wall. Skill fizzled at ({current_x},{current_y}).")
-                    break
-
-            # determine travel method
-            if data.travel_type == SkillTravelTypes.PROJECTILE:
-                # projectile can hit a target at any point during travel
-                check_for_target = True
-            elif data.travel_type == SkillTravelTypes.THROW:
-                # throw can only hit target at end of travel
-                if distance == data.range:
-                    check_for_target = True
-                else:
-                    check_for_target = False
-
-            # did we hit something that has the tags we need?
-            if check_for_target:
-                for tag in data.required_tags:
-                    if not world.Map.tile_has_tag(tile, tag, entity):
-                        found_target = False
-                        break
-                    else:
-                        found_target = True
-                        logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
-
-            # have we found a suitable target?
-            if found_target:
-                activate = True
-                break
-
-        # if at end of range and activate not triggered
-        if distance >= data.range and not activate:
-            if data.expiry_type == SkillExpiryTypes.FIZZLE:
-                activate = False
-                logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
-            elif data.expiry_type == SkillExpiryTypes.ACTIVATE:
-                activate = True
-                logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
-
-        # deal with activation
-        if activate:
-            coords = world.Skill.create_shape(data.shape, data.shape_size)
-            effected_tiles = world.Map.get_tiles(current_x, current_y, coords)
-
-            # apply any effects
-            for effect_name, effect_data in data.effects.items():
-                effect = world.Skill.create_effect(self, effect_data.effect_type)
-                effect.trigger(effected_tiles)
-
-            # end the turn
-            publisher.publish(EndTurnEvent(entity, data.time_cost))
+    # modifiers
+    modifiers: List = field(default_factory=list)

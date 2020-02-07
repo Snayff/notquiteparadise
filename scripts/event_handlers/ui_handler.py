@@ -3,14 +3,16 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Tuple
 from scripts.core.library import library
+from scripts.managers.game_manager import game
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
-from scripts.event_handlers.pub_sub_hub import Subscriber
+from scripts.core.event_hub import Subscriber
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MessageTypes, VisualInfo
+from scripts.world.components import Position
 
 if TYPE_CHECKING:
-    from scripts.skills.skill import Skill
+
     from scripts.world.entity import Entity
     from scripts.events.ui_events import MessageEvent
 
@@ -61,7 +63,8 @@ class UiHandler(Subscriber):
             # show the entity in the new tile
             player = world.Entity.get_player()
             if event.entity == player:
-                self.update_camera(event.start_pos, (player.x, player.y))
+                position = world.Entity.get_component(player, Position)
+                self.update_camera(event.start_pos, (position.x, position.y))
             else:
                 self.update_camera()
 
@@ -81,6 +84,14 @@ class UiHandler(Subscriber):
             elif event.new_game_state == GameStates.TARGETING_MODE:
                 # turn on targeting overlay
                 self.set_targeting_overlay(True, event.skill_to_be_used)
+
+            # check if we are moving to player turn and we are either in, or were just in, targeting
+            # this is due to processing order of events
+            elif event.new_game_state == GameStates.PLAYER_TURN and (game.game_state == GameStates.TARGETING_MODE or
+                game.previous_game_state == GameStates.TARGETING_MODE):
+
+                # turn off the targeting overlay
+                self.set_targeting_overlay(False)
 
             # new turn updates
             elif event.new_game_state == GameStates.NEW_TURN:
@@ -111,8 +122,12 @@ class UiHandler(Subscriber):
         if event.event_type == UIEventTypes.CLICK_TILE:
             # Select an entity
             tile = world.Map.get_tile(event.tile_pos_string)
-            entity = world.Map.get_entity_on_tile(tile)
-            self.select_entity(entity)
+            entities = world.Entity.get_entities_and_components_in_area([tile])
+
+            # there should only be one entity, but just in case...
+            for entity in entities:
+                self.select_entity(entity)
+                break
 
         if event.event_type == UIEventTypes.MESSAGE:
             # process a message
@@ -120,17 +135,17 @@ class UiHandler(Subscriber):
             self.process_message(event)
 
     @staticmethod
-    def set_targeting_overlay(is_visible: bool, skill: Skill = None):
+    def set_targeting_overlay(is_visible: bool, skill_name: str = None):
         """
         Show or hide targeting overlay, using Directions possible in the skill.
 
         Args:
+            skill_name ():
             is_visible ():
-            skill ():
         """
         # update directions to either clear or use info from skill
         if is_visible:
-            data = library.get_skill_data(skill.skill_tree_name, skill.name)
+            data = library.get_skill_data(skill_name)
             directions = data.target_directions
         else:
             directions = []

@@ -1,8 +1,13 @@
+from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
-from typing import Dict
+from typing import TYPE_CHECKING, Dict
 
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
+
+if TYPE_CHECKING:
+    pass
 
 
 @dataclass

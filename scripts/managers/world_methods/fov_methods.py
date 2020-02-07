@@ -1,6 +1,12 @@
-import tcod
+from __future__ import annotations
 
+import logging
+import tcod
+from typing import TYPE_CHECKING
 from scripts.core.constants import FOVInfo, SkillShapes
+
+if TYPE_CHECKING:
+    from scripts.managers.world_manager import WorldManager
 
 
 class FOVMethods:
@@ -8,19 +14,21 @@ class FOVMethods:
     Methods for querying the fov and fov related info and taking fov actions.
     """
     def __init__(self, manager):
-        self.manager = manager
+        self._manager = manager  # type: WorldManager
+        self._players_fov_map = None  # type: tcod.map.Map
 
     def create_player_fov_map(self, width, height):
         """
         Create the fov map for the player
         """
-        self.manager.player_fov_map = tcod.map_new(width, height)
-        fov_map = self.get_player_fov()
+        fov_map = tcod.map_new(width, height)
 
         for x in range(width):
             for y in range(height):
-                tile = self.manager.Map.get_tile((x, y))
+                tile = self._manager.Map.get_tile((x, y))
                 tcod.map_set_properties(fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
+
+        self._players_fov_map = fov_map
 
     def recompute_player_fov(self, x, y, radius):
         """
@@ -31,7 +39,7 @@ class FOVMethods:
             radius:
         """
         tcod.map_compute_fov(self.get_player_fov(), x, y, radius, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
-        self.manager.FOV.update_tile_visibility(self.get_player_fov())
+        self._manager.FOV.update_tile_visibility(self.get_player_fov())
 
     def is_tile_in_fov(self, tile_x, tile_y):
         """
@@ -54,7 +62,7 @@ class FOVMethods:
         Returns:
             tcod.map.Map
         """
-        return self.manager.player_fov_map
+        return self._players_fov_map
 
     def update_tile_visibility(self, fov_map):
         """
@@ -63,7 +71,7 @@ class FOVMethods:
         Args:
             fov_map:
         """
-        game_map = self.manager.Map.get_game_map()
+        game_map = self._manager.Map.get_game_map()
 
         for x in range(0, game_map.width):
             for y in range(0, game_map.height):
@@ -79,11 +87,11 @@ class FOVMethods:
         Returns:
             list[Tile]: A list of tiles
         """
-        player = self.manager.Entity.get_player()
+        player = self._manager.Entity.get_player()
 
         # get the tiles in range
-        coords = self.manager.Skill.create_shape(SkillShapes.SQUARE, range_from_centre)  # square as LOS is square
-        tiles_in_range = self.manager.Map.get_tiles(player.x, player.y, coords)
+        coords = self._manager.Skill.create_shape(SkillShapes.SQUARE, range_from_centre)  # square as LOS is square
+        tiles_in_range = self._manager.Map.get_tiles(player.x, player.y, coords)
         tiles_in_range_and_fov = []
 
         # only take tiles in range and FOV
