@@ -140,7 +140,7 @@ class TargetTags(Enum):
     OUT_OF_BOUNDS = auto()
     ANY = auto()
     OPEN_SPACE = auto()
-    BLOCKED_SPACE = auto()
+    BLOCKED_MOVEMENT = auto()
     IS_VISIBLE = auto()
 
     def __eq__(self, other):

@@ -19,9 +19,9 @@ class TurnManager:
 
     def __init__(self):
         self.turn_queue = {}  # type: Dict[Tuple[int, int]] # (entity, time)
-        self.round = 0  # count of the round
-        self.time = 0  # total time of actions taken
-        self.time_of_last_turn = 0
+        self.round = 1  # count of the round
+        self.time = 1  # total time of actions taken
+        self.time_of_last_turn = 1
         self.time_in_round = 100  # time units in a round
         self.round_time = 0  # tracker of time progressed in current round
         self.turn_holder = None  # current acting entity

@@ -6,7 +6,7 @@
         "attitudes": [
             {
                 "action": "damage",
-                "opinion_change": -80
+                "opinion_change": -5
             },
             {
                 "action": "burn",
@@ -16,7 +16,7 @@
         "interventions": [
             {
                 "name": "slow the mighty",
-                "required_opinion": -10
+                "required_opinion": -20
             }
         ]
     }

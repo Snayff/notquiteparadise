@@ -167,120 +167,75 @@ class SkillMethods:
 
         return list_of_coords
 
-    def use(self, using_entity: int, skill_name: str, start_pos: Tuple[int, int], target_direction: Tuple[int, int]):
+    def use(self, using_entity: int, skill_name: str, start_position: Tuple[int, int], target_direction: Tuple[int,
+    int]):
 
         """
         Use the skill
 
         Args:
-            start_pos ():
+            start_position ():
             skill_name ():
             using_entity ():
             target_direction (tuple): x y of the target direction
         """
-
+        # initial values
         skill_data = library.get_skill_data(skill_name)
         skill_range = skill_data.range
-
-        # initial values
+        terrain_collision = skill_data.terrain_collision
+        travel_type = skill_data.travel_type
+        expiry_type = skill_data.expiry_type
         identity = self._manager.Entity.get_identity(using_entity)
-        start_x = start_pos[0]
-        start_y = start_pos[1]
-        dir_x = target_direction[0]
-        dir_y = target_direction[1]
+        start_x, start_y = start_position
+        current_x, current_y = start_position
+        dir_x, dir_y = target_direction
         direction = (target_direction[0], target_direction[1])
-
-        # these values are either overridden by collision check or remain same
-        distance = 0
-        current_x = start_x
-        current_y = start_y
 
         # flags
         activate = False
-        found_target = False
-        check_for_target = False
+        fizzle = False
 
         logging.info(f"{identity.name} used {skill_name} at ({start_x},{start_y}) in {Directions(direction)}...")
 
-        # determine impact location N.B. +1 to make inclusive
-        for distance in range(1, skill_range + 1):
-            current_x = start_x + (dir_x * distance)
-            current_y = start_y + (dir_y * distance)
-            tile = self._manager.Map.get_tile((current_x, current_y))
+        # continue finding the position to use the skill on until we fizzle or activate
+        while not activate and not fizzle:
 
-            # did we hit terrain?
-            if self._manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_SPACE, using_entity):
-                # do we need to activate, reflect or fizzle?
-                # TODO - "hit a wall" is wrong. Triggering on entity. We need to check the space for an entity, too.
-                if skill_data.terrain_collision == SkillTerrainCollisions.ACTIVATE:
+            # get last free position in direction
+            current_x, current_y = self._get_furthest_free_position(start_position, (dir_x, dir_y), skill_range,
+                                                                    travel_type)
+
+            # determine how far we've travelled
+            distance = max(abs(start_x) - abs(current_x), abs(start_y) - abs(current_y))
+
+            # are we at max distance?
+            if distance >= skill_range:
+                # handle expiry type
+                if expiry_type == SkillExpiryTypes.FIZZLE:
+                    fizzle = True
+                    logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
+                elif expiry_type == SkillExpiryTypes.ACTIVATE:
                     activate = True
-                    logging.debug(f"-> and hit a wall. Skill will activate at ({current_x},{current_y}).")
-                    break
-                elif skill_data.terrain_collision == SkillTerrainCollisions.REFLECT:
-                    # work out position of adjacent walls
-                    adj_tile = self._manager.Map.get_tile((current_x, current_y - dir_y))
-                    collision_adj_y = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
-                    adj_tile = self._manager.Map.get_tile((current_x - dir_x, current_y))
-                    collision_adj_x = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_SPACE)
+                    logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
+            else:
+                # we arent at max so we must have hit something one space further along
+                current_x, current_y = current_x + dir_x, current_y + dir_y
+                tile = self._manager.Map.get_tile((current_x, current_y))
 
-                    # where did we collide?
-                    if collision_adj_x:
-                        if collision_adj_y:
-                            # hit a corner, bounce back towards entity
-                            dir_x *= -1
-                            dir_y *= -1
-                        else:
-                            # hit horizontal wall, revere y direction
-                            dir_y *= -1
-                    else:
-                        if collision_adj_y:
-                            # hit a vertical wall, reverse x direction
-                            dir_x *= -1
-                        else:  # not collision_adj_x and not collision_adj_y:
-                            # hit a single piece, on the corner, bounce back towards entity
-                            dir_x *= -1
-                            dir_y *= -1
-
-                    logging.info(f"-> and hit a wall. Skill`s direction changed to ({dir_x},{dir_y}).")
-                elif skill_data.terrain_collision == SkillTerrainCollisions.FIZZLE:
-                    activate = False
-                    logging.info(f"-> and hit a wall. Skill fizzled at ({current_x},{current_y}).")
-                    break
-
-            # determine travel method
-            if skill_data.travel_type == SkillTravelTypes.PROJECTILE:
-                # projectile can hit a target at any point during travel
-                check_for_target = True
-            elif skill_data.travel_type == SkillTravelTypes.THROW:
-                # throw can only hit target at end of travel
-                if distance == skill_data.range:
-                    check_for_target = True
+                # did we hit something that has the tags we need?
+                if self._manager.Map.tile_has_tags(tile, skill_data.required_tags, using_entity):
+                    activate = True
+                    logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
                 else:
-                    check_for_target = False
-
-            # did we hit something that has the tags we need?
-            if check_for_target:
-                for tag in skill_data.required_tags:
-                    if not self._manager.Map.tile_has_tag(tile, tag, using_entity):
-                        found_target = False
-                        break
-                    else:
-                        found_target = True
-                        logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
-
-            # have we found a suitable target?
-            if found_target:
-                activate = True
-                break
-
-        # if at end of range and activate not triggered
-        if distance >= skill_data.range and not activate:
-            if skill_data.expiry_type == SkillExpiryTypes.FIZZLE:
-                activate = False
-                logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
-            elif skill_data.expiry_type == SkillExpiryTypes.ACTIVATE:
-                activate = True
-                logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
+                    # we didnt hit the right thing so what happens now?
+                    if terrain_collision == SkillTerrainCollisions.ACTIVATE:
+                        activate = True
+                        logging.debug(f"-> and hit something. Skill will activate at ({current_x},{current_y}).")
+                    elif terrain_collision == SkillTerrainCollisions.REFLECT:
+                        dir_x, dir_y = self._get_reflected_direction((current_x, current_y), direction)
+                        logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
+                    elif terrain_collision == SkillTerrainCollisions.FIZZLE:
+                        activate = False
+                        logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
 
         # deal with activation
         if activate:
@@ -294,6 +249,107 @@ class SkillMethods:
             # end the turn if the entity isnt a god
             if not self._manager.Entity.has_component(using_entity, IsGod):
                 publisher.publish(EndTurnEvent(using_entity, skill_data.time_cost))
+
+    def _get_furthest_free_position(self, start_position: Tuple[int, int], target_direction: Tuple[int, int],
+            max_distance: int, travel_type: SkillTravelTypes) -> Tuple[int, int]:
+        """
+        Checks each position in a line and returns the last position that doesnt block movement. If no position in
+        range blocks movement then the last position checked is returned. If all positions in range block movement
+        then starting position is returned.
+
+        Args:
+            start_position ():
+            target_direction ():
+            max_distance ():
+
+        Returns:
+
+        """
+        start_x = start_position[0]
+        start_y = start_position[1]
+        dir_x = target_direction[0]
+        dir_y = target_direction[1]
+        current_x = start_x
+        current_y = start_y
+        free_x = start_x
+        free_y = start_y
+        check_for_target = False
+
+        # determine travel method
+        if travel_type == SkillTravelTypes.PROJECTILE:
+            # projectile can hit a target at any point during travel
+            check_for_target = True
+        elif travel_type == SkillTravelTypes.THROW:
+            # throw can only hit target at end of travel
+            check_for_target = False
+
+        # determine impact location N.B. +1 to make inclusive as starting from 1
+        for distance in range(1, max_distance + 1):
+
+            # allow throw to hit target
+            if travel_type == SkillTravelTypes.THROW:
+                if distance == max_distance + 1:
+                    check_for_target = True
+
+            # get current position
+            current_x = start_x + (dir_x * distance)
+            current_y = start_y + (dir_y * distance)
+            tile = self._manager.Map.get_tile((current_x, current_y))
+
+            # did we hit something causing projectile to stop
+            if self._manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_MOVEMENT):
+                # if we're ready to check for a target, do so
+                if check_for_target:
+                    # we hit something, go back to last free tile
+                    current_x = free_x
+                    current_y = free_y
+                    break
+            else:
+                free_x = current_x
+                free_y = current_y
+
+        return current_x, current_y
+
+    def _get_reflected_direction(self, current_position: Tuple[int, int], target_direction: Tuple[int,
+    int]) -> Tuple[int, int]:
+        """
+        Use surrounding walls to understand how the object should be reflected.
+
+        Args:
+            current_position ():
+            target_direction ():
+
+        Returns:
+
+        """
+        current_x, current_y = current_position
+        dir_x, dir_y = target_direction
+
+        # work out position of adjacent walls
+        adj_tile = self._manager.Map.get_tile((current_x, current_y - dir_y))
+        collision_adj_y = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+        adj_tile = self._manager.Map.get_tile((current_x - dir_x, current_y))
+        collision_adj_x = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+
+        # where did we collide?
+        if collision_adj_x:
+            if collision_adj_y:
+                # hit a corner, bounce back towards entity
+                dir_x *= -1
+                dir_y *= -1
+            else:
+                # hit horizontal wall, reverse y direction
+                dir_y *= -1
+        else:
+            if collision_adj_y:
+                # hit a vertical wall, reverse x direction
+                dir_x *= -1
+            else:  # not collision_adj_x and not collision_adj_y:
+                # hit a single piece, on the corner, bounce back towards entity
+                dir_x *= -1
+                dir_y *= -1
+
+        return dir_x, dir_y
 
     ############ EFFECTS ################
 

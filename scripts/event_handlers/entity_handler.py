@@ -59,15 +59,13 @@ class EntityHandler(Subscriber):
         entity = event.entity
         old_x, old_y = event.start_pos[0], event.start_pos[1]
 
-        # FIXME - skill fizzling at end of range instead of when nothing hit at end of range
-
         for step in range(0, distance):
             target_x = old_x + dir_x
             target_y = old_y + dir_y
 
             # is there something in the way?
             target_tile = world.Map.get_tile((target_x, target_y))
-            is_tile_blocking_movement = world.Map.tile_has_tag(target_tile, TargetTags.BLOCKED_SPACE, entity)
+            is_tile_blocking_movement = world.Map.tile_has_tag(target_tile, TargetTags.BLOCKED_MOVEMENT, entity)
             is_entity_on_tile = world.Map.tile_has_tag(target_tile, TargetTags.OTHER_ENTITY, entity)
 
             # check for no entity in way but tile is blocked

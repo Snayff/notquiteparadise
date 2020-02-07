@@ -297,7 +297,7 @@ class MapMethods:
                 return not self._is_tile_blocking_movement(tile.x, tile.y)
             else:
                 return False
-        elif tag == TargetTags.BLOCKED_SPACE:
+        elif tag == TargetTags.BLOCKED_MOVEMENT:
             # If in bounds check if anything is blocking
             if self._is_tile_in_bounds(tile.x, tile.y):
                 return self._is_tile_blocking_movement(tile.x, tile.y)
