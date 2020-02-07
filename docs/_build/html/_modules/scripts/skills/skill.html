@@ -64,11 +64,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -155,150 +155,46 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.skills.skill</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">math</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
 
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">SkillExpiryTypes</span><span class="p">,</span> <span class="n">Directions</span><span class="p">,</span> <span class="n">SkillTravelTypes</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> \
-    <span class="n">SkillTerrainCollisions</span>
-<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">EndTurnEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
+    <span class="n">SkillTerrainCollisions</span><span class="p">,</span> <span class="n">SkillShapes</span>
 
 
-<div class="viewcode-block" id="Skill"><a class="viewcode-back" href="../../../skills.html#scripts.skills.skill.Skill">[docs]</a><span class="k">class</span> <span class="nc">Skill</span><span class="p">:</span>
+<div class="viewcode-block" id="SkillData"><a class="viewcode-back" href="../../../skills.html#scripts.skills.skill.SkillData">[docs]</a><span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">SkillData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A skill to be used by an actor</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">            name(str):</span>
-<span class="sd">            owner():</span>
-<span class="sd">            skill_tree_name():</span>
+<span class="sd">    Data class for a skill. Used by the library to load from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># how do we know it?</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">skill_tree_name</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">owner</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span> <span class="o">=</span> <span class="n">skill_tree_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">skill_name</span>
+    <span class="c1"># what does it cost?</span>
+    <span class="n">resource_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+    <span class="n">resource_cost</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">time_cost</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cooldown</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="Skill.use"><a class="viewcode-back" href="../../../skills.html#scripts.skills.skill.Skill.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_direction</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Use the skill</span>
+    <span class="c1"># how does it travel from the user?</span>
+    <span class="n">target_directions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Directions</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">terrain_collision</span><span class="p">:</span> <span class="n">SkillTerrainCollisions</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">travel_type</span><span class="p">:</span> <span class="n">SkillTravelTypes</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            target_direction (tuple): x y of the target direction</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="c1"># when does it interact?</span>
+    <span class="n">expiry_type</span><span class="p">:</span> <span class="n">SkillExpiryTypes</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">required_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTags</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_tree_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">skill_range</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">range</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">owner</span>
+    <span class="c1"># how does it interact?</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">SkillShapes</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">effects</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
-
-        <span class="c1"># initial values</span>
-        <span class="n">start_x</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">start_y</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span>
-        <span class="n">dir_x</span> <span class="o">=</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">dir_y</span> <span class="o">=</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">direction</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-        <span class="c1"># flags</span>
-        <span class="n">activate</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">found_target</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">check_for_target</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity.name}</span><span class="s2"> used </span><span class="si">{self.name}</span><span class="s2"> at (</span><span class="si">{start_x}</span><span class="s2">,</span><span class="si">{start_y}</span><span class="s2">) in {Directions(direction)}...&quot;</span><span class="p">)</span>
-
-        <span class="c1"># determine impact location N.B. +1 to make inclusive</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
-        <span class="k">for</span> <span class="n">distance</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">skill_range</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">current_x</span> <span class="o">=</span> <span class="n">start_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">dir_x</span> <span class="o">*</span> <span class="n">distance</span><span class="p">)</span>
-            <span class="n">current_y</span> <span class="o">=</span> <span class="n">start_y</span> <span class="o">+</span> <span class="p">(</span><span class="n">dir_y</span> <span class="o">*</span> <span class="n">distance</span><span class="p">)</span>
-            <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">))</span>
-
-            <span class="c1"># did we hit terrain?</span>
-            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-                <span class="c1"># do we need to activate, reflect or fizzle?</span>
-                <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">terrain_collision</span> <span class="o">==</span> <span class="n">SkillTerrainCollisions</span><span class="o">.</span><span class="n">ACTIVATE</span><span class="p">:</span>
-                    <span class="n">activate</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; and hit a wall. Skill will activate at (</span><span class="si">{current_x}</span><span class="s2">,</span><span class="si">{current_y}</span><span class="s2">).&quot;</span><span class="p">)</span>
-                    <span class="k">break</span>
-                <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">terrain_collision</span> <span class="o">==</span> <span class="n">SkillTerrainCollisions</span><span class="o">.</span><span class="n">REFLECT</span><span class="p">:</span>
-                    <span class="c1"># work out position of adjacent walls</span>
-                    <span class="n">adj_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span> <span class="o">-</span> <span class="n">dir_y</span><span class="p">))</span>
-                    <span class="n">collision_adj_y</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">adj_tile</span><span class="p">,</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">)</span>
-                    <span class="n">adj_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">current_x</span> <span class="o">-</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">))</span>
-                    <span class="n">collision_adj_x</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">adj_tile</span><span class="p">,</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">)</span>
-
-                    <span class="c1"># where did we collide?</span>
-                    <span class="k">if</span> <span class="n">collision_adj_x</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">collision_adj_y</span><span class="p">:</span>
-                            <span class="c1"># hit a corner, bounce back towards entity</span>
-                            <span class="n">dir_x</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-                            <span class="n">dir_y</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="c1"># hit horizontal wall, revere y direction</span>
-                            <span class="n">dir_y</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">collision_adj_y</span><span class="p">:</span>
-                            <span class="c1"># hit a vertical wall, reverse x direction</span>
-                            <span class="n">dir_x</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-                        <span class="k">else</span><span class="p">:</span>  <span class="c1"># not collision_adj_x and not collision_adj_y:</span>
-                            <span class="c1"># hit a single piece, on the corner, bounce back towards entity</span>
-                            <span class="n">dir_x</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-                            <span class="n">dir_y</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-
-                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; and hit a wall. Skill`s direction changed to (</span><span class="si">{dir_x}</span><span class="s2">,</span><span class="si">{dir_y}</span><span class="s2">).&quot;</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">terrain_collision</span> <span class="o">==</span> <span class="n">SkillTerrainCollisions</span><span class="o">.</span><span class="n">FIZZLE</span><span class="p">:</span>
-                    <span class="n">activate</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; and hit a wall. Skill fizzled at (</span><span class="si">{current_x}</span><span class="s2">,</span><span class="si">{current_y}</span><span class="s2">).&quot;</span><span class="p">)</span>
-                    <span class="k">break</span>
-
-            <span class="c1"># determine travel method</span>
-            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">travel_type</span> <span class="o">==</span> <span class="n">SkillTravelTypes</span><span class="o">.</span><span class="n">PROJECTILE</span><span class="p">:</span>
-                <span class="c1"># projectile can hit a target at any point during travel</span>
-                <span class="n">check_for_target</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">travel_type</span> <span class="o">==</span> <span class="n">SkillTravelTypes</span><span class="o">.</span><span class="n">THROW</span><span class="p">:</span>
-                <span class="c1"># throw can only hit target at end of travel</span>
-                <span class="k">if</span> <span class="n">distance</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="n">range</span><span class="p">:</span>
-                    <span class="n">check_for_target</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">check_for_target</span> <span class="o">=</span> <span class="kc">False</span>
-
-            <span class="c1"># did we hit something that has the tags we need?</span>
-            <span class="k">if</span> <span class="n">check_for_target</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">required_tags</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-                        <span class="n">found_target</span> <span class="o">=</span> <span class="kc">False</span>
-                        <span class="k">break</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">found_target</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; and found suitable target at (</span><span class="si">{current_x}</span><span class="s2">,</span><span class="si">{current_y}</span><span class="s2">).&quot;</span><span class="p">)</span>
-
-            <span class="c1"># have we found a suitable target?</span>
-            <span class="k">if</span> <span class="n">found_target</span><span class="p">:</span>
-                <span class="n">activate</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">break</span>
-
-        <span class="c1"># if at end of range and activate not triggered</span>
-        <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">range</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">activate</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">expiry_type</span> <span class="o">==</span> <span class="n">SkillExpiryTypes</span><span class="o">.</span><span class="n">FIZZLE</span><span class="p">:</span>
-                <span class="n">activate</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; and hit nothing. Skill fizzled at (</span><span class="si">{current_x}</span><span class="s2">,</span><span class="si">{current_y}</span><span class="s2">).&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">expiry_type</span> <span class="o">==</span> <span class="n">SkillExpiryTypes</span><span class="o">.</span><span class="n">ACTIVATE</span><span class="p">:</span>
-                <span class="n">activate</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; and hit nothing. Skill will activate at (</span><span class="si">{current_x}</span><span class="s2">,</span><span class="si">{current_y}</span><span class="s2">).&quot;</span><span class="p">)</span>
-
-        <span class="c1"># deal with activation</span>
-        <span class="k">if</span> <span class="n">activate</span><span class="p">:</span>
-            <span class="n">coords</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_shape</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape_size</span><span class="p">)</span>
-            <span class="n">effected_tiles</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="n">current_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
-
-            <span class="c1"># apply any effects</span>
-            <span class="k">for</span> <span class="n">effect_name</span><span class="p">,</span> <span class="n">effect_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">effect</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect_data</span><span class="o">.</span><span class="n">effect_type</span><span class="p">)</span>
-                <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">effected_tiles</span><span class="p">)</span>
-
-            <span class="c1"># end the turn</span>
-            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">EndTurnEvent</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">time_cost</span><span class="p">))</span></div></div>
+    <span class="c1"># modifiers</span>
+    <span class="n">modifiers</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
 </pre></div>
 
 	    </div>

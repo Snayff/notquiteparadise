@@ -65,11 +65,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -161,41 +161,26 @@
 <span id="entity"></span><h2>Entity<a class="headerlink" href="#module-scripts.events.entity_events" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.events.entity_events.DieEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">DieEvent</code><span class="sig-paren">(</span><em class="sig-param">dying_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#DieEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.DieEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">DieEvent</code><span class="sig-paren">(</span><em class="sig-param">dying_entity: int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#DieEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.DieEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event for handling the death of an entity.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="scripts.events.entity_events.LearnEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">LearnEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_learn_skill</em>, <em class="sig-param">skill_tree_name</em>, <em class="sig-param">skill_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#LearnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.LearnEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Event for learning a new skill</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entity_to_learn_skill</strong> – </p></li>
-<li><p><strong>skill_tree_name</strong> – </p></li>
-<li><p><strong>skill_name</strong> – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
 <dt id="scripts.events.entity_events.MoveEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_move: scripts.world.entity.Entity</em>, <em class="sig-param">direction: Tuple</em>, <em class="sig-param">distance: int = 1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_move: int, start_pos: Tuple[int, int], direction: Tuple[int, int], distance: int = 1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event to move an entity as a basic move action</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.events.entity_events.UseSkillEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">UseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_using_skill: scripts.world.entity.Entity, skill: scripts.skills.skill.Skill, direction: Tuple[int, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">UseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int], direction: Tuple[int, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Event for entity skill</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>entity_using_skill</strong> (<a class="reference internal" href="world.html#scripts.world.entity.Entity" title="scripts.world.entity.Entity"><em>Entity</em></a>) – </p></li>
-<li><p><strong>target_pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – x, y</p></li>
-<li><p><strong>skill</strong> (<a class="reference internal" href="skills.html#scripts.skills.skill.Skill" title="scripts.skills.skill.Skill"><em>Skill</em></a>) – </p></li>
+<li><p><strong>entity_using_skill</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – entity id</p></li>
+<li><p><strong>direction</strong> (<em>Tuple</em>) – x, y</p></li>
+<li><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – skill name</p></li>
 </ul>
 </dd>
 </dl>

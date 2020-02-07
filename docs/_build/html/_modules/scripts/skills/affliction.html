@@ -64,11 +64,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -155,51 +155,23 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.skills.affliction</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">AfflictionTriggers</span>
-<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">AfflictionCategory</span>
 
 
-<div class="viewcode-block" id="Affliction"><a class="viewcode-back" href="../../../skills.html#scripts.skills.affliction.Affliction">[docs]</a><span class="k">class</span> <span class="nc">Affliction</span><span class="p">:</span>
+<div class="viewcode-block" id="AfflictionData"><a class="viewcode-back" href="../../../skills.html#scripts.skills.affliction.AfflictionData">[docs]</a><span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">AfflictionData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Affliction, either Bane or Boon. Applies a periodic effect to an Entity, dictated by its AfflictionTrigger.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        name (str):  string name of the Affliction</span>
-<span class="sd">        description (str): description of the Affliction</span>
-<span class="sd">        icon (pygame.Image): pygame image to symbolise the Affliction</span>
-<span class="sd">        affliction_category (AfflictionCategory): Bane or Boon</span>
-<span class="sd">        duration (int): amount of applications before expiry</span>
-<span class="sd">        trigger_event (AfflictionTriggers): the event that triggers the Affliction to activate</span>
-<span class="sd">        affected_entity (Entity): the Entity being impacted by the Affliction</span>
-<span class="sd">        affliction_effects (list(AfflictionEffect)): list of AfflictionEffects</span>
+<span class="sd">    Data class for an Affliction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">affected_entity</span><span class="p">):</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">affliction_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span> <span class="o">=</span> <span class="n">affected_entity</span>  <span class="c1"># set at time of allocation to an entity</span>
-
-<div class="viewcode-block" id="Affliction.trigger"><a class="viewcode-back" href="../../../skills.html#scripts.skills.affliction.Affliction.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Trigger all afflictions effects and decrement duration by 1 (Except for Permanent). Duration reduced at end</span>
-<span class="sd">        of turn.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Triggering effects in </span><span class="si">{self.name}</span><span class="s2">&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="n">log_string</span><span class="p">)</span>
-
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
-        <span class="c1"># apply any effects</span>
-        <span class="k">for</span> <span class="n">effect_name</span><span class="p">,</span> <span class="n">effect_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">effect</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_effect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">effect_data</span><span class="o">.</span><span class="n">effect_type</span><span class="p">)</span>
-            <span class="n">effected_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affected_entity</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-            <span class="n">effect</span><span class="o">.</span><span class="n">trigger</span><span class="p">([</span><span class="n">effected_tile</span><span class="p">])</span></div></div>
-
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+    <span class="n">trigger_event</span><span class="p">:</span> <span class="n">AfflictionTriggers</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">category</span><span class="p">:</span> <span class="n">AfflictionCategory</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">effects</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
 </pre></div>
 
 	    </div>

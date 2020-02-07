@@ -64,11 +64,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -169,94 +169,12 @@
 <h2>Terrain<a class="headerlink" href="#terrain" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id1">
 <h3>Terrain<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<span class="target" id="module-scripts.world.terrain.terrain"></span><dl class="class">
-<dt id="scripts.world.terrain.terrain.Terrain">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.world.terrain.terrain.</code><code class="sig-name descname">Terrain</code><a class="reference internal" href="_modules/scripts/world/terrain/terrain.html#Terrain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base terrain class</p>
-<dl class="attribute">
-<dt id="scripts.world.terrain.terrain.Terrain.owner">
-<code class="sig-name descname">owner</code><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain.owner" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#scripts.world.tile.Tile" title="scripts.world.tile.Tile">Tile</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="scripts.world.terrain.terrain.Terrain.blocks_movement">
-<code class="sig-name descname">blocks_movement</code><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain.blocks_movement" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="scripts.world.terrain.terrain.Terrain.blocks_sight">
-<code class="sig-name descname">blocks_sight</code><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain.blocks_sight" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="scripts.world.terrain.terrain.Terrain.sprite">
-<code class="sig-name descname">sprite</code><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain.sprite" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>pygame.Sprite</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="scripts.world.terrain.terrain.Terrain.name">
-<code class="sig-name descname">name</code><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain.name" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.world.terrain.terrain.Terrain.x">
-<em class="property">property </em><code class="sig-name descname">x</code><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain.x" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the tile_x of the Terrain.</p>
-<p>Returns:</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.world.terrain.terrain.Terrain.y">
-<em class="property">property </em><code class="sig-name descname">y</code><a class="headerlink" href="#scripts.world.terrain.terrain.Terrain.y" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the tile_y of the Terrain.</p>
-<p>Returns:</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
-<div class="section" id="module-scripts.world.terrain.floor">
-<span id="floor"></span><h3>Floor<a class="headerlink" href="#module-scripts.world.terrain.floor" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="scripts.world.terrain.floor.Floor">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.world.terrain.floor.</code><code class="sig-name descname">Floor</code><a class="reference internal" href="_modules/scripts/world/terrain/floor.html#Floor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.terrain.floor.Floor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Floor tile, doesnt block movement or sight</p>
-</dd></dl>
-
+<div class="section" id="floor">
+<h3>Floor<a class="headerlink" href="#floor" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="module-scripts.world.terrain.wall">
-<span id="wall"></span><h3>Wall<a class="headerlink" href="#module-scripts.world.terrain.wall" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="scripts.world.terrain.wall.Wall">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.world.terrain.wall.</code><code class="sig-name descname">Wall</code><a class="reference internal" href="_modules/scripts/world/terrain/wall.html#Wall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.terrain.wall.Wall" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wall tile, blocks movement and sight.</p>
-</dd></dl>
-
+<div class="section" id="wall">
+<h3>Wall<a class="headerlink" href="#wall" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="module-scripts.world.entity">
@@ -375,7 +293,7 @@
 <span id="tile"></span><h2>Tile<a class="headerlink" href="#module-scripts.world.tile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="scripts.world.tile.Tile">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.world.tile.</code><code class="sig-name descname">Tile</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">entity=None</em>, <em class="sig-param">terrain=None</em>, <em class="sig-param">aspect=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.tile.Tile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">scripts.world.tile.</code><code class="sig-name descname">Tile</code><span class="sig-paren">(</span><em class="sig-param">x: int</em>, <em class="sig-param">y: int</em>, <em class="sig-param">sprite: pygame.Surface</em>, <em class="sig-param">blocks_sight: bool = False</em>, <em class="sig-param">blocks_movement: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.tile.Tile" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Tile on the GameMap. Can contain an Entity, a Terrain and an Effect.</p>
 <dl class="attribute">
 <dt id="scripts.world.tile.Tile.x">
@@ -411,104 +329,12 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="scripts.world.tile.Tile.entity">
-<code class="sig-name descname">entity</code><a class="headerlink" href="#scripts.world.tile.Tile.entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>the entity on the tile</p>
+<dt id="scripts.world.tile.Tile.sprite">
+<code class="sig-name descname">sprite</code><a class="headerlink" href="#scripts.world.tile.Tile.sprite" title="Permalink to this definition">¶</a></dt>
+<dd><p>the sprite of the floor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#scripts.world.entity.Entity" title="scripts.world.entity.Entity">Entity</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="scripts.world.tile.Tile.terrain">
-<code class="sig-name descname">terrain</code><a class="headerlink" href="#scripts.world.tile.Tile.terrain" title="Permalink to this definition">¶</a></dt>
-<dd><p>the terrain on the tile, such as floor or wall</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#scripts.world.terrain.terrain.Terrain" title="scripts.world.terrain.terrain.Terrain">Terrain</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="scripts.world.tile.Tile.aspect">
-<code class="sig-name descname">aspect</code><a class="headerlink" href="#scripts.world.tile.Tile.aspect" title="Permalink to this definition">¶</a></dt>
-<dd><p>the aspects of the tile, such as smoke or fire</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a>[Aspect]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.world.tile.Tile.blocks_movement">
-<em class="property">property </em><code class="sig-name descname">blocks_movement</code><a class="headerlink" href="#scripts.world.tile.Tile.blocks_movement" title="Permalink to this definition">¶</a></dt>
-<dd><p>If anything on tile blocks ability to move</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if movement is blocked.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.world.tile.Tile.blocks_sight">
-<em class="property">property </em><code class="sig-name descname">blocks_sight</code><a class="headerlink" href="#scripts.world.tile.Tile.blocks_sight" title="Permalink to this definition">¶</a></dt>
-<dd><p>If anything on tile blocks ability to see</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if sight is blocked.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.world.tile.Tile.has_entity">
-<em class="property">property </em><code class="sig-name descname">has_entity</code><a class="headerlink" href="#scripts.world.tile.Tile.has_entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the tag is applicable</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if tag is applicable</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.world.tile.Tile.is_floor">
-<em class="property">property </em><code class="sig-name descname">is_floor</code><a class="headerlink" href="#scripts.world.tile.Tile.is_floor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the tag is applicable</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if tag is applicable</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.world.tile.Tile.is_wall">
-<em class="property">property </em><code class="sig-name descname">is_wall</code><a class="headerlink" href="#scripts.world.tile.Tile.is_wall" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the tag is applicable</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if tag is applicable</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+<dd class="field-odd"><p>pygame.Surface</p>
 </dd>
 </dl>
 </dd></dl>

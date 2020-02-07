@@ -64,11 +64,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -155,22 +155,25 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.managers.world_methods.entity_methods</h1><div class="highlight"><pre>
-<span></span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">pygame</span>
-<span class="kn">import</span> <span class="nn">tcod</span>
-<span class="kn">import</span> <span class="nn">scipy.spatial</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">scripts.components.actor</span> <span class="kn">import</span> <span class="n">Actor</span>
-<span class="kn">from</span> <span class="nn">scripts.components.combatant</span> <span class="kn">import</span> <span class="n">Combatant</span>
-<span class="kn">from</span> <span class="nn">scripts.components.homeland</span> <span class="kn">import</span> <span class="n">Homeland</span>
-<span class="kn">from</span> <span class="nn">scripts.components.race</span> <span class="kn">import</span> <span class="n">Race</span>
-<span class="kn">from</span> <span class="nn">scripts.components.savvy</span> <span class="kn">import</span> <span class="n">Savvy</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">ENTITY_BLOCKS_SIGHT</span><span class="p">,</span> <span class="n">ICON_SIZE</span>
 <span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">IsPlayer</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Resources</span><span class="p">,</span> <span class="n">Race</span><span class="p">,</span> <span class="n">Savvy</span><span class="p">,</span> <span class="n">Homeland</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> \
+    <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">IsGod</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">,</span> <span class="n">HasCombatStats</span><span class="p">,</span> <span class="n">Blocking</span>
 <span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
+<span class="kn">from</span> <span class="nn">scripts.world.combat_stats</span> <span class="kn">import</span> <span class="n">CombatStats</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+    <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
 
 
 <div class="viewcode-block" id="EntityMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods">[docs]</a><span class="k">class</span> <span class="nc">EntityMethods</span><span class="p">:</span>
@@ -180,9 +183,11 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        manager(WorldManager): the manager containing this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
+
+    <span class="c1">############### GET ###################</span>
 
 <div class="viewcode-block" id="EntityMethods.get_blocking_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_blocking_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_blocking_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -195,7 +200,7 @@
 <span class="sd">            Entity: returns entity if there is one, else None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO - change to just get the entity</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span>
 
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
@@ -215,265 +220,477 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            entity: Entity or None if no entity found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span>
 
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">is_tile_in_fov</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">is_tile_in_fov</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">entity</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="EntityMethods.get_euclidean_distance_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_euclidean_distance_between_entities">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_euclidean_distance_between_entities</span><span class="p">(</span><span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get distance from an entity towards another entity`s location</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            start_entity (Entity):</span>
-<span class="sd">            target_entity (Entity):</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            float: straight line distance</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dx</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">dy</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span>
-        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="EntityMethods.get_chebyshev_distance_between_tiles"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_chebyshev_distance_between_tiles">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_chebyshev_distance_between_tiles</span><span class="p">(</span><span class="n">start_tile</span><span class="p">,</span> <span class="n">end_tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get distance from a Tile towards another Tile`s location</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            start_tile (Tile):</span>
-<span class="sd">            end_tile (Tile):</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: distance in tiles</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">start_tile_position</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">start_tile</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
-        <span class="n">target_tile_position</span> <span class="o">=</span> <span class="p">[</span><span class="n">end_tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">end_tile</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">chebyshev</span><span class="p">(</span><span class="n">start_tile_position</span><span class="p">,</span> <span class="n">target_tile_position</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="EntityMethods.get_direction_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_direction_between_entities">[docs]</a>    <span class="k">def</span> <span class="nf">get_direction_between_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get direction from an entity towards another entity`s location. Respects blocked tiles.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            start_entity (Entity):</span>
-<span class="sd">            target_entity (Entity):</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> is looking for a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
-
-        <span class="n">direction_x</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">direction_y</span> <span class="o">=</span> <span class="n">target_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span>
-        <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">direction_x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">direction_y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-
-        <span class="n">direction_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">direction_x</span> <span class="o">/</span> <span class="n">distance</span><span class="p">))</span>
-        <span class="n">direction_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">direction_y</span> <span class="o">/</span> <span class="n">distance</span><span class="p">))</span>
-
-        <span class="n">tile_is_blocked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">is_tile_blocking_movement</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
-                                                                                <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction_y</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tile_is_blocked</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_blocking_entity</span><span class="p">(</span><span class="n">start_entity</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">direction_x</span><span class="p">,</span>
-                                                                          <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">direction_y</span><span class="p">)):</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> found a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
-
-            <span class="k">return</span> <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{start_entity.name}</span><span class="s2"> did NOT find a direct path to </span><span class="si">{target_entity.name}</span><span class="s2">.&quot;</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
-
-            <span class="k">return</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">start_entity</span><span class="o">.</span><span class="n">y</span></div>
-
-<div class="viewcode-block" id="EntityMethods.get_a_star_direction_between_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_a_star_direction_between_entities">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_a_star_direction_between_entities</span><span class="p">(</span><span class="n">start_entity</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Use a* pathfinding to get a direction from one entity to another</span>
-<span class="sd">        Args:</span>
-<span class="sd">            start_entity:</span>
-<span class="sd">            target_entity:</span>
-
-<span class="sd">        Returns:</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">max_path_length</span> <span class="o">=</span> <span class="mi">25</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
-        <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">game_map</span>
-        <span class="n">entities</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_all_entities</span><span class="p">()</span>
-        <span class="n">entity_to_move</span> <span class="o">=</span> <span class="n">start_entity</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">target_entity</span>
-
-        <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> is looking for a path to </span><span class="si">{target.name}</span><span class="s2"> with a*&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
-
-        <span class="c1"># Create a FOV map that has the dimensions of the map</span>
-        <span class="n">fov</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map_new</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
-
-        <span class="c1"># Scan the current map each turn and set all the walls as unwalkable</span>
-        <span class="k">for</span> <span class="n">y1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">x1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
-                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="ow">not</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x1</span><span class="p">][</span><span class="n">y1</span><span class="p">]</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">,</span>
-                                           <span class="ow">not</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x1</span><span class="p">][</span><span class="n">y1</span><span class="p">]</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">)</span>
-
-        <span class="c1"># Scan all the objects to see if there are objects that must be navigated around</span>
-        <span class="c1"># Check also that the object isn&#39;t self or the target (so that the start and the end points are free)</span>
-        <span class="c1"># The AI class handles the situation if self is next to the target so it will not use this A* function</span>
-        <span class="c1"># anyway</span>
-        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="ow">and</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">entity_to_move</span> <span class="ow">and</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">target</span><span class="p">:</span>
-                <span class="c1"># Set the tile as a wall so it must be navigated around</span>
-                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-
-        <span class="c1"># Allocate a A* path</span>
-        <span class="c1"># The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited</span>
-        <span class="n">my_path</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_new_using_map</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="mf">1.41</span><span class="p">)</span>
-
-        <span class="c1"># Compute the path between self`s coordinates and the target`s coordinates</span>
-        <span class="n">tcod</span><span class="o">.</span><span class="n">path_compute</span><span class="p">(</span><span class="n">my_path</span><span class="p">,</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-
-        <span class="c1"># Check if the path exists, and in this case, also the path is shorter than max_path_length</span>
-        <span class="c1"># The path size matters if you want the monster to use alternative longer paths (for example through</span>
-        <span class="c1"># other rooms) if for example the player is in a corridor</span>
-        <span class="c1"># It makes sense to keep path size relatively low to keep the monsters from running around the map if</span>
-        <span class="c1"># there`s an alternative path really far away</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_is_empty</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_size</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_path_length</span><span class="p">:</span>
-            <span class="c1"># Find the next coordinates in the computed full path</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_walk</span><span class="p">(</span><span class="n">my_path</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-            <span class="c1"># convert to direction</span>
-            <span class="n">direction_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">x</span>
-            <span class="n">direction_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">entity_to_move</span><span class="o">.</span><span class="n">y</span>
-
-            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> found an a* path to </span><span class="si">{target.name}</span><span class="s2">...&quot;</span>
-            <span class="n">log_string2</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;-&gt; will move from [</span><span class="si">{entity_to_move.x}</span><span class="s2">,</span><span class="si">{entity_to_move.y}</span><span class="s2">] towards [</span><span class="si">{x}</span><span class="s2">,</span><span class="si">{y}</span><span class="s2">] in direction &quot;</span>\
-                <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{direction_x}</span><span class="s2">,</span><span class="si">{direction_y}</span><span class="s2">]&quot;</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span> <span class="n">log_string2</span><span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># no path found return no movement direction</span>
-            <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{entity_to_move.name}</span><span class="s2"> did NOT find an a* path to </span><span class="si">{target.name}</span><span class="s2">.&quot;</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span>
-
-        <span class="c1"># Delete the path to free memory</span>
-        <span class="n">tcod</span><span class="o">.</span><span class="n">path_delete</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">direction_x</span><span class="p">,</span> <span class="n">direction_y</span></div>
-
-<div class="viewcode-block" id="EntityMethods.get_all_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_all_entities">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the list of all entities</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            list: list of entities</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span></div>
-
-<div class="viewcode-block" id="EntityMethods.get_player"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_player">[docs]</a>    <span class="k">def</span> <span class="nf">get_player</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityMethods.get_player"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_player">[docs]</a>    <span class="k">def</span> <span class="nf">get_player</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the player.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Entity:</span>
+<span class="sd">            int: Entity ID</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">player</span></div>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">IsPlayer</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">entity</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="EntityMethods.add_entity_to_central_list"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_entity_to_central_list">[docs]</a>    <span class="k">def</span> <span class="nf">add_entity_to_central_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityMethods.get_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique_component</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add entity to game map</span>
+<span class="sd">        Get a single entity that has a component. If multiple entities have the given component only the first found</span>
+<span class="sd">        is returned.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tile_x:</span>
-<span class="sd">            tile_y:</span>
-<span class="sd">            entity:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_entity_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></div>
+<span class="sd">            unique_component ():</span>
 
-<div class="viewcode-block" id="EntityMethods.add_player_to_central_list"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.add_player_to_central_list">[docs]</a>    <span class="k">def</span> <span class="nf">add_player_to_central_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Entity ID.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">unique_component</span><span class="p">):</span>
+            <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
+        <span class="n">num_entities</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num_entities</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to get an entity with </span><span class="si">{unique_component}</span><span class="s2"> component but found {len(entities)} &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;entities with that component.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">num_entities</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to get an entity with </span><span class="si">{unique_component}</span><span class="s2"> component but found none.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">entities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_entities"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_entities">[docs]</a>    <span class="k">def</span> <span class="nf">get_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component1</span><span class="p">,</span> <span class="n">component2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">component3</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get entities with the specified components.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tile_x:</span>
-<span class="sd">            tile_y:</span>
-<span class="sd">            entity:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO - fold into create actor, use player arg default to false</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="n">entity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">add_entity_to_central_list</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span></div>
+<span class="sd">            component1 ():</span>
+<span class="sd">            component2 ():</span>
+<span class="sd">            component3 ():</span>
 
-<div class="viewcode-block" id="EntityMethods.remove_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.remove_entity">[docs]</a>    <span class="k">def</span> <span class="nf">remove_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            List[int]: List of Entity IDs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">component2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">component3</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">c1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">component1</span><span class="p">):</span>
+                <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">component2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">component3</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">component1</span><span class="p">,</span> <span class="n">component2</span><span class="p">):</span>
+                <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">component2</span> <span class="ow">and</span> <span class="n">component3</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">component1</span><span class="p">,</span> <span class="n">component2</span><span class="p">,</span> <span class="n">component3</span><span class="p">):</span>
+                <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entities</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_entities_and_components_in_area"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_entities_and_components_in_area">[docs]</a>    <span class="k">def</span> <span class="nf">get_entities_and_components_in_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">area</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tile</span><span class="p">],</span> <span class="n">component1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">component2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">component3</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove entity from entities list and current tile.</span>
+<span class="sd">        Return a list of entities and their specified components, plus Position. e.g. (Position, component1). If no</span>
+<span class="sd">        components are specified the return will be (Position, None).</span>
+
+<span class="sd">        N.B. Do not specify Position as a component.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            entity:</span>
+<span class="sd">            area ():</span>
+<span class="sd">            component1 ():</span>
+<span class="sd">            component2 ():</span>
+<span class="sd">            component3 ():</span>
+
+<span class="sd">        Returns:</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># remove from tile</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">remove_entity</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c1"># remove from entities list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">component1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">component2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">component3</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">area</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                        <span class="n">entities</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">component1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">component2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">component3</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">c1</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">component1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">area</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                        <span class="n">entities</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">c1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">component1</span> <span class="ow">and</span> <span class="n">component2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">component3</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">component1</span><span class="p">,</span> <span class="n">component2</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">area</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                        <span class="n">entities</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">component1</span> <span class="ow">and</span> <span class="n">component2</span> <span class="ow">and</span> <span class="n">component3</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">component1</span><span class="p">,</span> <span class="n">component2</span><span class="p">,</span>
+                                                                                <span class="n">component3</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">area</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                        <span class="n">entities</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EntityMethods.create_actor_entity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.create_actor_entity">[docs]</a>    <span class="k">def</span> <span class="nf">create_actor_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor_template_name</span><span class="p">,</span> <span class="n">actor_name</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">entities</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_component"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_component">[docs]</a>    <span class="k">def</span> <span class="nf">get_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create an entity from an actor template</span>
+<span class="sd">        Get an entity&#39;s component.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tile_x (int):</span>
-<span class="sd">            tile_y (int):</span>
-<span class="sd">            actor_name (str):</span>
-<span class="sd">            actor_template_name (str):</span>
-<span class="sd">            player (bool):</span>
+<span class="sd">            entity ():</span>
+<span class="sd">            component ():</span>
+
+<span class="sd">        Returns:</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">actor_template</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_actor_template_data</span><span class="p">(</span><span class="n">actor_template_name</span><span class="p">)</span>
-
-        <span class="n">actor_name</span> <span class="o">=</span> <span class="n">actor_name</span>
-
-        <span class="n">sprite</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/actor/&quot;</span> <span class="o">+</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">spritesheet</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
-        <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;assets/actor/&quot;</span> <span class="o">+</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">icon</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
-
-        <span class="c1"># catch any images not resized and resize them</span>
-        <span class="k">if</span> <span class="n">icon</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span> <span class="o">!=</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">):</span>
-            <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
-
-        <span class="n">combatant_component</span> <span class="o">=</span> <span class="n">Combatant</span><span class="p">()</span>
-        <span class="n">savvy_component</span> <span class="o">=</span> <span class="n">Savvy</span><span class="p">(</span><span class="n">actor_template</span><span class="o">.</span><span class="n">savvy_component</span><span class="p">)</span>
-        <span class="n">homeland_component</span> <span class="o">=</span> <span class="n">Homeland</span><span class="p">(</span><span class="n">actor_template</span><span class="o">.</span><span class="n">homeland_component</span><span class="p">)</span>
-        <span class="n">race_component</span> <span class="o">=</span> <span class="n">Race</span><span class="p">(</span><span class="n">actor_template</span><span class="o">.</span><span class="n">race_component</span><span class="p">)</span>
-        <span class="n">actor_component</span> <span class="o">=</span> <span class="n">Actor</span><span class="p">()</span>
-
-        <span class="c1"># get the AI value and convert to relevant class</span>
-        <span class="n">ai_value</span> <span class="o">=</span> <span class="n">actor_template</span><span class="o">.</span><span class="n">ai_component</span>
-        <span class="kn">from</span> <span class="nn">scripts.components.ai</span> <span class="kn">import</span> <span class="n">BasicMonster</span>
-        <span class="k">if</span> <span class="n">ai_value</span> <span class="o">==</span> <span class="s2">&quot;basic_monster&quot;</span><span class="p">:</span>
-            <span class="n">ai_component</span> <span class="o">=</span> <span class="n">BasicMonster</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">component_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ai_component</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 
-        <span class="c1"># create the Entity</span>
-        <span class="n">actor</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="n">actor_name</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">combatant</span><span class="o">=</span><span class="n">combatant_component</span><span class="p">,</span> <span class="n">race</span><span class="o">=</span><span class="n">race_component</span><span class="p">,</span>
-                       <span class="n">savvy</span><span class="o">=</span><span class="n">savvy_component</span><span class="p">,</span> <span class="n">homeland</span><span class="o">=</span><span class="n">homeland_component</span><span class="p">,</span> <span class="n">ai</span><span class="o">=</span><span class="n">ai_component</span><span class="p">,</span>
-                       <span class="n">actor</span><span class="o">=</span><span class="n">actor_component</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="n">player</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">)</span>
+<div class="viewcode-block" id="EntityMethods.get_components"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_components">[docs]</a>    <span class="k">def</span> <span class="nf">get_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all of an entity&#39;s components.</span>
 
-        <span class="n">actor</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">hp</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">max_hp</span>
-        <span class="n">actor</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">stamina</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">combatant</span><span class="o">.</span><span class="n">secondary_stats</span><span class="o">.</span><span class="n">max_stamina</span>
+<span class="sd">        Args:</span>
+<span class="sd">            entity ():</span>
 
-        <span class="k">if</span> <span class="n">player</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_player_to_central_list</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor</span><span class="p">)</span>
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">components_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_identity"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_identity">[docs]</a>    <span class="k">def</span> <span class="nf">get_identity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Identity</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get an entity&#39;s Identity component.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_stats"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_stats">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CombatStats</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create and return a stat object  for an entity.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity ():</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CombatStats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.get_primary_stat"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.get_primary_stat">[docs]</a>    <span class="k">def</span> <span class="nf">get_primary_stat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">primary_stat</span><span class="p">:</span> <span class="n">PrimaryStatTypes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an entity&#39;s primary stat.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity ():</span>
+<span class="sd">            primary_stat ():</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="n">primary_stat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">race</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">try_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Race</span><span class="p">):</span>
+            <span class="n">race_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_race_data</span><span class="p">(</span><span class="n">race</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">race_data</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">savvy</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">try_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Savvy</span><span class="p">):</span>
+            <span class="n">savvy_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_savvy_data</span><span class="p">(</span><span class="n">savvy</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">savvy_data</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">homeland</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">try_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Homeland</span><span class="p">):</span>
+            <span class="n">homeland_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_homeland_data</span><span class="p">(</span><span class="n">homeland</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">homeland_data</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span>
+
+        <span class="c1"># TODO - re add afflicitons</span>
+        <span class="c1"># value += self._manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)</span>
+
+        <span class="c1"># ensure no dodgy numbers, like floats or negative</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+    <span class="c1">############## QUERIES  ################</span>
+
+<div class="viewcode-block" id="EntityMethods.has_component"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.has_component">[docs]</a>    <span class="k">def</span> <span class="nf">has_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Confirm if an entity has a component</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity ():</span>
+<span class="sd">            component ():</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">add_entity_to_central_list</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">,</span> <span class="n">actor</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="kc">False</span></div>
 
+    <span class="c1">############## ENTITY EXISTENCE ################</span>
+
+<div class="viewcode-block" id="EntityMethods.create"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use each component in a list of components to create an entity</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            components ():</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">world</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">create_entity</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
+            <span class="n">world</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">component</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entity</span></div>
+
+<div class="viewcode-block" id="EntityMethods.delete"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Queues entity for removal from the world. Happens at the next run of World.process.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">delete_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entity (</span><span class="si">{entity}</span><span class="s2">) deleted.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Tried to delete an entity but entity was None.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.create_god"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.create_god">[docs]</a>    <span class="k">def</span> <span class="nf">create_god</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">god_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an entity with all of the components to be a god.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            god_name (): god_name must be in the gods json file.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Entity ID</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_god_data</span><span class="p">(</span><span class="n">god_name</span><span class="p">)</span>
+        <span class="n">god</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># get aesthetic info</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">sprite</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+
+        <span class="c1"># get knowledge info</span>
+        <span class="n">interventions</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">interventions</span>
+        <span class="n">intervention_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">intervention</span> <span class="ow">in</span> <span class="n">interventions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">intervention_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intervention</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+        <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Aesthetic</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">image</span><span class="p">))</span>
+        <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsGod</span><span class="p">())</span>
+        <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Opinion</span><span class="p">())</span>
+        <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Knowledge</span><span class="p">(</span><span class="n">intervention_names</span><span class="p">))</span>
+        <span class="n">god</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">Resources</span><span class="p">(</span><span class="mi">9999</span><span class="p">,</span> <span class="mi">9999</span><span class="p">)))</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">god</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entity</span></div>
+
+<div class="viewcode-block" id="EntityMethods.create_actor"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.create_actor">[docs]</a>    <span class="k">def</span> <span class="nf">create_actor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">race_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">homeland_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">savvy_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">is_player</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an entity with all of the components to be an actor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (): </span>
+<span class="sd">            description (): </span>
+<span class="sd">            x (): </span>
+<span class="sd">            y ():</span>
+<span class="sd">            race_name (): </span>
+<span class="sd">            homeland_name (): </span>
+<span class="sd">            savvy_name (): </span>
+<span class="sd">            is_player (): Optional. Defaults to false.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Entity ID</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">actor</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># player components</span>
+        <span class="k">if</span> <span class="n">is_player</span><span class="p">:</span>
+            <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">IsPlayer</span><span class="p">())</span>
+
+        <span class="c1"># actor components</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="p">))</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Position</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  <span class="c1"># TODO - check position not blocked</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">HasCombatStats</span><span class="p">())</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Blocking</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">ENTITY_BLOCKS_SIGHT</span><span class="p">))</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Race</span><span class="p">(</span><span class="n">race_name</span><span class="p">))</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Homeland</span><span class="p">(</span><span class="n">homeland_name</span><span class="p">))</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Savvy</span><span class="p">(</span><span class="n">savvy_name</span><span class="p">))</span>
+
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">actor</span><span class="p">)</span>
+
+        <span class="c1"># give full resources</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">max_hp</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">max_stamina</span><span class="p">))</span>
+
+        <span class="c1"># get skills from characteristics</span>
+        <span class="n">skills</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;basic attack&quot;</span><span class="p">]</span>  <span class="c1"># N.B. All actors start with basic attack</span>
+        <span class="n">race_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_race_data</span><span class="p">(</span><span class="n">race_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">race_data</span><span class="o">.</span><span class="n">skills</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+            <span class="n">skills</span> <span class="o">+=</span> <span class="n">race_data</span><span class="o">.</span><span class="n">skills</span>
+
+        <span class="n">homeland_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_homeland_data</span><span class="p">(</span><span class="n">homeland_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">homeland_data</span><span class="o">.</span><span class="n">skills</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+            <span class="n">skills</span> <span class="o">+=</span> <span class="n">homeland_data</span><span class="o">.</span><span class="n">skills</span>
+
+        <span class="n">savvy_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_savvy_data</span><span class="p">(</span><span class="n">savvy_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">savvy_data</span><span class="o">.</span><span class="n">skills</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;none&quot;</span><span class="p">]:</span>
+            <span class="n">skills</span> <span class="o">+=</span> <span class="n">savvy_data</span><span class="o">.</span><span class="n">skills</span>
+
+        <span class="c1"># add skills to entity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">(</span><span class="n">skills</span><span class="p">))</span>
+
+        <span class="c1"># add aesthetic</span>
+        <span class="c1"># TODO - build final sprite from all characteristics</span>
+        <span class="n">sprite</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">race_data</span><span class="o">.</span><span class="n">sprite</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
+        <span class="n">icon</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">ICON_SIZE</span><span class="p">,</span> <span class="n">ICON_SIZE</span><span class="p">))</span>
+        <span class="n">sprite</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="n">icon</span><span class="p">))</span>
+
+        <span class="c1"># player fov</span>
+        <span class="k">if</span> <span class="n">is_player</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">recompute_player_fov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">sight_range</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entity</span></div>
+
+    <span class="c1">############### COMPONENT ACTIONS ##########</span>
+
+<div class="viewcode-block" id="EntityMethods.spend_time"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.spend_time">[docs]</a>    <span class="k">def</span> <span class="nf">spend_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add time_spent to the entity&#39;s total time spent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity ():</span>
+<span class="sd">            time_spent ():</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">component_for_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
+            <span class="n">resources</span><span class="o">.</span><span class="n">time_spent</span> <span class="o">+=</span> <span class="n">time_spent</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Tried to spend entity&#39;s time but entity was None.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.learn_skill"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.learn_skill">[docs]</a>    <span class="k">def</span> <span class="nf">learn_skill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add the skill name to the entity&#39;s knowledge component.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity ():</span>
+<span class="sd">            skill_name ():</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">has_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">add_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">())</span>
+
+        <span class="n">knowledge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">())</span>
+        <span class="n">knowledge</span><span class="o">.</span><span class="n">skills</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.judge_action"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.judge_action">[docs]</a>    <span class="k">def</span> <span class="nf">judge_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards</span>
+<span class="sd">        that  action.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity ():</span>
+<span class="sd">            action (): Can be str if matching name, e.g. affliction name, or Enum, e.g. Hit Type name.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">is_god</span><span class="p">,</span> <span class="n">opinion</span><span class="p">,</span> <span class="n">identity</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">IsGod</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">,</span> <span class="n">Identity</span><span class="p">):</span>
+
+            <span class="n">attitudes</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_god_attitudes_data</span><span class="p">(</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="c1"># handle enums and str being passed in</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+                <span class="n">action_name</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">action_name</span> <span class="o">=</span> <span class="n">action</span>
+
+            <span class="c1"># check if the god has an attitude towards the action and apply the opinion change,</span>
+            <span class="c1"># adding the entity to the dict if necessary</span>
+            <span class="k">if</span> <span class="n">action_name</span> <span class="ow">in</span> <span class="n">attitudes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">:</span>
+                    <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">+=</span> <span class="n">attitudes</span><span class="p">[</span><span class="n">action_name</span><span class="p">]</span><span class="o">.</span><span class="n">opinion_change</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">attitudes</span><span class="p">[</span><span class="n">action_name</span><span class="p">]</span><span class="o">.</span><span class="n">opinion_change</span>
+
+                <span class="n">entity_identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_identity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{identity.name}</span><span class="s2">&#39; reacted to &#39;</span><span class="si">{entity_identity.name}</span><span class="s2">&#39; using </span><span class="si">{action_name}</span><span class="s2">.  New &quot;</span>
+                             <span class="sa">f</span><span class="s2">&quot;opinion = </span><span class="si">{opinion.opinions[entity]}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EntityMethods.consider_intervening"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.entity_methods.EntityMethods.consider_intervening">[docs]</a>    <span class="k">def</span> <span class="nf">consider_intervening</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Have all entities consider intervening</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entity (): entity who acted</span>
+<span class="sd">            action (object): Can be str if matching name, e.g. affliction name, or Enum name, e.g. Hit Type name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Tuple]: List of tuples containing (god_entity_id, intervention name).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chosen_interventions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">desire_to_intervene</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">desire_to_do_nothing</span> <span class="o">=</span> <span class="mi">75</span>  <span class="c1"># weighting for doing nothing # TODO - move magic number to config</span>
+
+        <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">is_god</span><span class="p">,</span> <span class="n">opinion</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">knowledge</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">IsGod</span><span class="p">,</span> <span class="n">Opinion</span><span class="p">,</span>
+                                                                                              <span class="n">Identity</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">):</span>
+            <span class="n">attitudes</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_god_attitudes_data</span><span class="p">(</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="c1"># handle enums and str being passed in</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+                <span class="n">action_name</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">action_name</span> <span class="o">=</span> <span class="n">action</span>
+
+            <span class="c1"># check if the god has an attitude towards the action and increase likelihood of intervening</span>
+            <span class="k">if</span> <span class="n">action_name</span> <span class="ow">in</span> <span class="n">attitudes</span><span class="p">:</span>
+                <span class="n">desire_to_intervene</span> <span class="o">=</span> <span class="mi">30</span>
+
+            <span class="c1"># get eligible interventions and their weightings. Need separate lists for random.choices</span>
+            <span class="n">eligible_interventions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">intervention_weightings</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">intervention_name</span> <span class="ow">in</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skills</span><span class="p">:</span>
+                <span class="n">intervention_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_god_intervention_data</span><span class="p">(</span><span class="n">identity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">intervention_name</span><span class="p">)</span>
+
+                <span class="c1"># is the god willing to intervene i.e. does the opinion score meet the required opinion</span>
+                <span class="n">opinion_score</span> <span class="o">=</span> <span class="n">opinion</span><span class="o">.</span><span class="n">opinions</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span>
+                <span class="n">required_opinion</span> <span class="o">=</span> <span class="n">intervention_data</span><span class="o">.</span><span class="n">required_opinion</span>
+                <span class="c1"># check if greater or lower, depending on whether required opinion is positive or negative</span>
+                <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">required_opinion</span> <span class="o">&lt;</span> <span class="n">opinion_score</span><span class="p">:</span>
+                    <span class="n">amount_exceeding_requirement</span> <span class="o">=</span> <span class="n">opinion_score</span> <span class="o">-</span> <span class="n">required_opinion</span>
+
+                    <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intervention_name</span><span class="p">)</span>
+                    <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amount_exceeding_requirement</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="n">required_opinion</span> <span class="o">&gt;</span> <span class="n">opinion_score</span><span class="p">:</span>
+                    <span class="n">amount_exceeding_requirement</span> <span class="o">=</span> <span class="n">required_opinion</span> <span class="o">-</span> <span class="n">opinion_score</span>  <span class="c1"># N.B. opposite to above</span>
+                    <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intervention_name</span><span class="p">)</span>
+                    <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">amount_exceeding_requirement</span><span class="p">)</span>
+
+            <span class="c1"># add chance to do nothing</span>
+            <span class="n">eligible_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Nothing&quot;</span><span class="p">)</span>
+            <span class="n">intervention_weightings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">desire_to_do_nothing</span> <span class="o">-</span> <span class="n">desire_to_intervene</span><span class="p">)</span>
+
+            <span class="c1"># which intervention, if any, shall the god consider using?</span>
+            <span class="n">chosen_intervention</span><span class="p">,</span>  <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">eligible_interventions</span><span class="p">,</span> <span class="n">intervention_weightings</span><span class="p">)</span>
+            <span class="c1"># N.B. use , to unpack the result</span>
+
+            <span class="c1"># if god has chosen to take an action then add to list</span>
+            <span class="k">if</span> <span class="n">chosen_intervention</span> <span class="o">!=</span> <span class="s2">&quot;Nothing&quot;</span><span class="p">:</span>
+                <span class="n">chosen_interventions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ent</span><span class="p">,</span> <span class="n">chosen_intervention</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">chosen_interventions</span></div></div>
 </pre></div>
 
 	    </div>

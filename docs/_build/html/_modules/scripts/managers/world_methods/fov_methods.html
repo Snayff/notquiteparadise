@@ -64,11 +64,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -155,9 +155,15 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.managers.world_methods.fov_methods</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">tcod</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tcod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">FOVInfo</span><span class="p">,</span> <span class="n">SkillShapes</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
 
 
 <div class="viewcode-block" id="FOVMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.fov_methods.FOVMethods">[docs]</a><span class="k">class</span> <span class="nc">FOVMethods</span><span class="p">:</span>
@@ -165,19 +171,21 @@
 <span class="sd">    Methods for querying the fov and fov related info and taking fov actions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_players_fov_map</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: tcod.map.Map</span>
 
 <div class="viewcode-block" id="FOVMethods.create_player_fov_map"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.create_player_fov_map">[docs]</a>    <span class="k">def</span> <span class="nf">create_player_fov_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create the fov map for the player</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">player_fov_map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map_new</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
-        <span class="n">fov_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_player_fov</span><span class="p">()</span>
+        <span class="n">fov_map</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map_new</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
-                <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
-                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov_map</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">,</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">)</span></div>
+                <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov_map</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">,</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_players_fov_map</span> <span class="o">=</span> <span class="n">fov_map</span></div>
 
 <div class="viewcode-block" id="FOVMethods.recompute_player_fov"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.recompute_player_fov">[docs]</a>    <span class="k">def</span> <span class="nf">recompute_player_fov</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -188,7 +196,7 @@
 <span class="sd">            radius:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tcod</span><span class="o">.</span><span class="n">map_compute_fov</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_player_fov</span><span class="p">(),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">FOVInfo</span><span class="o">.</span><span class="n">LIGHT_WALLS</span><span class="p">,</span> <span class="n">FOVInfo</span><span class="o">.</span><span class="n">FOV_ALGORITHM</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">update_tile_visibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_player_fov</span><span class="p">())</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">update_tile_visibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_player_fov</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="FOVMethods.is_tile_in_fov"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.is_tile_in_fov">[docs]</a>    <span class="k">def</span> <span class="nf">is_tile_in_fov</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -211,7 +219,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            tcod.map.Map</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">player_fov_map</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_players_fov_map</span></div>
 
 <div class="viewcode-block" id="FOVMethods.update_tile_visibility"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.fov_methods.FOVMethods.update_tile_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">update_tile_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fov_map</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -220,7 +228,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            fov_map:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
@@ -236,11 +244,11 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            list[Tile]: A list of tiles</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
 
         <span class="c1"># get the tiles in range</span>
-        <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_shape</span><span class="p">(</span><span class="n">SkillShapes</span><span class="o">.</span><span class="n">SQUARE</span><span class="p">,</span> <span class="n">range_from_centre</span><span class="p">)</span>  <span class="c1"># square as LOS is square</span>
-        <span class="n">tiles_in_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">create_shape</span><span class="p">(</span><span class="n">SkillShapes</span><span class="o">.</span><span class="n">SQUARE</span><span class="p">,</span> <span class="n">range_from_centre</span><span class="p">)</span>  <span class="c1"># square as LOS is square</span>
+        <span class="n">tiles_in_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
         <span class="n">tiles_in_range_and_fov</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># only take tiles in range and FOV</span>

@@ -64,11 +64,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -155,10 +155,14 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.world.tile</h1><div class="highlight"><pre>
-<span></span>
-<span class="kn">from</span> <span class="nn">scripts.world.entity</span> <span class="kn">import</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="kn">import</span> <span class="n">Floor</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="kn">import</span> <span class="n">Wall</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pygame</span>
 
 
 <div class="viewcode-block" id="Tile"><a class="viewcode-back" href="../../../world.html#scripts.world.tile.Tile">[docs]</a><span class="k">class</span> <span class="nc">Tile</span><span class="p">:</span>
@@ -169,112 +173,17 @@
 <span class="sd">        x(int): tile_x</span>
 <span class="sd">        y(int): tile_y</span>
 <span class="sd">        is_visible(bool): if tile is visible to player</span>
-<span class="sd">        entity(Entity): the entity on the tile</span>
-<span class="sd">        terrain(Terrain): the terrain on the tile, such as floor or wall</span>
-<span class="sd">        aspect(dict[Aspect]): the aspects of the tile, such as smoke or fire</span>
+<span class="sd">        sprite(pygame.Surface): the sprite of the floor.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">terrain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span>
+    <span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite</span> <span class="o">=</span> <span class="n">sprite</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
-
-        <span class="k">if</span> <span class="n">terrain</span><span class="p">:</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_terrain_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">terrain</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">aspect</span><span class="p">:</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">add_aspect_to_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspect</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">set_entity_on_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_floor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if the tag is applicable</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if tag is applicable</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">,</span> <span class="n">Floor</span><span class="p">):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="kc">False</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_wall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if the tag is applicable</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if tag is applicable</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">,</span> <span class="n">Wall</span><span class="p">):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="kc">False</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">has_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if the tag is applicable</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if tag is applicable</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="kc">False</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">blocks_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If anything on tile blocks ability to move</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if movement is blocked.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="kc">False</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">blocks_sight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If anything on tile blocks ability to see</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if sight is blocked.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocks_sight</span> <span class="o">=</span> <span class="n">blocks_sight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocks_movement</span> <span class="o">=</span> <span class="n">blocks_movement</span></div>
 
 
 

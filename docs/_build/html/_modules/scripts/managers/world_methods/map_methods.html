@@ -64,11 +64,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#logging">Logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#message">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.pub_sub_hub">Hub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#hub">Hub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -155,16 +155,22 @@
 
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.managers.world_methods.map_methods</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">math</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">tcod</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">scipy.spatial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">TILE_SIZE</span>
+<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span>
 <span class="kn">from</span> <span class="nn">scripts.world.game_map</span> <span class="kn">import</span> <span class="n">GameMap</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.floor</span> <span class="kn">import</span> <span class="n">Floor</span>
-<span class="kn">from</span> <span class="nn">scripts.world.terrain.wall</span> <span class="kn">import</span> <span class="n">Wall</span>
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+    <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
 
 
 <div class="viewcode-block" id="MapMethods"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods">[docs]</a><span class="k">class</span> <span class="nc">MapMethods</span><span class="p">:</span>
@@ -174,9 +180,20 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        manager(WorldManager): the manager containing this class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager</span> <span class="kn">import</span> <span class="n">WorldManager</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: WorldManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_game_map</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1">########## CREATE ###############</span>
+
+<div class="viewcode-block" id="MapMethods.create_game_map"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.create_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">create_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create new GameMap and create player FOV</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_game_map</span> <span class="o">=</span> <span class="n">GameMap</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
+
+    <span class="c1">############# GET ###############</span>
 
 <div class="viewcode-block" id="MapMethods.get_game_map"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">get_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GameMap</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -185,82 +202,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            GameMap</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">game_map</span></div>
-
-<div class="viewcode-block" id="MapMethods.is_tile_blocking_sight"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_blocking_sight">[docs]</a>    <span class="k">def</span> <span class="nf">is_tile_blocking_sight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if a tile is blocking sight</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tile_x:</span>
-<span class="sd">            tile_y:</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">]</span><span class="o">.</span><span class="n">blocks_sight</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="MapMethods.is_tile_visible_to_player"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_visible_to_player">[docs]</a>    <span class="k">def</span> <span class="nf">is_tile_visible_to_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if the specified tile is visible to the player</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tile_x:</span>
-<span class="sd">            tile_y:</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">]</span><span class="o">.</span><span class="n">is_visible</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span></div>
-
-<div class="viewcode-block" id="MapMethods.get_target_type_from_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_target_type_from_tile">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_type_from_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get type of target tile</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tile_x(int):  x position of the tile</span>
-<span class="sd">            tile_y(int):  y position of the tile</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO - convert to properties of tile class</span>
-
-        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
-        <span class="n">tile</span> <span class="o">=</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tile_in_bounds</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">OUT_OF_BOUNDS</span>
-
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">terrain</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Wall</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span>
-        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">terrain</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Floor</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">FLOOR</span></div>
-
-<div class="viewcode-block" id="MapMethods.is_tile_in_bounds"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_in_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">is_tile_in_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if specified tile is in the map.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tile_x:</span>
-<span class="sd">            tile_y:</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
-            <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_game_map</span></div>
 
 <div class="viewcode-block" id="MapMethods.get_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_tile">[docs]</a>    <span class="k">def</span> <span class="nf">get_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_pos</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tile</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -335,12 +277,285 @@
             <span class="n">tile_y</span> <span class="o">=</span> <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">start_tile_row</span>
 
             <span class="c1"># make sure it is in bounds</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tile_in_bounds</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
                 <span class="n">tiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">tiles</span></div>
 
-<div class="viewcode-block" id="MapMethods.is_tile_blocking_movement"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.is_tile_blocking_movement">[docs]</a>    <span class="k">def</span> <span class="nf">is_tile_blocking_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">):</span>
+<div class="viewcode-block" id="MapMethods.get_euclidean_distance"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_euclidean_distance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_euclidean_distance</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get distance from an xy position towards another location. Expected tuple in the form of (x, y).</span>
+<span class="sd">        This returns a float indicating the straight line distance between the two points.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_pos ():</span>
+<span class="sd">            target_pos ():</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: straight line distance</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">target_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MapMethods.get_chebyshev_distance"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_chebyshev_distance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_chebyshev_distance</span><span class="p">(</span><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get distance from an xy position towards another location. Expected tuple in the form of (x, y).</span>
+<span class="sd">        This returns an int indicating the number of tile moves between the two points.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_pos ():</span>
+<span class="sd">            target_pos ():</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: distance in tiles</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">chebyshev</span><span class="p">(</span><span class="n">start_pos</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MapMethods.get_direct_direction"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_direct_direction">[docs]</a>    <span class="k">def</span> <span class="nf">get_direct_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get direction from an entity towards another entity`s location. Respects blocked tiles.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_pos ():</span>
+<span class="sd">            target_pos ():</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - update to use EC</span>
+        <span class="k">pass</span></div>
+        <span class="c1">#</span>
+        <span class="c1"># log_string = f&quot;{start_entity.name} is looking for a direct path to {target_entity.name}.&quot;</span>
+        <span class="c1"># logging.debug(log_string)</span>
+        <span class="c1">#</span>
+        <span class="c1"># direction_x = target_entity.x - start_entity.x</span>
+        <span class="c1"># direction_y = target_entity.y - start_entity.y</span>
+        <span class="c1"># distance = math.sqrt(direction_x ** 2 + direction_y ** 2)</span>
+        <span class="c1">#</span>
+        <span class="c1"># direction_x = int(round(direction_x / distance))</span>
+        <span class="c1"># direction_y = int(round(direction_y / distance))</span>
+        <span class="c1">#</span>
+        <span class="c1"># tile_is_blocked = self._manager.Map._is_tile_blocking_movement(start_entity.x + direction_x,</span>
+        <span class="c1">#                                                               start_entity.y + direction_y)</span>
+        <span class="c1">#</span>
+        <span class="c1"># if not (tile_is_blocked or self.get_blocking_entity(start_entity.x + direction_x,</span>
+        <span class="c1">#                                                     start_entity.y + direction_y)):</span>
+        <span class="c1">#     log_string = f&quot;{start_entity.name} found a direct path to {target_entity.name}.&quot;</span>
+        <span class="c1">#     logging.debug(log_string)</span>
+        <span class="c1">#</span>
+        <span class="c1">#     return direction_x, direction_y</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     log_string = f&quot;{start_entity.name} did NOT find a direct path to {target_entity.name}.&quot;</span>
+        <span class="c1">#     logging.debug(log_string)</span>
+        <span class="c1">#</span>
+        <span class="c1">#     return start_entity.x, start_entity.y</span>
+
+<div class="viewcode-block" id="MapMethods.get_a_star_direction"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_a_star_direction">[docs]</a>    <span class="k">def</span> <span class="nf">get_a_star_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use a* pathfinding to get a direction from one entity to another</span>
+<span class="sd">        Args:</span>
+<span class="sd">            start_pos ():</span>
+<span class="sd">            target_pos ():</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - update to use EC</span>
+        <span class="k">pass</span></div>
+        <span class="c1">#</span>
+        <span class="c1"># max_path_length = 25</span>
+        <span class="c1"># game_map = self._manager.game_map</span>
+        <span class="c1"># entities = []</span>
+        <span class="c1"># # TODO - update to use ECS</span>
+        <span class="c1"># for ent, (pos, blocking) in self._manager.World.get_components(Position, Blocking):</span>
+        <span class="c1">#     entities.append(ent)</span>
+        <span class="c1"># entity_to_move = start_entity</span>
+        <span class="c1"># target = target_entity</span>
+        <span class="c1">#</span>
+        <span class="c1"># log_string = f&quot;{entity_to_move.name} is looking for a path to {target.name} with a*&quot;</span>
+        <span class="c1"># logging.debug(log_string)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Create a FOV map that has the dimensions of the map</span>
+        <span class="c1"># fov = tcod.map_new(game_map.width, game_map.height)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Scan the current map each turn and set all the walls as unwalkable</span>
+        <span class="c1"># for y1 in range(game_map.height):</span>
+        <span class="c1">#     for x1 in range(game_map.width):</span>
+        <span class="c1">#         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,</span>
+        <span class="c1">#                                 not game_map.tiles[x1][y1].blocks_movement)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Scan all the objects to see if there are objects that must be navigated around</span>
+        <span class="c1"># # Check also that the object isn&#39;t self or the target (so that the start and the end points are free)</span>
+        <span class="c1"># # The AI class handles the situation if self is next to the target so it will not use this A* function</span>
+        <span class="c1"># # anyway</span>
+        <span class="c1"># for entity in entities:</span>
+        <span class="c1">#     if entity.blocks_movement and entity != entity_to_move and entity != target:</span>
+        <span class="c1">#         # Set the tile as a wall so it must be navigated around</span>
+        <span class="c1">#         tcod.map_set_properties(fov, entity.x, entity.y, True, False)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Allocate a A* path</span>
+        <span class="c1"># # The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited</span>
+        <span class="c1"># my_path = tcod.path_new_using_map(fov, 1.41)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Compute the path between self`s coordinates and the target`s coordinates</span>
+        <span class="c1"># tcod.path_compute(my_path, entity_to_move.x, entity_to_move.y, target.x, target.y)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Check if the path exists, and in this case, also the path is shorter than max_path_length</span>
+        <span class="c1"># # The path size matters if you want the monster to use alternative longer paths (for example through</span>
+        <span class="c1"># # other rooms) if for example the player is in a corridor</span>
+        <span class="c1"># # It makes sense to keep path size relatively low to keep the monsters from running around the map if</span>
+        <span class="c1"># # there`s an alternative path really far away</span>
+        <span class="c1"># if not tcod.path_is_empty(my_path) and tcod.path_size(my_path) &lt; max_path_length:</span>
+        <span class="c1">#     # Find the next coordinates in the computed full path</span>
+        <span class="c1">#     x, y = tcod.path_walk(my_path, True)</span>
+        <span class="c1">#</span>
+        <span class="c1">#     # convert to direction</span>
+        <span class="c1">#     direction_x = x - entity_to_move.x</span>
+        <span class="c1">#     direction_y = y - entity_to_move.y</span>
+        <span class="c1">#</span>
+        <span class="c1">#     log_string = f&quot;{entity_to_move.name} found an a* path to {target.name}...&quot;</span>
+        <span class="c1">#     log_string2 = f&quot;-&gt; will move from [{entity_to_move.x},{entity_to_move.y}] towards [{x},&quot; \</span>
+        <span class="c1">#                   f&quot;{y}] in direction &quot; \</span>
+        <span class="c1">#                   f&quot;[{direction_x},{direction_y}]&quot;</span>
+        <span class="c1">#     logging.debug(log_string)</span>
+        <span class="c1">#     logging.debug(log_string2)</span>
+        <span class="c1">#</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     # no path found return no movement direction</span>
+        <span class="c1">#     direction_x, direction_y = 0, 0</span>
+        <span class="c1">#     log_string = f&quot;{entity_to_move.name} did NOT find an a* path to {target.name}.&quot;</span>
+        <span class="c1">#     logging.debug(log_string)</span>
+        <span class="c1">#</span>
+        <span class="c1"># # Delete the path to free memory</span>
+        <span class="c1"># tcod.path_delete(my_path)</span>
+        <span class="c1"># return direction_x, direction_y</span>
+
+    <span class="c1">############# QUERIES ############</span>
+
+<div class="viewcode-block" id="MapMethods.tile_has_tag"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.tile_has_tag">[docs]</a>    <span class="k">def</span> <span class="nf">tile_has_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a given tag applies to the tile</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile ():</span>
+<span class="sd">            tag (): tag to check</span>
+<span class="sd">            active_entity (): entity using a skill</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if tag applies.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">OPEN_SPACE</span><span class="p">:</span>
+            <span class="c1"># If in bounds check if anything is blocking</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+                <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">BLOCKED_MOVEMENT</span><span class="p">:</span>
+            <span class="c1"># If in bounds check if anything is blocking</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_tile_in_bounds</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_tile_blocking_movement</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">SELF</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tile_has_entity</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tile_has_other_entity</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tile_has_any_entity</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">ANY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">IS_VISIBLE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_tile_visible_to_player</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># catch all</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="MapMethods.tile_has_tags"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.tile_has_tags">[docs]</a>    <span class="k">def</span> <span class="nf">tile_has_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">:</span> <span class="n">Tile</span><span class="p">,</span> <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTags</span><span class="p">],</span> <span class="n">active_entity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check a tile has all required tags</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile():</span>
+<span class="sd">            tags():</span>
+<span class="sd">            active_entity():</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if tile has all tags</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tags_checked</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># assess all tags</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="n">tags_checked</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">)</span>
+
+        <span class="c1"># if all tags came back true return true</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tags_checked</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    <span class="k">def</span> <span class="nf">_is_tile_blocking_sight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a tile is blocking sight</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
+
+        <span class="c1"># Does the tile block movement?</span>
+        <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Any entities that block movement?</span>
+        <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># We found nothing blocking the tile</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_is_tile_visible_to_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the specified tile is visible to the player</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">is_visible</span>
+
+    <span class="k">def</span> <span class="nf">_is_tile_in_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if specified tile is in the map.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_is_tile_blocking_movement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if the specified tile is blocking movement</span>
 <span class="sd">        Args:</span>
@@ -351,227 +566,88 @@
 <span class="sd">            bool:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">game_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_x</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tile_y</span> <span class="o">&lt;</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">tile_x</span><span class="p">][</span><span class="n">tile_y</span><span class="p">]</span><span class="o">.</span><span class="n">blocks_movement</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="MapMethods.convert_xy_to_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.convert_xy_to_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">convert_xy_to_tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert an x y position to a tile ref</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            x:</span>
-<span class="sd">            y:</span>
-
-<span class="sd">        Returns :</span>
-<span class="sd">            Tuple[int, int]</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
-        <span class="n">tile_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span></div>
-
-<div class="viewcode-block" id="MapMethods.create_game_map"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.create_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">create_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create new GameMap and create player FOV</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">game_map</span> <span class="o">=</span> <span class="n">GameMap</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="MapMethods.tile_has_tag"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.tile_has_tag">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">tile_has_tag</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">target_tag</span><span class="p">,</span> <span class="n">active_entity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check if a given tag applies to the tile</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tile ():</span>
-<span class="sd">            target_tag (TargetTags): tag to check</span>
-<span class="sd">            active_entity (Entity): entity using a skill</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if tag applies.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">is_floor</span>
-        <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">is_wall</span>
-        <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">SELF</span><span class="p">:</span>
-            <span class="c1"># ensure active entity is the same as the targeted one</span>
-            <span class="k">if</span> <span class="n">active_entity</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">:</span>
-            <span class="c1"># ensure active entity is NOT the same as the targeted one</span>
-            <span class="k">if</span> <span class="n">active_entity</span> <span class="o">!=</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span> <span class="ow">and</span> <span class="n">tile</span><span class="o">.</span><span class="n">has_entity</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">NO_ENTITY</span><span class="p">:</span>
-            <span class="k">return</span> <span class="ow">not</span> <span class="n">tile</span><span class="o">.</span><span class="n">has_entity</span>
-        <span class="k">elif</span> <span class="n">target_tag</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">ANY</span><span class="p">:</span>
+        <span class="c1"># Does the tile block movement?</span>
+        <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># catch all</span></div>
 
-<div class="viewcode-block" id="MapMethods.set_entity_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.set_entity_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">set_entity_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+        <span class="c1"># Any entities that block movement?</span>
+        <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># We found nothing blocking the tile</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_tile_has_any_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the new entity on the tile.</span>
-
+<span class="sd">        Check if the specified tile  has an entity on it</span>
 <span class="sd">        Args:</span>
-<span class="sd">            tile ():</span>
-<span class="sd">            entity:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tile</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity</span>
-        <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
-
-<div class="viewcode-block" id="MapMethods.get_entity_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_entity_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_entity_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the entity from the Tile</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Entity: The Entity on the tile</span>
+<span class="sd">            bool:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">entity</span></div>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
 
-<div class="viewcode-block" id="MapMethods.set_terrain_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.set_terrain_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">set_terrain_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">terrain</span><span class="p">):</span>
+        <span class="c1"># Any entities on the tile?</span>
+        <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># We found no entities on the tile</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_tile_has_other_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the new terrain on the tile.</span>
-
+<span class="sd">        Check if the specified tile  has an entity that isnt the active entity on it</span>
 <span class="sd">        Args:</span>
-<span class="sd">            tile (Tile):</span>
-<span class="sd">            terrain (TargetTags):</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">new_terrain</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">if</span> <span class="n">terrain</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
-            <span class="n">new_terrain</span> <span class="o">=</span> <span class="n">Wall</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">terrain</span> <span class="o">==</span> <span class="n">TargetTags</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span>
-            <span class="n">new_terrain</span> <span class="o">=</span> <span class="n">Floor</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">new_terrain</span><span class="p">:</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="n">new_terrain</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">tile</span></div>
-
-<div class="viewcode-block" id="MapMethods.get_terrain_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.get_terrain_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_terrain_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the terrain from the Tile</span>
+<span class="sd">            active_entity :</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Terrain: The terrain on the tile</span>
+<span class="sd">            bool:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">tile</span><span class="o">.</span><span class="n">terrain</span></div>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
 
-<div class="viewcode-block" id="MapMethods.add_aspect_to_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.add_aspect_to_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">add_aspect_to_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">):</span>
+        <span class="c1"># ensure active entity is the same as the targeted one</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">active_entity</span> <span class="o">!=</span> <span class="n">entity</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># no other entity found</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_tile_has_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">active_entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add a new aspects on the tile. If it already exists reset duration.</span>
-
+<span class="sd">        Check if the specified tile  has the active entity on it</span>
 <span class="sd">        Args:</span>
-<span class="sd">            tile (Tile):</span>
-<span class="sd">            aspect_name(str):</span>
+<span class="sd">            active_entity :</span>
+<span class="sd">            tile_x:</span>
+<span class="sd">            tile_y:</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool:</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_aspect_data</span><span class="p">(</span><span class="n">aspect_name</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">tile_x</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">))</span>
 
-        <span class="c1"># check if the aspect already exists</span>
-        <span class="k">if</span> <span class="n">aspect_name</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="c1"># reset duration</span>
-            <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">duration</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">scripts.world.aspect</span> <span class="kn">import</span> <span class="n">Aspect</span>
-            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
-                <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Aspect</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">)</span></div>
+        <span class="c1"># ensure active entity is the same as the targeted one</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">active_entity</span> <span class="o">==</span> <span class="n">entity</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="MapMethods.remove_aspect_from_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.remove_aspect_from_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">remove_aspect_from_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">aspect_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Aspect is removed from the tile.</span>
+        <span class="c1"># no matching entity found</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
-<span class="sd">        Args:</span>
-<span class="sd">            tile (Tile):</span>
-<span class="sd">            aspect_name(str):</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">aspect_name</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect_name</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="MapMethods.trigger_aspects_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.trigger_aspects_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">trigger_aspects_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Trigger the effect of the Aspect</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">aspect</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="MapMethods.reduce_aspect_durations_on_tile"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.reduce_aspect_durations_on_tile">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">reduce_aspect_durations_on_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reduce duration of all non-permanent afflictions on an entity.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tile (Tile):</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="mi">1</span>
-
-                <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{aspect.x}</span><span class="s2">,</span><span class="si">{aspect.y}</span><span class="s2">) </span><span class="si">{aspect.name}</span><span class="s2">`s duration reduced to &quot;</span> \
-                             <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{aspect.duration}</span><span class="s2">&quot;</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="MapMethods.cleanse_expired_aspects"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_methods.map_methods.MapMethods.cleanse_expired_aspects">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">cleanse_expired_aspects</span><span class="p">(</span><span class="n">tile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Delete expired aspects</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            tile (Tile):</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">removed_aspects</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">expired_aspects</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># check if aspects has expired</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">aspect</span> <span class="ow">in</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
-            <span class="c1"># make sure it isnt none before checking duration</span>
-            <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">aspect</span><span class="o">.</span><span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="c1"># log on expired list. Not removing now to avoid amending the currently iterating list</span>
-                    <span class="n">expired_aspects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
-
-        <span class="c1"># remove all expired aspects from the tile and delete each instance</span>
-        <span class="c1"># pop removes the element so we keep looking at element 0 and popping it</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">expired_aspects</span><span class="p">):</span>
-            <span class="c1"># get the aspect</span>
-            <span class="n">aspect</span> <span class="o">=</span> <span class="n">expired_aspects</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-
-            <span class="c1"># remove from tile</span>
-            <span class="k">del</span> <span class="n">tile</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">aspect</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-
-            <span class="c1"># add info to logging</span>
-            <span class="n">removed_aspects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{aspect.x}</span><span class="s2">,</span><span class="si">{aspect.y}</span><span class="s2">:</span><span class="si">{aspect.name}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="c1"># delete the instance</span>
-            <span class="k">del</span> <span class="n">aspect</span>
-
-        <span class="c1"># if we removed anything log it</span>
-        <span class="k">if</span> <span class="n">removed_aspects</span><span class="p">:</span>
-            <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Removed the following aspects: </span><span class="si">{removed_aspects}</span><span class="s2">&quot;</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div></div>
 </pre></div>
 
 	    </div>
