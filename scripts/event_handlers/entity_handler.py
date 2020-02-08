@@ -57,7 +57,7 @@ class EntityHandler(Subscriber):
         dir_x, dir_y = event.direction
         distance = event.distance
         entity = event.entity
-        old_x, old_y = event.start_pos[0], event.start_pos[1]
+        old_x, old_y = event.start_pos
 
         for step in range(0, distance):
             target_x = old_x + dir_x

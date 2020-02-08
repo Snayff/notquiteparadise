@@ -16,7 +16,6 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # Project Wide to do list...
 # TODO - swap out nose for pytest
 # TODO - remember window position and resume at that place
-# TODO - move assignation of Owner to the init
 # TODO - Review closure
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
@@ -26,12 +25,12 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - new lighting system
 #  entities create light, sight range shows light in range
 # TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
-# TODO - convert interventions to skills, gods to entities
 # TODO - add skill modifiers (blessings?)
 # TODO - write tests / checking for json values
 # TODO - could turn manager sit under game?
 # TODO - add piercing so projectile can damage and keep going
 # TODO - add projectiles, i.e. entity creation, movement and collision
+
 
 def main():
     """

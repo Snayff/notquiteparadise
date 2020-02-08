@@ -28,15 +28,15 @@ class LibraryOfAlexandria:
     """
 
     def __init__(self):
-        self.homelands = {}
-        self.races = {}  
-        self.savvys = {}  
-        self.afflictions = {}  
-        self.aspects = {}  
-        self.terrains = {}
-        self.stats = {}  
-        self.gods = {}
-        self.skills = {}
+        self._homelands = {}
+        self._races = {}
+        self._savvys = {}
+        self._afflictions = {}
+        self._aspects = {}
+        self._terrain = {}
+        self._stats = {}
+        self._gods = {}
+        self._skills = {}
 
         self.refresh_library_data()
 
@@ -47,42 +47,42 @@ class LibraryOfAlexandria:
         """
         Load json data into the library, convert strings to enums and dicts to data classes.
         """
-        self.load_data_into_library()
-        self.convert_external_strings_to_internal_values()
-        self.convert_afflictions_to_data_classes()
-        self.convert_aspects_to_data_classes()
-        self.convert_stats_to_data_classes()
-        self.convert_gods_to_data_classes()
-        self.convert_homelands_to_data_classes()
-        self.convert_savvys_to_data_classes()
-        self.convert_races_to_data_classes()
-        self.convert_skills_to_data_classes()
+        self._load_data_into_library()
+        self._convert_external_strings_to_internal_values()
+        self._convert_afflictions_to_data_classes()
+        self._convert_aspects_to_data_classes()
+        self._convert_stats_to_data_classes()
+        self._convert_gods_to_data_classes()
+        self._convert_homelands_to_data_classes()
+        self._convert_savvys_to_data_classes()
+        self._convert_races_to_data_classes()
+        self._convert_skills_to_data_classes()
 
 
         logging.info(f"Library refreshed.")
 
-    def load_data_into_library(self):
+    def _load_data_into_library(self):
         """
         Load data from all external jsons to this central data library
         """
         # N.B. this is set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self.homelands = self.load_homeland_json()
-            self.races = self.load_race_json()
-            self.savvys = self.load_savvy_json()
-            self.afflictions = self.load_affliction_json()
-            self.aspects = self.load_aspect_json()
-            self.terrains = self.load_terrain_json()
-            self.stats = self.load_base_stat_json()
-            self.gods = self.load_gods_json()
-            self.skills = self.load_skills_json()
+            self._homelands = self._load_homeland_json()
+            self._races = self._load_race_json()
+            self._savvys = self._load_savvy_json()
+            self._afflictions = self._load_affliction_json()
+            self._aspects = self._load_aspect_json()
+            self._terrain = self._load_terrain_json()
+            self._stats = self._load_base_stat_json()
+            self._gods = self._load_gods_json()
+            self._skills = self._load_skills_json()
 
         logging.info(f"Data loaded into the Library.")
 
     ####################### UTILITY ##############################
 
     @staticmethod
-    def cleanse_name(name: str):
+    def _cleanse_name(name: str):
         """
         Force name to lowercase, replace underscores with spaces, turn double space to single
         Args:
@@ -96,7 +96,7 @@ class LibraryOfAlexandria:
         cleansed_name = cleansed_name.replace("  ", " ")
         return cleansed_name
 
-    def recursive_replace(self, obj, key, value_to_replace, new_value):
+    def _recursive_replace(self, obj, key, value_to_replace, new_value):
         """
         Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
 
@@ -119,20 +119,20 @@ class LibraryOfAlexandria:
                     elif v == value_to_replace:
                         obj[key] = new_value
                 else:
-                    self.recursive_replace(v, key, value_to_replace, new_value)
+                    self._recursive_replace(v, key, value_to_replace, new_value)
 
         elif isinstance(obj, list):
             # Break the list out and run recursively against the elements
             for element in obj:
-                self.recursive_replace(element, key, value_to_replace, new_value)
+                self._recursive_replace(element, key, value_to_replace, new_value)
 
     ####################### CONVERT ##############################
 
-    def convert_afflictions_to_data_classes(self):
+    def _convert_afflictions_to_data_classes(self):
         """
         Take affliction data from library and convert to data classes
         """
-        all_afflictions_data = self.afflictions
+        all_afflictions_data = self._afflictions
         converted_afflictions = {}
 
         # loop all afflictions
@@ -151,18 +151,18 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the afflictions data to the data class
             affliction = AfflictionData(**new_affliction_dict)
-            affliction.name = self.cleanse_name(affliction.name)
+            affliction.name = self._cleanse_name(affliction.name)
             converted_afflictions[affliction.name] = affliction
 
         # delete all info from afflictions and replace with the converted data
-        self.afflictions = {}
-        self.afflictions = converted_afflictions
+        self._afflictions = {}
+        self._afflictions = converted_afflictions
 
-    def convert_aspects_to_data_classes(self):
+    def _convert_aspects_to_data_classes(self):
         """
         Take aspects data from library and convert to data classes
         """
-        all_aspect_data = self.aspects
+        all_aspect_data = self._aspects
         converted_aspects = {}
 
         # loop all aspects
@@ -189,18 +189,18 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             aspect = AspectData(**new_aspect_dict)
-            aspect.name = self.cleanse_name(aspect.name)
+            aspect.name = self._cleanse_name(aspect.name)
             converted_aspects[aspect.name] = aspect
 
         # delete all info from aspects and replace with the converted data
-        self.aspects = {}
-        self.aspects = converted_aspects
+        self._aspects = {}
+        self._aspects = converted_aspects
 
-    def convert_races_to_data_classes(self):
+    def _convert_races_to_data_classes(self):
         """
         Take race data from library and convert to data classes
         """
-        all_race_data = self.races
+        all_race_data = self._races
         converted_races = {}
 
         # loop all races
@@ -209,7 +209,7 @@ class LibraryOfAlexandria:
 
             # loop skills and convert to data class
             for index, skill_name in enumerate(race_data["skills"]):
-                converted_skills.append(self.cleanse_name(skill_name))
+                converted_skills.append(self._cleanse_name(skill_name))
 
             # set the temp dict to contain the converted skill effects
             new_race_dict = race_data.copy()
@@ -217,18 +217,18 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             race = CharacteristicData(**new_race_dict)
-            race.name = self.cleanse_name(race.name)
+            race.name = self._cleanse_name(race.name)
             converted_races[race.name] = race
 
         # delete all info from aspects and replace with the converted data
-        self.races = {}
-        self.races = converted_races
+        self._races = {}
+        self._races = converted_races
         
-    def convert_savvys_to_data_classes(self):
+    def _convert_savvys_to_data_classes(self):
         """
         Take savvy data from library and convert to data classes
         """
-        all_savvy_data = self.savvys
+        all_savvy_data = self._savvys
         converted_savvys = {}
 
         # loop all savvys
@@ -237,7 +237,7 @@ class LibraryOfAlexandria:
 
             # loop skills and convert to data class
             for index, skill_name in enumerate(savvy_data["skills"]):
-                converted_skills.append(self.cleanse_name(skill_name))
+                converted_skills.append(self._cleanse_name(skill_name))
 
             # set the temp dict to contain the converted skill effects
             new_savvy_dict = savvy_data.copy()
@@ -245,18 +245,18 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             savvy = CharacteristicData(**new_savvy_dict)
-            savvy.name = self.cleanse_name(savvy.name)
+            savvy.name = self._cleanse_name(savvy.name)
             converted_savvys[savvy.name] = savvy
 
         # delete all info from aspects and replace with the converted data
-        self.savvys = {}
-        self.savvys = converted_savvys
+        self._savvys = {}
+        self._savvys = converted_savvys
         
-    def convert_homelands_to_data_classes(self):
+    def _convert_homelands_to_data_classes(self):
         """
         Take homeland data from library and convert to data classes
         """
-        all_homeland_data = self.homelands
+        all_homeland_data = self._homelands
         converted_homelands = {}
 
         # loop all homelands
@@ -265,7 +265,7 @@ class LibraryOfAlexandria:
 
             # loop skills and convert to data class
             for index, skill_name in enumerate(homeland_data["skills"]):
-                converted_skills.append(self.cleanse_name(skill_name))
+                converted_skills.append(self._cleanse_name(skill_name))
 
             # set the temp dict to contain the converted skill effects
             new_homeland_dict = homeland_data.copy()
@@ -273,18 +273,18 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             homeland = CharacteristicData(**new_homeland_dict)
-            homeland.name = self.cleanse_name(homeland.name)
+            homeland.name = self._cleanse_name(homeland.name)
             converted_homelands[homeland.name] = homeland
 
         # delete all info from aspects and replace with the converted data
-        self.homelands = {}
-        self.homelands = converted_homelands
+        self._homelands = {}
+        self._homelands = converted_homelands
 
-    def convert_stats_to_data_classes(self):
+    def _convert_stats_to_data_classes(self):
         """
         Take skill data from library and convert to data classes
         """
-        all_stat_data = self.stats
+        all_stat_data = self._stats
         converted_primary_stats = {}
         converted_secondary_stats = {}
 
@@ -305,14 +305,14 @@ class LibraryOfAlexandria:
 
         # delete all info from stat and replace with the converted data
         converted_data = StatData(primary=converted_primary_stats, secondary=converted_secondary_stats)
-        self.stats = {}
-        self.stats = converted_data
+        self._stats = {}
+        self._stats = converted_data
 
-    def convert_gods_to_data_classes(self):
+    def _convert_gods_to_data_classes(self):
         """
         Take aspects data from library and convert to data classes
         """
-        all_god_data = self.gods
+        all_god_data = self._gods
         converted_gods = {}
 
         # loop all gods
@@ -342,18 +342,18 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the aspects data to the data class
             god = GodData(**new_god_dict)
-            god.name = self.cleanse_name(god.name)
+            god.name = self._cleanse_name(god.name)
             converted_gods[god.name] = god
 
         # delete all info from aspects and replace with the converted data
-        self.gods = {}
-        self.gods = converted_gods
+        self._gods = {}
+        self._gods = converted_gods
 
-    def convert_skills_to_data_classes(self):
+    def _convert_skills_to_data_classes(self):
         """
          Take homeland data from library and convert to data classes
          """
-        all_skill_data = self.skills
+        all_skill_data = self._skills
         converted_skills = {}
 
         # loop all skills
@@ -372,101 +372,101 @@ class LibraryOfAlexandria:
 
             # unpack the temp dict and convert the data to the data class
             skill = SkillData(**new_skill_dict)
-            skill.name = self.cleanse_name(skill.name)
+            skill.name = self._cleanse_name(skill.name)
             converted_skills[skill.name] = skill
 
         # delete all info from self and replace with the converted data
-        self.skills = {}
-        self.skills = converted_skills
+        self._skills = {}
+        self._skills = converted_skills
         
-    def convert_external_strings_to_internal_values(self):
+    def _convert_external_strings_to_internal_values(self):
         """
         Where there are external values that are utilised internally convert them to the internal constant.
         """
         # Update shared values
-        lists_to_convert = [self.aspects, self.afflictions, self.gods, self.savvys, self.races,
-            self.homelands, self.skills]
+        lists_to_convert = [self._aspects, self._afflictions, self._gods, self._savvys, self._races,
+            self._homelands, self._skills]
         
         for current_list in lists_to_convert:
             # Effects:required_tags
             for value in TargetTags:
-                self.recursive_replace(current_list, "required_tags", value.name.lower(), value)
+                self._recursive_replace(current_list, "required_tags", value.name.lower(), value)
 
             # Effects:name
             for value in EffectTypes:
-                self.recursive_replace(current_list, "effect_type", value.name.lower(), value)
+                self._recursive_replace(current_list, "effect_type", value.name.lower(), value)
 
             # Effects:damage_type
             for value in DamageTypes:
-                self.recursive_replace(current_list, "damage_type", value.name.lower(), value)
+                self._recursive_replace(current_list, "damage_type", value.name.lower(), value)
 
             # Effects:mod_stat
             for value in PrimaryStatTypes:
-                self.recursive_replace(current_list, "mod_stat", value.name.lower(), value)
-            self.recursive_replace(current_list, "mod_stat", "none", None)  # need to add this as mod_stat can be none
+                self._recursive_replace(current_list, "mod_stat", value.name.lower(), value)
+            self._recursive_replace(current_list, "mod_stat", "none", None)  # need to add this as mod_stat can be none
 
             # Effects:stat_to_target
             for value in PrimaryStatTypes:
-                self.recursive_replace(current_list, "stat_to_target", value.name.lower(), value)
+                self._recursive_replace(current_list, "stat_to_target", value.name.lower(), value)
             for value in SecondaryStatTypes:
-                self.recursive_replace(current_list, "stat_to_target", value.name.lower(), value)
+                self._recursive_replace(current_list, "stat_to_target", value.name.lower(), value)
 
             # Effects:stat_to_affect
             for value in PrimaryStatTypes:
-                self.recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
+                self._recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
             for value in SecondaryStatTypes:
-                self.recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
+                self._recursive_replace(current_list, "stat_to_affect", value.name.lower(), value)
 
             # Skill:shape
             for value in SkillShapes:
-                self.recursive_replace(current_list, "shape", value.name.lower(), value)
+                self._recursive_replace(current_list, "shape", value.name.lower(), value)
 
             # Skill:resource_type
             for value in SecondaryStatTypes:
-                self.recursive_replace(current_list, "resource_type", value.name.lower(), value)
+                self._recursive_replace(current_list, "resource_type", value.name.lower(), value)
 
             # Skill:target_directions
             for value in Directions:
-                self.recursive_replace(current_list, "target_directions", value.name.lower(), value)
+                self._recursive_replace(current_list, "target_directions", value.name.lower(), value)
 
             # Skill:travel_type
             for value in SkillTravelTypes:
-                self.recursive_replace(current_list, "travel_type", value.name.lower(), value)
+                self._recursive_replace(current_list, "travel_type", value.name.lower(), value)
 
             # Skill:terrain_collision
             for value in SkillTerrainCollisions:
-                self.recursive_replace(current_list, "terrain_collision", value.name.lower(), value)
+                self._recursive_replace(current_list, "terrain_collision", value.name.lower(), value)
 
             # Skill:expiry_type
             for value in SkillExpiryTypes:
-                self.recursive_replace(current_list, "expiry_type", value.name.lower(), value)
+                self._recursive_replace(current_list, "expiry_type", value.name.lower(), value)
        
         # Affliction:category
         for value in AfflictionCategory:
-            self.recursive_replace(self.afflictions, "category", value.name.lower(), value)
+            self._recursive_replace(self._afflictions, "category", value.name.lower(), value)
 
         # Affliction:trigger_event
         for value in AfflictionTriggers:
-            self.recursive_replace(self.afflictions, "trigger_event", value.name.lower(), value)
+            self._recursive_replace(self._afflictions, "trigger_event", value.name.lower(), value)
 
         # Stat:Primary:primary_stat_type
         for value in PrimaryStatTypes:
-            self.recursive_replace(self.stats, "primary_stat_type", value.name.lower(), value)
+            self._recursive_replace(self._stats, "primary_stat_type", value.name.lower(), value)
 
         # Stat:Secondary:secondary_stat_type
         for value in SecondaryStatTypes:
-            self.recursive_replace(self.stats, "secondary_stat_type", value.name.lower(), value)
+            self._recursive_replace(self._stats, "secondary_stat_type", value.name.lower(), value)
 
         # Gods:attitudes:action
         for value in EffectTypes:
-            self.recursive_replace(self.gods, "action", value.name.lower(), value)
+            self._recursive_replace(self._gods, "action", value.name.lower(), value)
         for value in DamageTypes:
-            self.recursive_replace(self.gods, "action", value.name.lower(), value)
+            self._recursive_replace(self._gods, "action", value.name.lower(), value)
         for value in HitTypes:
-            self.recursive_replace(self.gods, "action", value.name.lower(), value)
+            self._recursive_replace(self._gods, "action", value.name.lower(), value)
 
         # Aspect:duration
-        self.recursive_replace(self.aspects, "duration", "none", None)  # need to add this as duration can be none
+        self._recursive_replace(self._aspects, "duration", "none", None)  # need to add this as duration can be none
 
     ####################### GET ##############################
 
@@ -481,7 +481,7 @@ class LibraryOfAlexandria:
             AspectData: data for a specified aspects.
         """
 
-        data = self.aspects[aspect_name]
+        data = self._aspects[aspect_name]
         return data
 
     def get_aspect_effect_data(self, aspect_name, effect_type):
@@ -496,7 +496,7 @@ class LibraryOfAlexandria:
             EffectData: data for a specified effect.
         """
         try:
-            data = self.aspects[aspect_name].effects[effect_type.name]
+            data = self._aspects[aspect_name].effects[effect_type.name]
         except KeyError:
             data = None
 
@@ -513,7 +513,7 @@ class LibraryOfAlexandria:
             AfflictionData: data for a specified Affliction.
         """
 
-        data = self.afflictions[affliction_name]
+        data = self._afflictions[affliction_name]
         return data
 
     def get_affliction_effect_data(self, affliction_name, effect_type):
@@ -528,7 +528,7 @@ class LibraryOfAlexandria:
             EffectData: data for a specified effect.
         """
         try:
-            data = self.afflictions[affliction_name].effects[effect_type.name]
+            data = self._afflictions[affliction_name].effects[effect_type.name]
         except KeyError:
             data = None
 
@@ -545,7 +545,7 @@ class LibraryOfAlexandria:
             CharacteristicData: data for a specified Race.
         """
 
-        data = self.savvys[savvy_name]
+        data = self._savvys[savvy_name]
         return data
 
     def get_race_data(self, race_name):
@@ -559,7 +559,7 @@ class LibraryOfAlexandria:
             CharacteristicData: data for a specified Race.
         """
 
-        data = self.races[race_name]
+        data = self._races[race_name]
         return data
 
     def get_homeland_data(self, homeland_name):
@@ -573,7 +573,7 @@ class LibraryOfAlexandria:
             CharacteristicData: data for a specified Race.
         """
 
-        data = self.homelands[homeland_name]
+        data = self._homelands[homeland_name]
         return data
 
     def get_skill_data(self, skill_name):
@@ -586,7 +586,7 @@ class LibraryOfAlexandria:
         Returns:
             SkillData: data for a specified skill.
         """
-        skill_data = self.skills[skill_name]
+        skill_data = self._skills[skill_name]
 
         return skill_data
 
@@ -603,7 +603,7 @@ class LibraryOfAlexandria:
             EffectData: data for a specified skill effect.
         """
         try:
-            effect_data = self.skills[skill_name].effects[effect_type.name]
+            effect_data = self._skills[skill_name].effects[effect_type.name]
 
         except KeyError:
             effect_data = None
@@ -621,7 +621,7 @@ class LibraryOfAlexandria:
             PrimaryStatData:  stat data for specified stat.
         """
 
-        stat_data = self.stats.primary[primary_stat_type.name]
+        stat_data = self._stats.primary[primary_stat_type.name]
 
         return stat_data
 
@@ -636,7 +636,7 @@ class LibraryOfAlexandria:
             SecondaryStatData:  stat data for specified stat.
         """
 
-        stat_data = self.stats.secondary[secondary_stat_type.name]
+        stat_data = self._stats.secondary[secondary_stat_type.name]
 
         return stat_data
 
@@ -651,7 +651,7 @@ class LibraryOfAlexandria:
             GodData:  data for specified god.
         """
 
-        god_data = self.gods[god_name]
+        god_data = self._gods[god_name]
 
         return god_data
 
@@ -665,7 +665,7 @@ class LibraryOfAlexandria:
         Returns:
             dict: data for a specified god's interventions. (key, InterventionData)
         """
-        interventions_data = self.gods[god_name].interventions
+        interventions_data = self._gods[god_name].interventions
 
         return interventions_data
 
@@ -680,7 +680,7 @@ class LibraryOfAlexandria:
         Returns:
             InterventionData: data for a specified god's  specified intervention.
         """
-        interventions_data = self.gods[god_name].interventions[intervention_name]
+        interventions_data = self._gods[god_name].interventions[intervention_name]
 
         return interventions_data
 
@@ -695,7 +695,7 @@ class LibraryOfAlexandria:
         Returns:
             List[EffectData]: list of effects data
         """
-        effects_data = self.gods[god_name].interventions[intervention_name].effects
+        effects_data = self._gods[god_name].interventions[intervention_name].effects
 
         return effects_data
 
@@ -711,7 +711,7 @@ class LibraryOfAlexandria:
         Returns:
             EffectData: data for a specified skill effect.
         """
-        effects_data = self.gods[god_name].interventions[intervention_name].effects[effect_type.name]
+        effects_data = self._gods[god_name].interventions[intervention_name].effects[effect_type.name]
 
         return effects_data
 
@@ -725,14 +725,14 @@ class LibraryOfAlexandria:
         Returns:
             AttitudeData: data for a specified god.
         """
-        attitude_data = self.gods[god_name].attitudes
+        attitude_data = self._gods[god_name].attitudes
 
         return attitude_data
 
     ####################### LOAD ##############################
 
     @staticmethod
-    def load_affliction_json():
+    def _load_affliction_json():
         """
 
         Returns:
@@ -744,7 +744,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_aspect_json():
+    def _load_aspect_json():
         """
 
         Returns:
@@ -756,7 +756,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_terrain_json():
+    def _load_terrain_json():
         """
 
         Returns:
@@ -768,7 +768,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_homeland_json():
+    def _load_homeland_json():
         """
 
         Returns:
@@ -780,7 +780,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_savvy_json():
+    def _load_savvy_json():
         """
 
         Returns:
@@ -792,7 +792,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_race_json():
+    def _load_race_json():
         """
 
         Returns:
@@ -804,7 +804,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_base_stat_json():
+    def _load_base_stat_json():
         """
 
         Returns:
@@ -816,7 +816,7 @@ class LibraryOfAlexandria:
         return data
 
     @staticmethod
-    def load_gods_json():
+    def _load_gods_json():
         """
 
         Returns:
@@ -828,7 +828,7 @@ class LibraryOfAlexandria:
         return data
     
     @staticmethod
-    def load_skills_json():
+    def _load_skills_json():
         """
 
         Returns:
