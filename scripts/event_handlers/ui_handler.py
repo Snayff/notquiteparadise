@@ -81,6 +81,9 @@ class UiHandler(Subscriber):
             if event.new_game_state == GameStates.GAME_INITIALISING:
                 self.init_ui()
 
+            elif game.previous_game_state == GameStates.GAME_INITIALISING:
+                ui.Element.create_screen_message("Welcome to Not Quite Paradise", "", 6)
+
             elif event.new_game_state == GameStates.TARGETING_MODE:
                 # turn on targeting overlay
                 self.set_targeting_overlay(True, event.skill_to_be_used)
@@ -106,6 +109,7 @@ class UiHandler(Subscriber):
         ui.Element.init_skill_bar()
         ui.Element.init_message_log()
         ui.Element.init_entity_info()
+        ui.Element.init_skill_editor()
 
         # update camera
         self.update_camera()

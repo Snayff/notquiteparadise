@@ -2,6 +2,7 @@ import logging
 import pygame
 from typing import Tuple, List
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
+from scripts.dev_tools.skill_editor import SkillEditor
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog
@@ -76,6 +77,18 @@ class ElementMethods:
         rect = pygame.Rect((x, y), (width, height))
         camera = Camera(rect, self._manager.Gui, rows, cols)
         self.add_ui_element(UIElementTypes.CAMERA.name, camera)
+
+    def init_skill_editor(self):
+        """
+        Initialise the skill editor ui element.
+        """
+        width = 600
+        height = 600
+        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        y = 10
+        rect = pygame.Rect((x, y), (width, height))
+        editor = SkillEditor(rect, self._manager.Gui)
+        self.add_ui_element(UIElementTypes.SKILL_EDITOR.name, editor)
 
     ################ ELEMENT ###################
 
@@ -354,13 +367,14 @@ class ElementMethods:
 
     def create_screen_message(self, message: str, colour, size: int):
         """
-        Create a message on the screen
+        Create a message on the screen.
+
         Args:
             message ():
             colour ():
             size ():
         """
-        # TODO - respect colour chosen. Use colour mapping.
+        # TODO - respect colour chosen. Use colour mapping to go from RGB to Hex.
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
         screen_message = ScreenMessage(text, self._manager.Gui)

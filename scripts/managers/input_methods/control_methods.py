@@ -110,17 +110,21 @@ class ControlMethods:
         Returns:
             Tuple: (str) button name, button values
         """
-        if event.ui_object_id[:-1] == "#skill_button":
-            print(f"button clicked(skill{event.ui_object_id[-1:]})")
-            return "skill", event.ui_object_id[-1:]
+        try:
+            if event.ui_object_id[:-1] == "#skill_button":
+                print(f"button clicked(skill{event.ui_object_id[-1:]})")
+                return "skill", event.ui_object_id[-1:]
 
-        elif event.ui_object_id[:len("#tile")] == "#tile":
-            print(f"button clicked(grid.tile{event.ui_object_id[len('#tile'):]})")
-            return "tile", event.ui_object_id[len('#tile'):]
+            elif event.ui_object_id[:len("#tile")] == "#tile":
+                print(f"button clicked(grid.tile{event.ui_object_id[len('#tile'):]})")
+                return "tile", event.ui_object_id[len('#tile'):]
 
-        else:
-            logging.warning(f"Clicked {event.ui_object_id} but not sure what to do.")
-            return "", event.ui_object_id
+            else:
+                logging.warning(f"Clicked {event.ui_object_id} but not sure what to do.")
+                return "", event.ui_object_id
+        except TypeError:
+            logging.warning(f"Clicked something but got no value.")
+            return "", "None"
 
     def get_pressed_direction(self):
         """

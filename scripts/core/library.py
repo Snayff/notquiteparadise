@@ -19,7 +19,7 @@ from scripts.world.data_classes.interaction_dataclass import InteractionData
 from scripts.world.data_classes.intervention_dataclass import InterventionData
 
 if TYPE_CHECKING:
-    pass
+    from typing import Dict
 
 
 class LibraryOfAlexandria:
@@ -472,7 +472,7 @@ class LibraryOfAlexandria:
 
     def get_aspect_data(self, aspect_name):
         """
-        Get data for an aspects from the central library
+        Get data for an aspects from the library
 
         Args:
             aspect_name (str):
@@ -486,7 +486,7 @@ class LibraryOfAlexandria:
 
     def get_aspect_effect_data(self, aspect_name, effect_type):
         """
-        Get effect data for an aspects from the central library
+        Get effect data for an aspects from the library
 
         Args:
             aspect_name(str):
@@ -504,7 +504,7 @@ class LibraryOfAlexandria:
 
     def get_affliction_data(self, affliction_name):
         """
-        Get data for an affliction from the central library
+        Get data for an affliction from the library
 
         Args:
             affliction_name (str):
@@ -518,7 +518,7 @@ class LibraryOfAlexandria:
 
     def get_affliction_effect_data(self, affliction_name, effect_type):
         """
-        Get data for an affliction from the central library
+        Get data for an affliction from the library
 
         Args:
             affliction_name(str):
@@ -536,7 +536,7 @@ class LibraryOfAlexandria:
 
     def get_savvy_data(self, savvy_name):
         """
-        Get data for a savvys from the central library
+        Get data for a savvys from the library
 
         Args:
             savvy_name (str):
@@ -550,7 +550,7 @@ class LibraryOfAlexandria:
 
     def get_race_data(self, race_name):
         """
-        Get data for a races from the central library
+        Get data for a races from the library
 
         Args:
             race_name (str):
@@ -564,7 +564,7 @@ class LibraryOfAlexandria:
 
     def get_homeland_data(self, homeland_name):
         """
-        Get data for a homelands from the central library
+        Get data for a homelands from the library
 
         Args:
             homeland_name (str):
@@ -578,7 +578,7 @@ class LibraryOfAlexandria:
 
     def get_skill_data(self, skill_name):
         """
-        Get data for a skill from the central library
+        Get data for a skill from the library
 
         Args:
             skill_name (str):
@@ -590,9 +590,15 @@ class LibraryOfAlexandria:
 
         return skill_data
 
+    def get_all_skill_data(self) -> Dict[SkillData]:
+        """
+        Get all skill data from the library
+        """
+        return self._skills
+
     def get_skill_effect_data(self, skill_name, effect_type):
         """
-        Get data for a skill from the central library
+        Get data for a skill from the library
 
         Args:
 
@@ -612,7 +618,7 @@ class LibraryOfAlexandria:
 
     def get_primary_stat_data(self, primary_stat_type):
         """
-        Get data for a primary stat from the central library
+        Get data for a primary stat from the library
 
         Args:
             primary_stat_type (PrimaryStatTypes):
@@ -627,7 +633,7 @@ class LibraryOfAlexandria:
 
     def get_secondary_stat_data(self, secondary_stat_type):
         """
-        Get data for a secondary stat from the central library
+        Get data for a secondary stat from the library
 
         Args:
             secondary_stat_type (SecondaryStatTypes):
@@ -642,7 +648,7 @@ class LibraryOfAlexandria:
 
     def get_god_data(self, god_name):
         """
-        Get data for a god from the central library
+        Get data for a god from the library
 
         Args:
             god_name (str):
@@ -657,7 +663,7 @@ class LibraryOfAlexandria:
 
     def get_god_interventions_data(self, god_name):
         """
-        Get data for a god's interventions from the central library
+        Get data for a god's interventions from the library
 
         Args:
             god_name(str):
@@ -671,7 +677,7 @@ class LibraryOfAlexandria:
 
     def get_god_intervention_data(self, god_name, intervention_name):
         """
-        Get data for a god's specified intervention from the central library
+        Get data for a god's specified intervention from the library
 
         Args:
             god_name(str):
@@ -686,7 +692,7 @@ class LibraryOfAlexandria:
 
     def get_god_intervention_effects_data(self, god_name, intervention_name):
         """
-        Get data for the effects in a god's intervention from the central library
+        Get data for the effects in a god's intervention from the library
 
         Args:
             god_name(str):
@@ -701,7 +707,7 @@ class LibraryOfAlexandria:
 
     def get_god_intervention_effect_data(self, god_name, intervention_name, effect_type):
         """
-        Get data for a specified effect in a god's intervention from the central library
+        Get data for a specified effect in a god's intervention from the library
 
         Args:
             god_name(str):
@@ -717,7 +723,7 @@ class LibraryOfAlexandria:
 
     def get_god_attitudes_data(self, god_name):
         """
-        Get data for a god's attitudes from the central library
+        Get data for a god's attitudes from the library
 
         Args:
             god_name(str):
