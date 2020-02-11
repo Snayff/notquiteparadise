@@ -126,6 +126,18 @@ class ElementMethods:
         """
         self._elements[element_name] = element
 
+    def remove_ui_element(self, element_name):
+        """
+        Remove ui element from the list of all elements.
+
+        Args:
+            element_name ():
+        """
+        try:
+            del self._elements[element_name]
+        except KeyError:
+            logging.warning(f"Tried to remove {element_name} element but key not found.")
+
     ############## CAMERA ###################
 
     def is_target_pos_in_camera_edge(self, target_pos: Tuple):
@@ -382,8 +394,21 @@ class ElementMethods:
     ############## SKILL EDITOR ##################
 
     def kill_skill_editor(self):
+        """
+        Remove any reference to the skill_editor
+        """
         skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
 
         if skill_editor:
             skill_editor.cleanse()
             skill_editor.kill()
+            self.remove_ui_element(skill_editor)
+
+    def save_edited_skill(self):
+        """
+        Save the edited skill in the skill editor.
+        """
+        skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
+
+        if skill_editor:
+            skill_editor.save()

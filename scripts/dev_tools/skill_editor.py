@@ -6,8 +6,10 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
-from scripts.core.constants import VisualInfo
+from scripts.core.constants import VisualInfo, Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
+    TargetTags, SkillShapes
 from scripts.core.library import library
+from scripts.skills.effect import EffectData
 from scripts.skills.skill import SkillData
 
 if TYPE_CHECKING:
@@ -18,6 +20,7 @@ class SkillEditor(UIWindow):
     """
     Dev tool to allow creating and editing skills.
     """
+
     def __init__(self, rect, manager):
         element_ids = ["skill_editor"]
 
@@ -31,6 +34,7 @@ class SkillEditor(UIWindow):
         # ui widgets
         self.skill_selector = self.create_skill_selector()
         self.skill_details = None
+        self.labels = None
         self.save_button = None
 
     def create_skill_selector(self) -> UIDropDownMenu:
@@ -48,7 +52,7 @@ class SkillEditor(UIWindow):
         rect = pygame.Rect((x, y), (width, height))
 
         return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
-                                       parent_element=self, object_id="skill_selector")
+                              parent_element=self, object_id="skill_selector")
 
     def load_skill_details(self, skill_name: str):
         """
@@ -58,7 +62,14 @@ class SkillEditor(UIWindow):
             skill_name ():
         """
         self.skill_details = {}
+        self.labels = {}
         num = 0
+        dropdowns = {
+            "terrain_collision": SkillTerrainCollisions,
+            "travel_type": SkillTravelTypes,
+            "expiry_type": SkillExpiryTypes,
+            "shape": SkillShapes
+        }
 
         # get required skill details
         if skill_name != "New":
@@ -80,19 +91,41 @@ class SkillEditor(UIWindow):
         for key, value in skill_data.items():
             key_rect = pygame.Rect((key_x, start_y + offset_y), (key_width, height))
             key_label = UILabel(key_rect, key, self.ui_manager, container=self.get_container(), parent_element=self)
-
             value_rect = pygame.Rect((value_x, start_y + offset_y), (value_width, height))
-            value_input = UITextEntryLine(value_rect, self.ui_manager, container=self.get_container(),
-                                          parent_element=self, object_id=f"{key}")
-            value_input.set_text(f"{value}")
+
+            # handle different field requirements
+            if key in dropdowns:
+                options_list = []
+                options_list.extend(option.name for option in dropdowns[key])
+                value_input = UIDropDownMenu(options_list, f"{value.name}", value_rect, self.ui_manager,
+                                             container=self.get_container(), parent_element=self, object_id=key)
+            elif key == "effects":
+                # TODO - break out effects
+                #  Why not just pull that out into a separate UIWindow?
+                #  Have effects be a list you can add effects to, and each effect is a button that opens a new
+                #  UIWindow to edit that specific effect
+
+                # create button for each effect
+                # ? label showing each active effect
+                # press button opens the effect's fields (new method) on the side
+
+                pass
+            elif key == "icon":
+                # TODO - file picker
+                pass
+            else:
+                # everything else uses a single line text entry
+                value_input = UITextEntryLine(value_rect, self.ui_manager, container=self.get_container(),
+                                              parent_element=self, object_id=key)
+                value_input.set_text(f"{value}")
 
             # increment y
             offset_y += height
 
             # save refs to the ui widgets
             num += 1
-            self.skill_details[f"label{num}"] = key_label
-            self.skill_details[f"{key}"] = value_input
+            self.labels[f"label{num}"] = key_label
+            self.skill_details[key] = value_input
 
         # save last used Y pos for other widgets to refer to
         self.skill_details_lowest_y = offset_y
@@ -102,11 +135,16 @@ class SkillEditor(UIWindow):
         Clear currently held skill details from self.skill_details.
         """
         skill_details = self.skill_details
+        labels = self.labels
 
-        for key, value in skill_details.items():
+        for value in skill_details.values():
             value.kill()
 
-        self.skill_details = {}
+        for value in labels.values():
+            value.kill()
+
+        self.skill_details = None
+        self.labels = None
 
     def create_save_button(self) -> UIButton:
         """
@@ -124,6 +162,14 @@ class SkillEditor(UIWindow):
 
         return UIButton(rect, "Save", self.ui_manager, container=self.get_container(), parent_element=self,
                         object_id="skill_editor_save")
+
+    def clear_save_button(self):
+        """
+        Remove the save button and all references to it.
+        """
+        if self.save_button:
+            self.save_button.kill()
+            self.save_button = None
 
     def update(self, time_delta: float):
         """
@@ -143,6 +189,7 @@ class SkillEditor(UIWindow):
                 self.save_button = self.create_save_button()
             else:
                 self.clear_skill_details()
+                self.clear_save_button()
 
     def cleanse(self):
         """
@@ -153,3 +200,32 @@ class SkillEditor(UIWindow):
             self.skill_selector = None
         if self.skill_details:
             self.clear_skill_details()
+
+    def save(self):
+        """
+        Save the edited skill back to the json.
+        """
+        edited_name = self.skill_details["name"].text
+
+        # determine dict key for the skill
+        if self.current_skill == "New":
+            skill_key = edited_name
+        else:
+            skill_key = self.current_skill
+
+        # extract values to a dict
+        edited_skill = {}
+        for key, value in self.skill_details.items():
+            edited_skill[key] = value.text
+
+        # TODO - need to rebuild effects as EffectData
+
+        # unpack the dict to SkillData
+        skill_data = SkillData(**edited_skill)
+
+        # save the edited skill back to all skills
+        self.all_skills[skill_key] = skill_data
+
+        # save all skills back to the json
+        # TODO - save data back to json
+        pass

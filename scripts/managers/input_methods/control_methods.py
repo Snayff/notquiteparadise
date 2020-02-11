@@ -11,6 +11,7 @@ from scripts.events.entity_events import MoveEvent, UseSkillEvent
 from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent, EndTurnEvent
 from scripts.events.ui_events import ClickTile, MessageEvent
 from scripts.managers.game_manager import game
+from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.world.components import Knowledge, Position
 
@@ -118,18 +119,21 @@ class ControlMethods:
         """
         try:
             if event.ui_object_id[:-1] == "#skill_button":
+                # parse skill button presses
                 print(f"button clicked(skill{event.ui_object_id[-1:]})")
                 return "skill", event.ui_object_id[-1:]
 
             elif event.ui_object_id[:len("#tile")] == "#tile":
+                # parse tile presses
                 print(f"button clicked(grid.tile{event.ui_object_id[len('#tile'):]})")
                 return "tile", event.ui_object_id[len('#tile'):]
 
             else:
-                logging.warning(f"Clicked {event.ui_object_id} but not sure what to do.")
+                # handle all other button presses
+                print(f"Clicked {event.ui_object_id}.")
                 return "", event.ui_object_id
         except TypeError:
-            logging.warning(f"Clicked something but got no value.")
+            logging.warning(f"Clicked something but got no value for ui_object_id.")
             return "", "None"
 
     def get_pressed_direction(self):
@@ -232,10 +236,12 @@ class ControlMethods:
         get_intent = self.get_intent
         intent = InputIntents
 
+        # Activate Debug
         if get_intent(intent.DEBUG_TOGGLE):
             # TODO - create event to toggle debug
             pass
 
+        # Refresh Library Data
         if get_intent(intent.REFRESH_DATA):
             # TODO - create event to refresh data
             pass
@@ -331,6 +337,14 @@ class ControlMethods:
         """
         get_intent = self.get_intent
         intent = InputIntents
+
+        # Handle button presses
+        if get_intent(intent.BUTTON_PRESSED):
+            button = self.get_pressed_ui_button(event)
+
+            if button[1] == "skill_editor_save":
+                ui.Element.save_edited_skill()
+                # TODO - change to event and add library refresh
 
         if get_intent(intent.DEV_TOGGLE):
             publisher.publish(ChangeGameStateEvent(game.previous_game_state))
