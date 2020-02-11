@@ -37,6 +37,7 @@ class GameStates(Enum):
     EXIT_GAME = auto()
     GAME_INITIALISING = auto()
     NEW_TURN = auto()
+    DEV_MODE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
@@ -408,6 +409,7 @@ class InputIntents(Enum):
     DOWN_LEFT = auto()
     CONFIRM = auto()
     CANCEL = auto()
+    EXIT_GAME = auto()
     DEBUG_TOGGLE = auto()
     SKILL0 = auto()
     SKILL1 = auto()
@@ -416,6 +418,7 @@ class InputIntents(Enum):
     SKILL4 = auto()
     REFRESH_DATA = auto()
     BUTTON_PRESSED = auto()
+    DEV_TOGGLE = auto()
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:

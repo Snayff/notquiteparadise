@@ -68,21 +68,19 @@ class EntityInfo(UIWindow):
         """
         Cleanse existing section info.
         """
-        # kill the boxes
+        # kill the boxes and clear the references
         if self.entity_image:
             self.entity_image.kill()
+            self.entity_image = None
         if self.core_info:
             self.core_info.kill()
+            self.core_info = None
         if self.primary_stats:
             self.primary_stats.kill()
+            self.primary_stats = None
         if self.secondary_stats:
             self.secondary_stats.kill()
-
-        # clear the references
-        self.entity_image = None
-        self.core_info = None
-        self.primary_stats = None
-        self.secondary_stats = None
+            self.secondary_stats = None
 
     def create_entity_image_section(self):
         """

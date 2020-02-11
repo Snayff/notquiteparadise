@@ -12,7 +12,6 @@ from scripts.core.constants import EventTopics, GameEventTypes, GameStates, Enti
 from scripts.world.components import Position
 
 if TYPE_CHECKING:
-
     from scripts.world.entity import Entity
     from scripts.events.ui_events import MessageEvent
 
@@ -82,6 +81,7 @@ class UiHandler(Subscriber):
                 self.init_ui()
 
             elif game.previous_game_state == GameStates.GAME_INITIALISING:
+                # once everything is initialised present the welcome message
                 ui.Element.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
             elif event.new_game_state == GameStates.TARGETING_MODE:
@@ -101,6 +101,12 @@ class UiHandler(Subscriber):
                 # TODO - reflect new turn info
                 pass
 
+            elif event.new_game_state == GameStates.DEV_MODE:
+                self.init_dev_mode()
+
+            elif game.previous_game_state == GameStates.DEV_MODE:
+                self.exit_dev_mode()
+
     def init_ui(self):
         """
         Initialise the UI elements
@@ -109,10 +115,23 @@ class UiHandler(Subscriber):
         ui.Element.init_skill_bar()
         ui.Element.init_message_log()
         ui.Element.init_entity_info()
-        ui.Element.init_skill_editor()
 
         # update camera
         self.update_camera()
+
+    @staticmethod
+    def init_dev_mode():
+        """
+        Initialise all dev mode widgets
+        """
+        ui.Element.init_skill_editor()
+
+    @staticmethod
+    def exit_dev_mode():
+        """
+        Clear all dev mode widgets
+        """
+        ui.Element.kill_skill_editor()
 
     ############# HANDLE UI EVENTS #################
 

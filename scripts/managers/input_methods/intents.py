@@ -16,7 +16,7 @@ class Intents:
     down_left: bool = False
     confirm: bool = False
     cancel: bool = False
-    debug_toggle: bool = False
+    exit_game: bool = False
     skill0: bool = False
     skill1: bool = False
     skill2: bool = False
@@ -24,3 +24,5 @@ class Intents:
     skill4: bool = False
     refresh_data: bool = False
     button_pressed: bool = False
+    debug_toggle: bool = False
+    dev_toggle: bool = False

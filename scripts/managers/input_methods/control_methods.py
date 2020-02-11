@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import dataclasses
 import logging
-
 import pygame
+from typing import TYPE_CHECKING
 from scripts.core.constants import InputIntents, Directions, GameStates, MessageTypes
 from scripts.core.event_hub import publisher
 from scripts.core.library import library
@@ -11,6 +13,9 @@ from scripts.events.ui_events import ClickTile, MessageEvent
 from scripts.managers.game_manager import game
 from scripts.managers.world_manager import world
 from scripts.world.components import Knowledge, Position
+
+if TYPE_CHECKING:
+    from scripts.managers.input_manager import InputManager
 
 
 class ControlMethods:
@@ -22,7 +27,6 @@ class ControlMethods:
     """
 
     def __init__(self, manager):
-        from scripts.managers.input_manager import InputManager
         self._manager = manager  # type: InputManager
 
     ############### INPUT CHECKS ####################
@@ -78,7 +82,7 @@ class ControlMethods:
             elif event.key == pygame.K_RETURN:
                 self.set_intent(InputIntents.CONFIRM)
             elif event.key == pygame.K_ESCAPE:
-                self.set_intent(InputIntents.CANCEL)
+                self.set_intent(InputIntents.EXIT_GAME)
 
         # handle mouse click events
         if event.type == pygame.USEREVENT:
@@ -93,10 +97,12 @@ class ControlMethods:
         """
         # handle key press events
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_TAB:
+            if event.key == pygame.K_F1:
                 self.set_intent(InputIntents.DEBUG_TOGGLE)
             elif event.key == pygame.K_F5:
                 self.set_intent(InputIntents.REFRESH_DATA)
+            elif event.key == pygame.K_F2:
+                self.set_intent(InputIntents.DEV_TOGGLE)
 
     ############### GET INFO ABOUT AN INPUT #########
     @staticmethod
@@ -234,6 +240,10 @@ class ControlMethods:
             # TODO - create event to refresh data
             pass
 
+        # Exit game
+        if get_intent(intent.EXIT_GAME):
+            publisher.publish(ExitGameEvent())
+
     def process_player_turn_intents(self, event):
         """
         Process intents for the player turn game state.
@@ -244,10 +254,6 @@ class ControlMethods:
         get_intent = self.get_intent
         intent = InputIntents
         player = world.Entity.get_player()
-
-        # Exit game
-        if get_intent(intent.CANCEL):
-            publisher.publish(ExitGameEvent())
 
         # Button press
         if get_intent(intent.BUTTON_PRESSED):
@@ -272,6 +278,10 @@ class ControlMethods:
 
             if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
                 publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))
+
+        # activate the skill editor
+        if get_intent(intent.DEV_TOGGLE):
+            publisher.publish(ChangeGameStateEvent(GameStates.DEV_MODE))
 
     def process_targeting_mode_intents(self, event):
         """
@@ -311,3 +321,16 @@ class ControlMethods:
 
                 if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
                     publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))
+
+    def process_dev_mode_intents(self, event):
+        """
+        Process intents for the dev mode game state.
+
+        Args:
+            event ():
+        """
+        get_intent = self.get_intent
+        intent = InputIntents
+
+        if get_intent(intent.DEV_TOGGLE):
+            publisher.publish(ChangeGameStateEvent(game.previous_game_state))

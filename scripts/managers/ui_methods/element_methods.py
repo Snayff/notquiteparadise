@@ -84,7 +84,7 @@ class ElementMethods:
         """
         width = 600
         height = 600
-        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        x = 5
         y = 10
         rect = pygame.Rect((x, y), (width, height))
         editor = SkillEditor(rect, self._manager.Gui)
@@ -378,3 +378,12 @@ class ElementMethods:
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
         screen_message = ScreenMessage(text, self._manager.Gui)
+
+    ############## SKILL EDITOR ##################
+
+    def kill_skill_editor(self):
+        skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
+
+        if skill_editor:
+            skill_editor.cleanse()
+            skill_editor.kill()

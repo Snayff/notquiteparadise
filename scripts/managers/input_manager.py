@@ -38,6 +38,8 @@ class InputManager:
             self.Control.process_player_turn_intents(event)
         elif game_state == GameStates.TARGETING_MODE:
             self.Control.process_targeting_mode_intents(event)
+        elif game_state == GameStates.DEV_MODE:
+            self.Control.process_dev_mode_intents(event)
 
 
 input = InputManager()
