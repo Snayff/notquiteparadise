@@ -345,11 +345,15 @@ class ControlMethods:
             # skill editor saving a skill
             if button[1] == "skill_editor_save":
                 ui.Element.save_edited_skill()
-                # TODO - change to event and add library refresh
+                library.refresh_library_data()
 
             # skill editor editing a skill's effect
             if button[1] in EffectTypes._member_names_:
                 ui.Element.edit_skill_effect(EffectTypes[button[1]])
+
+            # skill editor saving an effect
+            if button[1] == "effect_editor_save":
+                ui.Element.save_edited_effect()
 
         if get_intent(intent.DEV_TOGGLE):
             publisher.publish(ChangeGameStateEvent(game.previous_game_state))

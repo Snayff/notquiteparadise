@@ -411,7 +411,17 @@ class ElementMethods:
         skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
 
         if skill_editor:
-            skill_editor.save()
+            skill_editor.save_skill_details()
+
+    def save_edited_effect(self):
+        """
+        Save the edited effect in the skill editor.
+        """
+        skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
+
+        if skill_editor:
+            skill_editor.save_effect_details()
+            skill_editor.load_skill_details(skill_editor.current_skill)
 
     def edit_skill_effect(self, effect_type):
         """
@@ -423,4 +433,5 @@ class ElementMethods:
         skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
 
         if skill_editor:
+            skill_editor.clear_effect_details()
             skill_editor.load_effect_details(effect_type)

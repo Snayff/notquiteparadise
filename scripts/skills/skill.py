@@ -35,6 +35,3 @@ class SkillData:
     shape: SkillShapes = None
     shape_size: int = 1
     effects: Dict = field(default_factory=dict)
-
-    # modifiers
-    modifiers: List = field(default_factory=list)

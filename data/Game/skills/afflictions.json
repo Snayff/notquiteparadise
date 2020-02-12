@@ -29,7 +29,7 @@
             {
                 "effect_type": "affect_stat",
                 "stat_to_affect": "bustle" ,
-                "amount": -25
+                "affect_stat_amount": -25
             }
         ]
     },
@@ -43,7 +43,7 @@
             {
                 "effect_type": "affect_stat",
                 "stat_to_affect": "sight_range",
-                "amount": -2
+                "affect_stat_amount": -2
             }
         ]
     }

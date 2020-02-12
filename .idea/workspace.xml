@@ -56,7 +56,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/skills" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -298,7 +298,7 @@
       <workItem from="1581356399357" duration="10433000" />
       <workItem from="1581424479349" duration="6330000" />
       <workItem from="1581449763016" duration="5414000" />
-      <workItem from="1581513688015" duration="8847000" />
+      <workItem from="1581513688015" duration="18389000" />
     </task>
     <servers />
   </component>
@@ -344,54 +344,54 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1579355830453" />
-    <state width="1795" height="616" key="DebuggerActiveHint" timestamp="1581526765512">
+    <state width="1795" height="947" key="DebuggerActiveHint" timestamp="1581536596024">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1795" height="616" key="DebuggerActiveHint/0.0.3440.1400@0.0.3440.1400" timestamp="1581526765512" />
+    <state width="1795" height="947" key="DebuggerActiveHint/0.0.3440.1400@0.0.3440.1400" timestamp="1581536596024" />
     <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1581454824011">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1581454824011" />
-    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog" timestamp="1581452152076">
+    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog" timestamp="1581535635613">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1581452152076" />
-    <state width="1036" height="283" key="GridCell.Tab.0.bottom" timestamp="1581526779665">
+    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1581535635613" />
+    <state width="1036" height="283" key="GridCell.Tab.0.bottom" timestamp="1581536566193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779665" />
-    <state width="1036" height="283" key="GridCell.Tab.0.center" timestamp="1581526779664">
+    <state width="1036" height="283" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566193" />
+    <state width="1036" height="283" key="GridCell.Tab.0.center" timestamp="1581536566193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779664" />
-    <state width="1036" height="283" key="GridCell.Tab.0.left" timestamp="1581526779664">
+    <state width="1036" height="283" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566193" />
+    <state width="1036" height="283" key="GridCell.Tab.0.left" timestamp="1581536566193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779664" />
-    <state width="1036" height="283" key="GridCell.Tab.0.right" timestamp="1581526779665">
+    <state width="1036" height="283" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566193" />
+    <state width="1036" height="283" key="GridCell.Tab.0.right" timestamp="1581536566193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779665" />
-    <state width="1036" height="283" key="GridCell.Tab.1.bottom" timestamp="1581526779585">
+    <state width="1036" height="283" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566193" />
+    <state width="1036" height="283" key="GridCell.Tab.1.bottom" timestamp="1581536566194">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779585" />
-    <state width="1036" height="283" key="GridCell.Tab.1.center" timestamp="1581526779585">
+    <state width="1036" height="283" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566194" />
+    <state width="1036" height="283" key="GridCell.Tab.1.center" timestamp="1581536566194">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779585" />
-    <state width="1036" height="283" key="GridCell.Tab.1.left" timestamp="1581526779584">
+    <state width="1036" height="283" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566194" />
+    <state width="1036" height="283" key="GridCell.Tab.1.left" timestamp="1581536566193">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779584" />
-    <state width="1036" height="283" key="GridCell.Tab.1.right" timestamp="1581526779585">
+    <state width="1036" height="283" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566193" />
+    <state width="1036" height="283" key="GridCell.Tab.1.right" timestamp="1581536566194">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1036" height="283" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1581526779585" />
-    <state x="955" y="345" key="SettingsEditor" timestamp="1581365283695">
+    <state width="1036" height="283" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1581536566194" />
+    <state x="955" y="345" key="SettingsEditor" timestamp="1581536510618">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="955" y="345" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1581365283695" />
+    <state x="955" y="345" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1581536510618" />
     <state x="1052" y="445" width="540" height="540" key="StructurePopup" timestamp="1578940051985">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -400,14 +400,14 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1055" height="703" key="XDebugger.FullValuePopup/0.0.3440.1400@0.0.3440.1400" timestamp="1581429262784" />
-    <state x="695" y="289" width="784" height="630" key="find.popup" timestamp="1581427490848">
+    <state x="695" y="289" width="784" height="630" key="find.popup" timestamp="1581531656477">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="695" y="289" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1581427490848" />
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1581514500781">
+    <state x="695" y="289" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1581531656477" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1581535141939">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1581514500781" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1581535141939" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -419,13 +419,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/dev_tools/skill_editor.py</url>
-          <line>343</line>
-          <option name="timeStamp" value="10" />
+          <line>466</line>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/scripts/dev_tools/skill_editor.py</url>
-          <line>336</line>
-          <option name="timeStamp" value="13" />
+          <line>422</line>
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -435,6 +435,6 @@
     <SUITE FILE_PATH="coverage/NotQuiteParadise$scratch_3.coverage" NAME="scratch_3 Coverage Results" MODIFIED="1581359823918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/NotQuiteParadise$scratch_2.coverage" NAME="scratch_2 Coverage Results" MODIFIED="1577626892555" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/NotQuiteParadise$scratch_4.coverage" NAME="scratch_4 Coverage Results" MODIFIED="1581425871272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
-    <SUITE FILE_PATH="coverage/NotQuiteParadise$engine.coverage" NAME="engine Coverage Results" MODIFIED="1581526779567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NotQuiteParadise$engine.coverage" NAME="engine Coverage Results" MODIFIED="1581536524726" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
