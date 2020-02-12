@@ -82,7 +82,7 @@ class ElementMethods:
         """
         Initialise the skill editor ui element.
         """
-        width = 600
+        width = 1200
         height = 600
         x = 5
         y = 10
@@ -412,3 +412,15 @@ class ElementMethods:
 
         if skill_editor:
             skill_editor.save()
+
+    def edit_skill_effect(self, effect_type):
+        """
+        Edit the skill's effect in the skill editor.
+
+        Args:
+            effect_type ():
+        """
+        skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
+
+        if skill_editor:
+            skill_editor.load_effect_details(effect_type)

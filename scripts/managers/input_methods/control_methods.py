@@ -4,7 +4,7 @@ import dataclasses
 import logging
 import pygame
 from typing import TYPE_CHECKING
-from scripts.core.constants import InputIntents, Directions, GameStates, MessageTypes
+from scripts.core.constants import InputIntents, Directions, GameStates, MessageTypes, EffectTypes
 from scripts.core.event_hub import publisher
 from scripts.core.library import library
 from scripts.events.entity_events import MoveEvent, UseSkillEvent
@@ -342,9 +342,14 @@ class ControlMethods:
         if get_intent(intent.BUTTON_PRESSED):
             button = self.get_pressed_ui_button(event)
 
+            # skill editor saving a skill
             if button[1] == "skill_editor_save":
                 ui.Element.save_edited_skill()
                 # TODO - change to event and add library refresh
+
+            # skill editor editing a skill's effect
+            if button[1] in EffectTypes._member_names_:
+                ui.Element.edit_skill_effect(EffectTypes[button[1]])
 
         if get_intent(intent.DEV_TOGGLE):
             publisher.publish(ChangeGameStateEvent(game.previous_game_state))
