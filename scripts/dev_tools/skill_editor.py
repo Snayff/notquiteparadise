@@ -3,7 +3,7 @@ from __future__ import annotations
 import dataclasses
 import logging
 from enum import Enum
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable
 import pygame
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
@@ -128,7 +128,7 @@ class SkillEditor(UIWindow):
                 value_input = UIDropDownMenu(options_list, value_name, value_rect, self.ui_manager,
                                              container=self.get_container(), parent_element=self, object_id=key)
             elif key == "effects":
-                button_width = int(skill_details_width / len(EffectTypes))
+                button_width = skill_details_width // len(EffectTypes)
 
                 # ensure there is a value to use as a label
                 if value:
@@ -149,15 +149,13 @@ class SkillEditor(UIWindow):
                 effects.extend(effect.name for effect in EffectTypes)
                 buttons = self.create_row_of_buttons(effects, key_x, start_y + offset_y, button_width, height)
             elif key == "target_directions":
-                directions = []
-                directions.extend(direction.name for direction in value)
-                clean_directions = ", ".join(directions)
-                value_input = self.create_text_entry(value_rect, key, clean_directions)
+                # convert the list to a string separated by commas
+                directions = ", ".join(direction.name for direction in value)
+                value_input = self.create_text_entry(value_rect, key, directions)
             elif key == "required_tags":
-                tags = []
-                tags.extend(tag.name for tag in value)
-                clean_tags = ", ".join(tags)
-                value_input = self.create_text_entry(value_rect, key, clean_tags)
+                # convert the list to a string separated by commas
+                tags = ", ".join(tag.name for tag in value)
+                value_input = self.create_text_entry(value_rect, key, tags)
 
             elif key == "icon":
                 # TODO - change to file picker
@@ -297,7 +295,8 @@ class SkillEditor(UIWindow):
         return UIDropDownMenu(options, "New", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="skill_selector")
 
-    def create_row_of_buttons(self, button_names: List[str], x: int, y: int, width: int, height: int) -> Dict:
+    def create_row_of_buttons(self, button_names: Iterable[str], x: int, y: int, width: int, height: int) -> Dict[
+        str, UIButton]:
         """
         Create a series of button UI widgets on the same x pos.
 
@@ -432,12 +431,8 @@ class SkillEditor(UIWindow):
                 # effects updated directly via effect save so get the info
                 edited_skill[key] = self.all_skills[self.current_skill].effects
             elif key == "target_directions":
-                converted_directions = []
-                directions = value.split(",")
-                for direction in directions:
-                    direction = direction.strip()
-                    converted_directions.append(Directions[direction])
-                edited_skill[key] = converted_directions
+                # split the string by comma and add to list, removing whitespace to allow matching to enum's name
+                edited_skill[key] = [Directions[direction.strip()] for direction in value.split(",")]
             elif key == "terrain_collision":
                 edited_skill[key] = SkillTerrainCollisions[value]
             elif key == "travel_type":
@@ -445,12 +440,8 @@ class SkillEditor(UIWindow):
             elif key == "expiry_type":
                 edited_skill[key] = SkillExpiryTypes[value]
             elif key == "required_tags":
-                converted_tags = []
-                tags = value.split(",")
-                for tag in tags:
-                    tag = tag.strip()
-                    converted_tags.append(TargetTags[tag])
-                edited_skill[key] = converted_tags
+                # split the string by comma and add to list, removing whitespace to allow matching to enum's name
+                edited_skill[key] = [TargetTags[tag.strip()] for tag in value.split(",")]
             elif key == "shape":
                 edited_skill[key] = SkillShapes[value]
             else:
@@ -482,6 +473,8 @@ class SkillEditor(UIWindow):
                 effect[key] = field.selected_option
             else:
                 effect[key] = field.text
+
+            # TODO - update back to enums, as per save skill details
 
         # convert to data class
         effect_data = EffectData(**effect)
