@@ -51,9 +51,6 @@ class SkillEditor(UIWindow):
     def update(self, time_delta: float):
         """
         Update based on current state and data. Run every frame.
-
-        Args:
-            time_delta ():
         """
         super().update(time_delta)
 
@@ -67,9 +64,6 @@ class SkillEditor(UIWindow):
     def load_skill_details(self, skill_name: str):
         """
         Load skill details into self.skill_details. Create required input fields.
-
-        Args:
-            skill_name ():
         """
         # clear existing info
         self.skill_details = {}
@@ -149,6 +143,7 @@ class SkillEditor(UIWindow):
                 effects.extend(effect.name for effect in EffectTypes)
                 buttons = self.create_row_of_buttons(effects, key_x, start_y + offset_y, button_width, height)
             elif key == "target_directions":
+                # TODO - create dict of listed items to handle all
                 # convert the list to a string separated by commas
                 directions = ", ".join(direction.name for direction in value)
                 value_input = self.create_text_entry(value_rect, key, directions)
@@ -183,9 +178,6 @@ class SkillEditor(UIWindow):
     def load_effect_details(self, effect_type: EffectTypes):
         """
         Load effect details into self.effect_details. Create required input fields.
-
-        Args:
-            effect_type ():
         """
         # clear existing info
         self.effect_details = {}
@@ -299,16 +291,6 @@ class SkillEditor(UIWindow):
         str, UIButton]:
         """
         Create a series of button UI widgets on the same x pos.
-
-        Args:
-            button_names ():
-            x ():
-            y ():
-            width ():
-            height ():
-
-        Returns:
-
         """
         offset_x = 0
         buttons = {}
@@ -325,14 +307,6 @@ class SkillEditor(UIWindow):
     def create_text_entry(self, rect: pygame.Rect, object_id: str, initial_text: str) -> UITextEntryLine:
         """
         Create an input field  UI widget.
-
-        Args:
-            rect ():
-            object_id ():
-            initial_text ():
-
-        Returns:
-
         """
         text_entry = UITextEntryLine(rect, self.ui_manager, container=self.get_container(), parent_element=self,
                                      object_id=object_id)
@@ -411,6 +385,18 @@ class SkillEditor(UIWindow):
         """
         edited_name = self.skill_details["name"].text
 
+        # map the classes to their keys
+        enums = {
+            "terrain_collision": SkillTerrainCollisions,
+            "travel_type": SkillTravelTypes,
+            "expiry_type": SkillExpiryTypes,
+            "shape": SkillShapes
+        }
+        listed_enums = {
+            "target_directions": Directions,
+            "required_tags": TargetTags
+        }
+
         # determine dict key for the skill
         if self.current_skill == "New":
             skill_key = edited_name
@@ -430,20 +416,11 @@ class SkillEditor(UIWindow):
             if key == "effects":
                 # effects updated directly via effect save so get the info
                 edited_skill[key] = self.all_skills[self.current_skill].effects
-            elif key == "target_directions":
+            elif key in listed_enums:
                 # split the string by comma and add to list, removing whitespace to allow matching to enum's name
-                edited_skill[key] = [Directions[direction.strip()] for direction in value.split(",")]
-            elif key == "terrain_collision":
-                edited_skill[key] = SkillTerrainCollisions[value]
-            elif key == "travel_type":
-                edited_skill[key] = SkillTravelTypes[value]
-            elif key == "expiry_type":
-                edited_skill[key] = SkillExpiryTypes[value]
-            elif key == "required_tags":
-                # split the string by comma and add to list, removing whitespace to allow matching to enum's name
-                edited_skill[key] = [TargetTags[tag.strip()] for tag in value.split(",")]
-            elif key == "shape":
-                edited_skill[key] = SkillShapes[value]
+                edited_skill[key] = [enums[key][string.strip()] for string in value.split(",")]
+            elif key in enums:
+                edited_skill[key] = enums[key][value]
             else:
                 # if value doesnt map to an enum try and convert to number if poss
                 try:
