@@ -9,6 +9,7 @@ from pygame_gui.elements import UITextBox
 if TYPE_CHECKING:
     import pygame_gui
 
+
 class MessageLog(UIWindow):
     """
     Hold text relating to the game's events, to display to the player. Does not use UIWindow.
@@ -31,6 +32,18 @@ class MessageLog(UIWindow):
 
         # confirm init complete
         logging.debug(f"MessageLog initialised.")
+
+    def update(self, time_delta: float):
+        """
+        Update based on current state and data. Run every frame.
+        """
+        super().update(time_delta)
+
+    def handle_events(self, event):
+        """
+        Handle events created by this UI widget
+        """
+        pass
 
     def add_message(self, message: str):
         """

@@ -1,8 +1,10 @@
+from __future__ import annotations
 import logging
 import pygame
-from typing import Tuple, List
+
+from typing import TYPE_CHECKING
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
-from scripts.dev_tools.skill_editor import SkillEditor
+from scripts.dev_tools.skill_editor import DataEditor
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog
@@ -11,6 +13,10 @@ from scripts.ui.ui_elements.screen_message import ScreenMessage
 from scripts.ui.ui_elements.skill_bar import SkillBar
 from scripts.world.entity import Entity
 from scripts.world.tile import Tile
+
+if TYPE_CHECKING:
+    from scripts.managers.ui_manager import UIManager
+    from typing import Tuple, List, Dict
 
 
 class ElementMethods:
@@ -22,9 +28,8 @@ class ElementMethods:
     """
 
     def __init__(self, manager):
-        from scripts.managers.ui_manager import UIManager
         self._manager = manager  # type: UIManager
-        self._elements = {}  # list of all init'd ui elements
+        self._elements = {}  # dict of all init'd ui elements
 
     ############### INIT ################
 
@@ -87,7 +92,7 @@ class ElementMethods:
         x = 5
         y = 10
         rect = pygame.Rect((x, y), (width, height))
-        editor = SkillEditor(rect, self._manager.Gui)
+        editor = DataEditor(rect, self._manager.Gui)
         self.add_ui_element(UIElementTypes.SKILL_EDITOR.name, editor)
 
     ################ ELEMENT ###################
@@ -107,12 +112,9 @@ class ElementMethods:
         except KeyError:
             return None
 
-    def get_ui_elements(self):
+    def get_ui_elements(self) -> Dict:
         """
         Get all the ui elements
-
-        Returns:
-            list: list of ui_elements
         """
         return self._elements
 
@@ -403,35 +405,3 @@ class ElementMethods:
             skill_editor.cleanse()
             skill_editor.kill()
             self.remove_ui_element(skill_editor)
-
-    def save_edited_skill(self):
-        """
-        Save the edited skill in the skill editor.
-        """
-        skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
-
-        if skill_editor:
-            skill_editor.save_skill_details()
-
-    def save_edited_effect(self):
-        """
-        Save the edited effect in the skill editor.
-        """
-        skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
-
-        if skill_editor:
-            skill_editor.save_effect_details()
-            skill_editor.load_skill_details(skill_editor.current_skill)
-
-    def edit_skill_effect(self, effect_type):
-        """
-        Edit the skill's effect in the skill editor.
-
-        Args:
-            effect_type ():
-        """
-        skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
-
-        if skill_editor:
-            skill_editor.clear_effect_details()
-            skill_editor.load_effect_details(effect_type)

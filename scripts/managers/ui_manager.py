@@ -25,17 +25,24 @@ class UIManager:
         """
         Update all ui elements
         """
-        # self.Element.update_elements()
         self.Gui.update(delta_time)
 
-    def process_pgui_events(self, event):
+    def process_ui_events(self, event):
         """
         Process input events
-
-        Args:
-            event ():
         """
         self.Gui.process_events(event)
+
+    def handle_ui_events(self, event):
+        """
+        Have each UI widget handle its own events.
+        """
+        # make sure it is a pgui event
+        if event.type == pygame.USEREVENT:
+            elements = self.Element.get_ui_elements()
+
+            for element in elements.values():
+                element.handle_events(event)
 
     def draw(self):
         """

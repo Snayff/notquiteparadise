@@ -41,6 +41,18 @@ class EntityInfo(UIWindow):
         # confirm init complete
         logging.debug(f"Entity Info initialised.")
 
+    def update(self, time_delta: float):
+        """
+        Update based on current state and data. Run every frame.
+        """
+        super().update(time_delta)
+
+    def handle_events(self, event):
+        """
+        Handle events created by this UI widget
+        """
+        pass
+
     def set_entity(self, entity: Union[Entity, None]):
         """
         Set the selected entity to show the info for that entity.

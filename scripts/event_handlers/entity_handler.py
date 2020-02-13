@@ -3,12 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.core.constants import EntityEventTypes, MessageTypes, Directions, TargetTags
+from scripts.events.game_events import EndTurnEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
-from scripts.world.components import Position, Knowledge, Identity
+from scripts.world.components import Position, Knowledge, Identity, IsGod
 from scripts.events.entity_events import UseSkillEvent
 
 if TYPE_CHECKING:
@@ -95,6 +96,10 @@ class EntityHandler(Subscriber):
                     sight_range = max(0, stats.sight_range)
                     world.FOV.recompute_player_fov(position.x, position.y, sight_range)
 
+                # if entity that moved is turn holder then end their turn
+                if entity == turn.turn_holder:
+                    publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
+
     @staticmethod
     def process_skill(event: UseSkillEvent):
         """
@@ -112,6 +117,11 @@ class EntityHandler(Subscriber):
 
             # use skill
             world.Skill.use(entity, skill_name, event.start_pos, event.direction)
+
+            # end the turn if the entity isnt a god
+            if not world.Entity.has_component(entity, IsGod):
+                publisher.publish(EndTurnEvent(entity, skill_data.time_cost))
+
             # TODO - trigger terrain effects
 
         else:

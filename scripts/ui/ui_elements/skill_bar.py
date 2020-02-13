@@ -39,6 +39,18 @@ class SkillBar(UIWindow):
         # confirm init complete
         logging.debug(f"SkillBar initialised.")
 
+    def update(self, time_delta: float):
+        """
+        Update based on current state and data. Run every frame.
+        """
+        super().update(time_delta)
+
+    def handle_events(self, event):
+        """
+        Handle events created by this UI widget
+        """
+        pass
+
     def set_skill(self, slot_number, skill):
         """
         Set skill in the skill bar slot

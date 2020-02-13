@@ -3,8 +3,9 @@ from __future__ import annotations
 import dataclasses
 import logging
 from enum import Enum
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING, Type
 import pygame
+import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.core.constants import VisualInfo, Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
@@ -14,16 +15,17 @@ from scripts.skills.effect import EffectData
 from scripts.skills.skill import SkillData
 
 if TYPE_CHECKING:
-    from typing import List, Dict
+    from typing import List, Dict, Iterable, Any
+
 
 # TODO - expand to be a general data editor
 # TODO - add None option to drop downs
 # TODO - limit selections based on context. e.g. move effect doesnt have affliction name.
 
 
-class SkillEditor(UIWindow):
+class DataEditor(UIWindow):
     """
-    Dev tool to allow creating and editing skills.
+    Dev tool to allow creating and editing data.
     """
 
     def __init__(self, rect, manager):
@@ -31,22 +33,46 @@ class SkillEditor(UIWindow):
 
         super().__init__(rect, manager, element_ids=element_ids)
 
+        # data options
+        self.category_options = {
+            "base_stats" : library.get_stat_data(),
+            "homelands": library.get_homelands_data(),
+            "races": library.get_races_data(),
+            "savvys": library.get_savvys_data(),
+            "afflictions": library.get_afflictions_data(),
+            "skills": library.get_skills_data(),
+            "aspects": library.get_aspects_data(),
+            "gods": library.get_gods_data()
+        }
+
         # data holders
-        self.all_skills = library.get_all_skill_data()
-        self.current_skill = "None"
+        self.all_skills = library.get_skills_data()
+        self.current_data_instance = None
+        self.current_data_category = None
+        self.current_held_data = None
 
         # ui widgets
-        self.skill_selector = None
-        self.skill_details = None
-        self.effect_details = None
-        self.skill_labels = None
-        self.effect_labels = None
+        self.category_selector = None
+        self.instance_selector = None
+        self.primary_details = None
+        self.secondary_details = None
+        self.primary_labels = None
+        self.secondary_labels = None
         self.buttons = None
 
-        # display the widgets
-        self.skill_selector = self.create_skill_selector()
-        self.current_skill = self.skill_selector.selected_option
-        self.load_skill_details(self.current_skill)
+        # size info
+        self.start_x = 2
+        self.start_y = 2
+        self.width = self.rect.width
+        self.height = self.rect.height
+        self.row_height = 30
+        self.max_rows = self.height // self.row_height
+        self.selectors_end_y = self.start_y + (self.row_height * 2)  # 2 is number of selectors
+        self.primary_width = self.width / 2
+        self.secondary_width = self.width - self.primary_width
+
+        # display the initial selector
+        self.category_selector = self.create_data_category_selector()
 
     def update(self, time_delta: float):
         """
@@ -54,21 +80,107 @@ class SkillEditor(UIWindow):
         """
         super().update(time_delta)
 
-        # check if new skill selected and then reload details
-        if self.skill_selector.selected_option != self.current_skill:
-            self.current_skill = self.skill_selector.selected_option
-            self.load_skill_details(self.current_skill)
+    def handle_events(self, event):
+        """
+        Handle events created by this UI widget
+        """
+        ui_object_id = event.ui_object_id
+
+        # new selection in instance_selector
+        if ui_object_id == "category_selector":
+            if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+                if self.category_selector.selected_option != self.current_data_category:
+                    self.current_data_category = self.category_selector.selected_option
+                    self.instance_selector = self.create_data_instance_selector()
+
+        # new selection in instance_selector
+        if ui_object_id == "instance_selector":
+            if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+                if self.instance_selector.selected_option != self.current_data_instance:
+                    self.current_data_instance = self.instance_selector.selected_option
+                    self.load_skill_details(self.current_data_instance)
+
+        # TODO - update below to primary/secondary
+        # saving a skill
+        if ui_object_id == "skill_editor_save":
+            self.save_skill_details()
+            library.refresh_library_data()
+
+        # editing a skill's effect
+        if ui_object_id in EffectTypes._member_names_:
+            self.clear_effect_details()
+            self.load_effect_details(EffectTypes[ui_object_id])
+
+        # saving an effect
+        if ui_object_id == "effect_editor_save":
+            self.save_effect_details()
+            self.load_skill_details(self.current_data_instance)
+
+
+
+    ############## CREATE ################
+
+    def create_data_category_selector(self):
+        """
+        Create the skill selector drop down menu
+        """
+
+
+        rect = pygame.Rect((self.start_x, self.start_y), (self.width, self.height))
+
+        return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
+                              parent_element=self, object_id="category_selector")
+
+    def create_data_instance_selector(self, options: List[str]) -> UIDropDownMenu:
+        """
+        Create the skill selector drop down menu
+        """
+        options = ["New"]
+        for skill in self.all_skills:
+            options.append(skill)
+
+        rect = pygame.Rect((self.start_x, self.start_y + self.row_height), (self.width, self.height))
+
+        return UIDropDownMenu(options, "New", rect, self.ui_manager, container=self.get_container(),
+                              parent_element=self, object_id="instance_selector")
+
+    def create_row_of_buttons(self, button_names: Iterable[str], x: int, y: int, width: int, height: int) -> Dict[
+        str, UIButton]:
+        """
+        Create a series of button UI widgets on the same x pos.
+        """
+        offset_x = 0
+        buttons = {}
+
+        for name in button_names:
+            button_rect = pygame.Rect((x + offset_x, y), (width, height))
+            button = UIButton(button_rect, name, self.ui_manager, container=self.get_container(),
+                              parent_element=self, object_id=name)
+            offset_x += width
+            buttons[name] = button
+
+        return buttons
+
+    def create_text_entry(self, rect: pygame.Rect, object_id: str, initial_text: str) -> UITextEntryLine:
+        """
+        Create an input field  UI widget.
+        """
+        text_entry = UITextEntryLine(rect, self.ui_manager, container=self.get_container(), parent_element=self,
+                                     object_id=object_id)
+        text_entry.set_text(f"{initial_text}")
+
+        return text_entry
 
     ############### LOAD ###################
 
     def load_skill_details(self, skill_name: str):
         """
-        Load skill details into self.skill_details. Create required input fields.
+        Load skill details into self.primary_details. Create required input fields.
         """
         # clear existing info
-        self.skill_details = {}
+        self.primary_details = {}
         self.buttons = {}
-        self.skill_labels = {}
+        self.primary_labels = {}
 
         # set the keys that need drop downs
         dropdowns = {
@@ -166,8 +278,8 @@ class SkillEditor(UIWindow):
             offset_y += height
 
             # save refs to the ui widgets
-            self.skill_labels[key] = key_label
-            self.skill_details[key] = value_input
+            self.primary_labels[key] = key_label
+            self.primary_details[key] = value_input
             self.buttons = {**self.buttons, **buttons}
 
         # create save button
@@ -177,11 +289,11 @@ class SkillEditor(UIWindow):
 
     def load_effect_details(self, effect_type: EffectTypes):
         """
-        Load effect details into self.effect_details. Create required input fields.
+        Load effect details into self.secondary_details. Create required input fields.
         """
         # clear existing info
-        self.effect_details = {}
-        self.effect_labels = {}
+        self.secondary_details = {}
+        self.secondary_labels = {}
 
         # set the keys that need drop downs
         dropdowns = {
@@ -192,9 +304,9 @@ class SkillEditor(UIWindow):
         }
 
         # get required effect details
-        if self.current_skill != "New":
+        if self.current_data_instance != "New":
             try:
-                current_effect = self.all_skills[self.current_skill].effects[effect_type.name]
+                current_effect = self.all_skills[self.current_data_instance].effects[effect_type.name]
             except KeyError:
                 current_effect = None
         else:
@@ -243,7 +355,7 @@ class SkillEditor(UIWindow):
             elif key == "effect_type":
                 # just a label because it cant be amended
                 value_input = UILabel(value_rect, value.name, self.ui_manager, container=self.get_container(),
-                                     parent_element=self)
+                                      parent_element=self)
             elif key == "required_tags":
                 tags = []
                 tags.extend(tag.name for tag in value)
@@ -260,68 +372,22 @@ class SkillEditor(UIWindow):
             offset_y += height
 
             # save refs to the ui widgets
-            self.effect_labels[key] = key_label
-            self.effect_details[key] = value_input
+            self.secondary_labels[key] = key_label
+            self.secondary_details[key] = value_input
 
         # create save button
         buttons = self.create_row_of_buttons(["effect_editor_save"], start_x, start_y + offset_y,
                                              effect_details_width, height)
         self.buttons = {**self.buttons, **buttons}
 
-    ############## CREATE ################
-
-    def create_skill_selector(self) -> UIDropDownMenu:
-        """
-        Create the skill selector drop down menu
-        """
-        options = ["New"]
-        for skill in self.all_skills:
-            options.append(skill)
-
-        x = 2
-        y = 2
-        width = self.rect.width
-        height = 30
-        rect = pygame.Rect((x, y), (width, height))
-
-        return UIDropDownMenu(options, "New", rect, self.ui_manager, container=self.get_container(),
-                              parent_element=self, object_id="skill_selector")
-
-    def create_row_of_buttons(self, button_names: Iterable[str], x: int, y: int, width: int, height: int) -> Dict[
-        str, UIButton]:
-        """
-        Create a series of button UI widgets on the same x pos.
-        """
-        offset_x = 0
-        buttons = {}
-
-        for name in button_names:
-            button_rect = pygame.Rect((x + offset_x, y), (width, height))
-            button = UIButton(button_rect, name, self.ui_manager, container=self.get_container(),
-                              parent_element=self, object_id=name)
-            offset_x += width
-            buttons[name] = button
-
-        return buttons
-
-    def create_text_entry(self, rect: pygame.Rect, object_id: str, initial_text: str) -> UITextEntryLine:
-        """
-        Create an input field  UI widget.
-        """
-        text_entry = UITextEntryLine(rect, self.ui_manager, container=self.get_container(), parent_element=self,
-                                     object_id=object_id)
-        text_entry.set_text(f"{initial_text}")
-
-        return text_entry
-
     ############## CLEAR #####################
 
     def clear_skill_details(self):
         """
-        Clear currently held skill details from self.skill_details.
+        Clear currently held skill details from self.primary_details.
         """
-        skill_details = self.skill_details
-        labels = self.skill_labels
+        skill_details = self.primary_details
+        labels = self.primary_labels
 
         if skill_details:
             for value in skill_details.values():
@@ -332,15 +398,15 @@ class SkillEditor(UIWindow):
             for value in labels.values():
                 value.kill()
 
-        self.skill_details = None
-        self.skill_labels = None
+        self.primary_details = None
+        self.primary_labels = None
 
     def clear_effect_details(self):
         """
-        Clear currently held effect details from self.effect_details.
+        Clear currently held effect details from self.secondary_details.
         """
-        effect_details = self.effect_details
-        labels = self.effect_labels
+        effect_details = self.secondary_details
+        labels = self.secondary_labels
 
         if effect_details:
             for value in effect_details.values():
@@ -351,8 +417,8 @@ class SkillEditor(UIWindow):
             for value in labels.values():
                 value.kill()
 
-        self.effect_details = None
-        self.effect_labels = None
+        self.secondary_details = None
+        self.secondary_labels = None
 
     def clear_buttons(self):
         """
@@ -367,12 +433,12 @@ class SkillEditor(UIWindow):
         """
         Clear all held data.
         """
-        if self.skill_selector:
-            self.skill_selector.kill()
-            self.skill_selector = None
-        if self.skill_details:
+        if self.instance_selector:
+            self.instance_selector.kill()
+            self.instance_selector = None
+        if self.primary_details:
             self.clear_skill_details()
-        if self.effect_details:
+        if self.secondary_details:
             self.clear_effect_details()
         if self.buttons:
             self.clear_buttons()
@@ -383,7 +449,7 @@ class SkillEditor(UIWindow):
         """
         Save the edited skill back to the json.
         """
-        edited_name = self.skill_details["name"].text
+        edited_name = self.primary_details["name"].text
 
         # map the classes to their keys
         enums = {
@@ -398,14 +464,14 @@ class SkillEditor(UIWindow):
         }
 
         # determine dict key for the skill
-        if self.current_skill == "New":
+        if self.current_data_instance == "New":
             skill_key = edited_name
         else:
-            skill_key = self.current_skill
+            skill_key = self.current_data_instance
 
         # extract values to a dict
         edited_skill = {}
-        for key, value in self.skill_details.items():
+        for key, value in self.primary_details.items():
             # get the required value
             if isinstance(value, UIDropDownMenu):
                 value = value.selected_option
@@ -413,20 +479,7 @@ class SkillEditor(UIWindow):
                 value = value.text
 
             # handle the different keys
-            if key == "effects":
-                # effects updated directly via effect save so get the info
-                edited_skill[key] = self.all_skills[self.current_skill].effects
-            elif key in listed_enums:
-                # split the string by comma and add to list, removing whitespace to allow matching to enum's name
-                edited_skill[key] = [enums[key][string.strip()] for string in value.split(",")]
-            elif key in enums:
-                edited_skill[key] = enums[key][value]
-            else:
-                # if value doesnt map to an enum try and convert to number if poss
-                try:
-                    edited_skill[key] = int(value)
-                except ValueError:
-                    edited_skill[key] = value
+            edited_skill[key] = self.convert_value_to_required_type(key, value, enums, listed_enums)
 
         # unpack the dict to SkillData
         skill_data = SkillData(**edited_skill)
@@ -442,19 +495,54 @@ class SkillEditor(UIWindow):
         """
         Save the current effect details to the current skill.
         """
-        effect = {}
+        enums = {
+            "mod_stat": PrimaryStatTypes,
+            "damage_type": DamageTypes,
+            "stat_to_target": PrimaryStatTypes,
+            "stat_to_affect": PrimaryStatTypes
+        }
+
+        listed_enums = {
+            "required_tags": TargetTags
+        }
+
+        edited_effect = {}
 
         # loop all input fields and add the data to a single dict
-        for key, field in self.effect_details.items():
-            if isinstance(field, UIDropDownMenu):
-                effect[key] = field.selected_option
+        for key, value in self.secondary_details.items():
+            if isinstance(value, UIDropDownMenu):
+                value = value.selected_option
             else:
-                effect[key] = field.text
+                value = value.text
 
-            # TODO - update back to enums, as per save skill details
+            # handle the different keys
+            edited_effect[key] = self.convert_value_to_required_type(key, value, enums, listed_enums)
 
         # convert to data class
-        effect_data = EffectData(**effect)
+        effect_data = EffectData(**edited_effect)
 
         # update data
-        self.all_skills[self.current_skill].effects[effect_data.effect_type] = effect_data
+        self.all_skills[self.current_data_instance].effects[effect_data.effect_type] = effect_data
+
+    def convert_value_to_required_type(self, key: str, initial_value: Any, enums: Dict[str, Type[Enum]],
+            listed_enums: Dict[str, Type[Enum]]) -> Any:
+        """
+        Use key and initial value to determine the required type and convert the type to that value 
+        """
+        # handle the different keys
+        if key == "effects":
+            # effects updated directly via effect save so get the info
+            value = self.all_skills[self.current_data_instance].effects
+        elif key in listed_enums:
+            # split the string by comma and add to list, removing whitespace to allow matching to enum's name
+            value = [listed_enums[key][string.strip()] for string in initial_value.split(",")]
+        elif key in enums:
+            value = enums[key][initial_value]
+        else:
+            # if value doesnt map to an enum try and convert to number if poss
+            try:
+                value = int(initial_value)
+            except ValueError:
+                value = initial_value
+
+        return value

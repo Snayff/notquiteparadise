@@ -3,10 +3,11 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Tuple
 from scripts.core.library import library
+from scripts.events.entity_events import UseSkillEvent
 from scripts.managers.game_manager import game
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
-from scripts.core.event_hub import Subscriber
+from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MessageTypes, VisualInfo
 from scripts.world.components import Position
@@ -143,14 +144,21 @@ class UiHandler(Subscriber):
             event ():
         """
         if event.event_type == UIEventTypes.CLICK_TILE:
-            # Select an entity
-            tile = world.Map.get_tile(event.tile_pos_string)
-            entities = world.Entity.get_entities_and_components_in_area([tile])
+            if game.game_state == GameStates.PLAYER_TURN:
+                # Select an entity
+                tile = world.Map.get_tile(event.tile_pos_string)
+                entities = world.Entity.get_entities_and_components_in_area([tile])
 
-            # there should only be one entity, but just in case...
-            for entity in entities:
-                self.select_entity(entity)
-                break
+                # there should only be one entity, but just in case...
+                for entity in entities:
+                    self.select_entity(entity)
+                    break
+            elif game.game_state == GameStates.TARGETING_MODE:
+                # use the skill on the clicked tile
+                player = world.Entity.get_player()
+                position = world.Entity.get_component(player, Position)
+                direction = world.Map.get_direction((position.x, position.y), event.tile_pos_string)
+                publisher.publish(UseSkillEvent(player, game.active_skill, (position.x, position.y), direction))
 
         if event.event_type == UIEventTypes.MESSAGE:
             # process a message

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from scripts.world.data_classes.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
@@ -71,7 +71,7 @@ class LibraryOfAlexandria:
             self._races = self._load_race_json()
             self._savvys = self._load_savvy_json()
             self._afflictions = self._load_affliction_json()
-            self._aspects = self._load_aspect_json()
+            self._aspects = self._load_aspects_json()
             self._terrain = self._load_terrain_json()
             self._stats = self._load_base_stat_json()
             self._gods = self._load_gods_json()
@@ -470,6 +470,14 @@ class LibraryOfAlexandria:
 
     ####################### GET ##############################
 
+    def get_aspects_data(self) -> Dict[str, AspectData]:
+        """
+        Get all aspects from the library
+        """
+
+        data = self._aspects
+        return data
+
     def get_aspect_data(self, aspect_name):
         """
         Get data for an aspects from the library
@@ -500,6 +508,14 @@ class LibraryOfAlexandria:
         except KeyError:
             data = None
 
+        return data
+
+    def get_afflictions_data(self) -> Dict[str, AfflictionData]:
+        """
+        Get all afflictions from the library
+        """
+
+        data = self._afflictions
         return data
 
     def get_affliction_data(self, affliction_name):
@@ -534,6 +550,14 @@ class LibraryOfAlexandria:
 
         return data
 
+    def get_savvys_data(self) -> Dict[str, CharacteristicData]:
+        """
+        Get all savvys from the library
+        """
+
+        data = self._savvys
+        return data
+
     def get_savvy_data(self, savvy_name):
         """
         Get data for a savvys from the library
@@ -546,6 +570,14 @@ class LibraryOfAlexandria:
         """
 
         data = self._savvys[savvy_name]
+        return data
+
+    def get_races_data(self) -> Dict[str, CharacteristicData]:
+        """
+        Get all races from the library
+        """
+
+        data = self._races
         return data
 
     def get_race_data(self, race_name):
@@ -562,6 +594,14 @@ class LibraryOfAlexandria:
         data = self._races[race_name]
         return data
 
+    def get_homelands_data(self) -> Dict[str, CharacteristicData]:
+        """
+        Get all homelands from the library
+        """
+
+        data = self._homelands
+        return data
+
     def get_homeland_data(self, homeland_name):
         """
         Get data for a homelands from the library
@@ -576,6 +616,12 @@ class LibraryOfAlexandria:
         data = self._homelands[homeland_name]
         return data
 
+    def get_skills_data(self) -> Dict[str, SkillData]:
+        """
+        Get all skill data from the library
+        """
+        return self._skills
+
     def get_skill_data(self, skill_name):
         """
         Get data for a skill from the library
@@ -589,12 +635,6 @@ class LibraryOfAlexandria:
         skill_data = self._skills[skill_name]
 
         return skill_data
-
-    def get_all_skill_data(self) -> Dict[SkillData]:
-        """
-        Get all skill data from the library
-        """
-        return self._skills
 
     def get_skill_effect_data(self, skill_name, effect_type):
         """
@@ -615,6 +655,15 @@ class LibraryOfAlexandria:
             effect_data = None
 
         return effect_data
+
+    def get_stat_data(self) -> Dict[str, StatData]:
+        """
+        Get data for a primary stat from the library
+        """
+
+        stat_data = self._stats
+
+        return stat_data
 
     def get_primary_stat_data(self, primary_stat_type):
         """
@@ -645,6 +694,15 @@ class LibraryOfAlexandria:
         stat_data = self._stats.secondary[secondary_stat_type.name]
 
         return stat_data
+
+    def get_gods_data(self) -> Dict[str, GodData]:
+        """
+        Get all gods data from the library
+
+        """
+        god_data = self._gods
+
+        return god_data
 
     def get_god_data(self, god_name):
         """
@@ -744,19 +802,19 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/skills/afflictions.json') as file:
+        with open('data/game/afflictions.json') as file:
             data = json.load(file)
 
         return data
 
     @staticmethod
-    def _load_aspect_json():
+    def _load_aspects_json():
         """
 
         Returns:
 
         """
-        with open('data/game/world/aspect.json') as file:
+        with open('data/game/aspects.json') as file:
             data = json.load(file)
 
         return data
@@ -768,7 +826,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/world/terrain.json') as file:
+        with open('data/game/terrain.json') as file:
             data = json.load(file)
 
         return data
@@ -780,7 +838,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/entity/homelands.json') as file:
+        with open('data/game/homelands.json') as file:
             data = json.load(file)
 
         return data
@@ -792,7 +850,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/entity/savvys.json') as file:
+        with open('data/game/savvys.json') as file:
             data = json.load(file)
 
         return data
@@ -804,7 +862,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/entity/races.json') as file:
+        with open('data/game/races.json') as file:
             data = json.load(file)
 
         return data
@@ -816,7 +874,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/entity/base_stats.json') as file:
+        with open('data/game/base_stats.json') as file:
             data = json.load(file)
 
         return data
@@ -828,7 +886,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/world/gods.json') as file:
+        with open('data/game/gods.json') as file:
             data = json.load(file)
 
         return data
@@ -840,7 +898,7 @@ class LibraryOfAlexandria:
         Returns:
 
         """
-        with open('data/game/skills/skills.json') as file:
+        with open('data/game/skills.json') as file:
             data = json.load(file)
 
         return data

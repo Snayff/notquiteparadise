@@ -172,12 +172,6 @@ class SkillMethods:
 
         """
         Use the skill
-
-        Args:
-            start_position ():
-            skill_name ():
-            using_entity ():
-            target_direction (tuple): x y of the target direction
         """
         # initial values
         skill_data = library.get_skill_data(skill_name)
@@ -245,10 +239,6 @@ class SkillMethods:
             # apply any effects
             for effect_name, effect_data in skill_data.effects.items():
                 self.apply_effect(effect_data.effect_type, skill_name, effected_tiles, using_entity)
-
-            # end the turn if the entity isnt a god
-            if not self._manager.Entity.has_component(using_entity, IsGod):
-                publisher.publish(EndTurnEvent(using_entity, skill_data.time_cost))
 
     def _get_furthest_free_position(self, start_position: Tuple[int, int], target_direction: Tuple[int, int],
             max_distance: int, travel_type: SkillTravelTypes) -> Tuple[int, int]:

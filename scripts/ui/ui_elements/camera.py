@@ -4,7 +4,9 @@ import pygame_gui
 from typing import List
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
-from scripts.core.constants import TILE_SIZE
+from scripts.core.constants import TILE_SIZE, GameStates
+from scripts.core.event_hub import publisher
+from scripts.events.ui_events import ClickTile
 from scripts.managers.world_manager import world
 from scripts.world.components import Position, Aesthetic
 
@@ -47,6 +49,24 @@ class Camera(UIWindow):
 
         # confirm init complete
         logging.debug(f"Camera initialised.")
+
+    def update(self, time_delta: float):
+        """
+        Update based on current state and data. Run every frame.
+        """
+        super().update(time_delta)
+
+    def handle_events(self, event):
+        """
+        Handle events created by this UI widget
+        """
+        ui_object_id = event.ui_object_id
+
+        # clicking a tile
+        tile_prefix = "#tile"
+        if ui_object_id[:len(tile_prefix)] == tile_prefix:
+            tile_pos = ui_object_id[len('#tile'):]
+            publisher.publish(ClickTile(tile_pos_string=tile_pos))
 
     def update_game_map(self):
         """
