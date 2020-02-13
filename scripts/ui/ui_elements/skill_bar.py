@@ -21,7 +21,7 @@ class SkillBar(UIWindow):
         # complete base class init
         super().__init__(rect, manager, ["skill_bar"])
 
-        # create skill buttons
+        # create skill primary_buttons
         start_x = 5
         start_y = 5
         width = 64

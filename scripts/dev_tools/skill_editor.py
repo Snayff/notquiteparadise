@@ -3,10 +3,10 @@ from __future__ import annotations
 import dataclasses
 import logging
 from enum import Enum
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Type, Iterable, List, Dict
 import pygame
 import pygame_gui
-from pygame_gui.core import UIWindow
+from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.core.constants import VisualInfo, Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
     TargetTags, SkillShapes, EffectTypes, PrimaryStatTypes, DamageTypes
@@ -15,7 +15,7 @@ from scripts.skills.effect import EffectData
 from scripts.skills.skill import SkillData
 
 if TYPE_CHECKING:
-    from typing import List, Dict, Iterable, Any
+    from typing import Any, Tuple
 
 
 # TODO - expand to be a general data editor
@@ -33,20 +33,8 @@ class DataEditor(UIWindow):
 
         super().__init__(rect, manager, element_ids=element_ids)
 
-        # data options
-        self.category_options = {
-            "base_stats" : library.get_stat_data(),
-            "homelands": library.get_homelands_data(),
-            "races": library.get_races_data(),
-            "savvys": library.get_savvys_data(),
-            "afflictions": library.get_afflictions_data(),
-            "skills": library.get_skills_data(),
-            "aspects": library.get_aspects_data(),
-            "gods": library.get_gods_data()
-        }
-
         # data holders
-        self.all_skills = library.get_skills_data()
+        self.data_options = None
         self.current_data_instance = None
         self.current_data_category = None
         self.current_held_data = None
@@ -58,7 +46,8 @@ class DataEditor(UIWindow):
         self.secondary_details = None
         self.primary_labels = None
         self.secondary_labels = None
-        self.buttons = None
+        self.primary_buttons = None
+        self.secondary_buttons = None
 
         # size info
         self.start_x = 2
@@ -70,6 +59,9 @@ class DataEditor(UIWindow):
         self.selectors_end_y = self.start_y + (self.row_height * 2)  # 2 is number of selectors
         self.primary_width = self.width / 2
         self.secondary_width = self.width - self.primary_width
+
+        # get the data options
+        self.load_data_options()
 
         # display the initial selector
         self.category_selector = self.create_data_category_selector()
@@ -91,14 +83,15 @@ class DataEditor(UIWindow):
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.category_selector.selected_option != self.current_data_category:
                     self.current_data_category = self.category_selector.selected_option
-                    self.instance_selector = self.create_data_instance_selector()
+                    options = [key for key in self.data_options[self.current_data_category].keys()]
+                    self.instance_selector = self.create_data_instance_selector(options)
 
         # new selection in instance_selector
         if ui_object_id == "instance_selector":
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.instance_selector.selected_option != self.current_data_instance:
                     self.current_data_instance = self.instance_selector.selected_option
-                    self.load_skill_details(self.current_data_instance)
+                    self.load_primary_details(self.current_data_instance)
 
         # TODO - update below to primary/secondary
         # saving a skill
@@ -116,17 +109,14 @@ class DataEditor(UIWindow):
             self.save_effect_details()
             self.load_skill_details(self.current_data_instance)
 
-
-
     ############## CREATE ################
 
     def create_data_category_selector(self):
         """
         Create the skill selector drop down menu
         """
-
-
-        rect = pygame.Rect((self.start_x, self.start_y), (self.width, self.height))
+        options = [keys for keys in self.data_options.keys()]
+        rect = pygame.Rect((self.start_x, self.start_y), (self.width, self.row_height))
 
         return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="category_selector")
@@ -135,26 +125,23 @@ class DataEditor(UIWindow):
         """
         Create the skill selector drop down menu
         """
-        options = ["New"]
-        for skill in self.all_skills:
-            options.append(skill)
-
-        rect = pygame.Rect((self.start_x, self.start_y + self.row_height), (self.width, self.height))
+        rect = pygame.Rect((self.start_x, self.start_y + self.row_height), (self.width, self.row_height))
 
         return UIDropDownMenu(options, "New", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="instance_selector")
 
-    def create_row_of_buttons(self, button_names: Iterable[str], x: int, y: int, width: int, height: int) -> Dict[
+    def create_row_of_buttons(self, button_names: List[str], x: int, y: int, width: int, height: int) -> Dict[
         str, UIButton]:
         """
         Create a series of button UI widgets on the same x pos.
         """
         offset_x = 0
+        container = self.get_container()
         buttons = {}
 
         for name in button_names:
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
-            button = UIButton(button_rect, name, self.ui_manager, container=self.get_container(),
+            button = UIButton(button_rect, name, self.ui_manager, container=container,
                               parent_element=self, object_id=name)
             offset_x += width
             buttons[name] = button
@@ -173,13 +160,137 @@ class DataEditor(UIWindow):
 
     ############### LOAD ###################
 
+    def load_primary_details(self, data_instance: str):
+        """
+        Load the primary details fields based on the data instance
+        """
+        # clear existing info
+        self.primary_details = {}
+        self.primary_buttons = {}
+        self.primary_labels = {}
+
+        # set rect sizes
+        row_width = self.primary_width
+        row_height = self.row_height
+        start_x = self.start_x
+        start_y = self.selectors_end_y
+        key_x = start_x
+        key_width = row_width / 4
+        value_width = row_width - key_width
+        value_x = key_x + key_width
+        current_y = start_y
+
+        # get any info we can get ahead of time
+        container = self.get_container()
+        manager = self.ui_manager
+
+        # convert dataclass to dict to loop values
+        if data_instance != "New":
+            # get the existing data class
+            data_dict = dataclasses.asdict(self.data_options[self.current_data_category][data_instance])
+        else:
+            # create a blank data class based on the data class of the 0th item in the current category
+            data_dict = dataclasses.asdict(type(self.data_options[self.current_data_category][0]))
+
+        # create labels and input fields
+        for key, value in data_dict.items():
+            # reset value input and buttons
+            value_input = None
+            buttons = {}
+
+            # create standard elements
+            key_rect = pygame.Rect((key_x, current_y), (key_width, row_height))
+            key_label = UILabel(key_rect, key, manager, container=container, parent_element=self)
+            value_rect = pygame.Rect((value_x, current_y), (value_width, row_height))
+
+            # pull effects out as they follow their own rules
+            if key == "effects":
+                # get list of enums names from the enum that contains the current value
+                options = []
+                options.extend("" + name.name for name in value.__class__.__members__.values())
+                value_input, buttons = self.create_multiple_choice(options, key, value, start_x, current_y,
+                                                                   row_width, container)
+
+            elif key == "icon":
+                # TODO - change to file picker
+                value_input = self.create_text_entry(value_rect, key, value)
+
+            # check if it is a list or dict
+            elif isinstance(value, List) or isinstance(value, Dict):
+                names = []
+                names.extend("multi#" + name for name in value)
+                value_input, buttons = self.create_multiple_choice(names, key, value, start_x, current_y,
+                                                                   row_width, container)
+
+            # check if it is an enum
+            elif isinstance(value, Enum):
+                # get value name
+                if value:
+                    value_name = value.name
+                else:
+                    value_name = "None"
+
+                # get list of enums names from the enum that contains the current value
+                options = []
+                options.extend(name.name for name in value.__class__.__members__.values())
+
+                # create drop down
+                value_input = UIDropDownMenu(options, value_name, value_rect, manager, container=container,
+                                             parent_element=self, object_id=key)
+
+            # handle everything else as a single line of text
+            else:
+                value_input = self.create_text_entry(value_rect, key, value)
+
+            # increment current_y
+            current_y += row_height
+
+            # save refs to the ui widgets
+            self.primary_labels[key] = key_label
+            self.primary_details[key] = value_input
+            self.primary_buttons = {**self.primary_buttons, **buttons}
+
+        # create save button and add to
+        buttons = self.create_row_of_buttons(["skill_editor_save"], start_x, current_y, row_width,
+                                         row_height)
+        self.primary_buttons = {**self.primary_buttons, **buttons}
+
+    def create_multiple_choice(self, button_names: List[str], key: str, value: Iterable,  x: int, y: int,
+            row_width: int, container: UIContainer) -> Tuple[UILabel, Dict[str, UIButton]]:
+        """
+        Create a label row and a subsequent row of buttons
+        """
+
+        # determine how wide to made buttons
+        button_width = row_width // len(button_names)
+
+        # ensure there is a value to use as a label
+        if value:
+            current_value = []
+            current_value.extend(item for item in value)
+        else:
+            current_value = "None"
+
+        # create rect
+        row_height = self.row_height
+        rect = pygame.Rect((x, y), (row_width, row_height))
+
+        # create a label showing each active effect
+        value_input = UILabel(rect, ", ".join(current_value), self.ui_manager, container=container,
+                              parent_element=self, object_id=key)
+
+        # create the buttons
+        buttons = self.create_row_of_buttons(button_names, x, y + row_height, button_width, row_height)
+
+        return value_input, buttons
+
     def load_skill_details(self, skill_name: str):
         """
         Load skill details into self.primary_details. Create required input fields.
         """
         # clear existing info
         self.primary_details = {}
-        self.buttons = {}
+        self.primary_buttons = {}
         self.primary_labels = {}
 
         # set the keys that need drop downs
@@ -280,12 +391,12 @@ class DataEditor(UIWindow):
             # save refs to the ui widgets
             self.primary_labels[key] = key_label
             self.primary_details[key] = value_input
-            self.buttons = {**self.buttons, **buttons}
+            self.primary_buttons = {**self.primary_buttons, **buttons}
 
         # create save button
         buttons = self.create_row_of_buttons(["skill_editor_save"], start_x, start_y + offset_y, skill_details_width,
                                              height)
-        self.buttons = {**self.buttons, **buttons}
+        self.primary_buttons = {**self.primary_buttons, **buttons}
 
     def load_effect_details(self, effect_type: EffectTypes):
         """
@@ -378,7 +489,22 @@ class DataEditor(UIWindow):
         # create save button
         buttons = self.create_row_of_buttons(["effect_editor_save"], start_x, start_y + offset_y,
                                              effect_details_width, height)
-        self.buttons = {**self.buttons, **buttons}
+        self.primary_buttons = {**self.primary_buttons, **buttons}
+
+    def load_data_options(self):
+        """
+        Load all of the data options into self.data_options
+        """
+        self.data_options = {
+            "base_stats": library.get_stat_data(),
+            "homelands": library.get_homelands_data(),
+            "races": library.get_races_data(),
+            "savvys": library.get_savvys_data(),
+            "afflictions": library.get_afflictions_data(),
+            "skills": library.get_skills_data(),
+            "aspects": library.get_aspects_data(),
+            "gods": library.get_gods_data()
+        }
 
     ############## CLEAR #####################
 
@@ -424,10 +550,10 @@ class DataEditor(UIWindow):
         """
         Remove the save button and all references to it.
         """
-        if self.buttons:
-            for button in self.buttons.values():
+        if self.primary_buttons:
+            for button in self.primary_buttons.values():
                 button.kill()
-            self.buttons = None
+            self.primary_buttons = None
 
     def cleanse(self):
         """
@@ -440,7 +566,7 @@ class DataEditor(UIWindow):
             self.clear_skill_details()
         if self.secondary_details:
             self.clear_effect_details()
-        if self.buttons:
+        if self.primary_buttons:
             self.clear_buttons()
 
     ############ SAVING ##################
@@ -524,6 +650,8 @@ class DataEditor(UIWindow):
         # update data
         self.all_skills[self.current_data_instance].effects[effect_data.effect_type] = effect_data
 
+    ############ UTILITY ################
+
     def convert_value_to_required_type(self, key: str, initial_value: Any, enums: Dict[str, Type[Enum]],
             listed_enums: Dict[str, Type[Enum]]) -> Any:
         """
@@ -546,3 +674,4 @@ class DataEditor(UIWindow):
                 value = initial_value
 
         return value
+
