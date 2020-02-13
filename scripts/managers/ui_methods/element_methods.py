@@ -393,11 +393,11 @@ class ElementMethods:
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
         screen_message = ScreenMessage(text, self._manager.Gui)
 
-    ############## SKILL EDITOR ##################
+    ############## KILL ##################
 
-    def kill_skill_editor(self):
+    def kill_data_editor(self):
         """
-        Remove any reference to the skill_editor
+        Remove any reference to the skill_editor. Includes use of editors's cleanse method.
         """
         skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
 
@@ -405,3 +405,13 @@ class ElementMethods:
             skill_editor.cleanse()
             skill_editor.kill()
             self.remove_ui_element(skill_editor)
+
+    def kill_element(self, element_type: UIElementTypes):
+        """
+        Remove any reference to the element
+        """
+        element = self.get_ui_element(element_type)
+
+        if element:
+            element.kill()
+            self.remove_ui_element(element)

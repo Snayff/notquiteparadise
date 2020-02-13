@@ -9,7 +9,7 @@ from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, MessageTypes, VisualInfo
+    UIEventTypes, MessageTypes, VisualInfo, UIElementTypes
 from scripts.world.components import Position
 
 if TYPE_CHECKING:
@@ -79,7 +79,7 @@ class UiHandler(Subscriber):
         """
         if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
             if event.new_game_state == GameStates.GAME_INITIALISING:
-                self.init_ui()
+                self.init_game_ui()
 
             elif game.previous_game_state == GameStates.GAME_INITIALISING:
                 # once everything is initialised present the welcome message
@@ -103,12 +103,14 @@ class UiHandler(Subscriber):
                 pass
 
             elif event.new_game_state == GameStates.DEV_MODE:
-                self.init_dev_mode()
+                self.init_dev_ui()
+                self.close_game_ui()
 
             elif game.previous_game_state == GameStates.DEV_MODE:
-                self.exit_dev_mode()
+                self.close_dev_ui()
+                self.init_game_ui()
 
-    def init_ui(self):
+    def init_game_ui(self):
         """
         Initialise the UI elements
         """
@@ -121,18 +123,28 @@ class UiHandler(Subscriber):
         self.update_camera()
 
     @staticmethod
-    def init_dev_mode():
+    def close_game_ui():
+        """
+        Close all game ui elements
+        """
+        ui.Element.kill_element(UIElementTypes.MESSAGE_LOG)
+        ui.Element.kill_element(UIElementTypes.SKILL_BAR)
+        ui.Element.kill_element(UIElementTypes.CAMERA)
+        ui.Element.kill_element(UIElementTypes.ENTITY_INFO)
+
+    @staticmethod
+    def init_dev_ui():
         """
         Initialise all dev mode widgets
         """
         ui.Element.init_skill_editor()
 
     @staticmethod
-    def exit_dev_mode():
+    def close_dev_ui():
         """
-        Clear all dev mode widgets
+        Clear all dev mode elements
         """
-        ui.Element.kill_skill_editor()
+        ui.Element.kill_data_editor()
 
     ############# HANDLE UI EVENTS #################
 

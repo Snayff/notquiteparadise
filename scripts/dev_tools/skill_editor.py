@@ -221,7 +221,7 @@ class DataEditor(UIWindow):
         start_x = self.start_x
         start_y = self.selectors_end_y
         key_x = start_x
-        key_width = row_width / 4
+        key_width = row_width // 4
         value_width = row_width - key_width
         value_x = key_x + key_width
         current_y = start_y
