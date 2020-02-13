@@ -84,6 +84,7 @@ class DataEditor(UIWindow):
                 if self.category_selector.selected_option != self.current_data_category:
                     self.current_data_category = self.category_selector.selected_option
                     options = [key for key in self.data_options[self.current_data_category].keys()]
+                    options.sort()
                     self.instance_selector = self.create_data_instance_selector(options)
 
         # new selection in instance_selector
@@ -111,11 +112,14 @@ class DataEditor(UIWindow):
 
     ############## CREATE ################
 
-    def create_data_category_selector(self):
+    def create_data_category_selector(self) -> UIDropDownMenu:
         """
         Create the skill selector drop down menu
         """
+        # get options and sort alphabetically
         options = [keys for keys in self.data_options.keys()]
+        options.sort()
+
         rect = pygame.Rect((self.start_x, self.start_y), (self.width, self.row_height))
 
         return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
@@ -139,12 +143,20 @@ class DataEditor(UIWindow):
         container = self.get_container()
         buttons = {}
 
-        for name in button_names:
+        for key in button_names:
+            # split the prefix from the name
+            try:
+                prefix, name = key.split("#")
+            except ValueError:
+                # if no prefix
+                name = key
+
+            # create the button
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
             button = UIButton(button_rect, name, self.ui_manager, container=container,
-                              parent_element=self, object_id=name)
+                              parent_element=self, object_id=key)
             offset_x += width
-            buttons[name] = button
+            buttons[key] = button
 
         return buttons
 
@@ -157,6 +169,34 @@ class DataEditor(UIWindow):
         text_entry.set_text(f"{initial_text}")
 
         return text_entry
+
+    def create_multiple_choice(self, button_names: List[str], label_id: str, label_value: List[str], row_x: int,
+            label_x: int, y: int, row_width: int, container: UIContainer) -> Tuple[UILabel, Dict[str, UIButton]]:
+        """
+        Create a label row and a subsequent row of buttons.
+        """
+
+        # determine how wide to made buttons
+        button_width = row_width // len(button_names)
+
+        # ensure there is a value to use as a label
+        if not label_value:
+            current_value = "None"
+        else:
+            current_value = ", ".join(label_value)
+
+        # create rect
+        row_height = self.row_height
+        rect = pygame.Rect((label_x, y), (row_width, row_height))
+
+        # create a label showing each active effect
+        value_input = UILabel(rect, current_value, self.ui_manager, container=container,
+                              parent_element=self, object_id=label_id)
+
+        # create the buttons
+        buttons = self.create_row_of_buttons(button_names, row_x, y + row_height, button_width, row_height)
+
+        return value_input, buttons
 
     ############### LOAD ###################
 
@@ -208,13 +248,17 @@ class DataEditor(UIWindow):
                 # get list of effect names for options
                 options = []
                 options.extend("secondary#" + name.name for name in EffectTypes)
+                options.sort()
 
                 # get current effects
                 effects = []
                 effects.extend(effect for effect in value)
 
-                value_input, buttons = self.create_multiple_choice(options, key, effects, start_x, current_y,
+                value_input, buttons = self.create_multiple_choice(options, key, effects, start_x, key_x, current_y,
                                                                    row_width, container)
+
+                # multiple choice takes 2 lines so increment y
+                current_y += row_height
 
             elif key == "icon":
                 # TODO - change to file picker
@@ -233,8 +277,15 @@ class DataEditor(UIWindow):
                     names.extend("multi#" + name for name in value)
                     cleaned_values.extend(name for name in value)
 
-                value_input, buttons = self.create_multiple_choice(names, key, cleaned_values, start_x, current_y,
-                                                                   row_width, container)
+                # sort lists alphabetically
+                names.sort()
+                cleaned_values.sort()
+
+                value_input, buttons = self.create_multiple_choice(names, key, cleaned_values, start_x, key_x,
+                                                                   current_y, row_width, container)
+
+                # multiple choice takes 2 lines so increment y
+                current_y += row_height
 
             # check if it is an enum
             elif isinstance(value, Enum):
@@ -247,6 +298,7 @@ class DataEditor(UIWindow):
                 # get list of enums names from the enum that contains the current value
                 options = []
                 options.extend(name.name for name in value.__class__.__members__.values())
+                options.sort()
 
                 # create drop down
                 value_input = UIDropDownMenu(options, value_name, value_rect, manager, container=container,
@@ -268,34 +320,6 @@ class DataEditor(UIWindow):
         buttons = self.create_row_of_buttons(["skill_editor_save"], start_x, current_y, row_width,
                                          row_height)
         self.primary_buttons = {**self.primary_buttons, **buttons}
-
-    def create_multiple_choice(self, button_names: List[str], label_id: str, label_value: List[str],  x: int, y: int,
-            row_width: int, container: UIContainer) -> Tuple[UILabel, Dict[str, UIButton]]:
-        """
-        Create a label row and a subsequent row of buttons.
-        """
-
-        # determine how wide to made buttons
-        button_width = row_width // len(button_names)
-
-        # ensure there is a value to use as a label
-        if not label_value:
-            current_value = "None"
-        else:
-            current_value = ", ".join(label_value)
-
-        # create rect
-        row_height = self.row_height
-        rect = pygame.Rect((x, y), (row_width, row_height))
-
-        # create a label showing each active effect
-        value_input = UILabel(rect, current_value, self.ui_manager, container=container,
-                              parent_element=self, object_id=label_id)
-
-        # create the buttons
-        buttons = self.create_row_of_buttons(button_names, x, y + row_height, button_width, row_height)
-
-        return value_input, buttons
 
     def load_skill_details(self, skill_name: str):
         """
