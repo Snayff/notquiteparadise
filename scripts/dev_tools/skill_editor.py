@@ -17,8 +17,6 @@ from scripts.skills.skill import SkillData
 if TYPE_CHECKING:
     from typing import Any, Tuple
 
-
-# TODO - expand to be a general data editor
 # TODO - add None option to drop downs
 # TODO - limit selections based on context. e.g. move effect doesnt have affliction name.
 
@@ -94,21 +92,29 @@ class DataEditor(UIWindow):
                     self.current_data_instance = self.instance_selector.selected_option
                     self.load_primary_details(self.current_data_instance)
 
-        # TODO - update below to primary/secondary
-        # saving a skill
-        if ui_object_id == "skill_editor_save":
-            self.save_skill_details()
+        # saving primary
+        if ui_object_id == "primary_save":
+            # TODO - save primary details
             library.refresh_library_data()
 
-        # editing a skill's effect
-        if ui_object_id in EffectTypes._member_names_:
-            self.clear_effect_details()
-            self.load_effect_details(EffectTypes[ui_object_id])
+        # saving secondary
+        if ui_object_id == "secondary_save":
+            # TODO - save secondary details
+            # TODO - reload primary details
+            pass
 
-        # saving an effect
-        if ui_object_id == "effect_editor_save":
-            self.save_effect_details()
-            self.load_skill_details(self.current_data_instance)
+        # handle triggers for secondary details
+        prefix = "secondary#"
+        if ui_object_id[len(prefix):] == prefix:
+            # TODO - clear secondary details
+            # TODO - load secondary details
+            pass
+
+        # handle multiple choice
+        prefix = "multi#"
+        if ui_object_id[len(prefix):] == prefix:
+            # TODO - add or remove selected element to relevant field
+            pass
 
     ############## CREATE ################
 
@@ -271,7 +277,7 @@ class DataEditor(UIWindow):
 
                 # Turn value into a list of strings and handle value being an enum
                 if isinstance(value[0], Enum):
-                    names.extend("multi#" + name.name for name in value)
+                    names.extend("multi#" + name.name for name in value[0].__class__.__members__.values())
                     cleaned_values.extend(name.name for name in value)
                 else:
                     names.extend("multi#" + name for name in value)
@@ -317,122 +323,8 @@ class DataEditor(UIWindow):
             self.primary_buttons = {**self.primary_buttons, **buttons}
 
         # create save button and add to
-        buttons = self.create_row_of_buttons(["skill_editor_save"], start_x, current_y, row_width,
+        buttons = self.create_row_of_buttons(["primary_save"], start_x, current_y, row_width,
                                          row_height)
-        self.primary_buttons = {**self.primary_buttons, **buttons}
-
-    def load_skill_details(self, skill_name: str):
-        """
-        Load skill details into self.primary_details. Create required input fields.
-        """
-        # clear existing info
-        self.primary_details = {}
-        self.primary_buttons = {}
-        self.primary_labels = {}
-
-        # set the keys that need drop downs
-        dropdowns = {
-            "terrain_collision": SkillTerrainCollisions,
-            "travel_type": SkillTravelTypes,
-            "expiry_type": SkillExpiryTypes,
-            "shape": SkillShapes
-        }
-
-        # get required skill details
-        if skill_name != "New":
-            # convert to dict to loop values
-            skill_data = dataclasses.asdict(self.all_skills[skill_name])
-        else:
-            skill_data = dataclasses.asdict(SkillData())
-
-        # set rect sizes
-        skill_details_width = self.rect.width / 2
-        start_x = 0
-        start_y = 33
-        height = 30
-        key_x = start_x
-        key_width = skill_details_width / 4
-        value_width = skill_details_width - key_width
-        value_x = key_x + key_width
-        offset_y = 0
-
-        # create labels and input fields
-        for key, value in skill_data.items():
-            # reset value input
-            value_input = None
-            buttons = {}
-
-            # create standard elements
-            key_rect = pygame.Rect((key_x, start_y + offset_y), (key_width, height))
-            key_label = UILabel(key_rect, key, self.ui_manager, container=self.get_container(), parent_element=self)
-            value_rect = pygame.Rect((value_x, start_y + offset_y), (value_width, height))
-
-            # handle different field requirements
-            if key in dropdowns:
-                options_list = []
-                options_list.extend(option.name for option in dropdowns[key])
-
-                # ensure there is a value
-                if value:
-                    value_name = value.name
-                else:
-                    value_name = "None"
-
-                # create drop down
-                value_input = UIDropDownMenu(options_list, value_name, value_rect, self.ui_manager,
-                                             container=self.get_container(), parent_element=self, object_id=key)
-            elif key == "effects":
-                button_width = skill_details_width // len(EffectTypes)
-
-                # ensure there is a value to use as a label
-                if value:
-                    active_effects = []
-                    active_effects.extend(effect for effect in value)
-                else:
-                    active_effects = "None"
-
-                # create a label showing each active effect
-                value_input = UILabel(value_rect, ", ".join(active_effects), self.ui_manager,
-                                      container=self.get_container(), parent_element=self, object_id=key)
-
-                # increment y
-                offset_y += height
-
-                # create button for each effect
-                effects = []
-                effects.extend(effect.name for effect in EffectTypes)
-                buttons = self.create_row_of_buttons(effects, key_x, start_y + offset_y, button_width, height)
-            elif key == "target_directions":
-                # TODO - create dict of listed items to handle all
-                # convert the list to a string separated by commas
-                directions = ", ".join(direction.name for direction in value)
-                value_input = self.create_text_entry(value_rect, key, directions)
-            elif key == "required_tags":
-                # convert the list to a string separated by commas
-                tags = ", ".join(tag.name for tag in value)
-                value_input = self.create_text_entry(value_rect, key, tags)
-
-            elif key == "icon":
-                # TODO - change to file picker
-                value_input = self.create_text_entry(value_rect, key, value)
-            else:
-                # everything else uses a single line text entry
-                if isinstance(value, Enum):
-                    value_input = self.create_text_entry(value_rect, key, value.name)
-                else:
-                    value_input = self.create_text_entry(value_rect, key, value)
-
-            # increment y
-            offset_y += height
-
-            # save refs to the ui widgets
-            self.primary_labels[key] = key_label
-            self.primary_details[key] = value_input
-            self.primary_buttons = {**self.primary_buttons, **buttons}
-
-        # create save button
-        buttons = self.create_row_of_buttons(["skill_editor_save"], start_x, start_y + offset_y, skill_details_width,
-                                             height)
         self.primary_buttons = {**self.primary_buttons, **buttons}
 
     def load_effect_details(self, effect_type: EffectTypes):
@@ -612,6 +504,7 @@ class DataEditor(UIWindow):
         """
         Save the edited skill back to the json.
         """
+        # TODO - rewrite for primary
         edited_name = self.primary_details["name"].text
 
         # map the classes to their keys
@@ -658,6 +551,7 @@ class DataEditor(UIWindow):
         """
         Save the current effect details to the current skill.
         """
+        # TODO - rewrite from secondary
         enums = {
             "mod_stat": PrimaryStatTypes,
             "damage_type": DamageTypes,
