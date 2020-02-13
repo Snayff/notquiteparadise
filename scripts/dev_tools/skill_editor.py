@@ -205,10 +205,15 @@ class DataEditor(UIWindow):
 
             # pull effects out as they follow their own rules
             if key == "effects":
-                # get list of enums names from the enum that contains the current value
+                # get list of effect names for options
                 options = []
-                options.extend("" + name.name for name in value.__class__.__members__.values())
-                value_input, buttons = self.create_multiple_choice(options, key, value, start_x, current_y,
+                options.extend("secondary#" + name.name for name in EffectTypes)
+
+                # get current effects
+                effects = []
+                effects.extend(effect for effect in value)
+
+                value_input, buttons = self.create_multiple_choice(options, key, effects, start_x, current_y,
                                                                    row_width, container)
 
             elif key == "icon":
@@ -218,8 +223,17 @@ class DataEditor(UIWindow):
             # check if it is a list or dict
             elif isinstance(value, List) or isinstance(value, Dict):
                 names = []
-                names.extend("multi#" + name for name in value)
-                value_input, buttons = self.create_multiple_choice(names, key, value, start_x, current_y,
+                cleaned_values = []
+
+                # Turn value into a list of strings and handle value being an enum
+                if isinstance(value[0], Enum):
+                    names.extend("multi#" + name.name for name in value)
+                    cleaned_values.extend(name.name for name in value)
+                else:
+                    names.extend("multi#" + name for name in value)
+                    cleaned_values.extend(name for name in value)
+
+                value_input, buttons = self.create_multiple_choice(names, key, cleaned_values, start_x, current_y,
                                                                    row_width, container)
 
             # check if it is an enum
@@ -255,29 +269,28 @@ class DataEditor(UIWindow):
                                          row_height)
         self.primary_buttons = {**self.primary_buttons, **buttons}
 
-    def create_multiple_choice(self, button_names: List[str], key: str, value: Iterable,  x: int, y: int,
+    def create_multiple_choice(self, button_names: List[str], label_id: str, label_value: List[str],  x: int, y: int,
             row_width: int, container: UIContainer) -> Tuple[UILabel, Dict[str, UIButton]]:
         """
-        Create a label row and a subsequent row of buttons
+        Create a label row and a subsequent row of buttons.
         """
 
         # determine how wide to made buttons
         button_width = row_width // len(button_names)
 
         # ensure there is a value to use as a label
-        if value:
-            current_value = []
-            current_value.extend(item for item in value)
-        else:
+        if not label_value:
             current_value = "None"
+        else:
+            current_value = ", ".join(label_value)
 
         # create rect
         row_height = self.row_height
         rect = pygame.Rect((x, y), (row_width, row_height))
 
         # create a label showing each active effect
-        value_input = UILabel(rect, ", ".join(current_value), self.ui_manager, container=container,
-                              parent_element=self, object_id=key)
+        value_input = UILabel(rect, current_value, self.ui_manager, container=container,
+                              parent_element=self, object_id=label_id)
 
         # create the buttons
         buttons = self.create_row_of_buttons(button_names, x, y + row_height, button_width, row_height)
