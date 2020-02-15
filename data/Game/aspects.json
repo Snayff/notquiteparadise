@@ -23,7 +23,7 @@
             }
         ]
     },
-        "dirt": {
+    "dirt": {
         "name": "dirt",
         "description": "This is the dirt aspect. It does nothing interesting.",
         "duration": "none",

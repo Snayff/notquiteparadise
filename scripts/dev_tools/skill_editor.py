@@ -88,7 +88,10 @@ class DataEditor(UIWindow):
                         self.instance_selector = None
 
                     # create new instance selector
-                    options = [key for key in self.data_options[self.current_data_category].keys()]
+                    options = ["New"]
+                    # FIXME - basestats is StatData and doesnt have keys. How to handle that layer or
+                    #  primary/secondary?
+                    options.extend(key for key in self.data_options[self.current_data_category].keys())
                     options.sort()
                     self.instance_selector = self.create_data_instance_selector(options)
 
@@ -147,7 +150,7 @@ class DataEditor(UIWindow):
         """
         rect = pygame.Rect((self.start_x, self.start_y + self.row_height), (self.width, self.row_height))
 
-        return UIDropDownMenu(options, "New", rect, self.ui_manager, container=self.get_container(),
+        return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="instance_selector")
 
     def create_row_of_buttons(self, button_names: List[str], x: int, y: int, width: int, height: int) -> Dict[
@@ -187,8 +190,8 @@ class DataEditor(UIWindow):
         return text_entry
 
     def create_multiple_choice(self, button_names: List[str], label_id: str, label_value: List[str], row_x: int,
-            label_x: int, y: int, row_width: int, container: UIContainer) -> Tuple[Dict[str, UILabel], Dict[str,
-    UIButton]]:
+            label_x: int, y: int, value_width: int, row_width: int, container: UIContainer) -> Tuple[Dict[str,
+    UILabel], Dict[str, UIButton]]:
         """
         Create a label row and a subsequent row of buttons.
         """
@@ -208,7 +211,7 @@ class DataEditor(UIWindow):
 
         # create rect
         row_height = self.row_height
-        rect = pygame.Rect((label_x, y), (row_width, row_height))
+        rect = pygame.Rect((label_x, y), (value_width, row_height))
 
         # create a label showing each active element
         value_input = {}
@@ -295,7 +298,8 @@ class DataEditor(UIWindow):
             data_dict = dataclasses.asdict(self.data_options[self.current_data_category][data_instance])
         else:
             # create a blank data class based on the data class of the 0th item in the current category
-            data_dict = dataclasses.asdict(type(self.data_options[self.current_data_category][0]))
+            first_item = next(iter(self.data_options[self.current_data_category].values()))
+            data_dict = dataclasses.asdict(type(first_item))
 
         # create labels and input fields
         for key, value in data_dict.items():
@@ -329,7 +333,7 @@ class DataEditor(UIWindow):
 
                 # TODO - remove when  moving to dropdowns
                 value_input, buttons = self.create_multiple_choice(options, key, current, start_x, value_x,
-                                                                   current_y, row_width, container)
+                                                                   current_y, value_width, row_width, container)
 
                 # multiple choice takes 2 lines so increment y
                 current_y += row_height
@@ -354,7 +358,7 @@ class DataEditor(UIWindow):
 
                 # TODO - remove when  moving to dropdowns
                 value_input, buttons = self.create_multiple_choice(options, key, current, start_x, value_x,
-                                                                   current_y,  row_width, container)
+                                                                   current_y, value_width,  row_width, container)
 
                 # multiple choice takes 2 lines so increment y
                 current_y += row_height
@@ -369,20 +373,34 @@ class DataEditor(UIWindow):
                 names = []
                 cleaned_values = []
 
+                # get the first value for the enum checking
+                if isinstance(value, List):
+                    _value = value[0]
+                else:
+                    # must be a dict
+                    _value = next(iter(value.values()))
+
                 # Turn value into a list of strings and handle value being an enum
-                if isinstance(value[0], Enum):
-                    names.extend("multi#" + name.name for name in value[0].__class__.__members__.values())
+                if isinstance(_value, Enum):
+                    names.extend("multi#" + name.name for name in _value.__class__.__members__.values())
                     cleaned_values.extend(name.name for name in value)
                 else:
+                    # as its not an enum it needs to be able to create new items
+                    names = ["multi#New"]
                     names.extend("multi#" + name for name in value)
                     cleaned_values.extend(name for name in value)
+
+                # replace spaces with underscores as object_id doesnt like spaces
+                cleaned_values = [new_value.replace(" ", "_") for new_value in cleaned_values]
+                names = [new_value.replace(" ", "_") for new_value in names]
 
                 # sort lists alphabetically
                 names.sort()
                 cleaned_values.sort()
 
-                value_input, buttons = self.create_multiple_choice(names, key, cleaned_values, start_x, key_x,
-                                                                   current_y, row_width, container)
+                # create
+                value_input, buttons = self.create_multiple_choice(names, key, cleaned_values, start_x, value_x,
+                                                                   current_y, value_width, row_width, container)
 
                 # multiple choice takes 2 lines so increment y
                 current_y += row_height
