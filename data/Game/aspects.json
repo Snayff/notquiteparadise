@@ -35,28 +35,28 @@
         "interactions": [
         ]
     },
-        "shrapnel": {
-                "name": "shrapnel",
-                "description": "Sharp pointy things litter the floor.",
-                "duration": 3,
-                "sprite": "placeholder/78.png",
-                "blocks_sight": false,
-                "blocks_movement": false,
-                "effects": [
-                    {
-                        "effect_type": "damage",
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "damage": 1,
-                        "mod_stat": "",
-                        "mod_amount": 0,
-                        "damage_type": "mundane",
-                        "accuracy": 100,
-                        "stat_to_target": "bustle"
-                    }
-                ],
-                "interactions": [
-                ]
-            }
+    "shrapnel": {
+            "name": "shrapnel",
+            "description": "Sharp pointy things litter the floor.",
+            "duration": 3,
+            "sprite": "placeholder/78.png",
+            "blocks_sight": false,
+            "blocks_movement": false,
+            "effects": [
+                {
+                    "effect_type": "damage",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "damage": 1,
+                    "mod_stat": "",
+                    "mod_amount": 0,
+                    "damage_type": "mundane",
+                    "accuracy": 100,
+                    "stat_to_target": "bustle"
+                }
+            ],
+            "interactions": [
+            ]
+        }
 }

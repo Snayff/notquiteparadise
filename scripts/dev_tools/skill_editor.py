@@ -3,7 +3,7 @@ from __future__ import annotations
 import dataclasses
 import logging
 from enum import Enum
-from typing import TYPE_CHECKING, Type, Iterable, List, Dict
+from typing import TYPE_CHECKING, Type, Iterable, List, Dict, Union
 import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow, UIContainer
@@ -81,9 +81,19 @@ class DataEditor(UIWindow):
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.category_selector.selected_option != self.current_data_category:
                     self.current_data_category = self.category_selector.selected_option
+
+                    # remove existing instance selector
+                    if self.instance_selector:
+                        self.instance_selector.kill()
+                        self.instance_selector = None
+
+                    # create new instance selector
                     options = [key for key in self.data_options[self.current_data_category].keys()]
                     options.sort()
                     self.instance_selector = self.create_data_instance_selector(options)
+
+                    # remove primary details
+                    self.clear_primary_details()
 
         # new selection in instance_selector
         if ui_object_id == "instance_selector":
@@ -177,10 +187,15 @@ class DataEditor(UIWindow):
         return text_entry
 
     def create_multiple_choice(self, button_names: List[str], label_id: str, label_value: List[str], row_x: int,
-            label_x: int, y: int, row_width: int, container: UIContainer) -> Tuple[UILabel, Dict[str, UIButton]]:
+            label_x: int, y: int, row_width: int, container: UIContainer) -> Tuple[Dict[str, UILabel], Dict[str,
+    UIButton]]:
         """
         Create a label row and a subsequent row of buttons.
         """
+
+        # TODO - uncomment when using dropdowns for secondary and replace button_names with this
+        # names = []
+        # names.extend("multi#" + name for name in button_names)
 
         # determine how wide to made buttons
         button_width = row_width // len(button_names)
@@ -195,14 +210,57 @@ class DataEditor(UIWindow):
         row_height = self.row_height
         rect = pygame.Rect((label_x, y), (row_width, row_height))
 
-        # create a label showing each active effect
-        value_input = UILabel(rect, current_value, self.ui_manager, container=container,
+        # create a label showing each active element
+        value_input = {}
+        value_input[label_id] = UILabel(rect, current_value, self.ui_manager, container=container,
                               parent_element=self, object_id=label_id)
 
         # create the buttons
         buttons = self.create_row_of_buttons(button_names, row_x, y + row_height, button_width, row_height)
 
         return value_input, buttons
+
+    def create_secondary_selector(self, starting_option: str, options_list: List[str], label_id: str, label_value:
+    List[str], row_x: int, label_x: int, y: int, row_width: int, button_width: int, container: UIContainer) -> Tuple[
+        Dict[str, Union[UILabel, UIDropDownMenu]], Dict[str, UIButton]]:
+        """"
+        Create a dropdown of options, a label containing the specified values and a button to load selected option 
+        into secondary details
+        """
+        # ensure there is a value to use as a label
+        if not label_value:
+            current_value = "None"
+        else:
+            current_value = ", ".join(label_value)
+
+            # create label rect
+            row_height = self.row_height
+            rect = pygame.Rect((label_x, y), (row_width, row_height))
+
+            # create a label showing each active element
+            value_input = {}
+            value_input[label_id] = UILabel(rect, current_value, self.ui_manager, container=container,
+                                  parent_element=self, object_id=label_id)
+
+            # create dropdown rect
+            dropdown_width = row_width - button_width
+            rect = pygame.Rect((row_x, y + row_height), (dropdown_width, row_height))
+
+            # create a dropdown for possible options
+            value_input["dropdown#" + label_id] = UIDropDownMenu(options_list, starting_option, rect,
+                                                                 self.ui_manager, container=container,
+                                                                 parent_element=self, object_id=label_id)
+
+            # create button rect
+            rect = pygame.Rect((row_x + dropdown_width, y + row_height), (button_width, row_height))
+
+            # create a button to move to secondary details
+            tooltip = "Press to open selected item in secondary details."
+            button = {}
+            button[label_id] = UIButton(rect, "->", self.ui_manager, container=container, tool_tip_text=tooltip,
+                              parent_element=self, object_id=f"secondary#{label_id}")
+
+            return value_input, button
 
     ############### LOAD ###################
 
@@ -225,6 +283,7 @@ class DataEditor(UIWindow):
         value_width = row_width - key_width
         value_x = key_x + key_width
         current_y = start_y
+        secondary_select_button_width = 20
 
         # get any info we can get ahead of time
         container = self.get_container()
@@ -241,7 +300,7 @@ class DataEditor(UIWindow):
         # create labels and input fields
         for key, value in data_dict.items():
             # reset value input and buttons
-            value_input = None
+            value_input = {}
             buttons = {}
 
             # create standard elements
@@ -249,26 +308,61 @@ class DataEditor(UIWindow):
             key_label = UILabel(key_rect, key, manager, container=container, parent_element=self)
             value_rect = pygame.Rect((value_x, current_y), (value_width, row_height))
 
-            # pull effects out as they follow their own rules
+            # anything that is a dict or list at the next level down needs to be treated individually
+            # effects have another layer
             if key == "effects":
                 # get list of effect names for options
                 options = []
+                # TODO - remove the string prefix when changing to dropdowns
                 options.extend("secondary#" + name.name for name in EffectTypes)
                 options.sort()
 
                 # get current effects
-                effects = []
-                effects.extend(effect for effect in value)
+                current = []
+                current.extend(current_effect for current_effect in value)
+                current.sort()
 
-                value_input, buttons = self.create_multiple_choice(options, key, effects, start_x, key_x, current_y,
-                                                                   row_width, container)
+                # TODO - use this when drop downs can be sized
+                # value_input, buttons = self.create_secondary_selector(options[0], options, key, current, start_x,
+                #                                                       key_x, current_y, row_width,
+                #                                                       secondary_select_button_width, container)
+
+                # TODO - remove when  moving to dropdowns
+                value_input, buttons = self.create_multiple_choice(options, key, current, start_x, value_x,
+                                                                   current_y, row_width, container)
 
                 # multiple choice takes 2 lines so increment y
                 current_y += row_height
 
+            # interactions have another layer
+            elif key == "interactions":
+                # get list of current interactions and add new
+                options = ["secondary#New"]
+                # TODO - remove the string prefix when changing to dropdowns
+                options.extend("secondary#" + current_interaction for current_interaction in value.keys())
+                options.sort()
+
+                # get current effects
+                current = []
+                current.extend(current_interaction for current_interaction in value)
+                current.sort()
+
+                # TODO - use this when drop downs can be sized
+                # value_input, buttons = self.create_secondary_selector(options[0], options, key, current, start_x,
+                #                                                       key_x, current_y, row_width,
+                #                                                       secondary_select_button_width, container)
+
+                # TODO - remove when  moving to dropdowns
+                value_input, buttons = self.create_multiple_choice(options, key, current, start_x, value_x,
+                                                                   current_y,  row_width, container)
+
+                # multiple choice takes 2 lines so increment y
+                current_y += row_height
+
+            # icon needs a file picker so doesnt follow normal rules
             elif key == "icon":
                 # TODO - change to file picker
-                value_input = self.create_text_entry(value_rect, key, value)
+                value_input[key] = self.create_text_entry(value_rect, key, value)
 
             # check if it is a list or dict
             elif isinstance(value, List) or isinstance(value, Dict):
@@ -307,19 +401,19 @@ class DataEditor(UIWindow):
                 options.sort()
 
                 # create drop down
-                value_input = UIDropDownMenu(options, value_name, value_rect, manager, container=container,
+                value_input[key] = UIDropDownMenu(options, value_name, value_rect, manager, container=container,
                                              parent_element=self, object_id=key)
 
             # handle everything else as a single line of text
             else:
-                value_input = self.create_text_entry(value_rect, key, value)
+                value_input[key] = self.create_text_entry(value_rect, key, value)
 
             # increment current_y
             current_y += row_height
 
             # save refs to the ui widgets
             self.primary_labels[key] = key_label
-            self.primary_details[key] = value_input
+            self.primary_details = {**self.primary_details,  **value_input}
             self.primary_buttons = {**self.primary_buttons, **buttons}
 
         # create save button and add to
@@ -437,12 +531,13 @@ class DataEditor(UIWindow):
 
     ############## CLEAR #####################
 
-    def clear_skill_details(self):
+    def clear_primary_details(self):
         """
-        Clear currently held skill details from self.primary_details.
+        Clear currently held primary details from self.primary_details.
         """
         skill_details = self.primary_details
         labels = self.primary_labels
+        buttons = self.primary_buttons
 
         if skill_details:
             for value in skill_details.values():
@@ -453,10 +548,15 @@ class DataEditor(UIWindow):
             for value in labels.values():
                 value.kill()
 
+        if buttons:
+            for button in buttons.values():
+                button.kill()
+
         self.primary_details = None
         self.primary_labels = None
+        self.primary_buttons = None
 
-    def clear_effect_details(self):
+    def clear_secondary_details(self):
         """
         Clear currently held effect details from self.secondary_details.
         """
@@ -475,28 +575,20 @@ class DataEditor(UIWindow):
         self.secondary_details = None
         self.secondary_labels = None
 
-    def clear_buttons(self):
-        """
-        Remove the save button and all references to it.
-        """
-        if self.primary_buttons:
-            for button in self.primary_buttons.values():
-                button.kill()
-            self.primary_buttons = None
-
     def cleanse(self):
         """
         Clear all held data.
         """
+        if self.category_selector:
+            self.category_selector.kill()
+            self.category_selector = None
         if self.instance_selector:
             self.instance_selector.kill()
             self.instance_selector = None
         if self.primary_details:
-            self.clear_skill_details()
+            self.clear_primary_details()
         if self.secondary_details:
-            self.clear_effect_details()
-        if self.primary_buttons:
-            self.clear_buttons()
+            self.clear_secondary_details()
 
     ############ SAVING ##################
 

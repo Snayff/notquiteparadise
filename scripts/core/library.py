@@ -168,7 +168,7 @@ class LibraryOfAlexandria:
         # loop all aspects
         for aspect_name, aspect_data in all_aspect_data.items():
             converted_effects = {}
-            converted_interactions = []
+            converted_interactions = {}
 
             # loop effects
             for index, effect_data in enumerate(aspect_data["effects"]):
@@ -180,7 +180,7 @@ class LibraryOfAlexandria:
             for index, interaction_data in enumerate(aspect_data["interactions"]):
                 # convert the skill effect data to the data class
                 interaction = InteractionData(**interaction_data)
-                converted_interactions.append(interaction)
+                converted_interactions[interaction.cause] = interaction
 
             # set the temp dict to contain the converted skill effects
             new_aspect_dict = aspect_data.copy()

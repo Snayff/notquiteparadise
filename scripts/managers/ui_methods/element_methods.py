@@ -18,6 +18,8 @@ if TYPE_CHECKING:
     from scripts.managers.ui_manager import UIManager
     from typing import Tuple, List, Dict
 
+# TODO - rename ui_element to something simpler as we are already in ui.Element.
+
 
 class ElementMethods:
     """
