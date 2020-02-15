@@ -333,7 +333,7 @@ class LibraryOfAlexandria:
 
                 # unpack the dict and convert the intervention data to the data class
                 intervention = InterventionData(**intervention_data)
-                converted_interventions[intervention.name] = intervention
+                converted_interventions[intervention.skill_key] = intervention
 
             # set the temp dict to contain the converted skill effects
             new_god_dict = god_data.copy()

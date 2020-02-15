@@ -75,6 +75,7 @@ class DataEditor(UIWindow):
         Handle events created by this UI widget
         """
         ui_object_id = event.ui_object_id
+        # !!! It is receiving the key e.g. "target_directions", not the full string with prefix and key
 
         # new selection in instance_selector
         if ui_object_id == "category_selector":
@@ -89,7 +90,7 @@ class DataEditor(UIWindow):
 
                     # create new instance selector
                     options = ["New"]
-                    # FIXME - basestats is StatData and doesnt have keys. How to handle that layer or
+                    # FIXME - basestats is StatData and doesnt have keys. How to handle that layer of
                     #  primary/secondary?
                     options.extend(key for key in self.data_options[self.current_data_category].keys())
                     options.sort()
@@ -107,7 +108,7 @@ class DataEditor(UIWindow):
 
         # saving primary
         if ui_object_id == "primary_save":
-            # TODO - save primary details
+            self.save_primary_details()
             library.refresh_library_data()
 
         # saving secondary
@@ -126,8 +127,9 @@ class DataEditor(UIWindow):
         # handle multiple choice
         prefix = "multi#"
         if ui_object_id[len(prefix):] == prefix:
+            # get the key
+            prefix, key, object_id = ui_object_id.split("#")
             # TODO - add or remove selected element to relevant field
-            pass
 
     ############## CREATE ################
 
@@ -162,13 +164,14 @@ class DataEditor(UIWindow):
         container = self.get_container()
         buttons = {}
 
-        for key in button_names:
+        for button_name in button_names:
             # split the prefix from the name
             try:
-                prefix, name = key.split("#")
+                prefix, key, name = button_name.split("#")
             except ValueError:
                 # if no prefix
-                name = key
+                name = button_name
+                key = button_name
 
             # create the button
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
@@ -317,8 +320,7 @@ class DataEditor(UIWindow):
             if key == "effects":
                 # get list of effect names for options
                 options = []
-                # TODO - remove the string prefix when changing to dropdowns
-                options.extend("secondary#" + name.name for name in EffectTypes)
+                options.extend(f"secondary#{key}#{name.name}" for name in EffectTypes)
                 options.sort()
 
                 # get current effects
@@ -341,9 +343,9 @@ class DataEditor(UIWindow):
             # interactions have another layer
             elif key == "interactions":
                 # get list of current interactions and add new
-                options = ["secondary#New"]
+                options = [f"secondary#{key}#New"]
                 # TODO - remove the string prefix when changing to dropdowns
-                options.extend("secondary#" + current_interaction for current_interaction in value.keys())
+                options.extend(f"secondary#{key}#{current_interaction}" for current_interaction in value.keys())
                 options.sort()
 
                 # get current effects
@@ -382,17 +384,17 @@ class DataEditor(UIWindow):
 
                 # Turn value into a list of strings and handle value being an enum
                 if isinstance(_value, Enum):
-                    names.extend("multi#" + name.name for name in _value.__class__.__members__.values())
+                    names.extend(f"multi#{key}#{name.name}" for name in _value.__class__.__members__.values())
                     cleaned_values.extend(name.name for name in value)
                 else:
                     # as its not an enum it needs to be able to create new items
-                    names = ["multi#New"]
-                    names.extend("multi#" + name for name in value)
+                    names = [f"multi#{key}#New"]
+                    names.extend(f"multi#{key}#{name}" for name in value)
                     cleaned_values.extend(name for name in value)
 
-                # replace spaces with underscores as object_id doesnt like spaces
-                cleaned_values = [new_value.replace(" ", "_") for new_value in cleaned_values]
-                names = [new_value.replace(" ", "_") for new_value in names]
+                    # replace spaces with underscores as object_id doesnt like spaces
+                    cleaned_values = [new_value.replace(" ", "_") for new_value in cleaned_values]
+                    names = [new_value.replace(" ", "_") for new_value in names]
 
                 # sort lists alphabetically
                 names.sort()
@@ -439,7 +441,7 @@ class DataEditor(UIWindow):
                                          row_height)
         self.primary_buttons = {**self.primary_buttons, **buttons}
 
-    def load_effect_details(self, effect_type: EffectTypes):
+    def load_secondary_details(self, effect_type: EffectTypes):
         """
         Load effect details into self.secondary_details. Create required input fields.
         """
@@ -610,7 +612,7 @@ class DataEditor(UIWindow):
 
     ############ SAVING ##################
 
-    def save_skill_details(self):
+    def save_primary_details(self):
         """
         Save the edited skill back to the json.
         """
@@ -657,7 +659,7 @@ class DataEditor(UIWindow):
         # TODO - save data back to json
         pass
 
-    def save_effect_details(self):
+    def save_secondary_details(self):
         """
         Save the current effect details to the current skill.
         """

@@ -7,5 +7,5 @@ class InterventionData:
     """
     Data class for a god's intervention
     """
-    name: str = "None"
+    skill_key: str = "None"
     required_opinion: int = 0

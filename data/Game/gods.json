@@ -15,7 +15,7 @@
         ],
         "interventions": [
             {
-                "name": "slow the mighty",
+                "skill_key": "slow_the_mighty",
                 "required_opinion": -20
             }
         ]

@@ -327,7 +327,7 @@ class EntityMethods:
         interventions = data.interventions
         intervention_names = []
         for name, intervention in interventions.items():
-            intervention_names.append(intervention.name)
+            intervention_names.append(intervention.skill_key)
 
         god.append(Identity(data.name, data.description))
         god.append(Aesthetic(image, image))
