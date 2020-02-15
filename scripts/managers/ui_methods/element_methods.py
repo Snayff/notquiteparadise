@@ -4,7 +4,7 @@ import pygame
 
 from typing import TYPE_CHECKING
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
-from scripts.dev_tools.skill_editor import DataEditor
+from scripts.dev_tools.data_editor import DataEditor
 from scripts.managers.world_manager import world
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog

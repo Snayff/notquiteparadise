@@ -75,7 +75,6 @@ class DataEditor(UIWindow):
         Handle events created by this UI widget
         """
         ui_object_id = event.ui_object_id
-        # !!! It is receiving the key e.g. "target_directions", not the full string with prefix and key
 
         # new selection in instance_selector
         if ui_object_id == "category_selector":
@@ -126,10 +125,18 @@ class DataEditor(UIWindow):
 
         # handle multiple choice
         prefix = "multi#"
-        if ui_object_id[len(prefix):] == prefix:
+        if ui_object_id[:len(prefix)] == prefix:
             # get the key
             prefix, key, object_id = ui_object_id.split("#")
-            # TODO - add or remove selected element to relevant field
+
+            # toggle value
+            current_text = self.primary_details[key].text
+            if ", " + object_id + ", " in current_text:
+                self.primary_details[key].set_text(current_text.replace(f", {object_id}, ", ", "))
+            elif object_id + ", " == current_text[:len(object_id + ", ")]:
+                self.primary_details[key].set_text(current_text[len(object_id + ", "):])
+            else:
+                self.primary_details[key].set_text(current_text + object_id + ", ")
 
     ############## CREATE ################
 
@@ -176,7 +183,7 @@ class DataEditor(UIWindow):
             # create the button
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
             button = UIButton(button_rect, name, self.ui_manager, container=container,
-                              parent_element=self, object_id=key)
+                              parent_element=self, object_id=button_name)
             offset_x += width
             buttons[key] = button
 
@@ -211,6 +218,7 @@ class DataEditor(UIWindow):
             current_value = "None"
         else:
             current_value = ", ".join(label_value)
+            current_value += ", "  # add comma to the end to help delimit when adding other values
 
         # create rect
         row_height = self.row_height
