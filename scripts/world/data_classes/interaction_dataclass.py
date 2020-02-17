@@ -1,8 +1,8 @@
-
+from __future__ import annotations
 from dataclasses import dataclass
 
 
-@dataclass()
+@dataclass
 class InteractionData:
     """
     Data class for an interaction

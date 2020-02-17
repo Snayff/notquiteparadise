@@ -1,11 +1,11 @@
+from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Dict
-
 from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
     SkillTerrainCollisions, SkillShapes
 
 
-@dataclass()
+@dataclass
 class SkillData:
     """
     Data class for a skill. Used by the library to load from json.

@@ -1,7 +1,8 @@
+from __future__ import annotations
 from dataclasses import dataclass
 
 
-@dataclass()
+@dataclass
 class Intents:
     """
     Hold the input intents

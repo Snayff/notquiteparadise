@@ -192,7 +192,7 @@ class ControlMethods:
         Reset all input intents to false
         """
         for field in dataclasses.fields(self._manager.Intents):
-            if field.type is bool:
+            if field.type is "bool":
                 setattr(self._manager.Intents, field.name, False)
 
     ############### PROCESS INTENT ###############

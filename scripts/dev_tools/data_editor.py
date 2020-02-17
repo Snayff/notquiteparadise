@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import dataclasses
 import logging
-from enum import Enum
-from typing import TYPE_CHECKING, Type, Iterable, List, Dict, Union
 import pygame
 import pygame_gui
+from pprint import pprint
+from dataclasses import Field, fields, dataclass
+from abc import ABC
+from enum import Enum
+from typing import TYPE_CHECKING, Type, Iterable, List, Dict, Union, TypeVar, Generic, cast, Callable
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.core.constants import VisualInfo, Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
@@ -46,6 +49,8 @@ class DataEditor(UIWindow):
         self.secondary_labels = None
         self.primary_buttons = None
         self.secondary_buttons = None
+        self.primary_data_fields = None
+        self.secondary_data_fields = None
 
         # size info
         self.start_x = 2
@@ -55,8 +60,16 @@ class DataEditor(UIWindow):
         self.row_height = 30
         self.max_rows = self.height // self.row_height
         self.selectors_end_y = self.start_y + (self.row_height * 2)  # 2 is number of selectors
-        self.primary_width = self.width / 2
+
+        self.primary_x = self.start_x
+        self.primary_y = self.start_y
+        self.primary_width = self.width // 2
+
+        self.secondary_x = self.primary_x + self.primary_width
+        self.secondary_y = self.start_y
         self.secondary_width = self.width - self.primary_width
+
+        self.label_width_mod = 0.3 # decimal % of row width that label takes up
 
         # get the data options
         self.load_data_options()
@@ -103,7 +116,8 @@ class DataEditor(UIWindow):
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.instance_selector.selected_option != self.current_data_instance:
                     self.current_data_instance = self.instance_selector.selected_option
-                    self.load_primary_details(self.current_data_instance)
+                    self.load_details("primary", self.current_data_instance)
+                    #self.load_primary_details(self.current_data_instance)
 
         # saving primary
         if ui_object_id == "primary_save":
@@ -131,10 +145,14 @@ class DataEditor(UIWindow):
 
             # toggle value
             current_text = self.primary_details[key].text
+            # check if the id is between separators
             if ", " + object_id + ", " in current_text:
                 self.primary_details[key].set_text(current_text.replace(f", {object_id}, ", ", "))
+            # check if the id is at the start
             elif object_id + ", " == current_text[:len(object_id + ", ")]:
+                # slice the id from the start
                 self.primary_details[key].set_text(current_text[len(object_id + ", "):])
+            # id not found, add it!
             else:
                 self.primary_details[key].set_text(current_text + object_id + ", ")
 
@@ -200,8 +218,8 @@ class DataEditor(UIWindow):
         return text_entry
 
     def create_multiple_choice(self, button_names: List[str], label_id: str, label_value: List[str], row_x: int,
-            label_x: int, y: int, value_width: int, row_width: int, container: UIContainer) -> Tuple[Dict[str,
-    UILabel], Dict[str, UIButton]]:
+            label_x: int, y: int, value_width: int, row_width: int,
+            container: UIContainer) -> Tuple[Dict[str, UILabel], Dict[str, UIButton]]:
         """
         Create a label row and a subsequent row of buttons.
         """
@@ -234,10 +252,10 @@ class DataEditor(UIWindow):
 
         return value_input, buttons
 
-    def create_secondary_selector(self, starting_option: str, options_list: List[str], label_id: str, label_value:
-    List[str], row_x: int, label_x: int, y: int, row_width: int, button_width: int, container: UIContainer) -> Tuple[
-        Dict[str, Union[UILabel, UIDropDownMenu]], Dict[str, UIButton]]:
-        """"
+    def create_secondary_selector(self, starting_option: str, options_list: List[str], label_id: str,
+            label_value: List[str], row_x: int, label_x: int, y: int, row_width: int, button_width: int, container:
+            UIContainer) -> Tuple[Dict[str, Union[UILabel, UIDropDownMenu]], Dict[str, UIButton]]:
+        """
         Create a dropdown of options, a label containing the specified values and a button to load selected option 
         into secondary details
         """
@@ -276,7 +294,159 @@ class DataEditor(UIWindow):
 
             return value_input, button
 
+    def create_choose_one_from_options_field(self):
+        pass
+
+    def create_edit_detail_field(self):
+        pass
+
+    def create_choose_multiple_from_options_field(self, key, value, x, y, width, height, container, 
+            ui_manager) -> DataField:
+        """
+        Create a data field containing label, current values and a row of buttons for possible options.
+        """
+        labels = []
+        options = []
+        values_list = []
+        
+        # get the first value to check if it is an enum
+        _value = value[0]
+
+        # Turn value into a list of strings; whether value is enum or strings
+        if isinstance(_value, Enum):
+            # add prefix and get other enum members
+            options.extend(f"multi#{key}#{name.name}" for name in _value.__class__.__members__.values())
+            values_list.extend(name.name for name in value)
+        else:
+            # as its not an enum it needs to be able to create new items so add a new option
+            options = [f"multi#{key}#New"]
+            options.extend(f"multi#{key}#{name}" for name in value)
+            values_list.extend(name for name in value)
+
+            # replace spaces with underscores as object_id doesnt like spaces
+            values_list = [new_value.replace(" ", "_") for new_value in values_list]
+            options = [new_value.replace(" ", "_") for new_value in options]
+
+        # sort lists alphabetically
+        options.sort()
+        values_list.sort()
+                
+        # create the key label
+        key_width = int(width * self.label_width_mod)
+        key_rect = pygame.Rect((x, y), (key_width, height))
+        key_label = UILabel(key_rect, key, ui_manager, container=container, parent_element=self)
+        labels.append(key_label)
+        
+        # convert the list to a string
+        values_str = ", ".join(values_list)
+        values_str += ", "  # add comma to the end to help delimit when adding other values
+
+        # create the current values label
+        value_width = width - key_width
+        value_x = x + key_width
+        value_rect = pygame.Rect((value_x, y), (value_width, height))
+        value_label = UILabel(value_rect, values_str, ui_manager, container=container, parent_element=self)
+        labels.append(value_label)
+
+        # determine how wide to make buttons
+        button_width = width // len(options)
+        
+        # create the option's buttons, incremented by height
+        buttons = self.create_row_of_buttons(options, x, y + height, button_width, height)
+        
+        # create the data field
+        data_field = DataField(key, value, labels, buttons=buttons)
+
+        return data_field
+
+    def create_text_entry_field(self, key, value, x, y, width, height, container, ui_manager) -> DataField:
+        """
+        Create a data field containing a text input widget.
+        """
+        # create the label
+        label_width = int(width * self.label_width_mod)
+        label_rect = pygame.Rect((x, y), (label_width, height))
+        label = UILabel(label_rect, key, ui_manager, container=container, parent_element=self)
+
+        # create the input
+        input_width = width - label_width
+        input_x = x + label_width
+        input_rect = pygame.Rect((input_x, y), (input_width, height))
+        input = UITextEntryLine(input_rect, ui_manager, container=container, parent_element=self, object_id=key)
+        input.set_text(f"{value}")
+
+        # create the data field
+        data_field = DataField(key, value, [label], input)
+
+        return data_field
+
     ############### LOAD ###################
+
+    def load_details(self, primary_or_secondary: str, data_instance: str):
+
+        # get initial pos info
+        if primary_or_secondary == "primary":
+            start_x = self.primary_x
+            start_y = self.primary_y
+            row_width = self.primary_width
+            self.primary_data_fields = []
+        elif primary_or_secondary == "secondary":
+            start_x = self.primary_x
+            start_y = self.primary_y
+            row_width = self.primary_width
+            self.secondary_data_fields = []
+        else:
+            logging.warning("Wrong key passed to data_editor:load_details. Using primary info.")
+            start_x = self.primary_x
+            start_y = self.primary_y
+            row_width = self.primary_width
+            self.primary_data_fields = []
+
+        # get any info we can get ahead of time
+        container = self.get_container()
+        manager = self.ui_manager
+        row_height = self.row_height
+        current_y = start_y
+        data_fields = []
+
+        # convert dataclass to dict to loop values
+        if data_instance != "New":
+            # get the existing data class
+            data_dict = dataclasses.asdict(self.data_options[self.current_data_category][data_instance])
+        else:
+            # create a blank data class based on the data class of the 0th item in the current category
+            first_item = next(iter(self.data_options[self.current_data_category].values()))
+            data_dict = dataclasses.asdict(type(first_item))
+
+        # create data fields
+        for key, value in data_dict.items():
+            if isinstance(value, Enum):
+                data_field = self.create_choose_one_from_options_field()
+            elif isinstance(value, List):
+                data_field = self.create_choose_multiple_from_options_field(key, value, start_x, start_y, row_width,
+                                                                            row_height, container, manager)
+            elif isinstance(value, Dict):
+                data_field = self.create_edit_detail_field()
+            else:
+                data_field = self.create_text_entry_field(key, value, start_x, start_y, row_width, row_height,
+                                                          container, manager)
+
+            # increment Y
+            current_y += row_height
+
+            # save the data field
+            data_fields.append(data_field)
+
+        # create the save button
+
+        # update the main record
+        if primary_or_secondary != "secondary":
+            self.primary_data_fields = []
+            self.primary_data_fields = data_fields
+        else:
+            self.secondary_data_fields = []
+            self.secondary_data_fields = data_fields
+
 
     def load_primary_details(self, data_instance: str):
         """
@@ -726,3 +896,11 @@ class DataEditor(UIWindow):
 
         return value
 
+
+class DataField:
+    def __init__(self, key, value, labels: List, input_element=None, buttons: Dict[str, UIButton] = None):
+        self.key = key
+        self.value = value
+        self.input_element = input_element
+        self.labels = labels
+        self.buttons = buttons
