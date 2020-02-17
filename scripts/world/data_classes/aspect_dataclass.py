@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Dict, List
-
+from scripts.core.extend_json import register_dataclass_with_json
 from scripts.world.data_classes.interaction_dataclass import InteractionData
 
 
+@register_dataclass_with_json
 @dataclass
 class AspectData:
     """

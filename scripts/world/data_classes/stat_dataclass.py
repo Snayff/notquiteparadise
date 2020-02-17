@@ -5,11 +5,13 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict
 
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
+from scripts.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
     pass
 
 
+@register_dataclass_with_json
 @dataclass
 class StatData:
     """
@@ -19,6 +21,7 @@ class StatData:
     secondary: Dict = field(default_factory=dict)
 
 
+@register_dataclass_with_json
 @dataclass
 class PrimaryStatData:
     """
@@ -29,6 +32,7 @@ class PrimaryStatData:
     base_value: int = 0
 
 
+@register_dataclass_with_json
 @dataclass
 class SecondaryStatData:
     """

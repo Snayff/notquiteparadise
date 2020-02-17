@@ -488,7 +488,7 @@ class DataEditor(UIWindow):
         """
         # if primary then grab from 4th layer; all_data:category:instance:data_field
         if primary_or_secondary == "primary":
-            # TODO - remove prints after saving
+            # TODO - remove prints after confirming
             before = getattr(self.all_data[self.current_data_category][self.current_data_instance],
                              data_field.key)
             pprint(before)
@@ -501,9 +501,8 @@ class DataEditor(UIWindow):
             with open(f"data/game/{self.current_data_category}.json", "w") as file:
                 json.dump(self.all_data[self.current_data_category], file, sort_keys=True, indent=4,
                           cls=ExtendedJsonEncoder)
-                j = json.dumps(self.all_data[self.current_data_category], sort_keys=True, indent=4,
-                               cls=ExtendedJsonEncoder)
-            pprint(json.loads(j, object_hook=deserialize_dataclasses))
+
+            # pprint(json.loads(j, object_hook=deserialize_dataclasses))
 
 class DataField:
     def __init__(self, key: str, value: Any, value_as_str: str, value_type, labels: List, height: int,

@@ -4,8 +4,10 @@ from dataclasses import dataclass, field
 from typing import List, Dict
 from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
     SkillTerrainCollisions, SkillShapes
+from scripts.core.extend_json import register_dataclass_with_json
 
 
+@register_dataclass_with_json
 @dataclass
 class SkillData:
     """
