@@ -1,21 +1,19 @@
 from __future__ import annotations
 
 import dataclasses
+import json
 import logging
 import pygame
 import pygame_gui
 from pprint import pprint
-from dataclasses import Field, fields, dataclass
-from abc import ABC
 from enum import Enum
-from typing import TYPE_CHECKING, Type, Iterable, List, Dict, Union, TypeVar, Generic, cast, Callable
-from pygame_gui.core import UIWindow, UIContainer
-from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton, UIVerticalScrollBar
-from scripts.core.constants import VisualInfo, Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
-    TargetTags, SkillShapes, EffectTypes, PrimaryStatTypes, DamageTypes
+from typing import TYPE_CHECKING, List, Dict
+from pygame_gui.core import UIWindow
+from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
+
+from scripts.core.extend_json import ExtendedJsonEncoder, deserialize_dataclasses
 from scripts.core.library import library
-from scripts.skills.effect import EffectData
-from scripts.skills.skill import SkillData
+
 
 if TYPE_CHECKING:
     from typing import Any, Tuple
@@ -140,38 +138,10 @@ class DataEditor(UIWindow):
             else:
                 current_value.append(id_as_value)
 
-            # # check if the id is between separators
-            # if ", " + object_id + ", " in current_text:
-            #     new_text = current_text.replace(f", {object_id}, ", ", ")
-            #     current_value.remove(id_as_value)
-            #     new_value = current_value
-            # # check if the id is at the start
-            # elif object_id + ", " == current_text[:len(object_id + ", ")]:
-            #     # slice the id from the start
-            #     new_text = current_text[len(object_id + ", "):]
-            #     current_value.remove(id_as_value)
-            #     new_value = current_value
-            # # id not found, add it!
-            # else:
-            #     current_value.append(object_id)
-            #     new_value = current_value
-
             self.save_update("primary", data_field, current_value)
 
             # reload to reflect new changes
             self.load_details("primary", self.current_data_instance)
-
-    def save_update(self, primary_or_secondary, data_field: DataField, updated_value: Any):
-
-        # if primary then grab from 4th layer; all_data:category:instance:data_field
-        if primary_or_secondary == "primary":
-            before = getattr(self.all_data[self.current_data_category][self.current_data_instance],
-                             data_field.key)
-            pprint(before)
-            setattr(self.all_data[self.current_data_category][self.current_data_instance], data_field.key,
-                    updated_value)
-            after = getattr(self.all_data[self.current_data_category][self.current_data_instance], data_field.key)
-            pprint(after)
 
     ############## CREATE ################
 
@@ -502,7 +472,8 @@ class DataEditor(UIWindow):
             self.clear_details(self.secondary_data_fields)
             self.secondary_data_fields = {}
 
-    def clear_details(self, data_fields):
+    @staticmethod
+    def clear_details(data_fields):
         """
         Clear currently held primary details from self.primary_details.
         """
@@ -511,7 +482,28 @@ class DataEditor(UIWindow):
 
     ############ SAVING ##################
 
+    def save_update(self, primary_or_secondary, data_field: DataField, updated_value: Any):
+        """
+        Save the updated value to the main dict held in self.all_data
+        """
+        # if primary then grab from 4th layer; all_data:category:instance:data_field
+        if primary_or_secondary == "primary":
+            # TODO - remove prints after saving
+            before = getattr(self.all_data[self.current_data_category][self.current_data_instance],
+                             data_field.key)
+            pprint(before)
+            setattr(self.all_data[self.current_data_category][self.current_data_instance], data_field.key,
+                    updated_value)
+            after = getattr(self.all_data[self.current_data_category][self.current_data_instance], data_field.key)
+            pprint(after)
 
+            # save back to json
+            with open(f"data/game/{self.current_data_category}.json", "w") as file:
+                json.dump(self.all_data[self.current_data_category], file, sort_keys=True, indent=4,
+                          cls=ExtendedJsonEncoder)
+                j = json.dumps(self.all_data[self.current_data_category], sort_keys=True, indent=4,
+                               cls=ExtendedJsonEncoder)
+            pprint(json.loads(j, object_hook=deserialize_dataclasses))
 
 class DataField:
     def __init__(self, key: str, value: Any, value_as_str: str, value_type, labels: List, height: int,
