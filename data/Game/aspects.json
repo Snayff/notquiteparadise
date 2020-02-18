@@ -6,7 +6,7 @@
         "description": "This is the bog aspect. It slows entities down.",
         "duration": null,
         "effects": {
-            "APPLY_AFFLICTION": {
+            "apply_affliction": {
                 "__dataclass__": "EffectData",
                 "accuracy": 100,
                 "affect_stat_amount": 0,
@@ -15,14 +15,14 @@
                 "damage": 0,
                 "damage_type": null,
                 "duration": 3,
-                "effect_type": "APPLY_AFFLICTION",
+                "effect_type": "apply_affliction",
                 "mod_amount": 0,
                 "mod_stat": null,
                 "required_tags": [
-                    "OTHER_ENTITY"
+                    "other_entity"
                 ],
                 "stat_to_affect": null,
-                "stat_to_target": "SKULLDUGGERY"
+                "stat_to_target": "skullduggery"
             }
         },
         "interactions": {
@@ -53,23 +53,23 @@
         "description": "Sharp pointy things litter the floor.",
         "duration": 3,
         "effects": {
-            "DAMAGE": {
+            "damage": {
                 "__dataclass__": "EffectData",
                 "accuracy": 100,
                 "affect_stat_amount": 0,
                 "affliction_name": "None",
                 "aspect_name": "None",
                 "damage": 1,
-                "damage_type": "MUNDANE",
+                "damage_type": "mundane",
                 "duration": 0,
-                "effect_type": "DAMAGE",
+                "effect_type": "damage",
                 "mod_amount": 0,
                 "mod_stat": "",
                 "required_tags": [
-                    "OTHER_ENTITY"
+                    "other_entity"
                 ],
                 "stat_to_affect": null,
-                "stat_to_target": "BUSTLE"
+                "stat_to_target": "bustle"
             }
         },
         "interactions": {},

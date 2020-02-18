@@ -104,7 +104,7 @@ class PrimaryStatTypes(SimpleNamespace):
     EXACTITUDE = "exactitude"
 
 
-class SecondaryStatTypes(Enum):
+class SecondaryStatTypes(SimpleNamespace):
     """
     Secondary stats
     """

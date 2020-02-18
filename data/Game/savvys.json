@@ -8,8 +8,8 @@
         "name": "cleromancer",
         "sight_range": 5,
         "skills": [
-            "burn the deck",
-            "bring down the mountain"
+            "burn_the_deck",
+            "bring_down_the_mountain"
         ],
         "skullduggery": 2,
         "sprite": "",
@@ -25,7 +25,7 @@
         "sight_range": 5,
         "skills": [
             "flail",
-            "eye-watering mistake"
+            "eye_watering_mistake"
         ],
         "skullduggery": 4,
         "sprite": "",

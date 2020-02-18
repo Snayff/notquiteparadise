@@ -19,8 +19,11 @@ if TYPE_CHECKING:
     from typing import Any, Tuple
 
 # TODO - add None option to drop downs
-# TODO - limit selections based on context. e.g. move effect doesnt have affliction name.
-
+# TODO - dropdown change isnt saving
+# TODO - primary details not clearing on new category
+# TODO - don't remove "_" from skill field - these are the skill keys
+# TODO - don't clean "_" from keys
+# TODO - add special case for "skills" field - get all keys from skills.json
 
 class DataEditor(UIWindow):
     """

@@ -1,10 +1,10 @@
 {
     "bogged down": {
         "__dataclass__": "AfflictionData",
-        "category": "BANE",
+        "category": "bane",
         "description": "It weakens mundane defence and makes you a little bit slower.",
         "effects": {
-            "AFFECT_STAT": {
+            "affect_stat": {
                 "__dataclass__": "EffectData",
                 "accuracy": 0,
                 "affect_stat_amount": -25,
@@ -13,24 +13,24 @@
                 "damage": 0,
                 "damage_type": null,
                 "duration": 0,
-                "effect_type": "AFFECT_STAT",
+                "effect_type": "affect_stat",
                 "mod_amount": 0,
                 "mod_stat": null,
                 "required_tags": [],
-                "stat_to_affect": "BUSTLE",
+                "stat_to_affect": "bustle",
                 "stat_to_target": null
             }
         },
         "icon": "placeholder/icon_00.png",
         "name": "bogged down",
-        "trigger_event": "PASSIVE"
+        "trigger_event": "passive"
     },
     "flaming": {
         "__dataclass__": "AfflictionData",
-        "category": "BANE",
+        "category": "bane",
         "description": "It does damage.",
         "effects": {
-            "DAMAGE": {
+            "damage": {
                 "__dataclass__": "EffectData",
                 "accuracy": 10,
                 "affect_stat_amount": 0,
@@ -39,26 +39,26 @@
                 "damage": 15,
                 "damage_type": "BURN",
                 "duration": 0,
-                "effect_type": "DAMAGE",
+                "effect_type": "damage",
                 "mod_amount": 0,
                 "mod_stat": null,
                 "required_tags": [
-                    "OTHER_ENTITY"
+                    "other_entity"
                 ],
                 "stat_to_affect": null,
-                "stat_to_target": "BUSTLE"
+                "stat_to_target": "bustle"
             }
         },
         "icon": "placeholder/icon_00.png",
         "name": "flaming",
-        "trigger_event": "END_TURN"
+        "trigger_event": "end_turn"
     },
     "myopic": {
         "__dataclass__": "AfflictionData",
         "category": "BANE",
         "description": "You can't see very well.",
         "effects": {
-            "AFFECT_STAT": {
+            "affect_stat": {
                 "__dataclass__": "EffectData",
                 "accuracy": 0,
                 "affect_stat_amount": -2,
@@ -67,16 +67,16 @@
                 "damage": 0,
                 "damage_type": null,
                 "duration": 0,
-                "effect_type": "AFFECT_STAT",
+                "effect_type": "affect_stat",
                 "mod_amount": 0,
                 "mod_stat": null,
                 "required_tags": [],
-                "stat_to_affect": "SIGHT_RANGE",
+                "stat_to_affect": "sight_range",
                 "stat_to_target": null
             }
         },
         "icon": "placeholder/icon_00.png",
         "name": "myopic",
-        "trigger_event": "PASSIVE"
+        "trigger_event": "passive"
     }
 }

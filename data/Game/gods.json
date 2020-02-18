@@ -1,5 +1,5 @@
 {
-    "the small gods": {
+    "the_small_gods": {
         "__dataclass__": "GodData",
         "attitudes": {
             "BURN": {
@@ -7,9 +7,9 @@
                 "action": "BURN",
                 "opinion_change": -10
             },
-            "DAMAGE": {
+            "damage": {
                 "__dataclass__": "AttitudeData",
-                "action": "DAMAGE",
+                "action": "damage",
                 "opinion_change": -5
             }
         },
