@@ -346,7 +346,7 @@ class CombatStats:
                 data = library.get_savvy_data(component.name)
                 base_value = max(base_value, data.sight_range)
             elif isinstance(component, Race):
-                data = library.get_race_data(component.name)
+                data = library.get_people_data(component.name)
                 base_value = max(base_value, data.sight_range)
 
         # from stats

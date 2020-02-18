@@ -72,11 +72,11 @@ class Identity:
 
 class Race:
     """
-    [Component] An entity's race.
+    [Component] An entity's people.
     """
 
-    def __init__(self, race_name: str):
-        self.name = race_name
+    def __init__(self, people_name: str):
+        self.name = people_name
 
 
 class Savvy:

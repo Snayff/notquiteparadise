@@ -240,9 +240,9 @@ class EntityMethods:
         stat = primary_stat
         value = 0
 
-        for race in self._manager.World.try_component(entity, Race):
-            race_data = library.get_race_data(race.name)
-            value += getattr(race_data, stat)
+        for people in self._manager.World.try_component(entity, Race):
+            people_data = library.get_people_data(people.name)
+            value += getattr(people_data, stat)
 
         for savvy in self._manager.World.try_component(entity, Savvy):
             savvy_data = library.get_savvy_data(savvy.name)
@@ -341,7 +341,7 @@ class EntityMethods:
 
         return entity
 
-    def create_actor(self, name: str, description: str, x: int, y: int, race_name: str, homeland_name: str,
+    def create_actor(self, name: str, description: str, x: int, y: int, people_name: str, homeland_name: str,
             savvy_name: str, is_player: bool = False) -> int:
         """
         Create an entity with all of the components to be an actor.
@@ -351,7 +351,7 @@ class EntityMethods:
             description (): 
             x (): 
             y ():
-            race_name (): 
+            people_name ():
             homeland_name (): 
             savvy_name (): 
             is_player (): Optional. Defaults to false.
@@ -370,7 +370,7 @@ class EntityMethods:
         actor.append(Position(x, y))  # TODO - check position not blocked before spawning
         actor.append(HasCombatStats())
         actor.append(Blocking(True, ENTITY_BLOCKS_SIGHT))
-        actor.append(Race(race_name))
+        actor.append(Race(people_name))
         actor.append(Homeland(homeland_name))
         actor.append(Savvy(savvy_name))
 
@@ -382,9 +382,9 @@ class EntityMethods:
 
         # get skills from characteristics
         skills = ["basic attack"]  # N.B. All actors start with basic attack
-        race_data = library.get_race_data(race_name)
-        if race_data.skills != ["none"]:
-            skills += race_data.skills
+        people_data = library.get_people_data(people_name)
+        if people_data.skills != ["none"]:
+            skills += people_data.skills
 
         homeland_data = library.get_homeland_data(homeland_name)
         if homeland_data.skills != ["none"]:
@@ -399,7 +399,7 @@ class EntityMethods:
 
         # add aesthetic
         # TODO - build final sprite from all characteristics
-        sprite = pygame.image.load(race_data.sprite).convert_alpha()
+        sprite = pygame.image.load(people_data.sprite).convert_alpha()
         icon = pygame.transform.smoothscale(sprite, (ICON_SIZE, ICON_SIZE))
         sprite = pygame.transform.smoothscale(sprite, (TILE_SIZE, TILE_SIZE))
         self._manager.World.add_component(entity, Aesthetic(sprite, icon))

@@ -13,7 +13,7 @@ class Entity:
     """
 
     def __init__(self, spritesheet=None, name="", blocks_movement=True, blocks_sight=True, combatant=None,
-            race=None, savvy=None, homeland=None, ai=None, actor=None, player=None, icon=None):
+            people=None, savvy=None, homeland=None, ai=None, actor=None, player=None, icon=None):
         """
         Args:
             spritesheet (dict(list(pygame.image))) : dictionary of sprites
@@ -21,7 +21,7 @@ class Entity:
             blocks_movement (bool) : Does entity block movement?
             blocks_sight (bool) : Does entity block sight?
             combatant (Combatant): Component.
-            race (Race): Component.
+            people (Race): Component.
             savvy (savvys): Component.
             homeland (Homeland): Component.
             ai (AI): Component.
@@ -44,7 +44,7 @@ class Entity:
         self.delay_until_idle_animation = 2  # seconds
 
         # components
-        self.race = race
+        self.people = people
         self.combatant = combatant
         self.savvy = savvy
         self.homeland = homeland
@@ -56,8 +56,8 @@ class Entity:
         if self.combatant:
             self.combatant.owner = self
 
-        if self.race:
-            self.race.owner = self
+        if self.people:
+            self.people.owner = self
 
         if self.savvy:
             self.savvy.owner = self
@@ -99,5 +99,5 @@ class Entity:
         Returns:
             int: Number of tiles an entity can see.
         """
-        race_data = library.get_race_data(self.race.name)
-        return race_data.sight_range
+        people_data = library.get_people_data(self.people.name)
+        return people_data.sight_range

@@ -476,7 +476,7 @@ class DataEditor(UIWindow):
         self.all_data = {
             "base_stats": library.get_stat_data(),
             "homelands": library.get_homelands_data(),
-            "races": library.get_races_data(),
+            "peoples": library.get_peoples_data(),
             "savvys": library.get_savvys_data(),
             "afflictions": library.get_afflictions_data(),
             "skills": library.get_skills_data(),

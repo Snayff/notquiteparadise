@@ -31,23 +31,15 @@ class LibraryOfAlexandria:
 
     def __init__(self):
         self._homelands = {}
-        self._races = {}
+        self._peoples = {}
         self._savvys = {}
         self._afflictions = {}
         self._aspects = {}
         self._terrain = {}
-        self._stats = {}
+        self._base_stats = {}
         self._gods = {}
         self._skills = {}
 
-        # from scripts.core.extend_json import deserialise_dataclasses
-        # from pprint import pprint
-        # import json
-        # with open(f"data/game/skills.json", "r") as file:
-        #     j = json.load(file, object_hook=deserialise_dataclasses)
-        #     pprint(j)
-
-        # TODO - rebuild deserialising
         self.refresh_library_data()
 
         logging.info(f"Data Library initialised.")
@@ -55,39 +47,23 @@ class LibraryOfAlexandria:
     ####################### LIBRARY MANAGEMENT ####################
     def refresh_library_data(self):
         """
-        Load json data into the library, convert strings to enums and dicts to data classes.
-        """
-        self._load_data_into_library()
-        # self._convert_external_strings_to_internal_values()
-        # self._convert_afflictions_to_data_classes()
-        # self._convert_aspects_to_data_classes()
-        # self._convert_stats_to_data_classes()
-        # self._convert_gods_to_data_classes()
-        # self._convert_homelands_to_data_classes()
-        # self._convert_savvys_to_data_classes()
-        # self._convert_races_to_data_classes()
-        # self._convert_skills_to_data_classes()
-
-
-        logging.info(f"Library refreshed.")
-
-    def _load_data_into_library(self):
-        """
-        Load data from all external jsons to this central data library
+        Load all json data into the library.
         """
         # N.B. this is set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
             self._homelands = self._load_homeland_json()
-            self._races = self._load_race_json()
+            self._peoples = self._load_people_json()
             self._savvys = self._load_savvy_json()
             self._afflictions = self._load_affliction_json()
             self._aspects = self._load_aspects_json()
             self._terrain = self._load_terrain_json()
-            self._stats = self._load_base_stat_json()
+            self._base_stats = self._load_base_stat_json()
             self._gods = self._load_gods_json()
             self._skills = self._load_skills_json()
 
         logging.info(f"Data loaded into the Library.")
+
+        logging.info(f"Library refreshed.")
 
     ####################### UTILITY ##############################
 
@@ -206,33 +182,33 @@ class LibraryOfAlexandria:
         self._aspects = {}
         self._aspects = converted_aspects
 
-    def _convert_races_to_data_classes(self):
+    def _convert_peoples_to_data_classes(self):
         """
-        Take race data from library and convert to data classes
+        Take people data from library and convert to data classes
         """
-        all_race_data = self._races
-        converted_races = {}
+        all_people_data = self._peoples
+        converted_peoples = {}
 
-        # loop all races
-        for race_name, race_data in all_race_data.items():
+        # loop all peoples
+        for people_name, people_data in all_people_data.items():
             converted_skills = []
 
             # loop skills and convert to data class
-            for index, skill_name in enumerate(race_data["skills"]):
+            for index, skill_name in enumerate(people_data["skills"]):
                 converted_skills.append(self._cleanse_name(skill_name))
 
             # set the temp dict to contain the converted skill effects
-            new_race_dict = race_data.copy()
-            new_race_dict["skills"] = converted_skills
+            new_people_dict = people_data.copy()
+            new_people_dict["skills"] = converted_skills
 
             # unpack the temp dict and convert the aspects data to the data class
-            race = CharacteristicData(**new_race_dict)
-            race.name = self._cleanse_name(race.name)
-            converted_races[race.name] = race
+            people = CharacteristicData(**new_people_dict)
+            people.name = self._cleanse_name(people.name)
+            converted_peoples[people.name] = people
 
         # delete all info from aspects and replace with the converted data
-        self._races = {}
-        self._races = converted_races
+        self._peoples = {}
+        self._peoples = converted_peoples
         
     def _convert_savvys_to_data_classes(self):
         """
@@ -294,7 +270,7 @@ class LibraryOfAlexandria:
         """
         Take skill data from library and convert to data classes
         """
-        all_stat_data = self._stats
+        all_stat_data = self._base_stats
         converted_primary_stats = {}
         converted_secondary_stats = {}
 
@@ -315,8 +291,8 @@ class LibraryOfAlexandria:
 
         # delete all info from stat and replace with the converted data
         converted_data = BaseStatData(primary=converted_primary_stats, secondary=converted_secondary_stats)
-        self._stats = {}
-        self._stats = converted_data
+        self._base_stats = {}
+        self._base_stats = converted_data
 
     def _convert_gods_to_data_classes(self):
         """
@@ -394,7 +370,7 @@ class LibraryOfAlexandria:
         Where there are external values that are utilised internally convert them to the internal constant.
         """
         # Update shared values
-        lists_to_convert = [self._aspects, self._afflictions, self._gods, self._savvys, self._races,
+        lists_to_convert = [self._aspects, self._afflictions, self._gods, self._savvys, self._peoples,
             self._homelands, self._skills]
         
         for current_list in lists_to_convert:
@@ -461,11 +437,11 @@ class LibraryOfAlexandria:
 
         # Stat:Primary:primary_stat_type
         for value in PrimaryStatTypes:
-            self._recursive_replace(self._stats, "primary_stat_type", value.name.lower(), value)
+            self._recursive_replace(self._base_stats, "primary_stat_type", value.name.lower(), value)
 
         # Stat:Secondary:secondary_stat_type
         for value in SecondaryStatTypes:
-            self._recursive_replace(self._stats, "secondary_stat_type", value.name.lower(), value)
+            self._recursive_replace(self._base_stats, "secondary_stat_type", value.name.lower(), value)
 
         # Gods:attitudes:action
         for value in EffectTypes:
@@ -582,26 +558,26 @@ class LibraryOfAlexandria:
         data = self._savvys[savvy_name]
         return data
 
-    def get_races_data(self) -> Dict[str, CharacteristicData]:
+    def get_peoples_data(self) -> Dict[str, CharacteristicData]:
         """
-        Get all races from the library
+        Get all peoples from the library
         """
 
-        data = self._races
+        data = self._peoples
         return data
 
-    def get_race_data(self, race_name):
+    def get_people_data(self, people_name):
         """
-        Get data for a races from the library
+        Get data for a peoples from the library
 
         Args:
-            race_name (str):
+            people_name (str):
 
         Returns:
             CharacteristicData: data for a specified Race.
         """
 
-        data = self._races[race_name]
+        data = self._peoples[people_name]
         return data
 
     def get_homelands_data(self) -> Dict[str, CharacteristicData]:
@@ -672,7 +648,7 @@ class LibraryOfAlexandria:
         Get data for a primary stat from the library
         """
 
-        stat_data = self._stats
+        stat_data = self._base_stats
 
         return stat_data
 
@@ -687,7 +663,7 @@ class LibraryOfAlexandria:
             BasePrimaryStatData:  stat data for specified stat.
         """
 
-        stat_data = self._stats.primary[primary_stat_type.name]
+        stat_data = self._base_stats.primary[primary_stat_type.name]
 
         return stat_data
 
@@ -696,8 +672,7 @@ class LibraryOfAlexandria:
         Get data for a secondary stat from the library
         """
 
-        #stat_data = self._stats.secondary[secondary_stat_type]
-        stat_data = BaseSecondaryStatData()
+        stat_data = self._base_stats.secondary[secondary_stat_type]
 
         return stat_data
 
@@ -801,113 +776,59 @@ class LibraryOfAlexandria:
 
     ####################### LOAD ##############################
 
-    @staticmethod
-    def _load_affliction_json():
-        """
-
-        Returns:
-
-        """
+    def _load_affliction_json(self):
         with open('data/game/afflictions.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._afflictions = data
 
-    @staticmethod
-    def _load_aspects_json():
-        """
-
-        Returns:
-
-        """
+    def _load_aspects_json(self):
         with open('data/game/aspects.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._aspects = data
 
-    @staticmethod
-    def _load_terrain_json():
-        """
-
-        Returns:
-
-        """
+    def _load_terrain_json(self):
         with open('data/game/terrain.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._terrain = data
 
-    @staticmethod
-    def _load_homeland_json():
-        """
-
-        Returns:
-
-        """
+    def _load_homeland_json(self):
         with open('data/game/homelands.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._homelands = data
 
-    @staticmethod
-    def _load_savvy_json():
-        """
-
-        Returns:
-
-        """
+    def _load_savvy_json(self):
         with open('data/game/savvys.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._savvys = data
 
-    @staticmethod
-    def _load_race_json():
-        """
-
-        Returns:
-
-        """
-        with open('data/game/races.json') as file:
+    def _load_people_json(self):
+        with open('data/game/peoples.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._peoples = data
 
-    @staticmethod
-    def _load_base_stat_json():
-        """
-
-        Returns:
-
-        """
+    def _load_base_stat_json(self):
         with open('data/game/base_stats.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._base_stats = data
 
-    @staticmethod
-    def _load_gods_json():
-        """
-
-        Returns:
-
-        """
+    def _load_gods_json(self):
         with open('data/game/gods.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._gods = data
     
-    @staticmethod
-    def _load_skills_json():
-        """
-
-        Returns:
-
-        """
+    def _load_skills_json(self):
         with open('data/game/skills.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
 
-        return data
+        self._skills = data
 
 
 library = LibraryOfAlexandria()
