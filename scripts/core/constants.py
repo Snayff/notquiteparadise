@@ -75,20 +75,13 @@ class EntityEventTypes(SimpleNamespace):
     LEARN = 4
 
 
-class UIEventTypes(Enum):
+class UIEventTypes(SimpleNamespace):
     """
     Types of UI events
     """
-    SELECT_ENTITY = auto()
-    CLICK_TILE = auto()
-    MESSAGE = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    SELECT_ENTITY = 1
+    CLICK_TILE = 2
+    MESSAGE = 3
 
 
 class MapEventTypes(Enum):
