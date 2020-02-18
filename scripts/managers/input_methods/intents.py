@@ -23,6 +23,7 @@ class Intents:
     skill2: bool = False
     skill3: bool = False
     skill4: bool = False
+    skill5: bool = False
     refresh_data: bool = False
     button_pressed: bool = False
     debug_toggle: bool = False

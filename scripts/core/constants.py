@@ -59,119 +59,77 @@ class MessageTypes(SimpleNamespace):
     SCREEN = 3
 
 
-class TargetTags(Enum):
+class TargetTags(SimpleNamespace):
     """
     Types of target
     """
-    SELF = auto()
-    OTHER_ENTITY = auto()
-    NO_ENTITY = auto()
-    OUT_OF_BOUNDS = auto()
-    ANY = auto()
-    OPEN_SPACE = auto()
-    BLOCKED_MOVEMENT = auto()
-    IS_VISIBLE = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    SELF = 1
+    OTHER_ENTITY = 2
+    NO_ENTITY = 3
+    OUT_OF_BOUNDS = 4
+    ANY = 5
+    OPEN_SPACE = 6
+    BLOCKED_MOVEMENT = 7
+    IS_VISIBLE = 8
 
 
-class DamageTypes(Enum):
+class DamageTypes(SimpleNamespace):
     """
     Damage types
     """
-    BURN = auto()
-    CHEMICAL = auto()
-    ASTRAL = auto()
-    COLD = auto()
-    MUNDANE = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    BURN = 1
+    CHEMICAL = 2
+    ASTRAL = 3
+    COLD = 4
+    MUNDANE = 5
 
 
-class StatTypes(Enum):
+class StatTypes(SimpleNamespace):
     """
     Primary stats
     """
-    PRIMARY = auto()
-    SECONDARY = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    PRIMARY = 1
+    SECONDARY = 2
 
 
-class PrimaryStatTypes(Enum):
+class PrimaryStatTypes(SimpleNamespace):
     """
     Primary stats
     """
-    VIGOUR = auto()
-    CLOUT = auto()
-    SKULLDUGGERY = auto()
-    BUSTLE = auto()
-    EXACTITUDE = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    VIGOUR = 1
+    CLOUT = 2
+    SKULLDUGGERY = 3
+    BUSTLE = 4
+    EXACTITUDE = 5
 
 
 class SecondaryStatTypes(Enum):
     """
     Secondary stats
     """
-    MAX_HP = auto()
-    MAX_STAMINA = auto()
-    HP = auto()
-    STAMINA = auto()
-    ACCURACY = auto()
-    RESIST_BURN = auto()
-    RESIST_CHEMICAL = auto()
-    RESIST_ASTRAL = auto()
-    RESIST_COLD = auto()
-    RESIST_MUNDANE = auto()
-    SIGHT_RANGE = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    MAX_HP = 1
+    MAX_STAMINA = 2
+    HP = 3
+    STAMINA = 4
+    ACCURACY = 5
+    RESIST_BURN = 6
+    RESIST_CHEMICAL = 7
+    RESIST_ASTRAL = 8
+    RESIST_COLD = 9
+    RESIST_MUNDANE = 10
+    SIGHT_RANGE = 11
 
 
-class HitTypes(Enum):
+class HitTypes(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
-    GRAZE = auto()
-    HIT = auto()
-    CRIT = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    GRAZE = 1
+    HIT = 2
+    CRIT = 3
 
 
-class HitValues(Enum):
+class HitValues(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
@@ -180,7 +138,7 @@ class HitValues(Enum):
     CRIT = 20
 
 
-class HitModifiers(Enum):
+class HitModifiers(SimpleNamespace):
     """
     The modifier for each hit type
     """
@@ -189,47 +147,33 @@ class HitModifiers(Enum):
     CRIT = 1.4
 
 
-class EffectTypes(Enum):
+class EffectTypes(SimpleNamespace):
     """
     Types of effects
     """
-    APPLY_AFFLICTION = auto()
-    DAMAGE = auto()
-    MOVE = auto()
-    AFFECT_STAT = auto()
-    ADD_ASPECT = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    APPLY_AFFLICTION = 1
+    DAMAGE = 2
+    MOVE = 3
+    AFFECT_STAT = 4
+    ADD_ASPECT = 5
 
 
-class AfflictionCategory(Enum):
+class AfflictionCategory(SimpleNamespace):
     """
     Boon or Bane
     """
-    BANE = auto()
-    BOON = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    BANE = 1
+    BOON = 2
 
 
-class AfflictionTriggers(Enum):
+class AfflictionTriggers(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    PASSIVE = auto()  # always applying effects, overrides duration
-    END_TURN = auto()  # apply at end of round turn
-    MOVE = auto()  # apply if afflicted entity moves
-    ACTION = auto()  # apply when an action is taken
+    PASSIVE = 1  # always applying effects, overrides duration
+    END_TURN = 2  # apply at end of round turn
+    MOVE = 3  # apply if afflicted entity moves
+    ACTION = 4  # apply when an action is taken
 
     # Other triggers to consider
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
@@ -237,144 +181,93 @@ class AfflictionTriggers(Enum):
     # USE_BURN = auto()  # apply if afflicted entity uses a burn type - etc.
     # DEATH = auto()  # apply if afflicted entity dies
 
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
 
-    __hash__ = None
-
-
-class AfflictionLifespan(Enum):
-    """
-    Identify if the affliction duration should be reduced or not
-    """
-    PERMANENT = 999
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
-
-
-class SkillShapes(Enum):
+class SkillShapes(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    TARGET = auto()  # single target
-    SQUARE = auto()
-    CIRCLE = auto()
-    CROSS = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
-
-class SkillTerrainCollisions(Enum):
-    REFLECT = auto()
-    ACTIVATE = auto()
-    FIZZLE = auto()
-
-class SkillTravelTypes(Enum):
-    PROJECTILE = auto()
-    THROW = auto()
-
-class SkillExpiryTypes(Enum):
-    FIZZLE = auto()
-    ACTIVATE = auto()
-
-class InputModes(Enum):
-    MOUSE_AND_KB = auto()
-    GAMEPAD = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    TARGET = 1  # single target
+    SQUARE = 2
+    CIRCLE = 3
+    CROSS = 4
 
 
-class MouseButtons(Enum):
-    LEFT_BUTTON = auto()
-    RIGHT_BUTTON = auto()
-    MIDDLE_BUTTON = auto()
-    WHEEL_UP = auto()
-    WHEEL_DOWN = auto()
+class SkillTerrainCollisions(SimpleNamespace):
+    """
+    What to do when a skill hits terrain
+    """
+    REFLECT = 1
+    ACTIVATE = 2
+    FIZZLE = 3
 
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
 
-    __hash__ = None
+class SkillTravelTypes(SimpleNamespace):
+    """
+    How the skill travels
+    """
+    PROJECTILE = 1  # travels tile by tile
+    THROW = 2  # only impacts last tile in range
 
-class InputStates(Enum):
-    PRESSED = auto()
-    RELEASED = auto()
 
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
+class SkillExpiryTypes(SimpleNamespace):
+    """
+    What happens when the skill reaches the range limit
+    """
+    FIZZLE = 1
+    ACTIVATE = 2
 
-    __hash__ = None
 
-class InputIntents(Enum):
-    UP = auto()
-    DOWN = auto()
-    LEFT = auto()
-    RIGHT = auto()
-    UP_RIGHT = auto()
-    UP_LEFT = auto()
-    DOWN_RIGHT = auto()
-    DOWN_LEFT = auto()
-    CONFIRM = auto()
-    CANCEL = auto()
-    EXIT_GAME = auto()
-    DEBUG_TOGGLE = auto()
-    SKILL0 = auto()
-    SKILL1 = auto()
-    SKILL2 = auto()
-    SKILL3 = auto()
-    SKILL4 = auto()
-    REFRESH_DATA = auto()
-    BUTTON_PRESSED = auto()
-    DEV_TOGGLE = auto()
+class InputModes(SimpleNamespace):
+    """
+    Input hardware being used
+    """
+    MOUSE_AND_KB = 1
+    GAMEPAD = 2
 
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
 
-    __hash__ = None
+class InputIntents(SimpleNamespace):
+    """
+    Values of the conversion from input to intent. Strings.
+    """
+    UP = "up"
+    DOWN = "down"
+    LEFT = "left"
+    RIGHT = "right"
+    UP_RIGHT = "up_right"
+    UP_LEFT = "up_left"
+    DOWN_RIGHT = "down_right"
+    DOWN_LEFT = "down_left"
+    CONFIRM = "confirm"
+    CANCEL = "cancel"
+    EXIT_GAME = "exit_game"
+    DEBUG_TOGGLE = "debug_toggle"
+    SKILL0 = "skill0"
+    SKILL1 = "skill1"
+    SKILL2 = "skill2"
+    SKILL3 = "skill3"
+    SKILL4 = "skill4"
+    SKILL5 = "skill5"
+    REFRESH_DATA = "refresh_data"
+    DEV_TOGGLE = "dev_toggle"
 
-class UIElementTypes(Enum):
+
+class UIElementTypes(SimpleNamespace):
     """
     The different UI elements
     """
-    MESSAGE_LOG = auto()
-    ENTITY_INFO = auto()
-    TARGETING_OVERLAY = auto()
-    SKILL_BAR = auto()
-    ENTITY_QUEUE = auto()
-    CAMERA = auto()
-    SKILL_EDITOR = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    MESSAGE_LOG = 1
+    ENTITY_INFO = 2
+    TARGETING_OVERLAY = 3
+    SKILL_BAR = 4
+    ENTITY_QUEUE = 5
+    CAMERA = 6
+    SKILL_EDITOR = 7
 
 
 class Directions(Enum):
+    """
+    Holds a tuple for each direction of the (x, y) relative direction.
+    """
     UP_LEFT = (-1, -1)
     UP = (0, -1)
     UP_RIGHT = (1, -1)
@@ -384,10 +277,3 @@ class Directions(Enum):
     DOWN_LEFT = (-1, 1)
     DOWN = (0, 1)
     DOWN_RIGHT = (1, 1)
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None

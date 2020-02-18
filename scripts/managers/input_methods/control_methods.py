@@ -85,10 +85,6 @@ class ControlMethods:
             elif event.key == pygame.K_ESCAPE:
                 self.set_intent(InputIntents.EXIT_GAME)
 
-        # handle mouse click events
-        if event.type == pygame.USEREVENT:
-            self.set_intent(InputIntents.BUTTON_PRESSED)
-
     def check_dev_actions(self, event):
         """
         get any dev actions
@@ -172,7 +168,7 @@ class ControlMethods:
         Args:
             intent ():
         """
-        setattr(self._manager.Intents, intent.name.lower(), True)
+        setattr(self._manager.Intents, intent, True)
         # print(f"Set {intent.name.lower()} Intent to True")
 
     def get_intent(self, intent: InputIntents):

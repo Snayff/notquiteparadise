@@ -147,6 +147,7 @@ class EntityInfo(UIWindow):
         text = ""
         stats = world.Entity.get_stats(self.selected_entity)
 
+        # FIXME - can no longer use the enum
         for stat in PrimaryStatTypes:
             try:
                 stat_value = getattr(stats, stat.name.lower())

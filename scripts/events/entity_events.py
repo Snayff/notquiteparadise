@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
-from scripts.core.constants import EventTopics
+from typing import TYPE_CHECKING, Union
+from scripts.core.constants import EventTopics, Directions
 from scripts.core.event_hub import Event
 
 if TYPE_CHECKING:
@@ -19,8 +19,7 @@ class UseSkillEvent(Event):
         skill_name (str): skill name
     """
     def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
-            direction: Tuple[
-        int, int]):
+            direction: Union[Tuple[int, int], Directions]):
         Event.__init__(self, "SKILL", EventTopics.ENTITY)
         self.entity = entity_using_skill
         self.direction = direction

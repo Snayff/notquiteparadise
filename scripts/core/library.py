@@ -45,8 +45,8 @@ class LibraryOfAlexandria:
         #     j = json.load(file, object_hook=deserialise_dataclasses)
         #     pprint(j)
 
-
-        self.refresh_library_data()
+        # TODO - rebuild deserialising
+        # self.refresh_library_data()
 
         logging.info(f"Data Library initialised.")
 

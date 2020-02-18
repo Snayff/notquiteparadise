@@ -53,7 +53,7 @@ class ExtendedJsonEncoder(json.JSONEncoder):
                 },
             }
         elif isinstance(obj, Enum):
-            return obj.name
+            return obj.value
         elif type(obj) in JSON_TYPES:
             return obj
         super(ExtendedJsonEncoder, self).default(obj)
