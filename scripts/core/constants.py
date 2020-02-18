@@ -26,6 +26,15 @@ class FOVInfo:
     FOV_ALGORITHM = 0
 
 
+# TODO - replace enums with this:
+# from types import SimpleNamespace
+#
+# class Directions(SimpleNamespace):
+#     LEFT = 1
+#     RIGHT = 2
+#     UP = 3
+#     DOWN = 4
+
 class GameStates(Enum):
     """
     States the Game can be in.

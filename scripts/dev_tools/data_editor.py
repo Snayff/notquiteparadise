@@ -126,7 +126,13 @@ class DataEditor(UIWindow):
 
                     has_updated = True
 
-        # TODO - handle text field finished
+        # handle text field finished typing (triggers on enter press)
+        if event.user_type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
+            key = ui_object_id
+            data_field = self.primary_data_fields[key]
+            new_value = self.instance_selector.selected_option
+
+            has_updated = True
 
         # handle triggers for secondary details
         prefix = "edit#"
