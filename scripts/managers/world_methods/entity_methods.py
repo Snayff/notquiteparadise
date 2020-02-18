@@ -381,7 +381,7 @@ class EntityMethods:
         self._manager.World.add_component(entity, Resources(stats.max_hp, stats.max_stamina))
 
         # get skills from characteristics
-        skills = ["basic attack"]  # N.B. All actors start with basic attack
+        skills = ["basic_attack"]  # N.B. All actors start with basic attack
         people_data = library.get_people_data(people_name)
         if people_data.skills != ["none"]:
             skills += people_data.skills

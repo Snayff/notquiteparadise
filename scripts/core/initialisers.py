@@ -60,18 +60,18 @@ def initialise_game():
 
     # init the player
     world.FOV.create_player_fov_map(map_width, map_height)
-    player = world.Entity.create_actor("player", "a desc", 1, 2, "herraculen", "aristo pirate",
+    player = world.Entity.create_actor("player", "a desc", 1, 2, "herraculen", "aristo_pirate",
                                        "fungechist", True)
 
     turn.turn_holder = player
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    enemy = world.Entity.create_actor("steve", "steve's desc", 1, 4, "goblinn", "bog refugee",
+    enemy = world.Entity.create_actor("steve", "steve's desc", 1, 4, "goblinn", "bog_refugee",
                                       "cleromancer")
 
     # create a god
-    god = world.Entity.create_god("the small gods")
+    god = world.Entity.create_god("the_small_gods")
 
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
 

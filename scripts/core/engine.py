@@ -14,6 +14,7 @@ from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
 # Project Wide to do list...
+# FIXME - collision isnt working - can walk through walls and leave map
 # TODO - swap out nose for pytest
 # TODO - remember window position and resume at that place
 # TODO - Review closure
@@ -26,7 +27,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 #  entities create light, sight range shows light in range
 # TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
 # TODO - add skill modifiers (blessings?)
-# TODO - write tests / checking for json values
+# TODO - write tests / checking for json values - use schema
 # TODO - could turn manager sit under game?
 # TODO - add piercing so projectile can damage and keep going
 # TODO - add projectiles, i.e. entity creation, movement and collision

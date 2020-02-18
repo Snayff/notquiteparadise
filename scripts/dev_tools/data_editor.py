@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 # TODO - don't remove "_" from skill field - these are the skill keys
 # TODO - don't clean "_" from keys
 # TODO - add special case for "skills" field - get all keys from skills.json
+# TODO - ability to add new
 
 class DataEditor(UIWindow):
     """

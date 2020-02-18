@@ -1,5 +1,5 @@
 {
-    "aristo pirate": {
+    "aristo_pirate": {
         "__dataclass__": "CharacteristicData",
         "bustle": 1,
         "clout": 3,
@@ -14,7 +14,7 @@
         "sprite": "",
         "vigour": 1
     },
-    "bog refugee": {
+    "bog_refugee": {
         "__dataclass__": "CharacteristicData",
         "bustle": 1,
         "clout": 1,
