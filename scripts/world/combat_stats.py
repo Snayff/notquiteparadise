@@ -17,12 +17,9 @@ class CombatStats:
         self.entity = entity
 
     @property
-    def vigour(self):
+    def vigour(self) -> int:
         """
-        Influences healthiness.
-
-        Returns:
-            int: How vigorous. Never below 1.
+        Influences healthiness. Never below 1.
         """
         stat = PrimaryStatTypes.VIGOUR
         # TODO - moving to the top creates an import error. Resolve it.
@@ -30,12 +27,9 @@ class CombatStats:
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def clout(self):
+    def clout(self) -> int:
         """
-        Influences forceful things.
-
-        Returns:
-            int: How much clout. Never below 1.
+        Influences forceful things. Never below 1.
         """
         stat = PrimaryStatTypes.CLOUT
         # TODO - moving to the top creates an import error. Resolve it.
@@ -43,12 +37,9 @@ class CombatStats:
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def skullduggery(self):
+    def skullduggery(self) -> int:
         """
-        Influences sneaky things.
-
-        Returns:
-            int: How skullduggery-y. Never below 1.
+        Influences sneaky things. Never below 1.
         """
         stat = PrimaryStatTypes.SKULLDUGGERY
         # TODO - moving to the top creates an import error. Resolve it.
@@ -56,12 +47,9 @@ class CombatStats:
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def bustle(self):
+    def bustle(self) -> int:
         """
-        Influences speedy things.
-
-        Returns:
-            int: How much bustle. Never below 1.
+        Influences speedy things. Never below 1.
         """
         stat = PrimaryStatTypes.BUSTLE
         # TODO - moving to the top creates an import error. Resolve it.
@@ -69,12 +57,9 @@ class CombatStats:
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def exactitude(self):
+    def exactitude(self) -> int:
         """
-        Influences preciseness.
-
-        Returns:
-            int: How exacting. Never below 1.
+        Influences preciseness. Never below 1.
         """
         stat = PrimaryStatTypes.EXACTITUDE
         # TODO - moving to the top creates an import error. Resolve it.
@@ -82,12 +67,9 @@ class CombatStats:
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def max_hp(self):
+    def max_hp(self) -> int:
         """
         Total damage an entity can take before death.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.MAX_HP
         stat_data = library.get_secondary_stat_data(stat)
@@ -112,12 +94,10 @@ class CombatStats:
         return total
 
     @property
-    def max_stamina(self):
+    def max_stamina(self) -> int:
         """
         an entities energy to take actions.
 
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.MAX_STAMINA
         stat_data = library.get_secondary_stat_data(stat)
@@ -142,12 +122,9 @@ class CombatStats:
         return total
 
     @property
-    def accuracy(self):
+    def accuracy(self) -> int:
         """
         an entities likelihood to hit.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.ACCURACY
         stat_data = library.get_secondary_stat_data(stat)
@@ -172,12 +149,10 @@ class CombatStats:
         return total
 
     @property
-    def resist_burn(self):
+    def resist_burn(self) -> int:
         """
         an entities resistance to burn damage.
 
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_BURN
         stat_data = library.get_secondary_stat_data(stat)
@@ -202,12 +177,10 @@ class CombatStats:
         return total
 
     @property
-    def resist_cold(self):
+    def resist_cold(self) -> int:
         """
         an entities resistance to cold damage.
 
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_COLD
         stat_data = library.get_secondary_stat_data(stat)
@@ -232,12 +205,9 @@ class CombatStats:
         return total
 
     @property
-    def resist_chemical(self):
+    def resist_chemical(self) -> int:
         """
         an entities resistance to chemical damage.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_CHEMICAL
         stat_data = library.get_secondary_stat_data(stat)
@@ -262,12 +232,9 @@ class CombatStats:
         return total
 
     @property
-    def resist_astral(self):
+    def resist_astral(self) -> int:
         """
         an entities resistance to astral damage.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_ASTRAL
         stat_data = library.get_secondary_stat_data(stat)
@@ -292,12 +259,9 @@ class CombatStats:
         return total
 
     @property
-    def resist_mundane(self):
+    def resist_mundane(self) -> int:
         """
         an entities resistance to mundane damage.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_MUNDANE
         stat_data = library.get_secondary_stat_data(stat)
@@ -322,12 +286,9 @@ class CombatStats:
         return total
 
     @property
-    def sight_range(self):
+    def sight_range(self) -> int:
         """
         Highest value among base contributions then modifiers applied. Cant be less than 0.
-
-        Returns:
-            int:
         """
         # TODO - moving to the top creates an import error. Resolve it.
         from scripts.managers.world_manager import world

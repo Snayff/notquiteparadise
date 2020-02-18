@@ -18,6 +18,7 @@ from scripts.core.library import library
 if TYPE_CHECKING:
     from typing import Any, Tuple
 
+# TODO - there are no more Enums. Remove all refs and rebuild functionality.
 # TODO - add None option to drop downs
 # TODO - dropdown change isnt saving
 # TODO - primary details not clearing on new category
@@ -25,6 +26,7 @@ if TYPE_CHECKING:
 # TODO - don't clean "_" from keys
 # TODO - add special case for "skills" field - get all keys from skills.json
 # TODO - ability to add new
+
 
 class DataEditor(UIWindow):
     """
