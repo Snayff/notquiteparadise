@@ -84,18 +84,11 @@ class UIEventTypes(SimpleNamespace):
     MESSAGE = 3
 
 
-class MapEventTypes(Enum):
+class MapEventTypes(SimpleNamespace):
     """
     Types of Map events
     """
-    TILE_INTERACTION = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    TILE_INTERACTION = 1
 
 
 class TargetTags(Enum):
@@ -214,7 +207,6 @@ class HitValues(Enum):
     """
     The value of each hit type. The value is the starting amount.
     """
-    # TODO - externalise the values
     GRAZE = 0
     HIT = 5
     CRIT = 20

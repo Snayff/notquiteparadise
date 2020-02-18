@@ -11,9 +11,10 @@ from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world
 from scripts.world.components import Position, Knowledge, Identity, IsGod
 from scripts.events.entity_events import UseSkillEvent
+from scripts.events.entity_events import DieEvent, MoveEvent
 
 if TYPE_CHECKING:
-    from scripts.events.entity_events import DieEvent, MoveEvent
+    pass
 
 
 class EntityHandler(Subscriber):
@@ -31,18 +32,15 @@ class EntityHandler(Subscriber):
             event(Event): the event in need of processing
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
 
-        if event.event_type == EntityEventTypes.MOVE:
-            event: MoveEvent
+        if isinstance(event, MoveEvent):
             self.process_move(event)
 
-        elif event.event_type == EntityEventTypes.SKILL:
-            event: UseSkillEvent
+        elif isinstance(event, UseSkillEvent):
             self.process_skill(event)
 
-        elif event.event_type == EntityEventTypes.DIE:
-            event: DieEvent
+        elif isinstance(event, DieEvent):
             self.process_die(event)
 
     @staticmethod

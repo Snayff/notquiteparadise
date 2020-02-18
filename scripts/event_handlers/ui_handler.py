@@ -3,7 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Tuple
 from scripts.core.library import library
-from scripts.events.entity_events import UseSkillEvent
+from scripts.events.entity_events import UseSkillEvent, DieEvent, MoveEvent
+from scripts.events.game_events import ChangeGameStateEvent
 from scripts.managers.game_manager import game
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
@@ -11,10 +12,10 @@ from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
     UIEventTypes, MessageTypes, VisualInfo, UIElementTypes
 from scripts.world.components import Position
+from scripts.events.ui_events import MessageEvent, ClickTile
 
 if TYPE_CHECKING:
     from scripts.world.entity import Entity
-    from scripts.events.ui_events import MessageEvent
 
 
 class UiHandler(Subscriber):
@@ -30,7 +31,7 @@ class UiHandler(Subscriber):
         Control the events
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
 
         if event.topic == EventTopics.UI:
             self.process_ui_event(event)
@@ -50,16 +51,13 @@ class UiHandler(Subscriber):
         Args:
             event ():
         """
-        # update UI based on entity action taken
-        if event.event_type == EntityEventTypes.LEARN:
-            # TODO - update UI to reflect new skills
-            pass
-
-        elif event.event_type == EntityEventTypes.DIE:
+        if isinstance(event, DieEvent):
+            event: DieEvent
             # remove the entity from the camera
             self.update_camera()
 
-        elif event.event_type == EntityEventTypes.MOVE:
+        elif isinstance(event, MoveEvent):
+            event: MoveEvent
             # show the entity in the new tile
             player = world.Entity.get_player()
             if event.entity == player:
@@ -73,11 +71,9 @@ class UiHandler(Subscriber):
     def process_game_event(self, event):
         """
         Process Game topic event
-
-        Args:
-            event ():
         """
-        if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
+        if isinstance(event, ChangeGameStateEvent):
+            event: ChangeGameStateEvent
             if event.new_game_state == GameStates.GAME_INITIALISING:
                 self.init_game_ui()
 
@@ -151,11 +147,9 @@ class UiHandler(Subscriber):
     def process_ui_event(self, event):
         """
         Process UI topic event
-
-        Args:
-            event ():
         """
-        if event.event_type == UIEventTypes.CLICK_TILE:
+        if isinstance(event, ClickTile):
+            event: ClickTile
             if game.game_state == GameStates.PLAYER_TURN:
                 # Select an entity
                 tile = world.Map.get_tile(event.tile_pos_string)
@@ -172,7 +166,7 @@ class UiHandler(Subscriber):
                 direction = world.Map.get_direction((position.x, position.y), event.tile_pos_string)
                 publisher.publish(UseSkillEvent(player, game.active_skill, (position.x, position.y), direction))
 
-        if event.event_type == UIEventTypes.MESSAGE:
+        if isinstance(event, MessageEvent):
             # process a message
             event: MessageEvent
             self.process_message(event)

@@ -7,7 +7,6 @@ from scripts.core.event_hub import Event
 
 if TYPE_CHECKING:
     from typing import Tuple
-    from scripts.world.entity import Entity
 
 
 class UseSkillEvent(Event):

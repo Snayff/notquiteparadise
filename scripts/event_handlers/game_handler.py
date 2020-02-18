@@ -9,9 +9,10 @@ from scripts.managers.world_manager import world
 from scripts.managers.game_manager import game
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.game_events import EndTurnEvent
+from scripts.events.game_events import ExitGameEvent
 
 if TYPE_CHECKING:
-    from scripts.events.game_events import ExitGameEvent
+    pass
 
 
 class GameHandler(Subscriber):
@@ -30,17 +31,17 @@ class GameHandler(Subscriber):
             event ():
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
 
-        if event.event_type == GameEventTypes.EXIT:
+        if isinstance(event, ExitGameEvent):
             event: ExitGameEvent
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
-        elif event.event_type == GameEventTypes.END_TURN:
+        elif isinstance(event, EndTurnEvent):
             event: EndTurnEvent
             self.process_end_turn(event)
 
-        elif event.event_type == GameEventTypes.CHANGE_GAME_STATE:
+        elif isinstance(event, ChangeGameStateEvent):
             event: ChangeGameStateEvent
             self.process_change_game_state(event)
 
