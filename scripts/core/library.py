@@ -640,6 +640,7 @@ class LibraryOfAlexandria:
         Returns:
             SkillData: data for a specified skill.
         """
+        # FIXME - it is possible for keys to have spaces and be compared to those that dont
         skill_data = self._skills[skill_name]
 
         return skill_data

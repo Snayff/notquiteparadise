@@ -67,19 +67,12 @@ class MessageTypes(SimpleNamespace):
     SCREEN = 3
 
 
-class EntityEventTypes(Enum):
+class EntityEventTypes(SimpleNamespace):
     """Types of Entity Events"""
-    DIE = auto()
-    SKILL = auto()
-    MOVE = auto()
-    LEARN = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    DIE = 1
+    SKILL = 2
+    MOVE = 3
+    LEARN = 4
 
 
 class UIEventTypes(Enum):
