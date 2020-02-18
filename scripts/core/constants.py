@@ -18,7 +18,6 @@ class VisualInfo(SimpleNamespace):
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
     GAME_FPS = 60
-    ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
 
 
 class FOVInfo(SimpleNamespace):
@@ -29,25 +28,18 @@ class FOVInfo(SimpleNamespace):
     FOV_ALGORITHM = 0
 
 
-class GameStates(Enum):
+class GameStates(SimpleNamespace):
     """
     States the Game can be in.
     """
-    PLAYER_TURN = auto()
-    ENEMY_TURN = auto()
-    PLAYER_DEAD = auto()
-    TARGETING_MODE = auto()
-    EXIT_GAME = auto()
-    GAME_INITIALISING = auto()
-    NEW_TURN = auto()
-    DEV_MODE = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    PLAYER_TURN = 1
+    ENEMY_TURN = 2
+    PLAYER_DEAD = 3
+    TARGETING_MODE = 4
+    EXIT_GAME = 5
+    GAME_INITIALISING = 6
+    NEW_TURN = 7
+    DEV_MODE = 8
 
 
 class EventTopics(Enum):
