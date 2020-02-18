@@ -21,7 +21,7 @@ class VisualInfo(SimpleNamespace):
     ENTITY_SPRITE_FRAME_DURATION = 0.05  # seconds
 
 
-class FOVInfo:
+class FOVInfo(SimpleNamespace):
     """
     Constant info about the FOV settings
     """
