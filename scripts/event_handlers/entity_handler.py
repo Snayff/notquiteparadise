@@ -90,7 +90,7 @@ class EntityHandler(Subscriber):
 
                 # update fov if needed
                 if entity == world.Entity.get_player():
-                    stats = world.Entity.get_stats(entity)
+                    stats = world.Entity.get_combat_stats(entity)
                     sight_range = max(0, stats.sight_range)
                     world.FOV.recompute_player_fov(position.x, position.y, sight_range)
 

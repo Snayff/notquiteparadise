@@ -100,7 +100,7 @@ class DataEditor(UIWindow):
 
                     # create new instance selector
                     options = []
-                    # FIXME - basestats is StatData and doesnt have keys. How to handle that layer of
+                    # FIXME - basestats is BaseStatData and doesnt have keys. How to handle that layer of
                     #  primary/secondary?
                     options.extend(key for key in self.all_data[self.current_data_category].keys())
                     options.sort()
@@ -438,6 +438,7 @@ class DataEditor(UIWindow):
 
         # create data fields
         for key, value in data_dict.items():
+            # TODO - there are no more enums, find way to identify those that fit here.
             if isinstance(value, Enum):
                 data_field = self._create_one_from_options_field(key, value, start_x, current_y, row_width,
                                                                  row_height, container, manager)

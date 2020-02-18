@@ -212,7 +212,7 @@ class EntityMethods:
         return self.get_component(entity, Identity)
 
     @staticmethod
-    def get_stats(entity: int) -> CombatStats:
+    def get_combat_stats(entity: int) -> CombatStats:
         """
         Create and return a stat object  for an entity.
 
@@ -235,7 +235,9 @@ class EntityMethods:
         Returns:
 
         """
-        stat = primary_stat.name.lower()
+        return 1
+
+        stat = primary_stat
         value = 0
 
         for race in self._manager.World.try_component(entity, Race):
@@ -365,7 +367,7 @@ class EntityMethods:
 
         # actor components
         actor.append(Identity(name, description))
-        actor.append(Position(x, y))  # TODO - check position not blocked
+        actor.append(Position(x, y))  # TODO - check position not blocked before spawning
         actor.append(HasCombatStats())
         actor.append(Blocking(True, ENTITY_BLOCKS_SIGHT))
         actor.append(Race(race_name))
@@ -375,7 +377,7 @@ class EntityMethods:
         entity = self.create(actor)
 
         # give full resources
-        stats = self.get_stats(entity)
+        stats = self.get_combat_stats(entity)
         self._manager.World.add_component(entity, Resources(stats.max_hp, stats.max_stamina))
 
         # get skills from characteristics

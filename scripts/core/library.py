@@ -4,11 +4,13 @@ import json
 import logging
 import os
 from typing import TYPE_CHECKING, Union
+
+from scripts.core.extend_json import deserialise_dataclasses
 from scripts.world.data_classes.characteristic_dataclass import CharacteristicData
 from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
     AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
     Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
-from scripts.world.data_classes.stat_dataclass import StatData, PrimaryStatData, SecondaryStatData
+from scripts.world.data_classes.stat_dataclass import BaseStatData, BasePrimaryStatData, BaseSecondaryStatData
 from scripts.skills.affliction import AfflictionData
 from scripts.skills.skill import SkillData
 from scripts.skills.effect import EffectData
@@ -46,7 +48,7 @@ class LibraryOfAlexandria:
         #     pprint(j)
 
         # TODO - rebuild deserialising
-        # self.refresh_library_data()
+        self.refresh_library_data()
 
         logging.info(f"Data Library initialised.")
 
@@ -56,15 +58,15 @@ class LibraryOfAlexandria:
         Load json data into the library, convert strings to enums and dicts to data classes.
         """
         self._load_data_into_library()
-        self._convert_external_strings_to_internal_values()
-        self._convert_afflictions_to_data_classes()
-        self._convert_aspects_to_data_classes()
-        self._convert_stats_to_data_classes()
-        self._convert_gods_to_data_classes()
-        self._convert_homelands_to_data_classes()
-        self._convert_savvys_to_data_classes()
-        self._convert_races_to_data_classes()
-        self._convert_skills_to_data_classes()
+        # self._convert_external_strings_to_internal_values()
+        # self._convert_afflictions_to_data_classes()
+        # self._convert_aspects_to_data_classes()
+        # self._convert_stats_to_data_classes()
+        # self._convert_gods_to_data_classes()
+        # self._convert_homelands_to_data_classes()
+        # self._convert_savvys_to_data_classes()
+        # self._convert_races_to_data_classes()
+        # self._convert_skills_to_data_classes()
 
 
         logging.info(f"Library refreshed.")
@@ -304,15 +306,15 @@ class LibraryOfAlexandria:
 
                 # unpack the dict and convert the stat data to the data class
                 if stat_type_name == "primary":
-                    stat = PrimaryStatData(**stat_data)
+                    stat = BasePrimaryStatData(**stat_data)
                     converted_primary_stats[stat.primary_stat_type.name] = stat
 
                 elif stat_type_name == "secondary":
-                    stat = SecondaryStatData(**stat_data)
+                    stat = BaseSecondaryStatData(**stat_data)
                     converted_secondary_stats[stat.secondary_stat_type.name] = stat
 
         # delete all info from stat and replace with the converted data
-        converted_data = StatData(primary=converted_primary_stats, secondary=converted_secondary_stats)
+        converted_data = BaseStatData(primary=converted_primary_stats, secondary=converted_secondary_stats)
         self._stats = {}
         self._stats = converted_data
 
@@ -665,7 +667,7 @@ class LibraryOfAlexandria:
 
         return effect_data
 
-    def get_stat_data(self) -> Dict[str, StatData]:
+    def get_stat_data(self) -> Dict[str, BaseStatData]:
         """
         Get data for a primary stat from the library
         """
@@ -682,25 +684,20 @@ class LibraryOfAlexandria:
             primary_stat_type (PrimaryStatTypes):
 
         Returns:
-            PrimaryStatData:  stat data for specified stat.
+            BasePrimaryStatData:  stat data for specified stat.
         """
 
         stat_data = self._stats.primary[primary_stat_type.name]
 
         return stat_data
 
-    def get_secondary_stat_data(self, secondary_stat_type):
+    def get_secondary_stat_data(self, secondary_stat_type: SecondaryStatTypes) -> BaseSecondaryStatData:
         """
         Get data for a secondary stat from the library
-
-        Args:
-            secondary_stat_type (SecondaryStatTypes):
-
-        Returns:
-            SecondaryStatData:  stat data for specified stat.
         """
 
-        stat_data = self._stats.secondary[secondary_stat_type.name]
+        #stat_data = self._stats.secondary[secondary_stat_type]
+        stat_data = BaseSecondaryStatData()
 
         return stat_data
 
@@ -812,7 +809,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/afflictions.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 
@@ -824,7 +821,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/aspects.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 
@@ -836,7 +833,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/terrain.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 
@@ -848,7 +845,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/homelands.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 
@@ -860,7 +857,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/savvys.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 
@@ -872,7 +869,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/races.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 
@@ -884,7 +881,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/base_stats.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 
@@ -896,7 +893,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/gods.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
     
@@ -908,7 +905,7 @@ class LibraryOfAlexandria:
 
         """
         with open('data/game/skills.json') as file:
-            data = json.load(file)
+            data = json.load(file, object_hook=deserialise_dataclasses)
 
         return data
 

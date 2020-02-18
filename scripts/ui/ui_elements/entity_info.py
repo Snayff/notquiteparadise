@@ -145,13 +145,12 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
-        stats = world.Entity.get_stats(self.selected_entity)
+        stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        # FIXME - can no longer use the enum
-        for stat in PrimaryStatTypes:
+        for name, stat in PrimaryStatTypes.__dict__.items():
             try:
-                stat_value = getattr(stats, stat.name.lower())
-                name = stat.name.title()
+                stat_value = getattr(stats, stat)
+                name = name.title()
                 name = name.replace("_", " ")
 
                 text += f"{name}: {stat_value}" + "<br>"
@@ -178,12 +177,12 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
-        stats = world.Entity.get_stats(self.selected_entity)
+        stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        for stat in SecondaryStatTypes:
+        for name, stat in SecondaryStatTypes.__dict__.items():
             try:
-                stat_value = getattr(stats, stat.name.lower())
-                name = stat.name.title()
+                stat_value = getattr(stats, name)
+                name = name.title()
                 name = name.replace("_", " ")
 
                 text += f"{name}: {stat_value}" + "<br>"

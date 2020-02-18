@@ -181,7 +181,7 @@ class ControlMethods:
         Returns:
             bool: True if intent is True.
         """
-        return getattr(self._manager.Intents, intent.name.lower())
+        return getattr(self._manager.Intents, intent)
 
     def reset_intents(self):
         """

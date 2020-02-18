@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 @register_dataclass_with_json
 @dataclass
-class StatData:
+class BaseStatData:
     """
     Data class to contain primary and secondary stats
     """
@@ -23,7 +23,7 @@ class StatData:
 
 @register_dataclass_with_json
 @dataclass
-class PrimaryStatData:
+class BasePrimaryStatData:
     """
     Data class for primary  stats
     """
@@ -34,7 +34,7 @@ class PrimaryStatData:
 
 @register_dataclass_with_json
 @dataclass
-class SecondaryStatData:
+class BaseSecondaryStatData:
     """
     Data class for secondary stats
     """

@@ -45,7 +45,7 @@ class ElementMethods:
         y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
         rect = pygame.Rect((x, y), (width, height))
         message_log = MessageLog(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.MESSAGE_LOG.name, message_log)
+        self.add_ui_element(UIElementTypes.MESSAGE_LOG, message_log)
 
     def init_entity_info(self):
         """
@@ -57,7 +57,7 @@ class ElementMethods:
         y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
         rect = pygame.Rect((x, y), (width, height))
         info = EntityInfo(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.ENTITY_INFO.name, info)
+        self.add_ui_element(UIElementTypes.ENTITY_INFO, info)
 
     def init_skill_bar(self):
         """
@@ -69,7 +69,7 @@ class ElementMethods:
         y = 2
         rect = pygame.Rect((x, y), (width, height))
         skill_bar = SkillBar(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.SKILL_BAR.name, skill_bar)
+        self.add_ui_element(UIElementTypes.SKILL_BAR, skill_bar)
 
     def init_camera(self):
         """
@@ -83,7 +83,7 @@ class ElementMethods:
         y = 5
         rect = pygame.Rect((x, y), (width, height))
         camera = Camera(rect, self._manager.Gui, rows, cols)
-        self.add_ui_element(UIElementTypes.CAMERA.name, camera)
+        self.add_ui_element(UIElementTypes.CAMERA, camera)
 
     def init_skill_editor(self):
         """
@@ -95,22 +95,16 @@ class ElementMethods:
         y = 10
         rect = pygame.Rect((x, y), (width, height))
         editor = DataEditor(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.SKILL_EDITOR.name, editor)
+        self.add_ui_element(UIElementTypes.SKILL_EDITOR, editor)
 
     ################ ELEMENT ###################
 
-    def get_ui_element(self, element_type):
+    def get_ui_element(self, element_type: UIElementTypes):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
-
-        Args:
-            element_type (UIElementTypes):
-
-        Returns:
-            any: ui element
         """
         try:
-            return self._elements[element_type.name]
+            return self._elements[element_type]
         except KeyError:
             return None
 

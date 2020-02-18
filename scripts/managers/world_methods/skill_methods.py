@@ -384,7 +384,7 @@ class SkillMethods:
         world = self._manager
         effect_data = library.get_skill_effect_data(skill_name, EffectTypes.APPLY_AFFLICTION)
         affliction_data = library.get_affliction_data(effect_data.affliction_name)
-        attackers_stats = world.Entity.get_stats(attacker)
+        attackers_stats = world.Entity.get_combat_stats(attacker)
 
         # get relevant entities
         entities = world.Entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats, Identity)
@@ -395,7 +395,7 @@ class SkillMethods:
             # create var to hold the modified duration, if it does change, or the base duration
             base_duration = effect_data.duration
             modified_duration = base_duration
-            defender_stats = world.Entity.get_stats(defender)
+            defender_stats = world.Entity.get_combat_stats(defender)
 
             # check we have all tags
             tile = world.Map.get_tile((position.x, position.y))
@@ -482,7 +482,7 @@ class SkillMethods:
     def _apply_damage_effect(self, skill_name: str, effected_tiles: List[Tile], attacker: int):
         world = self._manager
         data = library.get_skill_effect_data(skill_name, EffectTypes.DAMAGE)
-        attackers_stats = world.Entity.get_stats(attacker)
+        attackers_stats = world.Entity.get_combat_stats(attacker)
 
         # get relevant entities
         entities = world.Entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
@@ -492,7 +492,7 @@ class SkillMethods:
             tile = world.Map.get_tile((position.x, position.y))
             if world.Map.tile_has_tags(tile, data.required_tags, attacker):
                 # get the info to apply the damage
-                entitys_stats = world.Entity.get_stats(defender)
+                entitys_stats = world.Entity.get_combat_stats(defender)
                 to_hit_score = self._calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
                                                             attackers_stats)
                 hit_type = self._get_hit_type(to_hit_score)

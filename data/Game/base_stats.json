@@ -1,121 +1,136 @@
 {
+    "__dataclass__": "BaseStatData",
     "primary": {
-        "vigour": {
-            "name": "vigour",
-            "primary_stat_type": "vigour",
-            "base_value": 5
-        },
-        "clout": {
-            "name": "clout",
-            "primary_stat_type": "clout",
-            "base_value": 5
-        },
-        "skullduggery": {
-            "name": "skullduggery",
-            "primary_stat_type": "skullduggery",
-            "base_value": 5
-        },
-        "bustle": {
+        "BUSTLE": {
+            "__dataclass__": "BasePrimaryStatData",
+            "base_value": 5,
             "name": "bustle",
-            "primary_stat_type": "bustle",
-            "base_value": 5
+            "primary_stat_type": "BUSTLE"
         },
-        "exactitude": {
+        "CLOUT": {
+            "__dataclass__": "BasePrimaryStatData",
+            "base_value": 5,
+            "name": "clout",
+            "primary_stat_type": "CLOUT"
+        },
+        "EXACTITUDE": {
+            "__dataclass__": "BasePrimaryStatData",
+            "base_value": 5,
             "name": "exactitude",
-            "primary_stat_type": "exactitude",
-            "base_value": 5
+            "primary_stat_type": "EXACTITUDE"
+        },
+        "SKULLDUGGERY": {
+            "__dataclass__": "BasePrimaryStatData",
+            "base_value": 5,
+            "name": "skullduggery",
+            "primary_stat_type": "SKULLDUGGERY"
+        },
+        "VIGOUR": {
+            "__dataclass__": "BasePrimaryStatData",
+            "base_value": 5,
+            "name": "vigour",
+            "primary_stat_type": "VIGOUR"
         }
     },
     "secondary": {
-        "max_hp": {
-            "name": "max hp",
-            "secondary_stat_type": "max_hp",
-            "base_value": 200,
-            "vigour_mod": 2,
-            "clout_mod": 0,
-            "skullduggery_mod": 0,
+        "ACCURACY": {
+            "__dataclass__": "BaseSecondaryStatData",
+            "base_value": 5,
             "bustle_mod": 0,
-            "exactitude_mod": 0
-        },
-        "max_stamina": {
-            "name": "max stamina",
-            "secondary_stat_type": "max_stamina",
-            "base_value": 500,
-            "vigour_mod": 0,
             "clout_mod": 0,
-            "skullduggery_mod": 0,
-            "bustle_mod": 0,
-            "exactitude_mod": 0
-        },
-        "accuracy": {
+            "exactitude_mod": 2,
             "name": "accuracy",
-            "secondary_stat_type": "accuracy",
-            "base_value": 5,
-            "vigour_mod": 0,
-            "clout_mod": 0,
+            "secondary_stat_type": "ACCURACY",
             "skullduggery_mod": 0,
-            "bustle_mod": 0,
-            "exactitude_mod": 2
+            "vigour_mod": 0
         },
-        "resist_burn": {
-            "name": "resist burn",
-            "secondary_stat_type": "resist_burn",
-            "base_value": 5,
-            "vigour_mod": 0,
+        "MAX_HP": {
+            "__dataclass__": "BaseSecondaryStatData",
+            "base_value": 200,
+            "bustle_mod": 0,
             "clout_mod": 0,
+            "exactitude_mod": 0,
+            "name": "max hp",
+            "secondary_stat_type": "MAX_HP",
             "skullduggery_mod": 0,
-            "bustle_mod": 0,
-            "exactitude_mod": 0
+            "vigour_mod": 2
         },
-        "resist_cold": {
-            "name": "resist cold",
-            "secondary_stat_type": "resist_cold",
-            "base_value": 5,
-            "vigour_mod": 0,
+        "MAX_STAMINA": {
+            "__dataclass__": "BaseSecondaryStatData",
+            "base_value": 500,
+            "bustle_mod": 0,
             "clout_mod": 0,
+            "exactitude_mod": 0,
+            "name": "max stamina",
+            "secondary_stat_type": "MAX_STAMINA",
             "skullduggery_mod": 0,
-            "bustle_mod": 0,
-            "exactitude_mod": 0
+            "vigour_mod": 0
         },
-        "resist_chemical": {
-            "name": "resist chemical",
-            "secondary_stat_type": "resist_chemical",
+        "RESIST_ASTRAL": {
+            "__dataclass__": "BaseSecondaryStatData",
             "base_value": 5,
-            "vigour_mod": 0,
-            "clout_mod": 0,
-            "skullduggery_mod": 0,
             "bustle_mod": 0,
-            "exactitude_mod": 0
-        },
-        "resist_astral": {
+            "clout_mod": 0,
+            "exactitude_mod": 0,
             "name": "resist astral",
-            "secondary_stat_type": "resist_astral",
-            "base_value": 5,
-            "vigour_mod": 0,
-            "clout_mod": 0,
+            "secondary_stat_type": "RESIST_ASTRAL",
             "skullduggery_mod": 0,
-            "bustle_mod": 0,
-            "exactitude_mod": 0
+            "vigour_mod": 0
         },
-        "resist_mundane": {
+        "RESIST_BURN": {
+            "__dataclass__": "BaseSecondaryStatData",
+            "base_value": 5,
+            "bustle_mod": 0,
+            "clout_mod": 0,
+            "exactitude_mod": 0,
+            "name": "resist burn",
+            "secondary_stat_type": "RESIST_BURN",
+            "skullduggery_mod": 0,
+            "vigour_mod": 0
+        },
+        "RESIST_CHEMICAL": {
+            "__dataclass__": "BaseSecondaryStatData",
+            "base_value": 5,
+            "bustle_mod": 0,
+            "clout_mod": 0,
+            "exactitude_mod": 0,
+            "name": "resist chemical",
+            "secondary_stat_type": "RESIST_CHEMICAL",
+            "skullduggery_mod": 0,
+            "vigour_mod": 0
+        },
+        "RESIST_COLD": {
+            "__dataclass__": "BaseSecondaryStatData",
+            "base_value": 5,
+            "bustle_mod": 0,
+            "clout_mod": 0,
+            "exactitude_mod": 0,
+            "name": "resist cold",
+            "secondary_stat_type": "RESIST_COLD",
+            "skullduggery_mod": 0,
+            "vigour_mod": 0
+        },
+        "RESIST_MUNDANE": {
+            "__dataclass__": "BaseSecondaryStatData",
+            "base_value": 5,
+            "bustle_mod": 0,
+            "clout_mod": 0,
+            "exactitude_mod": 0,
             "name": "resist mundane",
-            "secondary_stat_type": "resist_mundane",
-            "base_value": 5,
-            "vigour_mod": 0,
-            "clout_mod": 0,
+            "secondary_stat_type": "RESIST_MUNDANE",
             "skullduggery_mod": 0,
-            "bustle_mod": 0,
-            "exactitude_mod": 0
+            "vigour_mod": 0
         },
-        "sight_range": {
-            "name": "sight range",
-            "secondary_stat_type": "sight_range",
+        "SIGHT_RANGE": {
+            "__dataclass__": "BaseSecondaryStatData",
             "base_value": 2,
-            "vigour_mod": 0,
-            "clout_mod": 0,
-            "skullduggery_mod": 0,
             "bustle_mod": 0,
-            "exactitude_mod": 0
+            "clout_mod": 0,
+            "exactitude_mod": 0,
+            "name": "sight range",
+            "secondary_stat_type": "SIGHT_RANGE",
+            "skullduggery_mod": 0,
+            "vigour_mod": 0
         }
     }
 }

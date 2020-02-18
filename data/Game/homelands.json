@@ -1,30 +1,32 @@
 {
-	"aristo_pirate" : {
-        "name": "aristo pirate",
-        "description": "A aristo pirate description",
-        "sprite": "",
-        "sight_range": 5,
-        "vigour": 1,
+    "aristo pirate": {
+        "__dataclass__": "CharacteristicData",
+        "bustle": 1,
         "clout": 3,
-        "skullduggery": 0,
-        "bustle": 1,
+        "description": "A aristo pirate description",
         "exactitude": -1,
-        "skills": [
-            "none"
-        ]
-    },
-	"bog_refugee" : {
-        "name": "bog refugee",
-        "description": "A bog refugee description",
-        "sprite": "",
+        "name": "aristo pirate",
         "sight_range": 5,
-        "vigour": -2,
-        "clout": 1,
-        "skullduggery": 2,
+        "skills": [
+            "flail"
+        ],
+        "skullduggery": 0,
+        "sprite": "",
+        "vigour": 1
+    },
+    "bog refugee": {
+        "__dataclass__": "CharacteristicData",
         "bustle": 1,
+        "clout": 1,
+        "description": "A bog refugee description",
         "exactitude": 1,
+        "name": "bog refugee",
+        "sight_range": 5,
         "skills": [
             "none"
-        ]
+        ],
+        "skullduggery": 2,
+        "sprite": "",
+        "vigour": -2
     }
 }

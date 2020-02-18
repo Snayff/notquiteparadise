@@ -1,23 +1,27 @@
 {
-    "small_gods": {
-        "name": "the small gods",
-        "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
-        "sprite": "assets/world/placeholder/Mobs_crow_01.png",
-        "attitudes": [
-            {
-                "action": "damage",
-                "opinion_change": -5
-            },
-            {
-                "action": "burn",
+    "the small gods": {
+        "__dataclass__": "GodData",
+        "attitudes": {
+            "BURN": {
+                "__dataclass__": "AttitudeData",
+                "action": "BURN",
                 "opinion_change": -10
+            },
+            "DAMAGE": {
+                "__dataclass__": "AttitudeData",
+                "action": "DAMAGE",
+                "opinion_change": -5
             }
-        ],
-        "interventions": [
-            {
-                "skill_key": "slow_the_mighty",
-                "required_opinion": -20
+        },
+        "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
+        "interventions": {
+            "slow_the_mighty": {
+                "__dataclass__": "InterventionData",
+                "required_opinion": -20,
+                "skill_key": "slow_the_mighty"
             }
-        ]
+        },
+        "name": "the small gods",
+        "sprite": "assets/world/placeholder/Mobs_crow_01.png"
     }
 }

@@ -1,62 +1,79 @@
 {
     "bog": {
-        "name": "bog",
-        "description": "This is the bog aspect. It slows entities down.",
-        "duration": "none",
-        "sprite": "placeholder/89.png",
-        "blocks_sight": false,
+        "__dataclass__": "AspectData",
         "blocks_movement": false,
-        "effects": [
-                {
-                    "effect_type": "apply_affliction",
-                    "required_tags": ["other_entity"],
-                    "accuracy": 100,
-                    "stat_to_target": "skullduggery",
-                    "affliction_name": "bogged down",
-                    "duration": 3
-                }
-        ],
-        "interactions": [
-            {
-               "cause": "flaming",
-               "change_to": "dirt"
+        "blocks_sight": false,
+        "description": "This is the bog aspect. It slows entities down.",
+        "duration": null,
+        "effects": {
+            "APPLY_AFFLICTION": {
+                "__dataclass__": "EffectData",
+                "accuracy": 100,
+                "affect_stat_amount": 0,
+                "affliction_name": "bogged down",
+                "aspect_name": "None",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 3,
+                "effect_type": "APPLY_AFFLICTION",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [
+                    "OTHER_ENTITY"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "SKULLDUGGERY"
             }
-        ]
+        },
+        "interactions": {
+            "flaming": {
+                "__dataclass__": "InteractionData",
+                "cause": "flaming",
+                "change_to": "dirt"
+            }
+        },
+        "name": "bog",
+        "sprite": "placeholder/89.png"
     },
     "dirt": {
-        "name": "dirt",
-        "description": "This is the dirt aspect. It does nothing interesting.",
-        "duration": "none",
-        "sprite": "placeholder/77.png",
-        "blocks_sight": false,
+        "__dataclass__": "AspectData",
         "blocks_movement": false,
-        "effects": [
-        ],
-        "interactions": [
-        ]
+        "blocks_sight": false,
+        "description": "This is the dirt aspect. It does nothing interesting.",
+        "duration": null,
+        "effects": {},
+        "interactions": {},
+        "name": "dirt",
+        "sprite": "placeholder/77.png"
     },
     "shrapnel": {
-            "name": "shrapnel",
-            "description": "Sharp pointy things litter the floor.",
-            "duration": 3,
-            "sprite": "placeholder/78.png",
-            "blocks_sight": false,
-            "blocks_movement": false,
-            "effects": [
-                {
-                    "effect_type": "damage",
-                    "required_tags": [
-                        "other_entity"
-                    ],
-                    "damage": 1,
-                    "mod_stat": "",
-                    "mod_amount": 0,
-                    "damage_type": "mundane",
-                    "accuracy": 100,
-                    "stat_to_target": "bustle"
-                }
-            ],
-            "interactions": [
-            ]
-        }
+        "__dataclass__": "AspectData",
+        "blocks_movement": false,
+        "blocks_sight": false,
+        "description": "Sharp pointy things litter the floor.",
+        "duration": 3,
+        "effects": {
+            "DAMAGE": {
+                "__dataclass__": "EffectData",
+                "accuracy": 100,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 1,
+                "damage_type": "MUNDANE",
+                "duration": 0,
+                "effect_type": "DAMAGE",
+                "mod_amount": 0,
+                "mod_stat": "",
+                "required_tags": [
+                    "OTHER_ENTITY"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "BUSTLE"
+            }
+        },
+        "interactions": {},
+        "name": "shrapnel",
+        "sprite": "placeholder/78.png"
+    }
 }

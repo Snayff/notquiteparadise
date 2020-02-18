@@ -1,50 +1,82 @@
 {
-    "flaming": {
-        "name": "flaming",
-        "description": "It does damage.",
-        "icon": "placeholder/icon_00.png",
-        "category": "bane",
-        "trigger_event": "end_turn",
-        "effects": [
-            {
-                "effect_type": "damage",
-                "required_tags": ["other_entity"
-                ],
-                "damage": 15,
-                "mod_stat": "none",
-                "mod_amount": 0,
-                "damage_type": "burn",
-                "accuracy": 10,
-                "stat_to_target": "bustle"
-            }
-        ]
-    },
-    "bogged_down": {
-        "name": "bogged down",
+    "bogged down": {
+        "__dataclass__": "AfflictionData",
+        "category": "BANE",
         "description": "It weakens mundane defence and makes you a little bit slower.",
-        "icon": "placeholder/icon_00.png",
-        "category": "bane",
-        "trigger_event": "passive",
-        "effects": [
-            {
-                "effect_type": "affect_stat",
-                "stat_to_affect": "bustle" ,
-                "affect_stat_amount": -25
+        "effects": {
+            "AFFECT_STAT": {
+                "__dataclass__": "EffectData",
+                "accuracy": 0,
+                "affect_stat_amount": -25,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 0,
+                "effect_type": "AFFECT_STAT",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [],
+                "stat_to_affect": "BUSTLE",
+                "stat_to_target": null
             }
-        ]
+        },
+        "icon": "placeholder/icon_00.png",
+        "name": "bogged down",
+        "trigger_event": "PASSIVE"
+    },
+    "flaming": {
+        "__dataclass__": "AfflictionData",
+        "category": "BANE",
+        "description": "It does damage.",
+        "effects": {
+            "DAMAGE": {
+                "__dataclass__": "EffectData",
+                "accuracy": 10,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 15,
+                "damage_type": "BURN",
+                "duration": 0,
+                "effect_type": "DAMAGE",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [
+                    "OTHER_ENTITY"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "BUSTLE"
+            }
+        },
+        "icon": "placeholder/icon_00.png",
+        "name": "flaming",
+        "trigger_event": "END_TURN"
     },
     "myopic": {
-        "name": "myopic",
+        "__dataclass__": "AfflictionData",
+        "category": "BANE",
         "description": "You can't see very well.",
-        "icon": "placeholder/icon_00.png",
-        "category": "bane",
-        "trigger_event": "passive",
-        "effects": [
-            {
-                "effect_type": "affect_stat",
-                "stat_to_affect": "sight_range",
-                "affect_stat_amount": -2
+        "effects": {
+            "AFFECT_STAT": {
+                "__dataclass__": "EffectData",
+                "accuracy": 0,
+                "affect_stat_amount": -2,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 0,
+                "effect_type": "AFFECT_STAT",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [],
+                "stat_to_affect": "SIGHT_RANGE",
+                "stat_to_target": null
             }
-        ]
+        },
+        "icon": "placeholder/icon_00.png",
+        "name": "myopic",
+        "trigger_event": "PASSIVE"
     }
 }

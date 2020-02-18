@@ -325,7 +325,7 @@ class MapMethods:
 
         # assess all tags
         for tag in tags:
-            tags_checked[tag.name] = self.tile_has_tag(tile, tag, active_entity)
+            tags_checked[tag] = self.tile_has_tag(tile, tag, active_entity)
 
         # if all tags came back true return true
         if all(value for value in tags_checked.values()):

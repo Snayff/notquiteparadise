@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from enum import Enum, auto
 from types import SimpleNamespace
+from typing import NewType
 
 VERSION = "0.91.0"
 TILE_SIZE = 64
@@ -94,30 +95,30 @@ class StatTypes(SimpleNamespace):
 
 class PrimaryStatTypes(SimpleNamespace):
     """
-    Primary stats
+    Primary stats. Values are strings.
     """
-    VIGOUR = 1
-    CLOUT = 2
-    SKULLDUGGERY = 3
-    BUSTLE = 4
-    EXACTITUDE = 5
+    VIGOUR = "vigour"
+    CLOUT = "clout"
+    SKULLDUGGERY = "skullduggery"
+    BUSTLE = "bustle"
+    EXACTITUDE = "exactitude"
 
 
 class SecondaryStatTypes(Enum):
     """
     Secondary stats
     """
-    MAX_HP = 1
-    MAX_STAMINA = 2
-    HP = 3
-    STAMINA = 4
-    ACCURACY = 5
-    RESIST_BURN = 6
-    RESIST_CHEMICAL = 7
-    RESIST_ASTRAL = 8
-    RESIST_COLD = 9
-    RESIST_MUNDANE = 10
-    SIGHT_RANGE = 11
+    MAX_HP = "max_hp"
+    MAX_STAMINA = "max_stamina"
+    HP = "hp"
+    STAMINA = "stamina"
+    ACCURACY = "accuracy"
+    RESIST_BURN = "resist_burn"
+    RESIST_CHEMICAL = "resist_chemical"
+    RESIST_ASTRAL = "resist_astral"
+    RESIST_COLD = "resist_cold"
+    RESIST_MUNDANE = "resist_mundane"
+    SIGHT_RANGE = "sight_range"
 
 
 class HitTypes(SimpleNamespace):
@@ -129,6 +130,7 @@ class HitTypes(SimpleNamespace):
     CRIT = 3
 
 
+# TODO - externalise the values
 class HitValues(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
@@ -138,6 +140,7 @@ class HitValues(SimpleNamespace):
     CRIT = 20
 
 
+# TODO - externalise the values
 class HitModifiers(SimpleNamespace):
     """
     The modifier for each hit type
@@ -224,7 +227,9 @@ class InputModes(SimpleNamespace):
     MOUSE_AND_KB = 1
     GAMEPAD = 2
 
-
+# TODO - add types to the different classes here
+#  e.g. UP = InputIntentType("up")
+InputIntentType = NewType('InputIntentType', str)
 class InputIntents(SimpleNamespace):
     """
     Values of the conversion from input to intent. Strings.
