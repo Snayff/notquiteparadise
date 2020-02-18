@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from enum import Enum, auto
+from types import SimpleNamespace
 
 VERSION = "0.91.0"
 TILE_SIZE = 64
@@ -27,7 +30,7 @@ class FOVInfo:
 
 
 # TODO - replace enums with this:
-# from types import SimpleNamespace
+
 #
 # class Directions(SimpleNamespace):
 #     LEFT = 1
