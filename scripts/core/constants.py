@@ -42,14 +42,14 @@ class GameStates(SimpleNamespace):
     DEV_MODE = 8
 
 
-class EventTopics(Enum):
+class EventTopics(SimpleNamespace):
     """
     Topics that Events can be associated with.
     """
-    GAME = auto()
-    ENTITY = auto()
-    UI = auto()
-    MAP = auto()
+    GAME = 1
+    ENTITY = 2
+    UI = 3
+    MAP = 4
 
 
 class GameEventTypes(Enum):
