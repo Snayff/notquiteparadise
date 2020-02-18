@@ -10,7 +10,7 @@ ICON_SIZE = 64
 ENTITY_BLOCKS_SIGHT = False
 
 
-class VisualInfo:
+class VisualInfo(SimpleNamespace):
     """
     Constant info about visual aspects such as resolution and frame rate
     """
@@ -28,15 +28,6 @@ class FOVInfo:
     LIGHT_WALLS = True
     FOV_ALGORITHM = 0
 
-
-# TODO - replace enums with this:
-
-#
-# class Directions(SimpleNamespace):
-#     LEFT = 1
-#     RIGHT = 2
-#     UP = 3
-#     DOWN = 4
 
 class GameStates(Enum):
     """
