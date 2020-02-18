@@ -52,19 +52,12 @@ class EventTopics(SimpleNamespace):
     MAP = 4
 
 
-class GameEventTypes(Enum):
+class GameEventTypes(SimpleNamespace):
     """Types of Game Events"""
-    EXIT = auto()  # go back a step / exit current focus
-    END_TURN = auto()  # end of turn
-    CHANGE_GAME_STATE = auto()  # move from one game state to another
-    END_ROUND = auto()  # end of round
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    EXIT = 1  # go back a step / exit current focus
+    END_TURN = 2  # end of turn
+    CHANGE_GAME_STATE = 3  # move from one game state to another
+    END_ROUND = 4  # end of round
 
 
 class MessageTypes(Enum):
