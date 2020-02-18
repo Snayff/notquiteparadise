@@ -38,6 +38,14 @@ class LibraryOfAlexandria:
         self._gods = {}
         self._skills = {}
 
+        # from scripts.core.extend_json import deserialise_dataclasses
+        # from pprint import pprint
+        # import json
+        # with open(f"data/game/skills.json", "r") as file:
+        #     j = json.load(file, object_hook=deserialise_dataclasses)
+        #     pprint(j)
+
+
         self.refresh_library_data()
 
         logging.info(f"Data Library initialised.")

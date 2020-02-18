@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, List, Dict
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 
-from scripts.core.extend_json import ExtendedJsonEncoder, deserialize_dataclasses
+from scripts.core.extend_json import ExtendedJsonEncoder
 from scripts.core.library import library
 
 
@@ -67,10 +67,10 @@ class DataEditor(UIWindow):
         self.max_y = self.height
 
         # get the data options
-        self.load_library_data()
+        self._load_library_data()
 
         # display the initial selector
-        self.category_selector = self.create_data_category_selector()
+        self.category_selector = self._create_data_category_selector()
 
     def update(self, time_delta: float):
         """
@@ -83,6 +83,9 @@ class DataEditor(UIWindow):
         Handle events created by this UI widget
         """
         ui_object_id = event.ui_object_id
+        has_updated = False
+        new_value = None
+        data_field = None
 
         # new selection in instance_selector
         if ui_object_id == "category_selector":
@@ -101,17 +104,29 @@ class DataEditor(UIWindow):
                     #  primary/secondary?
                     options.extend(key for key in self.all_data[self.current_data_category].keys())
                     options.sort()
-                    self.instance_selector = self.create_data_instance_selector(options)
+                    self.instance_selector = self._create_data_instance_selector(options)
 
                     # remove primary details
-                    self.clear_details(self.primary_data_fields)
+                    self._kill_details_fields(self.primary_data_fields)
 
         # new selection in instance_selector
         if ui_object_id == "instance_selector":
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.instance_selector.selected_option != self.current_data_instance:
                     self.current_data_instance = self.instance_selector.selected_option
-                    self.load_details("primary", self.current_data_instance)
+                    self._load_details("primary", self.current_data_instance)
+
+        # new selection in a different, non-selector dropdown
+        if ui_object_id != "instance_selector" and ui_object_id != "category_selector":
+            if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+                if self.instance_selector.selected_option != self.current_data_instance:
+                    key = ui_object_id
+                    data_field = self.primary_data_fields[key]
+                    new_value = self.instance_selector.selected_option
+
+                    has_updated = True
+
+        # TODO - handle text field finished
 
         # handle triggers for secondary details
         prefix = "edit#"
@@ -138,14 +153,19 @@ class DataEditor(UIWindow):
             else:
                 current_value.append(id_as_value)
 
-            self.save_update("primary", data_field, current_value)
+            new_value = current_value
+            has_updated = True
+
+        # process the update and reload
+        if has_updated and new_value and data_field:
+            self._save_updated_field("primary", data_field, new_value)
 
             # reload to reflect new changes
-            self.load_details("primary", self.current_data_instance)
+            self._load_details("primary", self.current_data_instance)
 
     ############## CREATE ################
 
-    def create_data_category_selector(self) -> UIDropDownMenu:
+    def _create_data_category_selector(self) -> UIDropDownMenu:
         """
         Create the skill selector drop down menu
         """
@@ -158,7 +178,7 @@ class DataEditor(UIWindow):
         return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="category_selector")
 
-    def create_data_instance_selector(self, options: List[str]) -> UIDropDownMenu:
+    def _create_data_instance_selector(self, options: List[str]) -> UIDropDownMenu:
         """
         Create the skill selector drop down menu
         """
@@ -167,7 +187,7 @@ class DataEditor(UIWindow):
         return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="instance_selector")
 
-    def create_one_from_options_field(self, key, value, x, y, width, height, container,
+    def _create_one_from_options_field(self, key, value, x, y, width, height, container,
             ui_manager) -> DataField:
         """
         Create a data field containing label, current value and a dropdown of possible options.
@@ -208,7 +228,7 @@ class DataEditor(UIWindow):
 
         return data_field
 
-    def create_edit_detail_field(self, key, value, x, y, width, height, container, ui_manager) -> DataField:
+    def _create_edit_detail_field(self, key, value, x, y, width, height, container, ui_manager) -> DataField:
         """
         Create a data field containing label, current values and a row of buttons for possible options. Buttons are
         prefixed with edit#
@@ -253,14 +273,14 @@ class DataEditor(UIWindow):
         button_width = width // len(options)
 
         # create the option's buttons, incremented by height
-        buttons = self.create_row_of_buttons(options, x, y + height, button_width, height)
+        buttons = self._create_row_of_buttons(options, x, y + height, button_width, height)
 
         # create the data field
         data_field = DataField(key, value, values_str, Dict, labels, height*2, buttons=buttons, options=options)
 
         return data_field
 
-    def create_multiple_from_options_field(self, key, value, x, y, width, height, container,
+    def _create_multiple_from_options_field(self, key, value, x, y, width, height, container,
             ui_manager) -> DataField:
         """
         Create a data field containing label, current values and a row of buttons for possible options. Button's
@@ -313,7 +333,7 @@ class DataEditor(UIWindow):
         button_width = width // len(options)
         
         # create the option's buttons, incremented by height
-        buttons = self.create_row_of_buttons(options, x, y + height, button_width, height)
+        buttons = self._create_row_of_buttons(options, x, y + height, button_width, height)
         
         # create the data field
         data_field = DataField(key, value, values_str, List, labels, height*2, buttons=buttons,
@@ -321,7 +341,7 @@ class DataEditor(UIWindow):
 
         return data_field
 
-    def create_text_entry_field(self, key, value, x, y, width, height, container, ui_manager) -> DataField:
+    def _create_text_entry_field(self, key, value, x, y, width, height, container, ui_manager) -> DataField:
         """
         Create a data field containing a text input widget.
         """
@@ -342,7 +362,7 @@ class DataEditor(UIWindow):
 
         return data_field
 
-    def create_row_of_buttons(self, button_names: List[str], x: int, y: int, width: int, height: int) -> Dict[
+    def _create_row_of_buttons(self, button_names: List[str], x: int, y: int, width: int, height: int) -> Dict[
         str, UIButton]:
         """
         Create a series of button UI widgets on the same x pos.
@@ -371,7 +391,10 @@ class DataEditor(UIWindow):
 
     ############### LOAD ###################
 
-    def load_details(self, primary_or_secondary: str, data_instance: str):
+    def _load_details(self, primary_or_secondary: str, data_instance: str):
+        """
+        Load details of the specified instance into the primary or secondary section
+        """
 
         # get initial pos info
         if primary_or_secondary == "primary":
@@ -385,7 +408,7 @@ class DataEditor(UIWindow):
             row_width = self.primary_width
             self.secondary_data_fields = []
         else:
-            logging.warning("Wrong key passed to data_editor:load_details. Using primary info.")
+            logging.warning("Wrong key passed to data_editor:_load_details. Using primary info.")
             start_x = self.primary_x
             start_y = self.primary_y
             row_width = self.primary_width
@@ -410,17 +433,17 @@ class DataEditor(UIWindow):
         # create data fields
         for key, value in data_dict.items():
             if isinstance(value, Enum):
-                data_field = self.create_one_from_options_field(key, value, start_x, current_y, row_width,
-                                                                row_height, container, manager)
+                data_field = self._create_one_from_options_field(key, value, start_x, current_y, row_width,
+                                                                 row_height, container, manager)
             elif isinstance(value, List):
-                data_field = self.create_multiple_from_options_field(key, value, start_x, current_y,
-                                                                     row_width, row_height, container, manager)
+                data_field = self._create_multiple_from_options_field(key, value, start_x, current_y,
+                                                                      row_width, row_height, container, manager)
             elif isinstance(value, Dict):
-                data_field = self.create_edit_detail_field(key, value, start_x, current_y, row_width, row_height,
-                                                           container, manager)
+                data_field = self._create_edit_detail_field(key, value, start_x, current_y, row_width, row_height,
+                                                            container, manager)
             else:
-                data_field = self.create_text_entry_field(key, value, start_x, current_y, row_width, row_height,
-                                                          container, manager)
+                data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width, row_height,
+                                                           container, manager)
 
             # increment Y
             current_y += data_field.height + 1
@@ -439,7 +462,7 @@ class DataEditor(UIWindow):
         # take note of the highest used y, for the scroll bar
         self.max_y = max(current_y, self.max_y)
 
-    def load_library_data(self):
+    def _load_library_data(self):
         """
         Load all of the data options into self.all_data
         """
@@ -455,7 +478,8 @@ class DataEditor(UIWindow):
         }
 
     ############## CLEAR #####################
-    def cleanse(self):
+
+    def _kill(self):
         """
         Clear all held data.
         """
@@ -466,14 +490,14 @@ class DataEditor(UIWindow):
             self.instance_selector.kill()
             self.instance_selector = None
         if self.primary_data_fields:
-            self.clear_details(self.primary_data_fields)
+            self._kill_details_fields(self.primary_data_fields)
             self.primary_data_fields = {}
         if self.secondary_data_fields:
-            self.clear_details(self.secondary_data_fields)
+            self._kill_details_fields(self.secondary_data_fields)
             self.secondary_data_fields = {}
 
     @staticmethod
-    def clear_details(data_fields):
+    def _kill_details_fields(data_fields: Dict[str, DataField]):
         """
         Clear currently held primary details from self.primary_details.
         """
@@ -482,7 +506,7 @@ class DataEditor(UIWindow):
 
     ############ SAVING ##################
 
-    def save_update(self, primary_or_secondary, data_field: DataField, updated_value: Any):
+    def _save_updated_field(self, primary_or_secondary, data_field: DataField, updated_value: Any):
         """
         Save the updated value to the main dict held in self.all_data
         """
@@ -502,9 +526,11 @@ class DataEditor(UIWindow):
                 json.dump(self.all_data[self.current_data_category], file, sort_keys=True, indent=4,
                           cls=ExtendedJsonEncoder)
 
-            # pprint(json.loads(j, object_hook=deserialize_dataclasses))
 
 class DataField:
+    """
+    Holds a set of related data and ui elements
+    """
     def __init__(self, key: str, value: Any, value_as_str: str, value_type, labels: List, height: int,
     input_element=None, buttons: Dict[str, UIButton] = None, options: List = None):
         self.key = key
@@ -518,6 +544,9 @@ class DataField:
         self.height = height
 
     def kill(self):
+        """
+        Kill all held ui elements
+        """
         if self.input_element:
             self.input_element.kill()
 

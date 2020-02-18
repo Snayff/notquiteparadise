@@ -1,319 +1,245 @@
 {
-    "basic attack": {
-        "__dataclass__": "SkillData",
-        "cooldown": 1,
+    "basic_attack": {
+        "name": "Basic Attack",
         "description": "A simple attack.",
-        "effects": {
-            "DAMAGE": {
-                "__dataclass__": "EffectData",
-                "accuracy": 0,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 10,
-                "damage_type": "MUNDANE",
-                "duration": 0,
-                "effect_type": "DAMAGE",
-                "mod_amount": 0.1,
-                "mod_stat": "CLOUT",
-                "required_tags": [
-                    "OTHER_ENTITY"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "BUSTLE"
-            }
-        },
-        "expiry_type": "FIZZLE",
         "icon": "placeholder/icon_00.png",
-        "name": "basic attack",
-        "range": 1,
-        "required_tags": [
-            "OTHER_ENTITY"
-        ],
+        "resource_type": "stamina",
         "resource_cost": 0,
-        "resource_type": "STAMINA",
-        "shape": "TARGET",
-        "shape_size": 1,
-        "target_directions": [
-            "DOWN",
-            "DOWN_LEFT",
-            "DOWN_RIGHT",
-            "LEFT",
-            "RIGHT",
-            "UP",
-            "UP_LEFT",
-            "UP_RIGHT"
-        ],
-        "terrain_collision": "FIZZLE",
         "time_cost": 20,
-        "travel_type": "PROJECTILE"
-    },
-    "burn the deck": {
-        "__dataclass__": "SkillData",
-        "cooldown": 2,
-        "description": "Apply burning affliction.",
-        "effects": {
-            "APPLY_AFFLICTION": {
-                "__dataclass__": "EffectData",
-                "accuracy": 100,
-                "affect_stat_amount": 0,
-                "affliction_name": "flaming",
-                "aspect_name": "None",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 3,
-                "effect_type": "APPLY_AFFLICTION",
-                "mod_amount": 0,
-                "mod_stat": null,
-                "required_tags": [
-                    "OTHER_ENTITY"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "SKULLDUGGERY"
-            },
-            "DAMAGE": {
-                "__dataclass__": "EffectData",
-                "accuracy": -5,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 5,
-                "damage_type": "MUNDANE",
-                "duration": 0,
-                "effect_type": "DAMAGE",
-                "mod_amount": 0.2,
-                "mod_stat": "BUSTLE",
-                "required_tags": [
-                    "OTHER_ENTITY"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "SKULLDUGGERY"
-            }
-        },
-        "expiry_type": "ACTIVATE",
-        "icon": "placeholder/icon_05.png",
-        "name": "burn the deck",
-        "range": 4,
-        "required_tags": [
-            "OTHER_ENTITY"
-        ],
-        "resource_cost": 10,
-        "resource_type": "STAMINA",
-        "shape": "CIRCLE",
-        "shape_size": 2,
+        "cooldown": 1,
         "target_directions": [
-            "DOWN",
-            "RIGHT"
+            "down",
+            "down_left",
+            "down_right",
+            "left",
+            "right",
+            "up",
+            "up_left",
+            "up_right"
         ],
-        "terrain_collision": "REFLECT",
-        "time_cost": 40,
-        "travel_type": "PROJECTILE"
-    },
-    "eye-watering mistake": {
-        "__dataclass__": "SkillData",
-        "cooldown": 2,
-        "description": "Use all your sneakiness to irritate your enemies.",
-        "effects": {
-            "APPLY_AFFLICTION": {
-                "__dataclass__": "EffectData",
-                "accuracy": 100,
-                "affect_stat_amount": 0,
-                "affliction_name": "myopic",
-                "aspect_name": "None",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 10,
-                "effect_type": "APPLY_AFFLICTION",
-                "mod_amount": 0,
-                "mod_stat": null,
+        "range": 1,
+        "terrain_collision": "fizzle",
+        "travel_type": "projectile",
+        "expiry_type": "fizzle",
+        "required_tags": [
+            "other_entity"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "effects": [
+            {
+                "effect_type": "damage",
                 "required_tags": [
-                    "OTHER_ENTITY"
+                    "other_entity"
                 ],
-                "stat_to_affect": null,
-                "stat_to_target": "VIGOUR"
-            },
-            "DAMAGE": {
-                "__dataclass__": "EffectData",
+                "damage": 10,
+                "mod_stat": "clout",
+                "mod_amount": 0.1,
+                "damage_type": "mundane",
                 "accuracy": 0,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 2,
-                "damage_type": "CHEMICAL",
-                "duration": 0,
-                "effect_type": "DAMAGE",
-                "mod_amount": 0.2,
-                "mod_stat": "SKULLDUGGERY",
-                "required_tags": [
-                    "OTHER_ENTITY"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "SKULLDUGGERY"
+                "stat_to_target": "bustle"
             }
-        },
-        "expiry_type": "ACTIVATE",
-        "icon": "placeholder/icon_37.png",
-        "name": "eye-watering mistake",
-        "range": 5,
-        "required_tags": [
-            "OTHER_ENTITY"
-        ],
-        "resource_cost": 10,
-        "resource_type": "STAMINA",
-        "shape": "CIRCLE",
-        "shape_size": 2,
-        "target_directions": [
-            "DOWN"
-        ],
-        "terrain_collision": "REFLECT",
-        "time_cost": 30,
-        "travel_type": "PROJECTILE"
+        ]
     },
     "flail": {
-        "__dataclass__": "SkillData",
-        "cooldown": 0,
+        "name": "Flail",
         "description": "Fungechists aren`t known for their physical prowess but you haven't got much choice.",
-        "effects": {
-            "DAMAGE": {
-                "__dataclass__": "EffectData",
-                "accuracy": -5,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 10,
-                "damage_type": "MUNDANE",
-                "duration": 0,
-                "effect_type": "DAMAGE",
-                "mod_amount": 0.2,
-                "mod_stat": "CLOUT",
-                "required_tags": [
-                    "OTHER_ENTITY"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "BUSTLE"
-            }
-        },
-        "expiry_type": "ACTIVATE",
         "icon": "placeholder/icon_01.png",
-        "name": "flail",
-        "range": 5,
-        "required_tags": [
-            "OTHER_ENTITY"
-        ],
+        "resource_type": "stamina",
         "resource_cost": 10,
-        "resource_type": "STAMINA",
-        "shape": "TARGET",
-        "shape_size": 1,
-        "target_directions": [
-            "DOWN",
-            "DOWN_LEFT",
-            "UP_LEFT"
-        ],
-        "terrain_collision": "REFLECT",
         "time_cost": 20,
-        "travel_type": "PROJECTILE"
-    },
-    "fractious fungi": {
-        "__dataclass__": "SkillData",
-        "cooldown": 5,
-        "description": "Hurl a dried toadstool and watch it leave a gift that keeps on giving.",
-        "effects": {
-            "ADD_ASPECT": {
-                "__dataclass__": "EffectData",
-                "accuracy": 0,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "shrapnel",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 0,
-                "effect_type": "ADD_ASPECT",
-                "mod_amount": 0,
-                "mod_stat": null,
-                "required_tags": [
-                    "ANY"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": null
-            },
-            "DAMAGE": {
-                "__dataclass__": "EffectData",
-                "accuracy": -5,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 1,
-                "damage_type": "MUNDANE",
-                "duration": 0,
-                "effect_type": "DAMAGE",
-                "mod_amount": 0.3,
-                "mod_stat": "CLOUT",
-                "required_tags": [
-                    "OTHER_ENTITY"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "BUSTLE"
-            }
-        },
-        "expiry_type": "ACTIVATE",
-        "icon": "placeholder/icon_40.png",
-        "name": "fractious fungi",
-        "range": 3,
-        "required_tags": [
-            "OTHER_ENTITY"
-        ],
-        "resource_cost": 10,
-        "resource_type": "STAMINA",
-        "shape": "TARGET",
-        "shape_size": 1,
+        "cooldown": 0,
         "target_directions": [
-            "DOWN"
+            "down",
+            "down_left",
+            "up_left"
         ],
-        "terrain_collision": "REFLECT",
-        "time_cost": 40,
-        "travel_type": "PROJECTILE"
-    },
-    "slow the mighty": {
-        "__dataclass__": "SkillData",
-        "cooldown": 5,
-        "description": "Slow the fat git down.",
-        "effects": {
-            "APPLY_AFFLICTION": {
-                "__dataclass__": "EffectData",
-                "accuracy": 100,
-                "affect_stat_amount": 0,
-                "affliction_name": "bogged down",
-                "aspect_name": "None",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 3,
-                "effect_type": "APPLY_AFFLICTION",
-                "mod_amount": 0,
-                "mod_stat": null,
+        "range": 5,
+        "terrain_collision": "reflect",
+        "travel_type": "projectile",
+        "expiry_type": "activate",
+        "required_tags": [
+            "other_entity"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "effects": [
+            {
+                "effect_type": "damage",
                 "required_tags": [
-                    "OTHER_ENTITY"
+                    "other_entity"
                 ],
-                "stat_to_affect": null,
-                "stat_to_target": "SKULLDUGGERY"
+                "damage": 10,
+                "mod_stat": "clout",
+                "mod_amount": 0.2,
+                "damage_type": "mundane",
+                "accuracy": -5,
+                "stat_to_target": "bustle"
             }
-        },
-        "expiry_type": "ACTIVATE",
+        ]
+    },
+    "eye_watering_mistake": {
+        "name": "Eye-Watering Mistake",
+        "description": "Use all your sneakiness to irritate your enemies.",
+        "icon": "placeholder/icon_37.png",
+        "resource_type": "stamina",
+        "resource_cost": 10,
+        "time_cost": 30,
+        "cooldown": 2,
+        "target_directions": [
+            "down"
+        ],
+        "range": 5,
+        "terrain_collision": "reflect",
+        "travel_type": "projectile",
+        "expiry_type": "activate",
+        "required_tags": [
+            "other_entity"
+        ],
+        "shape": "circle",
+        "shape_size": 2,
+        "effects": [
+            {
+                "effect_type": "damage",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "damage": 2,
+                "mod_stat": "skullduggery",
+                "mod_amount": 0.2,
+                "damage_type": "chemical",
+                "accuracy": 0,
+                "stat_to_target": "skullduggery"
+            },
+            {
+                "effect_type": "apply_affliction",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "accuracy": 100,
+                "stat_to_target": "vigour",
+                "affliction_name": "myopic",
+                "duration": 10
+            }
+        ]
+    },
+    "fractious_fungi": {
+        "name": "Fractious Fungi",
+        "description": "Hurl a dried toadstool and watch it leave a gift that keeps on giving.",
+        "icon": "placeholder/icon_40.png",
+        "resource_type": "stamina",
+        "resource_cost": 10,
+        "time_cost": 40,
+        "cooldown": 5,
+        "target_directions": [
+            "down"
+        ],
+        "range": 3,
+        "terrain_collision": "reflect",
+        "travel_type": "projectile",
+        "expiry_type": "activate",
+        "required_tags": [
+            "other_entity"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "effects": [
+            {
+                "effect_type": "damage",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "damage": 1,
+                "mod_stat": "clout",
+                "mod_amount": 0.3,
+                "damage_type": "mundane",
+                "accuracy": -5,
+                "stat_to_target": "bustle"
+            },
+            {
+                "effect_type": "add_aspect",
+                "required_tags": [
+                    "any"
+                ],
+                "aspect_name": "shrapnel"
+            }
+        ]
+    },
+    "burn_the_deck": {
+        "name": "Burn the Deck",
+        "description": "Apply burning affliction.",
         "icon": "placeholder/icon_05.png",
-        "name": "slow the mighty",
+        "resource_type": "stamina",
+        "resource_cost": 10,
+        "time_cost": 40,
+        "cooldown": 2,
+        "target_directions": [
+            "down"
+        ],
+        "range": 4,
+        "terrain_collision": "reflect",
+        "travel_type": "projectile",
+        "expiry_type": "activate",
+        "required_tags": [
+            "other_entity"
+        ],
+        "shape": "circle",
+        "shape_size": 2,
+            "effects": [
+                {
+                    "effect_type": "damage",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "damage": 5,
+                    "mod_stat": "bustle",
+                    "mod_amount": 0.2,
+                    "damage_type": "mundane",
+                    "accuracy": -5,
+                    "stat_to_target": "skullduggery"
+                },
+                {
+                    "effect_type": "apply_affliction",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "accuracy": 100,
+                    "stat_to_target": "skullduggery",
+                    "affliction_name": "flaming",
+                    "duration": 3
+                }
+            ]
+    },
+    "slow_the_mighty": {
+        "name": "Slow the Mighty",
+        "description": "Slow the fat git down.",
+        "icon": "placeholder/icon_05.png",
+        "resource_type": "stamina",
+        "resource_cost": 10,
+        "time_cost": 40,
+        "cooldown": 5,
+        "target_directions": [
+            "down"
+        ],
         "range": 0,
+        "terrain_collision": "reflect",
+        "travel_type": "projectile",
+        "expiry_type": "activate",
         "required_tags": [
             "wall",
-            "NO_ENTITY"
+            "no_entity"
         ],
-        "resource_cost": 10,
-        "resource_type": "STAMINA",
-        "shape": "CIRCLE",
+        "shape": "circle",
         "shape_size": 2,
-        "target_directions": [
-            "DOWN"
-        ],
-        "terrain_collision": "REFLECT",
-        "time_cost": 40,
-        "travel_type": "PROJECTILE"
+        "effects": [
+            {
+                "effect_type": "apply_affliction",
+                "required_tags": ["other_entity"],
+                "accuracy": 100,
+                "stat_to_target": "skullduggery",
+                "affliction_name": "bogged down",
+                "duration": 3
+            }
+         ]
     }
 }

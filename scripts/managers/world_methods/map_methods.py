@@ -281,15 +281,7 @@ class MapMethods:
 
     def tile_has_tag(self, tile: Tile, tag: TargetTags, active_entity: int = None) -> bool:
         """
-        Check if a given tag applies to the tile
-
-        Args:
-            tile ():
-            tag (): tag to check
-            active_entity (): entity using a skill
-
-        Returns:
-            bool: True if tag applies.
+        Check if a given tag applies to the tile.  True if tag applies.
         """
         if tag == TargetTags.OPEN_SPACE:
             # If in bounds check if anything is blocking

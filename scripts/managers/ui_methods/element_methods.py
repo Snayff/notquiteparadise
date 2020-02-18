@@ -350,7 +350,7 @@ class ElementMethods:
                 entity_info.set_entity(entity)
                 entity_info.show()
             else:
-                entity_info.cleanse()
+                entity_info._kill()
         else:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
@@ -361,9 +361,9 @@ class ElementMethods:
         entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
         if entity_info:
-            entity_info.cleanse()
+            entity_info._kill()
         else:
-            logging.warning(f"Tried to cleanse EntityInfo but key not found. Is it init'd?")
+            logging.warning(f"Tried to _kill EntityInfo but key not found. Is it init'd?")
 
     ############## MESSAGES #####################
 
@@ -399,12 +399,12 @@ class ElementMethods:
 
     def kill_data_editor(self):
         """
-        Remove any reference to the skill_editor. Includes use of editors's cleanse method.
+        Remove any reference to the skill_editor. Includes use of editors's _kill method.
         """
         skill_editor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
 
         if skill_editor:
-            skill_editor.cleanse()
+            skill_editor._kill()
             skill_editor.kill()
             self.remove_ui_element(skill_editor)
 

@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import logging
 from enum import Enum
 from typing import TYPE_CHECKING, Dict, Type
-from typing import List, Any, cast
 import dataclasses
 
 import json
@@ -13,13 +11,13 @@ if TYPE_CHECKING:
 
 ####################### UTILITY ############################
 
-def deserialize_dataclasses(dct):
+def deserialise_dataclasses(dct):
     if "__dataclass__" in dct:
         dataclass_ = ExtendedJsonEncoder.__dataclassses__[dct["__dataclass__"]]
         del dct["__dataclass__"]
         return dataclass_(
             **{
-                k: v if not isinstance(v, dict) else deserialize_dataclasses(v)
+                k: v if not isinstance(v, dict) else deserialise_dataclasses(v)
                 for k, v in dct.items()
             }
         )
@@ -41,7 +39,11 @@ class ExtendedJsonEncoder(json.JSONEncoder):
     Extend the json Encoder to handle Enum and dataclass types
     """
     __dataclassses__: Dict[str, Type] = {}
+
     def default(self, obj):
+        """
+        Override the base default method to handle enum and dataclasses
+        """
         if dataclasses.is_dataclass(obj):
             return {
                 **dict(__dataclass__=obj.__class__.__name__),
