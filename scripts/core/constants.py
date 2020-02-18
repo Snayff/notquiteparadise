@@ -60,18 +60,11 @@ class GameEventTypes(SimpleNamespace):
     END_ROUND = 4  # end of round
 
 
-class MessageTypes(Enum):
+class MessageTypes(SimpleNamespace):
     """Types of Message Events"""
-    LOG = auto()
-    ENTITY = auto()
-    SCREEN = auto()
-
-    def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self.name == other.name and self.value == other.value
-        return NotImplemented
-
-    __hash__ = None
+    LOG = 1
+    ENTITY = 2
+    SCREEN = 3
 
 
 class EntityEventTypes(Enum):
