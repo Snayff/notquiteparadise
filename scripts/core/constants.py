@@ -52,43 +52,11 @@ class EventTopics(SimpleNamespace):
     MAP = 4
 
 
-class GameEventTypes(SimpleNamespace):
-    """Types of Game Events"""
-    EXIT = 1  # go back a step / exit current focus
-    END_TURN = 2  # end of turn
-    CHANGE_GAME_STATE = 3  # move from one game state to another
-    END_ROUND = 4  # end of round
-
-
 class MessageTypes(SimpleNamespace):
     """Types of Message Events"""
     LOG = 1
     ENTITY = 2
     SCREEN = 3
-
-
-class EntityEventTypes(SimpleNamespace):
-    """Types of Entity Events"""
-    DIE = 1
-    SKILL = 2
-    MOVE = 3
-    LEARN = 4
-
-
-class UIEventTypes(SimpleNamespace):
-    """
-    Types of UI events
-    """
-    SELECT_ENTITY = 1
-    CLICK_TILE = 2
-    MESSAGE = 3
-
-
-class MapEventTypes(SimpleNamespace):
-    """
-    Types of Map events
-    """
-    TILE_INTERACTION = 1
 
 
 class TargetTags(Enum):

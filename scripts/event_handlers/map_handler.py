@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import MapEventTypes, MessageTypes, GameEventTypes
-from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber
 from scripts.managers.world_manager import world
 from scripts.world.components import Position
@@ -31,7 +29,7 @@ class MapHandler(Subscriber):
         """
 
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
 
         if isinstance(event, TileInteractionEvent):
             event: TileInteractionEvent

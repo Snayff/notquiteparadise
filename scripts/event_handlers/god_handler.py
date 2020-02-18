@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import EntityEventTypes, EffectTypes, EventTopics
+from scripts.core.constants import EffectTypes, EventTopics
 from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.library import library
 from scripts.managers.world_manager import world

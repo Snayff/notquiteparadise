@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import GameEventTypes, GameStates
+from scripts.core.constants import GameStates
 from scripts.core.event_hub import publisher, Subscriber
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager import world

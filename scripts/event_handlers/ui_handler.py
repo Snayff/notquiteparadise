@@ -9,8 +9,7 @@ from scripts.managers.game_manager import game
 from scripts.managers.ui_manager import ui
 from scripts.managers.world_manager import world
 from scripts.core.event_hub import Subscriber, publisher
-from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, MessageTypes, VisualInfo, UIElementTypes
+from scripts.core.constants import EventTopics, GameStates, MessageTypes, VisualInfo, UIElementTypes
 from scripts.world.components import Position
 from scripts.events.ui_events import MessageEvent, ClickTile
 

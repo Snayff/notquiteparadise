@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import EntityEventTypes, MessageTypes, Directions, TargetTags
+from scripts.core.constants import MessageTypes, Directions, TargetTags
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
