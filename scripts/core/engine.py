@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import io
-import pstats
 import pygame
-from scripts.core.constants import GameStates, VERSION
+from scripts.core.constants import GameStates
 from scripts.managers.input_manager.input_manager import input
 from scripts.managers.ui_manager.ui_manager import ui
 from scripts.managers.turn_manager import turn

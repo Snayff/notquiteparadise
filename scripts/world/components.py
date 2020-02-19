@@ -18,6 +18,7 @@ class IsPlayer:
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
+
 class Position:
     """
     [Component] An entity's position on the map.

@@ -64,8 +64,14 @@ class EntityHandler(Subscriber):
 
             # is there something in the way?
             target_tile = world.Map.get_tile((target_x, target_y))
-            is_tile_blocking_movement = world.Map.tile_has_tag(target_tile, TargetTags.BLOCKED_MOVEMENT, entity)
-            is_entity_on_tile = world.Map.tile_has_tag(target_tile, TargetTags.OTHER_ENTITY, entity)
+
+            # check a tile was returned
+            if target_tile:
+                is_tile_blocking_movement = world.Map.tile_has_tag(target_tile, TargetTags.BLOCKED_MOVEMENT, entity)
+                is_entity_on_tile = world.Map.tile_has_tag(target_tile, TargetTags.OTHER_ENTITY, entity)
+            else:
+                is_tile_blocking_movement = True
+                is_entity_on_tile = False
 
             # check for no entity in way but tile is blocked
             if not is_entity_on_tile and is_tile_blocking_movement:
@@ -119,8 +125,6 @@ class EntityHandler(Subscriber):
             # end the turn if the entity isnt a god
             if not world.Entity.has_component(entity, IsGod):
                 publisher.publish(EndTurnEvent(entity, skill_data.time_cost))
-
-            # TODO - trigger terrain effects
 
         else:
             # is it the player that's can't afford it?

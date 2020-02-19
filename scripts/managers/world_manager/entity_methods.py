@@ -32,46 +32,6 @@ class EntityMethods:
 
     ############### GET ###################
 
-    def get_blocking_entity(self, tile_x, tile_y):
-        """
-
-        Args:
-            tile_x:
-            tile_y:
-
-        Returns:
-            Entity: returns entity if there is one, else None.
-        """
-        # TODO - change to just get the entity
-        tile = self._manager.Map.get_tile((tile_x, tile_y))
-        entity = tile.entity
-
-        if entity:
-            if entity.blocks_movement:
-                return entity
-
-        return None
-
-    def get_entity_in_fov_at_tile(self, tile_x, tile_y):
-        """
-        Get the entity at a target tile
-
-        Args:
-            tile_x: x of tile
-            tile_y: y of tile
-
-        Returns:
-            entity: Entity or None if no entity found
-        """
-        tile = self._manager.Map.get_tile((tile_x, tile_y))
-        entity = tile.entity
-
-        if entity:
-            if self._manager.FOV.is_tile_in_fov(tile_x, tile_y):
-                return entity
-
-        return None
-
     def get_player(self) -> Union[int, None]:
         """
         Get the player.

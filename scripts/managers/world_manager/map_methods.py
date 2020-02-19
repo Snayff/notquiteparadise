@@ -47,15 +47,10 @@ class MapMethods:
         """
         return self._current_game_map
 
-    def get_tile(self, tile_pos: Union[Tuple[int, int], str]) -> Tile:
+    def get_tile(self, tile_pos: Union[Tuple[int, int], str]) -> Union[Tile, None]:
         """
-        Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string
-
-        Args:
-            tile_pos (): str expects "x,y", or handles tuples (x, y)
-
-        Returns:
-            Tile: the tile at the location
+        Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string "x,y".
+        Returns None if tile is out of bounds.
         """
         game_map = self.get_game_map()
 
@@ -67,25 +62,26 @@ class MapMethods:
             x = tile_pos[0]
             y = tile_pos[1]
 
-        return game_map.tiles[x][y]
+        if self._is_tile_in_bounds(x, y):
+            return game_map.tiles[x][y]
+        else:
+            logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
+            return None
 
     def get_direction(self, start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int],
     str]) -> Tuple[int, int]:
         """
-        Get the direction between two locations.
-
-        Args:
-            start_pos (): str expects "x,y", or handles tuples (x, y)
-            target_pos (): str expects "x,y", or handles tuples (x, y)
-
-        Returns:
-
+        Get the direction between two locations. Positions expect either "x,y", or handles tuples (x, y)
         """
         start_tile = self.get_tile(start_pos)
         target_tile = self.get_tile(target_pos)
 
-        dir_x = target_tile.x - start_tile.x
-        dir_y = target_tile.y - start_tile.y
+        if start_tile and target_tile:
+            dir_x = target_tile.x - start_tile.x
+            dir_y = target_tile.y - start_tile.y
+        else:
+            # at least one of the tiles is out of bounds so return centre
+            return 0, 0
 
         # handle any mistaken values coming in
         if dir_x > 1:
@@ -185,7 +181,7 @@ class MapMethods:
         # tile_is_blocked = self._manager.Map._is_tile_blocking_movement(start_entity.x + direction_x,
         #                                                               start_entity.y + direction_y)
         #
-        # if not (tile_is_blocked or self.get_blocking_entity(start_entity.x + direction_x,
+        # if not (tile_is_blocked or self.get_entity_at_position(start_entity.x + direction_x,
         #                                                     start_entity.y + direction_y)):
         #     log_string = f"{start_entity.name} found a direct path to {target_entity.name}."
         #     logging.debug(log_string)
@@ -346,14 +342,15 @@ class MapMethods:
         """
         tile = self.get_tile((tile_x, tile_y))
 
-        # Does the tile block movement?
-        if tile.blocks_sight:
-            return True
-
-        # Any entities that block movement?
-        for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
-            if position.x == tile.x and position.y == tile.y and blocking.blocks_sight:
+        if tile:
+            # Does the tile block movement?
+            if tile.blocks_sight:
                 return True
+
+            # Any entities that block movement?
+            for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
+                if position.x == tile.x and position.y == tile.y and blocking.blocks_sight:
+                    return True
 
         # We found nothing blocking the tile
         return False
@@ -362,26 +359,16 @@ class MapMethods:
         """
         Check if the specified tile is visible to the player
 
-        Args:
-            tile_x:
-            tile_y:
-
-        Returns:
-            bool:
         """
         tile = self.get_tile((tile_x, tile_y))
-        return tile.is_visible
+        if tile:
+            return tile.is_visible
+        else:
+            return False
 
     def _is_tile_in_bounds(self, tile_x: int, tile_y: int) -> bool:
         """
         Check if specified tile is in the map.
-
-        Args:
-            tile_x:
-            tile_y:
-
-        Returns:
-            bool:
         """
         game_map = self.get_game_map()
 
@@ -403,14 +390,15 @@ class MapMethods:
         """
         tile = self.get_tile((tile_x, tile_y))
 
-        # Does the tile block movement?
-        if tile.blocks_movement:
-            return True
-
-        # Any entities that block movement?
-        for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
-            if position.x == tile.x and position.y == tile.y and blocking.blocks_movement:
+        if tile:
+            # Does the tile block movement?
+            if tile.blocks_movement:
                 return True
+
+            # Any entities that block movement?
+            for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
+                if position.x == tile.x and position.y == tile.y and blocking.blocks_movement:
+                    return True
 
         # We found nothing blocking the tile
         return False
@@ -428,10 +416,11 @@ class MapMethods:
         """
         tile = self.get_tile((tile_x, tile_y))
 
-        # Any entities on the tile?
-        for ent, position in self._manager.World.get_component(Position):
-            if position.x == tile.x and position.y == tile.y:
-                return True
+        if tile:
+            # Any entities on the tile?
+            for ent, position in self._manager.World.get_component(Position):
+                if position.x == tile.x and position.y == tile.y:
+                    return True
 
         # We found no entities on the tile
         return False
@@ -439,22 +428,15 @@ class MapMethods:
     def _tile_has_other_entity(self, tile_x: int, tile_y: int, active_entity: int) -> bool:
         """
         Check if the specified tile  has an entity that isnt the active entity on it
-        Args:
-            active_entity :
-            tile_x:
-            tile_y:
-
-        Returns:
-            bool:
-
         """
         tile = self.get_tile((tile_x, tile_y))
 
-        # ensure active entity is the same as the targeted one
-        for entity, position in self._manager.World.get_component(Position):
-            if position.x == tile.x and position.y == tile.y:
-                if active_entity != entity:
-                    return True
+        if tile:
+            # ensure active entity is the same as the targeted one
+            for entity, position in self._manager.World.get_component(Position):
+                if position.x == tile.x and position.y == tile.y:
+                    if active_entity != entity:
+                        return True
 
         # no other entity found
         return False
@@ -473,11 +455,12 @@ class MapMethods:
         """
         tile = self.get_tile((tile_x, tile_y))
 
-        # ensure active entity is the same as the targeted one
-        for entity, position in self._manager.World.get_component(Position):
-            if position.x == tile.x and position.y == tile.y:
-                if active_entity == entity:
-                    return True
+        if tile:
+            # ensure active entity is the same as the targeted one
+            for entity, position in self._manager.World.get_component(Position):
+                if position.x == tile.x and position.y == tile.y:
+                    if active_entity == entity:
+                        return True
 
         # no matching entity found
         return False

@@ -55,21 +55,22 @@ class SkillMethods:
         skill_data = library.get_skill_data(skill_name)
 
         # check we have everything we need and if so use the skill
-        if world.Map.tile_has_tags(target_tile, skill_data.required_tags, entity):
-            resource_type = skill_data.resource_type
-            resource_cost = skill_data.resource_cost
-            if self.can_afford_cost(entity, resource_type, resource_cost):
-                distance = world.Map.get_chebyshev_distance((start_tile.x, start_tile.y), target_pos)
-                skill_range = skill_data.range
-                if distance <= skill_range:
-                    return True
-                else:
-                    logging.debug(f"Target out of skill range, "
-                                  f"range {skill_range} < distance {distance}")
+        if start_tile and target_tile:
+            if world.Map.tile_has_tags(target_tile, skill_data.required_tags, entity):
+                resource_type = skill_data.resource_type
+                resource_cost = skill_data.resource_cost
+                if self.can_afford_cost(entity, resource_type, resource_cost):
+                    distance = world.Map.get_chebyshev_distance((start_tile.x, start_tile.y), target_pos)
+                    skill_range = skill_data.range
+                    if distance <= skill_range:
+                        return True
+                    else:
+                        logging.debug(f"Target out of skill range, "
+                                      f"range {skill_range} < distance {distance}")
 
-            else:
-                msg = f"You can't afford the cost."
-                publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                else:
+                    msg = f"You can't afford the cost."
+                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
         return False
 
@@ -215,21 +216,26 @@ class SkillMethods:
                 current_x, current_y = current_x + dir_x, current_y + dir_y
                 tile = self._manager.Map.get_tile((current_x, current_y))
 
-                # did we hit something that has the tags we need?
-                if self._manager.Map.tile_has_tags(tile, skill_data.required_tags, using_entity):
-                    activate = True
-                    logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
-                else:
-                    # we didnt hit the right thing so what happens now?
-                    if terrain_collision == SkillTerrainCollisions.ACTIVATE:
+                if tile:
+                    # did we hit something that has the tags we need?
+                    if self._manager.Map.tile_has_tags(tile, skill_data.required_tags, using_entity):
                         activate = True
-                        logging.debug(f"-> and hit something. Skill will activate at ({current_x},{current_y}).")
-                    elif terrain_collision == SkillTerrainCollisions.REFLECT:
-                        dir_x, dir_y = self._get_reflected_direction((current_x, current_y), direction)
-                        logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
-                    elif terrain_collision == SkillTerrainCollisions.FIZZLE:
-                        activate = False
-                        logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
+                        logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
+                    else:
+                        # we didnt hit the right thing so what happens now?
+                        if terrain_collision == SkillTerrainCollisions.ACTIVATE:
+                            activate = True
+                            logging.debug(f"-> and hit something. Skill will activate at "
+                                          f"({current_x},{current_y}).")
+                        elif terrain_collision == SkillTerrainCollisions.REFLECT:
+                            dir_x, dir_y = self._get_reflected_direction((current_x, current_y), direction)
+                            logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
+                        elif terrain_collision == SkillTerrainCollisions.FIZZLE:
+                            activate = False
+                            logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
+                else:
+                    activate = False
+                    logging.warning(f"-> and went out of bounds at ({current_x},{current_y}).")
 
         # deal with activation
         if activate:
@@ -286,17 +292,18 @@ class SkillMethods:
             current_y = start_y + (dir_y * distance)
             tile = self._manager.Map.get_tile((current_x, current_y))
 
-            # did we hit something causing projectile to stop
-            if self._manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_MOVEMENT):
-                # if we're ready to check for a target, do so
-                if check_for_target:
-                    # we hit something, go back to last free tile
-                    current_x = free_x
-                    current_y = free_y
-                    break
-            else:
-                free_x = current_x
-                free_y = current_y
+            if tile:
+                # did we hit something causing projectile to stop
+                if self._manager.Map.tile_has_tag(tile, TargetTags.BLOCKED_MOVEMENT):
+                    # if we're ready to check for a target, do so
+                    if check_for_target:
+                        # we hit something, go back to last free tile
+                        current_x = free_x
+                        current_y = free_y
+                        break
+                else:
+                    free_x = current_x
+                    free_y = current_y
 
         return current_x, current_y
 
@@ -317,9 +324,18 @@ class SkillMethods:
 
         # work out position of adjacent walls
         adj_tile = self._manager.Map.get_tile((current_x, current_y - dir_y))
-        collision_adj_y = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+        if adj_tile:
+            collision_adj_y = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+        else:
+            # found no tile
+            collision_adj_y = True
+
         adj_tile = self._manager.Map.get_tile((current_x - dir_x, current_y))
-        collision_adj_x = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+        if adj_tile:
+            collision_adj_x = self._manager.Map.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+        else:
+            # found no tile
+            collision_adj_x = True
 
         # where did we collide?
         if collision_adj_x:
@@ -399,33 +415,34 @@ class SkillMethods:
 
             # check we have all tags
             tile = world.Map.get_tile((position.x, position.y))
-            if world.Map.tile_has_tags(tile, effect_data.required_tags, attacker):
-                # Roll for BANE application
-                if affliction_data.category == AfflictionCategory.BANE:
-                    to_hit_score = self._calculate_to_hit_score(defender_stats, effect_data.accuracy,
-                                                                effect_data.stat_to_target, attackers_stats)
-                    hit_type = self._get_hit_type(to_hit_score)
+            if tile:
+                if world.Map.tile_has_tags(tile, effect_data.required_tags, attacker):
+                    # Roll for BANE application
+                    if affliction_data.category == AfflictionCategory.BANE:
+                        to_hit_score = self._calculate_to_hit_score(defender_stats, effect_data.accuracy,
+                                                                    effect_data.stat_to_target, attackers_stats)
+                        hit_type = self._get_hit_type(to_hit_score)
 
-                    # check if afflictions applied
-                    if hit_type == HitTypes.GRAZE:
-                        msg = f"{identity.name} resisted {effect_data.affliction_name}."
-                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
-                    else:
-                        hit_msg = ""
+                        # check if afflictions applied
+                        if hit_type == HitTypes.GRAZE:
+                            msg = f"{identity.name} resisted {effect_data.affliction_name}."
+                            publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                        else:
+                            hit_msg = ""
 
-                        # check if there was a crit and if so modify the duration of the afflictions
-                        if hit_type == HitTypes.CRIT:
-                            modified_duration = int(base_duration * HitModifiers.CRIT.value)
-                            hit_msg = f"a critical "
+                            # check if there was a crit and if so modify the duration of the afflictions
+                            if hit_type == HitTypes.CRIT:
+                                modified_duration = int(base_duration * HitModifiers.CRIT.value)
+                                hit_msg = f"a critical "
 
-                        msg = f"{identity.name} succumbed to {hit_msg}{effect_data.affliction_name}."
-                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                            msg = f"{identity.name} succumbed to {hit_msg}{effect_data.affliction_name}."
+                            publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
+                            self._create_affliction(defender, effect_data.affliction_name, modified_duration)
+
+                    # Just apply the BOON
+                    elif affliction_data.affliction_category == AfflictionCategory.BOON:
                         self._create_affliction(defender, effect_data.affliction_name, modified_duration)
-
-                # Just apply the BOON
-                elif affliction_data.affliction_category == AfflictionCategory.BOON:
-                    self._create_affliction(defender, effect_data.affliction_name, modified_duration)
 
     def _create_affliction(self, entity: int, affliction_name: str, duration: int):
         data = library.get_affliction_data(affliction_name)
@@ -490,50 +507,51 @@ class SkillMethods:
         # loop all relevant entities
         for defender, (position, resources, has_stats) in entities.items():
             tile = world.Map.get_tile((position.x, position.y))
-            if world.Map.tile_has_tags(tile, data.required_tags, attacker):
-                # get the info to apply the damage
-                entitys_stats = world.Entity.get_combat_stats(defender)
-                to_hit_score = self._calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
-                                                            attackers_stats)
-                hit_type = self._get_hit_type(to_hit_score)
-                damage = self._calculate_damage(entitys_stats, hit_type, data, attackers_stats)
+            if tile:
+                if world.Map.tile_has_tags(tile, data.required_tags, attacker):
+                    # get the info to apply the damage
+                    entitys_stats = world.Entity.get_combat_stats(defender)
+                    to_hit_score = self._calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
+                                                                attackers_stats)
+                    hit_type = self._get_hit_type(to_hit_score)
+                    damage = self._calculate_damage(entitys_stats, hit_type, data, attackers_stats)
 
-                # who did the damage? (for informing the player)
-                if attacker:
-                    identity = world.Entity.get_identity(attacker)
-                    attacker_name = identity.name
-                else:
-                    attacker_name = "???"
-                identity = world.Entity.get_identity(defender)
-                defender_name = identity.name
-
-                # resolve the damage
-                if damage > 0:
-                    resources.health -= damage
-
-                    # log the outcome
-                    if hit_type == HitTypes.GRAZE:
-                        hit_type_desc = "grazes"
-                    elif hit_type == HitTypes.HIT:
-                        hit_type_desc = "hits"
-                    elif hit_type == HitTypes.CRIT:
-                        hit_type_desc = "crits"
+                    # who did the damage? (for informing the player)
+                    if attacker:
+                        identity = world.Entity.get_identity(attacker)
+                        attacker_name = identity.name
                     else:
-                        hit_type_desc = "does something unknown"  # catch all
+                        attacker_name = "???"
+                    identity = world.Entity.get_identity(defender)
+                    defender_name = identity.name
 
-                    msg = f"{attacker_name} {hit_type_desc} {defender_name} for {damage}."
-                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                    # resolve the damage
+                    if damage > 0:
+                        resources.health -= damage
 
-                    # TODO - add the damage type to the text and replace the type with an icon
-                    # TODO - add the explanation of the damage roll to a tooltip
+                        # log the outcome
+                        if hit_type == HitTypes.GRAZE:
+                            hit_type_desc = "grazes"
+                        elif hit_type == HitTypes.HIT:
+                            hit_type_desc = "hits"
+                        elif hit_type == HitTypes.CRIT:
+                            hit_type_desc = "crits"
+                        else:
+                            hit_type_desc = "does something unknown"  # catch all
 
-                    if resources.health <= 0:
-                        publisher.publish(DieEvent(defender))
+                        msg = f"{attacker_name} {hit_type_desc} {defender_name} for {damage}."
+                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
-                else:
-                    # log no damage
-                    msg = f" {defender_name} resists damage from {attacker_name}."
-                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                        # TODO - add the damage type to the text and replace the type with an icon
+                        # TODO - add the explanation of the damage roll to a tooltip
+
+                        if resources.health <= 0:
+                            publisher.publish(DieEvent(defender))
+
+                    else:
+                        # log no damage
+                        msg = f" {defender_name} resists damage from {attacker_name}."
+                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
     ############ UTILITY ################
 

@@ -150,9 +150,15 @@ class UiHandler(Subscriber):
         if isinstance(event, ClickTile):
             event: ClickTile
             if game.State.get_current() == GameStates.PLAYER_TURN:
+
                 # Select an entity
                 tile = world.Map.get_tile(event.tile_pos_string)
-                entities = world.Entity.get_entities_and_components_in_area([tile])
+
+                # ensure there is a tile
+                if tile:
+                    entities = world.Entity.get_entities_and_components_in_area([tile])
+                else:
+                    entities = []
 
                 # there should only be one entity, but just in case...
                 for entity in entities:
