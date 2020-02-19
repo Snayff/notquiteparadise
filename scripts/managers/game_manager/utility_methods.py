@@ -36,3 +36,33 @@ class UtilityMethods:
             image = pygame.transform.smoothscale(image, (width, height))
 
         return image
+
+    def recursive_replace(self, obj, key, value_to_replace, new_value):
+        """
+        Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
+
+        Args:
+            obj (object): dict, list, string, or anything else to be checked.
+            key (str): The key to look for in the object
+            value_to_replace (): The value to look for, stored against the key.
+            new_value (): The value to set.
+        """
+        if isinstance(obj, dict):
+            # Break the dict out and run recursively against the elements
+            for k, v in obj.items():
+                if k == key:
+                    # The value may be a list so handle it if so
+                    if isinstance(v, list):
+                        # Loop the list and replace the required value
+                        for index, item in enumerate(v):
+                            if item == value_to_replace:
+                                v[index] = new_value
+                    elif v == value_to_replace:
+                        obj[key] = new_value
+                else:
+                    self.recursive_replace(v, key, value_to_replace, new_value)
+
+        elif isinstance(obj, list):
+            # Break the list out and run recursively against the elements
+            for element in obj:
+                self.recursive_replace(element, key, value_to_replace, new_value)

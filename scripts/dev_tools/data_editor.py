@@ -10,7 +10,6 @@ from enum import Enum
 from typing import TYPE_CHECKING, List, Dict
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
-
 from scripts.core.extend_json import ExtendedJsonEncoder
 from scripts.core.library import library
 
@@ -480,7 +479,8 @@ class DataEditor(UIWindow):
         Load all of the data options into self.all_data
         """
         self.all_data = {
-            "base_stats": library.get_stat_data(),
+            "base_stats_primary": library.get_primary_stat_data(),
+            "base_stats_secondary": library.get_secondary_stat_data(),
             "homelands": library.get_homelands_data(),
             "peoples": library.get_peoples_data(),
             "savvys": library.get_savvys_data(),

@@ -16,7 +16,7 @@ class IsPlayer:
     """
     [Component] Whether the entity is the player.
     """
-
+    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 class Position:
     """
@@ -105,7 +105,7 @@ class AIBasic:
 
 class HasCombatStats:
     """[Component] A flag to show if an entity has stats used for combat."""
-
+    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 class Knowledge:
     """[Component] An entity's knowledge, including skills."""
@@ -138,6 +138,7 @@ class IsGod:
     """
     [Component] Whether the entity is a god.
     """
+    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Opinion:

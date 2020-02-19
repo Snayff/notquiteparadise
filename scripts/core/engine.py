@@ -1,6 +1,6 @@
-import cProfile
+from __future__ import annotations
+
 import io
-import logging
 import pstats
 import pygame
 from scripts.core.constants import GameStates, VERSION
@@ -10,7 +10,7 @@ from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager.world_manager import world
 from scripts.managers.game_manager.game_manager import game
 from scripts.core.event_hub import event_hub
-from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
+from scripts.core.initialisers import initialise_game, initialise_event_handlers
 
 # Project Wide to do list...
 # FIXME - collision isnt working - can walk through walls and leave map
@@ -87,28 +87,6 @@ def game_loop():
 
         # show the new state
         ui.draw()
-
-
-def dump_profiling_data(profiler):
-    """
-    End profiling and dump data to a readable file
-
-    Args:
-        profiler: The profiler
-    """
-
-    # dump the profiler stats
-    s = io.StringIO()
-    ps = pstats.Stats(profiler, stream=s).sort_stats("cumulative")
-    ps.dump_stats("logs/profiling/profile.dump")
-
-    # convert profiling to human readable format
-    import datetime
-    date_and_time = datetime.datetime.utcnow()
-
-    out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
-    ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
-    ps.strip_dirs().sort_stats("cumulative").print_stats()
 
 
 if __name__ == "__main__":  # prevents being run from other modules
