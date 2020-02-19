@@ -6,7 +6,6 @@ import pygame
 from scripts.core.constants import GameStates, VERSION
 from scripts.managers.input_manager.input_manager import input
 from scripts.managers.ui_manager.ui_manager import ui
-from scripts.managers.game_manager.debug_manager import debug
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager.world_manager import world
 from scripts.managers.game_manager.game_manager import game
@@ -37,14 +36,12 @@ def main():
     """
     The entry for the game initialisation and game loop
     """
-
     # initialise logging
-    initialise_logging()
+    game.Debug.initialise_logging()
 
     # initialise profiling
     # TODO - set to turn off for production builds
-    profiler = cProfile.Profile()
-    profiler.enable()
+    game.Debug.initialise_profiling()
 
     # initialise the game
     initialise_event_handlers()
@@ -54,10 +51,12 @@ def main():
     game_loop()
 
     # we've left the game loop so now close everything down
-    profiler.disable()
-    dump_profiling_data(profiler)
-    logging.shutdown()  # clear logging resources
+    game.Debug.disable_profiling()
+    game.Debug.dump_profiling_data()
+    game.Debug.disable_logging()
+
     pygame.quit()  # clean up pygame resources
+
     raise SystemExit  # exit window and python
 
 
@@ -82,13 +81,11 @@ def game_loop():
 
         # allow everything to update in response to new state
         game.update()
-        debug.update()
         world.update()
         ui.update(delta_time)
         event_hub.update()
 
         # show the new state
-        debug.draw()
         ui.draw()
 
 

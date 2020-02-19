@@ -80,7 +80,6 @@ def initialise_event_handlers():
     """
     Create the various event handlers and subscribe to required events.
     """
-    # TODO - move to engine
     game_handler = GameHandler(event_hub)
     game_handler.subscribe(EventTopics.GAME)
 
