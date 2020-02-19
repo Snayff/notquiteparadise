@@ -98,37 +98,42 @@ class DataEditor(UIWindow):
                 if self.category_selector.selected_option != self.current_data_category:
                     self.current_data_category = self.category_selector.selected_option
 
-                    # remove existing instance selector
+                    # clear existing details fields
+                    self._kill_details_fields("primary")
+                    self._kill_details_fields("secondary")
+
+                    # clear existing instance selector
                     if self.instance_selector:
                         self.instance_selector.kill()
                         self.instance_selector = None
 
                     # create new instance selector
                     options = []
-                    # FIXME - basestats is BaseStatData and doesnt have keys. How to handle that layer of
-                    #  primary/secondary?
                     options.extend(key for key in self.all_data[self.current_data_category].keys())
                     options.sort()
                     self.instance_selector = self._create_data_instance_selector(options)
-
-                    # remove primary details
-                    self._kill_details_fields(self.primary_data_fields)
 
         # new selection in instance_selector
         if ui_object_id == "instance_selector":
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.instance_selector.selected_option != self.current_data_instance:
+                    # clear existing details fields
+                    self._kill_details_fields("primary")
+                    self._kill_details_fields("secondary")
+
+                    # create new
                     self.current_data_instance = self.instance_selector.selected_option
                     self._load_details("primary", self.current_data_instance)
 
         # new selection in a different, non-selector dropdown
         if ui_object_id != "instance_selector" and ui_object_id != "category_selector":
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
-                if self.instance_selector.selected_option != self.current_data_instance:
-                    key = ui_object_id
-                    data_field = self.primary_data_fields[key]
-                    new_value = self.instance_selector.selected_option
+                key = ui_object_id
+                data_field = self.primary_data_fields[key]
+                new_value = data_field.input_element.selected_option
 
+                # check the value has changed
+                if new_value != data_field.value:
                     has_updated = True
 
         # handle text field finished typing (triggers on enter press)
@@ -146,7 +151,7 @@ class DataEditor(UIWindow):
             # TODO - load secondary details
             pass
 
-        # handle multiple choice
+        # handle multiple choice to toggle the value
         prefix = "multi#"
         if ui_object_id[:len(prefix)] == prefix:
             # get the key
@@ -154,7 +159,6 @@ class DataEditor(UIWindow):
 
             data_field = self.primary_data_fields[key]
 
-            # TOGGLE THE VALUE
             # get current value
             current_value: List = data_field.value
             id_as_value = data_field.options[object_id]
@@ -168,8 +172,12 @@ class DataEditor(UIWindow):
             has_updated = True
 
         # process the update and reload
+        # TODO - implement approach to determine if primary or secondary has changed
         if has_updated and new_value and data_field:
             self._save_updated_field("primary", data_field, new_value)
+
+            # clear existing
+            self._kill_details_fields("primary")
 
             # reload to reflect new changes
             self._load_details("primary", self.current_data_instance)
@@ -396,7 +404,8 @@ class DataEditor(UIWindow):
             button = UIButton(button_rect, name, self.ui_manager, container=container,
                               parent_element=self, object_id=button_name)
             offset_x += width
-            buttons[key] = button
+            buttons[key + name] = button
+            print(f"Created btn {key}:{button_name}")
 
         return buttons
 
@@ -479,8 +488,8 @@ class DataEditor(UIWindow):
         Load all of the data options into self.all_data
         """
         self.all_data = {
-            "base_stats_primary": library.get_primary_stat_data(),
-            "base_stats_secondary": library.get_secondary_stat_data(),
+            "base_stats_primary": library.get_primary_stats_data(),
+            "base_stats_secondary": library.get_secondary_stats_data(),
             "homelands": library.get_homelands_data(),
             "peoples": library.get_peoples_data(),
             "savvys": library.get_savvys_data(),
@@ -503,19 +512,34 @@ class DataEditor(UIWindow):
             self.instance_selector.kill()
             self.instance_selector = None
         if self.primary_data_fields:
-            self._kill_details_fields(self.primary_data_fields)
+            self._kill_details_fields("primary")
             self.primary_data_fields = {}
         if self.secondary_data_fields:
-            self._kill_details_fields(self.secondary_data_fields)
+            self._kill_details_fields("secondary")
             self.secondary_data_fields = {}
 
-    @staticmethod
-    def _kill_details_fields(data_fields: Dict[str, DataField]):
+    def _kill_details_fields(self, primary_or_secondary: str):
         """
-        Clear currently held primary details from self.primary_details.
+        Clear currently held details in the given dict of data fields.
         """
+        if primary_or_secondary == "primary":
+            data_fields = self.primary_data_fields
+        elif primary_or_secondary == "secondary":
+            data_fields = self.secondary_data_fields
+        else:
+            data_fields = self.primary_data_fields
+
+        # clear the data fields
         for data_field in data_fields.values():
             data_field.kill()
+
+        # clear the dict
+        if primary_or_secondary == "primary":
+            self.primary_data_fields = {}
+        elif primary_or_secondary == "secondary":
+            self.secondary_data_fields = {}
+        else:
+            self.primary_data_fields = {}
 
     ############ SAVING ##################
 
@@ -551,10 +575,12 @@ class DataField:
         self.value_as_str = value_as_str
         self.value_type = value_type
         self.options = options
+        self.height = height
+
+        # ui elements
         self.input_element = input_element
         self.labels = labels
         self.buttons = buttons
-        self.height = height
 
     def kill(self):
         """
@@ -562,11 +588,15 @@ class DataField:
         """
         if self.input_element:
             self.input_element.kill()
+            self.input_element = None
 
         if self.labels:
             for label in self.labels:
                 label.kill()
+            self.labels = None
 
         if self.buttons:
-            for button in self.buttons.values():
+            for key, button in self.buttons.items():
+                print(f"Killed btn {key}:{button.object_ids}")
                 button.kill()
+            self.buttons = None

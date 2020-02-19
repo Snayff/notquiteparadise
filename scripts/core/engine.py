@@ -11,7 +11,8 @@ from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers
 
 # Project Wide to do list...
-# FIXME - collision isnt working - can walk through walls and leave map
+# FIXME - collision isnt working - can walk through walls
+# FIXME - Directions not working - cant basic attack in any direction.
 # TODO - swap out nose for pytest
 # TODO - remember window position and resume at that place
 # TODO - Review closure

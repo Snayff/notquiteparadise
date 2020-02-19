@@ -255,22 +255,19 @@ class LibraryOfAlexandria:
 
         return effect_data
 
-    def get_stat_data(self) -> Dict[str, BaseStatData]:
-        """
-        Get data for a primary stat from the library
-        """
-
-        stat_data = self._base_stats_primary
-
-        return stat_data
-
     def get_primary_stat_data(self, primary_stat_type: PrimaryStatTypes) -> BasePrimaryStatData:
         """
         Get data for a primary stat from the library
 
         """
         stat_data = self._base_stats_primary[primary_stat_type]
+        return stat_data
 
+    def get_primary_stats_data(self) -> Dict[str, BasePrimaryStatData]:
+        """
+        Get all data for primary stats from the library
+        """
+        stat_data = self._base_stats_primary
         return stat_data
 
     def get_secondary_stat_data(self, secondary_stat_type: SecondaryStatTypes) -> BaseSecondaryStatData:
@@ -280,6 +277,13 @@ class LibraryOfAlexandria:
 
         stat_data = self._base_stats_secondary[secondary_stat_type]
 
+        return stat_data
+
+    def get_secondary_stats_data(self) -> Dict[str, BaseSecondaryStatData]:
+        """
+        Get all data for secondary stats from the library
+        """
+        stat_data = self._base_stats_secondary
         return stat_data
 
     def get_gods_data(self) -> Dict[str, GodData]:
