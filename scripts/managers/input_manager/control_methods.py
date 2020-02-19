@@ -162,22 +162,13 @@ class ControlMethods:
     def set_intent(self, intent: InputIntents):
         """
         Set an intent to true. IntentsData must exist in InputIntents and name must match (except case).
-
-        Args:
-            intent ():
         """
         setattr(self._manager.Intents, intent, True)
-        # print(f"Set {intent.name.lower()} Intent to True")
+        #print(f"Set {intent} Intent to True")
 
-    def get_intent(self, intent: InputIntents):
+    def get_intent(self, intent: InputIntents) -> bool:
         """
-        Get an intent. IntentsData must exist in InputIntents and name must match (except case).
-
-        Args:
-            intent ():
-
-        Returns:
-            bool: True if intent is True.
+        Get an intent. IntentsData must exist in InputIntents and name must match.
         """
         return getattr(self._manager.Intents, intent)
 
@@ -260,7 +251,7 @@ class ControlMethods:
 
         # Cancel use
         if get_intent(intent.CANCEL):
-            publisher.publish(ChangeGameStateEvent(game.State.get_previous))
+            publisher.publish(ChangeGameStateEvent(game.State.get_previous()))
 
         # Use another skill
         skill_number = self.get_pressed_skills_number()
@@ -286,4 +277,5 @@ class ControlMethods:
         intent = InputIntents
 
         if get_intent(intent.DEV_TOGGLE):
-            publisher.publish(ChangeGameStateEvent(game.State.get_previous))
+
+            publisher.publish(ChangeGameStateEvent(game.State.get_previous()))

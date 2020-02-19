@@ -76,7 +76,7 @@ class UiHandler(Subscriber):
             if event.new_game_state == GameStates.GAME_INITIALISING:
                 self.init_game_ui()
 
-            elif game.State.get_previous == GameStates.GAME_INITIALISING:
+            elif game.State.get_previous() == GameStates.GAME_INITIALISING:
                 # once everything is initialised present the welcome message
                 ui.Element.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
@@ -87,7 +87,7 @@ class UiHandler(Subscriber):
             # check if we are moving to player turn and we are either in, or were just in, targeting
             # this is due to processing order of events
             elif event.new_game_state == GameStates.PLAYER_TURN and (game.State.get_current() == GameStates.TARGETING_MODE or
-                game.State.get_previous == GameStates.TARGETING_MODE):
+                game.State.get_previous() == GameStates.TARGETING_MODE):
 
                 # turn off the targeting overlay
                 self.set_targeting_overlay(False)
@@ -101,7 +101,7 @@ class UiHandler(Subscriber):
                 self.init_dev_ui()
                 self.close_game_ui()
 
-            elif game.State.get_previous == GameStates.DEV_MODE:
+            elif game.State.get_previous() == GameStates.DEV_MODE:
                 self.close_dev_ui()
                 self.init_game_ui()
 
