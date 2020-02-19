@@ -78,6 +78,7 @@ class DebugMethods:
         self._profiler.enable()
 
     ##################### CLOSE ##############################
+
     def disable_logging(self):
         """
         Turn off current logging and clear logging resources

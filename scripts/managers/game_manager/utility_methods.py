@@ -9,6 +9,7 @@ from scripts.core.constants import IMAGE_NOT_FOUND_PATH
 
 if TYPE_CHECKING:
     from scripts.managers.game_manager.game_manager import GameManager
+    from typing import Tuple
 
 
 class UtilityMethods:

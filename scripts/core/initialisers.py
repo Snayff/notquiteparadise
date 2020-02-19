@@ -1,6 +1,4 @@
-import logging
-import time
-import pygame
+from __future__ import annotations
 
 from scripts.core.constants import EventTopics, GameStates, TILE_SIZE
 from scripts.event_handlers.god_handler import GodHandler
@@ -12,40 +10,6 @@ from scripts.core.event_hub import publisher, event_hub
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager.world_manager import world
 from scripts.event_handlers.ui_handler import UiHandler
-
-
-def initialise_logging():
-    """
-    Configure logging
-    
-    Logging levels:
-        CRITICAL - A serious error, indicating that may be unable to continue running.
-        ERROR - A more serious problem, has not been able to perform some function.
-        WARNING - An indication that something unexpected happened, but otherwise still working as expected.
-        INFO - Confirmation that things are working as expected.
-        DEBUG - Detailed information, typically of interest only when diagnosing problems
-    
-    File mode options:
-        'r' - open for reading(default)
-        'w' - open for writing, truncating the file first
-        'x' - open for exclusive creation, failing if the file already exists
-        'a' - open for writing, appending to the end of the file if it exists
-    
-    """
-    # TODO - move to engine
-
-    log_file_name = "logs/" + "game.log"
-    log_level = logging.INFO
-    file_mode = "w"
-
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-
-    logging.basicConfig(filename=log_file_name, filemode=file_mode, level=log_level,
-                        format="%(asctime)s| %(levelname)-8s| %(message)s")  # 8 adds space for 8 characters (CRITICAL)
-
-    # format in uk time
-    logging.Formatter.converter = time.gmtime
 
 
 def initialise_game():
