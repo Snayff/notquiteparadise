@@ -9,13 +9,14 @@ TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 64
 ENTITY_BLOCKS_SIGHT = False
+IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 
 
 class VisualInfo(SimpleNamespace):
     """
     Constant info about visual aspects such as resolution and frame rate
     """
-    # TODO -  should this be in game manager? or UI?
+    # TODO -  should this be in UI?
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
     GAME_FPS = 60

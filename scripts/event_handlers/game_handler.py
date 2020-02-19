@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 from scripts.core.constants import GameStates
 from scripts.core.event_hub import publisher, Subscriber
 from scripts.managers.turn_manager import turn
-from scripts.managers.world_manager import world
-from scripts.managers.game_manager import game
+from scripts.managers.world_manager.world_manager import world
+from scripts.managers.game_manager.game_manager import game
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.game_events import EndTurnEvent
 from scripts.events.game_events import ExitGameEvent
@@ -69,15 +69,15 @@ class GameHandler(Subscriber):
                 publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
         elif new_game_state == GameStates.TARGETING_MODE:
-            game.active_skill = event.skill_to_be_used
+            game.State.set_active_skill(event.skill_to_be_used)
 
         # update the game state to the intended state
-        if new_game_state != game.game_state:
-            game.update_game_state(new_game_state)
+        if new_game_state != game.State.get_current():
+            game.State.set(new_game_state)
         else:
             # handle wasted attempt to change the game state
             log_string = f"-> new game state {new_game_state} is same as current" \
-                         f" {game.game_state} so state not updated."
+                         f" {game.State.get_current()} so state not updated."
             logging.info(log_string)
 
     @staticmethod

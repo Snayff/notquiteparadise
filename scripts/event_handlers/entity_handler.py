@@ -8,7 +8,7 @@ from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Position, Knowledge, Identity, IsGod
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.entity_events import DieEvent, MoveEvent

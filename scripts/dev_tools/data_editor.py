@@ -492,7 +492,7 @@ class DataEditor(UIWindow):
 
     ############## CLEAR #####################
 
-    def _kill(self):
+    def cleanse(self):
         """
         Clear all held data.
         """

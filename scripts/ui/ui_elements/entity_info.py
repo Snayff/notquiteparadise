@@ -5,9 +5,8 @@ import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Aesthetic, Identity, Resources
-from scripts.world.entity import Entity
 
 
 class EntityInfo(UIWindow):
@@ -53,12 +52,9 @@ class EntityInfo(UIWindow):
         """
         pass
 
-    def set_entity(self, entity: Union[Entity, None]):
+    def set_entity(self, entity: int):
         """
         Set the selected entity to show the info for that entity.
-
-        Args:
-            entity ():
         """
         self.selected_entity = entity
 

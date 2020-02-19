@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.core.event_hub import publisher, Subscriber
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Position
 from scripts.events.map_events import TileInteractionEvent
 from scripts.events.game_events import EndTurnEvent, EndRoundEvent

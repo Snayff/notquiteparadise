@@ -6,14 +6,14 @@ from scripts.core.event_hub import Event
 
 if TYPE_CHECKING:
     from scripts.core.constants import MessageTypes
-    from scripts.world.entity import Entity
+
 
 
 class SelectEntity(Event):
     """
     Event for selecting an entity.
     """
-    def __init__(self, entity):
+    def __init__(self, entity: int):
         Event.__init__(self, "SELECT_ENTITY", EventTopics.UI)
 
         self.selected_entity = entity
@@ -34,7 +34,7 @@ class MessageEvent(Event):
     Event to share messages with the player
     """
     def __init__(self, message_type: MessageTypes,  message: str, colour: str = None, size: int = 4,
-            entity: Entity = None):
+            entity: int = None):
         Event.__init__(self, "MESSAGE", EventTopics.UI)
         self.message = message
         self.message_type = message_type

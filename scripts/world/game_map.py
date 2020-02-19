@@ -3,6 +3,7 @@ from typing import List
 import pygame
 
 from scripts.core.constants import TILE_SIZE
+from scripts.managers.game_manager.game_manager import game
 from scripts.world.tile import Tile
 
 
@@ -15,10 +16,8 @@ class GameMap:
         self.width = width
         self.height = height
 
-        floor_sprite = pygame.image.load("assets/world/placeholder/_test.png").convert_alpha()
-        floor_sprite = pygame.transform.scale(floor_sprite, (TILE_SIZE, TILE_SIZE))
-        wall_sprite = pygame.image.load("assets/world/placeholder/_testWall.png").convert_alpha()
-        wall_sprite = pygame.transform.scale(wall_sprite, (TILE_SIZE, TILE_SIZE))
+        floor_sprite = game.Utility.get_image("assets/world/placeholder/_test.png", (TILE_SIZE, TILE_SIZE))
+        wall_sprite = game.Utility.get_image("assets/world/placeholder/_testWall.png", (TILE_SIZE, TILE_SIZE))
 
         # populate map with tiles
         for x in range(self.width):

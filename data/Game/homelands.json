@@ -1,11 +1,11 @@
 {
-    "aristo_pirate": {
+    "soft_tops": {
         "__dataclass__": "CharacteristicData",
         "bustle": 1,
         "clout": 3,
-        "description": "A aristo pirate description",
+        "description": "Home to beautiful wildlife, towering, majestic fauna and the air of constant, never-ending warfare.",
         "exactitude": -1,
-        "name": "aristo pirate",
+        "name": "the soft tops",
         "sight_range": 5,
         "skills": [
             "flail"
@@ -13,20 +13,5 @@
         "skullduggery": 0,
         "sprite": "",
         "vigour": 1
-    },
-    "bog_refugee": {
-        "__dataclass__": "CharacteristicData",
-        "bustle": 1,
-        "clout": 1,
-        "description": "A bog refugee description",
-        "exactitude": 1,
-        "name": "bog refugee",
-        "sight_range": 5,
-        "skills": [
-            "none"
-        ],
-        "skullduggery": 2,
-        "sprite": "",
-        "vigour": -2
     }
 }

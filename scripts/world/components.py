@@ -109,20 +109,28 @@ class HasCombatStats:
 
 class Knowledge:
     """[Component] An entity's knowledge, including skills."""
-    def __init__(self, skills: List[str] = []):
+    def __init__(self, skills: List[str] = None):
+        if skills is None:
+            skills = []
         self.skills = skills
 
 
 class Affliction:
     """[Component] An entity's Boons and Banes. e.g. {boon_name: duration}"""
-    def __init__(self, boons: Dict = {}, banes: Dict = {}):
+    def __init__(self, boons: Dict = None, banes: Dict = None):
+        if banes is None:
+            banes = {}
+        if boons is None:
+            boons = {}
         self.boons = boons
         self.banes = banes
 
 
 class Aspect:
     """[Component] An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
-    def __init__(self, aspects: Dict = {}):
+    def __init__(self, aspects: Dict = None):
+        if aspects is None:
+            aspects = {}
         self.aspects = aspects
 
 

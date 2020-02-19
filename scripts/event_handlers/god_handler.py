@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from scripts.core.constants import EffectTypes, EventTopics, Directions
 from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.library import library
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Position, IsGod
 from scripts.events.entity_events import UseSkillEvent
 

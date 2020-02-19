@@ -7,7 +7,7 @@ from pygame_gui.elements import UIButton, UIImage
 from scripts.core.constants import TILE_SIZE, GameStates
 from scripts.core.event_hub import publisher
 from scripts.events.ui_events import ClickTile
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Position, Aesthetic
 
 

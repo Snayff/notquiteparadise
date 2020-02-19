@@ -4,12 +4,12 @@ import logging
 import pstats
 import pygame
 from scripts.core.constants import GameStates, VERSION
-from scripts.managers.input_manager import input
-from scripts.managers.ui_manager import ui
-from scripts.managers.debug_manager import debug
+from scripts.managers.input_manager.input_manager import input
+from scripts.managers.ui_manager.ui_manager import ui
+from scripts.managers.game_manager.debug_manager import debug
 from scripts.managers.turn_manager import turn
-from scripts.managers.world_manager import world
-from scripts.managers.game_manager import game
+from scripts.managers.world_manager.world_manager import world
+from scripts.managers.game_manager.game_manager import game
 from scripts.core.event_hub import event_hub
 from scripts.core.initialisers import initialise_game, initialise_event_handlers, initialise_logging
 
@@ -66,17 +66,17 @@ def game_loop():
     The core game loop, handling input, rendering and logic.
     """
 
-    while not game.game_state == GameStates.EXIT_GAME:
+    while not game.State.get_current() == GameStates.EXIT_GAME:
 
-        # get delta time and set frame rate with .tick()
-        delta_time = game.internal_clock.tick(60) / 1000.0
+        # get delta time to support UI updates
+        delta_time = game.State.get_delta_time()
 
-        if game.game_state == GameStates.ENEMY_TURN:
+        if game.State.get_current() == GameStates.ENEMY_TURN:
             turn.turn_holder.ai.take_turn()
 
         # update based on input events
         for event in pygame.event.get():
-            input.update(event, game.game_state)
+            input.update(event, game.State.get_current())
             ui.process_ui_events(event)
             ui.handle_ui_events(event)
 

@@ -23,7 +23,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.VIGOUR
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -33,7 +33,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.CLOUT
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -43,7 +43,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.SKULLDUGGERY
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -53,7 +53,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.BUSTLE
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -63,7 +63,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.EXACTITUDE
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -84,7 +84,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -112,7 +112,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -139,7 +139,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -167,7 +167,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -195,7 +195,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -222,7 +222,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -249,7 +249,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -276,7 +276,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -291,7 +291,7 @@ class CombatStats:
         Highest value among base contributions then modifiers applied. Cant be less than 0.
         """
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
 
         stat = SecondaryStatTypes.SIGHT_RANGE
         stat_data = library.get_secondary_stat_data(stat)
