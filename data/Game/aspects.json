@@ -2,7 +2,7 @@
     "bog": {
         "__dataclass__": "AspectData",
         "blocks_movement": "False",
-        "blocks_sight": "False",
+        "blocks_sight": "True",
         "description": "This is the bog aspect. It slows entities down.",
         "duration": null,
         "effects": {

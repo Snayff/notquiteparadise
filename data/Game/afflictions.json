@@ -27,7 +27,7 @@
     },
     "flaming": {
         "__dataclass__": "AfflictionData",
-        "category": "bane",
+        "category": "BANE",
         "description": "It does damage.",
         "effects": {
             "damage": {
@@ -51,7 +51,7 @@
         },
         "icon": "placeholder/icon_00.png",
         "name": "flaming",
-        "trigger_event": "end_turn"
+        "trigger_event": "ACTION"
     },
     "myopic": {
         "__dataclass__": "AfflictionData",

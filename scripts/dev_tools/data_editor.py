@@ -3,6 +3,8 @@ from __future__ import annotations
 import dataclasses
 import json
 import logging
+from random import random
+
 import pygame
 import pygame_gui
 from pprint import pprint
@@ -16,19 +18,15 @@ from scripts.core.extend_json import ExtendedJsonEncoder
 from scripts.core.library import library
 from scripts.managers.game_manager.game_manager import game
 from scripts.skills.effect import EffectData
+from scripts.world.data_classes.attitude_dataclass import AttitudeData
+from scripts.world.data_classes.interaction_dataclass import InteractionData
+from scripts.world.data_classes.intervention_dataclass import InterventionData
 
 if TYPE_CHECKING:
     from typing import Any, Tuple
     from pygame_gui import UIManager
 
-
-# TODO - there are no more Enums. Remove all refs and rebuild functionality.
 # TODO - add None option to drop downs
-# TODO - dropdown change isnt saving
-# TODO - primary details not clearing on new category
-# TODO - don't remove "_" from skill field - these are the skill keys
-# TODO - don't clean "_" from keys
-# TODO - add special case for "skills" field - get all keys from skills.json
 # TODO - ability to add new
 
 
@@ -38,7 +36,7 @@ class DataEditor(UIWindow):
     """
 
     def __init__(self, rect, manager):
-        element_ids = ["skill_editor"]
+        element_ids = ["data_editor"]
 
         super().__init__(rect, manager, element_ids=element_ids)
 
@@ -263,7 +261,7 @@ class DataEditor(UIWindow):
 
         # Turn value into a list of strings
         prefixed_options.extend(f"edit#{key}#{name}" for name in options)
-        values_list.extend(name for name in value)
+        values_list.extend(name for name in value.keys())
 
         # replace spaces with underscores as object_id doesnt like spaces
         # values_list = [new_value.replace(" ", "_") for new_value in values_list]
@@ -394,17 +392,18 @@ class DataEditor(UIWindow):
 
             # ensure the object ID has no spaces
             object_id = button_name
-            object_id.replace(" ", "_")
+            object_id.replace(" ", "_")  # FIXME - space not being replaced. 
 
             # create the button
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
             button = UIButton(button_rect, name, self.ui_manager, container=container,
                               parent_element=self, object_id=object_id)
             offset_x += width
-            buttons[key + name] = button
-            print(f"Created btn {key}:{button_name}")
+            buttons[object_id] = button
 
         return buttons
+
+    ############### LOAD ###################
 
     def _load_field_options(self):
         """
@@ -449,11 +448,12 @@ class DataEditor(UIWindow):
             "target_directions": (get_members(Directions), None),
             "terrain_collision": (get_members(SkillTerrainCollisions), None),
             "travel_type": (get_members(SkillTravelTypes), None),
+            "interactions": (affliction_options + effect_options + skill_options, InteractionData),
+            "attitudes": (affliction_options + effect_options + skill_options, AttitudeData),
+            "interventions": (skill_options, InterventionData)
         }
 
         self.field_options = field_options
-
-    ############### LOAD ###################
 
     def _load_details(self, primary_or_secondary: str, data_instance: str):
         """
@@ -493,43 +493,44 @@ class DataEditor(UIWindow):
             # create a blank data class based on the data class of the 0th item in the current category
             first_item = next(iter(self.all_data[self.current_data_category].values()))
             data_dict = dataclasses.asdict(type(first_item))
+            # TODO - need way to set the key for the new dict
 
         # create data fields
         for key, value in data_dict.items():
-            try:
-                if key in self.field_options:
-                    options, secondary_fields = self.field_options[key]
-                else:
-                    options = secondary_fields = None
+            #try:
+            if key in self.field_options:
+                options, secondary_fields = self.field_options[key]
+            else:
+                options = secondary_fields = None
 
-                # have we identified the secondary fields?
-                if secondary_fields:
-                    data_field = self._create_edit_detail_field(key, value, options, start_x, current_y, row_width,
-                                                                row_height, container, manager)
-                else:
-                    if options:
-                        # if key name is plural
-                        if key[len(key) - 1:] == "s":
-                            data_field = self._create_multiple_from_options_field(key, value, options, start_x,
-                                                                                  current_y, row_width, row_height,
-                                                                                  container, manager)
-                        # singular name, only pick one
-                        else:
-                            data_field = self._create_one_from_options_field(key, value, options, start_x,
-                                                                             current_y, row_width, row_height,
-                                                                             container, manager)
-                    # no options so it must be a text field
+            # have we identified the secondary fields?
+            if secondary_fields:
+                data_field = self._create_edit_detail_field(key, value, options, start_x, current_y, row_width,
+                                                            row_height, container, manager)
+            else:
+                if options:
+                    # if key name is plural
+                    if key[len(key) - 1:] == "s":
+                        data_field = self._create_multiple_from_options_field(key, value, options, start_x,
+                                                                              current_y, row_width, row_height,
+                                                                              container, manager)
+                    # singular name, only pick one
                     else:
-                        data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width,
-                                                                   row_height, container, manager)
+                        data_field = self._create_one_from_options_field(key, value, options, start_x,
+                                                                         current_y, row_width, row_height,
+                                                                         container, manager)
+                # no options so it must be a text field
+                else:
+                    data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width,
+                                                               row_height, container, manager)
 
-                # increment Y
-                current_y += data_field.height + 1
+            # increment Y
+            current_y += data_field.height + 1
 
-                # save the data field
-                data_fields[key] = data_field
-            except ValueError:
-                logging.warning(f"Error trying to create data field for {key}:{value}")
+            # save the data field
+            data_fields[key] = data_field
+            #except ValueError:
+            #    logging.warning(f"Error trying to create data field for {key}:{value}")
 
         # update the main record
         if primary_or_secondary == "primary":
@@ -660,6 +661,5 @@ class DataField:
 
         if self.buttons:
             for key, button in self.buttons.items():
-                print(f"Killed btn {key}:{button.object_ids}")
                 button.kill()
             self.buttons = None
