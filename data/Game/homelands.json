@@ -11,7 +11,7 @@
             "flail"
         ],
         "skullduggery": 0,
-        "sprite": "",
+        "sprite": "assets/actor/homeland/soft_tops.png",
         "vigour": 1
     }
 }

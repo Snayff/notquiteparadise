@@ -29,6 +29,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - could turn manager sit under game?
 # TODO - add piercing so projectile can damage and keep going
 # TODO - add projectiles, i.e. entity creation, movement and collision
+# TODO - multi-tile entities
 
 
 def main():

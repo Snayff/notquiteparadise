@@ -337,11 +337,15 @@ class EntityMethods:
         self._manager.World.add_component(entity, Knowledge(skills))
 
         # add aesthetic
-        # TODO - build final sprite from all characteristics
         icon = game.Utility.get_image(people_data.sprite, (ICON_SIZE, ICON_SIZE))
-        sprite = game.Utility.get_image(people_data.sprite, (TILE_SIZE, TILE_SIZE))
+        homeland_sprite = game.Utility.get_image(homeland_data.sprite, (TILE_SIZE, TILE_SIZE))
+        people_sprite = game.Utility.get_image(people_data.sprite, (TILE_SIZE, TILE_SIZE))
+        savvy_sprite = game.Utility.get_image(savvy_data.sprite, (TILE_SIZE, TILE_SIZE))
 
-        self._manager.World.add_component(entity, Aesthetic(sprite, icon))
+        # combine the sprite homeland -> people -> savvy
+        homeland_sprite.blits(((people_sprite, (0, 0)), (savvy_sprite, (0, 0))))
+
+        self._manager.World.add_component(entity, Aesthetic(homeland_sprite, icon))
 
         # player fov
         if is_player:
