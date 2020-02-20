@@ -1,7 +1,7 @@
 {
     "bogged down": {
         "__dataclass__": "AfflictionData",
-        "category": "bane",
+        "category": "BANE",
         "description": "It weakens mundane defence and makes you a little bit slower.",
         "effects": {
             "affect_stat": {
@@ -23,7 +23,7 @@
         },
         "icon": "placeholder/icon_00.png",
         "name": "bogged down",
-        "trigger_event": "passive"
+        "trigger_event": "PASSIVE"
     },
     "flaming": {
         "__dataclass__": "AfflictionData",

@@ -8,9 +8,8 @@ import pygame_gui
 from pprint import pprint
 from enum import Enum
 from typing import TYPE_CHECKING, List, Dict
-from pygame_gui.core import UIWindow
+from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
-
 from scripts.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
     TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
 from scripts.core.extend_json import ExtendedJsonEncoder
@@ -20,6 +19,8 @@ from scripts.skills.effect import EffectData
 
 if TYPE_CHECKING:
     from typing import Any, Tuple
+    from pygame_gui import UIManager
+
 
 # TODO - there are no more Enums. Remove all refs and rebuild functionality.
 # TODO - add None option to drop downs
@@ -212,8 +213,8 @@ class DataEditor(UIWindow):
         return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="instance_selector")
 
-    def _create_one_from_options_field(self, key, value, x, y, width, height, container,
-            ui_manager) -> DataField:
+    def _create_one_from_options_field(self, key: str, value: Any, options: List[str], x: int, y: int, width: int,
+            height: int, container: UIContainer, ui_manager: UIManager) -> DataField:
         """
         Create a data field containing label, current value and a dropdown of possible options.
         """
@@ -221,13 +222,10 @@ class DataEditor(UIWindow):
 
         # get value name
         if value:
-            value_name = value.name
+            value_name = value
         else:
             value_name = "None"
 
-        # get list of enums names from the enum that contains the current value
-        options = []
-        options.extend(name.name for name in value.__class__.__members__.values())
         options.sort()
 
         # create the key label
@@ -249,33 +247,31 @@ class DataEditor(UIWindow):
                                parent_element=self, object_id=key)
 
         # create the data field
-        data_field = DataField(key, value, value_name, Enum, labels, height*2, input_element=input, options=options)
+        data_field = DataField(key, value, value_name, Enum, labels, height * 2, input_element=input, options=options)
 
         return data_field
 
-    def _create_edit_detail_field(self, key, value, x, y, width, height, container, ui_manager) -> DataField:
+    def _create_edit_detail_field(self, key: str, value: Any, options: List[str], x: int, y: int, width: int,
+            height: int, container: UIContainer, ui_manager: UIManager) -> DataField:
         """
         Create a data field containing label, current values and a row of buttons for possible options. Buttons are
         prefixed with edit#
         """
         labels = []
-        options = []
+        prefixed_options = []
         values_list = []
 
         # Turn value into a list of strings
-        options.extend(f"edit#{key}#{name}" for name in value)
+        prefixed_options.extend(f"edit#{key}#{name}" for name in options)
         values_list.extend(name for name in value)
 
         # replace spaces with underscores as object_id doesnt like spaces
-        values_list = [new_value.replace(" ", "_") for new_value in values_list]
-        options = [new_value.replace(" ", "_") for new_value in options]
+        # values_list = [new_value.replace(" ", "_") for new_value in values_list]
+        # options = [new_value.replace(" ", "_") for new_value in options]
 
         # sort lists alphabetically
-        options.sort()
+        prefixed_options.sort()
         values_list.sort()
-
-        # as its not an enum it needs to be able to create new items so add a new option at the start of the list
-        options.insert(0, f"edit#{key}#New")
 
         # create the key label
         key_width = int(width * self.label_width_mod)
@@ -295,54 +291,45 @@ class DataEditor(UIWindow):
         labels.append(value_label)
 
         # determine how wide to make buttons
-        button_width = width // len(options)
+        button_width = width // len(prefixed_options)
 
         # create the option's buttons, incremented by height
-        buttons = self._create_row_of_buttons(options, x, y + height, button_width, height)
+        buttons = self._create_row_of_buttons(prefixed_options, x, y + height, button_width, height)
 
         # create the data field
-        data_field = DataField(key, value, values_str, Dict, labels, height*2, buttons=buttons, options=options)
+        data_field = DataField(key, value, values_str, Dict, labels, height * 2, buttons=buttons,
+                               options=prefixed_options)
 
         return data_field
 
-    def _create_multiple_from_options_field(self, key, value, x, y, width, height, container,
-            ui_manager) -> DataField:
+    def _create_multiple_from_options_field(self, key: str, value: Any, options: List[str], x: int, y: int,
+            width: int, height: int, container: UIContainer, ui_manager: UIManager) -> DataField:
         """
         Create a data field containing label, current values and a row of buttons for possible options. Button's
         object_ids are prefixed with multi#
         """
         labels = []
-        options = []
+        prefixed_options = []
         values_list = []
 
-        # get the first value to check if it is an enum
-        _value = value[0]
+        # add prefix
+        prefixed_options.extend(f"multi#{key}#{name}" for name in options)
+        values_list.extend(name for name in value)
 
-        # Turn value into a list of strings; whether value is enum or strings
-        if isinstance(_value, Enum):
-            # add prefix and get other enum members
-            options.extend(f"multi#{key}#{name.name}" for name in _value.__class__.__members__.values())
-            values_list.extend(name.name for name in value)
-        else:
-            # as its not an enum it needs to be able to create new items so add a new option
-            options = [f"multi#{key}#New"]
-            options.extend(f"multi#{key}#{name}" for name in value)
-            values_list.extend(name for name in value)
-
-            # replace spaces with underscores as object_id doesnt like spaces
-            values_list = [new_value.replace(" ", "_") for new_value in values_list]
-            options = [new_value.replace(" ", "_") for new_value in options]
+        # replace spaces with underscores as object_id doesnt like spaces
+        # values_list = [new_value.replace(" ", "_") for new_value in values_list]
+        # prefixed_options = [new_value.replace(" ", "_") for new_value in options]
 
         # sort lists alphabetically
-        options.sort()
+        prefixed_options.sort()
         values_list.sort()
-                
+
         # create the key label
         key_width = int(width * self.label_width_mod)
         key_rect = pygame.Rect((x, y), (key_width, height))
         key_label = UILabel(key_rect, key, ui_manager, container=container, parent_element=self)
         labels.append(key_label)
-        
+
         # convert the list to a string
         values_str = ", ".join(values_list)
         values_str += ", "  # add comma to the end to help delimit when adding other values
@@ -355,14 +342,14 @@ class DataEditor(UIWindow):
         labels.append(value_label)
 
         # determine how wide to make buttons
-        button_width = width // len(options)
-        
+        button_width = width // len(prefixed_options)
+
         # create the option's buttons, incremented by height
-        buttons = self._create_row_of_buttons(options, x, y + height, button_width, height)
-        
+        buttons = self._create_row_of_buttons(prefixed_options, x, y + height, button_width, height)
+
         # create the data field
-        data_field = DataField(key, value, values_str, List, labels, height*2, buttons=buttons,
-                               options=_value.__class__.__members__)
+        data_field = DataField(key, value, values_str, List, labels, height * 2, buttons=buttons,
+                               options=prefixed_options)
 
         return data_field
 
@@ -405,10 +392,14 @@ class DataEditor(UIWindow):
                 name = button_name
                 key = button_name
 
+            # ensure the object ID has no spaces
+            object_id = button_name
+            object_id.replace(" ", "_")
+
             # create the button
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
             button = UIButton(button_rect, name, self.ui_manager, container=container,
-                              parent_element=self, object_id=button_name)
+                              parent_element=self, object_id=object_id)
             offset_x += width
             buttons[key + name] = button
             print(f"Created btn {key}:{button_name}")
@@ -461,6 +452,7 @@ class DataEditor(UIWindow):
         }
 
         self.field_options = field_options
+
     ############### LOAD ###################
 
     def _load_details(self, primary_or_secondary: str, data_instance: str):
@@ -505,19 +497,31 @@ class DataEditor(UIWindow):
         # create data fields
         for key, value in data_dict.items():
             try:
-                # TODO - there are no more enums, find way to identify those that fit here.
-                if isinstance(value, Enum):
-                    data_field = self._create_one_from_options_field(key, value, start_x, current_y, row_width,
-                                                                     row_height, container, manager)
-                elif isinstance(value, List):
-                    data_field = self._create_multiple_from_options_field(key, value, start_x, current_y,
-                                                                          row_width, row_height, container, manager)
-                elif isinstance(value, Dict):
-                    data_field = self._create_edit_detail_field(key, value, start_x, current_y, row_width,
+                if key in self.field_options:
+                    options, secondary_fields = self.field_options[key]
+                else:
+                    options = secondary_fields = None
+
+                # have we identified the secondary fields?
+                if secondary_fields:
+                    data_field = self._create_edit_detail_field(key, value, options, start_x, current_y, row_width,
                                                                 row_height, container, manager)
                 else:
-                    data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width,
-                                                               row_height, container, manager)
+                    if options:
+                        # if key name is plural
+                        if key[len(key) - 1:] == "s":
+                            data_field = self._create_multiple_from_options_field(key, value, options, start_x,
+                                                                                  current_y, row_width, row_height,
+                                                                                  container, manager)
+                        # singular name, only pick one
+                        else:
+                            data_field = self._create_one_from_options_field(key, value, options, start_x,
+                                                                             current_y, row_width, row_height,
+                                                                             container, manager)
+                    # no options so it must be a text field
+                    else:
+                        data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width,
+                                                                   row_height, container, manager)
 
                 # increment Y
                 current_y += data_field.height + 1
@@ -626,8 +630,9 @@ class DataField:
     """
     Holds a set of related data and ui elements
     """
+
     def __init__(self, key: str, value: Any, value_as_str: str, value_type, labels: List, height: int,
-    input_element=None, buttons: Dict[str, UIButton] = None, options: List = None):
+            input_element=None, buttons: Dict[str, UIButton] = None, options: List = None):
         self.key = key
         self.value = value
         self.value_as_str = value_as_str
