@@ -11,7 +11,8 @@ from typing import TYPE_CHECKING, List, Dict
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 
-from scripts.core.constants import EffectTypes, AfflictionTriggers
+from scripts.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
+    TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
 from scripts.core.extend_json import ExtendedJsonEncoder
 from scripts.core.library import library
 from scripts.managers.game_manager.game_manager import game
@@ -414,22 +415,52 @@ class DataEditor(UIWindow):
 
         return buttons
 
-    def _load_field_options(self) -> Dict[str, Tuple]:
+    def _load_field_options(self):
         """
         Maps the various data keys to their related (options, dataclass). The dataclass is only provided if the key
-        relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData)
+        relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData). Loads
+        details into self.field_options
         """
-        effect_options = game.Utility.get_class_members(EffectTypes)
-        trigger_event_options = game.Utility.get_class_members(AfflictionTriggers)
-        affliction_options = self.all_data["afflictions"].keys()
+        get_members = game.Utility.get_class_members
 
-        key_options = {
+        affliction_options = [key for key in self.all_data["afflictions"].keys()]
+        aspect_options = [key for key in self.all_data["aspects"].keys()]
+        effect_options = get_members(EffectTypes)
+        primary_stat_options = get_members(PrimaryStatTypes)
+        secondary_stat_options = get_members(SecondaryStatTypes)
+        bool_options = ["True", "False"]
+        skill_options = [key for key in self.all_data["skills"].keys()]
+
+        field_options = {
             "effects": (effect_options, EffectData),
-            "trigger_event": (trigger_event_options, None),
-            "affliction_name": (affliction_options , None)
+            "trigger_event": (get_members(AfflictionTriggers), None),
+            "affliction_name": (affliction_options, None),
+            "aspect_name": (aspect_options, None),
+            "damage_type": (get_members(DamageTypes), None),
+            "effect_type": (effect_options, None),
+            "stat_to_affect": (primary_stat_options + secondary_stat_options, None),
+            "stat_to_target": (primary_stat_options, None),
+            "required_tags": (get_members(TargetTags), None),
+            "mod_stat": (primary_stat_options + secondary_stat_options, None),
+            "blocks_movement": (bool_options, None),
+            "blocks_sight": (bool_options, None),
+            "category": (get_members(AfflictionCategory), None),
+            "cause": (affliction_options + effect_options + skill_options, None),  # interaction trigger
+            "change_to": (aspect_options, None),
+            "primary_stat_type": (primary_stat_options, None),
+            "secondary_stat_type": (secondary_stat_options, None),
+            "action": (affliction_options + effect_options + skill_options, None),  # gods attitudes on things
+            "skill_key": (skill_options, None),
+            "skills": (skill_options, None),
+            "expiry_type": (get_members(SkillExpiryTypes), None),
+            "resource_type": (secondary_stat_options, None),
+            "shape": (get_members(SkillShapes), None),
+            "target_directions": (get_members(Directions), None),
+            "terrain_collision": (get_members(SkillTerrainCollisions), None),
+            "travel_type": (get_members(SkillTravelTypes), None),
         }
 
-        return key_options
+        self.field_options = field_options
     ############### LOAD ###################
 
     def _load_details(self, primary_or_secondary: str, data_instance: str):

@@ -14,7 +14,7 @@ class EffectData:
     """
     effect_type: EffectTypes
     required_tags: List[TargetTags] = field(default_factory=list)
-    damage: int = 0
+    damage: int = 0  # TODO - combine with affect stat amount as only one will be on each effect
     affect_stat_amount: int = 0
     mod_stat: PrimaryStatTypes = None
     mod_amount: int = 0

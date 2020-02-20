@@ -2,9 +2,9 @@
     "the_small_gods": {
         "__dataclass__": "GodData",
         "attitudes": {
-            "BURN": {
+            "burn": {
                 "__dataclass__": "AttitudeData",
-                "action": "BURN",
+                "action": "burn",
                 "opinion_change": -10
             },
             "damage": {

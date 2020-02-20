@@ -37,7 +37,7 @@
                 "affliction_name": "None",
                 "aspect_name": "None",
                 "damage": 15,
-                "damage_type": "BURN",
+                "damage_type": "burn",
                 "duration": 0,
                 "effect_type": "damage",
                 "mod_amount": 0,
