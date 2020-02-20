@@ -9,7 +9,7 @@ from scripts.core.constants import IMAGE_NOT_FOUND_PATH
 
 if TYPE_CHECKING:
     from scripts.managers.game_manager.game_manager import GameManager
-    from typing import Tuple
+    from typing import Tuple, List, Any
 
 
 class UtilityMethods:
@@ -20,7 +20,8 @@ class UtilityMethods:
     def __init__(self, manager):
         self._manager = manager  # type: GameManager
 
-    def get_image(self, img_path: str, desired_dimensions: Tuple[int, int] = None) -> pygame.Surface:
+    @staticmethod
+    def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pygame.Surface:
         """
         Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format.
         """
@@ -66,3 +67,16 @@ class UtilityMethods:
             # Break the list out and run recursively against the elements
             for element in obj:
                 self.recursive_replace(element, key, value_to_replace, new_value)
+
+    @staticmethod
+    def get_class_members(cls: Any) -> List[str]:
+        """
+        Get a class' members, excluding special methods e.g. anything prefixed with '__'
+         """
+        members = []
+
+        for member in cls.__dict__.keys():
+            if member[:2] != "__":
+                members.append(member)
+
+        return members

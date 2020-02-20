@@ -10,9 +10,12 @@ from enum import Enum
 from typing import TYPE_CHECKING, List, Dict
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
+
+from scripts.core.constants import EffectTypes, AfflictionTriggers
 from scripts.core.extend_json import ExtendedJsonEncoder
 from scripts.core.library import library
-
+from scripts.managers.game_manager.game_manager import game
+from scripts.skills.effect import EffectData
 
 if TYPE_CHECKING:
     from typing import Any, Tuple
@@ -41,6 +44,7 @@ class DataEditor(UIWindow):
         self.all_data = None
         self.current_data_instance = None
         self.current_data_category = None
+        self.field_options = None
 
         # data selectors
         self.category_selector: UIDropDownMenu = None
@@ -71,8 +75,9 @@ class DataEditor(UIWindow):
 
         self.max_y = self.height
 
-        # get the data options
+        # get the data & field options
         self._load_library_data()
+        self._load_field_options()
 
         # display the initial selector
         self.category_selector = self._create_data_category_selector()
@@ -409,6 +414,22 @@ class DataEditor(UIWindow):
 
         return buttons
 
+    def _load_field_options(self) -> Dict[str, Tuple]:
+        """
+        Maps the various data keys to their related (options, dataclass). The dataclass is only provided if the key
+        relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData)
+        """
+        effect_options = game.Utility.get_class_members(EffectTypes)
+        trigger_event_options = game.Utility.get_class_members(AfflictionTriggers)
+        affliction_options = self.all_data["afflictions"].keys()
+
+        key_options = {
+            "effects": (effect_options, EffectData),
+            "trigger_event": (trigger_event_options, None),
+            "affliction_name": (affliction_options , None)
+        }
+
+        return key_options
     ############### LOAD ###################
 
     def _load_details(self, primary_or_secondary: str, data_instance: str):
@@ -452,33 +473,39 @@ class DataEditor(UIWindow):
 
         # create data fields
         for key, value in data_dict.items():
-            # TODO - there are no more enums, find way to identify those that fit here.
-            if isinstance(value, Enum):
-                data_field = self._create_one_from_options_field(key, value, start_x, current_y, row_width,
-                                                                 row_height, container, manager)
-            elif isinstance(value, List):
-                data_field = self._create_multiple_from_options_field(key, value, start_x, current_y,
-                                                                      row_width, row_height, container, manager)
-            elif isinstance(value, Dict):
-                data_field = self._create_edit_detail_field(key, value, start_x, current_y, row_width, row_height,
-                                                            container, manager)
-            else:
-                data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width, row_height,
-                                                           container, manager)
+            try:
+                # TODO - there are no more enums, find way to identify those that fit here.
+                if isinstance(value, Enum):
+                    data_field = self._create_one_from_options_field(key, value, start_x, current_y, row_width,
+                                                                     row_height, container, manager)
+                elif isinstance(value, List):
+                    data_field = self._create_multiple_from_options_field(key, value, start_x, current_y,
+                                                                          row_width, row_height, container, manager)
+                elif isinstance(value, Dict):
+                    data_field = self._create_edit_detail_field(key, value, start_x, current_y, row_width,
+                                                                row_height, container, manager)
+                else:
+                    data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width,
+                                                               row_height, container, manager)
 
-            # increment Y
-            current_y += data_field.height + 1
+                # increment Y
+                current_y += data_field.height + 1
 
-            # save the data field
-            data_fields[key] = data_field
+                # save the data field
+                data_fields[key] = data_field
+            except ValueError:
+                logging.warning(f"Error trying to create data field for {key}:{value}")
 
         # update the main record
-        if primary_or_secondary != "secondary":
+        if primary_or_secondary == "primary":
             self.primary_data_fields = {}
             self.primary_data_fields = data_fields
-        else:
+        elif primary_or_secondary == "secondary":
             self.secondary_data_fields = {}
             self.secondary_data_fields = data_fields
+        else:
+            self.primary_data_fields = {}
+            self.primary_data_fields = data_fields
 
         # take note of the highest used y, for the scroll bar
         self.max_y = max(current_y, self.max_y)

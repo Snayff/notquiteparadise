@@ -86,14 +86,6 @@ class DamageTypes(SimpleNamespace):
     MUNDANE = 5
 
 
-class StatTypes(SimpleNamespace):
-    """
-    Primary stats
-    """
-    PRIMARY = 1
-    SECONDARY = 2
-
-
 class PrimaryStatTypes(SimpleNamespace):
     """
     Primary stats. Values are strings.
