@@ -9,7 +9,7 @@ import pygame
 import pygame_gui
 from pprint import pprint
 from enum import Enum
-from typing import TYPE_CHECKING, List, Dict
+from typing import TYPE_CHECKING, List, Dict, Union
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
@@ -26,8 +26,9 @@ if TYPE_CHECKING:
     from typing import Any, Tuple
     from pygame_gui import UIManager
 
-# TODO - add None option to drop downs
+
 # TODO - ability to add new
+# TODO - add secondary details to edit next layer
 
 
 class DataEditor(UIWindow):
@@ -101,84 +102,36 @@ class DataEditor(UIWindow):
         if ui_object_id == "category_selector":
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.category_selector.selected_option != self.current_data_category:
-                    self.current_data_category = self.category_selector.selected_option
-
-                    # clear existing details fields
-                    self._kill_details_fields("primary")
-                    self._kill_details_fields("secondary")
-
-                    # clear existing instance selector
-                    if self.instance_selector:
-                        self.instance_selector.kill()
-                        self.instance_selector = None
-
-                    # create new instance selector
-                    options = []
-                    options.extend(key for key in self.all_data[self.current_data_category].keys())
-                    options.sort()
-                    self.instance_selector = self._create_data_instance_selector(options)
+                    self._select_new_category(self.category_selector.selected_option)
 
         # new selection in instance_selector
         if ui_object_id == "instance_selector":
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if self.instance_selector.selected_option != self.current_data_instance:
-                    # clear existing details fields
-                    self._kill_details_fields("primary")
-                    self._kill_details_fields("secondary")
-
-                    # create new
-                    self.current_data_instance = self.instance_selector.selected_option
-                    self._load_details("primary", self.current_data_instance)
+                    self._select_new_instance(self.instance_selector.selected_option)
 
         # new selection in a different, non-selector dropdown
         if ui_object_id != "instance_selector" and ui_object_id != "category_selector":
             if event.user_type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
-                key = ui_object_id
-                data_field = self.primary_data_fields[key]
-                new_value = data_field.input_element.selected_option
-
-                # check the value has changed
-                if new_value != data_field.value:
-                    has_updated = True
+                data_field, new_value = self._process_dropdown_change(ui_object_id)
 
         # handle text field finished typing (triggers on enter press)
         if event.user_type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
-            key = ui_object_id
-            data_field = self.primary_data_fields[key]
-            new_value = self.instance_selector.selected_option
-
-            has_updated = True
+            data_field, new_value = self._process_textbox_change(ui_object_id)
 
         # handle triggers for secondary details
         prefix = "edit#"
         if ui_object_id[len(prefix):] == prefix:
-            # TODO - clear secondary details
-            # TODO - load secondary details
-            pass
+            self._process_edit_action(ui_object_id)
 
         # handle multiple choice to toggle the value
         prefix = "multi#"
         if ui_object_id[:len(prefix)] == prefix:
-            # get the key
-            prefix, key, object_id = ui_object_id.split("#")
-
-            data_field = self.primary_data_fields[key]
-
-            # get current value
-            current_value: List = data_field.value
-            id_as_value = data_field.options[object_id]
-
-            if id_as_value in current_value:
-                current_value.remove(id_as_value)
-            else:
-                current_value.append(id_as_value)
-
-            new_value = current_value
-            has_updated = True
+            self._process_multi_action(ui_object_id)
 
         # process the update and reload
         # TODO - implement approach to determine if primary or secondary has changed
-        if has_updated and new_value and data_field:
+        if new_value and data_field:
             self._save_updated_field("primary", data_field, new_value)
 
             # clear existing
@@ -187,11 +140,98 @@ class DataEditor(UIWindow):
             # reload to reflect new changes
             self._load_details("primary", self.current_data_instance)
 
+    ################# INTERACT ################
+
+    def _select_new_category(self, category: str):
+        """
+        Select new category, clear existing data fields and create new instance options from category.
+        """
+        self.current_data_category = category
+
+        # clear existing details fields
+        self._kill_details_fields("primary")
+        self._kill_details_fields("secondary")
+
+        # clear existing instance selector
+        if self.instance_selector:
+            self.instance_selector.kill()
+            self.instance_selector = None
+
+        # create new instance selector
+        options = []
+        options.extend(key for key in self.all_data[self.current_data_category].keys())
+        options.sort()
+        self.instance_selector = self._create_data_instance_selector(options)
+
+    def _select_new_instance(self, instance: str):
+        """
+        Select new data instance and clear current data fields before loading primary data details
+        """
+        # clear existing details fields
+        self._kill_details_fields("primary")
+        self._kill_details_fields("secondary")
+
+        # create new
+        self.current_data_instance = instance
+        self._load_details("primary", self.current_data_instance)
+
+    def _process_dropdown_change(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
+        """
+        Check if new option selected in dropdown and if so return data_field and new value"""
+        key = object_id
+        data_field = self.primary_data_fields[key]
+        new_value = data_field.input_element.selected_option
+
+        # check the value has changed
+        if new_value != data_field.value:
+            return data_field, new_value
+
+        return None, None
+
+    def _process_textbox_change(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
+        """
+        Check if text has changed and return data field and new value"""
+        key = object_id
+        data_field = self.primary_data_fields[key]
+        new_value = data_field.input_element.text
+
+        # check the value has changed
+        if new_value != data_field.value:
+            return data_field, new_value
+
+        return None, None
+
+    def _process_edit_action(self, object_id: str):
+        # TODO - clear secondary details
+        # TODO - load secondary details
+        pass
+
+    def _process_multi_action(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
+        """
+        Toggle selected option in the relevant field"""
+        # get the key
+        prefix, key, _object_id = object_id.split("#")
+
+        data_field = self.primary_data_fields[key]
+
+        # get current value
+        current_value: List = data_field.value
+        id_as_value = data_field.options[_object_id]
+
+        if id_as_value in current_value:
+            current_value.remove(id_as_value)
+        else:
+            current_value.append(id_as_value)
+
+        new_value = current_value
+
+        return data_field, new_value
+
     ############## CREATE ################
 
     def _create_data_category_selector(self) -> UIDropDownMenu:
         """
-        Create the skill selector drop down menu
+        Create the category selector drop down menu
         """
         # get options and sort alphabetically
         options = [keys for keys in self.all_data.keys()]
@@ -204,11 +244,14 @@ class DataEditor(UIWindow):
 
     def _create_data_instance_selector(self, options: List[str]) -> UIDropDownMenu:
         """
-        Create the skill selector drop down menu
+        Create the instance selector drop down menu
         """
         rect = pygame.Rect((self.start_x, self.start_y + self.row_height), (self.width, self.row_height))
 
-        return UIDropDownMenu(options, "None", rect, self.ui_manager, container=self.get_container(),
+        _options = options
+        _options.insert(0, "New")
+
+        return UIDropDownMenu(_options, "None", rect, self.ui_manager, container=self.get_container(),
                               parent_element=self, object_id="instance_selector")
 
     def _create_one_from_options_field(self, key: str, value: Any, options: List[str], x: int, y: int, width: int,
@@ -217,6 +260,7 @@ class DataEditor(UIWindow):
         Create a data field containing label, current value and a dropdown of possible options.
         """
         labels = []
+        _options = options
 
         # get value name
         if value:
@@ -224,7 +268,10 @@ class DataEditor(UIWindow):
         else:
             value_name = "None"
 
-        options.sort()
+        # insert none option
+        _options.insert(0, "None")
+
+        _options.sort()
 
         # create the key label
         key_width = int(width * self.label_width_mod)
@@ -241,11 +288,12 @@ class DataEditor(UIWindow):
 
         # create the option's dropwdown, incremented by height
         input_rect = pygame.Rect((x, y + height), (width, height))
-        input = UIDropDownMenu(options, value_name, input_rect, ui_manager, container=container,
+        input = UIDropDownMenu(_options, value_name, input_rect, ui_manager, container=container,
                                parent_element=self, object_id=key)
 
         # create the data field
-        data_field = DataField(key, value, value_name, Enum, labels, height * 2, input_element=input, options=options)
+        data_field = DataField(key, value, value_name, Enum, labels, height * 2, input_element=input,
+                               options=_options)
 
         return data_field
 
@@ -330,7 +378,10 @@ class DataEditor(UIWindow):
 
         # convert the list to a string
         values_str = ", ".join(values_list)
-        values_str += ", "  # add comma to the end to help delimit when adding other values
+
+        # add comma to the end to help delimit when adding other values, unless there are no values!
+        if values_str != "":
+            values_str += ", "
 
         # create the current values label
         value_width = width - key_width
@@ -391,7 +442,7 @@ class DataEditor(UIWindow):
                 key = button_name
 
             # ensure the object ID has no spaces
-            object_id = button_name.replace(" ", "_") 
+            object_id = button_name.replace(" ", "_")
 
             # create the button
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
@@ -603,7 +654,7 @@ class DataEditor(UIWindow):
         else:
             self.primary_data_fields = {}
 
-    ############ SAVING ##################
+    ############ SAVE ##################
 
     def _save_updated_field(self, primary_or_secondary, data_field: DataField, updated_value: Any):
         """
