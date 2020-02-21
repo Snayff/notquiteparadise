@@ -3,10 +3,9 @@ from __future__ import annotations
 import dataclasses
 import json
 import logging
-from random import random
-
 import pygame
 import pygame_gui
+
 from pprint import pprint
 from enum import Enum
 from typing import TYPE_CHECKING, List, Dict, Union
@@ -25,6 +24,7 @@ from scripts.world.data_classes.intervention_dataclass import InterventionData
 if TYPE_CHECKING:
     from typing import Any, Tuple
     from pygame_gui import UIManager
+    from dataclasses import dataclass
 
 
 # TODO - ability to add new
@@ -42,10 +42,10 @@ class DataEditor(UIWindow):
         super().__init__(rect, manager, element_ids=element_ids)
 
         # data holders
-        self.all_data = None
-        self.current_data_instance = None
-        self.current_data_category = None
-        self.field_options = None
+        self.all_data: Dict[str, dataclass] = {}
+        self.current_data_instance: str = None
+        self.current_data_category: str = None
+        self.field_options: Dict[str, Tuple[List[str], Union[dataclass, None]]] = {}
 
         # data selectors
         self.category_selector: UIDropDownMenu = None
@@ -94,7 +94,6 @@ class DataEditor(UIWindow):
         Handle events created by this UI widget
         """
         ui_object_id = event.ui_object_id
-        has_updated = False
         new_value = None
         data_field = None
 
@@ -121,7 +120,7 @@ class DataEditor(UIWindow):
 
         # handle triggers for secondary details
         prefix = "edit#"
-        if ui_object_id[len(prefix):] == prefix:
+        if ui_object_id[:len(prefix)] == prefix:
             self._process_edit_action(ui_object_id)
 
         # handle multiple choice to toggle the value
@@ -202,9 +201,14 @@ class DataEditor(UIWindow):
         return None, None
 
     def _process_edit_action(self, object_id: str):
-        # TODO - clear secondary details
-        # TODO - load secondary details
-        pass
+        # get the key
+        prefix, key, _object_id = object_id.split("#")
+
+        # clear existing details fields
+        self._kill_details_fields("secondary")
+
+        #  load secondary details
+        self._load_details("secondary", self.current_data_instance, key)
 
     def _process_multi_action(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
         """
@@ -472,7 +476,7 @@ class DataEditor(UIWindow):
         skill_options = [key for key in self.all_data["skills"].keys()]
 
         field_options = {
-            "effects": (effect_options, EffectData),
+            "effects": (effect_options, EffectData()),
             "trigger_event": (get_members(AfflictionTriggers), None),
             "affliction_name": (affliction_options, None),
             "aspect_name": (aspect_options, None),
@@ -498,14 +502,14 @@ class DataEditor(UIWindow):
             "target_directions": (get_members(Directions), None),
             "terrain_collision": (get_members(SkillTerrainCollisions), None),
             "travel_type": (get_members(SkillTravelTypes), None),
-            "interactions": (affliction_options + effect_options + skill_options, InteractionData),
-            "attitudes": (affliction_options + effect_options + skill_options, AttitudeData),
-            "interventions": (skill_options, InterventionData)
+            "interactions": (affliction_options + effect_options + skill_options, InteractionData()),
+            "attitudes": (affliction_options + effect_options + skill_options, AttitudeData()),
+            "interventions": (skill_options, InterventionData())
         }
 
         self.field_options = field_options
 
-    def _load_details(self, primary_or_secondary: str, data_instance: str):
+    def _load_details(self, primary_or_secondary: str, data_instance: str, secondary_key: str = None):
         """
         Load details of the specified instance into the primary or secondary section
         """
@@ -517,9 +521,9 @@ class DataEditor(UIWindow):
             row_width = self.primary_width
             self.primary_data_fields = []
         elif primary_or_secondary == "secondary":
-            start_x = self.primary_x
-            start_y = self.primary_y
-            row_width = self.primary_width
+            start_x = self.secondary_x
+            start_y = self.secondary_y
+            row_width = self.secondary_width
             self.secondary_data_fields = []
         else:
             logging.warning("Wrong key passed to data_editor:_load_details. Using primary info.")
@@ -535,52 +539,66 @@ class DataEditor(UIWindow):
         current_y = start_y
         data_fields = {}
 
+        # point to the required dataclasses
+        if primary_or_secondary == "secondary" and secondary_key:
+            outer_dataclass = self.all_data[self.current_data_category][data_instance]
+            outer_dict = dataclasses.asdict(outer_dataclass)
+
+            # get the data class from the possible field options
+            _x, inner_dataclass = self.field_options[secondary_key]
+
+            # TODO - get existing details for those options if they exist
+
+        else:
+            outer_dict = self.all_data[self.current_data_category]
+            inner_dataclass = self.all_data[self.current_data_category][data_instance]
+
         # convert dataclass to dict to loop values
         if data_instance != "New":
             # get the existing data class
-            data_dict = dataclasses.asdict(self.all_data[self.current_data_category][data_instance])
+            data_dict = dataclasses.asdict(inner_dataclass)
         else:
             # create a blank data class based on the data class of the 0th item in the current category
-            first_item = next(iter(self.all_data[self.current_data_category].values()))
+            first_item = next(iter(outer_dict.values()))
             data_dict = dataclasses.asdict(type(first_item))
             # TODO - need way to set the key for the new dict
 
         # create data fields
         for key, value in data_dict.items():
-            #try:
-            if key in self.field_options:
-                options, secondary_fields = self.field_options[key]
-            else:
-                options = secondary_fields = None
-
-            # have we identified the secondary fields?
-            if secondary_fields:
-                data_field = self._create_edit_detail_field(key, value, options, start_x, current_y, row_width,
-                                                            row_height, container, manager)
-            else:
-                if options:
-                    # if key name is plural
-                    if key[len(key) - 1:] == "s":
-                        data_field = self._create_multiple_from_options_field(key, value, options, start_x,
-                                                                              current_y, row_width, row_height,
-                                                                              container, manager)
-                    # singular name, only pick one
-                    else:
-                        data_field = self._create_one_from_options_field(key, value, options, start_x,
-                                                                         current_y, row_width, row_height,
-                                                                         container, manager)
-                # no options so it must be a text field
+            try:
+                if key in self.field_options:
+                    options, secondary_fields = self.field_options[key]
                 else:
-                    data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width,
-                                                               row_height, container, manager)
+                    options = secondary_fields = None
 
-            # increment Y
-            current_y += data_field.height + 1
+                # have we identified the secondary fields?
+                if secondary_fields:
+                    data_field = self._create_edit_detail_field(key, value, options, start_x, current_y, row_width,
+                                                                row_height, container, manager)
+                else:
+                    if options:
+                        # if key name is plural
+                        if key[len(key) - 1:] == "s":
+                            data_field = self._create_multiple_from_options_field(key, value, options, start_x,
+                                                                                  current_y, row_width, row_height,
+                                                                                  container, manager)
+                        # singular name, only pick one
+                        else:
+                            data_field = self._create_one_from_options_field(key, value, options, start_x,
+                                                                             current_y, row_width, row_height,
+                                                                             container, manager)
+                    # no options so it must be a text field
+                    else:
+                        data_field = self._create_text_entry_field(key, value, start_x, current_y, row_width,
+                                                                   row_height, container, manager)
 
-            # save the data field
-            data_fields[key] = data_field
-            #except ValueError:
-            #    logging.warning(f"Error trying to create data field for {key}:{value}")
+                # increment Y
+                current_y += data_field.height + 1
+
+                # save the data field
+                data_fields[key] = data_field
+            except ValueError as e:
+                logging.warning(f"Error ({e}) trying to create data field for {key}:{value}.")
 
         # update the main record
         if primary_or_secondary == "primary":

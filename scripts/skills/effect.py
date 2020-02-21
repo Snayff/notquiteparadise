@@ -12,7 +12,7 @@ class EffectData:
     """
     Data class for a skill effect
     """
-    effect_type: EffectTypes
+    effect_type: EffectTypes = None
     required_tags: List[TargetTags] = field(default_factory=list)
     damage: int = 0  # TODO - combine with affect stat amount as only one will be on each effect
     affect_stat_amount: int = 0
