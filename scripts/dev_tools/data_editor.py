@@ -391,8 +391,7 @@ class DataEditor(UIWindow):
                 key = button_name
 
             # ensure the object ID has no spaces
-            object_id = button_name
-            object_id.replace(" ", "_")  # FIXME - space not being replaced. 
+            object_id = button_name.replace(" ", "_") 
 
             # create the button
             button_rect = pygame.Rect((x + offset_x, y), (width, height))
