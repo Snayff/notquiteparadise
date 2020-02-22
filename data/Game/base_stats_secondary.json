@@ -97,5 +97,16 @@
         "secondary_stat_type": "sight_range",
         "skullduggery_mod": 0,
         "vigour_mod": 0
+    },
+    "rush": {
+        "__dataclass__": "BaseSecondaryStatData",
+        "base_value": 100,
+        "bustle_mod": 5,
+        "clout_mod": -2,
+        "exactitude_mod": 0,
+        "name": "rush",
+        "secondary_stat_type": "rush",
+        "skullduggery_mod": 0,
+        "vigour_mod": 1
     }
 }

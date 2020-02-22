@@ -7,7 +7,7 @@
         "exactitude": -1,
         "name": "the soft tops",
         "sight_range": 5,
-        "skills": [
+        "known_skills": [
             "flail"
         ],
         "skullduggery": 0,

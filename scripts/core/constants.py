@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from enum import Enum, auto
 from types import SimpleNamespace
 from typing import NewType
 
 VERSION = "0.91.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
-ICON_SIZE = 64
+ICON_SIZE = 32
 ENTITY_BLOCKS_SIGHT = False
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 
@@ -112,6 +111,7 @@ class SecondaryStatTypes(SimpleNamespace):
     RESIST_COLD = "resist_cold"
     RESIST_MUNDANE = "resist_mundane"
     SIGHT_RANGE = "sight_range"
+    RUSH = "rush"
 
 
 class HitTypes(SimpleNamespace):
@@ -262,7 +262,7 @@ class UIElementTypes(SimpleNamespace):
     SKILL_EDITOR = 7
 
 
-class Directions(Enum):
+class Directions(SimpleNamespace):
     """
     Holds a tuple for each direction of the (x, y) relative direction.
     """

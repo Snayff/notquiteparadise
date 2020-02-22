@@ -112,21 +112,21 @@ class ControlMethods:
         intent = InputIntents
 
         if get_intent(intent.UP):
-            dir_x, dir_y = Directions.UP.value
+            dir_x, dir_y = Directions.UP
         elif get_intent(intent.UP_RIGHT):
-            dir_x, dir_y = Directions.UP_RIGHT.value
+            dir_x, dir_y = Directions.UP_RIGHT
         elif get_intent(intent.UP_LEFT):
-            dir_x, dir_y = Directions.UP_LEFT.value
+            dir_x, dir_y = Directions.UP_LEFT
         elif get_intent(intent.RIGHT):
-            dir_x, dir_y = Directions.RIGHT.value
+            dir_x, dir_y = Directions.RIGHT
         elif get_intent(intent.LEFT):
-            dir_x, dir_y = Directions.LEFT.value
+            dir_x, dir_y = Directions.LEFT
         elif get_intent(intent.DOWN):
-            dir_x, dir_y = Directions.DOWN.value
+            dir_x, dir_y = Directions.DOWN
         elif get_intent(intent.DOWN_RIGHT):
-            dir_x, dir_y = Directions.DOWN_RIGHT.value
+            dir_x, dir_y = Directions.DOWN_RIGHT
         elif get_intent(intent.DOWN_LEFT):
-            dir_x, dir_y = Directions.DOWN_LEFT.value
+            dir_x, dir_y = Directions.DOWN_LEFT
         else:
             dir_x, dir_y = 0, 0
 

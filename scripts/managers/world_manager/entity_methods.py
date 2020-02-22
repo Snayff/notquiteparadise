@@ -12,7 +12,6 @@ from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy,
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
-from enum import Enum
 
 if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
@@ -320,21 +319,21 @@ class EntityMethods:
         self._manager.World.add_component(entity, Resources(stats.max_hp, stats.max_stamina))
 
         # get skills from characteristics
-        skills = ["basic_attack"]  # N.B. All actors start with basic attack
+        known_skills = ["basic_attack"]  # N.B. All actors start with basic attack
         people_data = library.get_people_data(people_name)
-        if people_data.skills != ["none"]:
-            skills += people_data.skills
+        if people_data.known_skills != ["none"]:
+            known_skills += people_data.known_skills
 
         homeland_data = library.get_homeland_data(homeland_name)
-        if homeland_data.skills != ["none"]:
-            skills += homeland_data.skills
+        if homeland_data.known_skills != ["none"]:
+            known_skills += homeland_data.known_skills
 
         savvy_data = library.get_savvy_data(savvy_name)
-        if savvy_data.skills != ["none"]:
-            skills += savvy_data.skills
+        if savvy_data.known_skills != ["none"]:
+            known_skills += savvy_data.known_skills
 
         # add skills to entity
-        self._manager.World.add_component(entity, Knowledge(skills))
+        self._manager.World.add_component(entity, Knowledge(known_skills))
 
         # add aesthetic
         icon = game.Utility.get_image(people_data.sprite, (ICON_SIZE, ICON_SIZE))
@@ -390,7 +389,7 @@ class EntityMethods:
 
         Args:
             entity ():
-            action (): Can be str if matching name, e.g. affliction name, or Enum, e.g. Hit Type name.
+            action (): Can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
 
         """
 
@@ -398,11 +397,7 @@ class EntityMethods:
 
             attitudes = library.get_god_attitudes_data(identity.name)
 
-            # handle enums and str being passed in
-            if isinstance(action, Enum):
-                action_name = action.name
-            else:
-                action_name = action
+            action_name = action
 
             # check if the god has an attitude towards the action and apply the opinion change,
             # adding the entity to the dict if necessary
@@ -422,7 +417,7 @@ class EntityMethods:
 
         Args:
             entity (): entity who acted
-            action (object): Can be str if matching name, e.g. affliction name, or Enum name, e.g. Hit Type name.
+            action (object): Can be str if matching name, e.g. affliction name, or class attribute, e.g. Hit Type name.
 
         Returns:
             List[Tuple]: List of tuples containing (god_entity_id, intervention name).
@@ -435,11 +430,7 @@ class EntityMethods:
                                                                                               Identity, Knowledge):
             attitudes = library.get_god_attitudes_data(identity.name)
 
-            # handle enums and str being passed in
-            if isinstance(action, Enum):
-                action_name = action.name
-            else:
-                action_name = action
+            action_name = action
 
             # check if the god has an attitude towards the action and increase likelihood of intervening
             if action_name in attitudes:

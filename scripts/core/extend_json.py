@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from enum import Enum
 from typing import TYPE_CHECKING, Dict, Type
 import dataclasses
 
@@ -36,7 +35,7 @@ JSON_TYPES = [str, int, dict, float, bool, tuple, list, type(None)]
 
 class ExtendedJsonEncoder(json.JSONEncoder):
     """
-    Extend the json Encoder to handle Enum and dataclass types
+    Extend the json Encoder to handle dataclass types
     """
     __dataclassses__: Dict[str, Type] = {}
 
@@ -52,8 +51,6 @@ class ExtendedJsonEncoder(json.JSONEncoder):
                     for field in dataclasses.fields(obj)
                 },
             }
-        elif isinstance(obj, Enum):
-            return obj.value
         elif type(obj) in JSON_TYPES:
             return obj
         super(ExtendedJsonEncoder, self).default(obj)

@@ -7,7 +7,7 @@
         "exactitude": 0,
         "name": "goblynn",
         "sight_range": 3,
-        "skills": [
+        "known_skills": [
             "none"
         ],
         "skullduggery": 0,
@@ -22,7 +22,7 @@
         "exactitude": 2,
         "name": "shoom",
         "sight_range": 4,
-        "skills": [
+        "known_skills": [
             "eye_watering_mistake", "fractious_fungi"
         ],
         "skullduggery": 2,

@@ -20,4 +20,4 @@ class CharacteristicData:
     skullduggery: int = 0
     bustle: int = 0
     exactitude: int = 0
-    skills: Dict = field(default_factory=dict)
+    known_skills: Dict = field(default_factory=dict)

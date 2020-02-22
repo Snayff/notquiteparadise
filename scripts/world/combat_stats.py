@@ -327,4 +327,30 @@ class CombatStats:
 
         return total
 
+    @property
+    def rush(self) -> int:
+        """
+        how quickly an entity does things. Reduce time cost of actions.
+        """
+        stat = SecondaryStatTypes.RUSH
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        # TODO - moving to the top creates an import error. Resolve it.
+        from scripts.managers.world_manager.world_manager import world
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 

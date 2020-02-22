@@ -7,7 +7,7 @@
         "exactitude": 1,
         "name": "fungechist",
         "sight_range": 5,
-        "skills": [
+        "known_skills": [
             "flail",
             "eye_watering_mistake"
         ],
@@ -23,7 +23,7 @@
         "exactitude": -1,
         "name": "irascible dandy",
         "sight_range": 5,
-        "skills": [
+        "known_skills": [
             "flail"
         ],
         "skullduggery": 1,
