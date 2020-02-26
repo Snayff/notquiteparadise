@@ -30,6 +30,8 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - add piercing so projectile can damage and keep going
 # TODO - add projectiles, i.e. entity creation, movement and collision
 # TODO - multi-tile entities
+# TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
+# TODO - edit the UI json
 
 
 def main():

@@ -28,9 +28,9 @@ copyright = '2020, Snayff'
 author = 'Snayff'
 
 # The short X.Y version
-version = '0.91.0'
+version = '0.92.0'
 # The full version, including alpha/beta/rc tags
-release = '0.91.0'
+release = '0.92.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -229,3 +229,4 @@ autodoc_default_options = {
     'private-members': True
 }
 autoclass_content = "both"
+autodoc_typehints = 'description'
