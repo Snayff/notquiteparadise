@@ -17,77 +17,59 @@ class CombatStats:
         self.entity = entity
 
     @property
-    def vigour(self):
+    def vigour(self) -> int:
         """
-        Influences healthiness.
-
-        Returns:
-            int: How vigorous. Never below 1.
+        Influences healthiness. Never below 1.
         """
         stat = PrimaryStatTypes.VIGOUR
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def clout(self):
+    def clout(self) -> int:
         """
-        Influences forceful things.
-
-        Returns:
-            int: How much clout. Never below 1.
+        Influences forceful things. Never below 1.
         """
         stat = PrimaryStatTypes.CLOUT
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def skullduggery(self):
+    def skullduggery(self) -> int:
         """
-        Influences sneaky things.
-
-        Returns:
-            int: How skullduggery-y. Never below 1.
+        Influences sneaky things. Never below 1.
         """
         stat = PrimaryStatTypes.SKULLDUGGERY
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def bustle(self):
+    def bustle(self) -> int:
         """
-        Influences speedy things.
-
-        Returns:
-            int: How much bustle. Never below 1.
+        Influences speedy things. Never below 1.
         """
         stat = PrimaryStatTypes.BUSTLE
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def exactitude(self):
+    def exactitude(self) -> int:
         """
-        Influences preciseness.
-
-        Returns:
-            int: How exacting. Never below 1.
+        Influences preciseness. Never below 1.
         """
         stat = PrimaryStatTypes.EXACTITUDE
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
-    def max_hp(self):
+    def max_hp(self) -> int:
         """
         Total damage an entity can take before death.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.MAX_HP
         stat_data = library.get_secondary_stat_data(stat)
@@ -102,7 +84,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -112,12 +94,10 @@ class CombatStats:
         return total
 
     @property
-    def max_stamina(self):
+    def max_stamina(self) -> int:
         """
         an entities energy to take actions.
 
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.MAX_STAMINA
         stat_data = library.get_secondary_stat_data(stat)
@@ -132,7 +112,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -142,12 +122,9 @@ class CombatStats:
         return total
 
     @property
-    def accuracy(self):
+    def accuracy(self) -> int:
         """
         an entities likelihood to hit.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.ACCURACY
         stat_data = library.get_secondary_stat_data(stat)
@@ -162,7 +139,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -172,12 +149,10 @@ class CombatStats:
         return total
 
     @property
-    def resist_burn(self):
+    def resist_burn(self) -> int:
         """
         an entities resistance to burn damage.
 
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_BURN
         stat_data = library.get_secondary_stat_data(stat)
@@ -192,7 +167,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -202,12 +177,10 @@ class CombatStats:
         return total
 
     @property
-    def resist_cold(self):
+    def resist_cold(self) -> int:
         """
         an entities resistance to cold damage.
 
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_COLD
         stat_data = library.get_secondary_stat_data(stat)
@@ -222,7 +195,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -232,12 +205,9 @@ class CombatStats:
         return total
 
     @property
-    def resist_chemical(self):
+    def resist_chemical(self) -> int:
         """
         an entities resistance to chemical damage.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_CHEMICAL
         stat_data = library.get_secondary_stat_data(stat)
@@ -252,7 +222,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -262,12 +232,9 @@ class CombatStats:
         return total
 
     @property
-    def resist_astral(self):
+    def resist_astral(self) -> int:
         """
         an entities resistance to astral damage.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_ASTRAL
         stat_data = library.get_secondary_stat_data(stat)
@@ -282,7 +249,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -292,12 +259,9 @@ class CombatStats:
         return total
 
     @property
-    def resist_mundane(self):
+    def resist_mundane(self) -> int:
         """
         an entities resistance to mundane damage.
-
-        Returns:
-            int:
         """
         stat = SecondaryStatTypes.RESIST_MUNDANE
         stat_data = library.get_secondary_stat_data(stat)
@@ -312,7 +276,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -322,15 +286,12 @@ class CombatStats:
         return total
 
     @property
-    def sight_range(self):
+    def sight_range(self) -> int:
         """
         Highest value among base contributions then modifiers applied. Cant be less than 0.
-
-        Returns:
-            int:
         """
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager import world
+        from scripts.managers.world_manager.world_manager import world
 
         stat = SecondaryStatTypes.SIGHT_RANGE
         stat_data = library.get_secondary_stat_data(stat)
@@ -346,7 +307,7 @@ class CombatStats:
                 data = library.get_savvy_data(component.name)
                 base_value = max(base_value, data.sight_range)
             elif isinstance(component, Race):
-                data = library.get_race_data(component.name)
+                data = library.get_people_data(component.name)
                 base_value = max(base_value, data.sight_range)
 
         # from stats
@@ -366,4 +327,30 @@ class CombatStats:
 
         return total
 
+    @property
+    def rush(self) -> int:
+        """
+        how quickly an entity does things. Reduce time cost of actions.
+        """
+        stat = SecondaryStatTypes.RUSH
+        stat_data = library.get_secondary_stat_data(stat)
+        base_value = stat_data.base_value
+
+        from_vigour = self.vigour * stat_data.vigour_mod
+        from_clout = self.clout * stat_data.clout_mod
+        from_skullduggery = self.skullduggery * stat_data.skullduggery_mod
+        from_bustle = self.bustle * stat_data.bustle_mod
+        from_exactitude = self.exactitude * stat_data.exactitude_mod
+
+        stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
+
+        # TODO - moving to the top creates an import error. Resolve it.
+        from scripts.managers.world_manager.world_manager import world
+        # TODO - readd affliction changes
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+
+        # ensure 1 or above
+        total = max(1, int(stat_total + affliction_changes))
+
+        return total
 

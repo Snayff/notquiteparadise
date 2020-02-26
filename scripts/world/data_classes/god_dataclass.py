@@ -1,9 +1,12 @@
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Dict
+from scripts.core.extend_json import register_dataclass_with_json
 
 
-@dataclass()
+@register_dataclass_with_json
+@dataclass
 class GodData:
     """
     Data class for a god

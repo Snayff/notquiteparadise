@@ -54,18 +54,16 @@ class Subscriber:
         self.event_hub.unsubscribe(event, self)
 
 
+# TODO - make ABC
 class Event:
     """
     Events to cause top level actions to take place
     """
-    def __init__(self, event_type, topic):
+    def __init__(self, name, topic):
         """
-
-        Args:
-            event_type ():
-            topic ():
+        Base class for events
         """
-        self.event_type = event_type
+        self.name = name
         self.topic = topic
 
 

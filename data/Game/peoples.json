@@ -1,0 +1,32 @@
+{
+    "goblynn": {
+        "__dataclass__": "CharacteristicData",
+        "bustle": 0,
+        "clout": 0,
+        "description": "A goblinn description",
+        "exactitude": 0,
+        "name": "goblynn",
+        "sight_range": 3,
+        "known_skills": [
+            "none"
+        ],
+        "skullduggery": 0,
+        "sprite": "",
+        "vigour": 0
+    },
+	"shoom": {
+        "__dataclass__": "CharacteristicData",
+        "bustle": 0,
+        "clout": -1,
+        "description": "Often found in their ancestral home of the Soft Tops they have spent most of the last century being drafted into a war over which of the causes it the right one. Not that anyone can quite remember which cause they're fighting for.",
+        "exactitude": 2,
+        "name": "shoom",
+        "sight_range": 4,
+        "known_skills": [
+            "eye_watering_mistake", "fractious_fungi"
+        ],
+        "skullduggery": 2,
+        "sprite": "assets/actor/people/shoom.png",
+        "vigour": 0
+    }
+}

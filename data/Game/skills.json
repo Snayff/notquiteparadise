@@ -1,0 +1,318 @@
+{
+    "basic_attack": {
+        "__dataclass__": "SkillData",
+        "cooldown": 1,
+        "description": "A simple attack.",
+        "effects": {
+            "damage": {
+                "__dataclass__": "EffectData",
+                "accuracy": 0,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 0,
+                "effect_type": null,
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [
+                    "any"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": null
+            }
+        },
+        "expiry_type": "fizzle",
+        "icon": "placeholder/icon_00.png",
+        "name": "basic attack",
+        "range": 1,
+        "required_tags": [
+            "other_entity"
+        ],
+        "resource_cost": "10",
+        "resource_type": "hp",
+        "shape": "CIRCLE",
+        "shape_size": 1,
+        "target_directions": [
+            "down",
+            "down_left",
+            "down_right",
+            "left",
+            "right",
+            "up",
+            "up_left",
+            "up_right"
+        ],
+        "terrain_collision": "fizzle",
+        "time_cost": 20,
+        "travel_type": "projectile"
+    },
+    "burn_the_deck": {
+        "__dataclass__": "SkillData",
+        "cooldown": 2,
+        "description": "Apply burning affliction.",
+        "effects": {
+            "apply_affliction": {
+                "__dataclass__": "EffectData",
+                "accuracy": 100,
+                "affect_stat_amount": 0,
+                "affliction_name": "flaming",
+                "aspect_name": "None",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 3,
+                "effect_type": "apply_affliction",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [
+                    "other_entity"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "skullduggery"
+            },
+            "damage": {
+                "__dataclass__": "EffectData",
+                "accuracy": -5,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 5,
+                "damage_type": "mundane",
+                "duration": 0,
+                "effect_type": "damage",
+                "mod_amount": 0.2,
+                "mod_stat": "bustle",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "skullduggery"
+            }
+        },
+        "expiry_type": "activate",
+        "icon": "placeholder/icon_05.png",
+        "name": "burn the deck",
+        "range": 4,
+        "required_tags": [
+            "other_entity"
+        ],
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "shape": "circle",
+        "shape_size": 2,
+        "target_directions": [
+            "down"
+        ],
+        "terrain_collision": "reflect",
+        "time_cost": 40,
+        "travel_type": "projectile"
+    },
+    "eye_watering_mistake": {
+        "__dataclass__": "SkillData",
+        "cooldown": 2,
+        "description": "Use all your sneakiness to irritate your enemies.",
+        "effects": {
+            "apply_affliction": {
+                "__dataclass__": "EffectData",
+                "accuracy": 100,
+                "affect_stat_amount": 0,
+                "affliction_name": "myopic",
+                "aspect_name": "None",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 10,
+                "effect_type": "apply_affliction",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [
+                    "other_entity"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "vigour"
+            },
+            "damage": {
+                "__dataclass__": "EffectData",
+                "accuracy": 0,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 2,
+                "damage_type": "chemical",
+                "duration": 0,
+                "effect_type": "damage",
+                "mod_amount": 0.2,
+                "mod_stat": "skullduggery",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "skullduggery"
+            }
+        },
+        "expiry_type": "activate",
+        "icon": "placeholder/icon_37.png",
+        "name": "eye-watering mistake",
+        "range": 5,
+        "required_tags": [
+            "other_entity"
+        ],
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "shape": "circle",
+        "shape_size": 2,
+        "target_directions": [
+            "down"
+        ],
+        "terrain_collision": "reflect",
+        "time_cost": 30,
+        "travel_type": "projectile"
+    },
+    "flail": {
+        "__dataclass__": "SkillData",
+        "cooldown": 0,
+        "description": "Fungechists aren`t known for their physical prowess but you haven't got much choice.",
+        "effects": {
+            "damage": {
+                "__dataclass__": "EffectData",
+                "accuracy": -5,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 10,
+                "damage_type": "mundane",
+                "duration": 0,
+                "effect_type": "damage",
+                "mod_amount": 0.2,
+                "mod_stat": "clout",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "bustle"
+            }
+        },
+        "expiry_type": "activate",
+        "icon": "placeholder/icon_01.png",
+        "name": "flail",
+        "range": 5,
+        "required_tags": [
+            "other_entity"
+        ],
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "shape": "target",
+        "shape_size": 1,
+        "target_directions": [
+            "down",
+            "down_LEFT",
+            "UP_LEFT"
+        ],
+        "terrain_collision": "reflect",
+        "time_cost": 20,
+        "travel_type": "projectile"
+    },
+    "fractious_fungi": {
+        "__dataclass__": "SkillData",
+        "cooldown": 5,
+        "description": "Hurl a dried toadstool and watch it leave a gift that keeps on giving.",
+        "effects": {
+            "add_aspect": {
+                "__dataclass__": "EffectData",
+                "accuracy": 0,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "shrapnel",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 0,
+                "effect_type": "add_aspect",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [
+                    "ANY"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": null
+            },
+            "damage": {
+                "__dataclass__": "EffectData",
+                "accuracy": -5,
+                "affect_stat_amount": 0,
+                "affliction_name": "None",
+                "aspect_name": "None",
+                "damage": 1,
+                "damage_type": "mundane",
+                "duration": 0,
+                "effect_type": "damage",
+                "mod_amount": 0.3,
+                "mod_stat": "clout",
+                "required_tags": [
+                    "other_entity"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "bustle"
+            }
+        },
+        "expiry_type": "activate",
+        "icon": "placeholder/icon_40.png",
+        "name": "fractious fungi",
+        "range": 3,
+        "required_tags": [
+            "other_entity"
+        ],
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "shape": "target",
+        "shape_size": 1,
+        "target_directions": [
+            "down"
+        ],
+        "terrain_collision": "reflect",
+        "time_cost": 40,
+        "travel_type": "projectile"
+    },
+    "slow_the_mighty": {
+        "__dataclass__": "SkillData",
+        "cooldown": 5,
+        "description": "Slow the fat git down.",
+        "effects": {
+            "apply_affliction": {
+                "__dataclass__": "EffectData",
+                "accuracy": 100,
+                "affect_stat_amount": 0,
+                "affliction_name": "bogged down",
+                "aspect_name": "None",
+                "damage": 0,
+                "damage_type": null,
+                "duration": 3,
+                "effect_type": "apply_affliction",
+                "mod_amount": 0,
+                "mod_stat": null,
+                "required_tags": [
+                    "other_entity"
+                ],
+                "stat_to_affect": null,
+                "stat_to_target": "skullduggery"
+            }
+        },
+        "expiry_type": "activate",
+        "icon": "placeholder/icon_05.png",
+        "name": "slow the mighty",
+        "range": 0,
+        "required_tags": [
+            "wall",
+            "NO_ENTITY"
+        ],
+        "resource_cost": 10,
+        "resource_type": "stamina",
+        "shape": "circle",
+        "shape_size": 2,
+        "target_directions": [
+            "down"
+        ],
+        "terrain_collision": "reflect",
+        "time_cost": 40,
+        "travel_type": "projectile"
+    }
+}

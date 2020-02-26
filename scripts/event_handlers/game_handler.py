@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import GameEventTypes, GameStates
+from scripts.core.constants import GameStates
 from scripts.core.event_hub import publisher, Subscriber
 from scripts.managers.turn_manager import turn
-from scripts.managers.world_manager import world
-from scripts.managers.game_manager import game
+from scripts.managers.world_manager.world_manager import world
+from scripts.managers.game_manager.game_manager import game
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.events.game_events import EndTurnEvent
+from scripts.events.game_events import ExitGameEvent
 
 if TYPE_CHECKING:
-    from scripts.events.game_events import ExitGameEvent
+    pass
 
 
 class GameHandler(Subscriber):
@@ -30,17 +31,17 @@ class GameHandler(Subscriber):
             event ():
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
 
-        if event.event_type == GameEventTypes.EXIT:
+        if isinstance(event, ExitGameEvent):
             event: ExitGameEvent
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
-        elif event.event_type == GameEventTypes.END_TURN:
+        elif isinstance(event, EndTurnEvent):
             event: EndTurnEvent
             self.process_end_turn(event)
 
-        elif event.event_type == GameEventTypes.CHANGE_GAME_STATE:
+        elif isinstance(event, ChangeGameStateEvent):
             event: ChangeGameStateEvent
             self.process_change_game_state(event)
 
@@ -68,15 +69,15 @@ class GameHandler(Subscriber):
                 publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
         elif new_game_state == GameStates.TARGETING_MODE:
-            game.active_skill = event.skill_to_be_used
+            game.State.set_active_skill(event.skill_to_be_used)
 
         # update the game state to the intended state
-        if new_game_state != game.game_state:
-            game.update_game_state(new_game_state)
+        if new_game_state != game.State.get_current():
+            game.State.set(new_game_state)
         else:
             # handle wasted attempt to change the game state
             log_string = f"-> new game state {new_game_state} is same as current" \
-                         f" {game.game_state} so state not updated."
+                         f" {game.State.get_current()} so state not updated."
             logging.info(log_string)
 
     @staticmethod

@@ -16,6 +16,7 @@ class IsPlayer:
     """
     [Component] Whether the entity is the player.
     """
+    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Position:
@@ -72,11 +73,11 @@ class Identity:
 
 class Race:
     """
-    [Component] An entity's race.
+    [Component] An entity's people.
     """
 
-    def __init__(self, race_name: str):
-        self.name = race_name
+    def __init__(self, people_name: str):
+        self.name = people_name
 
 
 class Savvy:
@@ -105,24 +106,32 @@ class AIBasic:
 
 class HasCombatStats:
     """[Component] A flag to show if an entity has stats used for combat."""
-
+    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 class Knowledge:
     """[Component] An entity's knowledge, including skills."""
-    def __init__(self, skills: List[str] = []):
+    def __init__(self, skills: List[str] = None):
+        if skills is None:
+            skills = []
         self.skills = skills
 
 
 class Affliction:
     """[Component] An entity's Boons and Banes. e.g. {boon_name: duration}"""
-    def __init__(self, boons: Dict = {}, banes: Dict = {}):
+    def __init__(self, boons: Dict = None, banes: Dict = None):
+        if banes is None:
+            banes = {}
+        if boons is None:
+            boons = {}
         self.boons = boons
         self.banes = banes
 
 
 class Aspect:
     """[Component] An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
-    def __init__(self, aspects: Dict = {}):
+    def __init__(self, aspects: Dict = None):
+        if aspects is None:
+            aspects = {}
         self.aspects = aspects
 
 
@@ -130,6 +139,7 @@ class IsGod:
     """
     [Component] Whether the entity is a god.
     """
+    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Opinion:

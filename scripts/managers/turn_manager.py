@@ -3,7 +3,7 @@ from typing import Dict, Tuple
 
 from scripts.events.game_events import EndRoundEvent
 from scripts.core.event_hub import publisher
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Resources, Identity
 
 

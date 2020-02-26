@@ -3,18 +3,18 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Tuple
 from scripts.core.library import library
-from scripts.managers.game_manager import game
-from scripts.managers.ui_manager import ui
-from scripts.managers.world_manager import world
-from scripts.core.event_hub import Subscriber
-from scripts.core.constants import EventTopics, GameEventTypes, GameStates, EntityEventTypes, \
-    UIEventTypes, MessageTypes, VisualInfo
+from scripts.events.entity_events import UseSkillEvent, DieEvent, MoveEvent
+from scripts.events.game_events import ChangeGameStateEvent
+from scripts.managers.game_manager.game_manager import game
+from scripts.managers.ui_manager.ui_manager import ui
+from scripts.managers.world_manager.world_manager import world
+from scripts.core.event_hub import Subscriber, publisher
+from scripts.core.constants import EventTopics, GameStates, MessageTypes, VisualInfo, UIElementTypes
 from scripts.world.components import Position
+from scripts.events.ui_events import MessageEvent, ClickTile
 
 if TYPE_CHECKING:
-
-    from scripts.world.entity import Entity
-    from scripts.events.ui_events import MessageEvent
+    pass
 
 
 class UiHandler(Subscriber):
@@ -30,7 +30,7 @@ class UiHandler(Subscriber):
         Control the events
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
 
         if event.topic == EventTopics.UI:
             self.process_ui_event(event)
@@ -50,16 +50,13 @@ class UiHandler(Subscriber):
         Args:
             event ():
         """
-        # update UI based on entity action taken
-        if event.event_type == EntityEventTypes.LEARN:
-            # TODO - update UI to reflect new skills
-            pass
-
-        elif event.event_type == EntityEventTypes.DIE:
+        if isinstance(event, DieEvent):
+            event: DieEvent
             # remove the entity from the camera
             self.update_camera()
 
-        elif event.event_type == EntityEventTypes.MOVE:
+        elif isinstance(event, MoveEvent):
+            event: MoveEvent
             # show the entity in the new tile
             player = world.Entity.get_player()
             if event.entity == player:
@@ -73,13 +70,15 @@ class UiHandler(Subscriber):
     def process_game_event(self, event):
         """
         Process Game topic event
-
-        Args:
-            event ():
         """
-        if event.event_type == GameEventTypes.CHANGE_GAME_STATE:
+        if isinstance(event, ChangeGameStateEvent):
+            event: ChangeGameStateEvent
             if event.new_game_state == GameStates.GAME_INITIALISING:
-                self.init_ui()
+                self.init_game_ui()
+
+            elif game.State.get_previous() == GameStates.GAME_INITIALISING:
+                # once everything is initialised present the welcome message
+                ui.Element.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
             elif event.new_game_state == GameStates.TARGETING_MODE:
                 # turn on targeting overlay
@@ -87,8 +86,8 @@ class UiHandler(Subscriber):
 
             # check if we are moving to player turn and we are either in, or were just in, targeting
             # this is due to processing order of events
-            elif event.new_game_state == GameStates.PLAYER_TURN and (game.game_state == GameStates.TARGETING_MODE or
-                game.previous_game_state == GameStates.TARGETING_MODE):
+            elif event.new_game_state == GameStates.PLAYER_TURN and (game.State.get_current() == GameStates.TARGETING_MODE or
+                game.State.get_previous() == GameStates.TARGETING_MODE):
 
                 # turn off the targeting overlay
                 self.set_targeting_overlay(False)
@@ -98,7 +97,15 @@ class UiHandler(Subscriber):
                 # TODO - reflect new turn info
                 pass
 
-    def init_ui(self):
+            elif event.new_game_state == GameStates.DEV_MODE:
+                self.init_dev_ui()
+                self.close_game_ui()
+
+            elif game.State.get_previous() == GameStates.DEV_MODE:
+                self.close_dev_ui()
+                self.init_game_ui()
+
+    def init_game_ui(self):
         """
         Initialise the UI elements
         """
@@ -110,26 +117,61 @@ class UiHandler(Subscriber):
         # update camera
         self.update_camera()
 
+    @staticmethod
+    def close_game_ui():
+        """
+        Close all game ui elements
+        """
+        ui.Element.kill_element(UIElementTypes.MESSAGE_LOG)
+        ui.Element.kill_element(UIElementTypes.SKILL_BAR)
+        ui.Element.kill_element(UIElementTypes.CAMERA)
+        ui.Element.kill_element(UIElementTypes.ENTITY_INFO)
+
+    @staticmethod
+    def init_dev_ui():
+        """
+        Initialise all dev mode widgets
+        """
+        ui.Element.init_skill_editor()
+
+    @staticmethod
+    def close_dev_ui():
+        """
+        Clear all dev mode elements
+        """
+        ui.Element.kill_data_editor()
+
     ############# HANDLE UI EVENTS #################
 
     def process_ui_event(self, event):
         """
         Process UI topic event
-
-        Args:
-            event ():
         """
-        if event.event_type == UIEventTypes.CLICK_TILE:
-            # Select an entity
-            tile = world.Map.get_tile(event.tile_pos_string)
-            entities = world.Entity.get_entities_and_components_in_area([tile])
+        if isinstance(event, ClickTile):
+            event: ClickTile
+            if game.State.get_current() == GameStates.PLAYER_TURN:
 
-            # there should only be one entity, but just in case...
-            for entity in entities:
-                self.select_entity(entity)
-                break
+                # Select an entity
+                tile = world.Map.get_tile(event.tile_pos_string)
 
-        if event.event_type == UIEventTypes.MESSAGE:
+                # ensure there is a tile
+                if tile:
+                    entities = world.Entity.get_entities_and_components_in_area([tile])
+                else:
+                    entities = []
+
+                # there should only be one entity, but just in case...
+                for entity in entities:
+                    self.select_entity(entity)
+                    break
+            elif game.State.get_current() == GameStates.TARGETING_MODE:
+                # use the skill on the clicked tile
+                player = world.Entity.get_player()
+                position = world.Entity.get_component(player, Position)
+                direction = world.Map.get_direction((position.x, position.y), event.tile_pos_string)
+                publisher.publish(UseSkillEvent(player, game.State.get_active_skill(), (position.x, position.y), direction))
+
+        if isinstance(event, MessageEvent):
             # process a message
             event: MessageEvent
             self.process_message(event)
@@ -182,7 +224,7 @@ class UiHandler(Subscriber):
         ui.Element.update_camera_grid()
 
     @staticmethod
-    def select_entity(entity: Entity):
+    def select_entity(entity: int):
         """
         Set the selected entity
 

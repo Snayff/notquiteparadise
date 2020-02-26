@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import List, Dict
-
 from scripts.core.constants import SkillExpiryTypes, Directions, SkillTravelTypes, TargetTags, \
     SkillTerrainCollisions, SkillShapes
+from scripts.core.extend_json import register_dataclass_with_json
 
 
-@dataclass()
+@register_dataclass_with_json
+@dataclass
 class SkillData:
     """
     Data class for a skill. Used by the library to load from json.
@@ -35,6 +38,3 @@ class SkillData:
     shape: SkillShapes = None
     shape_size: int = 1
     effects: Dict = field(default_factory=dict)
-
-    # modifiers
-    modifiers: List = field(default_factory=list)

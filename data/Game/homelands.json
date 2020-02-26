@@ -1,0 +1,17 @@
+{
+    "soft_tops": {
+        "__dataclass__": "CharacteristicData",
+        "bustle": 1,
+        "clout": 3,
+        "description": "Home to beautiful wildlife, towering, majestic fauna and the air of constant, never-ending warfare.",
+        "exactitude": -1,
+        "name": "the soft tops",
+        "sight_range": 5,
+        "known_skills": [
+            "flail"
+        ],
+        "skullduggery": 0,
+        "sprite": "assets/actor/homeland/soft_tops.png",
+        "vigour": 1
+    }
+}

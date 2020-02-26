@@ -1,5 +1,5 @@
 
-from scripts.core.constants import EventTopics, MapEventTypes
+from scripts.core.constants import EventTopics
 from scripts.core.event_hub import Event
 
 
@@ -12,6 +12,6 @@ class TileInteractionEvent(Event):
         cause (str): name of the effect or affliction that has taken place on the tile
     """
     def __init__(self, tiles, cause):
-        Event.__init__(self, MapEventTypes.TILE_INTERACTION, EventTopics.MAP)
+        Event.__init__(self, "TILE_INTERACTION", EventTopics.MAP)
         self.tiles = tiles
         self.cause = cause

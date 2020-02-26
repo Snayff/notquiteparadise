@@ -2,16 +2,15 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import MapEventTypes, MessageTypes, GameEventTypes
-from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Position
+from scripts.events.map_events import TileInteractionEvent
+from scripts.events.game_events import EndTurnEvent, EndRoundEvent
+from scripts.events.ui_events import MessageEvent
 
 if TYPE_CHECKING:
-    from scripts.events.game_events import EndTurnEvent, EndRoundEvent
-    from scripts.events.map_events import TileInteractionEvent
-    from scripts.events.ui_events import MessageEvent
+    pass
 
 
 class MapHandler(Subscriber):
@@ -30,17 +29,17 @@ class MapHandler(Subscriber):
         """
 
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}...")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
 
-        if event.event_type == MapEventTypes.TILE_INTERACTION:
+        if isinstance(event, TileInteractionEvent):
             event: TileInteractionEvent
             self.process_tile_interaction(event)
 
-        elif event.event_type == GameEventTypes.END_TURN:
+        elif isinstance(event, EndTurnEvent):
             event: EndTurnEvent
             self.process_end_of_turn_updates(event)
 
-        elif event.event_type == GameEventTypes.END_ROUND:
+        elif isinstance(event, EndRoundEvent):
             event: EndRoundEvent
             self.process_end_of_round_updates()
 
@@ -52,30 +51,31 @@ class MapHandler(Subscriber):
         Args:
             event(TileInteractionEvent):
         """
+        pass
 
-        # check all tiles
-        for tile in event.tiles:
-
-            # only aspects have interactions...
-            if tile.aspects:
-
-                for key, aspect in tile.aspects.items():
-                    aspect_data = library.get_aspect_data(aspect.name)
-
-                    # check cause is a valid trigger for an interaction
-                    for interaction in aspect_data.interactions:
-                        if event.cause == interaction.cause:
-                            # change aspects
-                            world.Map.remove_aspect_from_tile(tile, aspect.name)
-                            world.Map.add_aspect_to_tile(tile, interaction.change_to)
-
-                            # log the change
-                            log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
-                            logging.info(log_string)
-
-                            # inform player of change
-                            msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."
-                            publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+        # # check all tiles
+        # for tile in event.tiles:
+        #     # TODO - rebuild to work for EC
+        #     # only aspects have interactions...
+        #     if tile.aspects:
+        #
+        #         for key, aspect in tile.aspects.items():
+        #             aspect_data = library.get_aspect_data(aspect.name)
+        #
+        #             # check cause is a valid trigger for an interaction
+        #             for interaction in aspect_data.interactions:
+        #                 if event.cause == interaction.cause:
+        #                     # change aspects
+        #                     world.Map.remove_aspect_from_tile(tile, aspect.name)
+        #                     world.Map.add_aspect_to_tile(tile, interaction.change_to)
+        #
+        #                     # log the change
+        #                     log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
+        #                     logging.info(log_string)
+        #
+        #                     # inform player of change
+        #                     msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."
+        #                     publisher.publish(MessageEvent(MessageTypes.LOG, msg))
 
     @staticmethod
     def process_end_of_turn_updates(event: EndTurnEvent):
@@ -90,6 +90,7 @@ class MapHandler(Subscriber):
         tile = world.Map.get_tile((position.x, position.y))
 
         # trigger aspects
+        #  TODO - update to EC approach
         #world.Map.trigger_aspects_on_tile(tile)
 
     @staticmethod

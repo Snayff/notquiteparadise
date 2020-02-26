@@ -2,17 +2,19 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import EntityEventTypes, MessageTypes, Directions, TargetTags
+from scripts.core.constants import MessageTypes, Directions, TargetTags
+from scripts.events.game_events import EndTurnEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
-from scripts.managers.world_manager import world
-from scripts.world.components import Position, Knowledge, Identity
+from scripts.managers.world_manager.world_manager import world
+from scripts.world.components import Position, Knowledge, Identity, IsGod
 from scripts.events.entity_events import UseSkillEvent
+from scripts.events.entity_events import DieEvent, MoveEvent
 
 if TYPE_CHECKING:
-    from scripts.events.entity_events import DieEvent, MoveEvent
+    pass
 
 
 class EntityHandler(Subscriber):
@@ -30,18 +32,15 @@ class EntityHandler(Subscriber):
             event(Event): the event in need of processing
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.event_type}.")
+        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
 
-        if event.event_type == EntityEventTypes.MOVE:
-            event: MoveEvent
+        if isinstance(event, MoveEvent):
             self.process_move(event)
 
-        elif event.event_type == EntityEventTypes.SKILL:
-            event: UseSkillEvent
+        elif isinstance(event, UseSkillEvent):
             self.process_skill(event)
 
-        elif event.event_type == EntityEventTypes.DIE:
-            event: DieEvent
+        elif isinstance(event, DieEvent):
             self.process_die(event)
 
     @staticmethod
@@ -57,7 +56,7 @@ class EntityHandler(Subscriber):
         dir_x, dir_y = event.direction
         distance = event.distance
         entity = event.entity
-        old_x, old_y = event.start_pos[0], event.start_pos[1]
+        old_x, old_y = event.start_pos
 
         for step in range(0, distance):
             target_x = old_x + dir_x
@@ -65,8 +64,14 @@ class EntityHandler(Subscriber):
 
             # is there something in the way?
             target_tile = world.Map.get_tile((target_x, target_y))
-            is_tile_blocking_movement = world.Map.tile_has_tag(target_tile, TargetTags.BLOCKED_MOVEMENT, entity)
-            is_entity_on_tile = world.Map.tile_has_tag(target_tile, TargetTags.OTHER_ENTITY, entity)
+
+            # check a tile was returned
+            if target_tile:
+                is_tile_blocking_movement = world.Map.tile_has_tag(target_tile, TargetTags.BLOCKED_MOVEMENT, entity)
+                is_entity_on_tile = world.Map.tile_has_tag(target_tile, TargetTags.OTHER_ENTITY, entity)
+            else:
+                is_tile_blocking_movement = True
+                is_entity_on_tile = False
 
             # check for no entity in way but tile is blocked
             if not is_entity_on_tile and is_tile_blocking_movement:
@@ -77,8 +82,8 @@ class EntityHandler(Subscriber):
                 knowledge = world.Entity.get_component(entity, Knowledge)
                 skill_name = knowledge.skills[0]
                 skill_data = library.get_skill_data(skill_name)
-                direction = Directions((dir_x, dir_y))
-                if direction in skill_data.target_directions:
+                #direction = Directions((dir_x, dir_y))
+                if (dir_x, dir_y) in skill_data.target_directions:
                     publisher.publish((UseSkillEvent(entity, skill_name, event.start_pos, (dir_x, dir_y))))
                 else:
                     publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill_name} doesn't go that way!"))
@@ -91,9 +96,13 @@ class EntityHandler(Subscriber):
 
                 # update fov if needed
                 if entity == world.Entity.get_player():
-                    stats = world.Entity.get_stats(entity)
+                    stats = world.Entity.get_combat_stats(entity)
                     sight_range = max(0, stats.sight_range)
                     world.FOV.recompute_player_fov(position.x, position.y, sight_range)
+
+                # if entity that moved is turn holder then end their turn
+                if entity == turn.turn_holder:
+                    publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
 
     @staticmethod
     def process_skill(event: UseSkillEvent):
@@ -112,7 +121,10 @@ class EntityHandler(Subscriber):
 
             # use skill
             world.Skill.use(entity, skill_name, event.start_pos, event.direction)
-            # TODO - trigger terrain effects
+
+            # end the turn if the entity isnt a god
+            if not world.Entity.has_component(entity, IsGod):
+                publisher.publish(EndTurnEvent(entity, skill_data.time_cost))
 
         else:
             # is it the player that's can't afford it?

@@ -5,9 +5,8 @@ import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
-from scripts.managers.world_manager import world
+from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Aesthetic, Identity, Resources
-from scripts.world.entity import Entity
 
 
 class EntityInfo(UIWindow):
@@ -41,12 +40,21 @@ class EntityInfo(UIWindow):
         # confirm init complete
         logging.debug(f"Entity Info initialised.")
 
-    def set_entity(self, entity: Union[Entity, None]):
+    def update(self, time_delta: float):
+        """
+        Update based on current state and data. Run every frame.
+        """
+        super().update(time_delta)
+
+    def handle_events(self, event):
+        """
+        Handle events created by this UI widget
+        """
+        pass
+
+    def set_entity(self, entity: int):
         """
         Set the selected entity to show the info for that entity.
-
-        Args:
-            entity ():
         """
         self.selected_entity = entity
 
@@ -68,21 +76,19 @@ class EntityInfo(UIWindow):
         """
         Cleanse existing section info.
         """
-        # kill the boxes
+        # kill the boxes and clear the references
         if self.entity_image:
             self.entity_image.kill()
+            self.entity_image = None
         if self.core_info:
             self.core_info.kill()
+            self.core_info = None
         if self.primary_stats:
             self.primary_stats.kill()
+            self.primary_stats = None
         if self.secondary_stats:
             self.secondary_stats.kill()
-
-        # clear the references
-        self.entity_image = None
-        self.core_info = None
-        self.primary_stats = None
-        self.secondary_stats = None
+            self.secondary_stats = None
 
     def create_entity_image_section(self):
         """
@@ -135,12 +141,12 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
-        stats = world.Entity.get_stats(self.selected_entity)
+        stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        for stat in PrimaryStatTypes:
+        for name, stat in PrimaryStatTypes.__dict__.items():
             try:
-                stat_value = getattr(stats, stat.name.lower())
-                name = stat.name.title()
+                stat_value = getattr(stats, stat)
+                name = name.title()
                 name = name.replace("_", " ")
 
                 text += f"{name}: {stat_value}" + "<br>"
@@ -167,12 +173,12 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
-        stats = world.Entity.get_stats(self.selected_entity)
+        stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        for stat in SecondaryStatTypes:
+        for name, stat in SecondaryStatTypes.__dict__.items():
             try:
-                stat_value = getattr(stats, stat.name.lower())
-                name = stat.name.title()
+                stat_value = getattr(stats, name)
+                name = name.title()
                 name = name.replace("_", " ")
 
                 text += f"{name}: {stat_value}" + "<br>"

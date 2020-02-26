@@ -1,9 +1,12 @@
+from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict
 
 from scripts.core.constants import AfflictionTriggers, AfflictionCategory
+from scripts.core.extend_json import register_dataclass_with_json
 
 
+@register_dataclass_with_json
 @dataclass()
 class AfflictionData:
     """

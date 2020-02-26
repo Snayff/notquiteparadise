@@ -1,0 +1,33 @@
+{
+    "fungechist": {
+        "__dataclass__": "CharacteristicData",
+        "bustle": 1,
+        "clout": -1,
+        "description": "Drafted into service as a chemist to the Mushroom Barons of the Soft Tops the fungechists always keep Ou in their minds.",
+        "exactitude": 1,
+        "name": "fungechist",
+        "sight_range": 5,
+        "known_skills": [
+            "flail",
+            "eye_watering_mistake"
+        ],
+        "skullduggery": 4,
+        "sprite": "",
+        "vigour": -1
+    },
+	"irascible_dandy": {
+        "__dataclass__": "CharacteristicData",
+        "bustle": 2,
+        "clout": 2,
+        "description": "Lounging around the taverns of the Soft Tops they can be found one word away from an indignant splutter and a grasp for their sword.",
+        "exactitude": -1,
+        "name": "irascible dandy",
+        "sight_range": 5,
+        "known_skills": [
+            "flail"
+        ],
+        "skullduggery": 1,
+        "sprite": "assets/actor/savvy/irascible_dandy.png",
+        "vigour": -1
+    }
+}

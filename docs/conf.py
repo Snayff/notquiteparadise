@@ -24,13 +24,13 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = 'NotQuiteParadise'
-copyright = '2019, Snayff'
+copyright = '2020, Snayff'
 author = 'Snayff'
 
 # The short X.Y version
-version = '0.0.1'
+version = '0.91.0'
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '0.91.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -51,6 +51,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
+    'sphinx.ext.autodoc.typehints'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -207,9 +208,9 @@ todo_include_todos = True
 # -- Napoleon ----------------------------------------------------------------
 # Napoleon settings
 napoleon_google_docstring = True
-napoleon_numpy_docstring = True
+napoleon_numpy_docstring = False
 napoleon_include_init_with_doc = True
-napoleon_include_private_with_doc = False
+napoleon_include_private_with_doc = True
 napoleon_include_special_with_doc = True
 napoleon_use_admonition_for_examples = False
 napoleon_use_admonition_for_notes = False
@@ -217,3 +218,14 @@ napoleon_use_admonition_for_references = False
 napoleon_use_ivar = False
 napoleon_use_param = True
 napoleon_use_rtype = True
+
+# -- Autodoc ----------------------------------------------------------------
+# Auiodoc settings
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'undoc-members': True,
+    'show-inheritance': True,
+    'private-members': True
+}
+autoclass_content = "both"
