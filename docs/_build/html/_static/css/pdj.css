@@ -394,3 +394,56 @@ a:visited{
 .highlight-yaml .nt{
     color: #eac648;
 }
+
+
+/* .rst-content dl:not(.docutils) { */
+/*     margin-bottom: 24px; */
+/*     background-color: #000; */
+/* } */
+
+/* .rst-content dl:not(.docutils) code{ */
+/*     color: #1bb41b; */
+/*     border: none; */
+/*     background-color: #000; */
+/* } */
+
+.rst-content dl:not(.docutils) dt{
+    background-color: #dcdfe2 !important;
+    border-top: 3px solid #969798;
+}
+
+/* dl.method > dt{ */
+/*     background-color: #000 !important; */
+/*     color: #17deb0 !important; */
+/*     border: 1px solid #858181 !important; */
+/*     border-left: 3px solid #858181 !important; */
+/* } */
+
+/* .sig-name{ */
+/*     background-color: #000; */
+/*     border: none; */
+/*     color: #1bb41b; */
+/*     font-size: 1.0em; */
+/* } */
+
+/* .rst-content dl p, .rst-content dl table, .rst-content dl ul, .rst-content dl ol { */
+/*     color: #FDF5E6 !important; */
+/*     font-size: 0.95em !important; */
+/* } */
+
+code, .rst-content tt {
+    color: #000;
+    font-weight: bold;
+    font-size: 85%;
+    border-color: #92989a;
+ }
+
+.reference code{
+    color: #2980B9;
+    font-weight: bold;
+    font-size: 85%;
+ }
+
+.highlight-sh .nf, .highlight-sh .nb{
+    color: #12b920;
+}

@@ -1,0 +1,414 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="" lang="" version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <title>scripts.ui.ui_elements.camera &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  
+
+  
+
+  
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="../../../../_static/css/pdj.css" type="text/css" />
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
+    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cache-control" content="public" />
+    <meta name="robots" content="follow, all" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  </head>
+
+  <body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../../index.html" class="fa fa-home"> NotQuiteParadise </a>
+        <div role="search">
+	  <form id ="rtd-search-form" class="wy-form"
+		action="../../../../search.html" method="get">
+	    <input type="text" name="q" placeholder="Search docs" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../core.html#module-scripts.core.constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../core.html#module-scripts.core.library">Library of Alexandria</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_tools.html">Dev Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dev_tools.html#module-scripts.dev_tools.data_editor">Data Editor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.ui_handler">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../events.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.entity_events">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.game_events">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.map_events">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.ui_events">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.ui_manager.ui_manager">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ui.html">UI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui.html#basic">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui.html#ui-elements">UI Elements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../world.html">World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.combat_stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.game_map">Game Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.tile">Tile</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+
+      </div>
+      &nbsp;
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      <nav class="wy-nav-top" id="barra-mobile" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Porão do Juca</a>
+      </nav>
+
+      <div class="wy-nav-content">
+	<div class="fundo-claro">
+	</div>
+	<div class="fundo-escuro">
+	</div>
+
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+	    
+	    <!-- <ul class="wy-breadcrumbs"> -->
+	    <!--   <li><a href="#">Docs</a> &raquo;</li> -->
+
+	    <!--   <li>Features</li> -->
+	    <!--   <li class="wy-breadcrumbs-aside"> -->
+
+	    <!-- 	<a href="_sources/index.txt" rel="nofollow"> View page source</a> -->
+
+	    <!--   </li> -->
+	    <!-- </ul> -->
+	    <!-- <hr/> -->
+	  </div>
+
+          <div role="main" class="">
+
+	    <div id="content" class="hfeed entry-container hentry">
+  <h1>Source code for scripts.ui.ui_elements.camera</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">pygame_gui</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIWindow</span><span class="p">,</span> <span class="n">UIContainer</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIImage</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">GameStates</span>
+<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
+<span class="kn">from</span> <span class="nn">scripts.events.ui_events</span> <span class="kn">import</span> <span class="n">ClickTile</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Aesthetic</span>
+
+
+<div class="viewcode-block" id="Camera"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera">[docs]</a><span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">UIWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hold the visual info for the Game Map</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">ui_manager</span><span class="o">.</span><span class="n">UIManager</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># general info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">cols</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_size</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># # of tiles to control camera movement</span>
+
+        <span class="c1"># game map info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_tile</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the tile in which the player resides</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># overlay info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_overlay_visible</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overlay_directions</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list of tuples</span>
+
+        <span class="c1"># grid info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_tile</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the tile in the grid currently being selected</span>
+
+        <span class="c1"># complete base class init</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;camera&quot;</span><span class="p">])</span>
+
+        <span class="c1"># create game map</span>
+        <span class="n">blank_surf</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">SRCALPHA</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">image_surface</span><span class="o">=</span><span class="n">blank_surf</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>
+                                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#game_map&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">UIContainer</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>  <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+                                <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#grid&quot;</span><span class="p">)</span>
+
+        <span class="c1"># confirm init complete</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Camera initialised.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Camera.update"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update based on current state and data. Run every frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Camera.handle_events"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle events created by this UI widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ui_object_id</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ui_object_id</span>
+
+        <span class="c1"># clicking a tile</span>
+        <span class="n">tile_prefix</span> <span class="o">=</span> <span class="s2">&quot;#tile&quot;</span>
+        <span class="k">if</span> <span class="n">ui_object_id</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">tile_prefix</span><span class="p">)]</span> <span class="o">==</span> <span class="n">tile_prefix</span><span class="p">:</span>
+            <span class="n">tile_pos</span> <span class="o">=</span> <span class="n">ui_object_id</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;#tile&#39;</span><span class="p">):]</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ClickTile</span><span class="p">(</span><span class="n">tile_pos_string</span><span class="o">=</span><span class="n">tile_pos</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Camera.update_game_map"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.update_game_map">[docs]</a>    <span class="k">def</span> <span class="nf">update_game_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the game map to show the current tiles and entities</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span>
+
+        <span class="c1"># create new surface for the game map</span>
+        <span class="n">map_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">map_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">map_surf</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">map_width</span><span class="p">,</span> <span class="n">map_height</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">SRCALPHA</span><span class="p">)</span>
+
+        <span class="c1"># prep for loop</span>
+        <span class="n">tile_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">map_width</span> <span class="o">/</span> <span class="n">cols</span><span class="p">)</span>
+        <span class="n">tile_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">map_height</span> <span class="o">/</span> <span class="n">rows</span><span class="p">)</span>
+
+        <span class="c1"># draw tiles</span>
+        <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">:</span>
+            <span class="c1"># TODO - determine where this is using FOV</span>
+            <span class="n">screen_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_width</span>
+            <span class="n">screen_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_height</span>
+            <span class="n">map_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">))</span>
+
+        <span class="c1"># draw entities</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">):</span>
+            <span class="c1"># if in camera view</span>
+            <span class="c1"># TODO - use FOV</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">&lt;=</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">&lt;=</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">:</span>
+                    <span class="n">screen_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_width</span>
+                    <span class="n">screen_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_height</span>
+                    <span class="n">map_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">map_surf</span></div>
+
+<div class="viewcode-block" id="Camera.update_grid"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.update_grid">[docs]</a>    <span class="k">def</span> <span class="nf">update_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the tile grid to only have  options in line with the tiles set OR the overlay</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># clear existing grid tiles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span>
+        <span class="n">start_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span>
+        <span class="n">start_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_overlay_visible</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_tile</span><span class="p">:</span>
+                <span class="n">player_tile_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_tile</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">player_tile_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_tile</span><span class="o">.</span><span class="n">y</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">player_tile_x</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">player_tile_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">directions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlay_directions</span>
+
+            <span class="c1"># draw the overlay</span>
+            <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">directions</span><span class="p">:</span>
+                <span class="n">offset_tile_x</span><span class="p">,</span> <span class="n">offset_tile_y</span> <span class="o">=</span> <span class="n">direction</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">((</span><span class="n">player_tile_x</span> <span class="o">+</span> <span class="n">offset_tile_x</span><span class="p">)</span> <span class="o">-</span> <span class="n">start_col</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">((</span><span class="n">player_tile_y</span> <span class="o">+</span> <span class="n">offset_tile_y</span><span class="p">)</span> <span class="o">-</span> <span class="n">start_row</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span>
+                <span class="n">tile_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
+
+                <span class="c1"># get current row and col</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">tile_x</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tile_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">tile_y</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tile_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">UIButton</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">tile_rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span>
+                                <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;#tile</span><span class="si">{tile_x}</span><span class="s2">,</span><span class="si">{tile_y}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span>
+
+            <span class="c1"># create a grid for the tiles needed</span>
+            <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">start_col</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">start_row</span><span class="p">)</span> <span class="o">*</span> <span class="n">TILE_SIZE</span>
+                <span class="n">tile_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">)</span>
+
+                <span class="c1"># get current row and col</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">tile_x</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tile_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">tile_y</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tile_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">TILE_SIZE</span><span class="p">))</span>
+
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">UIButton</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">tile_rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span>
+                                <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;#tile</span><span class="si">{tile_x}</span><span class="s2">,</span><span class="si">{tile_y}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Camera.set_tiles"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.set_tiles">[docs]</a>    <span class="k">def</span> <span class="nf">set_tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tiles</span><span class="p">:</span> <span class="n">List</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the tiles in the camera.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tiles (): List of Tiles</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span> <span class="o">=</span> <span class="n">tiles</span></div>
+
+<div class="viewcode-block" id="Camera.set_player_tile"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.set_player_tile">[docs]</a>    <span class="k">def</span> <span class="nf">set_player_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the player tile</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tile ():</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_tile</span> <span class="o">=</span> <span class="n">tile</span></div>
+
+<div class="viewcode-block" id="Camera.set_overlay_visibility"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.set_overlay_visibility">[docs]</a>    <span class="k">def</span> <span class="nf">set_overlay_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_visible</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set whether the targeting overlay is visible or now.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            is_visible ():</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_overlay_visible</span> <span class="o">=</span> <span class="n">is_visible</span></div>
+
+<div class="viewcode-block" id="Camera.set_overlay_directions"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.set_overlay_directions">[docs]</a>    <span class="k">def</span> <span class="nf">set_overlay_directions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directions</span><span class="p">:</span> <span class="n">List</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the overlay with possible targeting directions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            directions (): List of Directions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overlay_directions</span> <span class="o">=</span> <span class="n">directions</span></div></div>
+</pre></div>
+
+	    </div>
+            <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Snayff.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/jucacrispim/sphinx_pdj_theme">theme</a> provided by <a href="http://poraodojuca.net">Porão do Juca</a>.
+
+</footer>
+	</div>
+	</div>
+	  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.92.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js">
+
+    </script>
+    <script type="text/javascript" src="../../../../_static/underscore.js">
+
+    </script>
+    <script type="text/javascript" src="../../../../_static/doctools.js">
+
+    </script>
+    <script type="text/javascript" src="../../../../_static/language_data.js">
+
+    </script>
+
+  
+
+   <script type="text/javascript"
+           src="../../../../_static/js/theme.js"></script>
+
+   <script type="text/javascript"
+           src="../../../../_static/js/pdj.js"></script>
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+  </body>
+</html>

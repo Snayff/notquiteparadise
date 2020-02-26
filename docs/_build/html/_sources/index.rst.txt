@@ -11,11 +11,12 @@ Last updated on |today| for v|version|.
     :maxdepth: 1
 
     core
+    dev_tools
     event_handlers
     events
     managers
     skills
-    ui_elements
+    ui
     world
 
 

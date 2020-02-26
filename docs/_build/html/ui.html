@@ -1,0 +1,1036 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="" lang="" version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <title>UI &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  
+
+  
+
+  
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="_static/css/pdj.css" type="text/css" />
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="index.html"/>
+        <link rel="next" title="World" href="world.html"/>
+        <link rel="prev" title="Skills" href="skills.html"/>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cache-control" content="public" />
+    <meta name="robots" content="follow, all" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  </head>
+
+  <body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> NotQuiteParadise </a>
+        <div role="search">
+	  <form id ="rtd-search-form" class="wy-form"
+		action="search.html" method="get">
+	    <input type="text" name="q" placeholder="Search docs" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.library">Library of Alexandria</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_tools.html">Dev Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_tools.html#module-scripts.dev_tools.data_editor">Data Editor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.ui_handler">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.entity_events">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.game_events">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.map_events">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.ui_events">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.ui_manager.ui_manager">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.skill">Skill</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">UI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ui-elements">UI Elements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.combat_stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.game_map">Game Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.tile">Tile</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+
+      </div>
+      &nbsp;
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      <nav class="wy-nav-top" id="barra-mobile" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Porão do Juca</a>
+      </nav>
+
+      <div class="wy-nav-content">
+	<div class="fundo-claro">
+	</div>
+	<div class="fundo-escuro">
+	</div>
+
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+	    
+	    <!-- <ul class="wy-breadcrumbs"> -->
+	    <!--   <li><a href="#">Docs</a> &raquo;</li> -->
+
+	    <!--   <li>Features</li> -->
+	    <!--   <li class="wy-breadcrumbs-aside"> -->
+
+	    <!-- 	<a href="_sources/index.txt" rel="nofollow"> View page source</a> -->
+
+	    <!--   </li> -->
+	    <!-- </ul> -->
+	    <!-- <hr/> -->
+	  </div>
+
+          <div role="main" class="">
+
+	    <div id="content" class="hfeed entry-container hentry">
+  <div class="section" id="ui">
+<h1>UI<a class="headerlink" href="#ui" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic">
+<h2>Basic<a class="headerlink" href="#basic" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.ui.basic.colours">
+<span id="colours"></span><h3>Colours<a class="headerlink" href="#module-scripts.ui.basic.colours" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.basic.colours.Colour">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.basic.colours.</code><code class="sig-name descname">Colour</code><a class="reference internal" href="_modules/scripts/ui/basic/colours.html#Colour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.colours.Colour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A Colour value; a tuple containing RGB values.</p>
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.primary">
+<code class="sig-name descname">primary</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.primary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of main Colours.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour.PrimaryColour" title="scripts.ui.basic.colours.Colour.PrimaryColour">PrimaryColour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.secondary">
+<code class="sig-name descname">secondary</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.secondary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of secondary Colours.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour.SecondaryColour" title="scripts.ui.basic.colours.Colour.SecondaryColour">SecondaryColour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.tertiary">
+<code class="sig-name descname">tertiary</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.tertiary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of tertiary Colours.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour.TertiaryColour" title="scripts.ui.basic.colours.Colour.TertiaryColour">TertiaryColour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.complement">
+<code class="sig-name descname">complement</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.complement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of complement Colours.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour.ComplementColour" title="scripts.ui.basic.colours.Colour.ComplementColour">ComplementColour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.colours.Colour.PrimaryColour">
+<em class="property">class </em><code class="sig-name descname">PrimaryColour</code><a class="reference internal" href="_modules/scripts/ui/basic/colours.html#Colour.PrimaryColour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.colours.Colour.PrimaryColour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A set of gradients for the main Colour.</p>
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.PrimaryColour.darkest">
+<code class="sig-name descname">darkest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.PrimaryColour.darkest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darkest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.PrimaryColour.darker">
+<code class="sig-name descname">darker</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.PrimaryColour.darker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darker colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.PrimaryColour.neutral">
+<code class="sig-name descname">neutral</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.PrimaryColour.neutral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Neutral colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.PrimaryColour.lighter">
+<code class="sig-name descname">lighter</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.PrimaryColour.lighter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lighter colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.PrimaryColour.lightest">
+<code class="sig-name descname">lightest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.PrimaryColour.lightest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lightest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.colours.Colour.SecondaryColour">
+<em class="property">class </em><code class="sig-name descname">SecondaryColour</code><a class="reference internal" href="_modules/scripts/ui/basic/colours.html#Colour.SecondaryColour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.colours.Colour.SecondaryColour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A set of gradients for the secondary Colour.</p>
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.SecondaryColour.darkest">
+<code class="sig-name descname">darkest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.SecondaryColour.darkest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darkest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.SecondaryColour.darker">
+<code class="sig-name descname">darker</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.SecondaryColour.darker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darker colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.SecondaryColour.neutral">
+<code class="sig-name descname">neutral</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.SecondaryColour.neutral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Neutral colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.SecondaryColour.lighter">
+<code class="sig-name descname">lighter</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.SecondaryColour.lighter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lighter colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.SecondaryColour.lightest">
+<code class="sig-name descname">lightest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.SecondaryColour.lightest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lightest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.colours.Colour.TertiaryColour">
+<em class="property">class </em><code class="sig-name descname">TertiaryColour</code><a class="reference internal" href="_modules/scripts/ui/basic/colours.html#Colour.TertiaryColour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.colours.Colour.TertiaryColour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A set of gradients for the tertiary Colour.</p>
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.TertiaryColour.darkest">
+<code class="sig-name descname">darkest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.TertiaryColour.darkest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darkest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.TertiaryColour.darker">
+<code class="sig-name descname">darker</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.TertiaryColour.darker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darker colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.TertiaryColour.neutral">
+<code class="sig-name descname">neutral</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.TertiaryColour.neutral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Neutral colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.TertiaryColour.lighter">
+<code class="sig-name descname">lighter</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.TertiaryColour.lighter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lighter colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.TertiaryColour.lightest">
+<code class="sig-name descname">lightest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.TertiaryColour.lightest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lightest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.colours.Colour.ComplementColour">
+<em class="property">class </em><code class="sig-name descname">ComplementColour</code><a class="reference internal" href="_modules/scripts/ui/basic/colours.html#Colour.ComplementColour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.colours.Colour.ComplementColour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A set of gradients for the complement Colour.</p>
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.ComplementColour.darkest">
+<code class="sig-name descname">darkest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.ComplementColour.darkest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darkest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.ComplementColour.darker">
+<code class="sig-name descname">darker</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.ComplementColour.darker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Darker colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.ComplementColour.neutral">
+<code class="sig-name descname">neutral</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.ComplementColour.neutral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Neutral colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.ComplementColour.lighter">
+<code class="sig-name descname">lighter</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.ComplementColour.lighter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lighter colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.colours.Colour.ComplementColour.lightest">
+<code class="sig-name descname">lightest</code><a class="headerlink" href="#scripts.ui.basic.colours.Colour.ComplementColour.lightest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lightest colour in gradient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.ui.basic.fonts">
+<span id="fonts"></span><h3>Fonts<a class="headerlink" href="#module-scripts.ui.basic.fonts" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.basic.fonts.Font">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.basic.fonts.</code><code class="sig-name descname">Font</code><a class="reference internal" href="_modules/scripts/ui/basic/fonts.html#Font"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.fonts.Font" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Renderable font.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.ui.basic.palette">
+<span id="palette"></span><h3>Palette<a class="headerlink" href="#module-scripts.ui.basic.palette" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.basic.palette.Palette">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.basic.palette.</code><code class="sig-name descname">Palette</code><a class="reference internal" href="_modules/scripts/ui/basic/palette.html#Palette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.palette.Palette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A collection of Colours defined for specific purposes.</p>
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.menu_background">
+<code class="sig-name descname">menu_background</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.menu_background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of the Menu background.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.debug_font_colour">
+<code class="sig-name descname">debug_font_colour</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.debug_font_colour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of the Debug Font.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.palette.Palette.MessageLogPalette">
+<em class="property">class </em><code class="sig-name descname">MessageLogPalette</code><a class="reference internal" href="_modules/scripts/ui/basic/palette.html#Palette.MessageLogPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.palette.Palette.MessageLogPalette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The palette for the messagelog</p>
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.MessageLogPalette.background">
+<code class="sig-name descname">background</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.MessageLogPalette.background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of the Message Log background.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.MessageLogPalette.expressions_player">
+<code class="sig-name descname">expressions_player</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.MessageLogPalette.expressions_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of the  player`s expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.MessageLogPalette.text_default">
+<code class="sig-name descname">text_default</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.MessageLogPalette.text_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of the default text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.MessageLogPalette.hyperlink">
+<code class="sig-name descname">hyperlink</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.MessageLogPalette.hyperlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of hyperlinks .</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.MessageLogPalette.tooltip_background">
+<code class="sig-name descname">tooltip_background</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.MessageLogPalette.tooltip_background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of the tooltip window background.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="scripts.ui.basic.palette.Palette.MessageLogPalette.tooltip_text">
+<code class="sig-name descname">tooltip_text</code><a class="headerlink" href="#scripts.ui.basic.palette.Palette.MessageLogPalette.tooltip_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Colour of the tooltip text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.ui.basic.colours.Colour" title="scripts.ui.basic.colours.Colour">Colour</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.palette.Palette.EntityInfoPalette">
+<em class="property">class </em><code class="sig-name descname">EntityInfoPalette</code><a class="reference internal" href="_modules/scripts/ui/basic/palette.html#Palette.EntityInfoPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.palette.Palette.EntityInfoPalette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The palette for the entity info panel</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.palette.Palette.TargetingOverlayPalette">
+<em class="property">class </em><code class="sig-name descname">TargetingOverlayPalette</code><a class="reference internal" href="_modules/scripts/ui/basic/palette.html#Palette.TargetingOverlayPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.palette.Palette.TargetingOverlayPalette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The palette for the targeting overlay</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.palette.Palette.SkillBarPalette">
+<em class="property">class </em><code class="sig-name descname">SkillBarPalette</code><a class="reference internal" href="_modules/scripts/ui/basic/palette.html#Palette.SkillBarPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.palette.Palette.SkillBarPalette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The palette for the skill bar</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.palette.Palette.EntityQueuePalette">
+<em class="property">class </em><code class="sig-name descname">EntityQueuePalette</code><a class="reference internal" href="_modules/scripts/ui/basic/palette.html#Palette.EntityQueuePalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.palette.Palette.EntityQueuePalette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The palette for the entity queue</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="scripts.ui.basic.palette.Palette.CameraPalette">
+<em class="property">class </em><code class="sig-name descname">CameraPalette</code><a class="reference internal" href="_modules/scripts/ui/basic/palette.html#Palette.CameraPalette"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.basic.palette.Palette.CameraPalette" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The palette for the camera</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="ui-elements">
+<h2>UI Elements<a class="headerlink" href="#ui-elements" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.ui.ui_elements.camera">
+<span id="camera"></span><h3>Camera<a class="headerlink" href="#module-scripts.ui.ui_elements.camera" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.ui_elements.camera.Camera">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.ui_elements.camera.</code><code class="sig-name descname">Camera</code><span class="sig-paren">(</span><em class="sig-param">rect</em>, <em class="sig-param">manager</em>, <em class="sig-param">rows</em>, <em class="sig-param">cols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.core.ui_window.UIWindow</span></code></p>
+<p>Hold the visual info for the Game Map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rect</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Rect</span></code>) – </p></li>
+<li><p><strong>manager</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">UIManager</span></code>) – </p></li>
+<li><p><strong>rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">time_delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.update_game_map">
+<code class="sig-name descname">update_game_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.update_game_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.update_game_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the game map to show the current tiles and entities</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.update_grid">
+<code class="sig-name descname">update_grid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.update_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.update_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the tile grid to only have  options in line with the tiles set OR the overlay</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.set_tiles">
+<code class="sig-name descname">set_tiles</code><span class="sig-paren">(</span><em class="sig-param">tiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.set_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.set_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the tiles in the camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>tiles</em>) – List of Tiles</p></li>
+<li><p><strong>tiles</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.set_player_tile">
+<code class="sig-name descname">set_player_tile</code><span class="sig-paren">(</span><em class="sig-param">tile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.set_player_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.set_player_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the player tile</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>tile</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.set_overlay_visibility">
+<code class="sig-name descname">set_overlay_visibility</code><span class="sig-paren">(</span><em class="sig-param">is_visible</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.set_overlay_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.set_overlay_visibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether the targeting overlay is visible or now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>is_visible</em>) – </p></li>
+<li><p><strong>is_visible</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.set_overlay_directions">
+<code class="sig-name descname">set_overlay_directions</code><span class="sig-paren">(</span><em class="sig-param">directions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.set_overlay_directions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.set_overlay_directions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the overlay with possible targeting directions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>directions</em>) – List of Directions</p></li>
+<li><p><strong>directions</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.ui.ui_elements.entity_info">
+<span id="entity-info"></span><h3>Entity Info<a class="headerlink" href="#module-scripts.ui.ui_elements.entity_info" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.ui_elements.entity_info.</code><code class="sig-name descname">EntityInfo</code><span class="sig-paren">(</span><em class="sig-param">rect</em>, <em class="sig-param">manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.core.ui_window.UIWindow</span></code></p>
+<p>Hold text relating to the game’s events, to display to the player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rect</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Rect</span></code>) – </p></li>
+<li><p><strong>manager</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">UIManager</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">time_delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.set_entity">
+<code class="sig-name descname">set_entity</code><span class="sig-paren">(</span><em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.set_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.set_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the selected entity to show the info for that entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the entity info. Builds the sections required, after clearing any existing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.cleanse">
+<code class="sig-name descname">cleanse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.cleanse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.cleanse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleanse existing section info.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.create_entity_image_section">
+<code class="sig-name descname">create_entity_image_section</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.create_entity_image_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.create_entity_image_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the image section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>UIImage</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.create_core_info_section">
+<code class="sig-name descname">create_core_info_section</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.create_core_info_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.create_core_info_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the core info section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>UITextBox</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.create_primary_stats_section">
+<code class="sig-name descname">create_primary_stats_section</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.create_primary_stats_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.create_primary_stats_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the primary stats section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>UITextBox</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.entity_info.EntityInfo.create_secondary_stats_section">
+<code class="sig-name descname">create_secondary_stats_section</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/entity_info.html#EntityInfo.create_secondary_stats_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.entity_info.EntityInfo.create_secondary_stats_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the secondary stats section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>UITextBox</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.ui.ui_elements.message_log">
+<span id="message-log"></span><h3>Message Log<a class="headerlink" href="#module-scripts.ui.ui_elements.message_log" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.ui_elements.message_log.MessageLog">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.ui_elements.message_log.</code><code class="sig-name descname">MessageLog</code><span class="sig-paren">(</span><em class="sig-param">rect</em>, <em class="sig-param">manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/message_log.html#MessageLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.message_log.MessageLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.core.ui_window.UIWindow</span></code></p>
+<p>Hold text relating to the game’s events, to display to the player. Does not use UIWindow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rect</strong> (<em>pygame.Rect</em>) – </p></li>
+<li><p><strong>manager</strong> (<em>pygame_gui.ui_manager.UIManager</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="scripts.ui.ui_elements.message_log.MessageLog.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">time_delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/message_log.html#MessageLog.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.message_log.MessageLog.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.message_log.MessageLog.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/message_log.html#MessageLog.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.message_log.MessageLog.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.message_log.MessageLog.add_message">
+<code class="sig-name descname">add_message</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/message_log.html#MessageLog.add_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.message_log.MessageLog.add_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add message to the message log. Formatting the text is done via a subset of HTML tags. Currently supported
+tags are:</p>
+<p>&lt;b&gt;&lt;/b&gt; or &lt;strong&gt;&lt;/strong&gt; - to encase bold styled text.
+&lt;i&gt;&lt;/i&gt;, &lt;em&gt;&lt;/em&gt; or &lt;var&gt;&lt;/var&gt; - to encase italic styled text.
+&lt;u&gt;&lt;/u&gt; - to encase underlined text.
+&lt;a href=’id’&gt;&lt;/a&gt; - to encase ‘link’ text that can be clicked on to generate events with the id given in href.
+&lt;body bgcolor=’#FFFFFF’&gt;&lt;/body&gt; - to change the background colour of encased text.
+&lt;br&gt; - to start a new line.
+&lt;font face=’verdana’ color=’#000000’ size=3.5&gt;&lt;/font&gt; - To set the font, colour and size of encased text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>message</em>) – </p></li>
+<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.ui.ui_elements.screen_message">
+<span id="screen-message"></span><h3>Screen Message<a class="headerlink" href="#module-scripts.ui.ui_elements.screen_message" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.ui_elements.screen_message.ScreenMessage">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.ui_elements.screen_message.</code><code class="sig-name descname">ScreenMessage</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/screen_message.html#ScreenMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.screen_message.ScreenMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.elements.ui_text_box.UITextBox</span></code></p>
+<p>Show messages on the centre of the screen for a limited time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>manager</strong> (<em>pygame_gui.ui_manager.UIManager</em>) – </p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="scripts.ui.ui_elements.screen_message.ScreenMessage.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">time_delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/screen_message.html#ScreenMessage.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.screen_message.ScreenMessage.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.screen_message.ScreenMessage.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/screen_message.html#ScreenMessage.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.screen_message.ScreenMessage.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.ui.ui_elements.skill_bar">
+<span id="skill-bar"></span><h3>Skill Bar<a class="headerlink" href="#module-scripts.ui.ui_elements.skill_bar" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.ui.ui_elements.skill_bar.SkillBar">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.ui.ui_elements.skill_bar.</code><code class="sig-name descname">SkillBar</code><span class="sig-paren">(</span><em class="sig-param">rect</em>, <em class="sig-param">manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/skill_bar.html#SkillBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.skill_bar.SkillBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.core.ui_window.UIWindow</span></code></p>
+<p>Display and hold the info for the skills in the skill bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rect</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Rect</span></code>) – </p></li>
+<li><p><strong>manager</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">UIManager</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="scripts.ui.ui_elements.skill_bar.SkillBar.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">time_delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/skill_bar.html#SkillBar.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.skill_bar.SkillBar.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.skill_bar.SkillBar.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/skill_bar.html#SkillBar.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.skill_bar.SkillBar.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.skill_bar.SkillBar.set_skill">
+<code class="sig-name descname">set_skill</code><span class="sig-paren">(</span><em class="sig-param">slot_number</em>, <em class="sig-param">skill</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/skill_bar.html#SkillBar.set_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.skill_bar.SkillBar.set_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set skill in the skill bar slot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>skill</em>) – </p></li>
+<li><p><strong>(</strong><strong>)</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+	    </div>
+            <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="world.html" class="btn btn-neutral float-right" title="World">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="skills.html" class="btn btn-neutral" title="Skills"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Snayff.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/jucacrispim/sphinx_pdj_theme">theme</a> provided by <a href="http://poraodojuca.net">Porão do Juca</a>.
+
+</footer>
+	</div>
+	</div>
+	  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.92.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js">
+
+    </script>
+    <script type="text/javascript" src="_static/underscore.js">
+
+    </script>
+    <script type="text/javascript" src="_static/doctools.js">
+
+    </script>
+    <script type="text/javascript" src="_static/language_data.js">
+
+    </script>
+
+  
+
+   <script type="text/javascript"
+           src="_static/js/theme.js"></script>
+
+   <script type="text/javascript"
+           src="_static/js/pdj.js"></script>
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+  </body>
+</html>

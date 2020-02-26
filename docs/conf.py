@@ -229,7 +229,8 @@ autodoc_default_options = {
     'private-members': True
 }
 autoclass_content = "both"
-autodoc_typehints = 'description'
 
 # -- sphinx-autodoc-typehints ---------------------------------------------------
 always_document_param_types = True
+# set_type_checking_flag = True  # N.B. enabling breaks managers
+# typehints_document_rtype  = True # N.B. enabling breaks managers

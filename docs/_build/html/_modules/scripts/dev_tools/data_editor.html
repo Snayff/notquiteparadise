@@ -1,0 +1,1024 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="" lang="" version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <title>scripts.dev_tools.data_editor &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  
+
+  
+
+  
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="../../../_static/css/pdj.css" type="text/css" />
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cache-control" content="public" />
+    <meta name="robots" content="follow, all" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  </head>
+
+  <body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> NotQuiteParadise </a>
+        <div role="search">
+	  <form id ="rtd-search-form" class="wy-form"
+		action="../../../search.html" method="get">
+	    <input type="text" name="q" placeholder="Search docs" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.library">Library of Alexandria</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_tools.html">Dev Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../dev_tools.html#module-scripts.dev_tools.data_editor">Data Editor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.ui_handler">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../events.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.entity_events">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.game_events">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.map_events">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.ui_events">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.ui_manager.ui_manager">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ui.html">UI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui.html#basic">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui.html#ui-elements">UI Elements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../world.html">World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.combat_stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.game_map">Game Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.tile">Tile</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+
+      </div>
+      &nbsp;
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      <nav class="wy-nav-top" id="barra-mobile" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Porão do Juca</a>
+      </nav>
+
+      <div class="wy-nav-content">
+	<div class="fundo-claro">
+	</div>
+	<div class="fundo-escuro">
+	</div>
+
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+	    
+	    <!-- <ul class="wy-breadcrumbs"> -->
+	    <!--   <li><a href="#">Docs</a> &raquo;</li> -->
+
+	    <!--   <li>Features</li> -->
+	    <!--   <li class="wy-breadcrumbs-aside"> -->
+
+	    <!-- 	<a href="_sources/index.txt" rel="nofollow"> View page source</a> -->
+
+	    <!--   </li> -->
+	    <!-- </ul> -->
+	    <!-- <hr/> -->
+	  </div>
+
+          <div role="main" class="">
+
+	    <div id="content" class="hfeed entry-container hentry">
+  <h1>Source code for scripts.dev_tools.data_editor</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">dataclasses</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">pygame_gui</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIWindow</span><span class="p">,</span> <span class="n">UIContainer</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIDropDownMenu</span><span class="p">,</span> <span class="n">UILabel</span><span class="p">,</span> <span class="n">UITextEntryLine</span><span class="p">,</span> <span class="n">UIButton</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">DamageTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> \
+    <span class="n">TargetTags</span><span class="p">,</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">SkillExpiryTypes</span><span class="p">,</span> <span class="n">SkillShapes</span><span class="p">,</span> <span class="n">Directions</span><span class="p">,</span> <span class="n">SkillTerrainCollisions</span><span class="p">,</span> <span class="n">SkillTravelTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.core.extend_json</span> <span class="kn">import</span> <span class="n">ExtendedJsonEncoder</span>
+<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.game_manager.game_manager</span> <span class="kn">import</span> <span class="n">game</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.affliction</span> <span class="kn">import</span> <span class="n">AfflictionData</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.effect</span> <span class="kn">import</span> <span class="n">EffectData</span>
+<span class="kn">from</span> <span class="nn">scripts.skills.skill</span> <span class="kn">import</span> <span class="n">SkillData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.aspect_dataclass</span> <span class="kn">import</span> <span class="n">AspectData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.attitude_dataclass</span> <span class="kn">import</span> <span class="n">AttitudeData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.characteristic_dataclass</span> <span class="kn">import</span> <span class="n">CharacteristicData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.god_dataclass</span> <span class="kn">import</span> <span class="n">GodData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.interaction_dataclass</span> <span class="kn">import</span> <span class="n">InteractionData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.intervention_dataclass</span> <span class="kn">import</span> <span class="n">InterventionData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.stat_dataclass</span> <span class="kn">import</span> <span class="n">BasePrimaryStatData</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+    <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
+    <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+
+<div class="viewcode-block" id="DataEditor"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor">[docs]</a><span class="k">class</span> <span class="nc">DataEditor</span><span class="p">(</span><span class="n">UIWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dev tool to allow creating and editing data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
+        <span class="n">element_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;data_editor&quot;</span><span class="p">]</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">element_ids</span><span class="o">=</span><span class="n">element_ids</span><span class="p">)</span>
+
+        <span class="c1"># data holders</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_primary_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_secondary_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_being_edited</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="n">dataclass</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># data selectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category_selector</span><span class="p">:</span> <span class="n">UIDropDownMenu</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span><span class="p">:</span> <span class="n">UIDropDownMenu</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># dicts of data fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataField</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataField</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># size info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">row_height</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selectors_end_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">row_height</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># 2 is number of selectors</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">primary_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primary_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectors_end_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primary_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">secondary_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">secondary_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectors_end_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">secondary_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_width</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_width_mod</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># decimal % of row width that label takes up</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># get the data &amp; field options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_library_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_field_options</span><span class="p">()</span>
+
+        <span class="c1"># display the initial selector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category_selector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_data_category_selector</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DataEditor.update"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update based on current state and data. Run every frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataEditor.handle_events"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle events created by this UI widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ui_object_id</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">ui_object_id</span>
+        <span class="n">new_value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">data_field</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># new selection in instance_selector</span>
+        <span class="k">if</span> <span class="n">ui_object_id</span> <span class="o">==</span> <span class="s2">&quot;category_selector&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_DROP_DOWN_MENU_CHANGED</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_selector</span><span class="o">.</span><span class="n">selected_option</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_select_new_category</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">category_selector</span><span class="o">.</span><span class="n">selected_option</span><span class="p">)</span>
+
+        <span class="c1"># new selection in instance_selector</span>
+        <span class="k">if</span> <span class="n">ui_object_id</span> <span class="o">==</span> <span class="s2">&quot;instance_selector&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_DROP_DOWN_MENU_CHANGED</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span><span class="o">.</span><span class="n">selected_option</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_select_new_instance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span><span class="o">.</span><span class="n">selected_option</span><span class="p">)</span>
+
+        <span class="c1"># new selection in a different, non-selector dropdown</span>
+        <span class="k">if</span> <span class="n">ui_object_id</span> <span class="o">!=</span> <span class="s2">&quot;instance_selector&quot;</span> <span class="ow">and</span> <span class="n">ui_object_id</span> <span class="o">!=</span> <span class="s2">&quot;category_selector&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_DROP_DOWN_MENU_CHANGED</span><span class="p">:</span>
+                <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_dropdown_change</span><span class="p">(</span><span class="n">ui_object_id</span><span class="p">)</span>
+
+        <span class="c1"># handle text field finished typing (triggers on enter press)</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">user_type</span> <span class="o">==</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">UI_TEXT_ENTRY_FINISHED</span><span class="p">:</span>
+            <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_textbox_change</span><span class="p">(</span><span class="n">ui_object_id</span><span class="p">)</span>
+
+        <span class="c1"># handle triggers for secondary details</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;edit#&quot;</span>
+        <span class="k">if</span> <span class="n">ui_object_id</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)]</span> <span class="o">==</span> <span class="n">prefix</span><span class="p">:</span>
+            <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_edit_action</span><span class="p">(</span><span class="n">ui_object_id</span><span class="p">)</span>
+
+        <span class="c1"># handle multiple choice to toggle the value</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;multi#&quot;</span>
+        <span class="k">if</span> <span class="n">ui_object_id</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)]</span> <span class="o">==</span> <span class="n">prefix</span><span class="p">:</span>
+            <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_multi_action</span><span class="p">(</span><span class="n">ui_object_id</span><span class="p">)</span>
+
+        <span class="c1"># update selected fields</span>
+        <span class="k">if</span> <span class="n">data_field</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">data_field</span><span class="o">.</span><span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;primary&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_primary_field</span> <span class="o">=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">key</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_secondary_field</span> <span class="o">=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">key</span>
+
+            <span class="k">if</span> <span class="n">new_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># process the update and reload</span>
+                <span class="n">primary_or_secondary</span> <span class="o">=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">primary_or_secondary</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_save_updated_field</span><span class="p">(</span><span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
+
+                <span class="c1"># clear existing</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="n">primary_or_secondary</span><span class="p">)</span>
+
+                <span class="c1"># reload to reflect new changes</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_load_details</span><span class="p">(</span><span class="n">primary_or_secondary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">)</span></div>
+
+    <span class="c1">################# INTERACT ################</span>
+
+<div class="viewcode-block" id="DataEditor._select_new_category"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._select_new_category">[docs]</a>    <span class="k">def</span> <span class="nf">_select_new_category</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select new category, clear existing data fields and create new instance options from category.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span> <span class="o">=</span> <span class="n">category</span>
+
+        <span class="c1"># clear existing details fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="s2">&quot;secondary&quot;</span><span class="p">)</span>
+
+        <span class="c1"># clear existing instance selector</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># create new instance selector</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_data_instance_selector</span><span class="p">(</span><span class="n">options</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataEditor._select_new_instance"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._select_new_instance">[docs]</a>    <span class="k">def</span> <span class="nf">_select_new_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select new data instance and clear current data fields before loading primary data details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># clear existing details fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="s2">&quot;secondary&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create new</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_details</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataEditor._process_dropdown_change"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._process_dropdown_change">[docs]</a>    <span class="k">def</span> <span class="nf">_process_dropdown_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DataField</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if new option selected in dropdown and if so return data_field and new value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">object_id</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="n">new_value</span> <span class="o">=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">input_element</span><span class="o">.</span><span class="n">selected_option</span>
+
+        <span class="c1"># check the value has changed</span>
+        <span class="k">if</span> <span class="n">new_value</span> <span class="o">!=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span>
+
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DataEditor._process_textbox_change"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._process_textbox_change">[docs]</a>    <span class="k">def</span> <span class="nf">_process_textbox_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DataField</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if text has changed and return data field and new value&quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">object_id</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="n">new_value</span> <span class="o">=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">input_element</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="c1"># check the value has changed</span>
+        <span class="k">if</span> <span class="n">new_value</span> <span class="o">!=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span>
+
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DataEditor._process_edit_action"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._process_edit_action">[docs]</a>    <span class="k">def</span> <span class="nf">_process_edit_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DataField</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="c1"># get the key</span>
+        <span class="n">prefix</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">_object_id</span> <span class="o">=</span> <span class="n">object_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+
+        <span class="c1"># clear existing details fields N.B. edit can only be in primary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="s2">&quot;secondary&quot;</span><span class="p">)</span>
+
+        <span class="c1">#  load secondary details</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_details</span><span class="p">(</span><span class="s2">&quot;secondary&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">_object_id</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_being_edited</span> <span class="o">=</span> <span class="n">_object_id</span>
+
+        <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">data_field</span><span class="p">,</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="DataEditor._process_multi_action"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._process_multi_action">[docs]</a>    <span class="k">def</span> <span class="nf">_process_multi_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DataField</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Toggle selected option in the relevant field&quot;&quot;&quot;</span>
+        <span class="c1"># get the key</span>
+        <span class="n">prefix</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">_object_id</span> <span class="o">=</span> <span class="n">object_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="c1"># get current value</span>
+        <span class="n">current_value</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">id_as_value</span> <span class="o">=</span> <span class="n">_object_id</span>
+
+        <span class="k">if</span> <span class="n">id_as_value</span> <span class="ow">in</span> <span class="n">current_value</span><span class="p">:</span>
+            <span class="n">current_value</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">id_as_value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_as_value</span><span class="p">)</span>
+
+        <span class="n">new_value</span> <span class="o">=</span> <span class="n">current_value</span>
+
+        <span class="k">return</span> <span class="n">data_field</span><span class="p">,</span> <span class="n">new_value</span></div>
+
+    <span class="c1">############## CREATE ################</span>
+
+<div class="viewcode-block" id="DataEditor._create_data_category_selector"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._create_data_category_selector">[docs]</a>    <span class="k">def</span> <span class="nf">_create_data_category_selector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UIDropDownMenu</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the category selector drop down menu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get options and sort alphabetically</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">keys</span> <span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_height</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">UIDropDownMenu</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+                              <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;category_selector&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataEditor._create_data_instance_selector"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._create_data_instance_selector">[docs]</a>    <span class="k">def</span> <span class="nf">_create_data_instance_selector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">UIDropDownMenu</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the instance selector drop down menu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">start_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_height</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_height</span><span class="p">))</span>
+
+        <span class="n">_options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="n">_options</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;new&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">UIDropDownMenu</span><span class="p">(</span><span class="n">_options</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span>
+                              <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;instance_selector&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataEditor._create_one_from_options_field"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._create_one_from_options_field">[docs]</a>    <span class="k">def</span> <span class="nf">_create_one_from_options_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">container</span><span class="p">:</span> <span class="n">UIContainer</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataField</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a data field containing label, current value and a dropdown of possible options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># split out the elements of the key</span>
+        <span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">option</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span><span class="p">]</span>
+
+        <span class="c1"># get value name</span>
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">value_name</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value_name</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+
+        <span class="c1"># insert none option</span>
+        <span class="n">_options</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
+
+        <span class="n">_options</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># create the key label</span>
+        <span class="n">key_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_width_mod</span><span class="p">)</span>
+        <span class="n">key_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">key_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="n">key_label</span> <span class="o">=</span> <span class="n">UILabel</span><span class="p">(</span><span class="n">key_rect</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key_label</span><span class="p">)</span>
+
+        <span class="c1"># create the current values label</span>
+        <span class="n">value_width</span> <span class="o">=</span> <span class="n">width</span> <span class="o">-</span> <span class="n">key_width</span>
+        <span class="n">value_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">key_width</span>
+        <span class="n">value_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">value_x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">value_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="n">value_label</span> <span class="o">=</span> <span class="n">UILabel</span><span class="p">(</span><span class="n">value_rect</span><span class="p">,</span> <span class="n">value_name</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value_label</span><span class="p">)</span>
+
+        <span class="c1"># create the option&#39;s dropdown, incremented by height</span>
+        <span class="n">input_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">height</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="n">UIDropDownMenu</span><span class="p">(</span><span class="n">_options</span><span class="p">,</span> <span class="n">value_name</span><span class="p">,</span> <span class="n">input_rect</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+                               <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">_key</span><span class="p">)</span>
+
+        <span class="c1"># create the data field</span>
+        <span class="n">data_field</span> <span class="o">=</span> <span class="n">DataField</span><span class="p">(</span><span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">value_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">height</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                               <span class="n">input_element</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">_options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_field</span></div>
+
+<div class="viewcode-block" id="DataEditor._create_edit_detail_field"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._create_edit_detail_field">[docs]</a>    <span class="k">def</span> <span class="nf">_create_edit_detail_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">container</span><span class="p">:</span> <span class="n">UIContainer</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataField</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a data field containing label, current values and a row of buttons for possible options. Buttons are</span>
+<span class="sd">        prefixed with edit#</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># split out the elements of the key</span>
+        <span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">prefixed_options</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">values_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Turn value into a list of strings</span>
+        <span class="n">prefixed_options</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;edit#</span><span class="si">{_key}</span><span class="s2">#{name.lower()}&quot;</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">values_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># sort lists alphabetically</span>
+        <span class="n">prefixed_options</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">values_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># create the key label</span>
+        <span class="n">key_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_width_mod</span><span class="p">)</span>
+        <span class="n">key_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">key_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="n">key_label</span> <span class="o">=</span> <span class="n">UILabel</span><span class="p">(</span><span class="n">key_rect</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key_label</span><span class="p">)</span>
+
+        <span class="c1"># convert the list to a string</span>
+        <span class="n">values_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values_list</span><span class="p">)</span>
+        <span class="n">values_str</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>  <span class="c1"># add comma to the end to help delimit when adding other values</span>
+
+        <span class="c1"># create the current values label</span>
+        <span class="n">value_width</span> <span class="o">=</span> <span class="n">width</span> <span class="o">-</span> <span class="n">key_width</span>
+        <span class="n">value_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">key_width</span>
+        <span class="n">value_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">value_x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">value_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="n">value_label</span> <span class="o">=</span> <span class="n">UILabel</span><span class="p">(</span><span class="n">value_rect</span><span class="p">,</span> <span class="n">values_str</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value_label</span><span class="p">)</span>
+
+        <span class="c1"># determine how wide to make buttons</span>
+        <span class="n">button_width</span> <span class="o">=</span> <span class="n">width</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefixed_options</span><span class="p">)</span>
+
+        <span class="c1"># create the option&#39;s buttons, incremented by height</span>
+        <span class="n">buttons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_row_of_buttons</span><span class="p">(</span><span class="n">prefixed_options</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">height</span><span class="p">,</span> <span class="n">button_width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># create the data field</span>
+        <span class="n">data_field</span> <span class="o">=</span> <span class="n">DataField</span><span class="p">(</span><span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">values_str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">height</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                               <span class="n">buttons</span><span class="o">=</span><span class="n">buttons</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">prefixed_options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_field</span></div>
+
+<div class="viewcode-block" id="DataEditor._create_multiple_from_options_field"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._create_multiple_from_options_field">[docs]</a>    <span class="k">def</span> <span class="nf">_create_multiple_from_options_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">container</span><span class="p">:</span> <span class="n">UIContainer</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">:</span> <span class="n">UIManager</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataField</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a data field containing label, current values and a row of buttons for possible options. Button&#39;s</span>
+<span class="sd">        object_ids are prefixed with multi#</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># split out the elements of the key</span>
+        <span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">prefixed_options</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">values_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># add prefix</span>
+        <span class="n">prefixed_options</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;multi#</span><span class="si">{_key}</span><span class="s2">#{name.lower()}&quot;</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">options</span><span class="p">)</span>
+        <span class="n">values_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># replace spaces with underscores as object_id doesnt like spaces</span>
+        <span class="c1"># values_list = [new_value.replace(&quot; &quot;, &quot;_&quot;) for new_value in values_list]</span>
+        <span class="c1"># prefixed_options = [new_value.replace(&quot; &quot;, &quot;_&quot;) for new_value in options]</span>
+
+        <span class="c1"># sort lists alphabetically</span>
+        <span class="n">prefixed_options</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">values_list</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># create the key label</span>
+        <span class="n">key_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_width_mod</span><span class="p">)</span>
+        <span class="n">key_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">key_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="n">key_label</span> <span class="o">=</span> <span class="n">UILabel</span><span class="p">(</span><span class="n">key_rect</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key_label</span><span class="p">)</span>
+
+        <span class="c1"># convert the list to a string</span>
+        <span class="n">values_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values_list</span><span class="p">)</span>
+
+        <span class="c1"># add comma to the end to help delimit when adding other values, unless there are no values!</span>
+        <span class="k">if</span> <span class="n">values_str</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">values_str</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
+
+        <span class="c1"># create the current values label</span>
+        <span class="n">value_width</span> <span class="o">=</span> <span class="n">width</span> <span class="o">-</span> <span class="n">key_width</span>
+        <span class="n">value_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">key_width</span>
+        <span class="n">value_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">value_x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">value_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="n">value_label</span> <span class="o">=</span> <span class="n">UILabel</span><span class="p">(</span><span class="n">value_rect</span><span class="p">,</span> <span class="n">values_str</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value_label</span><span class="p">)</span>
+
+        <span class="c1"># determine how wide to make buttons</span>
+        <span class="n">button_width</span> <span class="o">=</span> <span class="n">width</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefixed_options</span><span class="p">)</span>
+
+        <span class="c1"># create the option&#39;s buttons, incremented by height</span>
+        <span class="n">buttons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_row_of_buttons</span><span class="p">(</span><span class="n">prefixed_options</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">height</span><span class="p">,</span> <span class="n">button_width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># create the data field</span>
+        <span class="n">data_field</span> <span class="o">=</span> <span class="n">DataField</span><span class="p">(</span><span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">values_str</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">height</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                               <span class="n">buttons</span><span class="o">=</span><span class="n">buttons</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">prefixed_options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_field</span></div>
+
+<div class="viewcode-block" id="DataEditor._create_text_entry_field"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._create_text_entry_field">[docs]</a>    <span class="k">def</span> <span class="nf">_create_text_entry_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataField</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a data field containing a text input widget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># split out the elements of the key</span>
+        <span class="n">primary_or_secondary</span><span class="p">,</span>  <span class="n">_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create the label</span>
+        <span class="n">label_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_width_mod</span><span class="p">)</span>
+        <span class="n">label_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">label_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">UILabel</span><span class="p">(</span><span class="n">label_rect</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># create the input</span>
+        <span class="n">input_width</span> <span class="o">=</span> <span class="n">width</span> <span class="o">-</span> <span class="n">label_width</span>
+        <span class="n">input_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">label_width</span>
+        <span class="n">input_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">input_x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">input_width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="n">UITextEntryLine</span><span class="p">(</span><span class="n">input_rect</span><span class="p">,</span> <span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">_key</span><span class="p">)</span>
+        <span class="nb">input</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create the data field</span>
+        <span class="n">data_field</span> <span class="o">=</span> <span class="n">DataField</span><span class="p">(</span><span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="nb">str</span><span class="p">,</span> <span class="p">[</span><span class="n">label</span><span class="p">],</span> <span class="n">height</span><span class="p">,</span>
+                               <span class="n">input_element</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_field</span></div>
+
+<div class="viewcode-block" id="DataEditor._create_row_of_buttons"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._create_row_of_buttons">[docs]</a>    <span class="k">def</span> <span class="nf">_create_row_of_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span>
+        <span class="nb">str</span><span class="p">,</span> <span class="n">UIButton</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a series of button UI widgets on the same x pos.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">offset_x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">container</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">()</span>
+        <span class="n">buttons</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">button_name</span> <span class="ow">in</span> <span class="n">button_names</span><span class="p">:</span>
+            <span class="c1"># split the prefix from the name</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">prefix</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">button_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># if no prefix</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">button_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">button_name</span>
+
+            <span class="c1"># ensure the object ID has no spaces</span>
+            <span class="n">object_id</span> <span class="o">=</span> <span class="n">button_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+            <span class="c1"># create the button</span>
+            <span class="n">button_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">offset_x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="n">UIButton</span><span class="p">(</span><span class="n">button_rect</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+                              <span class="n">parent_element</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">object_id</span><span class="p">)</span>
+            <span class="n">offset_x</span> <span class="o">+=</span> <span class="n">width</span>
+            <span class="n">buttons</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">button</span>
+
+        <span class="k">return</span> <span class="n">buttons</span></div>
+
+    <span class="c1">############### LOAD ###################</span>
+
+<div class="viewcode-block" id="DataEditor._load_field_options"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._load_field_options">[docs]</a>    <span class="k">def</span> <span class="nf">_load_field_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Maps the various data keys to their related (options, dataclass). The dataclass is only provided if the key</span>
+<span class="sd">        relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData). Loads</span>
+<span class="sd">        details into self.field_options</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_members</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">Utility</span><span class="o">.</span><span class="n">get_class_members</span>
+
+        <span class="n">affliction_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;afflictions&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">aspect_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;aspects&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">effect_options</span> <span class="o">=</span> <span class="n">get_members</span><span class="p">(</span><span class="n">EffectTypes</span><span class="p">)</span>
+        <span class="n">primary_stat_options</span> <span class="o">=</span> <span class="n">get_members</span><span class="p">(</span><span class="n">PrimaryStatTypes</span><span class="p">)</span>
+        <span class="n">secondary_stat_options</span> <span class="o">=</span> <span class="n">get_members</span><span class="p">(</span><span class="n">SecondaryStatTypes</span><span class="p">)</span>
+        <span class="n">bool_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;False&quot;</span><span class="p">]</span>
+        <span class="n">skill_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;skills&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+
+        <span class="n">field_options</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;effects&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">effect_options</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">()),</span>
+            <span class="s2">&quot;trigger_event&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">AfflictionTriggers</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;affliction_name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">affliction_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;aspect_name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">aspect_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;damage_type&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">DamageTypes</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;effect_type&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">effect_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;stat_to_affect&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">primary_stat_options</span> <span class="o">+</span> <span class="n">secondary_stat_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;stat_to_target&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">primary_stat_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;required_tags&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">TargetTags</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;mod_stat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">primary_stat_options</span> <span class="o">+</span> <span class="n">secondary_stat_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;blocks_movement&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">bool_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;blocks_sight&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">bool_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">AfflictionCategory</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;cause&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">affliction_options</span> <span class="o">+</span> <span class="n">effect_options</span> <span class="o">+</span> <span class="n">skill_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># interaction trigger</span>
+            <span class="s2">&quot;change_to&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">aspect_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;primary_stat_type&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">primary_stat_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;secondary_stat_type&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">secondary_stat_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">affliction_options</span> <span class="o">+</span> <span class="n">effect_options</span> <span class="o">+</span> <span class="n">skill_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>  <span class="c1"># gods attitudes on things</span>
+            <span class="s2">&quot;skill_key&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">skill_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;known_skills&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">skill_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;expiry_type&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">SkillExpiryTypes</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">secondary_stat_options</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">SkillShapes</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;target_directions&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">Directions</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;terrain_collision&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">SkillTerrainCollisions</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;travel_type&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">get_members</span><span class="p">(</span><span class="n">SkillTravelTypes</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;interactions&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">affliction_options</span> <span class="o">+</span> <span class="n">effect_options</span> <span class="o">+</span> <span class="n">skill_options</span><span class="p">,</span> <span class="n">InteractionData</span><span class="p">()),</span>
+            <span class="s2">&quot;attitudes&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">affliction_options</span> <span class="o">+</span> <span class="n">effect_options</span> <span class="o">+</span> <span class="n">skill_options</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">()),</span>
+            <span class="s2">&quot;interventions&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">skill_options</span><span class="p">,</span> <span class="n">InterventionData</span><span class="p">()),</span>
+            <span class="s2">&quot;skills&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">SkillData</span><span class="p">()),</span>
+            <span class="s2">&quot;afflictions&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">AfflictionData</span><span class="p">()),</span>
+            <span class="s2">&quot;aspects&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">AspectData</span><span class="p">()),</span>
+            <span class="s2">&quot;base_stats_primary&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">()),</span>
+            <span class="s2">&quot;base_stats_secondary&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">()),</span>
+            <span class="s2">&quot;homelands&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">CharacteristicData</span><span class="p">()),</span>
+            <span class="s2">&quot;peoples&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">CharacteristicData</span><span class="p">()),</span>
+            <span class="s2">&quot;savvys&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">CharacteristicData</span><span class="p">()),</span>
+            <span class="s2">&quot;gods&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">GodData</span><span class="p">())</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_options</span> <span class="o">=</span> <span class="n">field_options</span></div>
+
+<div class="viewcode-block" id="DataEditor._load_details"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._load_details">[docs]</a>    <span class="k">def</span> <span class="nf">_load_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">primary_or_secondary</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_instance</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">secondary_keys</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load details of the specified instance into the primary or secondary section</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">secondary_keys</span><span class="p">:</span>
+            <span class="n">secondary_key</span><span class="p">,</span> <span class="n">instance_key</span> <span class="o">=</span> <span class="n">secondary_keys</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">secondary_key</span> <span class="o">=</span> <span class="n">instance_key</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># get initial pos info</span>
+        <span class="k">if</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;primary&quot;</span><span class="p">:</span>
+            <span class="n">start_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_x</span>
+            <span class="n">start_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_y</span>
+            <span class="n">row_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_width</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_x</span>
+            <span class="n">start_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_y</span>
+            <span class="n">row_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_width</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># get any info we can get ahead of time</span>
+        <span class="n">container</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">()</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span>
+        <span class="n">row_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">row_height</span>
+        <span class="n">current_y</span> <span class="o">=</span> <span class="n">start_y</span>
+        <span class="n">data_fields</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span>
+        <span class="n">category</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">data_instance</span>
+        <span class="n">field_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_options</span>
+
+        <span class="c1"># point to the required dataclasses</span>
+        <span class="k">if</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;secondary&quot;</span> <span class="ow">and</span> <span class="n">secondary_key</span><span class="p">:</span>
+            <span class="n">instance_dict</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">all_data</span><span class="p">[</span><span class="n">category</span><span class="p">][</span><span class="n">instance</span><span class="p">],</span> <span class="n">secondary_key</span><span class="p">)</span>
+
+            <span class="c1"># see if we have existing values</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">inner_dataclass</span> <span class="o">=</span> <span class="n">instance_dict</span><span class="p">[</span><span class="n">instance_key</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c1"># get the data class from the possible field options</span>
+                <span class="n">_key</span><span class="p">,</span> <span class="n">inner_dataclass</span> <span class="o">=</span> <span class="n">field_options</span><span class="p">[</span><span class="n">secondary_key</span><span class="p">]</span>
+
+                <span class="c1"># assign the key</span>
+                <span class="n">instance_dict</span><span class="p">[</span><span class="n">instance_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">inner_dataclass</span>
+
+        <span class="k">elif</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;secondary&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">secondary_key</span><span class="p">:</span>
+            <span class="n">instance_dict</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">all_data</span><span class="p">[</span><span class="n">category</span><span class="p">][</span><span class="n">instance</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_primary_field</span><span class="p">)</span>
+            <span class="n">inner_dataclass</span> <span class="o">=</span> <span class="n">instance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key_being_edited</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># handle a new data instance by getting the relevant dataclass</span>
+            <span class="k">if</span> <span class="n">instance</span> <span class="o">==</span> <span class="s2">&quot;new&quot;</span><span class="p">:</span>
+                <span class="n">outer_dict</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="n">category</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">field_options</span><span class="p">:</span>
+                    <span class="n">options</span><span class="p">,</span> <span class="n">inner_dataclass</span> <span class="o">=</span> <span class="n">field_options</span><span class="p">[</span><span class="n">category</span><span class="p">]</span>
+
+                    <span class="c1"># assign the key</span>
+                    <span class="n">outer_dict</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inner_dataclass</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">inner_dataclass</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="n">category</span><span class="p">][</span><span class="n">instance</span><span class="p">]</span>
+
+        <span class="c1"># convert dataclass to dict to loop values</span>
+        <span class="n">data_dict</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">asdict</span><span class="p">(</span><span class="n">inner_dataclass</span><span class="p">)</span>
+
+        <span class="c1"># create data fields</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">field_options</span><span class="p">:</span>
+                    <span class="n">options</span><span class="p">,</span> <span class="n">secondary_fields</span> <span class="o">=</span> <span class="n">field_options</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">options</span> <span class="o">=</span> <span class="n">secondary_fields</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="c1"># modify key to include the prefix</span>
+                <span class="n">prefix_key</span> <span class="o">=</span> <span class="n">primary_or_secondary</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="n">key</span>
+
+                <span class="c1"># have we identified the secondary fields?</span>
+                <span class="k">if</span> <span class="n">secondary_fields</span><span class="p">:</span>
+                    <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_edit_detail_field</span><span class="p">(</span><span class="n">prefix_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">start_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">,</span>
+                                                                <span class="n">row_width</span><span class="p">,</span> <span class="n">row_height</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
+                        <span class="c1"># if key name is plural</span>
+                        <span class="k">if</span> <span class="n">key</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span>
+                            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_multiple_from_options_field</span><span class="p">(</span><span class="n">prefix_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">start_x</span><span class="p">,</span>
+                                                                                  <span class="n">current_y</span><span class="p">,</span> <span class="n">row_width</span><span class="p">,</span> <span class="n">row_height</span><span class="p">,</span>
+                                                                                  <span class="n">container</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span>
+                        <span class="c1"># singular name, only pick one</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_one_from_options_field</span><span class="p">(</span><span class="n">prefix_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">start_x</span><span class="p">,</span>
+                                                                             <span class="n">current_y</span><span class="p">,</span> <span class="n">row_width</span><span class="p">,</span> <span class="n">row_height</span><span class="p">,</span>
+                                                                             <span class="n">container</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span>
+                    <span class="c1"># no options so it must be a text field</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">data_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_text_entry_field</span><span class="p">(</span><span class="n">prefix_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">start_x</span><span class="p">,</span> <span class="n">current_y</span><span class="p">,</span> <span class="n">row_width</span><span class="p">,</span>
+                                                                   <span class="n">row_height</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span>
+
+                <span class="c1"># increment Y</span>
+                <span class="n">current_y</span> <span class="o">+=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="c1"># save the data field</span>
+                <span class="n">data_fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_field</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error (</span><span class="si">{e}</span><span class="s2">) trying to create data field for </span><span class="si">{key}</span><span class="s2">:</span><span class="si">{value}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># update the main record</span>
+        <span class="k">if</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;primary&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="n">data_fields</span>
+        <span class="k">elif</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;secondary&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span> <span class="o">=</span> <span class="n">data_fields</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="n">data_fields</span>
+
+        <span class="c1"># take note of the highest used y, for the scroll bar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">current_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataEditor._load_library_data"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._load_library_data">[docs]</a>    <span class="k">def</span> <span class="nf">_load_library_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load all of the data options into self.all_data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;base_stats_primary&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_primary_stats_data</span><span class="p">(),</span>
+            <span class="s2">&quot;base_stats_secondary&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_secondary_stats_data</span><span class="p">(),</span>
+            <span class="s2">&quot;homelands&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_homelands_data</span><span class="p">(),</span>
+            <span class="s2">&quot;peoples&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_peoples_data</span><span class="p">(),</span>
+            <span class="s2">&quot;savvys&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_savvys_data</span><span class="p">(),</span>
+            <span class="s2">&quot;afflictions&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_afflictions_data</span><span class="p">(),</span>
+            <span class="s2">&quot;skills&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skills_data</span><span class="p">(),</span>
+            <span class="s2">&quot;aspects&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_aspects_data</span><span class="p">(),</span>
+            <span class="s2">&quot;gods&quot;</span><span class="p">:</span> <span class="n">library</span><span class="o">.</span><span class="n">get_gods_data</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
+    <span class="c1">############## CLEAR #####################</span>
+
+<div class="viewcode-block" id="DataEditor.cleanse"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor.cleanse">[docs]</a>    <span class="k">def</span> <span class="nf">cleanse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear all held data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_selector</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">category_selector</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">category_selector</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance_selector</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_kill_details_fields</span><span class="p">(</span><span class="s2">&quot;secondary&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="DataEditor._kill_details_fields"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._kill_details_fields">[docs]</a>    <span class="k">def</span> <span class="nf">_kill_details_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">primary_or_secondary</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear currently held details in the given dict of data fields.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;primary&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_primary_field</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">data_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span>
+        <span class="k">elif</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;secondary&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_secondary_field</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">data_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span>
+
+        <span class="c1"># clear the data fields</span>
+        <span class="k">for</span> <span class="n">data_field</span> <span class="ow">in</span> <span class="n">data_fields</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">data_field</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+
+        <span class="c1"># clear the dict</span>
+        <span class="k">if</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;primary&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">elif</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;secondary&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">secondary_data_fields</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+    <span class="c1">############ SAVE ##################</span>
+
+<div class="viewcode-block" id="DataEditor._save_updated_field"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataEditor._save_updated_field">[docs]</a>    <span class="k">def</span> <span class="nf">_save_updated_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">primary_or_secondary</span><span class="p">,</span> <span class="n">data_field</span><span class="p">:</span> <span class="n">DataField</span><span class="p">,</span> <span class="n">updated_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the updated value to the main dict held in self.all_data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if primary then grab from 4th layer; all_data:category:instance:data_field</span>
+        <span class="k">if</span> <span class="n">primary_or_secondary</span> <span class="o">==</span> <span class="s2">&quot;primary&quot;</span><span class="p">:</span>
+            <span class="c1"># if we have a new data set</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span> <span class="o">==</span> <span class="s2">&quot;new&quot;</span><span class="p">:</span>
+                <span class="c1"># if we have changed the name</span>
+                <span class="k">if</span> <span class="n">data_field</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span>
+                    <span class="c1"># move the &quot;new&quot; key to a key using the name</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">data_field</span><span class="o">.</span><span class="n">input_element</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># It will be a text field, as the name always is</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">)</span>
+
+                    <span class="c1"># update current instance</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span> <span class="o">=</span> <span class="n">name</span>
+
+            <span class="c1"># set the primary value</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">],</span> <span class="n">data_field</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                    <span class="n">updated_value</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># get the selected primary field</span>
+            <span class="n">primary</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_instance</span><span class="p">],</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">primary_data_fields</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_primary_field</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">primary</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key_being_edited</span><span class="p">],</span> <span class="n">data_field</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">updated_value</span><span class="p">)</span>
+
+        <span class="c1"># save back to json</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/game/</span><span class="si">{self.current_data_category}</span><span class="s2">.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_data_category</span><span class="p">],</span> <span class="n">file</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                      <span class="bp">cls</span><span class="o">=</span><span class="n">ExtendedJsonEncoder</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DataField"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataField">[docs]</a><span class="k">class</span> <span class="nc">DataField</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Holds a set of related data and ui elements</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">primary_or_secondary</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value_as_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value_type</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+        <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">input_element</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">buttons</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UIButton</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primary_or_secondary</span> <span class="o">=</span> <span class="n">primary_or_secondary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_as_str</span> <span class="o">=</span> <span class="n">value_as_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_type</span> <span class="o">=</span> <span class="n">value_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+
+        <span class="c1"># ui elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_element</span> <span class="o">=</span> <span class="n">input_element</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span> <span class="o">=</span> <span class="n">buttons</span>
+
+<div class="viewcode-block" id="DataField.kill"><a class="viewcode-back" href="../../../dev_tools.html#scripts.dev_tools.data_editor.DataField.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Kill all held ui elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_element</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_element</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_element</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+                <span class="n">label</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">button</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">button</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+	    </div>
+            <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Snayff.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/jucacrispim/sphinx_pdj_theme">theme</a> provided by <a href="http://poraodojuca.net">Porão do Juca</a>.
+
+</footer>
+	</div>
+	</div>
+	  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.92.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js">
+
+    </script>
+    <script type="text/javascript" src="../../../_static/underscore.js">
+
+    </script>
+    <script type="text/javascript" src="../../../_static/doctools.js">
+
+    </script>
+    <script type="text/javascript" src="../../../_static/language_data.js">
+
+    </script>
+
+  
+
+   <script type="text/javascript"
+           src="../../../_static/js/theme.js"></script>
+
+   <script type="text/javascript"
+           src="../../../_static/js/pdj.js"></script>
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+  </body>
+</html>

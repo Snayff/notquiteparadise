@@ -1,0 +1,257 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="" lang="" version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <title>scripts.managers.input_manager.input_manager &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  
+
+  
+
+  
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="../../../../_static/css/pdj.css" type="text/css" />
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
+    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cache-control" content="public" />
+    <meta name="robots" content="follow, all" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  </head>
+
+  <body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../../index.html" class="fa fa-home"> NotQuiteParadise </a>
+        <div role="search">
+	  <form id ="rtd-search-form" class="wy-form"
+		action="../../../../search.html" method="get">
+	    <input type="text" name="q" placeholder="Search docs" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../core.html#module-scripts.core.constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../core.html#module-scripts.core.library">Library of Alexandria</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_tools.html">Dev Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dev_tools.html#module-scripts.dev_tools.data_editor">Data Editor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.ui_handler">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../events.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.entity_events">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.game_events">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.map_events">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../events.html#module-scripts.events.ui_events">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.ui_manager.ui_manager">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ui.html">UI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui.html#basic">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ui.html#ui-elements">UI Elements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../world.html">World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.combat_stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.game_map">Game Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../world.html#module-scripts.world.tile">Tile</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+
+      </div>
+      &nbsp;
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      <nav class="wy-nav-top" id="barra-mobile" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Porão do Juca</a>
+      </nav>
+
+      <div class="wy-nav-content">
+	<div class="fundo-claro">
+	</div>
+	<div class="fundo-escuro">
+	</div>
+
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+	    
+	    <!-- <ul class="wy-breadcrumbs"> -->
+	    <!--   <li><a href="#">Docs</a> &raquo;</li> -->
+
+	    <!--   <li>Features</li> -->
+	    <!--   <li class="wy-breadcrumbs-aside"> -->
+
+	    <!-- 	<a href="_sources/index.txt" rel="nofollow"> View page source</a> -->
+
+	    <!--   </li> -->
+	    <!-- </ul> -->
+	    <!-- <hr/> -->
+	  </div>
+
+          <div role="main" class="">
+
+	    <div id="content" class="hfeed entry-container hentry">
+  <h1>Source code for scripts.managers.input_manager.input_manager</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">GameStates</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.input_manager.config_methods</span> <span class="kn">import</span> <span class="n">ConfigMethods</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.input_manager.intents_dataclass</span> <span class="kn">import</span> <span class="n">IntentsData</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.input_manager.control_methods</span> <span class="kn">import</span> <span class="n">ControlMethods</span>
+
+
+<div class="viewcode-block" id="InputManager"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.input_manager.input_manager.InputManager">[docs]</a><span class="k">class</span> <span class="nc">InputManager</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manage the input events. Convert input value to an intent and then process that intent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Intents</span> <span class="o">=</span> <span class="n">IntentsData</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Config</span> <span class="o">=</span> <span class="n">ConfigMethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Control</span> <span class="o">=</span> <span class="n">ControlMethods</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;InputManager initialised.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InputManager.update"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.input_manager.input_manager.InputManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">game_state</span><span class="p">:</span> <span class="n">GameStates</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the input event and process it</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># clear any held values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">reset_intents</span><span class="p">()</span>
+
+        <span class="c1"># convert input to intent</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span> <span class="ow">or</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">USEREVENT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">check_actions</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">check_directions</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">check_dev_actions</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="c1"># process intent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">process_stateless_intents</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">PLAYER_TURN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">process_player_turn_intents</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">TARGETING_MODE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">process_targeting_mode_intents</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">DEV_MODE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Control</span><span class="o">.</span><span class="n">process_dev_mode_intents</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div></div>
+
+
+<span class="nb">input</span> <span class="o">=</span> <span class="n">InputManager</span><span class="p">()</span>
+</pre></div>
+
+	    </div>
+            <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Snayff.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/jucacrispim/sphinx_pdj_theme">theme</a> provided by <a href="http://poraodojuca.net">Porão do Juca</a>.
+
+</footer>
+	</div>
+	</div>
+	  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.92.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js">
+
+    </script>
+    <script type="text/javascript" src="../../../../_static/underscore.js">
+
+    </script>
+    <script type="text/javascript" src="../../../../_static/doctools.js">
+
+    </script>
+    <script type="text/javascript" src="../../../../_static/language_data.js">
+
+    </script>
+
+  
+
+   <script type="text/javascript"
+           src="../../../../_static/js/theme.js"></script>
+
+   <script type="text/javascript"
+           src="../../../../_static/js/pdj.js"></script>
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+  </body>
+</html>

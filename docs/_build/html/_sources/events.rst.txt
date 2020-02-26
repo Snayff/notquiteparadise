@@ -1,31 +1,26 @@
 
 Events
-=============
+====================
 
 Entity
 ------------------
 .. automodule:: scripts.events.entity_events
-    :members:
+    :show-inheritance:
 
 Game
 ------------------
 .. automodule:: scripts.events.game_events
-    :members:
+    :show-inheritance:
 
-Logging
+Map
 ------------------
-.. automodule:: scripts.events.logging_events
-    :members:
-
-Message
-------------------
-.. automodule:: scripts.events.message_events
-    :members:
+.. automodule:: scripts.events.map_events
+    :show-inheritance:
 
 UI
 ------------------
 .. automodule:: scripts.events.ui_events
-    :members:
+    :show-inheritance:
 
 
 

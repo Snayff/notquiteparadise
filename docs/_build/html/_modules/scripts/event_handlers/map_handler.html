@@ -1,0 +1,322 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="" lang="" version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <title>scripts.event_handlers.map_handler &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  
+
+  
+
+  
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="../../../_static/css/pdj.css" type="text/css" />
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cache-control" content="public" />
+    <meta name="robots" content="follow, all" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  </head>
+
+  <body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> NotQuiteParadise </a>
+        <div role="search">
+	  <form id ="rtd-search-form" class="wy-form"
+		action="../../../search.html" method="get">
+	    <input type="text" name="q" placeholder="Search docs" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../core.html#module-scripts.core.library">Library of Alexandria</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_tools.html">Dev Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../dev_tools.html#module-scripts.dev_tools.data_editor">Data Editor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.ui_handler">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../events.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.entity_events">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.game_events">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.map_events">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#module-scripts.events.ui_events">UI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.ui_manager.ui_manager">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ui.html">UI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui.html#basic">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../ui.html#ui-elements">UI Elements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../world.html">World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.combat_stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.game_map">Game Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../world.html#module-scripts.world.tile">Tile</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+
+      </div>
+      &nbsp;
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      <nav class="wy-nav-top" id="barra-mobile" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Porão do Juca</a>
+      </nav>
+
+      <div class="wy-nav-content">
+	<div class="fundo-claro">
+	</div>
+	<div class="fundo-escuro">
+	</div>
+
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+	    
+	    <!-- <ul class="wy-breadcrumbs"> -->
+	    <!--   <li><a href="#">Docs</a> &raquo;</li> -->
+
+	    <!--   <li>Features</li> -->
+	    <!--   <li class="wy-breadcrumbs-aside"> -->
+
+	    <!-- 	<a href="_sources/index.txt" rel="nofollow"> View page source</a> -->
+
+	    <!--   </li> -->
+	    <!-- </ul> -->
+	    <!-- <hr/> -->
+	  </div>
+
+          <div role="main" class="">
+
+	    <div id="content" class="hfeed entry-container hentry">
+  <h1>Source code for scripts.event_handlers.map_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span><span class="p">,</span> <span class="n">Subscriber</span>
+<span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Position</span>
+<span class="kn">from</span> <span class="nn">scripts.events.map_events</span> <span class="kn">import</span> <span class="n">TileInteractionEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">EndTurnEvent</span><span class="p">,</span> <span class="n">EndRoundEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.events.ui_events</span> <span class="kn">import</span> <span class="n">MessageEvent</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="MapHandler"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.map_handler.MapHandler">[docs]</a><span class="k">class</span> <span class="nc">MapHandler</span><span class="p">(</span><span class="n">Subscriber</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handle map related events</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">):</span>
+        <span class="n">Subscriber</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;map_handler&quot;</span><span class="p">,</span> <span class="n">event_hub</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MapHandler.process_event"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_event">[docs]</a>    <span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Control world events</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event(Event): the event in need of processing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># log that event has been received</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.name}</span><span class="s2"> received </span><span class="si">{event.topic}</span><span class="s2">:</span><span class="si">{event.__class__.__name__}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">TileInteractionEvent</span><span class="p">):</span>
+            <span class="n">event</span><span class="p">:</span> <span class="n">TileInteractionEvent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process_tile_interaction</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">EndTurnEvent</span><span class="p">):</span>
+            <span class="n">event</span><span class="p">:</span> <span class="n">EndTurnEvent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process_end_of_turn_updates</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">EndRoundEvent</span><span class="p">):</span>
+            <span class="n">event</span><span class="p">:</span> <span class="n">EndRoundEvent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process_end_of_round_updates</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MapHandler.process_tile_interaction"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_tile_interaction">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">process_tile_interaction</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">TileInteractionEvent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the cause on the aspects of a tile and trigger any interactions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event(TileInteractionEvent):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+        <span class="c1"># # check all tiles</span>
+        <span class="c1"># for tile in event.tiles:</span>
+        <span class="c1">#     # TODO - rebuild to work for EC</span>
+        <span class="c1">#     # only aspects have interactions...</span>
+        <span class="c1">#     if tile.aspects:</span>
+        <span class="c1">#</span>
+        <span class="c1">#         for key, aspect in tile.aspects.items():</span>
+        <span class="c1">#             aspect_data = library.get_aspect_data(aspect.name)</span>
+        <span class="c1">#</span>
+        <span class="c1">#             # check cause is a valid trigger for an interaction</span>
+        <span class="c1">#             for interaction in aspect_data.interactions:</span>
+        <span class="c1">#                 if event.cause == interaction.cause:</span>
+        <span class="c1">#                     # change aspects</span>
+        <span class="c1">#                     world.Map.remove_aspect_from_tile(tile, aspect.name)</span>
+        <span class="c1">#                     world.Map.add_aspect_to_tile(tile, interaction.change_to)</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     # log the change</span>
+        <span class="c1">#                     log_string = f&quot;{interaction.cause} changed {aspect_data.name} to {interaction.change_to}&quot;</span>
+        <span class="c1">#                     logging.info(log_string)</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     # inform player of change</span>
+        <span class="c1">#                     msg = f&quot;{interaction.cause} changed {aspect_data.name} to {interaction.change_to}.&quot;</span>
+        <span class="c1">#                     publisher.publish(MessageEvent(MessageTypes.LOG, msg))</span>
+
+<div class="viewcode-block" id="MapHandler.process_end_of_turn_updates"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_end_of_turn_updates">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">process_end_of_turn_updates</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">EndTurnEvent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trigger aspects on tile turn holder is on</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event(EndTurnEvent):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">entity</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">))</span></div>
+
+        <span class="c1"># trigger aspects</span>
+        <span class="c1">#  TODO - update to EC approach</span>
+        <span class="c1">#world.Map.trigger_aspects_on_tile(tile)</span>
+
+<div class="viewcode-block" id="MapHandler.process_end_of_round_updates"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_end_of_round_updates">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">process_end_of_round_updates</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update aspect durations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span></div></div>
+
+        <span class="c1"># TODO - set to only apply within X range of player</span>
+        <span class="c1">#  TODO - update to EC approach</span>
+        <span class="c1"># for row in game_map.tiles:</span>
+        <span class="c1">#     for tile in row:</span>
+        <span class="c1">#         if tile.aspects:</span>
+        <span class="c1">#             # update durations</span>
+        <span class="c1">#             world.Map.reduce_aspect_durations_on_tile(tile)</span>
+        <span class="c1">#             world.Map.cleanse_expired_aspects(tile)</span>
+</pre></div>
+
+	    </div>
+            <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Snayff.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/jucacrispim/sphinx_pdj_theme">theme</a> provided by <a href="http://poraodojuca.net">Porão do Juca</a>.
+
+</footer>
+	</div>
+	</div>
+	  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.92.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js">
+
+    </script>
+    <script type="text/javascript" src="../../../_static/underscore.js">
+
+    </script>
+    <script type="text/javascript" src="../../../_static/doctools.js">
+
+    </script>
+    <script type="text/javascript" src="../../../_static/language_data.js">
+
+    </script>
+
+  
+
+   <script type="text/javascript"
+           src="../../../_static/js/theme.js"></script>
+
+   <script type="text/javascript"
+           src="../../../_static/js/pdj.js"></script>
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+  </body>
+</html>

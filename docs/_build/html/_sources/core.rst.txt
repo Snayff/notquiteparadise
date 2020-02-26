@@ -5,12 +5,12 @@ Core
 Constants
 ------------------
 .. automodule:: scripts.core.constants
-    :members:
+    :show-inheritance:
 
 Library of Alexandria
 --------------------------
-.. automodule:: scripts.core.library_of_alexandria
-    :members:
+.. automodule:: scripts.core.library
+    :show-inheritance:
 
 
 
