@@ -90,7 +90,7 @@ class SkillMethods:
         identity = self._manager.Entity.get_identity(entity)
 
         # Check if cost can be paid
-        value = getattr(resources, resource.name.lower())
+        value = getattr(resources, resource.lower())
         if value - cost >= 0:
             logging.debug(f"'{identity.name}' can afford cost.")
             return True

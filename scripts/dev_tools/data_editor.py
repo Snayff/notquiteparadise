@@ -48,10 +48,11 @@ class DataEditor(UIWindow):
 
         # data holders
         self.all_data: Dict[str, dataclass] = {}
-        self.current_data_instance: str = None
         self.current_data_category: str = None
+        self.current_data_instance: str = None
         self.current_primary_field: str = None
         self.current_secondary_field: str = None
+        self.key_being_edited: str = None
         self.field_options: Dict[str, Tuple[List[str], Union[dataclass, None]]] = {}
 
         # data selectors
@@ -128,7 +129,7 @@ class DataEditor(UIWindow):
         # handle triggers for secondary details
         prefix = "edit#"
         if ui_object_id[:len(prefix)] == prefix:
-            self._process_edit_action(ui_object_id)
+            data_field, new_value = self._process_edit_action(ui_object_id)
 
         # handle multiple choice to toggle the value
         prefix = "multi#"
@@ -141,21 +142,18 @@ class DataEditor(UIWindow):
                 self.current_primary_field = data_field.key
             else:
                 self.current_secondary_field = data_field.key
-        else:
-            self.current_primary_field = None
-            self.current_secondary_field = None
 
-        # process the update and reload
-        if new_value and data_field:
-            primary_or_secondary = data_field.primary_or_secondary
+            if new_value is not None:
+                # process the update and reload
+                primary_or_secondary = data_field.primary_or_secondary
 
-            self._save_updated_field(primary_or_secondary, data_field, new_value)
+                self._save_updated_field(primary_or_secondary, data_field, new_value)
 
-            # clear existing
-            self._kill_details_fields(primary_or_secondary)
+                # clear existing
+                self._kill_details_fields(primary_or_secondary)
 
-            # reload to reflect new changes
-            self._load_details(primary_or_secondary, self.current_data_instance)
+                # reload to reflect new changes
+                self._load_details(primary_or_secondary, self.current_data_instance)
 
     ################# INTERACT ################
 
@@ -197,7 +195,12 @@ class DataEditor(UIWindow):
         Check if new option selected in dropdown and if so return data_field and new value
         """
         key = object_id
-        data_field = self.primary_data_fields[key]
+
+        try:
+            data_field = self.secondary_data_fields[key]
+        except KeyError:
+            data_field = self.primary_data_fields[key]
+
         new_value = data_field.input_element.selected_option
 
         # check the value has changed
@@ -210,7 +213,11 @@ class DataEditor(UIWindow):
         """
         Check if text has changed and return data field and new value"""
         key = object_id
-        data_field = self.primary_data_fields[key]
+        try:
+            data_field = self.secondary_data_fields[key]
+        except KeyError:
+            data_field = self.primary_data_fields[key]
+
         new_value = data_field.input_element.text
 
         # check the value has changed
@@ -219,15 +226,20 @@ class DataEditor(UIWindow):
 
         return None, None
 
-    def _process_edit_action(self, object_id: str):
+    def _process_edit_action(self, object_id: str) -> Tuple[Union[DataField, None], None]:
         # get the key
         prefix, key, _object_id = object_id.split("#")
 
-        # clear existing details fields
+        # clear existing details fields N.B. edit can only be in primary
         self._kill_details_fields("secondary")
 
         #  load secondary details
         self._load_details("secondary", self.current_data_instance, (key, _object_id))
+
+        self.key_being_edited = _object_id
+
+        data_field = self.primary_data_fields[key]
+        return data_field, None
 
     def _process_multi_action(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
         """
@@ -235,7 +247,10 @@ class DataEditor(UIWindow):
         # get the key
         prefix, key, _object_id = object_id.split("#")
 
-        data_field = self.primary_data_fields[key]
+        try:
+            data_field = self.secondary_data_fields[key]
+        except KeyError:
+            data_field = self.primary_data_fields[key]
 
         # get current value
         current_value: List = data_field.value
@@ -338,11 +353,8 @@ class DataEditor(UIWindow):
 
         # Turn value into a list of strings
         prefixed_options.extend(f"edit#{_key}#{name.lower()}" for name in options)
-        values_list.extend(name for name in value.keys())
-
-        # replace spaces with underscores as object_id doesnt like spaces
-        # values_list = [new_value.replace(" ", "_") for new_value in values_list]
-        # options = [new_value.replace(" ", "_") for new_value in options]
+        if value:
+            values_list.extend(name for name in value.keys())
 
         # sort lists alphabetically
         prefixed_options.sort()
@@ -584,38 +596,38 @@ class DataEditor(UIWindow):
 
         # point to the required dataclasses
         if primary_or_secondary == "secondary" and secondary_key:
-            outer_dataclass = all_data[category][instance]
-            outer_dict = dataclasses.asdict(outer_dataclass)
+            instance_dict = getattr(all_data[category][instance], secondary_key)
 
             # see if we have existing values
             try:
-                instance_dict = getattr(all_data[category][instance],
-                                        secondary_key)
                 inner_dataclass = instance_dict[instance_key.lower()]
+
             except KeyError:
                 # get the data class from the possible field options
                 _key, inner_dataclass = field_options[secondary_key]
+
+                # assign the key
+                instance_dict[instance_key] = inner_dataclass
+
+        elif primary_or_secondary == "secondary" and not secondary_key:
+            instance_dict = getattr(all_data[category][instance], self.current_primary_field)
+            inner_dataclass = instance_dict[self.key_being_edited]
 
         else:
             # handle a new data instance by getting the relevant dataclass
             if instance == "new":
                 outer_dict = all_data[category]
-
                 if category in field_options:
                     options, inner_dataclass = field_options[category]
 
+                    # assign the key
+                    outer_dict["new"] = inner_dataclass
+
             else:
-                outer_dict = all_data[category]
                 inner_dataclass = all_data[category][instance]
 
         # convert dataclass to dict to loop values
         data_dict = dataclasses.asdict(inner_dataclass)
-
-        # set the key for the new dict
-        if primary_or_secondary == "primary":
-            outer_dict["new"] = inner_dataclass
-        else:
-            instance_dict[instance_key] = inner_dataclass
 
         # create data fields
         for key, value in data_dict.items():
@@ -711,8 +723,10 @@ class DataEditor(UIWindow):
         Clear currently held details in the given dict of data fields.
         """
         if primary_or_secondary == "primary":
+            self.current_primary_field = None
             data_fields = self.primary_data_fields
         elif primary_or_secondary == "secondary":
+            self.current_secondary_field = None
             data_fields = self.secondary_data_fields
         else:
             data_fields = self.primary_data_fields
@@ -737,7 +751,6 @@ class DataEditor(UIWindow):
         """
         # if primary then grab from 4th layer; all_data:category:instance:data_field
         if primary_or_secondary == "primary":
-
             # if we have a new data set
             if self.current_data_instance == "new":
                 # if we have changed the name
@@ -750,13 +763,15 @@ class DataEditor(UIWindow):
                     # update current instance
                     self.current_data_instance = name
 
+            # set the primary value
             setattr(self.all_data[self.current_data_category][self.current_data_instance], data_field.key,
                     updated_value)
 
         else:
+            # get the selected primary field
             primary = getattr(self.all_data[self.current_data_category][self.current_data_instance],
                               self.primary_data_fields[self.current_primary_field].key)
-            setattr(primary, data_field.key, updated_value)
+            setattr(primary[self.key_being_edited], data_field.key, updated_value)
 
         # save back to json
         with open(f"data/game/{self.current_data_category}.json", "w") as file:

@@ -10,17 +10,17 @@
                 "affect_stat_amount": 0,
                 "affliction_name": "None",
                 "aspect_name": "None",
-                "damage": 10,
-                "damage_type": "mundane",
+                "damage": 0,
+                "damage_type": null,
                 "duration": 0,
-                "effect_type": "damage",
-                "mod_amount": 0.1,
-                "mod_stat": "clout",
+                "effect_type": null,
+                "mod_amount": 0,
+                "mod_stat": null,
                 "required_tags": [
-                    "other_entity"
+                    "any"
                 ],
                 "stat_to_affect": null,
-                "stat_to_target": "bustle"
+                "stat_to_target": null
             }
         },
         "expiry_type": "fizzle",
