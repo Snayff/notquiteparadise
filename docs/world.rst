@@ -2,47 +2,22 @@
 World
 ============================================
 
-Aspects
+Combat Stats
 ------------------
-Aspect
-^^^^^^^^^^^^^^^^^^
-.. automodule:: scripts.world.aspect.aspect
-    :members:
+.. automodule:: scripts.world.combat_stats
+    :show-inheritance:
 
-Bog
-^^^^^^^^^^^^^^^^^^
-.. automodule:: scripts.world.aspect.bog
-    :members:
-
-Terrain
+Components
 ------------------
-Terrain
-^^^^^^^^^^^^^^^^^^
-.. automodule:: scripts.world.terrain.terrain
-    :members:
-
-Floor
-^^^^^^^^^^^^^^^^^^
-.. automodule:: scripts.world.terrain.floor
-    :members:
-
-Wall
-^^^^^^^^^^^^^^^^^^
-.. automodule:: scripts.world.terrain.wall
-    :members:
-
-
-Entity
-------------------
-.. automodule:: scripts.world.entity
-    :members:
+.. automodule:: scripts.world.components
+    :show-inheritance:
 
 Game Map
 ------------------
 .. automodule:: scripts.world.game_map
-    :members:
+    :show-inheritance:
 
 Tile
 ------------------
 .. automodule:: scripts.world.tile
-    :members:
+    :show-inheritance:

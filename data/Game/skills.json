@@ -30,8 +30,8 @@
         "required_tags": [
             "other_entity"
         ],
-        "resource_cost": 0,
-        "resource_type": "stamina",
+        "resource_cost": "10",
+        "resource_type": "hp",
         "shape": "CIRCLE",
         "shape_size": 1,
         "target_directions": [

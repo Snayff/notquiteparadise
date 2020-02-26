@@ -6,7 +6,6 @@ import logging
 import pygame
 import pygame_gui
 
-from pprint import pprint
 from typing import TYPE_CHECKING, List, Dict, Union
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
@@ -30,10 +29,6 @@ if TYPE_CHECKING:
     from typing import Any, Tuple
     from pygame_gui import UIManager
     from dataclasses import dataclass
-
-
-# TODO - ability to add new
-# TODO - add secondary details to edit next layer
 
 
 class DataEditor(UIWindow):
