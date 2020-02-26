@@ -51,7 +51,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
-    'sphinx.ext.autodoc.typehints'
+    'sphinx_autodoc_typehints'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -230,3 +230,6 @@ autodoc_default_options = {
 }
 autoclass_content = "both"
 autodoc_typehints = 'description'
+
+# -- sphinx-autodoc-typehints ---------------------------------------------------
+always_document_param_types = True
