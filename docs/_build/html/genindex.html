@@ -72,7 +72,7 @@
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.ui_handler">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Events</a><ul>
@@ -85,7 +85,7 @@
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.ui_manager.ui_manager">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
@@ -401,10 +401,6 @@
       </ul></li>
       <li><a href="events.html#scripts.events.ui_events.ClickTile">ClickTile (class in scripts.events.ui_events)</a>
 </li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.close_dev_ui">close_dev_ui() (scripts.event_handlers.ui_handler.UiHandler static method)</a>
-</li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.close_game_ui">close_game_ui() (scripts.event_handlers.ui_handler.UiHandler static method)</a>
-</li>
       <li><a href="core.html#scripts.core.constants.PrimaryStatTypes.CLOUT">CLOUT (scripts.core.constants.PrimaryStatTypes attribute)</a>
 </li>
       <li><a href="world.html#scripts.world.combat_stats.CombatStats.clout">clout() (scripts.world.combat_stats.CombatStats property)</a>
@@ -417,10 +413,10 @@
 </li>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.PrimaryColour">Colour.PrimaryColour (class in scripts.ui.basic.colours)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.SecondaryColour">Colour.SecondaryColour (class in scripts.ui.basic.colours)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.TertiaryColour">Colour.TertiaryColour (class in scripts.ui.basic.colours)</a>
 </li>
       <li><a href="world.html#scripts.world.combat_stats.CombatStats">CombatStats (class in scripts.world.combat_stats)</a>
@@ -513,10 +509,10 @@
 </li>
       <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods">DebugMethods (class in scripts.managers.game_manager.debug_methods)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.delete">delete() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.delete">delete() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
       <li><a href="skills.html#scripts.skills.affliction.AfflictionData.description">description (scripts.skills.affliction.AfflictionData attribute)</a>
 
       <ul>
@@ -555,8 +551,6 @@
         <li><a href="core.html#scripts.core.constants.InputIntents.DOWN_RIGHT">(scripts.core.constants.InputIntents attribute)</a>
 </li>
       </ul></li>
-      <li><a href="managers.html#scripts.managers.ui_manager.ui_manager.UIManager.draw">draw() (scripts.managers.ui_manager.ui_manager.UIManager method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.dump_profiling_data">dump_profiling_data() (scripts.managers.game_manager.debug_methods.DebugMethods method)</a>
 </li>
       <li><a href="skills.html#scripts.skills.effect.EffectData.duration">duration (scripts.skills.effect.EffectData attribute)</a>
@@ -823,16 +817,14 @@
         <li><a href="ui.html#scripts.ui.ui_elements.skill_bar.SkillBar.handle_events">(scripts.ui.ui_elements.skill_bar.SkillBar method)</a>
 </li>
       </ul></li>
-      <li><a href="managers.html#scripts.managers.ui_manager.ui_manager.UIManager.handle_ui_events">handle_ui_events() (scripts.managers.ui_manager.ui_manager.UIManager method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.has_component">has_component() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="world.html#scripts.world.components.HasCombatStats">HasCombatStats (class in scripts.world.components)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.hide_entity_info">hide_entity_info() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core.html#scripts.core.constants.HitModifiers.HIT">HIT (scripts.core.constants.HitModifiers attribute)</a>
 
       <ul>
@@ -869,13 +861,9 @@
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_camera">init_camera() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.init_dev_ui">init_dev_ui() (scripts.event_handlers.ui_handler.UiHandler static method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config">init_display_config() (scripts.managers.ui_manager.display_methods.DisplayMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_entity_info">init_entity_info() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
-</li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.init_game_ui">init_game_ui() (scripts.event_handlers.ui_handler.UiHandler method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_message_log">init_message_log() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
@@ -883,10 +871,10 @@
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_skill_bar">init_skill_bar() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_skill_editor">init_skill_editor() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging">initialise_logging() (scripts.managers.game_manager.debug_methods.DebugMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_profiling">initialise_profiling() (scripts.managers.game_manager.debug_methods.DebugMethods method)</a>
@@ -1123,17 +1111,15 @@
 </li>
       <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_dev_mode_intents">process_dev_mode_intents() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="event_handlers.html#scripts.event_handlers.entity_handler.EntityHandler.process_die">process_die() (scripts.event_handlers.entity_handler.EntityHandler static method)</a>
 </li>
       <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_end_of_round_updates">process_end_of_round_updates() (scripts.event_handlers.map_handler.MapHandler static method)</a>
 </li>
       <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_end_of_turn_updates">process_end_of_turn_updates() (scripts.event_handlers.map_handler.MapHandler static method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="event_handlers.html#scripts.event_handlers.game_handler.GameHandler.process_end_turn">process_end_turn() (scripts.event_handlers.game_handler.GameHandler static method)</a>
-</li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.process_entity_event">process_entity_event() (scripts.event_handlers.ui_handler.UiHandler method)</a>
 </li>
       <li><a href="event_handlers.html#scripts.event_handlers.entity_handler.EntityHandler.process_event">process_event() (scripts.event_handlers.entity_handler.EntityHandler method)</a>
 
@@ -1144,16 +1130,10 @@
 </li>
         <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_event">(scripts.event_handlers.map_handler.MapHandler method)</a>
 </li>
-        <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.process_event">(scripts.event_handlers.ui_handler.UiHandler method)</a>
-</li>
       </ul></li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.process_game_event">process_game_event() (scripts.event_handlers.ui_handler.UiHandler method)</a>
-</li>
       <li><a href="event_handlers.html#scripts.event_handlers.god_handler.GodHandler.process_interventions">process_interventions() (scripts.event_handlers.god_handler.GodHandler static method)</a>
 </li>
       <li><a href="event_handlers.html#scripts.event_handlers.god_handler.GodHandler.process_judgements">process_judgements() (scripts.event_handlers.god_handler.GodHandler static method)</a>
-</li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.process_message">process_message() (scripts.event_handlers.ui_handler.UiHandler static method)</a>
 </li>
       <li><a href="event_handlers.html#scripts.event_handlers.entity_handler.EntityHandler.process_move">process_move() (scripts.event_handlers.entity_handler.EntityHandler static method)</a>
 </li>
@@ -1166,10 +1146,6 @@
       <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_targeting_mode_intents">process_targeting_mode_intents() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
 </li>
       <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_tile_interaction">process_tile_interaction() (scripts.event_handlers.map_handler.MapHandler static method)</a>
-</li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.process_ui_event">process_ui_event() (scripts.event_handlers.ui_handler.UiHandler method)</a>
-</li>
-      <li><a href="managers.html#scripts.managers.ui_manager.ui_manager.UIManager.process_ui_events">process_ui_events() (scripts.managers.ui_manager.ui_manager.UIManager method)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.SkillTravelTypes.PROJECTILE">PROJECTILE (scripts.core.constants.SkillTravelTypes attribute)</a>
 </li>
@@ -1267,8 +1243,6 @@
 </li>
       <li><a href="event_handlers.html#module-scripts.event_handlers.map_handler">scripts.event_handlers.map_handler (module)</a>
 </li>
-      <li><a href="event_handlers.html#module-scripts.event_handlers.ui_handler">scripts.event_handlers.ui_handler (module)</a>
-</li>
       <li><a href="events.html#module-scripts.events.entity_events">scripts.events.entity_events (module)</a>
 </li>
       <li><a href="events.html#module-scripts.events.game_events">scripts.events.game_events (module)</a>
@@ -1294,8 +1268,6 @@
       <li><a href="managers.html#module-scripts.managers.ui_manager.display_methods">scripts.managers.ui_manager.display_methods (module)</a>
 </li>
       <li><a href="managers.html#module-scripts.managers.ui_manager.element_methods">scripts.managers.ui_manager.element_methods (module)</a>
-</li>
-      <li><a href="managers.html#module-scripts.managers.ui_manager.ui_manager">scripts.managers.ui_manager.ui_manager (module)</a>
 </li>
       <li><a href="managers.html#module-scripts.managers.world_manager.entity_methods">scripts.managers.world_manager.entity_methods (module)</a>
 </li>
@@ -1341,12 +1313,10 @@
 </li>
       <li><a href="core.html#scripts.core.constants.SecondaryStatTypes">SecondaryStatTypes (class in scripts.core.constants)</a>
 </li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.select_entity">select_entity() (scripts.event_handlers.ui_handler.UiHandler static method)</a>
+      <li><a href="events.html#scripts.events.ui_events.SelectEntity">SelectEntity (class in scripts.events.ui_events)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="events.html#scripts.events.ui_events.SelectEntity">SelectEntity (class in scripts.events.ui_events)</a>
-</li>
       <li><a href="core.html#scripts.core.constants.TargetTags.SELF">SELF (scripts.core.constants.TargetTags attribute)</a>
 </li>
       <li><a href="managers.html#scripts.managers.game_manager.state_methods.StateMethods.set">set() (scripts.managers.game_manager.state_methods.StateMethods method)</a>
@@ -1380,8 +1350,6 @@
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.set_selected_entity">set_selected_entity() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
       <li><a href="ui.html#scripts.ui.ui_elements.skill_bar.SkillBar.set_skill">set_skill() (scripts.ui.ui_elements.skill_bar.SkillBar method)</a>
-</li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.set_targeting_overlay">set_targeting_overlay() (scripts.event_handlers.ui_handler.UiHandler static method)</a>
 </li>
       <li><a href="ui.html#scripts.ui.ui_elements.camera.Camera.set_tiles">set_tiles() (scripts.ui.ui_elements.camera.Camera method)</a>
 </li>
@@ -1501,10 +1469,6 @@
 </li>
       <li><a href="core.html#scripts.core.constants.UIElementTypes">UIElementTypes (class in scripts.core.constants)</a>
 </li>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler">UiHandler (class in scripts.event_handlers.ui_handler)</a>
-</li>
-      <li><a href="managers.html#scripts.managers.ui_manager.ui_manager.UIManager">UIManager (class in scripts.managers.ui_manager.ui_manager)</a>
-</li>
       <li><a href="core.html#scripts.core.constants.Directions.UP">UP (scripts.core.constants.Directions attribute)</a>
 
       <ul>
@@ -1530,8 +1494,6 @@
 </li>
         <li><a href="managers.html#scripts.managers.input_manager.input_manager.InputManager.update">(scripts.managers.input_manager.input_manager.InputManager method)</a>
 </li>
-        <li><a href="managers.html#scripts.managers.ui_manager.ui_manager.UIManager.update">(scripts.managers.ui_manager.ui_manager.UIManager method)</a>
-</li>
         <li><a href="managers.html#scripts.managers.world_manager.world_manager.WorldManager.update">(scripts.managers.world_manager.world_manager.WorldManager method)</a>
 </li>
         <li><a href="ui.html#scripts.ui.ui_elements.camera.Camera.update">(scripts.ui.ui_elements.camera.Camera method)</a>
@@ -1547,8 +1509,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="event_handlers.html#scripts.event_handlers.ui_handler.UiHandler.update_camera">update_camera() (scripts.event_handlers.ui_handler.UiHandler static method)</a>
-</li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.update_camera_game_map">update_camera_game_map() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.update_camera_grid">update_camera_grid() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>

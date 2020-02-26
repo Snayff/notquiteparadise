@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.ui_handler">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Events</a><ul>
@@ -86,7 +86,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.managers.game_manager.game_manager">Game</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.managers.input_manager.input_manager">Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.managers.ui_manager.ui_manager">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ui">UI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
@@ -374,7 +374,7 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>event</strong> (<em>&lt;module 'pygame.event' from 'c:\users\gabriel\documents\notquiteparadise\venv\lib\site-packages\pygame\event.cp37-win_amd64.pyd'&gt;</em>) – </p></li>
+<li><p><strong>event</strong> (<em>&lt;module 'pygame.event' from '/usr/local/lib/python3.7/site-packages/pygame/event.cpython-37m-x86_64-linux-gnu.so'&gt;</em>) – </p></li>
 <li><p><strong>game_state</strong> (<a class="reference internal" href="core.html#scripts.core.constants.GameStates" title="scripts.core.constants.GameStates"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameStates</span></code></a>) – </p></li>
 </ul>
 </dd>
@@ -564,44 +564,8 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 
 </div>
 </div>
-<div class="section" id="module-scripts.managers.ui_manager.ui_manager">
-<span id="ui"></span><h2>UI<a class="headerlink" href="#module-scripts.managers.ui_manager.ui_manager" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.managers.ui_manager.ui_manager.UIManager">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.managers.ui_manager.ui_manager.</code><code class="sig-name descname">UIManager</code><a class="reference internal" href="_modules/scripts/managers/ui_manager/ui_manager.html#UIManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.ui_manager.UIManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Manage the UI, such as windows, resource bars etc</p>
-<dl class="method">
-<dt id="scripts.managers.ui_manager.ui_manager.UIManager.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">delta_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/ui_manager.html#UIManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.ui_manager.UIManager.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update all ui elements</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>delta_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.managers.ui_manager.ui_manager.UIManager.process_ui_events">
-<code class="sig-name descname">process_ui_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/ui_manager.html#UIManager.process_ui_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.ui_manager.UIManager.process_ui_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process input events</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.managers.ui_manager.ui_manager.UIManager.handle_ui_events">
-<code class="sig-name descname">handle_ui_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/ui_manager.html#UIManager.handle_ui_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.ui_manager.UIManager.handle_ui_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>Have each UI widget handle its own events.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.managers.ui_manager.ui_manager.UIManager.draw">
-<code class="sig-name descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/ui_manager.html#UIManager.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.ui_manager.UIManager.draw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draw the UI.</p>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="ui">
+<h2>UI<a class="headerlink" href="#ui" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="module-scripts.managers.ui_manager.display_methods">
 <span id="display-methods"></span><h3>Display methods<a class="headerlink" href="#module-scripts.managers.ui_manager.display_methods" title="Permalink to this headline">¶</a></h3>
 <dl class="class">

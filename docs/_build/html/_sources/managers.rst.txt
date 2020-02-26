@@ -6,9 +6,6 @@ Game
 ------------------
 .. automodule:: scripts.managers.game_manager.game_manager
     :show-inheritance:
-    :members:
-    :private-members:
-    :undoc-members:
 
 Debug methods
 ^^^^^^^^^^^^^^^^^^^^
