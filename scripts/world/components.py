@@ -34,9 +34,9 @@ class Aesthetic:
     [Component] An entity's sprite.
     """
 
-    def __init__(self, sprite: pygame.Surface, icon: pygame.Surface):
-        self.icon = icon
-        self.sprite = sprite
+    def __init__(self, current_sprite: pygame.Surface, sprites: Dict[str, pygame.Surface]):
+        self.current_sprite = current_sprite
+        self.sprites = sprites
         # TODO - add screen pos here and use that in drawing
 
 

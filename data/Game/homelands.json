@@ -11,7 +11,12 @@
             "flail"
         ],
         "skullduggery": 0,
-        "sprite": "assets/actor/homeland/soft_tops.png",
+        "sprites": {
+            "idle": "assets/actor/homeland/soft_tops_idle.png",
+            "attack": "assets/actor/homeland/soft_tops_attack.png",
+            "hit": "assets/actor/homeland/soft_tops_hit.png",
+            "dead": "assets/actor/homeland/soft_tops_dead.png"
+        },
         "vigour": 1
     }
 }

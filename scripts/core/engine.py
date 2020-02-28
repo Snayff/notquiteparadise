@@ -33,6 +33,7 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
 # TODO - edit the UI json
 # TODO - ingame descriptions written first hand by observes. Like excerpts from a book.
+# TODO - use a global for font size so it can be amended in options
 
 
 def main():

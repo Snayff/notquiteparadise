@@ -56,7 +56,7 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/managers/game_manager" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="settings.json.schema" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -314,6 +314,7 @@
       <workItem from="1582391686329" duration="13155000" />
       <workItem from="1582718631963" duration="12654000" />
       <workItem from="1582733969509" duration="2830000" />
+      <workItem from="1582889477595" duration="1770000" />
     </task>
     <servers />
   </component>
@@ -427,10 +428,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1007" height="196" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1582733465587" />
-    <state x="717" y="303" key="SettingsEditor" timestamp="1582732079324">
+    <state x="717" y="303" key="SettingsEditor" timestamp="1582891249424">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="717" y="303" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1582732079324" />
+    <state x="717" y="303" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1582891249424" />
     <state x="1052" y="445" width="540" height="540" key="StructurePopup" timestamp="1578940051985">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -443,14 +444,14 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1055" height="703" key="XDebugger.FullValuePopup/0.0.3440.1400@0.0.3440.1400" timestamp="1581429262784" />
-    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1582403070795">
+    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1582890096932">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582403070795" />
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1582404195869">
+    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582890096932" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1582889971407">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582404195869" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582889971407" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

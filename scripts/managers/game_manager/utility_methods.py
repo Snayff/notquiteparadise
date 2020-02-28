@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.core.constants import IMAGE_NOT_FOUND_PATH
+from scripts.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE
 
 if TYPE_CHECKING:
     from scripts.managers.game_manager.game_manager import GameManager
@@ -23,13 +23,21 @@ class UtilityMethods:
     @staticmethod
     def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pygame.Surface:
         """
-        Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format.
+        Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format. If img
+        path is "none" then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
+        dimensions provided.
         """
-        # try and get the image
-        try:
-            image = pygame.image.load(img_path).convert_alpha()
-        except:
-            image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
+        # check if image path provided
+        if img_path.lower() != "none":
+            try:
+                # try and get the image provided
+                image = pygame.image.load(img_path).convert_alpha()
+
+            except:
+                image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
+        else:
+            image = pygame.Surface((TILE_SIZE, TILE_SIZE))
+            image.set_alpha(0)
 
         # resize if needed
         if desired_dimensions:

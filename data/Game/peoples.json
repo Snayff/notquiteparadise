@@ -11,7 +11,12 @@
             "none"
         ],
         "skullduggery": 0,
-        "sprite": "",
+        "sprites": {
+            "idle": "assets/actor/people/goblynn_idle.png",
+            "attack": "assets/actor/people/goblynn_attack.png",
+            "hit": "assets/actor/people/goblynn_hit.png",
+            "dead": "assets/actor/people/goblynn_dead.png"
+        },
         "vigour": 0
     },
 	"shoom": {
@@ -23,10 +28,16 @@
         "name": "shoom",
         "sight_range": 4,
         "known_skills": [
-            "eye_watering_mistake", "fractious_fungi"
+            "eye_watering_mistake",
+            "fractious_fungi"
         ],
         "skullduggery": 2,
-        "sprite": "assets/actor/people/shoom.png",
+        "sprites": {
+            "idle": "assets/actor/people/shoom_idle.png",
+            "attack": "assets/actor/people/shoom_attack.png",
+            "hit": "assets/actor/people/shoom_hit.png",
+            "dead": "assets/actor/people/shoom_dead.png"
+        },
         "vigour": 0
     }
 }

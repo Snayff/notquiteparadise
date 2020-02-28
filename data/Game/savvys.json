@@ -12,10 +12,15 @@
             "eye_watering_mistake"
         ],
         "skullduggery": 4,
-        "sprite": "",
+        "sprites": {
+            "idle": "assets/actor/savvy/fungechist_idle.png",
+            "attack": "assets/actor/savvy/fungechist_attack.png",
+            "hit": "assets/actor/savvy/fungechist_hit.png",
+            "dead": "assets/actor/savvy/fungechist_dead.png"
+        }, 
         "vigour": -1
     },
-	"irascible_dandy": {
+	"dandy": {
         "__dataclass__": "CharacteristicData",
         "bustle": 2,
         "clout": 2,
@@ -27,7 +32,12 @@
             "flail"
         ],
         "skullduggery": 1,
-        "sprite": "assets/actor/savvy/irascible_dandy.png",
+        "sprites": {
+            "idle": "assets/actor/savvy/dandy_idle.png",
+            "attack": "assets/actor/savvy/dandy_attack.png",
+            "hit": "assets/actor/savvy/dandy_hit.png",
+            "dead": "assets/actor/savvy/dandy_dead.png"
+        }, 
         "vigour": -1
     }
 }

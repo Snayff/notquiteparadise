@@ -3,7 +3,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import NewType
 
-VERSION = "0.92.0"
+VERSION = "0.93.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
@@ -275,3 +275,13 @@ class Directions(SimpleNamespace):
     DOWN_LEFT = (-1, 1)
     DOWN = (0, 1)
     DOWN_RIGHT = (1, 1)
+
+
+class CharacteristicSprites(SimpleNamespace):
+    """
+    The sprites for a characteristic
+    """
+    IDLE = 1
+    ATTACK = 2
+    HIT = 3
+    DEAD = 4
