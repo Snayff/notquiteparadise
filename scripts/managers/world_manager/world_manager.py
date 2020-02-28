@@ -4,6 +4,8 @@ import logging
 import esper
 from typing import TYPE_CHECKING
 
+import pytweening
+
 from scripts.core import utilities
 from scripts.managers.world_manager.entity_methods import EntityMethods
 from scripts.managers.world_manager.fov_methods import FOVMethods
@@ -40,11 +42,22 @@ class WorldManager:
 
             # do we need to show moving to a new position?
             if aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y:
-                aesthetic.screen_x = utilities.lerp(aesthetic.screen_x, aesthetic.target_screen_x, 0.2)
-                aesthetic.screen_y = utilities.lerp(aesthetic.screen_y, aesthetic.target_screen_y, 0.2)
+                # are we close?
+                if (aesthetic.screen_x - 1 < aesthetic.target_screen_x < aesthetic.screen_x + 1) and \
+                    (aesthetic.screen_y - 1 < aesthetic.target_screen_y < aesthetic.screen_y + 1):
+                    # jump to target
+                    aesthetic.screen_x = aesthetic.target_screen_x
+                    aesthetic.screen_y = aesthetic.target_screen_y
+
+                # keep moving:
+                else:
+                    lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
+                    aesthetic.screen_x = utilities.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
+                    aesthetic.screen_y = utilities.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
             # not moving so reset to idle
             else:
                 aesthetic.current_sprite = aesthetic.sprites.idle
+                aesthetic.current_sprite_duration = 0
 
 
 world = WorldManager()

@@ -9,6 +9,8 @@ import pygame_gui
 from typing import TYPE_CHECKING, List, Dict, Union
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
+
+from scripts.core import utilities
 from scripts.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
     TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
 from scripts.core.extend_json import ExtendedJsonEncoder

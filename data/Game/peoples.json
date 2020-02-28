@@ -18,7 +18,7 @@
             "hit": "assets/actor/people/goblynn_hit.png",
             "dead": "assets/actor/people/goblynn_dead.png",
             "icon": "assets/actor/people/goblynn_icon.png",
-            "move": "none"
+            "move": "assets/actor/homeland/goblynn_move.png"
         },
         "vigour": 0
     },
@@ -42,7 +42,7 @@
             "hit": "assets/actor/people/shoom_hit.png",
             "dead": "assets/actor/people/shoom_dead.png",
             "icon": "assets/actor/people/shoom_icon.png",
-            "move": "none"
+            "move": "assets/actor/people/shoom_move.png"
         },
         "vigour": 0
     }

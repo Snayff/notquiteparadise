@@ -18,7 +18,7 @@
             "hit": "assets/actor/homeland/soft_tops_hit.png",
             "dead": "assets/actor/homeland/soft_tops_dead.png",
             "icon": "none",
-            "move": "none"
+            "move": "assets/actor/homeland/soft_tops_move.png"
         },
         "vigour": 1
     }

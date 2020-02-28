@@ -54,6 +54,7 @@ class Camera(UIWindow):
         Update based on current state and data. Run every frame.
         """
         super().update(time_delta)
+        self.update_game_map()
 
     def handle_events(self, event):
         """

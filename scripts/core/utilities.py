@@ -104,9 +104,22 @@ def get_class_members(cls: Any) -> List[str]:
     return members
 
 
-def lerp(initial_value: float, target_value: float, lerp_amount: float):
+def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> float:
     """
-    Linear interpolation between initial and target by amount
+    Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1.
     """
-    new_value = (lerp_amount * initial_value) + ((1 - lerp_amount) * target_value)
-    return new_value
+    amount = clamp(lerp_fraction, 0, 1)
+
+    print(f"Initial:{initial_value}, Target:{target_value}, Lerp Amount:{amount}")
+
+    if amount >= 0.99:
+        return target_value
+    else:
+        return (lerp_fraction * initial_value) + ((1 - amount) * target_value)
+
+
+def clamp(value, min_value, max_value):
+    """
+    Return the value, clamped between min and max.
+    """
+    return max(min_value, min(value, max_value))

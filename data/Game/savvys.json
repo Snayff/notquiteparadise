@@ -19,7 +19,7 @@
             "hit": "assets/actor/savvy/fungechist_hit.png",
             "dead": "assets/actor/savvy/fungechist_dead.png",
             "icon": "none",
-            "move": "none"
+            "move": "assets/actor/savvy/fungechist_move.png"
         }, 
         "vigour": -1
     },
@@ -42,7 +42,7 @@
             "hit": "assets/actor/savvy/dandy_hit.png",
             "dead": "assets/actor/savvy/dandy_dead.png",
             "icon": "none",
-            "move": "none"
+            "move": "assets/actor/savvy/dandy_move.png"
         }, 
         "vigour": -1
     }
