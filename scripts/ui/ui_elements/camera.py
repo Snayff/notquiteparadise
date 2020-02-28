@@ -1,7 +1,7 @@
 import logging
 import pygame
 import pygame_gui
-from typing import List
+from typing import List, Tuple
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
 from scripts.core.constants import TILE_SIZE, GameStates
@@ -72,33 +72,24 @@ class Camera(UIWindow):
         """
         Update the game map to show the current tiles and entities
         """
-        rows = self.rows
-        cols = self.columns
-
         # create new surface for the game map
         map_width = self.game_map.rect.width
         map_height = self.game_map.rect.height
         map_surf = pygame.Surface((map_width, map_height), pygame.SRCALPHA)
 
-        # prep for loop
-        tile_width = int(map_width / cols)
-        tile_height = int(map_height / rows)
-
         # draw tiles
         for tile in self.tiles:
             # TODO - determine where this is using FOV
-            screen_x = (tile.x - self.start_tile_col) * tile_width
-            screen_y = (tile.y - self.start_tile_row) * tile_height
+            screen_x, screen_y = self.world_to_screen_position((tile.screen_x, tile.screen_y))
             map_surf.blit(tile.sprite, (screen_x, screen_y))
 
         # draw entities
         for entity, (pos, aesthetic) in world.World.get_components(Position, Aesthetic):
-            # if in camera view
             # TODO - use FOV
+            # if in camera view
             if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:
                 if self.start_tile_row <= pos.y < self.start_tile_row + self.rows:
-                    screen_x = (pos.x - self.start_tile_col) * tile_width
-                    screen_y = (pos.y - self.start_tile_row) * tile_height
+                    screen_x, screen_y = self.world_to_screen_position((aesthetic.screen_x, aesthetic.screen_y))
                     map_surf.blit(aesthetic.current_sprite, (screen_x, screen_y))
 
         self.game_map.image = map_surf
@@ -200,3 +191,15 @@ class Camera(UIWindow):
             directions (): List of Directions
         """
         self.overlay_directions = directions
+        
+    def world_to_screen_position(self, pos: Tuple[int, int]):
+        """
+        Convert from the world position to the screen position
+        """
+        tile_width = int(self.game_map.rect.width / self.columns)
+        tile_height = int(self.game_map.rect.height / self.rows)
+        screen_x = (pos[0] - self.start_tile_col) * tile_width
+        screen_y = (pos[1] - self.start_tile_row) * tile_height
+
+        return screen_x, screen_y
+

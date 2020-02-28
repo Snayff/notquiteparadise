@@ -363,7 +363,7 @@ class EntityMethods:
 
         sprites = CharacteristicSpritesData(icon=icon, idle=idle, attack=attack, hit=hit, dead=dead)
 
-        self._manager.World.add_component(entity, Aesthetic(sprites.idle, sprites))
+        self._manager.World.add_component(entity, Aesthetic(sprites.idle, sprites, x, y))
 
         # player fov
         if is_player:

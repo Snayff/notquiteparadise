@@ -314,7 +314,7 @@
       <workItem from="1582391686329" duration="13155000" />
       <workItem from="1582718631963" duration="12654000" />
       <workItem from="1582733969509" duration="2830000" />
-      <workItem from="1582889477595" duration="7590000" />
+      <workItem from="1582889477595" duration="11573000" />
     </task>
     <servers />
   </component>
@@ -444,14 +444,14 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1055" height="703" key="XDebugger.FullValuePopup/0.0.3440.1400@0.0.3440.1400" timestamp="1581429262784" />
-    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1582896436070">
+    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1582898262890">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582896436070" />
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1582896396509">
+    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582898262890" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1582901488590">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582896396509" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582901488590" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

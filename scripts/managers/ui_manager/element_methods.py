@@ -269,16 +269,10 @@ class ElementMethods:
         else:
             logging.warning(f"Tried to set Camera overlay directions but key not found. Is it init'd?")
 
-    def should_camera_move(self, start_pos: Tuple, target_pos: Tuple):
+    def should_camera_move(self, start_pos: Tuple, target_pos: Tuple) -> bool:
         """
         Determine if camera should move based on start and target pos and intersecting the edge of the screen.
-
-        Args:
-            start_pos (): x,y
-            target_pos (): x,y
-
-        Returns:
-            bool:
+        pos is x, y.
         """
         start_x, start_y = start_pos
         target_x, target_y = target_pos
@@ -328,6 +322,18 @@ class ElementMethods:
                 return False
         else:
             logging.warning(f"Tried to check if Camera should move but key not found. Is it init'd?")
+
+    def world_to_screen_position(self, pos: Tuple[int, int]):
+        """
+        Convert from the world position to the screen position. -1, -1 if camera not init'd.
+        """
+        camera = self.get_ui_element(UIElementTypes.CAMERA)
+
+        # if camera has been init'd
+        if camera:
+            return camera.world_to_screen_position(pos)
+        logging.warning("Tried to get screen position but camera not init'd. Likely to draw in wrong place, if at all.")
+        return -1, -1
 
     ############## ENTITY INFO ###################
 
