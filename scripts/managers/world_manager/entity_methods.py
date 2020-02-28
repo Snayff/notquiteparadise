@@ -3,14 +3,13 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-from dataclasses import fields
-from typing import TYPE_CHECKING, Any, Type, TypeVar, Generic
 import logging
 
+from typing import TYPE_CHECKING, Any, Type
 from scripts.core import utilities
 from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
 from scripts.core.library import library
-from scripts.managers.game_manager.game_manager import game
+from scripts.core.types import Component
 from scripts.managers.ui_manager.ui_manager import ui
 from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
@@ -22,7 +21,7 @@ if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
     from scripts.managers.world_manager.world_manager import WorldManager
 
-Component = TypeVar("Component")
+
 
 
 class EntityMethods:
@@ -49,16 +48,10 @@ class EntityMethods:
             return entity
         return None
 
-    def get_entity(self, unique_component: Generic[Component]) -> Union[int, None]:
+    def get_entity(self, unique_component: Type[Component]) -> Union[int, None]:
         """
         Get a single entity that has a component. If multiple entities have the given component only the first found
         is returned.
-
-        Args:
-            unique_component ():
-
-        Returns:
-            int: Entity ID.
         """
         entities = []
         for entity, flag in self._manager.World.get_entitys_component(unique_component):
@@ -75,8 +68,8 @@ class EntityMethods:
 
         return entities[0]
 
-    def get_entities(self, component1: Generic[Component], component2: Generic[Component] = None,
-            component3: Generic[Component] = None) -> List[int]:
+    def get_entities(self, component1:  Type[Component], component2:  Type[Component] = None,
+            component3:  Type[Component] = None) -> List[int]:
         """
         Get entities with the specified components. Returns a list of entity IDs
         """
@@ -94,9 +87,9 @@ class EntityMethods:
 
         return entities
 
-    def get_entities_and_components_in_area(self, area: List[Tile], component1: Generic[Component] = None,
-            component2: Generic[Component] = None, component3: Generic[Component] = None) -> \
-            Dict[int, Generic[Component]]:
+    def get_entities_and_components_in_area(self, area: List[Tile], component1:  Type[Component] = None,
+            component2:  Type[Component] = None, component3:  Type[Component] = None) -> \
+            Dict[int, Component]:
         """
         Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
         components are specified the return will be (Position, None).
@@ -128,7 +121,7 @@ class EntityMethods:
 
         return entities
 
-    def get_entitys_component(self, entity: int, component: Generic[Component]) -> Union[Generic[Component], None]:
+    def get_entitys_component(self, entity: int, component:  Type[Component]) -> Union[Component, None]:
         """
         Get an entity's component.
         """
@@ -148,7 +141,7 @@ class EntityMethods:
 
         return self.get_entitys_component(entity, Identity)
 
-    def get_component(self, component: Generic[Component]) -> List[Tuple[int, Generic[Component]]]:
+    def get_component(self, component:  Type[Component]) -> List[Tuple[int, Component]]:
         """
         Get all entities with the specified component
         """
@@ -173,7 +166,7 @@ class EntityMethods:
         """
         return CombatStats(entity)
 
-    def get_primary_stat(self, entity: int, primary_stat: PrimaryStatTypes) -> int:
+    def get_primary_stat(self, entity: int, primary_stat: str) -> int:
         """
         Get an entity's primary stat.
         """
@@ -202,16 +195,9 @@ class EntityMethods:
 
     ############## QUERIES  ################
 
-    def has_component(self, entity, component):
+    def has_component(self, entity: int, component:  Type[Component]):
         """
         Confirm if an entity has a component
-
-        Args:
-            entity ():
-            component ():
-
-        Returns:
-
         """
         if self._manager.World.has_component(entity, component):
             return True
@@ -220,12 +206,9 @@ class EntityMethods:
 
     ############## ENTITY EXISTENCE ################
 
-    def create(self, components=None) -> int:
+    def create(self, components: List[Type[Component]] = None) -> int:
         """
         Use each component in a list of components to create an entity
-
-        Args:
-            components ():
         """
         if components is None:
             components = []
@@ -399,10 +382,10 @@ class EntityMethods:
             entity ():
             skill_name ():
         """
-        if not self._manager.World.has_component(entity, Knowledge()):
+        if not self._manager.World.has_component(entity, Knowledge):
             self._manager.World.add_component(entity, Knowledge())
 
-        knowledge = self.get_entitys_component(entity, Knowledge())
+        knowledge = self.get_entitys_component(entity, Knowledge)
         knowledge.skills.append(skill_name)
 
     def judge_action(self, entity: int, action: Any):

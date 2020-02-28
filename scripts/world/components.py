@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
+from scripts.core.types import Component
 from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData
 
 if TYPE_CHECKING:
@@ -13,14 +13,14 @@ if TYPE_CHECKING:
 #########################################################
 
 
-class IsPlayer:
+class IsPlayer(Component):
     """
     [Component] Whether the entity is the player.
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
-class Position:
+class Position(Component):
     """
     [Component] An entity's position on the map.
     """
@@ -30,7 +30,7 @@ class Position:
         self.y = y
 
 
-class Aesthetic:
+class Aesthetic(Component):
     """
     [Component] An entity's sprite.
     """
@@ -46,7 +46,7 @@ class Aesthetic:
         self.current_sprite_duration = 0
 
 
-class Resources:
+class Resources(Component):
     """
     [Component] An entity's resources.
     """
@@ -57,7 +57,7 @@ class Resources:
         self.time_spent = 0
 
 
-class Blocking:
+class Blocking(Component):
     """
     [Component] An entity's blocking of other objects.
     """
@@ -67,7 +67,7 @@ class Blocking:
         self.blocks_sight = blocks_sight
 
 
-class Identity:
+class Identity(Component):
     """
     [Component] An entity's identity, such as name and description.
     """
@@ -77,7 +77,7 @@ class Identity:
         self.description = description
 
 
-class Race:
+class Race(Component):
     """
     [Component] An entity's people.
     """
@@ -86,7 +86,7 @@ class Race:
         self.name = people_name
 
 
-class Savvy:
+class Savvy(Component):
     """
     [Component] An entity's savvy.
     """
@@ -95,7 +95,7 @@ class Savvy:
         self.name = savvy_name
 
 
-class Homeland:
+class Homeland(Component):
     """
     [Component] An entity's homeland.
     """
@@ -104,18 +104,18 @@ class Homeland:
         self.name = homeland_name
 
 
-class AIBasic:
+class AIBasic(Component):
     """
     [Component] An ai to control an entity.
     """
 
 
-class HasCombatStats:
+class HasCombatStats(Component):
     """[Component] A flag to show if an entity has stats used for combat."""
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
-class Knowledge:
+class Knowledge(Component):
     """[Component] An entity's knowledge, including skills."""
     def __init__(self, skills: List[str] = None):
         if skills is None:
@@ -123,7 +123,7 @@ class Knowledge:
         self.skills = skills
 
 
-class Affliction:
+class Affliction(Component):
     """[Component] An entity's Boons and Banes. e.g. {boon_name: duration}"""
     def __init__(self, boons: Dict = None, banes: Dict = None):
         if banes is None:
@@ -134,7 +134,7 @@ class Affliction:
         self.banes = banes
 
 
-class Aspect:
+class Aspect(Component):
     """[Component] An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
     def __init__(self, aspects: Dict = None):
         if aspects is None:
@@ -142,14 +142,14 @@ class Aspect:
         self.aspects = aspects
 
 
-class IsGod:
+class IsGod(Component):
     """
     [Component] Whether the entity is a god.
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
-class Opinion:
+class Opinion(Component):
     """
     [Component] An entity's views on other entities.
     """

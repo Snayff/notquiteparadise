@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 import esper
 import pytweening
-from typing import TYPE_CHECKING
 
+from typing import TYPE_CHECKING
 from scripts.core import utilities
 from scripts.managers.world_manager.entity_methods import EntityMethods
 from scripts.managers.world_manager.fov_methods import FOVMethods
