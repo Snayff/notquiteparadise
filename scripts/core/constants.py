@@ -285,3 +285,4 @@ class CharacteristicSprites(SimpleNamespace):
     ATTACK = 2
     HIT = 3
     DEAD = 4
+    ICON = 5

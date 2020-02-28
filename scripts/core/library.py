@@ -76,33 +76,20 @@ class LibraryOfAlexandria:
         data = self._aspects
         return data
 
-    def get_aspect_data(self, aspect_name):
+    def get_aspect_data(self, aspect_name: str) -> AspectData:
         """
         Get data for an aspects from the library
-
-        Args:
-            aspect_name (str):
-
-        Returns:
-            AspectData: data for a specified aspects.
         """
 
         data = self._aspects[aspect_name]
         return data
 
-    def get_aspect_effect_data(self, aspect_name, effect_type):
+    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectTypes) -> EffectData:
         """
         Get effect data for an aspects from the library
-
-        Args:
-            aspect_name(str):
-            effect_type(EffectTypes):
-
-        Returns:
-            EffectData: data for a specified effect.
         """
         try:
-            data = self._aspects[aspect_name].effects[effect_type.name]
+            data = self._aspects[aspect_name].effects[effect_type]
         except KeyError:
             data = None
 
@@ -116,33 +103,21 @@ class LibraryOfAlexandria:
         data = self._afflictions
         return data
 
-    def get_affliction_data(self, affliction_name):
+    def get_affliction_data(self, affliction_name: str) -> AfflictionData:
         """
         Get data for an affliction from the library
-
-        Args:
-            affliction_name (str):
-
-        Returns:
-            AfflictionData: data for a specified Affliction.
         """
 
         data = self._afflictions[affliction_name]
         return data
 
-    def get_affliction_effect_data(self, affliction_name, effect_type):
+    def get_affliction_effect_data(self, affliction_name: str, effect_type: EffectData) -> EffectData:
         """
         Get data for an affliction from the library
 
-        Args:
-            affliction_name(str):
-            effect_type(EffectTypes):
-
-        Returns:
-            EffectData: data for a specified effect.
         """
         try:
-            data = self._afflictions[affliction_name].effects[effect_type.name]
+            data = self._afflictions[affliction_name].effects[effect_type]
         except KeyError:
             data = None
 
@@ -156,15 +131,9 @@ class LibraryOfAlexandria:
         data = self._savvys
         return data
 
-    def get_savvy_data(self, savvy_name):
+    def get_savvy_data(self, savvy_name: str) -> CharacteristicData:
         """
         Get data for a savvys from the library
-
-        Args:
-            savvy_name (str):
-
-        Returns:
-            CharacteristicData: data for a specified Race.
         """
 
         data = self._savvys[savvy_name]
@@ -178,15 +147,9 @@ class LibraryOfAlexandria:
         data = self._peoples
         return data
 
-    def get_people_data(self, people_name):
+    def get_people_data(self, people_name: str) -> CharacteristicData:
         """
         Get data for a peoples from the library
-
-        Args:
-            people_name (str):
-
-        Returns:
-            CharacteristicData: data for a specified Race.
         """
 
         data = self._peoples[people_name]
@@ -200,15 +163,9 @@ class LibraryOfAlexandria:
         data = self._homelands
         return data
 
-    def get_homeland_data(self, homeland_name):
+    def get_homeland_data(self, homeland_name: str) -> CharacteristicData:
         """
         Get data for a homelands from the library
-
-        Args:
-            homeland_name (str):
-
-        Returns:
-            CharacteristicData: data for a specified Race.
         """
 
         data = self._homelands[homeland_name]
@@ -220,35 +177,21 @@ class LibraryOfAlexandria:
         """
         return self._skills
 
-    def get_skill_data(self, skill_name):
+    def get_skill_data(self, skill_name: str) -> SkillData:
         """
         Get data for a skill from the library
-
-        Args:
-            skill_name (str):
-
-        Returns:
-            SkillData: data for a specified skill.
         """
         # FIXME - it is possible for keys to have spaces and be compared to those that dont
         skill_data = self._skills[skill_name]
 
         return skill_data
 
-    def get_skill_effect_data(self, skill_name, effect_type):
+    def get_skill_effect_data(self, skill_name: str, effect_type: EffectTypes) -> EffectData:
         """
-        Get data for a skill from the library
-
-        Args:
-
-            skill_name(str):
-            effect_type(EffectTypes):
-
-        Returns:
-            EffectData: data for a specified skill effect.
+        Get effect data for a skill from the library
         """
         try:
-            effect_data = self._skills[skill_name].effects[effect_type.name]
+            effect_data = self._skills[skill_name].effects[effect_type]
 
         except KeyError:
             effect_data = None
@@ -295,90 +238,51 @@ class LibraryOfAlexandria:
 
         return god_data
 
-    def get_god_data(self, god_name):
+    def get_god_data(self, god_name: str) -> GodData:
         """
         Get data for a god from the library
-
-        Args:
-            god_name (str):
-
-        Returns:
-            GodData:  data for specified god.
         """
 
         god_data = self._gods[god_name]
 
         return god_data
 
-    def get_god_interventions_data(self, god_name):
+    def get_god_interventions_data(self, god_name: str) -> Dict[str, InterventionData]:
         """
         Get data for a god's interventions from the library
-
-        Args:
-            god_name(str):
-
-        Returns:
-            dict: data for a specified god's interventions. (key, InterventionData)
         """
         interventions_data = self._gods[god_name].interventions
 
         return interventions_data
 
-    def get_god_intervention_data(self, god_name, intervention_name):
+    def get_god_intervention_data(self, god_name: str, intervention_name: str) -> InterventionData:
         """
         Get data for a god's specified intervention from the library
-
-        Args:
-            god_name(str):
-            intervention_name(str):
-
-        Returns:
-            InterventionData: data for a specified god's  specified intervention.
         """
         interventions_data = self._gods[god_name].interventions[intervention_name]
 
         return interventions_data
 
-    def get_god_intervention_effects_data(self, god_name, intervention_name):
+    def get_god_intervention_effects_data(self, god_name: str, intervention_name: str) -> Dict[str, EffectData]:
         """
         Get data for the effects in a god's intervention from the library
-
-        Args:
-            god_name(str):
-            intervention_name(str):
-
-        Returns:
-            List[EffectData]: list of effects data
         """
         effects_data = self._gods[god_name].interventions[intervention_name].effects
 
         return effects_data
 
-    def get_god_intervention_effect_data(self, god_name, intervention_name, effect_type):
+    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectTypes) -> \
+            EffectData:
         """
         Get data for a specified effect in a god's intervention from the library
-
-        Args:
-            god_name(str):
-            intervention_name(str):
-            effect_type(EffectTypes):
-
-        Returns:
-            EffectData: data for a specified skill effect.
         """
         effects_data = self._gods[god_name].interventions[intervention_name].effects[effect_type.name]
 
         return effects_data
 
-    def get_god_attitudes_data(self, god_name):
+    def get_god_attitudes_data(self, god_name: str) -> AttitudeData:
         """
         Get data for a god's attitudes from the library
-
-        Args:
-            god_name(str):
-
-        Returns:
-            AttitudeData: data for a specified god.
         """
         attitude_data = self._gods[god_name].attitudes
 

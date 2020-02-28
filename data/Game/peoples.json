@@ -15,7 +15,8 @@
             "idle": "assets/actor/people/goblynn_idle.png",
             "attack": "assets/actor/people/goblynn_attack.png",
             "hit": "assets/actor/people/goblynn_hit.png",
-            "dead": "assets/actor/people/goblynn_dead.png"
+            "dead": "assets/actor/people/goblynn_dead.png",
+            "icon": "assets/actor/people/goblynn_icon.png"
         },
         "vigour": 0
     },
@@ -36,7 +37,8 @@
             "idle": "assets/actor/people/shoom_idle.png",
             "attack": "assets/actor/people/shoom_attack.png",
             "hit": "assets/actor/people/shoom_hit.png",
-            "dead": "assets/actor/people/shoom_dead.png"
+            "dead": "assets/actor/people/shoom_dead.png",
+            "icon": "assets/actor/people/shoom_icon.png"
         },
         "vigour": 0
     }
