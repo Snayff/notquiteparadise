@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>Core &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  <title>Core &mdash; NotQuiteParadise 0.93.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="index.html"/>
         <link rel="next" title="Dev Tools" href="dev_tools.html"/>
         <link rel="prev" title="Welcome to Not Quite Paradise’s documentation!" href="index.html"/>
 
@@ -69,10 +69,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -85,15 +85,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.affliction">Affliction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.effect">Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.skill">Skill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#skill">Skill</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ui.html">UI</a><ul>
@@ -939,13 +939,10 @@
 <dd><p>Get data for an aspects from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified aspects.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>AspectData</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AspectData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -957,15 +954,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
+<li><p><strong>aspect_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectTypes</span></code></a>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified effect.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="skills.html#scripts.skills.effect.EffectData" title="scripts.skills.effect.EffectData">EffectData</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -976,7 +970,7 @@
 <dd><p>Get all afflictions from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, <a class="reference internal" href="skills.html#scripts.skills.affliction.AfflictionData" title="scripts.skills.affliction.AfflictionData">AfflictionData</a>]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, AfflictionData]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -987,13 +981,10 @@
 <dd><p>Get data for an affliction from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified Affliction.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="skills.html#scripts.skills.affliction.AfflictionData" title="scripts.skills.affliction.AfflictionData">AfflictionData</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AfflictionData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1005,15 +996,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
+<li><p><strong>affliction_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>effect_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">EffectData</span></code>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified effect.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="skills.html#scripts.skills.effect.EffectData" title="scripts.skills.effect.EffectData">EffectData</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1035,13 +1023,10 @@
 <dd><p>Get data for a savvys from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>savvy_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>savvy_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified Race.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>CharacteristicData</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CharacteristicData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1063,13 +1048,10 @@
 <dd><p>Get data for a peoples from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>people_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>people_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified Race.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>CharacteristicData</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CharacteristicData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1091,13 +1073,10 @@
 <dd><p>Get data for a homelands from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>homeland_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>homeland_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified Race.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>CharacteristicData</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CharacteristicData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1108,7 +1087,7 @@
 <dd><p>Get all skill data from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, <a class="reference internal" href="skills.html#scripts.skills.skill.SkillData" title="scripts.skills.skill.SkillData">SkillData</a>]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, SkillData]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1119,13 +1098,10 @@
 <dd><p>Get data for a skill from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified skill.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="skills.html#scripts.skills.skill.SkillData" title="scripts.skills.skill.SkillData">SkillData</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SkillData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1133,19 +1109,16 @@
 <dl class="method">
 <dt id="scripts.core.library.LibraryOfAlexandria.get_skill_effect_data">
 <code class="sig-name descname">get_skill_effect_data</code><span class="sig-paren">(</span><em class="sig-param">skill_name</em>, <em class="sig-param">effect_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/core/library.html#LibraryOfAlexandria.get_skill_effect_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.core.library.LibraryOfAlexandria.get_skill_effect_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get data for a skill from the library</p>
+<dd><p>Get effect data for a skill from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
+<li><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectTypes</span></code></a>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified skill effect.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="skills.html#scripts.skills.effect.EffectData" title="scripts.skills.effect.EffectData">EffectData</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1217,13 +1190,10 @@
 <dd><p>Get data for a god from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for specified god.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>GodData</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GodData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1236,11 +1206,8 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified god’s interventions. (key, InterventionData)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, InterventionData]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1252,15 +1219,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
+<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified god’s  specified intervention.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>InterventionData</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">InterventionData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1276,11 +1240,8 @@
 <li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of effects data</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="skills.html#scripts.skills.effect.EffectData" title="scripts.skills.effect.EffectData">EffectData</a>]</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a>, EffectData]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1292,16 +1253,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><em>EffectTypes</em></a>) – </p></li>
+<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>intervention_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>effect_type</strong> (<a class="reference internal" href="#scripts.core.constants.EffectTypes" title="scripts.core.constants.EffectTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectTypes</span></code></a>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified skill effect.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="skills.html#scripts.skills.effect.EffectData" title="scripts.skills.effect.EffectData">EffectData</a></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">EffectData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1312,13 +1270,10 @@
 <dd><p>Get data for a god’s attitudes from the library</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>data for a specified god.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>AttitudeData</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AttitudeData</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1410,7 +1365,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.92.0',
+            VERSION:'0.93.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

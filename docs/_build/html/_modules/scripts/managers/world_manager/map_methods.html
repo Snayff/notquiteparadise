@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.managers.world_manager.map_methods &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  <title>scripts.managers.world_manager.map_methods &mdash; NotQuiteParadise 0.93.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -68,10 +68,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,15 +84,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.effect">Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#skill">Skill</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ui.html">UI</a><ul>
@@ -360,7 +360,7 @@
         <span class="c1"># game_map = self._manager.game_map</span>
         <span class="c1"># entities = []</span>
         <span class="c1"># # TODO - update to use ECS</span>
-        <span class="c1"># for ent, (pos, blocking) in self._manager.World.get_components(Position, Blocking):</span>
+        <span class="c1"># for ent, (pos, blocking) in self._manager.World.get_entitys_components(Position, Blocking):</span>
         <span class="c1">#     entities.append(ent)</span>
         <span class="c1"># entity_to_move = start_entity</span>
         <span class="c1"># target = target_entity</span>
@@ -498,7 +498,7 @@
                 <span class="k">return</span> <span class="kc">True</span>
 
             <span class="c1"># Any entities that block movement?</span>
-            <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_entitys_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_sight</span><span class="p">:</span>
                     <span class="k">return</span> <span class="kc">True</span>
 
@@ -546,7 +546,7 @@
                 <span class="k">return</span> <span class="kc">True</span>
 
             <span class="c1"># Any entities that block movement?</span>
-            <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">blocking</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Blocking</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="ow">and</span> <span class="n">blocking</span><span class="o">.</span><span class="n">blocks_movement</span><span class="p">:</span>
                     <span class="k">return</span> <span class="kc">True</span>
 
@@ -568,7 +568,7 @@
 
         <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
             <span class="c1"># Any entities on the tile?</span>
-            <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ent</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                     <span class="k">return</span> <span class="kc">True</span>
 
@@ -583,7 +583,7 @@
 
         <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
             <span class="c1"># ensure active entity is the same as the targeted one</span>
-            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">active_entity</span> <span class="o">!=</span> <span class="n">entity</span><span class="p">:</span>
                         <span class="k">return</span> <span class="kc">True</span>
@@ -607,7 +607,7 @@
 
         <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
             <span class="c1"># ensure active entity is the same as the targeted one</span>
-            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">position</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">active_entity</span> <span class="o">==</span> <span class="n">entity</span><span class="p">:</span>
                         <span class="k">return</span> <span class="kc">True</span>
@@ -640,7 +640,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.92.0',
+            VERSION:'0.93.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

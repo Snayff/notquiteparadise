@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>UI &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  <title>UI &mdash; NotQuiteParadise 0.93.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="index.html"/>
         <link rel="next" title="World" href="world.html"/>
         <link rel="prev" title="Skills" href="skills.html"/>
 
@@ -69,10 +69,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -85,15 +85,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.affliction">Affliction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.effect">Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="skills.html#module-scripts.skills.skill">Skill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skills.html#skill">Skill</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">UI</a><ul>
@@ -706,6 +706,17 @@
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.world_to_screen_position">
+<code class="sig-name descname">world_to_screen_position</code><span class="sig-paren">(</span><em class="sig-param">pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.world_to_screen_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.world_to_screen_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert from the world position to the screen position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – </p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -996,7 +1007,7 @@ tags are:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.92.0',
+            VERSION:'0.93.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

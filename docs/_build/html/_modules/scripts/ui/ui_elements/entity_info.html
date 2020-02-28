@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.ui.ui_elements.entity_info &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  <title>scripts.ui.ui_elements.entity_info &mdash; NotQuiteParadise 0.93.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -68,10 +68,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,15 +84,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.effect">Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#skill">Skill</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ui.html">UI</a><ul>
@@ -149,13 +149,12 @@
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.ui.ui_elements.entity_info</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">pygame_gui</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIWindow</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UITextBox</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.core.utilities</span> <span class="kn">import</span> <span class="n">get_class_members</span>
 <span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">Resources</span>
 
 
@@ -251,8 +250,11 @@
         <span class="n">image_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_image_height</span>
         <span class="n">centre_draw_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">image_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
         <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">centre_draw_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span><span class="p">),</span> <span class="p">(</span><span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">))</span>
-        <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">icon</span><span class="p">,</span> <span class="p">(</span><span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">))</span>
+
+        <span class="c1"># TODO - moving to the top causes import issues. Resolve this!</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+        <span class="n">aesthetic</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">sprites</span><span class="o">.</span><span class="n">icon</span><span class="p">,</span> <span class="p">(</span><span class="n">image_width</span><span class="p">,</span> <span class="n">image_height</span><span class="p">))</span>
 
         <span class="n">entity_image</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">image_surface</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gui_manager</span><span class="p">,</span>
                                <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#entity_image&quot;</span><span class="p">)</span>
@@ -266,8 +268,10 @@
 <span class="sd">            UITextBox:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span>
-        <span class="n">identity</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
-        <span class="n">resources</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
+        <span class="c1"># TODO - moving to the top causes import issues. Resolve this!</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+        <span class="n">identity</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">)</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
         <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;{identity.name.capitalize()}&quot;</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Current Health: </span><span class="si">{resources.health}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Current Stamina: </span><span class="si">{resources.stamina}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
@@ -291,11 +295,15 @@
 <span class="sd">            UITextBox:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># TODO - moving to the top causes import issues. Resolve this!</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
         <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_combat_stats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">PrimaryStatTypes</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">all_stats</span> <span class="o">=</span> <span class="n">get_class_members</span><span class="p">(</span><span class="n">PrimaryStatTypes</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_stats</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span>
+                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
                 <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
@@ -303,7 +311,7 @@
 
             <span class="c1"># in case it fails to pull expected attribute</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{stat}</span><span class="s2"> not found for EntityInfo.&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{name}</span><span class="s2"> not found for EntityInfo.&quot;</span><span class="p">)</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gap_between_sections</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_image_height</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">core_info_height</span>
@@ -323,11 +331,15 @@
 <span class="sd">            UITextBox:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># TODO - moving to the top causes import issues. Resolve this!</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
         <span class="n">stats</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_combat_stats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selected_entity</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">SecondaryStatTypes</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">all_stats</span> <span class="o">=</span> <span class="n">get_class_members</span><span class="p">(</span><span class="n">SecondaryStatTypes</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_stats</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">stat_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
                 <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
@@ -335,7 +347,7 @@
 
             <span class="c1"># in case it fails to pull expected attribute</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{stat}</span><span class="s2"> not found for EntityInfo.&quot;</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{name}</span><span class="s2"> not found for EntityInfo.&quot;</span><span class="p">)</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gap_between_sections</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_image_height</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">core_info_height</span> <span class="o">+</span> \
@@ -371,7 +383,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.92.0',
+            VERSION:'0.93.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

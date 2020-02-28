@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.dev_tools.data_editor &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  <title>scripts.dev_tools.data_editor &mdash; NotQuiteParadise 0.93.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -68,10 +68,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,15 +84,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.effect">Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../skills.html#skill">Skill</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ui.html">UI</a><ul>
@@ -159,14 +159,16 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIWindow</span><span class="p">,</span> <span class="n">UIContainer</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIDropDownMenu</span><span class="p">,</span> <span class="n">UILabel</span><span class="p">,</span> <span class="n">UITextEntryLine</span><span class="p">,</span> <span class="n">UIButton</span>
+
+<span class="kn">from</span> <span class="nn">scripts.core</span> <span class="kn">import</span> <span class="n">utilities</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">AfflictionTriggers</span><span class="p">,</span> <span class="n">DamageTypes</span><span class="p">,</span> <span class="n">PrimaryStatTypes</span><span class="p">,</span> <span class="n">SecondaryStatTypes</span><span class="p">,</span> \
     <span class="n">TargetTags</span><span class="p">,</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">SkillExpiryTypes</span><span class="p">,</span> <span class="n">SkillShapes</span><span class="p">,</span> <span class="n">Directions</span><span class="p">,</span> <span class="n">SkillTerrainCollisions</span><span class="p">,</span> <span class="n">SkillTravelTypes</span>
 <span class="kn">from</span> <span class="nn">scripts.core.extend_json</span> <span class="kn">import</span> <span class="n">ExtendedJsonEncoder</span>
 <span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.game_manager.game_manager</span> <span class="kn">import</span> <span class="n">game</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.affliction</span> <span class="kn">import</span> <span class="n">AfflictionData</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effect</span> <span class="kn">import</span> <span class="n">EffectData</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.skill</span> <span class="kn">import</span> <span class="n">SkillData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.affliction_dataclass</span> <span class="kn">import</span> <span class="n">AfflictionData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.effect_dataclass</span> <span class="kn">import</span> <span class="n">EffectData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.skill_dataclass</span> <span class="kn">import</span> <span class="n">SkillData</span>
 <span class="kn">from</span> <span class="nn">scripts.world.data_classes.aspect_dataclass</span> <span class="kn">import</span> <span class="n">AspectData</span>
 <span class="kn">from</span> <span class="nn">scripts.world.data_classes.attitude_dataclass</span> <span class="kn">import</span> <span class="n">AttitudeData</span>
 <span class="kn">from</span> <span class="nn">scripts.world.data_classes.characteristic_dataclass</span> <span class="kn">import</span> <span class="n">CharacteristicData</span>
@@ -654,7 +656,7 @@
 <span class="sd">        relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData). Loads</span>
 <span class="sd">        details into self.field_options</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">get_members</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">Utility</span><span class="o">.</span><span class="n">get_class_members</span>
+        <span class="n">get_members</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_class_members</span>
 
         <span class="n">affliction_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;afflictions&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
         <span class="n">aspect_options</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;aspects&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
@@ -984,7 +986,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.92.0',
+            VERSION:'0.93.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

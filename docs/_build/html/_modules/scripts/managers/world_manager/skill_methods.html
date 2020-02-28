@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.managers.world_manager.skill_methods &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  <title>scripts.managers.world_manager.skill_methods &mdash; NotQuiteParadise 0.93.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -68,10 +68,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,15 +84,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.effect">Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#skill">Skill</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ui.html">UI</a><ul>
@@ -157,13 +157,12 @@
     <span class="n">EffectTypes</span><span class="p">,</span> <span class="n">SkillShapes</span><span class="p">,</span> <span class="n">Directions</span><span class="p">,</span> <span class="n">TargetTags</span><span class="p">,</span> <span class="n">SkillTerrainCollisions</span><span class="p">,</span> <span class="n">SkillTravelTypes</span><span class="p">,</span> <span class="n">SkillExpiryTypes</span><span class="p">,</span> \
     <span class="n">HitModifiers</span><span class="p">,</span> <span class="n">AfflictionCategory</span>
 <span class="kn">from</span> <span class="nn">scripts.events.entity_events</span> <span class="kn">import</span> <span class="n">DieEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">EndTurnEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.events.ui_events</span> <span class="kn">import</span> <span class="n">MessageEvent</span>
 <span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
-<span class="kn">from</span> <span class="nn">scripts.skills.effect</span> <span class="kn">import</span> <span class="n">EffectData</span>
+<span class="kn">from</span> <span class="nn">scripts.world.data_classes.effect_dataclass</span> <span class="kn">import</span> <span class="n">EffectData</span>
 <span class="kn">from</span> <span class="nn">scripts.world.combat_stats</span> <span class="kn">import</span> <span class="n">CombatStats</span>
-<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Resources</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">HasCombatStats</span><span class="p">,</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Aspect</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">IsGod</span>
+<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Resources</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">HasCombatStats</span><span class="p">,</span> <span class="n">Affliction</span><span class="p">,</span> <span class="n">Aspect</span><span class="p">,</span> <span class="n">Identity</span>
 
 <span class="kn">from</span> <span class="nn">scripts.world.tile</span> <span class="kn">import</span> <span class="n">Tile</span>
 
@@ -198,7 +197,7 @@
 <span class="sd">            bool: True if can use the skill. Else False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">world</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
         <span class="n">start_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
         <span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span> <span class="o">=</span> <span class="n">target_pos</span>
         <span class="n">target_tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">))</span>
@@ -236,7 +235,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            bool: True for success, False otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
         <span class="n">identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_identity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
         <span class="c1"># Check if cost can be paid</span>
@@ -259,7 +258,7 @@
 <span class="sd">            resource (SecondaryStatTypes): HP or STAMINA</span>
 <span class="sd">            cost (int):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">)</span>
         <span class="n">identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_identity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
 
         <span class="n">resource_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
@@ -597,7 +596,7 @@
 <div class="viewcode-block" id="SkillMethods._create_affliction"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.world_manager.skill_methods.SkillMethods._create_affliction">[docs]</a>    <span class="k">def</span> <span class="nf">_create_affliction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">affliction_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_affliction_data</span><span class="p">(</span><span class="n">affliction_name</span><span class="p">)</span>
         <span class="n">identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_identity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">afflictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Affliction</span><span class="p">)</span>
+        <span class="n">afflictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">Affliction</span><span class="p">)</span>
         <span class="n">active_affliction_duration</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">boon</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">bane</span> <span class="o">=</span> <span class="p">{}</span>
@@ -836,7 +835,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.92.0',
+            VERSION:'0.93.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

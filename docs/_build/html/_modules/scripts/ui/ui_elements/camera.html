@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.ui.ui_elements.camera &mdash; NotQuiteParadise 0.92.0 documentation</title>
+  <title>scripts.ui.ui_elements.camera &mdash; NotQuiteParadise 0.93.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.92.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -68,10 +68,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.entity_handler">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,15 +84,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.affliction">Affliction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.effect">Effect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#module-scripts.skills.skill">Skill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#affliction">Affliction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#effect">Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../skills.html#skill">Skill</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ui.html">UI</a><ul>
@@ -151,13 +151,12 @@
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">pygame_gui</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIWindow</span><span class="p">,</span> <span class="n">UIContainer</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIImage</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">GameStates</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">TILE_SIZE</span>
 <span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
 <span class="kn">from</span> <span class="nn">scripts.events.ui_events</span> <span class="kn">import</span> <span class="n">ClickTile</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Position</span><span class="p">,</span> <span class="n">Aesthetic</span>
 
 
@@ -204,7 +203,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update based on current state and data. Run every frame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_game_map</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Camera.handle_events"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -222,34 +222,26 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the game map to show the current tiles and entities</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span>
-        <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span>
-
         <span class="c1"># create new surface for the game map</span>
         <span class="n">map_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
         <span class="n">map_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
         <span class="n">map_surf</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">map_width</span><span class="p">,</span> <span class="n">map_height</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">SRCALPHA</span><span class="p">)</span>
 
-        <span class="c1"># prep for loop</span>
-        <span class="n">tile_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">map_width</span> <span class="o">/</span> <span class="n">cols</span><span class="p">)</span>
-        <span class="n">tile_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">map_height</span> <span class="o">/</span> <span class="n">rows</span><span class="p">)</span>
-
         <span class="c1"># draw tiles</span>
         <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">:</span>
             <span class="c1"># TODO - determine where this is using FOV</span>
-            <span class="n">screen_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_width</span>
-            <span class="n">screen_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_height</span>
+            <span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world_to_screen_position</span><span class="p">((</span><span class="n">tile</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
             <span class="n">map_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">))</span>
 
         <span class="c1"># draw entities</span>
-        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">):</span>
-            <span class="c1"># if in camera view</span>
+        <span class="c1"># TODO - moving to the top creates circular import. Resolve this!</span>
+        <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
+        <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_components</span><span class="p">(</span><span class="n">Position</span><span class="p">,</span> <span class="n">Aesthetic</span><span class="p">):</span>
             <span class="c1"># TODO - use FOV</span>
+            <span class="c1"># if in camera view</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">&lt;=</span> <span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">&lt;=</span> <span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">:</span>
-                    <span class="n">screen_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_width</span>
-                    <span class="n">screen_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_height</span>
-                    <span class="n">map_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">))</span>
+                    <span class="n">map_surf</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">current_sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">aesthetic</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">aesthetic</span><span class="o">.</span><span class="n">screen_y</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">map_surf</span></div>
 
@@ -349,7 +341,19 @@
 <span class="sd">        Args:</span>
 <span class="sd">            directions (): List of Directions</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">overlay_directions</span> <span class="o">=</span> <span class="n">directions</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overlay_directions</span> <span class="o">=</span> <span class="n">directions</span></div>
+        
+<div class="viewcode-block" id="Camera.world_to_screen_position"><a class="viewcode-back" href="../../../../ui.html#scripts.ui.ui_elements.camera.Camera.world_to_screen_position">[docs]</a>    <span class="k">def</span> <span class="nf">world_to_screen_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert from the world position to the screen position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tile_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">tile_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_map</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+        <span class="n">screen_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_col</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_width</span>
+        <span class="n">screen_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tile_row</span><span class="p">)</span> <span class="o">*</span> <span class="n">tile_height</span>
+
+        <span class="k">return</span> <span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span></div></div>
+
 </pre></div>
 
 	    </div>
@@ -374,7 +378,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.92.0',
+            VERSION:'0.93.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
