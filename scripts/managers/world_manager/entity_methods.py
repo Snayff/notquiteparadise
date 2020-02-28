@@ -106,23 +106,22 @@ class EntityMethods:
         entities = {}
 
         if not component1 and not component2 and not component3:
-            for entity, pos in self._manager.World.get_entitys_component(Position):
+            for entity, pos in self.get_component(Position):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, None)
         elif component1 and not component2 and not component3:
-            for entity, (pos, c1) in self._manager.World.get_entitys_components(Position, component1):
+            for entity, (pos, c1) in self.get_components(Position, component1):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1)
         elif component1 and component2 and not component3:
-            for entity, (pos, c1, c2) in self._manager.World.get_entitys_components(Position, component1, component2):
+            for entity, (pos, c1, c2) in self.get_components(Position, component1, component2):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1, c2)
         elif component1 and component2 and component3:
-            for entity, (pos, c1, c2, c3) in self._manager.World.get_entitys_components(Position, component1, component2,
-                                                                                        component3):
+            for entity, (pos, c1, c2, c3) in self.get_components(Position, component1, component2, component3):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1, c2, c3)

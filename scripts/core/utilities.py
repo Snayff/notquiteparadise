@@ -110,7 +110,7 @@ def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> flo
     """
     amount = clamp(lerp_fraction, 0, 1)
 
-    print(f"Initial:{initial_value}, Target:{target_value}, Lerp Amount:{amount}")
+    #print(f"Initial:{initial_value}, Target:{target_value}, Lerp Amount:{amount}")
 
     if amount >= 0.99:
         return target_value

@@ -32,7 +32,7 @@ def initialise_game():
     # create an enemy
     # TODO - remove when enemy gen is in
     enemy = world.Entity.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops",
-                                      "fungechist")
+                                      "dandy")
 
     # create a god
     god = world.Entity.create_god("the_small_gods")

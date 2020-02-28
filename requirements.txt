@@ -32,6 +32,7 @@ pygame==2.0.0.dev6
 pygame-gui==0.4.2
 Pygments==2.5.2
 pyparsing==2.4.2
+pytweening==1.0.3
 pytz==2019.3
 radon==4.1.0
 requests==2.22.0

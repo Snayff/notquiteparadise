@@ -4,6 +4,7 @@ import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
+from scripts.core.utilities import get_class_members
 from scripts.world.components import Aesthetic, Identity, Resources
 
 
@@ -148,9 +149,11 @@ class EntityInfo(UIWindow):
         from scripts.managers.world_manager.world_manager import world
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        for name, stat in PrimaryStatTypes.__dict__.items():
+        all_stats = get_class_members(PrimaryStatTypes)
+        for name in all_stats:
             try:
-                stat_value = getattr(stats, stat)
+                stat_value = getattr(stats, name.lower())
+
                 name = name.title()
                 name = name.replace("_", " ")
 
@@ -158,7 +161,7 @@ class EntityInfo(UIWindow):
 
             # in case it fails to pull expected attribute
             except AttributeError:
-                logging.warning(f"Attribute {stat} not found for EntityInfo.")
+                logging.warning(f"Attribute {name} not found for EntityInfo.")
 
         x = self.indent
         y = (self.gap_between_sections * 3) + self.indent + self.entity_image_height + self.core_info_height
@@ -182,9 +185,11 @@ class EntityInfo(UIWindow):
         from scripts.managers.world_manager.world_manager import world
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        for name, stat in SecondaryStatTypes.__dict__.items():
+        all_stats = get_class_members(SecondaryStatTypes)
+        for name in all_stats:
             try:
-                stat_value = getattr(stats, name)
+                stat_value = getattr(stats, name.lower())
+
                 name = name.title()
                 name = name.replace("_", " ")
 
@@ -192,7 +197,7 @@ class EntityInfo(UIWindow):
 
             # in case it fails to pull expected attribute
             except AttributeError:
-                logging.warning(f"Attribute {stat} not found for EntityInfo.")
+                logging.warning(f"Attribute {name} not found for EntityInfo.")
 
         x = self.indent
         y = (self.gap_between_sections * 3) + self.indent + self.entity_image_height + self.core_info_height + \

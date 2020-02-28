@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import logging
 import esper
-from typing import TYPE_CHECKING
-
 import pytweening
+from typing import TYPE_CHECKING
 
 from scripts.core import utilities
 from scripts.managers.world_manager.entity_methods import EntityMethods
@@ -37,11 +36,14 @@ class WorldManager:
         """
         # move entities screen position towards target
         for entity, aesthetic in self.Entity.get_component(Aesthetic):
+            max_duration = 0.3
+
             # increment time
             aesthetic.current_sprite_duration += delta_time
 
             # do we need to show moving to a new position?
-            if aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y:
+            if (aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y) \
+                    and aesthetic.current_sprite_duration <= max_duration:
                 # are we close?
                 if (aesthetic.screen_x - 1 < aesthetic.target_screen_x < aesthetic.screen_x + 1) and \
                     (aesthetic.screen_y - 1 < aesthetic.target_screen_y < aesthetic.screen_y + 1):
