@@ -5,7 +5,6 @@ import pygame
 from typing import TYPE_CHECKING
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.dev_tools.data_editor import DataEditor
-from scripts.managers.world_manager.world_manager import world
 from scripts.ui.ui_elements.camera import Camera
 from scripts.ui.ui_elements.message_log import MessageLog
 from scripts.ui.ui_elements.entity_info import EntityInfo
@@ -181,7 +180,9 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
         if camera:
+            # TODO - moving to top causes circular import. Resolve this.
             from scripts.managers.world_manager.world_manager import world
+
             game_map = world.Map.get_game_map()
 
             # clamp function: max(low, min(n, high))
@@ -198,6 +199,9 @@ class ElementMethods:
 
         if camera:
             tiles = []
+
+            # TODO - moving to top causes circular import. Resolve this.
+            from scripts.managers.world_manager.world_manager import world
 
             for x in range(camera.start_tile_col, camera.start_tile_col + camera.columns):
                 for y in range(camera.start_tile_row, camera.start_tile_row + camera.rows):
@@ -327,13 +331,15 @@ class ElementMethods:
         """
         Convert from the world position to the screen position. -1, -1 if camera not init'd.
         """
+        # TODO - this shouldnt rely on UI, if possible.
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
         # if camera has been init'd
         if camera:
             return camera.world_to_screen_position(pos)
-        logging.warning("Tried to get screen position but camera not init'd. Likely to draw in wrong place, if at all.")
-        return -1, -1
+        logging.warning("Tried to get screen position but camera not init`d. Likely to draw in wrong place, "
+                        "if it draws at all.")
+        return 0, 0
 
     ############## ENTITY INFO ###################
 

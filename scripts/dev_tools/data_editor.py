@@ -504,7 +504,7 @@ class DataEditor(UIWindow):
         relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData). Loads
         details into self.field_options
         """
-        get_members = game.Utility.get_class_members
+        get_members = utilities.get_class_members
 
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]

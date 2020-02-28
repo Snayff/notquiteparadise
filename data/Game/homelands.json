@@ -17,7 +17,8 @@
             "attack": "assets/actor/homeland/soft_tops_attack.png",
             "hit": "assets/actor/homeland/soft_tops_hit.png",
             "dead": "assets/actor/homeland/soft_tops_dead.png",
-            "icon": "none"
+            "icon": "none",
+            "move": "none"
         },
         "vigour": 1
     }

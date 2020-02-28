@@ -85,7 +85,7 @@ def game_loop():
 
         # allow everything to update in response to new state
         game.update()
-        world.update()
+        world.update(delta_time)
         ui.update(delta_time)
         event_hub.update()
 

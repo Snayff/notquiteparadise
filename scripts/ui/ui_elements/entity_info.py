@@ -1,11 +1,9 @@
 import logging
-from typing import Union
 import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
-from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Aesthetic, Identity, Resources
 
 
@@ -101,7 +99,10 @@ class EntityInfo(UIWindow):
         image_height = self.entity_image_height
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
-        aesthetic = world.Entity.get_component(self.selected_entity, Aesthetic)
+
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
+        aesthetic = world.Entity.get_entitys_component(self.selected_entity, Aesthetic)
         image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
@@ -116,8 +117,10 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         entity = self.selected_entity
-        identity = world.Entity.get_component(self.selected_entity, Identity)
-        resources = world.Entity.get_component(self.selected_entity, Resources)
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
+        identity = world.Entity.get_entitys_component(entity, Identity)
+        resources = world.Entity.get_entitys_component(entity, Resources)
         text = f"{identity.name.capitalize()}" + "<br>"
         text += f"Current Health: {resources.health}" + "<br>"
         text += f"Current Stamina: {resources.stamina}" + "<br>"
@@ -141,6 +144,8 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
         for name, stat in PrimaryStatTypes.__dict__.items():
@@ -173,6 +178,8 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
         for name, stat in SecondaryStatTypes.__dict__.items():

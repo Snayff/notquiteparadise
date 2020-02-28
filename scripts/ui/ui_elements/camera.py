@@ -4,10 +4,9 @@ import pygame_gui
 from typing import List, Tuple
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
-from scripts.core.constants import TILE_SIZE, GameStates
+from scripts.core.constants import TILE_SIZE
 from scripts.core.event_hub import publisher
 from scripts.events.ui_events import ClickTile
-from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Position, Aesthetic
 
 
@@ -80,17 +79,18 @@ class Camera(UIWindow):
         # draw tiles
         for tile in self.tiles:
             # TODO - determine where this is using FOV
-            screen_x, screen_y = self.world_to_screen_position((tile.screen_x, tile.screen_y))
+            screen_x, screen_y = self.world_to_screen_position((tile.x, tile.y))
             map_surf.blit(tile.sprite, (screen_x, screen_y))
 
         # draw entities
-        for entity, (pos, aesthetic) in world.World.get_components(Position, Aesthetic):
+        # TODO - moving to the top creates circular import. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
+        for entity, (pos, aesthetic) in world.Entity.get_components(Position, Aesthetic):
             # TODO - use FOV
             # if in camera view
             if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:
                 if self.start_tile_row <= pos.y < self.start_tile_row + self.rows:
-                    screen_x, screen_y = self.world_to_screen_position((aesthetic.screen_x, aesthetic.screen_y))
-                    map_surf.blit(aesthetic.current_sprite, (screen_x, screen_y))
+                    map_surf.blit(aesthetic.current_sprite, (aesthetic.screen_x, aesthetic.screen_y))
 
         self.game_map.image = map_surf
 

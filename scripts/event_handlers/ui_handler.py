@@ -60,7 +60,7 @@ class UiHandler(Subscriber):
             # show the entity in the new tile
             player = world.Entity.get_player()
             if event.entity == player:
-                position = world.Entity.get_component(player, Position)
+                position = world.Entity.get_entitys_component(player, Position)
                 self.update_camera(event.start_pos, (position.x, position.y))
             else:
                 self.update_camera()
@@ -113,6 +113,9 @@ class UiHandler(Subscriber):
         ui.Element.init_skill_bar()
         ui.Element.init_message_log()
         ui.Element.init_entity_info()
+
+        # refresh entities screen positions N.B. must be before camera update as camera snapshots current positions
+        world.Entity.refresh_aesthetic_screen_position()
 
         # update camera
         self.update_camera()
@@ -167,7 +170,7 @@ class UiHandler(Subscriber):
             elif game.State.get_current() == GameStates.TARGETING_MODE:
                 # use the skill on the clicked tile
                 player = world.Entity.get_player()
-                position = world.Entity.get_component(player, Position)
+                position = world.Entity.get_entitys_component(player, Position)
                 direction = world.Map.get_direction((position.x, position.y), event.tile_pos_string)
                 publisher.publish(UseSkillEvent(player, game.State.get_active_skill(), (position.x, position.y), direction))
 

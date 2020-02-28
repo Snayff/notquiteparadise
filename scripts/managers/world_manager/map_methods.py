@@ -210,7 +210,7 @@ class MapMethods:
         # game_map = self._manager.game_map
         # entities = []
         # # TODO - update to use ECS
-        # for ent, (pos, blocking) in self._manager.World.get_components(Position, Blocking):
+        # for ent, (pos, blocking) in self._manager.World.get_entitys_components(Position, Blocking):
         #     entities.append(ent)
         # entity_to_move = start_entity
         # target = target_entity
@@ -348,7 +348,7 @@ class MapMethods:
                 return True
 
             # Any entities that block movement?
-            for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
+            for ent, (position, blocking) in self._manager.World.get_entitys_components(Position, Blocking):
                 if position.x == tile.x and position.y == tile.y and blocking.blocks_sight:
                     return True
 
@@ -396,7 +396,7 @@ class MapMethods:
                 return True
 
             # Any entities that block movement?
-            for ent, (position, blocking) in self._manager.World.get_components(Position, Blocking):
+            for ent, (position, blocking) in self._manager.Entity.get_components(Position, Blocking):
                 if position.x == tile.x and position.y == tile.y and blocking.blocks_movement:
                     return True
 
@@ -418,7 +418,7 @@ class MapMethods:
 
         if tile:
             # Any entities on the tile?
-            for ent, position in self._manager.World.get_component(Position):
+            for ent, position in self._manager.World.get_entitys_component(Position):
                 if position.x == tile.x and position.y == tile.y:
                     return True
 
@@ -433,7 +433,7 @@ class MapMethods:
 
         if tile:
             # ensure active entity is the same as the targeted one
-            for entity, position in self._manager.World.get_component(Position):
+            for entity, position in self._manager.Entity.get_component(Position):
                 if position.x == tile.x and position.y == tile.y:
                     if active_entity != entity:
                         return True
@@ -457,7 +457,7 @@ class MapMethods:
 
         if tile:
             # ensure active entity is the same as the targeted one
-            for entity, position in self._manager.World.get_component(Position):
+            for entity, position in self._manager.World.get_entitys_component(Position):
                 if position.x == tile.x and position.y == tile.y:
                     if active_entity == entity:
                         return True

@@ -35,16 +35,14 @@ class Aesthetic:
     [Component] An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData, x: int, y: int):
+    def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
         self.current_sprite = current_sprite
         self.sprites = sprites
 
-        from scripts.managers.ui_manager.ui_manager import ui
-        screen_x, screen_y = ui.Element.world_to_screen_position((x, y))
-        self.screen_x = screen_x
-        self.screen_y = screen_y
-        self.target_screen_x = screen_x
-        self.target_screen_y = screen_y
+        self.screen_x: float = 0
+        self.screen_y: float = 0
+        self.target_screen_x: float = 0
+        self.target_screen_y: float = 0
         self.current_sprite_duration = 0
 
 

@@ -20,6 +20,7 @@ class CharacteristicSpritesData:
     attack: pygame.Surface = None
     hit: pygame.Surface = None
     dead: pygame.Surface = None
+    move: pygame.Surface = None
     
     
 @register_dataclass_with_json
@@ -33,3 +34,4 @@ class CharacteristicSpritePathsData:
     attack: str = "none"
     hit: str = "none"
     dead: str = "none"
+    move: str = "none"

@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 from scripts.managers.game_manager.debug_methods import DebugMethods
 from scripts.managers.game_manager.state_methods import StateMethods
-from scripts.managers.game_manager.utility_methods import UtilityMethods
 
 if TYPE_CHECKING:
     pass
@@ -17,7 +16,6 @@ class GameManager:
     """
     def __init__(self):
         self.State = StateMethods(self)
-        self.Utility = UtilityMethods(self)
         self.Debug = DebugMethods(self)
 
         logging.info(f"GameManager initialised.")

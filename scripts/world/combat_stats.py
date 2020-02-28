@@ -297,7 +297,7 @@ class CombatStats:
         stat_data = library.get_secondary_stat_data(stat)
 
         # from characteristics
-        components = world.Entity.get_components(self.entity)
+        components = world.Entity.get_entitys_components(self.entity)
         base_value = stat_data.base_value
         for component in components:
             if isinstance(component, Homeland):

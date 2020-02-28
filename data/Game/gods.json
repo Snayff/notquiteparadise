@@ -28,7 +28,8 @@
             "attack": "none",
             "hit": "none",
             "dead": "none",
-            "icon": "none"
+            "icon": "none",
+            "move": "none"
         }
     }
 }

@@ -9,6 +9,7 @@
       <w>entitys</w>
       <w>fullscreen</w>
       <w>gamepad</w>
+      <w>lerp</w>
       <w>pathfinding</w>
       <w>pygame</w>
       <w>recalc</w>

@@ -47,7 +47,7 @@ class SkillMethods:
             bool: True if can use the skill. Else False.
         """
         world = self._manager
-        position = world.Entity.get_component(entity, Position)
+        position = world.Entity.get_entitys_component(entity, Position)
         start_tile = world.Map.get_tile((position.x, position.y))
         target_x, target_y = target_pos
         target_tile = world.Map.get_tile((target_x, target_y))
@@ -85,7 +85,7 @@ class SkillMethods:
         Returns:
             bool: True for success, False otherwise.
         """
-        resources = self._manager.Entity.get_component(entity, Resources)
+        resources = self._manager.Entity.get_entitys_component(entity, Resources)
         identity = self._manager.Entity.get_identity(entity)
 
         # Check if cost can be paid
@@ -108,7 +108,7 @@ class SkillMethods:
             resource (SecondaryStatTypes): HP or STAMINA
             cost (int):
         """
-        resources = self._manager.Entity.get_component(entity, Resources)
+        resources = self._manager.Entity.get_entitys_component(entity, Resources)
         identity = self._manager.Entity.get_identity(entity)
 
         resource_value = getattr(resources, resource.name.lower())
@@ -446,7 +446,7 @@ class SkillMethods:
     def _create_affliction(self, entity: int, affliction_name: str, duration: int):
         data = library.get_affliction_data(affliction_name)
         identity = self._manager.Entity.get_identity(entity)
-        afflictions = self._manager.Entity.get_component(entity, Affliction)
+        afflictions = self._manager.Entity.get_entitys_component(entity, Affliction)
         active_affliction_duration = False
         boon = {}
         bane = {}

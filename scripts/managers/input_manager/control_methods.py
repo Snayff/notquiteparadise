@@ -220,13 +220,13 @@ class ControlMethods:
         # Player movement
         dir_x, dir_y = self.get_pressed_direction()
         if dir_x != 0 or dir_y != 0:
-            position = world.Entity.get_component(player, Position)
+            position = world.Entity.get_entitys_component(player, Position)
             publisher.publish(MoveEvent(player, (position.x, position.y), (dir_x, dir_y)))
 
         # Use a skill
         skill_number = self.get_pressed_skills_number()
         if skill_number != -1:
-            knowledge = world.Entity.get_component(player, Knowledge)
+            knowledge = world.Entity.get_entitys_component(player, Knowledge)
             skill_name = knowledge.skills[skill_number]
             skill_data = library.get_skill_data(skill_name)
 
@@ -259,7 +259,7 @@ class ControlMethods:
             skill_pressed = player.actor.known_skills[skill_number]
             # confirm skill pressed doesn't match skill already pressed
             if skill_pressed != skill_name:
-                knowledge = world.Entity.get_component(player, Knowledge)
+                knowledge = world.Entity.get_entitys_component(player, Knowledge)
                 skill_name = knowledge.skills[skill_number]
                 skill_data = library.get_skill_data(skill_name)
 
