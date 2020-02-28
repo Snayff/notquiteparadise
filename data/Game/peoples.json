@@ -11,7 +11,8 @@
             "none"
         ],
         "skullduggery": 0,
-        "sprites": {
+        "sprite_paths": {
+            "__dataclass__": "CharacteristicSpritePathsData",
             "idle": "assets/actor/people/goblynn_idle.png",
             "attack": "assets/actor/people/goblynn_attack.png",
             "hit": "assets/actor/people/goblynn_hit.png",
@@ -33,7 +34,8 @@
             "fractious_fungi"
         ],
         "skullduggery": 2,
-        "sprites": {
+        "sprite_paths": {
+            "__dataclass__": "CharacteristicSpritePathsData",
             "idle": "assets/actor/people/shoom_idle.png",
             "attack": "assets/actor/people/shoom_attack.png",
             "hit": "assets/actor/people/shoom_hit.png",

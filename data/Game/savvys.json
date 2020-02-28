@@ -12,12 +12,13 @@
             "eye_watering_mistake"
         ],
         "skullduggery": 4,
-        "sprites": {
+        "sprite_paths": {
+            "__dataclass__": "CharacteristicSpritePathsData",
             "idle": "assets/actor/savvy/fungechist_idle.png",
             "attack": "assets/actor/savvy/fungechist_attack.png",
             "hit": "assets/actor/savvy/fungechist_hit.png",
             "dead": "assets/actor/savvy/fungechist_dead.png",
-            "icon": ""
+            "icon": "none"
         }, 
         "vigour": -1
     },
@@ -33,12 +34,13 @@
             "flail"
         ],
         "skullduggery": 1,
-        "sprites": {
+        "sprite_paths": {
+            "__dataclass__": "CharacteristicSpritePathsData",
             "idle": "assets/actor/savvy/dandy_idle.png",
             "attack": "assets/actor/savvy/dandy_attack.png",
             "hit": "assets/actor/savvy/dandy_hit.png",
             "dead": "assets/actor/savvy/dandy_dead.png",
-            "icon": ""
+            "icon": "none"
         }, 
         "vigour": -1
     }

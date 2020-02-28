@@ -3,21 +3,19 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from scripts.core.extend_json import deserialise_dataclasses
 from scripts.world.data_classes.characteristic_dataclass import CharacteristicData
-from scripts.core.constants import TargetTags, EffectTypes, PrimaryStatTypes, \
-    AfflictionCategory, AfflictionTriggers, DamageTypes, SecondaryStatTypes, SkillShapes, HitTypes, \
-    Directions, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes
-from scripts.world.data_classes.stat_dataclass import BaseStatData, BasePrimaryStatData, BaseSecondaryStatData
-from scripts.skills.affliction import AfflictionData
-from scripts.skills.skill import SkillData
-from scripts.skills.effect import EffectData
+from scripts.core.constants import EffectTypes, PrimaryStatTypes, \
+    SecondaryStatTypes
+from scripts.world.data_classes.stat_dataclass import BasePrimaryStatData, BaseSecondaryStatData
+from scripts.world.data_classes.affliction_dataclass import AfflictionData
+from scripts.world.data_classes.skill_dataclass import SkillData
+from scripts.world.data_classes.effect_dataclass import EffectData
 from scripts.world.data_classes.aspect_dataclass import AspectData
 from scripts.world.data_classes.attitude_dataclass import AttitudeData
 from scripts.world.data_classes.god_dataclass import GodData
-from scripts.world.data_classes.interaction_dataclass import InteractionData
 from scripts.world.data_classes.intervention_dataclass import InterventionData
 
 if TYPE_CHECKING:

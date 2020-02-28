@@ -11,12 +11,13 @@
             "flail"
         ],
         "skullduggery": 0,
-        "sprites": {
+        "sprite_paths": {
+            "__dataclass__": "CharacteristicSpritePathsData",
             "idle": "assets/actor/homeland/soft_tops_idle.png",
             "attack": "assets/actor/homeland/soft_tops_attack.png",
             "hit": "assets/actor/homeland/soft_tops_hit.png",
             "dead": "assets/actor/homeland/soft_tops_dead.png",
-            "icon": ""
+            "icon": "none"
         },
         "vigour": 1
     }

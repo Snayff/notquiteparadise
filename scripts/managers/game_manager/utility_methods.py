@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING
-
 import pygame
-
+import logging
+from typing import TYPE_CHECKING, Iterator
 from scripts.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE
 
 if TYPE_CHECKING:
     from scripts.managers.game_manager.game_manager import GameManager
-    from typing import Tuple, List, Any
+    from typing import Tuple, List, Any, Dict
 
 
 class UtilityMethods:
@@ -45,6 +43,29 @@ class UtilityMethods:
             image = pygame.transform.smoothscale(image, (width, height))
 
         return image
+
+    def get_images(self, img_paths: List[str], desired_dimensions: Tuple[int, int] = None) -> List[pygame.Surface]:
+        """
+        Get a collection of images.
+        """
+        images = []
+
+        for path in img_paths:
+            images.append(self.get_image(path, desired_dimensions))
+
+        return images
+
+    @staticmethod
+    def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
+        """
+        Flatten a list of images into a single image. All images must be the same size. Images are blitted in order.
+        """
+        base = images.pop(0)
+
+        for image in images:
+            base.blit(image, (0, 0))
+
+        return base
 
     def recursive_replace(self, obj, key, value_to_replace, new_value):
         """

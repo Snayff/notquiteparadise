@@ -4,12 +4,12 @@ import logging
 import random
 from typing import TYPE_CHECKING, Any
 import logging
-import pygame
-from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE, IMAGE_NOT_FOUND_PATH
+from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
 from scripts.core.library import library
 from scripts.managers.game_manager.game_manager import game
 from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
+from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
 
@@ -272,8 +272,9 @@ class EntityMethods:
         god = []
 
         # get aesthetic info
-        sprite = game.Utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE))
-        icon = game.Utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE))
+        idle = game.Utility.get_image(data.sprite_paths.idle, (TILE_SIZE, TILE_SIZE))
+        icon = game.Utility.get_image(data.sprite_paths.icon, (ICON_SIZE, ICON_SIZE))
+        sprites = CharacteristicSpritesData(icon=icon, idle=idle)
 
         # get knowledge info
         interventions = data.interventions
@@ -282,7 +283,7 @@ class EntityMethods:
             intervention_names.append(intervention.skill_key)
 
         god.append(Identity(data.name, data.description))
-        god.append(Aesthetic(sprite, icon))
+        god.append(Aesthetic(sprites.idle, sprites))
         god.append(IsGod())
         god.append(Opinion())
         god.append(Knowledge(intervention_names))
@@ -336,15 +337,33 @@ class EntityMethods:
         self._manager.World.add_component(entity, Knowledge(known_skills))
 
         # add aesthetic
-        icon = game.Utility.get_image(people_data.sprite, (ICON_SIZE, ICON_SIZE))
-        homeland_sprite = game.Utility.get_image(homeland_data.sprite, (TILE_SIZE, TILE_SIZE))
-        people_sprite = game.Utility.get_image(people_data.sprite, (TILE_SIZE, TILE_SIZE))
-        savvy_sprite = game.Utility.get_image(savvy_data.sprite, (TILE_SIZE, TILE_SIZE))
+        utility = game.Utility
 
-        # combine the sprite homeland -> people -> savvy
-        homeland_sprite.blits(((people_sprite, (0, 0)), (savvy_sprite, (0, 0))))
+        icon_paths = [homeland_data.sprite_paths.icon, people_data.sprite_paths.icon,
+            savvy_data.sprite_paths.icon]
+        icon_sprites = utility.get_images(icon_paths, (ICON_SIZE, ICON_SIZE))
+        icon = utility.flatten_images(icon_sprites)
 
-        self._manager.World.add_component(entity, Aesthetic(homeland_sprite, icon))
+        idle_paths = [homeland_data.sprite_paths.idle, people_data.sprite_paths.idle, savvy_data.sprite_paths.idle]
+        idle_sprites = utility.get_images(idle_paths, (TILE_SIZE, TILE_SIZE))
+        idle = utility.flatten_images(idle_sprites)
+
+        attack_paths = [homeland_data.sprite_paths.attack, people_data.sprite_paths.attack,
+            savvy_data.sprite_paths.attack]
+        attack_sprites = utility.get_images(attack_paths, (TILE_SIZE, TILE_SIZE))
+        attack = utility.flatten_images(attack_sprites)
+
+        hit_paths = [homeland_data.sprite_paths.hit, people_data.sprite_paths.hit, savvy_data.sprite_paths.hit]
+        hit_sprites = utility.get_images(hit_paths, (TILE_SIZE, TILE_SIZE))
+        hit = utility.flatten_images(hit_sprites)
+
+        dead_paths = [homeland_data.sprite_paths.dead, people_data.sprite_paths.dead, savvy_data.sprite_paths.dead]
+        dead_sprites = utility.get_images(dead_paths, (TILE_SIZE, TILE_SIZE))
+        dead = utility.flatten_images(dead_sprites)
+
+        sprites = CharacteristicSpritesData(icon=icon, idle=idle, attack=attack, hit=hit, dead=dead)
+
+        self._manager.World.add_component(entity, Aesthetic(sprites.idle, sprites))
 
         # player fov
         if is_player:

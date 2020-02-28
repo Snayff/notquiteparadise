@@ -14,9 +14,9 @@ from scripts.core.constants import EffectTypes, AfflictionTriggers, DamageTypes,
 from scripts.core.extend_json import ExtendedJsonEncoder
 from scripts.core.library import library
 from scripts.managers.game_manager.game_manager import game
-from scripts.skills.affliction import AfflictionData
-from scripts.skills.effect import EffectData
-from scripts.skills.skill import SkillData
+from scripts.world.data_classes.affliction_dataclass import AfflictionData
+from scripts.world.data_classes.effect_dataclass import EffectData
+from scripts.world.data_classes.skill_dataclass import SkillData
 from scripts.world.data_classes.aspect_dataclass import AspectData
 from scripts.world.data_classes.attitude_dataclass import AttitudeData
 from scripts.world.data_classes.characteristic_dataclass import CharacteristicData

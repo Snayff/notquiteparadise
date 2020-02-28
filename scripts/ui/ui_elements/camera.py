@@ -99,7 +99,7 @@ class Camera(UIWindow):
                 if self.start_tile_row <= pos.y < self.start_tile_row + self.rows:
                     screen_x = (pos.x - self.start_tile_col) * tile_width
                     screen_y = (pos.y - self.start_tile_row) * tile_height
-                    map_surf.blit(aesthetic.sprite, (screen_x, screen_y))
+                    map_surf.blit(aesthetic.current_sprite, (screen_x, screen_y))
 
         self.game_map.image = map_surf
 

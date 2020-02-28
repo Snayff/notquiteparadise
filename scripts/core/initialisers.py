@@ -25,7 +25,7 @@ def initialise_game():
     # init the player
     world.FOV.create_player_fov_map(map_width, map_height)
     player = world.Entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
-                                       "irascible_dandy", True)
+                                       "dandy", True)
 
     turn.turn_holder = player
 

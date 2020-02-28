@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict
-
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
 from scripts.core.extend_json import register_dataclass_with_json
 

@@ -275,14 +275,3 @@ class Directions(SimpleNamespace):
     DOWN_LEFT = (-1, 1)
     DOWN = (0, 1)
     DOWN_RIGHT = (1, 1)
-
-
-class CharacteristicSprites(SimpleNamespace):
-    """
-    The sprites for a characteristic
-    """
-    IDLE = 1
-    ATTACK = 2
-    HIT = 3
-    DEAD = 4
-    ICON = 5

@@ -102,7 +102,7 @@ class EntityInfo(UIWindow):
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
         aesthetic = world.Entity.get_component(self.selected_entity, Aesthetic)
-        image = pygame.transform.scale(aesthetic.icon, (image_width, image_height))
+        image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
                                container=self.get_container(), object_id="#entity_image")

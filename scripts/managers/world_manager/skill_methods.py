@@ -7,13 +7,12 @@ from scripts.core.constants import MessageTypes, PrimaryStatTypes, SecondaryStat
     EffectTypes, SkillShapes, Directions, TargetTags, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
     HitModifiers, AfflictionCategory
 from scripts.events.entity_events import DieEvent
-from scripts.events.game_events import EndTurnEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher
-from scripts.skills.effect import EffectData
+from scripts.world.data_classes.effect_dataclass import EffectData
 from scripts.world.combat_stats import CombatStats
-from scripts.world.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity, IsGod
+from scripts.world.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity
 
 from scripts.world.tile import Tile
 

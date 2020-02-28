@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData
+
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict
@@ -34,7 +36,7 @@ class Aesthetic:
     [Component] An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: Dict[str, pygame.Surface]):
+    def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
         self.current_sprite = current_sprite
         self.sprites = sprites
         # TODO - add screen pos here and use that in drawing
