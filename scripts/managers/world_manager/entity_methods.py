@@ -1,21 +1,28 @@
 from __future__ import annotations
 
+import dataclasses
 import logging
 import random
-from typing import TYPE_CHECKING, Any
+from dataclasses import fields
+from typing import TYPE_CHECKING, Any, Type, TypeVar, Generic
 import logging
-import pygame
-from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE, IMAGE_NOT_FOUND_PATH
+
+from scripts.core import utilities
+from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
 from scripts.core.library import library
 from scripts.managers.game_manager.game_manager import game
+from scripts.managers.ui_manager.ui_manager import ui
 from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
+from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData, CharacteristicSpritePathsData
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
 
 if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
     from scripts.managers.world_manager.world_manager import WorldManager
+
+Component = TypeVar("Component")
 
 
 class EntityMethods:
@@ -27,7 +34,7 @@ class EntityMethods:
     """
 
     def __init__(self, manager):
-        self._manager = manager  # type: WorldManager
+        self._manager: WorldManager = manager
 
     ############### GET ###################
 
@@ -38,11 +45,11 @@ class EntityMethods:
         Returns:
             int: Entity ID
         """
-        for entity, flag in self._manager.World.get_component(IsPlayer):
+        for entity, flag in self.get_component(IsPlayer):
             return entity
         return None
 
-    def get_entity(self, unique_component) -> Union[int, None]:
+    def get_entity(self, unique_component: Generic[Component]) -> Union[int, None]:
         """
         Get a single entity that has a component. If multiple entities have the given component only the first found
         is returned.
@@ -54,7 +61,7 @@ class EntityMethods:
             int: Entity ID.
         """
         entities = []
-        for entity, flag in self._manager.World.get_component(unique_component):
+        for entity, flag in self._manager.World.get_entitys_component(unique_component):
             entities.append(entity)
 
         num_entities = len(entities)
@@ -68,107 +75,90 @@ class EntityMethods:
 
         return entities[0]
 
-    def get_entities(self, component1, component2=None, component3=None) -> List[int]:
+    def get_entities(self, component1: Generic[Component], component2: Generic[Component] = None,
+            component3: Generic[Component] = None) -> List[int]:
         """
-        Get entities with the specified components.
-
-        Args:
-            component1 ():
-            component2 ():
-            component3 ():
-
-        Returns:
-            List[int]: List of Entity IDs
+        Get entities with the specified components. Returns a list of entity IDs
         """
         entities = []
 
         if not component2 and not component3:
-            for entity, c1 in self._manager.World.get_component(component1):
+            for entity, c1 in self._manager.World.get_entitys_component(component1):
                 entities.append(entity)
         elif component2 and not component3:
-            for entity, (c1, c2) in self._manager.World.get_components(component1, component2):
+            for entity, (c1, c2) in self._manager.World.get_entitys_components(component1, component2):
                 entities.append(entity)
         elif component2 and component3:
-            for entity, (c1, c2, c3) in self._manager.World.get_components(component1, component2, component3):
+            for entity, (c1, c2, c3) in self._manager.World.get_entitys_components(component1, component2, component3):
                 entities.append(entity)
 
         return entities
 
-    def get_entities_and_components_in_area(self, area: List[Tile], component1=None, component2=None,
-            component3=None) -> Dict:
+    def get_entities_and_components_in_area(self, area: List[Tile], component1: Generic[Component] = None,
+            component2: Generic[Component] = None, component3: Generic[Component] = None) -> \
+            Dict[int, Generic[Component]]:
         """
-        Return a list of entities and their specified components, plus Position. e.g. (Position, component1). If no
+        Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
         components are specified the return will be (Position, None).
 
         N.B. Do not specify Position as a component.
-
-        Args:
-            area ():
-            component1 ():
-            component2 ():
-            component3 ():
-
-        Returns:
-
         """
         entities = {}
 
         if not component1 and not component2 and not component3:
-            for entity, pos in self._manager.World.get_component(Position):
+            for entity, pos in self.get_component(Position):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, None)
         elif component1 and not component2 and not component3:
-            for entity, (pos, c1) in self._manager.World.get_components(Position, component1):
+            for entity, (pos, c1) in self.get_components(Position, component1):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1)
         elif component1 and component2 and not component3:
-            for entity, (pos, c1, c2) in self._manager.World.get_components(Position, component1, component2):
+            for entity, (pos, c1, c2) in self.get_components(Position, component1, component2):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1, c2)
         elif component1 and component2 and component3:
-            for entity, (pos, c1, c2, c3) in self._manager.World.get_components(Position, component1, component2,
-                                                                                component3):
+            for entity, (pos, c1, c2, c3) in self.get_components(Position, component1, component2, component3):
                 for tile in area:
                     if tile.x == pos.x and tile.y == pos.y:
                         entities[entity] = (pos, c1, c2, c3)
 
         return entities
 
-    def get_component(self, entity, component):
+    def get_entitys_component(self, entity: int, component: Generic[Component]) -> Union[Generic[Component], None]:
         """
         Get an entity's component.
-
-        Args:
-            entity ():
-            component ():
-
-        Returns:
-
         """
         if self._manager.World.has_component(entity, component):
             return self._manager.World.component_for_entity(entity, component)
         else:
             return None
 
-    def get_components(self, entity) -> Tuple:
+    def get_entitys_components(self, entity: int) -> Tuple[Component, ...]:
         """
         Get all of an entity's components.
-
-        Args:
-            entity ():
-
-        Returns:
-
         """
         return self._manager.World.components_for_entity(entity)
 
     def get_identity(self, entity: int) -> Identity:
         """Get an entity's Identity component."""
 
-        return self.get_component(entity, Identity)
+        return self.get_entitys_component(entity, Identity)
+
+    def get_component(self, component: Generic[Component]) -> List[Tuple[int, Generic[Component]]]:
+        """
+        Get all entities with the specified component
+        """
+        return self._manager.World.get_component(component)
+
+    def get_components(self, *components: type) -> List[Tuple[int, ...]]:
+        """
+        Get all entities with the specified components
+        """
+        return self._manager.World.get_components(*components)
 
     @staticmethod
     def get_combat_stats(entity: int) -> CombatStats:
@@ -230,13 +220,15 @@ class EntityMethods:
 
     ############## ENTITY EXISTENCE ################
 
-    def create(self, components: List = []) -> int:
+    def create(self, components=None) -> int:
         """
         Use each component in a list of components to create an entity
 
         Args:
             components ():
         """
+        if components is None:
+            components = []
         world = self._manager.World
         entity = world.create_entity()
 
@@ -272,8 +264,9 @@ class EntityMethods:
         god = []
 
         # get aesthetic info
-        sprite = game.Utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE))
-        icon = game.Utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE))
+        idle = utilities.get_image(data.sprite_paths.idle, (TILE_SIZE, TILE_SIZE))
+        icon = utilities.get_image(data.sprite_paths.icon, (ICON_SIZE, ICON_SIZE))
+        sprites = CharacteristicSpritesData(icon=icon, idle=idle)
 
         # get knowledge info
         interventions = data.interventions
@@ -282,7 +275,7 @@ class EntityMethods:
             intervention_names.append(intervention.skill_key)
 
         god.append(Identity(data.name, data.description))
-        god.append(Aesthetic(sprite, icon))
+        god.append(Aesthetic(sprites.idle, sprites))
         god.append(IsGod())
         god.append(Opinion())
         god.append(Knowledge(intervention_names))
@@ -336,15 +329,9 @@ class EntityMethods:
         self._manager.World.add_component(entity, Knowledge(known_skills))
 
         # add aesthetic
-        icon = game.Utility.get_image(people_data.sprite, (ICON_SIZE, ICON_SIZE))
-        homeland_sprite = game.Utility.get_image(homeland_data.sprite, (TILE_SIZE, TILE_SIZE))
-        people_sprite = game.Utility.get_image(people_data.sprite, (TILE_SIZE, TILE_SIZE))
-        savvy_sprite = game.Utility.get_image(savvy_data.sprite, (TILE_SIZE, TILE_SIZE))
-
-        # combine the sprite homeland -> people -> savvy
-        homeland_sprite.blits(((people_sprite, (0, 0)), (savvy_sprite, (0, 0))))
-
-        self._manager.World.add_component(entity, Aesthetic(homeland_sprite, icon))
+        characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
+        sprites = self.build_characteristic_sprites(characteristics)
+        self._manager.World.add_component(entity, Aesthetic(sprites.idle, sprites))
 
         # player fov
         if is_player:
@@ -354,14 +341,50 @@ class EntityMethods:
 
     ############### COMPONENT ACTIONS ##########
 
+    @staticmethod
+    def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsData]) \
+            -> CharacteristicSpritesData:
+        """
+        Build a CharacteristicSpritesData class from a list of sprite paths
+        """
+        paths = {}
+        sprites = {}
+        flattened_sprites = {}
+
+        # bundle into cross-characteristic sprite path lists
+        for characteristic in sprite_paths:
+            char_dict = dataclasses.asdict(characteristic)
+            for name, path in char_dict.items():
+                # check if key exists
+                if name in paths:
+                    paths[name].append(path)
+                # if not init the list
+                else:
+                    paths[name] = [path]
+
+        # convert to sprites
+        for name, path_list in paths.items():
+            # get the size to convert to
+            if name == "icon":
+                size = (ICON_SIZE, ICON_SIZE)
+            else:
+                size = (TILE_SIZE, TILE_SIZE)
+
+            sprites[name] = utilities.get_images(path_list, size)
+
+        # flatten the images
+        for name, surface_list in sprites.items():
+            flattened_sprites[name] = utilities.flatten_images(surface_list)
+
+        # convert to dataclass
+        converted = CharacteristicSpritesData(**flattened_sprites)
+        return converted
+
     def spend_time(self, entity: int, time_spent: int):
         """
         Add time_spent to the entity's total time spent.
-
-        Args:
-            entity ():
-            time_spent ():
         """
+        # TODO - modify by time modifier stat
         if entity:
             resources = self._manager.World.component_for_entity(entity, Resources)
             resources.time_spent += time_spent
@@ -379,7 +402,7 @@ class EntityMethods:
         if not self._manager.World.has_component(entity, Knowledge()):
             self._manager.World.add_component(entity, Knowledge())
 
-        knowledge = self.get_component(entity, Knowledge())
+        knowledge = self.get_entitys_component(entity, Knowledge())
         knowledge.skills.append(skill_name)
 
     def judge_action(self, entity: int, action: Any):
@@ -393,7 +416,7 @@ class EntityMethods:
 
         """
 
-        for ent, (is_god, opinion, identity) in self._manager.World.get_components(IsGod, Opinion, Identity):
+        for ent, (is_god, opinion, identity) in self._manager.World.get_entitys_components(IsGod, Opinion, Identity):
 
             attitudes = library.get_god_attitudes_data(identity.name)
 
@@ -426,8 +449,8 @@ class EntityMethods:
         desire_to_intervene = 10
         desire_to_do_nothing = 75  # weighting for doing nothing # TODO - move magic number to config
 
-        for ent, (is_god, opinion, identity, knowledge) in self._manager.World.get_components(IsGod, Opinion,
-                                                                                              Identity, Knowledge):
+        for ent, (is_god, opinion, identity, knowledge) in self._manager.World.get_entitys_components(IsGod, Opinion,
+                                                                                                      Identity, Knowledge):
             attitudes = library.get_god_attitudes_data(identity.name)
 
             action_name = action
@@ -471,4 +494,12 @@ class EntityMethods:
 
         return chosen_interventions
 
+    def refresh_aesthetic_screen_position(self):
+        """
+        Loop all entities with Position and Aesthetic and update their screen position
+        """
+        for entity, (aesthetic, position) in self.get_components(Aesthetic, Position):
+            aesthetic.screen_x, aesthetic.screen_y = ui.Element.world_to_screen_position((position.x, position.y))
+            aesthetic.target_screen_x = aesthetic.screen_x
+            aesthetic.target_screen_y = aesthetic.screen_y
 

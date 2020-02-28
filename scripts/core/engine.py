@@ -32,6 +32,8 @@ from scripts.core.initialisers import initialise_game, initialise_event_handlers
 # TODO - multi-tile entities
 # TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
 # TODO - edit the UI json
+# TODO - ingame descriptions written first hand by observes. Like excerpts from a book.
+# TODO - use a global for font size so it can be amended in options
 
 
 def main():
@@ -83,7 +85,7 @@ def game_loop():
 
         # allow everything to update in response to new state
         game.update()
-        world.update()
+        world.update(delta_time)
         ui.update(delta_time)
         event_hub.update()
 

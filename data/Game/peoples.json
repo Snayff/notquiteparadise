@@ -11,7 +11,15 @@
             "none"
         ],
         "skullduggery": 0,
-        "sprite": "",
+        "sprite_paths": {
+            "__dataclass__": "CharacteristicSpritePathsData",
+            "idle": "assets/actor/people/goblynn_idle.png",
+            "attack": "assets/actor/people/goblynn_attack.png",
+            "hit": "assets/actor/people/goblynn_hit.png",
+            "dead": "assets/actor/people/goblynn_dead.png",
+            "icon": "assets/actor/people/goblynn_icon.png",
+            "move": "assets/actor/homeland/goblynn_move.png"
+        },
         "vigour": 0
     },
 	"shoom": {
@@ -23,10 +31,19 @@
         "name": "shoom",
         "sight_range": 4,
         "known_skills": [
-            "eye_watering_mistake", "fractious_fungi"
+            "eye_watering_mistake",
+            "fractious_fungi"
         ],
         "skullduggery": 2,
-        "sprite": "assets/actor/people/shoom.png",
+        "sprite_paths": {
+            "__dataclass__": "CharacteristicSpritePathsData",
+            "idle": "assets/actor/people/shoom_idle.png",
+            "attack": "assets/actor/people/shoom_attack.png",
+            "hit": "assets/actor/people/shoom_hit.png",
+            "dead": "assets/actor/people/shoom_dead.png",
+            "icon": "assets/actor/people/shoom_icon.png",
+            "move": "assets/actor/people/shoom_move.png"
+        },
         "vigour": 0
     }
 }

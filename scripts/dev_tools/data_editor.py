@@ -9,14 +9,16 @@ import pygame_gui
 from typing import TYPE_CHECKING, List, Dict, Union
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
+
+from scripts.core import utilities
 from scripts.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
     TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
 from scripts.core.extend_json import ExtendedJsonEncoder
 from scripts.core.library import library
 from scripts.managers.game_manager.game_manager import game
-from scripts.skills.affliction import AfflictionData
-from scripts.skills.effect import EffectData
-from scripts.skills.skill import SkillData
+from scripts.world.data_classes.affliction_dataclass import AfflictionData
+from scripts.world.data_classes.effect_dataclass import EffectData
+from scripts.world.data_classes.skill_dataclass import SkillData
 from scripts.world.data_classes.aspect_dataclass import AspectData
 from scripts.world.data_classes.attitude_dataclass import AttitudeData
 from scripts.world.data_classes.characteristic_dataclass import CharacteristicData
@@ -504,7 +506,7 @@ class DataEditor(UIWindow):
         relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData). Loads
         details into self.field_options
         """
-        get_members = game.Utility.get_class_members
+        get_members = utilities.get_class_members
 
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]

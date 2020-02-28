@@ -8,8 +8,9 @@ from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.turn_manager import turn
+from scripts.managers.ui_manager.ui_manager import ui
 from scripts.managers.world_manager.world_manager import world
-from scripts.world.components import Position, Knowledge, Identity, IsGod
+from scripts.world.components import Position, Knowledge, Identity, IsGod, Aesthetic
 from scripts.events.entity_events import UseSkillEvent
 from scripts.events.entity_events import DieEvent, MoveEvent
 
@@ -79,7 +80,7 @@ class EntityHandler(Subscriber):
 
             # check if entity blocking tile to attack
             elif is_entity_on_tile:
-                knowledge = world.Entity.get_component(entity, Knowledge)
+                knowledge = world.Entity.get_entitys_component(entity, Knowledge)
                 skill_name = knowledge.skills[0]
                 skill_data = library.get_skill_data(skill_name)
                 #direction = Directions((dir_x, dir_y))
@@ -90,9 +91,14 @@ class EntityHandler(Subscriber):
 
             # if nothing in the way, time to move!
             elif not is_entity_on_tile and not is_tile_blocking_movement:
-                position = world.Entity.get_component(entity, Position)
+                position = world.Entity.get_entitys_component(entity, Position)
                 position.x = target_x
                 position.y = target_y
+
+                aesthetic: Aesthetic = world.Entity.get_entitys_component(entity, Aesthetic)
+                aesthetic.target_screen_x, aesthetic.target_screen_y = ui.Element.world_to_screen_position((target_x,
+                target_y))
+                aesthetic.current_sprite = aesthetic.sprites.move
 
                 # update fov if needed
                 if entity == world.Entity.get_player():

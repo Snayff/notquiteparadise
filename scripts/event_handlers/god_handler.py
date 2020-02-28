@@ -80,7 +80,7 @@ class GodHandler(Subscriber):
         """
         skill_name = event.skill_name
         entity = event.entity
-        position = world.Entity.get_component(entity, Position)
+        position = world.Entity.get_entitys_component(entity, Position)
 
         interventions = world.Entity.consider_intervening(entity, skill_name)
 

@@ -1,11 +1,10 @@
 import logging
-from typing import Union
 import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
-from scripts.managers.world_manager.world_manager import world
+from scripts.core.utilities import get_class_members
 from scripts.world.components import Aesthetic, Identity, Resources
 
 
@@ -101,8 +100,11 @@ class EntityInfo(UIWindow):
         image_height = self.entity_image_height
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
-        aesthetic = world.Entity.get_component(self.selected_entity, Aesthetic)
-        image = pygame.transform.scale(aesthetic.icon, (image_width, image_height))
+
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
+        aesthetic = world.Entity.get_entitys_component(self.selected_entity, Aesthetic)
+        image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
                                container=self.get_container(), object_id="#entity_image")
@@ -116,8 +118,10 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         entity = self.selected_entity
-        identity = world.Entity.get_component(self.selected_entity, Identity)
-        resources = world.Entity.get_component(self.selected_entity, Resources)
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
+        identity = world.Entity.get_entitys_component(entity, Identity)
+        resources = world.Entity.get_entitys_component(entity, Resources)
         text = f"{identity.name.capitalize()}" + "<br>"
         text += f"Current Health: {resources.health}" + "<br>"
         text += f"Current Stamina: {resources.stamina}" + "<br>"
@@ -141,11 +145,15 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        for name, stat in PrimaryStatTypes.__dict__.items():
+        all_stats = get_class_members(PrimaryStatTypes)
+        for name in all_stats:
             try:
-                stat_value = getattr(stats, stat)
+                stat_value = getattr(stats, name.lower())
+
                 name = name.title()
                 name = name.replace("_", " ")
 
@@ -153,7 +161,7 @@ class EntityInfo(UIWindow):
 
             # in case it fails to pull expected attribute
             except AttributeError:
-                logging.warning(f"Attribute {stat} not found for EntityInfo.")
+                logging.warning(f"Attribute {name} not found for EntityInfo.")
 
         x = self.indent
         y = (self.gap_between_sections * 3) + self.indent + self.entity_image_height + self.core_info_height
@@ -173,11 +181,15 @@ class EntityInfo(UIWindow):
             UITextBox:
         """
         text = ""
+        # TODO - moving to the top causes import issues. Resolve this!
+        from scripts.managers.world_manager.world_manager import world
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
-        for name, stat in SecondaryStatTypes.__dict__.items():
+        all_stats = get_class_members(SecondaryStatTypes)
+        for name in all_stats:
             try:
-                stat_value = getattr(stats, name)
+                stat_value = getattr(stats, name.lower())
+
                 name = name.title()
                 name = name.replace("_", " ")
 
@@ -185,7 +197,7 @@ class EntityInfo(UIWindow):
 
             # in case it fails to pull expected attribute
             except AttributeError:
-                logging.warning(f"Attribute {stat} not found for EntityInfo.")
+                logging.warning(f"Attribute {name} not found for EntityInfo.")
 
         x = self.indent
         y = (self.gap_between_sections * 3) + self.indent + self.entity_image_height + self.core_info_height + \

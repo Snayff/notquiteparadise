@@ -86,7 +86,7 @@ class MapHandler(Subscriber):
             event(EndTurnEvent):
         """
         entity = event.entity
-        position = world.Entity.get_component(entity, Position)
+        position = world.Entity.get_entitys_component(entity, Position)
         tile = world.Map.get_tile((position.x, position.y))
 
         # trigger aspects

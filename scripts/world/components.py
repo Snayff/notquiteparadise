@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData
 
 if TYPE_CHECKING:
     import pygame
@@ -34,10 +35,15 @@ class Aesthetic:
     [Component] An entity's sprite.
     """
 
-    def __init__(self, sprite: pygame.Surface, icon: pygame.Surface):
-        self.icon = icon
-        self.sprite = sprite
-        # TODO - add screen pos here and use that in drawing
+    def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
+        self.current_sprite = current_sprite
+        self.sprites = sprites
+
+        self.screen_x: float = 0
+        self.screen_y: float = 0
+        self.target_screen_x: float = 0
+        self.target_screen_y: float = 0
+        self.current_sprite_duration = 0
 
 
 class Resources:
@@ -107,6 +113,7 @@ class AIBasic:
 class HasCombatStats:
     """[Component] A flag to show if an entity has stats used for combat."""
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
+
 
 class Knowledge:
     """[Component] An entity's knowledge, including skills."""
