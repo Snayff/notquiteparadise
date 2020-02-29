@@ -1,9 +1,16 @@
+from __future__ import annotations
+
 import logging
 import pygame
+
+from typing import TYPE_CHECKING
 from scripts.core.constants import GameStates
 from scripts.managers.input_manager.config_methods import ConfigMethods
 from scripts.managers.input_manager.intents_dataclass import IntentsData
 from scripts.managers.input_manager.control_methods import ControlMethods
+
+if TYPE_CHECKING:
+    pass
 
 
 class InputManager:

@@ -15,7 +15,7 @@ class StateMethods:
     """
 
     def __init__(self, manager):
-        self._manager = manager  # type: GameManager
+        self._manager: GameManager = manager
         self._current_game_state: GameStates = GameStates.GAME_INITIALISING
         self._previous_game_state: GameStates = GameStates.GAME_INITIALISING
         self._internal_clock = pygame.time.Clock()

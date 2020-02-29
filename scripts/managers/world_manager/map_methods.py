@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-import tcod
 import logging
 import math
 import scipy.spatial
+
 from typing import TYPE_CHECKING
-from scripts.core.constants import TargetTags, TILE_SIZE
+from scripts.core.constants import TargetTags
 from scripts.world.components import Position, Blocking
 from scripts.world.game_map import GameMap
 from scripts.world.tile import Tile
-from scripts.core.library import library
 
 if TYPE_CHECKING:
     from typing import List, Tuple, Union
@@ -25,7 +24,7 @@ class MapMethods:
     """
 
     def __init__(self, manager):
-        self._manager = manager  # type: WorldManager
+        self._manager: WorldManager = manager
         self._current_game_map = None
 
     ########## CREATE ###############

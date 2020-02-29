@@ -5,8 +5,8 @@ import logging
 import time
 import io
 import pstats
+import datetime
 from typing import TYPE_CHECKING
-
 from scripts.core.constants import VERSION
 
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ class DebugMethods:
     """
 
     def __init__(self, manager):
-        self._manager = manager  # type: GameManager
+        self._manager: GameManager = manager
         self._profiler = None
         self._is_visible = False
 
@@ -36,7 +36,8 @@ class DebugMethods:
 
     ##################### INIT #############################
 
-    def initialise_logging(self):
+    @staticmethod
+    def initialise_logging():
         """
         Configure logging
 
@@ -79,7 +80,8 @@ class DebugMethods:
 
     ##################### CLOSE ##############################
 
-    def disable_logging(self):
+    @staticmethod
+    def disable_logging():
         """
         Turn off current logging and clear logging resources
         """
@@ -104,9 +106,7 @@ class DebugMethods:
         ps.dump_stats("logs/profiling/profile.dump")
 
         # convert profiling to human readable format
-        import datetime
         date_and_time = datetime.datetime.utcnow()
-
         out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
         ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
         ps.strip_dirs().sort_stats("cumulative").print_stats()

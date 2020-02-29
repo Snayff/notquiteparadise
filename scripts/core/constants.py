@@ -3,7 +3,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import NewType
 
-VERSION = "0.93.0"
+VERSION = "0.94.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
@@ -41,6 +41,7 @@ class GameStates(SimpleNamespace):
     GAME_INITIALISING = 6
     NEW_TURN = 7
     DEV_MODE = 8
+    PREVIOUS = 9
 
 
 class EventTopics(SimpleNamespace):
@@ -259,7 +260,7 @@ class UIElementTypes(SimpleNamespace):
     SKILL_BAR = 4
     ENTITY_QUEUE = 5
     CAMERA = 6
-    SKILL_EDITOR = 7
+    DATA_EDITOR = 7
 
 
 class Directions(SimpleNamespace):

@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING
 from scripts.core.constants import GameStates
 from scripts.core.event_hub import publisher, Subscriber
-from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager.world_manager import world
 from scripts.managers.game_manager.game_manager import game
 from scripts.events.game_events import ChangeGameStateEvent
@@ -26,32 +25,23 @@ class GameHandler(Subscriber):
     def process_event(self, event):
         """
         Process game events.
-
-        Args:
-            event ():
         """
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
 
         if isinstance(event, ExitGameEvent):
-            event: ExitGameEvent
             publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
 
         elif isinstance(event, EndTurnEvent):
-            event: EndTurnEvent
             self.process_end_turn(event)
 
         elif isinstance(event, ChangeGameStateEvent):
-            event: ChangeGameStateEvent
             self.process_change_game_state(event)
 
     @staticmethod
     def process_change_game_state(event: ChangeGameStateEvent):
         """
         Transition to another game state as specified by the event.
-
-        Args:
-            event ():
         """
         new_game_state = event.new_game_state
 
@@ -62,7 +52,7 @@ class GameHandler(Subscriber):
 
         elif new_game_state == GameStates.NEW_TURN:
             # if turn holder is the player then update to player turn
-            if turn.turn_holder == world.Entity.get_player():
+            if world.Turn.get_turn_holder() == world.Entity.get_player():
                 publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
             # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
             else:
@@ -70,6 +60,10 @@ class GameHandler(Subscriber):
 
         elif new_game_state == GameStates.TARGETING_MODE:
             game.State.set_active_skill(event.skill_to_be_used)
+
+        # PREVIOUS must be last as it overwrites new_game_state
+        elif new_game_state == GameStates.PREVIOUS:
+            new_game_state = game.State.get_previous()
 
         # update the game state to the intended state
         if new_game_state != game.State.get_current():
@@ -84,10 +78,6 @@ class GameHandler(Subscriber):
     def process_end_turn(event: EndTurnEvent):
         """
         End turn, move to next turn, change game state to new turn.
-
-        Args:
-            event (EndTurnEvent):
         """
-        turn.end_turn(event.time_spent)
-        turn.next_turn()
+        world.Turn.next_turn()
         publisher.publish(ChangeGameStateEvent(GameStates.NEW_TURN))

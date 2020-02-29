@@ -1,17 +1,12 @@
 from __future__ import annotations
 
 import dataclasses
-import logging
 import pygame
 from typing import TYPE_CHECKING
-from scripts.core.constants import InputIntents, Directions, GameStates, MessageTypes, EffectTypes
+from scripts.core.constants import InputIntents, Directions, GameStates
 from scripts.core.event_hub import publisher
-from scripts.core.library import library
-from scripts.events.entity_events import MoveEvent, UseSkillEvent
-from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent, EndTurnEvent
-from scripts.managers.game_manager.game_manager import game
-from scripts.managers.world_manager.world_manager import world
-from scripts.world.components import Knowledge, Position
+from scripts.events.entity_events import MoveEvent, WantToUseSkillEvent
+from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent
 
 if TYPE_CHECKING:
     from scripts.managers.input_manager.input_manager import InputManager
@@ -26,8 +21,14 @@ class ControlMethods:
     """
 
     def __init__(self, manager):
-        self._manager = manager  # type: InputManager
+        self._manager: InputManager = manager
+        self._player_id = None
 
+    def set_player_id(self, player_id: int):
+        """
+        Set the player ID.
+        """
+        self._player_id = player_id
     ############### INPUT CHECKS ####################
 
     def check_directions(self, event):
@@ -209,29 +210,20 @@ class ControlMethods:
     def process_player_turn_intents(self, event):
         """
         Process intents for the player turn game state.
-
-        Args:
-            event ():
         """
         get_intent = self.get_intent
         intent = InputIntents
-        player = world.Entity.get_player()
+        player = self._player_id
 
         # Player movement
         dir_x, dir_y = self.get_pressed_direction()
         if dir_x != 0 or dir_y != 0:
-            position = world.Entity.get_entitys_component(player, Position)
-            publisher.publish(MoveEvent(player, (position.x, position.y), (dir_x, dir_y)))
+            publisher.publish(MoveEvent(player, (dir_x, dir_y)))
 
         # Use a skill
         skill_number = self.get_pressed_skills_number()
         if skill_number != -1:
-            knowledge = world.Entity.get_entitys_component(player, Knowledge)
-            skill_name = knowledge.skills[skill_number]
-            skill_data = library.get_skill_data(skill_name)
-
-            if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))
+            publisher.publish(WantToUseSkillEvent(skill_number))
 
         # activate the skill editor
         if get_intent(intent.DEV_TOGGLE):
@@ -240,42 +232,25 @@ class ControlMethods:
     def process_targeting_mode_intents(self, event):
         """
         Process intents for the player turn game state.
-
-        Args:
-            event ():
         """
         get_intent = self.get_intent
         intent = InputIntents
-        player = world.Entity.get_player()
-        skill_name = game.State.get_active_skill()
 
         # Cancel use
         if get_intent(intent.CANCEL):
-            publisher.publish(ChangeGameStateEvent(game.State.get_previous()))
+            publisher.publish(ChangeGameStateEvent(GameStates.PREVIOUS))
 
-        # Use another skill
+        # Consider using the skill, handle if different skill pressed
         skill_number = self.get_pressed_skills_number()
         if skill_number != -1:
-            skill_pressed = player.actor.known_skills[skill_number]
-            # confirm skill pressed doesn't match skill already pressed
-            if skill_pressed != skill_name:
-                knowledge = world.Entity.get_entitys_component(player, Knowledge)
-                skill_name = knowledge.skills[skill_number]
-                skill_data = library.get_skill_data(skill_name)
-
-                if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                    publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))
+            publisher.publish(WantToUseSkillEvent(skill_number))
 
     def process_dev_mode_intents(self, event):
         """
         Process intents for the dev mode game state.
-
-        Args:
-            event ():
         """
         get_intent = self.get_intent
         intent = InputIntents
 
         if get_intent(intent.DEV_TOGGLE):
-
-            publisher.publish(ChangeGameStateEvent(game.State.get_previous()))
+            publisher.publish(ChangeGameStateEvent(GameStates.PREVIOUS))

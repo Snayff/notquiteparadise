@@ -1,19 +1,16 @@
 from __future__ import annotations
 
 import dataclasses
-import logging
 import random
-from dataclasses import fields
-from typing import TYPE_CHECKING, Any, Type, TypeVar, Generic
 import logging
+import pytweening
 
+from typing import TYPE_CHECKING, Any, Type, TypeVar
 from scripts.core import utilities
-from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
+from scripts.core.constants import TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
 from scripts.core.library import library
-from scripts.managers.game_manager.game_manager import game
-from scripts.managers.ui_manager.ui_manager import ui
 from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
-    Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
+    Aesthetic, IsGod, Opinion, HasCombatStats, Blocking, Component
 from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData, CharacteristicSpritePathsData
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
@@ -22,7 +19,7 @@ if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
     from scripts.managers.world_manager.world_manager import WorldManager
 
-Component = TypeVar("Component")
+C = TypeVar("C", bound=Component)
 
 
 class EntityMethods:
@@ -49,16 +46,10 @@ class EntityMethods:
             return entity
         return None
 
-    def get_entity(self, unique_component: Generic[Component]) -> Union[int, None]:
+    def get_entity(self, unique_component: Type[C]) -> Union[int, None]:
         """
         Get a single entity that has a component. If multiple entities have the given component only the first found
         is returned.
-
-        Args:
-            unique_component ():
-
-        Returns:
-            int: Entity ID.
         """
         entities = []
         for entity, flag in self._manager.World.get_entitys_component(unique_component):
@@ -75,8 +66,8 @@ class EntityMethods:
 
         return entities[0]
 
-    def get_entities(self, component1: Generic[Component], component2: Generic[Component] = None,
-            component3: Generic[Component] = None) -> List[int]:
+    def get_entities(self, component1:  Type[C], component2:  Type[C] = None,
+            component3:  Type[C] = None) -> List[int]:
         """
         Get entities with the specified components. Returns a list of entity IDs
         """
@@ -94,9 +85,9 @@ class EntityMethods:
 
         return entities
 
-    def get_entities_and_components_in_area(self, area: List[Tile], component1: Generic[Component] = None,
-            component2: Generic[Component] = None, component3: Generic[Component] = None) -> \
-            Dict[int, Generic[Component]]:
+    def get_entities_and_components_in_area(self, area: List[Tile], component1:  Type[C] = None,
+            component2:  Type[C] = None, component3:  Type[C] = None) -> \
+            Dict[int, Tuple[int, C, ...]]:
         """
         Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
         components are specified the return will be (Position, None).
@@ -128,7 +119,7 @@ class EntityMethods:
 
         return entities
 
-    def get_entitys_component(self, entity: int, component: Generic[Component]) -> Union[Generic[Component], None]:
+    def get_entitys_component(self, entity: int, component:  Type[C]) -> Union[C, None]:
         """
         Get an entity's component.
         """
@@ -148,7 +139,7 @@ class EntityMethods:
 
         return self.get_entitys_component(entity, Identity)
 
-    def get_component(self, component: Generic[Component]) -> List[Tuple[int, Generic[Component]]]:
+    def get_component(self, component:  Type[C]) -> List[Tuple[int, C]]:
         """
         Get all entities with the specified component
         """
@@ -173,7 +164,7 @@ class EntityMethods:
         """
         return CombatStats(entity)
 
-    def get_primary_stat(self, entity: int, primary_stat: PrimaryStatTypes) -> int:
+    def get_primary_stat(self, entity: int, primary_stat: str) -> int:
         """
         Get an entity's primary stat.
         """
@@ -202,16 +193,9 @@ class EntityMethods:
 
     ############## QUERIES  ################
 
-    def has_component(self, entity, component):
+    def has_component(self, entity: int, component:  Type[Component]):
         """
         Confirm if an entity has a component
-
-        Args:
-            entity ():
-            component ():
-
-        Returns:
-
         """
         if self._manager.World.has_component(entity, component):
             return True
@@ -220,18 +204,19 @@ class EntityMethods:
 
     ############## ENTITY EXISTENCE ################
 
-    def create(self, components=None) -> int:
+    def create(self, components: List[Type[Component]] = None) -> int:
         """
         Use each component in a list of components to create an entity
-
-        Args:
-            components ():
         """
         if components is None:
             components = []
+
         world = self._manager.World
+
+        # create the entity
         entity = world.create_entity()
 
+        # add all components
         for component in components:
             world.add_component(entity, component)
 
@@ -399,23 +384,17 @@ class EntityMethods:
             entity ():
             skill_name ():
         """
-        if not self._manager.World.has_component(entity, Knowledge()):
+        if not self._manager.World.has_component(entity, Knowledge):
             self._manager.World.add_component(entity, Knowledge())
 
-        knowledge = self.get_entitys_component(entity, Knowledge())
+        knowledge = self.get_entitys_component(entity, Knowledge)
         knowledge.skills.append(skill_name)
 
     def judge_action(self, entity: int, action: Any):
         """
         Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards
-        that  action.
-
-        Args:
-            entity ():
-            action (): Can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
-
+        that  action. Action can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
         """
-
         for ent, (is_god, opinion, identity) in self._manager.World.get_entitys_components(IsGod, Opinion, Identity):
 
             attitudes = library.get_god_attitudes_data(identity.name)
@@ -494,12 +473,37 @@ class EntityMethods:
 
         return chosen_interventions
 
-    def refresh_aesthetic_screen_position(self):
-        """
-        Loop all entities with Position and Aesthetic and update their screen position
-        """
-        for entity, (aesthetic, position) in self.get_components(Aesthetic, Position):
-            aesthetic.screen_x, aesthetic.screen_y = ui.Element.world_to_screen_position((position.x, position.y))
-            aesthetic.target_screen_x = aesthetic.screen_x
-            aesthetic.target_screen_y = aesthetic.screen_y
+    ############### PROCESSORS ##########
 
+    def process_aesthetic_update(self, delta_time: float):
+        """
+        Update real-time timers on entities
+        """
+        get_component = self.get_component
+
+        # move entities screen position towards target
+        for entity, aesthetic in get_component(Aesthetic):
+            max_duration = 0.3
+
+            # increment time
+            aesthetic.current_sprite_duration += delta_time
+
+            # do we need to show moving to a new position? Have we exceeded animation duration?
+            if (aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y) \
+                    and aesthetic.current_sprite_duration <= max_duration:
+                # are we close?
+                if (aesthetic.screen_x - 1 < aesthetic.target_screen_x < aesthetic.screen_x + 1) and \
+                        (aesthetic.screen_y - 1 < aesthetic.target_screen_y < aesthetic.screen_y + 1):
+                    # jump to target
+                    aesthetic.screen_x = aesthetic.target_screen_x
+                    aesthetic.screen_y = aesthetic.target_screen_y
+
+                # keep moving:
+                else:
+                    lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
+                    aesthetic.screen_x = utilities.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
+                    aesthetic.screen_y = utilities.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
+            # not moving so reset to idle
+            else:
+                aesthetic.current_sprite = aesthetic.sprites.idle
+                aesthetic.current_sprite_duration = 0

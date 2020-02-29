@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 import logging
 import pygame
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
 from scripts.dev_tools.data_editor import DataEditor
 from scripts.ui.ui_elements.camera import Camera
@@ -93,11 +94,11 @@ class ElementMethods:
         y = 10
         rect = pygame.Rect((x, y), (width, height))
         editor = DataEditor(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.SKILL_EDITOR, editor)
+        self.add_ui_element(UIElementTypes.DATA_EDITOR, editor)
 
     ################ ELEMENT ###################
 
-    def get_ui_element(self, element_type: UIElementTypes):
+    def get_ui_element(self, element_type: Type[UIElementTypes]):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
         """
@@ -112,27 +113,20 @@ class ElementMethods:
         """
         return self._elements
 
-    def add_ui_element(self, element_name, element):
+    def add_ui_element(self, element_type: Type[UIElementTypes], element: object):
         """
         Add ui element to the list of all elements.
-
-        Args:
-            element_name ():
-            element ():
         """
-        self._elements[element_name] = element
+        self._elements[element_type] = element
 
-    def remove_ui_element(self, element_name):
+    def remove_ui_element(self, element_type: Type[UIElementTypes]):
         """
         Remove ui element from the list of all elements.
-
-        Args:
-            element_name ():
         """
         try:
-            del self._elements[element_name]
+            del self._elements[element_type]
         except KeyError:
-            logging.warning(f"Tried to remove {element_name} element but key not found.")
+            logging.warning(f"Tried to remove {element_type} element but key not found.")
 
     ############## CAMERA ###################
 
@@ -169,25 +163,14 @@ class ElementMethods:
             logging.warning(f"Tried to check target pos in Camera but key not found. Is it init'd?")
             return False
 
-    def move_camera(self, move_x, move_y):
+    def move_camera(self, num_cols: int, num_rows: int):
         """
         Increment camera's drawn tiles in the given direction. N.B. Physical position on screen does not change.
-
-        Args:
-            move_x ():
-            move_y ():
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
         if camera:
-            # TODO - moving to top causes circular import. Resolve this.
-            from scripts.managers.world_manager.world_manager import world
-
-            game_map = world.Map.get_game_map()
-
-            # clamp function: max(low, min(n, high))
-            camera.start_tile_col = max(0, min(camera.start_tile_col + move_x, game_map.width))
-            camera.start_tile_row = max(0, min(camera.start_tile_row + move_y, game_map.height))
+            camera.move_camera(num_cols, num_rows)
         else:
             logging.warning(f"Tried to move Camera but key not found. Is it init'd?")
 
@@ -198,19 +181,7 @@ class ElementMethods:
         camera = self.get_ui_element(UIElementTypes.CAMERA)
 
         if camera:
-            tiles = []
-
-            # TODO - moving to top causes circular import. Resolve this.
-            from scripts.managers.world_manager.world_manager import world
-
-            for x in range(camera.start_tile_col, camera.start_tile_col + camera.columns):
-                for y in range(camera.start_tile_row, camera.start_tile_row + camera.rows):
-                    if world.FOV.is_tile_in_fov(x, y):
-                        tile = world.Map.get_tile((x, y))
-                        if tile:
-                            tiles.append(tile)
-
-            camera.set_tiles(tiles)
+            camera.update_camera_tiles()
         else:
             logging.warning(f"Tried to set camera tiles in Camera but key not found. Is it init'd?")
 
@@ -367,16 +338,13 @@ class ElementMethods:
         if entity_info:
             entity_info.cleanse()
         else:
-            logging.warning(f"Tried to cleanse EntityInfo but key not found. Is it init'd?")
+            logging.warning(f"Tried to kill EntityInfo but key not found. Is it init'd?")
 
     ############## MESSAGES #####################
 
-    def add_to_message_log(self, message):
+    def add_to_message_log(self, message: str):
         """
         Add a text to the message log. Includes processing of the text.
-
-        Args:
-            message (str):
         """
         try:
             message_log = self._manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
@@ -401,17 +369,7 @@ class ElementMethods:
 
     ############## KILL ##################
 
-    def kill_data_editor(self):
-        """
-        Remove any reference to the skill_editor. Includes use of editors's cleanse method.
-        """
-        data_editor: DataEditor = self.get_ui_element(UIElementTypes.SKILL_EDITOR)
-
-        if data_editor:
-            data_editor.cleanse()
-            self.remove_ui_element(data_editor)
-
-    def kill_element(self, element_type: UIElementTypes):
+    def kill_element(self, element_type: Type[UIElementTypes]):
         """
         Remove any reference to the element
         """
