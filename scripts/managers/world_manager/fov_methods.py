@@ -14,7 +14,7 @@ class FOVMethods:
     """
     def __init__(self, manager):
         self._manager: WorldManager = manager
-        self._players_fov_map = None  # type: tcod.map.Map
+        self._players_fov_map: tcod.map.Map = None
 
     def create_player_fov_map(self, width, height):
         """
