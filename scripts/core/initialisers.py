@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from scripts.core.constants import EventTopics, GameStates, TILE_SIZE
+from scripts.core.constants import EventTopics, GameStates
 from scripts.event_handlers.god_handler import GodHandler
 from scripts.event_handlers.map_handler import MapHandler
 from scripts.event_handlers.entity_handler import EntityHandler
 from scripts.events.game_events import ChangeGameStateEvent
 from scripts.event_handlers.game_handler import GameHandler
 from scripts.core.event_hub import publisher, event_hub
-from scripts.managers.turn_manager import turn
+
 from scripts.managers.world_manager.world_manager import world
 from scripts.managers.input_manager.input_manager import input
 from scripts.event_handlers.ui_handler import UiHandler
@@ -29,7 +29,7 @@ def initialise_game():
                                        "dandy", True)
 
     # tell places about the player
-    turn.turn_holder = player
+    world.Turn.set_turn_holder(player)
     input.Control.set_player_id(player)
 
     # create an enemy
@@ -52,6 +52,7 @@ def initialise_event_handlers():
 
     entity_handler = EntityHandler(event_hub)
     entity_handler.subscribe(EventTopics.ENTITY)
+    entity_handler.subscribe(EventTopics.GAME)
 
     map_handler = MapHandler(event_hub)
     map_handler.subscribe(EventTopics.MAP)

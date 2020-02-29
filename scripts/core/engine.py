@@ -4,7 +4,7 @@ import pygame
 from scripts.core.constants import GameStates
 from scripts.managers.input_manager.input_manager import input
 from scripts.managers.ui_manager.ui_manager import ui
-from scripts.managers.turn_manager import turn
+
 from scripts.managers.world_manager.world_manager import world
 from scripts.managers.game_manager.game_manager import game
 from scripts.core.event_hub import event_hub
@@ -75,7 +75,8 @@ def game_loop():
         delta_time = game.State.get_delta_time()
 
         if game.State.get_current() == GameStates.ENEMY_TURN:
-            turn.turn_holder.ai.take_turn()
+            pass
+            #turn.turn_holder.ai.take_turn()
 
         # update based on input events
         for event in pygame.event.get():

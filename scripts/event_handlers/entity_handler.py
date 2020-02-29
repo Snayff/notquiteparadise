@@ -2,16 +2,15 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import MessageTypes, Directions, TargetTags, GameStates
+from scripts.core.constants import MessageTypes, TargetTags, GameStates
 from scripts.events.game_events import EndTurnEvent, ChangeGameStateEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
 from scripts.managers.game_manager.game_manager import game
-from scripts.managers.turn_manager import turn
 from scripts.managers.ui_manager.ui_manager import ui
 from scripts.managers.world_manager.world_manager import world
-from scripts.world.components import Position, Knowledge, Identity, IsGod, Aesthetic
+from scripts.world.components import Position, Knowledge, IsGod, Aesthetic
 from scripts.events.entity_events import UseSkillEvent, WantToUseSkillEvent
 from scripts.events.entity_events import DieEvent, MoveEvent
 
@@ -29,9 +28,6 @@ class EntityHandler(Subscriber):
     def process_event(self, event):
         """
         Control entity events
-
-        Args:
-            event(Event): the event in need of processing
         """
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
@@ -47,6 +43,9 @@ class EntityHandler(Subscriber):
 
         elif isinstance(event, WantToUseSkillEvent):
             self.process_want_to_use_skill(event)
+
+        elif isinstance(event, EndTurnEvent):
+            self.process_end_turn(event)
 
     @staticmethod
     def process_move(event: MoveEvent):
@@ -108,7 +107,7 @@ class EntityHandler(Subscriber):
                     world.FOV.recompute_player_fov(position.x, position.y, sight_range)
 
                 # if entity that moved is turn holder then end their turn
-                if entity == turn.turn_holder:
+                if entity == world.Turn.get_turn_holder():
                     publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
 
     @staticmethod
@@ -145,18 +144,19 @@ class EntityHandler(Subscriber):
     def process_die(event: DieEvent):
         """
         Control the entity death
-        Args:
-            event(EntityEvent): the event to process
         """
 
         # TODO add player death
         entity = event.dying_entity
+        turn_queue = world.Turn.get_turn_queue()
 
         # remove from turn queue
-        if entity in turn.turn_queue:
-            turn.turn_queue.pop(entity)
-        if turn.turn_holder == entity:
-            turn.build_new_turn_queue()
+        if entity in turn_queue:
+            turn_queue.pop(entity)
+
+        # if turn holder and not player create new queue
+        if entity == world.Turn.get_turn_holder() and entity != world.Entity.get_player():
+            world.Turn.build_new_turn_queue()
 
         # delete from world
         world.Entity.delete(entity)
@@ -185,3 +185,11 @@ class EntityHandler(Subscriber):
             pass
             # TODO - activate skill. Need to get selected tile.
             # publisher.publish(UseSkillEvent(player, skill_name, (player_pos.x, player_pos.y), ))
+
+    @staticmethod
+    def process_end_turn(event: EndTurnEvent):
+        """
+        Have entity spend their time
+        """
+        #  update turn holder`s time spent
+        world.Entity.spend_time(event.entity, event.time_spent)
