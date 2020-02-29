@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.event_handlers.game_handler &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>scripts.event_handlers.game_handler &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a><ul>
@@ -154,7 +154,6 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">GameStates</span>
 <span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span><span class="p">,</span> <span class="n">Subscriber</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.turn_manager</span> <span class="kn">import</span> <span class="n">turn</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
 <span class="kn">from</span> <span class="nn">scripts.managers.game_manager.game_manager</span> <span class="kn">import</span> <span class="n">game</span>
 <span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">ChangeGameStateEvent</span>
@@ -176,32 +175,23 @@
 <div class="viewcode-block" id="GameHandler.process_event"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.game_handler.GameHandler.process_event">[docs]</a>    <span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Process game events.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            event ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># log that event has been received</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.name}</span><span class="s2"> received </span><span class="si">{event.topic}</span><span class="s2">:</span><span class="si">{event.__class__.__name__}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ExitGameEvent</span><span class="p">):</span>
-            <span class="n">event</span><span class="p">:</span> <span class="n">ExitGameEvent</span>
             <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">EXIT_GAME</span><span class="p">))</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">EndTurnEvent</span><span class="p">):</span>
-            <span class="n">event</span><span class="p">:</span> <span class="n">EndTurnEvent</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_end_turn</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ChangeGameStateEvent</span><span class="p">):</span>
-            <span class="n">event</span><span class="p">:</span> <span class="n">ChangeGameStateEvent</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_change_game_state</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GameHandler.process_change_game_state"><a class="viewcode-back" href="../../../event_handlers.html#scripts.event_handlers.game_handler.GameHandler.process_change_game_state">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process_change_game_state</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">ChangeGameStateEvent</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transition to another game state as specified by the event.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            event ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_game_state</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">new_game_state</span>
 
@@ -212,7 +202,7 @@
 
         <span class="k">elif</span> <span class="n">new_game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">:</span>
             <span class="c1"># if turn holder is the player then update to player turn</span>
-            <span class="k">if</span> <span class="n">turn</span><span class="o">.</span><span class="n">turn_holder</span> <span class="o">==</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">Turn</span><span class="o">.</span><span class="n">get_turn_holder</span><span class="p">()</span> <span class="o">==</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_player</span><span class="p">():</span>
                 <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">PLAYER_TURN</span><span class="p">))</span>
             <span class="c1"># if turn holder is not player and we aren&#39;t already in enemy turn then update to enemy turn</span>
             <span class="k">else</span><span class="p">:</span>
@@ -220,6 +210,10 @@
 
         <span class="k">elif</span> <span class="n">new_game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">TARGETING_MODE</span><span class="p">:</span>
             <span class="n">game</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">set_active_skill</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">skill_to_be_used</span><span class="p">)</span>
+
+        <span class="c1"># PREVIOUS must be last as it overwrites new_game_state</span>
+        <span class="k">elif</span> <span class="n">new_game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">PREVIOUS</span><span class="p">:</span>
+            <span class="n">new_game_state</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">get_previous</span><span class="p">()</span>
 
         <span class="c1"># update the game state to the intended state</span>
         <span class="k">if</span> <span class="n">new_game_state</span> <span class="o">!=</span> <span class="n">game</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">get_current</span><span class="p">():</span>
@@ -234,12 +228,8 @@
     <span class="k">def</span> <span class="nf">process_end_turn</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">EndTurnEvent</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        End turn, move to next turn, change game state to new turn.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            event (EndTurnEvent):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">turn</span><span class="o">.</span><span class="n">end_turn</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">time_spent</span><span class="p">)</span>
-        <span class="n">turn</span><span class="o">.</span><span class="n">next_turn</span><span class="p">()</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">Turn</span><span class="o">.</span><span class="n">next_turn</span><span class="p">()</span>
         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">NEW_TURN</span><span class="p">))</span></div></div>
 </pre></div>
 
@@ -265,7 +255,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

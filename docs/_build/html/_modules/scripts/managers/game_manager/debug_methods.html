@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.managers.game_manager.debug_methods &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>scripts.managers.game_manager.debug_methods &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
@@ -155,8 +155,8 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">pstats</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
-
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">VERSION</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
@@ -172,7 +172,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: GameManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="p">:</span> <span class="n">GameManager</span> <span class="o">=</span> <span class="n">manager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_profiler</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_visible</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -186,7 +186,8 @@
 
     <span class="c1">##################### INIT #############################</span>
 
-<div class="viewcode-block" id="DebugMethods.initialise_logging"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging">[docs]</a>    <span class="k">def</span> <span class="nf">initialise_logging</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DebugMethods.initialise_logging"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">initialise_logging</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure logging</span>
 
@@ -229,7 +230,8 @@
 
     <span class="c1">##################### CLOSE ##############################</span>
 
-<div class="viewcode-block" id="DebugMethods.disable_logging"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.disable_logging">[docs]</a>    <span class="k">def</span> <span class="nf">disable_logging</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DebugMethods.disable_logging"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.disable_logging">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">disable_logging</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Turn off current logging and clear logging resources</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -254,9 +256,7 @@
         <span class="n">ps</span><span class="o">.</span><span class="n">dump_stats</span><span class="p">(</span><span class="s2">&quot;logs/profiling/profile.dump&quot;</span><span class="p">)</span>
 
         <span class="c1"># convert profiling to human readable format</span>
-        <span class="kn">import</span> <span class="nn">datetime</span>
         <span class="n">date_and_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-
         <span class="n">out_stream</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;logs/profiling/&quot;</span> <span class="o">+</span> <span class="n">date_and_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%m</span><span class="si">%d</span><span class="s2">@%H%M&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">VERSION</span> <span class="o">+</span> <span class="s2">&quot;.profile&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
         <span class="n">ps</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="s2">&quot;logs/profiling/profile.dump&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">out_stream</span><span class="p">)</span>
         <span class="n">ps</span><span class="o">.</span><span class="n">strip_dirs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">&quot;cumulative&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span></div></div>
@@ -284,7 +284,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

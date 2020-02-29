@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>Index &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>Index &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
         <link rel="index" title="Index"
               href="#"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta http-equiv="cache-control" content="public" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
@@ -161,6 +161,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -344,6 +345,8 @@
 </li>
       <li><a href="core.html#scripts.core.constants.AfflictionCategory.BOON">BOON (scripts.core.constants.AfflictionCategory attribute)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.build_characteristic_sprites">build_characteristic_sprites() (scripts.managers.world_manager.entity_methods.EntityMethods static method)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.DamageTypes.BURN">BURN (scripts.core.constants.DamageTypes attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.PrimaryStatTypes.BUSTLE">BUSTLE (scripts.core.constants.PrimaryStatTypes attribute)</a>
@@ -370,16 +373,18 @@
 </li>
       <li><a href="events.html#scripts.events.game_events.ChangeGameStateEvent">ChangeGameStateEvent (class in scripts.events.game_events)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.check_actions">check_actions() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.check_dev_actions">check_dev_actions() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.check_directions">check_directions() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.DamageTypes.CHEMICAL">CHEMICAL (scripts.core.constants.DamageTypes attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.SkillShapes.CIRCLE">CIRCLE (scripts.core.constants.SkillShapes attribute)</a>
 </li>
-      <li><a href="dev_tools.html#scripts.dev_tools.data_editor.DataEditor.cleanse">cleanse() (scripts.dev_tools.data_editor.DataEditor method)</a>
-
-      <ul>
-        <li><a href="ui.html#scripts.ui.ui_elements.entity_info.EntityInfo.cleanse">(scripts.ui.ui_elements.entity_info.EntityInfo method)</a>
+      <li><a href="ui.html#scripts.ui.ui_elements.entity_info.EntityInfo.cleanse">cleanse() (scripts.ui.ui_elements.entity_info.EntityInfo method)</a>
 </li>
-      </ul></li>
       <li><a href="events.html#scripts.events.ui_events.ClickTile">ClickTile (class in scripts.events.ui_events)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.PrimaryStatTypes.CLOUT">CLOUT (scripts.core.constants.PrimaryStatTypes attribute)</a>
@@ -394,25 +399,37 @@
 </li>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.PrimaryColour">Colour.PrimaryColour (class in scripts.ui.basic.colours)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.SecondaryColour">Colour.SecondaryColour (class in scripts.ui.basic.colours)</a>
 </li>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.TertiaryColour">Colour.TertiaryColour (class in scripts.ui.basic.colours)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="world.html#scripts.world.combat_stats.CombatStats">CombatStats (class in scripts.world.combat_stats)</a>
 </li>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.complement">complement (scripts.ui.basic.colours.Colour attribute)</a>
 </li>
+      <li><a href="world.html#scripts.world.components.Component">Component (class in scripts.world.components)</a>
+</li>
       <li><a href="managers.html#scripts.managers.input_manager.config_methods.ConfigMethods">ConfigMethods (class in scripts.managers.input_manager.config_methods)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.InputIntents.CONFIRM">CONFIRM (scripts.core.constants.InputIntents attribute)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.consider_intervening">consider_intervening() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods">ControlMethods (class in scripts.managers.input_manager.control_methods)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.create">create() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.create_actor">create_actor() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="ui.html#scripts.ui.ui_elements.entity_info.EntityInfo.create_core_info_section">create_core_info_section() (scripts.ui.ui_elements.entity_info.EntityInfo method)</a>
 </li>
       <li><a href="ui.html#scripts.ui.ui_elements.entity_info.EntityInfo.create_entity_image_section">create_entity_image_section() (scripts.ui.ui_elements.entity_info.EntityInfo method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_manager.map_methods.MapMethods.create_game_map">create_game_map() (scripts.managers.world_manager.map_methods.MapMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.create_god">create_god() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_manager.fov_methods.FOVMethods.create_player_fov_map">create_player_fov_map() (scripts.managers.world_manager.fov_methods.FOVMethods method)</a>
 </li>
@@ -464,6 +481,8 @@
         <li><a href="ui.html#scripts.ui.basic.colours.Colour.TertiaryColour.darkest">(scripts.ui.basic.colours.Colour.TertiaryColour attribute)</a>
 </li>
       </ul></li>
+      <li><a href="core.html#scripts.core.constants.UIElementTypes.DATA_EDITOR">DATA_EDITOR (scripts.core.constants.UIElementTypes attribute)</a>
+</li>
       <li><a href="dev_tools.html#scripts.dev_tools.data_editor.DataEditor">DataEditor (class in scripts.dev_tools.data_editor)</a>
 </li>
       <li><a href="dev_tools.html#scripts.dev_tools.data_editor.DataField">DataField (class in scripts.dev_tools.data_editor)</a>
@@ -476,6 +495,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods">DebugMethods (class in scripts.managers.game_manager.debug_methods)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.delete">delete() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.GameStates.DEV_MODE">DEV_MODE (scripts.core.constants.GameStates attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.InputIntents.DEV_TOGGLE">DEV_TOGGLE (scripts.core.constants.InputIntents attribute)</a>
@@ -484,7 +505,7 @@
 </li>
       <li><a href="core.html#scripts.core.constants.Directions">Directions (class in scripts.core.constants)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.disable_logging">disable_logging() (scripts.managers.game_manager.debug_methods.DebugMethods method)</a>
+      <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.disable_logging">disable_logging() (scripts.managers.game_manager.debug_methods.DebugMethods static method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.disable_profiling">disable_profiling() (scripts.managers.game_manager.debug_methods.DebugMethods method)</a>
 </li>
@@ -542,6 +563,8 @@
 </li>
       <li><a href="ui.html#scripts.ui.ui_elements.entity_info.EntityInfo">EntityInfo (class in scripts.ui.ui_elements.entity_info)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods">EntityMethods (class in scripts.managers.world_manager.entity_methods)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.EventTopics">EventTopics (class in scripts.core.constants)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.PrimaryStatTypes.EXACTITUDE">EXACTITUDE (scripts.core.constants.PrimaryStatTypes attribute)</a>
@@ -592,6 +615,8 @@
 </li>
       <li><a href="core.html#scripts.core.constants.GameStates.GAME_INITIALISING">GAME_INITIALISING (scripts.core.constants.GameStates attribute)</a>
 </li>
+      <li><a href="event_handlers.html#scripts.event_handlers.game_handler.GameHandler">GameHandler (class in scripts.event_handlers.game_handler)</a>
+</li>
       <li><a href="managers.html#scripts.managers.game_manager.game_manager.GameManager">GameManager (class in scripts.managers.game_manager.game_manager)</a>
 </li>
       <li><a href="world.html#scripts.world.game_map.GameMap">GameMap (class in scripts.world.game_map)</a>
@@ -618,6 +643,12 @@
 </li>
       <li><a href="managers.html#scripts.managers.world_manager.map_methods.MapMethods.get_chebyshev_distance">get_chebyshev_distance() (scripts.managers.world_manager.map_methods.MapMethods static method)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_combat_stats">get_combat_stats() (scripts.managers.world_manager.entity_methods.EntityMethods static method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_component">get_component() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_components">get_components() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.game_manager.state_methods.StateMethods.get_current">get_current() (scripts.managers.game_manager.state_methods.StateMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.game_manager.state_methods.StateMethods.get_delta_time">get_delta_time() (scripts.managers.game_manager.state_methods.StateMethods method)</a>
@@ -627,6 +658,16 @@
       <li><a href="managers.html#scripts.managers.world_manager.map_methods.MapMethods.get_direct_direction">get_direct_direction() (scripts.managers.world_manager.map_methods.MapMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_manager.map_methods.MapMethods.get_direction">get_direction() (scripts.managers.world_manager.map_methods.MapMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_entities">get_entities() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_entities_and_components_in_area">get_entities_and_components_in_area() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_entity">get_entity() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_entitys_component">get_entitys_component() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_entitys_components">get_entitys_components() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_manager.map_methods.MapMethods.get_euclidean_distance">get_euclidean_distance() (scripts.managers.world_manager.map_methods.MapMethods static method)</a>
 </li>
@@ -640,10 +681,10 @@
 </li>
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_god_intervention_effect_data">get_god_intervention_effect_data() (scripts.core.library.LibraryOfAlexandria method)</a>
 </li>
-      <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_god_intervention_effects_data">get_god_intervention_effects_data() (scripts.core.library.LibraryOfAlexandria method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_god_intervention_effects_data">get_god_intervention_effects_data() (scripts.core.library.LibraryOfAlexandria method)</a>
+</li>
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_god_interventions_data">get_god_interventions_data() (scripts.core.library.LibraryOfAlexandria method)</a>
 </li>
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_gods_data">get_gods_data() (scripts.core.library.LibraryOfAlexandria method)</a>
@@ -651,6 +692,10 @@
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_homeland_data">get_homeland_data() (scripts.core.library.LibraryOfAlexandria method)</a>
 </li>
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_homelands_data">get_homelands_data() (scripts.core.library.LibraryOfAlexandria method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_identity">get_identity() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.get_intent">get_intent() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.game_manager.state_methods.StateMethods.get_internal_clock">get_internal_clock() (scripts.managers.game_manager.state_methods.StateMethods method)</a>
 </li>
@@ -660,9 +705,17 @@
 </li>
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_peoples_data">get_peoples_data() (scripts.core.library.LibraryOfAlexandria method)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_player">get_player() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.world_manager.fov_methods.FOVMethods.get_player_fov">get_player_fov() (scripts.managers.world_manager.fov_methods.FOVMethods method)</a>
 </li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.get_pressed_direction">get_pressed_direction() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.get_pressed_skills_number">get_pressed_skills_number() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.game_manager.state_methods.StateMethods.get_previous">get_previous() (scripts.managers.game_manager.state_methods.StateMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.get_primary_stat">get_primary_stat() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.get_primary_stat_data">get_primary_stat_data() (scripts.core.library.LibraryOfAlexandria method)</a>
 </li>
@@ -696,6 +749,8 @@
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_window">get_window() (scripts.managers.ui_manager.display_methods.DisplayMethods method)</a>
 </li>
+      <li><a href="event_handlers.html#scripts.event_handlers.god_handler.GodHandler">GodHandler (class in scripts.event_handlers.god_handler)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.HitModifiers.GRAZE">GRAZE (scripts.core.constants.HitModifiers attribute)</a>
 
       <ul>
@@ -724,6 +779,8 @@
         <li><a href="ui.html#scripts.ui.ui_elements.skill_bar.SkillBar.handle_events">(scripts.ui.ui_elements.skill_bar.SkillBar method)</a>
 </li>
       </ul></li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.has_component">has_component() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
       <li><a href="world.html#scripts.world.components.HasCombatStats">HasCombatStats (class in scripts.world.components)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.hide_entity_info">hide_entity_info() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
@@ -760,25 +817,27 @@
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_camera">init_camera() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config">init_display_config() (scripts.managers.ui_manager.display_methods.DisplayMethods method)</a>
+      <li><a href="managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config">init_display_config() (scripts.managers.ui_manager.display_methods.DisplayMethods static method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_entity_info">init_entity_info() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_message_log">init_message_log() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_pygame">init_pygame() (scripts.managers.ui_manager.display_methods.DisplayMethods method)</a>
+      <li><a href="managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_pygame">init_pygame() (scripts.managers.ui_manager.display_methods.DisplayMethods static method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_skill_bar">init_skill_bar() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.init_skill_editor">init_skill_editor() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging">initialise_logging() (scripts.managers.game_manager.debug_methods.DebugMethods method)</a>
+      <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging">initialise_logging() (scripts.managers.game_manager.debug_methods.DebugMethods static method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_profiling">initialise_profiling() (scripts.managers.game_manager.debug_methods.DebugMethods method)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.InputIntents">InputIntents (class in scripts.core.constants)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.input_manager.InputManager">InputManager (class in scripts.managers.input_manager.input_manager)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.InputModes">InputModes (class in scripts.core.constants)</a>
 </li>
@@ -797,13 +856,23 @@
   </ul></td>
 </tr></table>
 
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.judge_action">judge_action() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dev_tools.html#scripts.dev_tools.data_editor.DataField.kill">kill() (scripts.dev_tools.data_editor.DataField method)</a>
+      <li><a href="dev_tools.html#scripts.dev_tools.data_editor.DataEditor.kill">kill() (scripts.dev_tools.data_editor.DataEditor method)</a>
+
+      <ul>
+        <li><a href="dev_tools.html#scripts.dev_tools.data_editor.DataField.kill">(scripts.dev_tools.data_editor.DataField method)</a>
 </li>
-      <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.kill_data_editor">kill_data_editor() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.kill_element">kill_element() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
@@ -816,6 +885,8 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.learn_skill">learn_skill() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
       <li><a href="core.html#scripts.core.constants.Directions.LEFT">LEFT (scripts.core.constants.Directions attribute)</a>
 
       <ul>
@@ -859,9 +930,13 @@
       <li><a href="managers.html#scripts.managers.input_manager.config_methods.ConfigMethods.manager">manager (scripts.managers.input_manager.config_methods.ConfigMethods attribute)</a>
 
       <ul>
+        <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.manager">(scripts.managers.input_manager.control_methods.ControlMethods attribute)</a>
+</li>
         <li><a href="managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.manager">(scripts.managers.ui_manager.display_methods.DisplayMethods attribute)</a>
 </li>
         <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.manager">(scripts.managers.ui_manager.element_methods.ElementMethods attribute)</a>
+</li>
+        <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.manager">(scripts.managers.world_manager.entity_methods.EntityMethods attribute)</a>
 </li>
         <li><a href="managers.html#scripts.managers.world_manager.map_methods.MapMethods.manager">(scripts.managers.world_manager.map_methods.MapMethods attribute)</a>
 </li>
@@ -869,6 +944,8 @@
 </li>
       </ul></li>
       <li><a href="core.html#scripts.core.constants.EventTopics.MAP">MAP (scripts.core.constants.EventTopics attribute)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler">MapHandler (class in scripts.event_handlers.map_handler)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_manager.map_methods.MapMethods">MapMethods (class in scripts.managers.world_manager.map_methods)</a>
 </li>
@@ -878,10 +955,10 @@
 </li>
       <li><a href="core.html#scripts.core.constants.SecondaryStatTypes.MAX_STAMINA">MAX_STAMINA (scripts.core.constants.SecondaryStatTypes attribute)</a>
 </li>
-      <li><a href="world.html#scripts.world.combat_stats.CombatStats.max_stamina">max_stamina() (scripts.world.combat_stats.CombatStats property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="world.html#scripts.world.combat_stats.CombatStats.max_stamina">max_stamina() (scripts.world.combat_stats.CombatStats property)</a>
+</li>
       <li><a href="ui.html#scripts.ui.basic.palette.Palette.menu_background">menu_background (scripts.ui.basic.palette.Palette attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.UIElementTypes.MESSAGE_LOG">MESSAGE_LOG (scripts.core.constants.UIElementTypes attribute)</a>
@@ -901,7 +978,11 @@
 </li>
       </ul></li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.move_camera">move_camera() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
+
+      <ul>
+        <li><a href="ui.html#scripts.ui.ui_elements.camera.Camera.move_camera">(scripts.ui.ui_elements.camera.Camera method)</a>
 </li>
+      </ul></li>
       <li><a href="events.html#scripts.events.entity_events.MoveEvent">MoveEvent (class in scripts.events.entity_events)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.DamageTypes.MUNDANE">MUNDANE (scripts.core.constants.DamageTypes attribute)</a>
@@ -964,8 +1045,6 @@
 </li>
       <li><a href="ui.html#scripts.ui.basic.palette.Palette.TargetingOverlayPalette">Palette.TargetingOverlayPalette (class in scripts.ui.basic.palette)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core.html#scripts.core.constants.AfflictionTriggers.PASSIVE">PASSIVE (scripts.core.constants.AfflictionTriggers attribute)</a>
 </li>
       <li><a href="managers.html#scripts.managers.world_manager.skill_methods.SkillMethods.pay_resource_cost">pay_resource_cost() (scripts.managers.world_manager.skill_methods.SkillMethods method)</a>
@@ -976,9 +1055,45 @@
 </li>
       <li><a href="world.html#scripts.world.components.Position">Position (class in scripts.world.components)</a>
 </li>
+      <li><a href="core.html#scripts.core.constants.GameStates.PREVIOUS">PREVIOUS (scripts.core.constants.GameStates attribute)</a>
+</li>
       <li><a href="ui.html#scripts.ui.basic.colours.Colour.primary">primary (scripts.ui.basic.colours.Colour attribute)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.PrimaryStatTypes">PrimaryStatTypes (class in scripts.core.constants)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.process_aesthetic_update">process_aesthetic_update() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.game_handler.GameHandler.process_change_game_state">process_change_game_state() (scripts.event_handlers.game_handler.GameHandler static method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_dev_mode_intents">process_dev_mode_intents() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_end_of_round_updates">process_end_of_round_updates() (scripts.event_handlers.map_handler.MapHandler static method)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_end_of_turn_updates">process_end_of_turn_updates() (scripts.event_handlers.map_handler.MapHandler static method)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.game_handler.GameHandler.process_end_turn">process_end_turn() (scripts.event_handlers.game_handler.GameHandler static method)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.game_handler.GameHandler.process_event">process_event() (scripts.event_handlers.game_handler.GameHandler method)</a>
+
+      <ul>
+        <li><a href="event_handlers.html#scripts.event_handlers.god_handler.GodHandler.process_event">(scripts.event_handlers.god_handler.GodHandler method)</a>
+</li>
+        <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_event">(scripts.event_handlers.map_handler.MapHandler method)</a>
+</li>
+      </ul></li>
+      <li><a href="event_handlers.html#scripts.event_handlers.god_handler.GodHandler.process_interventions">process_interventions() (scripts.event_handlers.god_handler.GodHandler static method)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.god_handler.GodHandler.process_judgements">process_judgements() (scripts.event_handlers.god_handler.GodHandler static method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_player_turn_intents">process_player_turn_intents() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_stateless_intents">process_stateless_intents() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_targeting_mode_intents">process_targeting_mode_intents() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
+      <li><a href="event_handlers.html#scripts.event_handlers.map_handler.MapHandler.process_tile_interaction">process_tile_interaction() (scripts.event_handlers.map_handler.MapHandler static method)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.SkillTravelTypes.PROJECTILE">PROJECTILE (scripts.core.constants.SkillTravelTypes attribute)</a>
 </li>
@@ -999,6 +1114,8 @@
       <li><a href="core.html#scripts.core.library.LibraryOfAlexandria.refresh_library_data">refresh_library_data() (scripts.core.library.LibraryOfAlexandria method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.remove_ui_element">remove_ui_element() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.reset_intents">reset_intents() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.SecondaryStatTypes.RESIST_ASTRAL">RESIST_ASTRAL (scripts.core.constants.SecondaryStatTypes attribute)</a>
 </li>
@@ -1052,6 +1169,12 @@
 </li>
       <li><a href="dev_tools.html#module-scripts.dev_tools.data_editor">scripts.dev_tools.data_editor (module)</a>
 </li>
+      <li><a href="event_handlers.html#module-scripts.event_handlers.game_handler">scripts.event_handlers.game_handler (module)</a>
+</li>
+      <li><a href="event_handlers.html#module-scripts.event_handlers.god_handler">scripts.event_handlers.god_handler (module)</a>
+</li>
+      <li><a href="event_handlers.html#module-scripts.event_handlers.map_handler">scripts.event_handlers.map_handler (module)</a>
+</li>
       <li><a href="events.html#module-scripts.events.entity_events">scripts.events.entity_events (module)</a>
 </li>
       <li><a href="events.html#module-scripts.events.game_events">scripts.events.game_events (module)</a>
@@ -1068,15 +1191,23 @@
 </li>
       <li><a href="managers.html#module-scripts.managers.input_manager.config_methods">scripts.managers.input_manager.config_methods (module)</a>
 </li>
+      <li><a href="managers.html#module-scripts.managers.input_manager.control_methods">scripts.managers.input_manager.control_methods (module)</a>
+</li>
+      <li><a href="managers.html#module-scripts.managers.input_manager.input_manager">scripts.managers.input_manager.input_manager (module)</a>
+</li>
       <li><a href="managers.html#module-scripts.managers.ui_manager.display_methods">scripts.managers.ui_manager.display_methods (module)</a>
 </li>
       <li><a href="managers.html#module-scripts.managers.ui_manager.element_methods">scripts.managers.ui_manager.element_methods (module)</a>
+</li>
+      <li><a href="managers.html#module-scripts.managers.world_manager.entity_methods">scripts.managers.world_manager.entity_methods (module)</a>
 </li>
       <li><a href="managers.html#module-scripts.managers.world_manager.fov_methods">scripts.managers.world_manager.fov_methods (module)</a>
 </li>
       <li><a href="managers.html#module-scripts.managers.world_manager.map_methods">scripts.managers.world_manager.map_methods (module)</a>
 </li>
       <li><a href="managers.html#module-scripts.managers.world_manager.skill_methods">scripts.managers.world_manager.skill_methods (module)</a>
+</li>
+      <li><a href="managers.html#module-scripts.managers.world_manager.world_manager">scripts.managers.world_manager.world_manager (module)</a>
 </li>
       <li><a href="ui.html#module-scripts.ui.basic.colours">scripts.ui.basic.colours (module)</a>
 </li>
@@ -1108,17 +1239,19 @@
 </li>
       <li><a href="events.html#scripts.events.ui_events.SelectEntity">SelectEntity (class in scripts.events.ui_events)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core.html#scripts.core.constants.TargetTags.SELF">SELF (scripts.core.constants.TargetTags attribute)</a>
 </li>
       <li><a href="managers.html#scripts.managers.game_manager.state_methods.StateMethods.set">set() (scripts.managers.game_manager.state_methods.StateMethods method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="managers.html#scripts.managers.game_manager.state_methods.StateMethods.set_active_skill">set_active_skill() (scripts.managers.game_manager.state_methods.StateMethods method)</a>
 </li>
       <li><a href="ui.html#scripts.ui.ui_elements.entity_info.EntityInfo.set_entity">set_entity() (scripts.ui.ui_elements.entity_info.EntityInfo method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.input_manager.config_methods.ConfigMethods.set_input_mode">set_input_mode() (scripts.managers.input_manager.config_methods.ConfigMethods method)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.set_intent">set_intent() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.set_overlay_directions">set_overlay_directions() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 
@@ -1132,6 +1265,8 @@
         <li><a href="ui.html#scripts.ui.ui_elements.camera.Camera.set_overlay_visibility">(scripts.ui.ui_elements.camera.Camera method)</a>
 </li>
       </ul></li>
+      <li><a href="managers.html#scripts.managers.input_manager.control_methods.ControlMethods.set_player_id">set_player_id() (scripts.managers.input_manager.control_methods.ControlMethods method)</a>
+</li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.set_player_tile">set_player_tile() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 
       <ul>
@@ -1168,8 +1303,6 @@
 </li>
       <li><a href="core.html#scripts.core.constants.UIElementTypes.SKILL_BAR">SKILL_BAR (scripts.core.constants.UIElementTypes attribute)</a>
 </li>
-      <li><a href="core.html#scripts.core.constants.UIElementTypes.SKILL_EDITOR">SKILL_EDITOR (scripts.core.constants.UIElementTypes attribute)</a>
-</li>
       <li><a href="ui.html#scripts.ui.ui_elements.skill_bar.SkillBar">SkillBar (class in scripts.ui.ui_elements.skill_bar)</a>
 </li>
       <li><a href="core.html#scripts.core.constants.SkillExpiryTypes">SkillExpiryTypes (class in scripts.core.constants)</a>
@@ -1185,6 +1318,8 @@
       <li><a href="core.html#scripts.core.constants.PrimaryStatTypes.SKULLDUGGERY">SKULLDUGGERY (scripts.core.constants.PrimaryStatTypes attribute)</a>
 </li>
       <li><a href="world.html#scripts.world.combat_stats.CombatStats.skullduggery">skullduggery() (scripts.world.combat_stats.CombatStats property)</a>
+</li>
+      <li><a href="managers.html#scripts.managers.world_manager.entity_methods.EntityMethods.spend_time">spend_time() (scripts.managers.world_manager.entity_methods.EntityMethods method)</a>
 </li>
       <li><a href="world.html#scripts.world.tile.Tile.sprite">sprite (scripts.world.tile.Tile attribute)</a>
 </li>
@@ -1261,6 +1396,10 @@
       <ul>
         <li><a href="managers.html#scripts.managers.game_manager.game_manager.GameManager.update">(scripts.managers.game_manager.game_manager.GameManager method)</a>
 </li>
+        <li><a href="managers.html#scripts.managers.input_manager.input_manager.InputManager.update">(scripts.managers.input_manager.input_manager.InputManager method)</a>
+</li>
+        <li><a href="managers.html#scripts.managers.world_manager.world_manager.WorldManager.update">(scripts.managers.world_manager.world_manager.WorldManager method)</a>
+</li>
         <li><a href="ui.html#scripts.ui.ui_elements.camera.Camera.update">(scripts.ui.ui_elements.camera.Camera method)</a>
 </li>
         <li><a href="ui.html#scripts.ui.ui_elements.entity_info.EntityInfo.update">(scripts.ui.ui_elements.entity_info.EntityInfo method)</a>
@@ -1277,6 +1416,8 @@
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.update_camera_game_map">update_camera_game_map() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.update_camera_grid">update_camera_grid() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
+</li>
+      <li><a href="ui.html#scripts.ui.ui_elements.camera.Camera.update_camera_tiles">update_camera_tiles() (scripts.ui.ui_elements.camera.Camera method)</a>
 </li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.update_cameras_tiles">update_cameras_tiles() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 </li>
@@ -1312,12 +1453,18 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="events.html#scripts.events.entity_events.WantToUseSkillEvent">WantToUseSkillEvent (class in scripts.events.entity_events)</a>
+</li>
       <li><a href="managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.world_to_screen_position">world_to_screen_position() (scripts.managers.ui_manager.element_methods.ElementMethods method)</a>
 
       <ul>
         <li><a href="ui.html#scripts.ui.ui_elements.camera.Camera.world_to_screen_position">(scripts.ui.ui_elements.camera.Camera method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="managers.html#scripts.managers.world_manager.world_manager.WorldManager">WorldManager (class in scripts.managers.world_manager.world_manager)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1361,7 +1508,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

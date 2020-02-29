@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.managers.ui_manager.display_methods &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>scripts.managers.ui_manager.display_methods &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
@@ -186,52 +186,46 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_display_config</span><span class="p">()</span>
 
-<div class="viewcode-block" id="DisplayMethods.init_pygame"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_pygame">[docs]</a>    <span class="k">def</span> <span class="nf">init_pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">############# INIT ###############################</span>
+
+<div class="viewcode-block" id="DisplayMethods.init_pygame"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_pygame">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">init_pygame</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Init pygame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="DisplayMethods.init_display_config"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config">[docs]</a>    <span class="k">def</span> <span class="nf">init_display_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DisplayMethods.init_display_config"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">init_display_config</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise display settings.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Not Quite Paradise&quot;</span><span class="p">)</span></div>
         <span class="c1"># pygame.display.set_icon() # TODO - add window icon</span>
 
-<div class="viewcode-block" id="DisplayMethods.get_screen_scaling_mod"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_screen_scaling_mod">[docs]</a>    <span class="k">def</span> <span class="nf">get_screen_scaling_mod</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">############# GET ##############################</span>
+
+<div class="viewcode-block" id="DisplayMethods.get_screen_scaling_mod"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_screen_scaling_mod">[docs]</a>    <span class="k">def</span> <span class="nf">get_screen_scaling_mod</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the screen scaling modifier</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Tuple[int,int]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_scaling_mod_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_scaling_mod_y</span></div>
 
-<div class="viewcode-block" id="DisplayMethods.get_main_surface"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_main_surface">[docs]</a>    <span class="k">def</span> <span class="nf">get_main_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DisplayMethods.get_main_surface"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_main_surface">[docs]</a>    <span class="k">def</span> <span class="nf">get_main_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the main surface where all draws eventually go.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            pygame.Surface:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_surface</span></div>
 
-<div class="viewcode-block" id="DisplayMethods.get_desired_resolution"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_desired_resolution">[docs]</a>    <span class="k">def</span> <span class="nf">get_desired_resolution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DisplayMethods.get_desired_resolution"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_desired_resolution">[docs]</a>    <span class="k">def</span> <span class="nf">get_desired_resolution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the desired resolution</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Tuple[int, int]: (width, height)</span>
+<span class="sd">        Get the desired resolution as (width, height)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">desired_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desired_height</span></div>
 
-<div class="viewcode-block" id="DisplayMethods.get_window"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_window">[docs]</a>    <span class="k">def</span> <span class="nf">get_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DisplayMethods.get_window"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.display_methods.DisplayMethods.get_window">[docs]</a>    <span class="k">def</span> <span class="nf">get_window</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the window</span>
-
-<span class="sd">        Returns:</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span></div></div>
 </pre></div>
@@ -258,7 +252,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

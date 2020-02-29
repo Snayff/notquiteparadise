@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>Managers &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>Managers &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="index.html"/>
         <link rel="next" title="Skills" href="skills.html"/>
         <link rel="prev" title="Events" href="events.html"/>
 
@@ -70,9 +70,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -85,9 +85,9 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
@@ -185,7 +185,7 @@
 
 <dl class="method">
 <dt id="scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging">
-<code class="sig-name descname">initialise_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/game_manager/debug_methods.html#DebugMethods.initialise_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">initialise_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/game_manager/debug_methods.html#DebugMethods.initialise_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.game_manager.debug_methods.DebugMethods.initialise_logging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configure logging</p>
 <dl class="simple">
 <dt>Logging levels:</dt><dd><p>CRITICAL - A serious error, indicating that may be unable to continue running.
@@ -210,7 +210,7 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 
 <dl class="method">
 <dt id="scripts.managers.game_manager.debug_methods.DebugMethods.disable_logging">
-<code class="sig-name descname">disable_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/game_manager/debug_methods.html#DebugMethods.disable_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.game_manager.debug_methods.DebugMethods.disable_logging" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">disable_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/game_manager/debug_methods.html#DebugMethods.disable_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.game_manager.debug_methods.DebugMethods.disable_logging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn off current logging and clear logging resources</p>
 </dd></dl>
 
@@ -306,8 +306,21 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 <h3>Utility methods<a class="headerlink" href="#utility-methods" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="input">
-<h2>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.managers.input_manager.input_manager">
+<span id="input"></span><h2>Input<a class="headerlink" href="#module-scripts.managers.input_manager.input_manager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.managers.input_manager.input_manager.InputManager">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.managers.input_manager.input_manager.</code><code class="sig-name descname">InputManager</code><a class="reference internal" href="_modules/scripts/managers/input_manager/input_manager.html#InputManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.input_manager.InputManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Manage the input events. Convert input value to an intent and then process that intent.</p>
+<dl class="method">
+<dt id="scripts.managers.input_manager.input_manager.InputManager.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">event</em>, <em class="sig-param">game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/input_manager.html#InputManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.input_manager.InputManager.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input event and process it</p>
+</dd></dl>
+
+</dd></dl>
+
 <div class="section" id="module-scripts.managers.input_manager.config_methods">
 <span id="config-methods"></span><h3>Config methods<a class="headerlink" href="#module-scripts.managers.input_manager.config_methods" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
@@ -337,8 +350,152 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 </dd></dl>
 
 </div>
-<div class="section" id="control-methods">
-<h3>Control methods<a class="headerlink" href="#control-methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-scripts.managers.input_manager.control_methods">
+<span id="control-methods"></span><h3>Control methods<a class="headerlink" href="#module-scripts.managers.input_manager.control_methods" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.managers.input_manager.control_methods.</code><code class="sig-name descname">ControlMethods</code><span class="sig-paren">(</span><em class="sig-param">manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Methods for handling Input values and converting them to intents</p>
+<dl class="attribute">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.manager">
+<code class="sig-name descname">manager</code><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.manager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.set_player_id">
+<code class="sig-name descname">set_player_id</code><span class="sig-paren">(</span><em class="sig-param">player_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.set_player_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.set_player_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the player ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.check_directions">
+<code class="sig-name descname">check_directions</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.check_directions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.check_directions" title="Permalink to this definition">¶</a></dt>
+<dd><p>get directional input from the keyboard</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>pygame.event</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.check_actions">
+<code class="sig-name descname">check_actions</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.check_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.check_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>get actions such as confirm or cancel, or skill usage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>pygame.event</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.check_dev_actions">
+<code class="sig-name descname">check_dev_actions</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.check_dev_actions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.check_dev_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>get any dev actions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>pygame.event</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.get_pressed_direction">
+<code class="sig-name descname">get_pressed_direction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.get_pressed_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.get_pressed_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of the directions pressed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(x, y). Values are ints between -1 and 1.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.get_pressed_skills_number">
+<code class="sig-name descname">get_pressed_skills_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.get_pressed_skills_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.get_pressed_skills_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the pressed skill number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>value of skill number pressed. Returns -1 if none.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.set_intent">
+<code class="sig-name descname">set_intent</code><span class="sig-paren">(</span><em class="sig-param">intent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.set_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.set_intent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set an intent to true. IntentsData must exist in InputIntents and name must match (except case).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>intent</strong> (<a class="reference internal" href="core.html#scripts.core.constants.InputIntents" title="scripts.core.constants.InputIntents"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputIntents</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.get_intent">
+<code class="sig-name descname">get_intent</code><span class="sig-paren">(</span><em class="sig-param">intent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.get_intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.get_intent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an intent. IntentsData must exist in InputIntents and name must match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>intent</strong> (<a class="reference internal" href="core.html#scripts.core.constants.InputIntents" title="scripts.core.constants.InputIntents"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputIntents</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.reset_intents">
+<code class="sig-name descname">reset_intents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.reset_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.reset_intents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all input intents to false</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.process_stateless_intents">
+<code class="sig-name descname">process_stateless_intents</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.process_stateless_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.process_stateless_intents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process intents that don’t rely on game state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>event</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.process_player_turn_intents">
+<code class="sig-name descname">process_player_turn_intents</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.process_player_turn_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.process_player_turn_intents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process intents for the player turn game state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.process_targeting_mode_intents">
+<code class="sig-name descname">process_targeting_mode_intents</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.process_targeting_mode_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.process_targeting_mode_intents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process intents for the player turn game state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.input_manager.control_methods.ControlMethods.process_dev_mode_intents">
+<code class="sig-name descname">process_dev_mode_intents</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/input_manager/control_methods.html#ControlMethods.process_dev_mode_intents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.input_manager.control_methods.ControlMethods.process_dev_mode_intents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process intents for the dev mode game state.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 <div class="section" id="ui">
@@ -357,13 +514,13 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 
 <dl class="method">
 <dt id="scripts.managers.ui_manager.display_methods.DisplayMethods.init_pygame">
-<code class="sig-name descname">init_pygame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.init_pygame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.init_pygame" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">init_pygame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.init_pygame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.init_pygame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Init pygame</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config">
-<code class="sig-name descname">init_display_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.init_display_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">init_display_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.init_display_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.init_display_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise display settings.</p>
 </dd></dl>
 
@@ -372,8 +529,8 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 <code class="sig-name descname">get_screen_scaling_mod</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.get_screen_scaling_mod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.get_screen_scaling_mod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the screen scaling modifier</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Tuple[int,int]</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -383,11 +540,8 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 <code class="sig-name descname">get_main_surface</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.get_main_surface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.get_main_surface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the main surface where all draws eventually go.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>pygame.Surface</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Surface</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -395,13 +549,10 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 <dl class="method">
 <dt id="scripts.managers.ui_manager.display_methods.DisplayMethods.get_desired_resolution">
 <code class="sig-name descname">get_desired_resolution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.get_desired_resolution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.get_desired_resolution" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the desired resolution</p>
+<dd><p>Get the desired resolution as (width, height)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>(width, height)</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -410,7 +561,6 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 <dt id="scripts.managers.ui_manager.display_methods.DisplayMethods.get_window">
 <code class="sig-name descname">get_window</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/display_methods.html#DisplayMethods.get_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.display_methods.DisplayMethods.get_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the window</p>
-<p>Returns:</p>
 </dd></dl>
 
 </dd></dl>
@@ -464,7 +614,7 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 <dd><p>Get UI element. Returns nothing if not found. Won’t be found if not init’d.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>element_type</strong> (<a class="reference internal" href="core.html#scripts.core.constants.UIElementTypes" title="scripts.core.constants.UIElementTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIElementTypes</span></code></a>) – </p>
+<dd class="field-odd"><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="core.html#scripts.core.constants.UIElementTypes" title="scripts.core.constants.UIElementTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIElementTypes</span></code></a>]) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -482,13 +632,13 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 
 <dl class="method">
 <dt id="scripts.managers.ui_manager.element_methods.ElementMethods.add_ui_element">
-<code class="sig-name descname">add_ui_element</code><span class="sig-paren">(</span><em class="sig-param">element_name</em>, <em class="sig-param">element</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.add_ui_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.add_ui_element" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_ui_element</code><span class="sig-paren">(</span><em class="sig-param">element_type</em>, <em class="sig-param">element</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.add_ui_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.add_ui_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add ui element to the list of all elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>(</strong><strong>)</strong> (<em>element</em>) – </p></li>
-<li><p><strong>(</strong><strong>)</strong> – </p></li>
+<li><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="core.html#scripts.core.constants.UIElementTypes" title="scripts.core.constants.UIElementTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIElementTypes</span></code></a>]) – </p></li>
+<li><p><strong>element</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -496,11 +646,11 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 
 <dl class="method">
 <dt id="scripts.managers.ui_manager.element_methods.ElementMethods.remove_ui_element">
-<code class="sig-name descname">remove_ui_element</code><span class="sig-paren">(</span><em class="sig-param">element_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.remove_ui_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.remove_ui_element" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove_ui_element</code><span class="sig-paren">(</span><em class="sig-param">element_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.remove_ui_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.remove_ui_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove ui element from the list of all elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>element_name</em>) – </p>
+<dd class="field-odd"><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="core.html#scripts.core.constants.UIElementTypes" title="scripts.core.constants.UIElementTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIElementTypes</span></code></a>]) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -527,13 +677,13 @@ DEBUG - Detailed information, typically of interest only when diagnosing problem
 
 <dl class="method">
 <dt id="scripts.managers.ui_manager.element_methods.ElementMethods.move_camera">
-<code class="sig-name descname">move_camera</code><span class="sig-paren">(</span><em class="sig-param">move_x</em>, <em class="sig-param">move_y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.move_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.move_camera" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">move_camera</code><span class="sig-paren">(</span><em class="sig-param">num_cols</em>, <em class="sig-param">num_rows</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.move_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.move_camera" title="Permalink to this definition">¶</a></dt>
 <dd><p>Increment camera’s drawn tiles in the given direction. N.B. Physical position on screen does not change.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>(</strong><strong>)</strong> (<em>move_y</em>) – </p></li>
-<li><p><strong>(</strong><strong>)</strong> – </p></li>
+<li><p><strong>num_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>num_rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -651,7 +801,7 @@ pos is x, y.</p>
 <dd><p>Add a text to the message log. Includes processing of the text.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -674,18 +824,12 @@ pos is x, y.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="scripts.managers.ui_manager.element_methods.ElementMethods.kill_data_editor">
-<code class="sig-name descname">kill_data_editor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.kill_data_editor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.kill_data_editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove any reference to the skill_editor. Includes use of editors’s cleanse method.</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="scripts.managers.ui_manager.element_methods.ElementMethods.kill_element">
 <code class="sig-name descname">kill_element</code><span class="sig-paren">(</span><em class="sig-param">element_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/ui_manager/element_methods.html#ElementMethods.kill_element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.ui_manager.element_methods.ElementMethods.kill_element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove any reference to the element</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>element_type</strong> (<a class="reference internal" href="core.html#scripts.core.constants.UIElementTypes" title="scripts.core.constants.UIElementTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIElementTypes</span></code></a>) – </p>
+<dd class="field-odd"><p><strong>element_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="core.html#scripts.core.constants.UIElementTypes" title="scripts.core.constants.UIElementTypes"><code class="xref py py-class docutils literal notranslate"><span class="pre">UIElementTypes</span></code></a>]) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -694,10 +838,398 @@ pos is x, y.</p>
 
 </div>
 </div>
-<div class="section" id="world">
-<h2>World<a class="headerlink" href="#world" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="entity-methods">
-<h3>Entity methods<a class="headerlink" href="#entity-methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="module-scripts.managers.world_manager.world_manager">
+<span id="world"></span><h2>World<a class="headerlink" href="#module-scripts.managers.world_manager.world_manager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="scripts.managers.world_manager.world_manager.WorldManager">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.managers.world_manager.world_manager.</code><code class="sig-name descname">WorldManager</code><a class="reference internal" href="_modules/scripts/managers/world_manager/world_manager.html#WorldManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.world_manager.WorldManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Contains all world related functionality</p>
+<dl class="method">
+<dt id="scripts.managers.world_manager.world_manager.WorldManager.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">delta_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/world_manager.html#WorldManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.world_manager.WorldManager.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update real-time timers on entities</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>delta_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="module-scripts.managers.world_manager.entity_methods">
+<span id="entity-methods"></span><h3>Entity methods<a class="headerlink" href="#module-scripts.managers.world_manager.entity_methods" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.managers.world_manager.entity_methods.</code><code class="sig-name descname">EntityMethods</code><span class="sig-paren">(</span><em class="sig-param">manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Queries relating to entities.</p>
+<dl class="attribute">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.manager">
+<code class="sig-name descname">manager</code><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>the manager containing this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.managers.world_manager.world_manager.WorldManager" title="scripts.managers.world_manager.world_manager.WorldManager">WorldManager</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_player">
+<code class="sig-name descname">get_player</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Entity ID</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_entity">
+<code class="sig-name descname">get_entity</code><span class="sig-paren">(</span><em class="sig-param">unique_component</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single entity that has a component. If multiple entities have the given component only the first found
+is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>unique_component</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Union[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_entities">
+<code class="sig-name descname">get_entities</code><span class="sig-paren">(</span><em class="sig-param">component1</em>, <em class="sig-param">component2=None</em>, <em class="sig-param">component3=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get entities with the specified components. Returns a list of entity IDs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component1</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p></li>
+<li><p><strong>component2</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p></li>
+<li><p><strong>component3</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_entities_and_components_in_area">
+<code class="sig-name descname">get_entities_and_components_in_area</code><span class="sig-paren">(</span><em class="sig-param">area</em>, <em class="sig-param">component1=None</em>, <em class="sig-param">component2=None</em>, <em class="sig-param">component3=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_entities_and_components_in_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_entities_and_components_in_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
+components are specified the return will be (Position, None).</p>
+<p>N.B. Do not specify Position as a component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>area</strong> (<em>List</em><em>[</em><a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile"><em>Tile</em></a><em>]</em>) – </p></li>
+<li><p><strong>component1</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p></li>
+<li><p><strong>component2</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p></li>
+<li><p><strong>component3</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, C, ..]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_entitys_component">
+<code class="sig-name descname">get_entitys_component</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">component</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_entitys_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_entitys_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+<li><p><strong>component</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Union[C, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_entitys_components">
+<code class="sig-name descname">get_entitys_components</code><span class="sig-paren">(</span><em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_entitys_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_entitys_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all of an entity’s components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tuple[<a class="reference internal" href="world.html#scripts.world.components.Component" title="scripts.world.components.Component">Component</a>, ..]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_identity">
+<code class="sig-name descname">get_identity</code><span class="sig-paren">(</span><em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s Identity component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="world.html#scripts.world.components.Identity" title="scripts.world.components.Identity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Identity</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_component">
+<code class="sig-name descname">get_component</code><span class="sig-paren">(</span><em class="sig-param">component</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all entities with the specified component</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>component</strong> (<em>Type</em><em>[</em><em>C</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, C]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_components">
+<code class="sig-name descname">get_components</code><span class="sig-paren">(</span><em class="sig-param">*components</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all entities with the specified components</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>components</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.8)"><em>type</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, ..]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_combat_stats">
+<em class="property">static </em><code class="sig-name descname">get_combat_stats</code><span class="sig-paren">(</span><em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_combat_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_combat_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a stat object  for an entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>entity</em>) – </p>
+</dd>
+</dl>
+<p>Returns:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="world.html#scripts.world.combat_stats.CombatStats" title="scripts.world.combat_stats.CombatStats"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombatStats</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.get_primary_stat">
+<code class="sig-name descname">get_primary_stat</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">primary_stat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.get_primary_stat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.get_primary_stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s primary stat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>primary_stat</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.has_component">
+<code class="sig-name descname">has_component</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">component</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.has_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.has_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Confirm if an entity has a component</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>component</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="world.html#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a>]) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.create">
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">components=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use each component in a list of components to create an entity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>components</strong> (<em>List</em><em>[</em><em>Type</em><em>[</em><a class="reference internal" href="world.html#scripts.world.components.Component" title="scripts.world.components.Component"><em>Component</em></a><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.delete">
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queues entity for removal from the world. Happens at the next run of World.process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.create_god">
+<code class="sig-name descname">create_god</code><span class="sig-paren">(</span><em class="sig-param">god_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.create_god"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.create_god" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an entity with all of the components to be a god.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>god_name</em>) – god_name must be in the gods json file.</p></li>
+<li><p><strong>god_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Entity ID</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.create_actor">
+<code class="sig-name descname">create_actor</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">people_name</em>, <em class="sig-param">homeland_name</em>, <em class="sig-param">savvy_name</em>, <em class="sig-param">is_player=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.create_actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.create_actor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an entity with all of the components to be an actor. is_player is Optional and defaults to false.
+Returns Entity ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>people_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>homeland_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>savvy_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>is_player</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.build_characteristic_sprites">
+<em class="property">static </em><code class="sig-name descname">build_characteristic_sprites</code><span class="sig-paren">(</span><em class="sig-param">sprite_paths</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.build_characteristic_sprites"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.build_characteristic_sprites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a CharacteristicSpritesData class from a list of sprite paths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sprite_paths</strong> (<em>List</em><em>[</em><em>CharacteristicSpritePathsData</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>CharacteristicSpritesData</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.spend_time">
+<code class="sig-name descname">spend_time</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">time_spent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.spend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.spend_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add time_spent to the entity’s total time spent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>time_spent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.learn_skill">
+<code class="sig-name descname">learn_skill</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">skill_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.learn_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.learn_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the skill name to the entity’s knowledge component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>skill_name</em>) – </p></li>
+<li><p><strong>(</strong><strong>)</strong> – </p></li>
+<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.judge_action">
+<code class="sig-name descname">judge_action</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">action</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.judge_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.judge_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards
+that  action. Action can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.consider_intervening">
+<code class="sig-name descname">consider_intervening</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">action</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.consider_intervening"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.consider_intervening" title="Permalink to this definition">¶</a></dt>
+<dd><p>Have all entities consider intervening</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>)</strong> (<em>entity</em>) – entity who acted</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><em>object</em></a>) – Can be str if matching name, e.g. affliction name, or class attribute, e.g. Hit Type name.</p></li>
+<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of tuples containing (god_entity_id, intervention name).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Tuple]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.managers.world_manager.entity_methods.EntityMethods.process_aesthetic_update">
+<code class="sig-name descname">process_aesthetic_update</code><span class="sig-paren">(</span><em class="sig-param">delta_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/managers/world_manager/entity_methods.html#EntityMethods.process_aesthetic_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.managers.world_manager.entity_methods.EntityMethods.process_aesthetic_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update real-time timers on entities</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>delta_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.managers.world_manager.fov_methods">
 <span id="fov-methods"></span><h3>FOV methods<a class="headerlink" href="#module-scripts.managers.world_manager.fov_methods" title="Permalink to this headline">¶</a></h3>
@@ -801,7 +1333,7 @@ pos is x, y.</p>
 <dd><p>the manager containing this class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>WorldManager</p>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.managers.world_manager.world_manager.WorldManager" title="scripts.managers.world_manager.world_manager.WorldManager">WorldManager</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1144,7 +1676,7 @@ This returns an int indicating the number of tile moves between the two points.<
 <dd><p>the manager containing this class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>WorldManager</p>
+<dd class="field-odd"><p><a class="reference internal" href="#scripts.managers.world_manager.world_manager.WorldManager" title="scripts.managers.world_manager.world_manager.WorldManager">WorldManager</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1482,7 +2014,7 @@ then starting position is returned.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

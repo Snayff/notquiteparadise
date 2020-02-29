@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>World &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>World &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="index.html"/>
         <link rel="prev" title="UI" href="ui.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
@@ -332,16 +332,23 @@
 <div class="section" id="module-scripts.world.components">
 <span id="components"></span><h2>Components<a class="headerlink" href="#module-scripts.world.components" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="scripts.world.components.Component">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Component</code><a class="reference internal" href="_modules/scripts/world/components.html#Component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base component</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="scripts.world.components.IsPlayer">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">IsPlayer</code><a class="reference internal" href="_modules/scripts/world/components.html#IsPlayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.IsPlayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] Whether the entity is the player.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.world.components.Position">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Position</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Position" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s position on the map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -356,7 +363,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Aesthetic">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Aesthetic</code><span class="sig-paren">(</span><em class="sig-param">current_sprite</em>, <em class="sig-param">sprites</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Aesthetic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Aesthetic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s sprite.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -371,7 +378,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Resources">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Resources</code><span class="sig-paren">(</span><em class="sig-param">health=1</em>, <em class="sig-param">stamina=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Resources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Resources" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s resources.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -386,7 +393,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Blocking">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Blocking</code><span class="sig-paren">(</span><em class="sig-param">blocks_movement=False</em>, <em class="sig-param">blocks_sight=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Blocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Blocking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s blocking of other objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -401,7 +408,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Identity">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Identity</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">description=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Identity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s identity, such as name and description.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -416,7 +423,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Race">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Race</code><span class="sig-paren">(</span><em class="sig-param">people_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Race"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Race" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s people.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -428,7 +435,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Savvy">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Savvy</code><span class="sig-paren">(</span><em class="sig-param">savvy_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Savvy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Savvy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s savvy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -440,7 +447,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Homeland">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Homeland</code><span class="sig-paren">(</span><em class="sig-param">homeland_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Homeland"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Homeland" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s homeland.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -452,21 +459,21 @@
 <dl class="class">
 <dt id="scripts.world.components.AIBasic">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">AIBasic</code><a class="reference internal" href="_modules/scripts/world/components.html#AIBasic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.AIBasic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An ai to control an entity.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.world.components.HasCombatStats">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">HasCombatStats</code><a class="reference internal" href="_modules/scripts/world/components.html#HasCombatStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.HasCombatStats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] A flag to show if an entity has stats used for combat.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.world.components.Knowledge">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Knowledge</code><span class="sig-paren">(</span><em class="sig-param">skills=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Knowledge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Knowledge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s knowledge, including skills.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -478,7 +485,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Affliction">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Affliction</code><span class="sig-paren">(</span><em class="sig-param">boons=None</em>, <em class="sig-param">banes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Affliction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s Boons and Banes. e.g. {boon_name: duration}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -493,7 +500,7 @@
 <dl class="class">
 <dt id="scripts.world.components.Aspect">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Aspect</code><span class="sig-paren">(</span><em class="sig-param">aspects=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/world/components.html#Aspect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Aspect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s aspects. A static tile modifier. e.g. {aspect_name: duration}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -505,14 +512,14 @@
 <dl class="class">
 <dt id="scripts.world.components.IsGod">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">IsGod</code><a class="reference internal" href="_modules/scripts/world/components.html#IsGod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.IsGod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] Whether the entity is a god.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="scripts.world.components.Opinion">
 <em class="property">class </em><code class="sig-prename descclassname">scripts.world.components.</code><code class="sig-name descname">Opinion</code><a class="reference internal" href="_modules/scripts/world/components.html#Opinion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.world.components.Opinion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#scripts.world.components.Component" title="scripts.world.components.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.world.components.Component</span></code></a></p>
 <p>[Component] An entity’s views on other entities.</p>
 </dd></dl>
 
@@ -624,7 +631,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

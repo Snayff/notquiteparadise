@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>UI &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>UI &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="index.html"/>
         <link rel="next" title="World" href="world.html"/>
         <link rel="prev" title="Skills" href="skills.html"/>
 
@@ -70,9 +70,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -85,9 +85,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
@@ -625,6 +625,12 @@
 </dd>
 </dl>
 <dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="scripts.ui.ui_elements.camera.Camera.update">
 <code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">time_delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update based on current state and data. Run every frame.</p>
@@ -633,12 +639,6 @@
 <dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.ui.ui_elements.camera.Camera.handle_events">
-<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.handle_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handle events created by this UI widget</p>
 </dd></dl>
 
 <dl class="method">
@@ -651,6 +651,12 @@
 <dt id="scripts.ui.ui_elements.camera.Camera.update_grid">
 <code class="sig-name descname">update_grid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.update_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.update_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the tile grid to only have  options in line with the tiles set OR the overlay</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.update_camera_tiles">
+<code class="sig-name descname">update_camera_tiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.update_camera_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.update_camera_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.</p>
 </dd></dl>
 
 <dl class="method">
@@ -701,6 +707,20 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>(</strong><strong>)</strong> (<em>directions</em>) – List of Directions</p></li>
 <li><p><strong>directions</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="scripts.ui.ui_elements.camera.Camera.move_camera">
+<code class="sig-name descname">move_camera</code><span class="sig-paren">(</span><em class="sig-param">num_cols</em>, <em class="sig-param">num_rows</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/ui/ui_elements/camera.html#Camera.move_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.ui.ui_elements.camera.Camera.move_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust the camera position by the number of columns and rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>num_rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -1007,7 +1027,7 @@ tags are:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

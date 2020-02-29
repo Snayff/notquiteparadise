@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.managers.input_manager.control_methods &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>scripts.managers.input_manager.control_methods &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
@@ -151,17 +151,12 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">dataclasses</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
-<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">InputIntents</span><span class="p">,</span> <span class="n">Directions</span><span class="p">,</span> <span class="n">GameStates</span><span class="p">,</span> <span class="n">MessageTypes</span><span class="p">,</span> <span class="n">EffectTypes</span>
+<span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">InputIntents</span><span class="p">,</span> <span class="n">Directions</span><span class="p">,</span> <span class="n">GameStates</span>
 <span class="kn">from</span> <span class="nn">scripts.core.event_hub</span> <span class="kn">import</span> <span class="n">publisher</span>
-<span class="kn">from</span> <span class="nn">scripts.core.library</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.events.entity_events</span> <span class="kn">import</span> <span class="n">MoveEvent</span><span class="p">,</span> <span class="n">UseSkillEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">ExitGameEvent</span><span class="p">,</span> <span class="n">ChangeGameStateEvent</span><span class="p">,</span> <span class="n">EndTurnEvent</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.game_manager.game_manager</span> <span class="kn">import</span> <span class="n">game</span>
-<span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.world.components</span> <span class="kn">import</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Position</span>
+<span class="kn">from</span> <span class="nn">scripts.events.entity_events</span> <span class="kn">import</span> <span class="n">MoveEvent</span><span class="p">,</span> <span class="n">WantToUseSkillEvent</span>
+<span class="kn">from</span> <span class="nn">scripts.events.game_events</span> <span class="kn">import</span> <span class="n">ExitGameEvent</span><span class="p">,</span> <span class="n">ChangeGameStateEvent</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">scripts.managers.input_manager.input_manager</span> <span class="kn">import</span> <span class="n">InputManager</span>
@@ -176,8 +171,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">manager</span>  <span class="c1"># type: InputManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="p">:</span> <span class="n">InputManager</span> <span class="o">=</span> <span class="n">manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_player_id</span> <span class="o">=</span> <span class="kc">None</span>
 
+<div class="viewcode-block" id="ControlMethods.set_player_id"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.input_manager.control_methods.ControlMethods.set_player_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_player_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the player ID.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_player_id</span> <span class="o">=</span> <span class="n">player_id</span></div>
     <span class="c1">############### INPUT CHECKS ####################</span>
 
 <div class="viewcode-block" id="ControlMethods.check_directions"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.input_manager.control_methods.ControlMethods.check_directions">[docs]</a>    <span class="k">def</span> <span class="nf">check_directions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
@@ -359,29 +360,20 @@
 <div class="viewcode-block" id="ControlMethods.process_player_turn_intents"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_player_turn_intents">[docs]</a>    <span class="k">def</span> <span class="nf">process_player_turn_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Process intents for the player turn game state.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            event ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">get_intent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intent</span>
         <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntents</span>
-        <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player_id</span>
 
         <span class="c1"># Player movement</span>
         <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pressed_direction</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">dir_x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">dir_y</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">position</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Position</span><span class="p">)</span>
-            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MoveEvent</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">)))</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">MoveEvent</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="p">(</span><span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">)))</span>
 
         <span class="c1"># Use a skill</span>
         <span class="n">skill_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pressed_skills_number</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">skill_number</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">knowledge</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
-            <span class="n">skill_name</span> <span class="o">=</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_number</span><span class="p">]</span>
-            <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">can_afford_cost</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">):</span>
-                <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">TARGETING_MODE</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">))</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">WantToUseSkillEvent</span><span class="p">(</span><span class="n">skill_number</span><span class="p">))</span>
 
         <span class="c1"># activate the skill editor</span>
         <span class="k">if</span> <span class="n">get_intent</span><span class="p">(</span><span class="n">intent</span><span class="o">.</span><span class="n">DEV_TOGGLE</span><span class="p">):</span>
@@ -390,45 +382,28 @@
 <div class="viewcode-block" id="ControlMethods.process_targeting_mode_intents"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_targeting_mode_intents">[docs]</a>    <span class="k">def</span> <span class="nf">process_targeting_mode_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Process intents for the player turn game state.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            event ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">get_intent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intent</span>
         <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntents</span>
-        <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
-        <span class="n">skill_name</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">get_active_skill</span><span class="p">()</span>
 
         <span class="c1"># Cancel use</span>
         <span class="k">if</span> <span class="n">get_intent</span><span class="p">(</span><span class="n">intent</span><span class="o">.</span><span class="n">CANCEL</span><span class="p">):</span>
-            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">get_previous</span><span class="p">()))</span>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">PREVIOUS</span><span class="p">))</span>
 
-        <span class="c1"># Use another skill</span>
+        <span class="c1"># Consider using the skill, handle if different skill pressed</span>
         <span class="n">skill_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pressed_skills_number</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">skill_number</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">skill_pressed</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">known_skills</span><span class="p">[</span><span class="n">skill_number</span><span class="p">]</span>
-            <span class="c1"># confirm skill pressed doesn&#39;t match skill already pressed</span>
-            <span class="k">if</span> <span class="n">skill_pressed</span> <span class="o">!=</span> <span class="n">skill_name</span><span class="p">:</span>
-                <span class="n">knowledge</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Entity</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">)</span>
-                <span class="n">skill_name</span> <span class="o">=</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skills</span><span class="p">[</span><span class="n">skill_number</span><span class="p">]</span>
-                <span class="n">skill_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">get_skill_data</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">Skill</span><span class="o">.</span><span class="n">can_afford_cost</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_type</span><span class="p">,</span> <span class="n">skill_data</span><span class="o">.</span><span class="n">resource_cost</span><span class="p">):</span>
-                    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">TARGETING_MODE</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">))</span></div>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">WantToUseSkillEvent</span><span class="p">(</span><span class="n">skill_number</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="ControlMethods.process_dev_mode_intents"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.input_manager.control_methods.ControlMethods.process_dev_mode_intents">[docs]</a>    <span class="k">def</span> <span class="nf">process_dev_mode_intents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Process intents for the dev mode game state.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            event ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">get_intent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_intent</span>
         <span class="n">intent</span> <span class="o">=</span> <span class="n">InputIntents</span>
 
         <span class="k">if</span> <span class="n">get_intent</span><span class="p">(</span><span class="n">intent</span><span class="o">.</span><span class="n">DEV_TOGGLE</span><span class="p">):</span>
-
-            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">get_previous</span><span class="p">()))</span></div></div>
+            <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">ChangeGameStateEvent</span><span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">PREVIOUS</span><span class="p">))</span></div></div>
 </pre></div>
 
 	    </div>
@@ -453,7 +428,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

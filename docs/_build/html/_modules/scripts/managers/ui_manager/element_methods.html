@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.managers.ui_manager.element_methods &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>scripts.managers.ui_manager.element_methods &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skills.html">Skills</a><ul>
@@ -149,10 +149,11 @@
 	    <div id="content" class="hfeed entry-container hentry">
   <h1>Source code for scripts.managers.ui_manager.element_methods</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pygame</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Type</span>
 <span class="kn">from</span> <span class="nn">scripts.core.constants</span> <span class="kn">import</span> <span class="n">UIElementTypes</span><span class="p">,</span> <span class="n">TILE_SIZE</span><span class="p">,</span> <span class="n">VisualInfo</span>
 <span class="kn">from</span> <span class="nn">scripts.dev_tools.data_editor</span> <span class="kn">import</span> <span class="n">DataEditor</span>
 <span class="kn">from</span> <span class="nn">scripts.ui.ui_elements.camera</span> <span class="kn">import</span> <span class="n">Camera</span>
@@ -243,11 +244,11 @@
         <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
         <span class="n">editor</span> <span class="o">=</span> <span class="n">DataEditor</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Gui</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_ui_element</span><span class="p">(</span><span class="n">UIElementTypes</span><span class="o">.</span><span class="n">SKILL_EDITOR</span><span class="p">,</span> <span class="n">editor</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_ui_element</span><span class="p">(</span><span class="n">UIElementTypes</span><span class="o">.</span><span class="n">DATA_EDITOR</span><span class="p">,</span> <span class="n">editor</span><span class="p">)</span></div>
 
     <span class="c1">################ ELEMENT ###################</span>
 
-<div class="viewcode-block" id="ElementMethods.get_ui_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.get_ui_element">[docs]</a>    <span class="k">def</span> <span class="nf">get_ui_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementTypes</span><span class="p">):</span>
+<div class="viewcode-block" id="ElementMethods.get_ui_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.get_ui_element">[docs]</a>    <span class="k">def</span> <span class="nf">get_ui_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">UIElementTypes</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get UI element. Returns nothing if not found. Won&#39;t be found if not init&#39;d.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -262,27 +263,20 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span></div>
 
-<div class="viewcode-block" id="ElementMethods.add_ui_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.add_ui_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_ui_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_name</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+<div class="viewcode-block" id="ElementMethods.add_ui_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.add_ui_element">[docs]</a>    <span class="k">def</span> <span class="nf">add_ui_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">UIElementTypes</span><span class="p">],</span> <span class="n">element</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add ui element to the list of all elements.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            element_name ():</span>
-<span class="sd">            element ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="n">element_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="n">element_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span></div>
 
-<div class="viewcode-block" id="ElementMethods.remove_ui_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.remove_ui_element">[docs]</a>    <span class="k">def</span> <span class="nf">remove_ui_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_name</span><span class="p">):</span>
+<div class="viewcode-block" id="ElementMethods.remove_ui_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.remove_ui_element">[docs]</a>    <span class="k">def</span> <span class="nf">remove_ui_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">UIElementTypes</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove ui element from the list of all elements.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            element_name ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="n">element_name</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elements</span><span class="p">[</span><span class="n">element_type</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to remove </span><span class="si">{element_name}</span><span class="s2"> element but key not found.&quot;</span><span class="p">)</span></div>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to remove </span><span class="si">{element_type}</span><span class="s2"> element but key not found.&quot;</span><span class="p">)</span></div>
 
     <span class="c1">############## CAMERA ###################</span>
 
@@ -319,25 +313,14 @@
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to check target pos in Camera but key not found. Is it init&#39;d?&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="ElementMethods.move_camera"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.move_camera">[docs]</a>    <span class="k">def</span> <span class="nf">move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">move_x</span><span class="p">,</span> <span class="n">move_y</span><span class="p">):</span>
+<div class="viewcode-block" id="ElementMethods.move_camera"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.move_camera">[docs]</a>    <span class="k">def</span> <span class="nf">move_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Increment camera&#39;s drawn tiles in the given direction. N.B. Physical position on screen does not change.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            move_x ():</span>
-<span class="sd">            move_y ():</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ui_element</span><span class="p">(</span><span class="n">UIElementTypes</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">camera</span><span class="p">:</span>
-            <span class="c1"># TODO - moving to top causes circular import. Resolve this.</span>
-            <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
-
-            <span class="n">game_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_game_map</span><span class="p">()</span>
-
-            <span class="c1"># clamp function: max(low, min(n, high))</span>
-            <span class="n">camera</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">+</span> <span class="n">move_x</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
-            <span class="n">camera</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">+</span> <span class="n">move_y</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">move_camera</span><span class="p">(</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to move Camera but key not found. Is it init&#39;d?&quot;</span><span class="p">)</span></div>
 
@@ -348,19 +331,7 @@
         <span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ui_element</span><span class="p">(</span><span class="n">UIElementTypes</span><span class="o">.</span><span class="n">CAMERA</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">camera</span><span class="p">:</span>
-            <span class="n">tiles</span> <span class="o">=</span> <span class="p">[]</span>
-
-            <span class="c1"># TODO - moving to top causes circular import. Resolve this.</span>
-            <span class="kn">from</span> <span class="nn">scripts.managers.world_manager.world_manager</span> <span class="kn">import</span> <span class="n">world</span>
-
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">start_tile_col</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">start_tile_col</span> <span class="o">+</span> <span class="n">camera</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">start_tile_row</span><span class="p">,</span> <span class="n">camera</span><span class="o">.</span><span class="n">start_tile_row</span> <span class="o">+</span> <span class="n">camera</span><span class="o">.</span><span class="n">rows</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">FOV</span><span class="o">.</span><span class="n">is_tile_in_fov</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-                        <span class="n">tile</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">Map</span><span class="o">.</span><span class="n">get_tile</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
-                        <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
-                            <span class="n">tiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
-
-            <span class="n">camera</span><span class="o">.</span><span class="n">set_tiles</span><span class="p">(</span><span class="n">tiles</span><span class="p">)</span>
+            <span class="n">camera</span><span class="o">.</span><span class="n">update_camera_tiles</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to set camera tiles in Camera but key not found. Is it init&#39;d?&quot;</span><span class="p">)</span></div>
 
@@ -517,16 +488,13 @@
         <span class="k">if</span> <span class="n">entity_info</span><span class="p">:</span>
             <span class="n">entity_info</span><span class="o">.</span><span class="n">cleanse</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to cleanse EntityInfo but key not found. Is it init&#39;d?&quot;</span><span class="p">)</span></div>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to kill EntityInfo but key not found. Is it init&#39;d?&quot;</span><span class="p">)</span></div>
 
     <span class="c1">############## MESSAGES #####################</span>
 
-<div class="viewcode-block" id="ElementMethods.add_to_message_log"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.add_to_message_log">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_message_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="ElementMethods.add_to_message_log"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.add_to_message_log">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_message_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a text to the message log. Includes processing of the text.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            message (str):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">message_log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">Element</span><span class="o">.</span><span class="n">get_ui_element</span><span class="p">(</span><span class="n">UIElementTypes</span><span class="o">.</span><span class="n">MESSAGE_LOG</span><span class="p">)</span>
@@ -551,17 +519,7 @@
 
     <span class="c1">############## KILL ##################</span>
 
-<div class="viewcode-block" id="ElementMethods.kill_data_editor"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.kill_data_editor">[docs]</a>    <span class="k">def</span> <span class="nf">kill_data_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Remove any reference to the skill_editor. Includes use of editors&#39;s cleanse method.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data_editor</span><span class="p">:</span> <span class="n">DataEditor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ui_element</span><span class="p">(</span><span class="n">UIElementTypes</span><span class="o">.</span><span class="n">SKILL_EDITOR</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">data_editor</span><span class="p">:</span>
-            <span class="n">data_editor</span><span class="o">.</span><span class="n">cleanse</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">remove_ui_element</span><span class="p">(</span><span class="n">data_editor</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ElementMethods.kill_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.kill_element">[docs]</a>    <span class="k">def</span> <span class="nf">kill_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">UIElementTypes</span><span class="p">):</span>
+<div class="viewcode-block" id="ElementMethods.kill_element"><a class="viewcode-back" href="../../../../managers.html#scripts.managers.ui_manager.element_methods.ElementMethods.kill_element">[docs]</a>    <span class="k">def</span> <span class="nf">kill_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">UIElementTypes</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove any reference to the element</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -594,7 +552,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

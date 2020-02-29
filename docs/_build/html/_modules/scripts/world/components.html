@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>scripts.world.components &mdash; NotQuiteParadise 0.93.0 documentation</title>
+  <title>scripts.world.components &mdash; NotQuiteParadise 0.94.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.93.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -69,9 +69,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#game">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#god">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
@@ -84,9 +84,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../managers.html">Managers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#input">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#world">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../skills.html">Skills</a><ul>
@@ -150,7 +150,6 @@
   <h1>Source code for scripts.world.components</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 <span class="kn">from</span> <span class="nn">scripts.world.data_classes.sprites_dataclass</span> <span class="kn">import</span> <span class="n">CharacteristicSpritesData</span>
 
@@ -163,14 +162,19 @@
 <span class="c1">#########################################################</span>
 
 
-<div class="viewcode-block" id="IsPlayer"><a class="viewcode-back" href="../../../world.html#scripts.world.components.IsPlayer">[docs]</a><span class="k">class</span> <span class="nc">IsPlayer</span><span class="p">:</span>
+<div class="viewcode-block" id="Component"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Component">[docs]</a><span class="k">class</span> <span class="nc">Component</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Base component&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="IsPlayer"><a class="viewcode-back" href="../../../world.html#scripts.world.components.IsPlayer">[docs]</a><span class="k">class</span> <span class="nc">IsPlayer</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] Whether the entity is the player.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>  <span class="c1"># reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance</span></div>
 
 
-<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">:</span>
+<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s position on the map.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -180,7 +184,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="Aesthetic"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Aesthetic">[docs]</a><span class="k">class</span> <span class="nc">Aesthetic</span><span class="p">:</span>
+<div class="viewcode-block" id="Aesthetic"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Aesthetic">[docs]</a><span class="k">class</span> <span class="nc">Aesthetic</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s sprite.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -196,7 +200,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_sprite_duration</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
-<div class="viewcode-block" id="Resources"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Resources">[docs]</a><span class="k">class</span> <span class="nc">Resources</span><span class="p">:</span>
+<div class="viewcode-block" id="Resources"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Resources">[docs]</a><span class="k">class</span> <span class="nc">Resources</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s resources.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -207,7 +211,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">time_spent</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 
-<div class="viewcode-block" id="Blocking"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Blocking">[docs]</a><span class="k">class</span> <span class="nc">Blocking</span><span class="p">:</span>
+<div class="viewcode-block" id="Blocking"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Blocking">[docs]</a><span class="k">class</span> <span class="nc">Blocking</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s blocking of other objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -217,7 +221,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">blocks_sight</span> <span class="o">=</span> <span class="n">blocks_sight</span></div>
 
 
-<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">:</span>
+<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s identity, such as name and description.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -227,7 +231,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span></div>
 
 
-<div class="viewcode-block" id="Race"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Race">[docs]</a><span class="k">class</span> <span class="nc">Race</span><span class="p">:</span>
+<div class="viewcode-block" id="Race"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Race">[docs]</a><span class="k">class</span> <span class="nc">Race</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s people.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -236,7 +240,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">people_name</span></div>
 
 
-<div class="viewcode-block" id="Savvy"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Savvy">[docs]</a><span class="k">class</span> <span class="nc">Savvy</span><span class="p">:</span>
+<div class="viewcode-block" id="Savvy"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Savvy">[docs]</a><span class="k">class</span> <span class="nc">Savvy</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s savvy.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -245,7 +249,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">savvy_name</span></div>
 
 
-<div class="viewcode-block" id="Homeland"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Homeland">[docs]</a><span class="k">class</span> <span class="nc">Homeland</span><span class="p">:</span>
+<div class="viewcode-block" id="Homeland"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Homeland">[docs]</a><span class="k">class</span> <span class="nc">Homeland</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s homeland.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -254,18 +258,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">homeland_name</span></div>
 
 
-<div class="viewcode-block" id="AIBasic"><a class="viewcode-back" href="../../../world.html#scripts.world.components.AIBasic">[docs]</a><span class="k">class</span> <span class="nc">AIBasic</span><span class="p">:</span>
+<div class="viewcode-block" id="AIBasic"><a class="viewcode-back" href="../../../world.html#scripts.world.components.AIBasic">[docs]</a><span class="k">class</span> <span class="nc">AIBasic</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An ai to control an entity.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="HasCombatStats"><a class="viewcode-back" href="../../../world.html#scripts.world.components.HasCombatStats">[docs]</a><span class="k">class</span> <span class="nc">HasCombatStats</span><span class="p">:</span>
+<div class="viewcode-block" id="HasCombatStats"><a class="viewcode-back" href="../../../world.html#scripts.world.components.HasCombatStats">[docs]</a><span class="k">class</span> <span class="nc">HasCombatStats</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[Component] A flag to show if an entity has stats used for combat.&quot;&quot;&quot;</span>
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>  <span class="c1"># reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance</span></div>
 
 
-<div class="viewcode-block" id="Knowledge"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Knowledge">[docs]</a><span class="k">class</span> <span class="nc">Knowledge</span><span class="p">:</span>
+<div class="viewcode-block" id="Knowledge"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Knowledge">[docs]</a><span class="k">class</span> <span class="nc">Knowledge</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[Component] An entity&#39;s knowledge, including skills.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">skills</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -273,7 +277,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">skills</span> <span class="o">=</span> <span class="n">skills</span></div>
 
 
-<div class="viewcode-block" id="Affliction"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Affliction">[docs]</a><span class="k">class</span> <span class="nc">Affliction</span><span class="p">:</span>
+<div class="viewcode-block" id="Affliction"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Affliction">[docs]</a><span class="k">class</span> <span class="nc">Affliction</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[Component] An entity&#39;s Boons and Banes. e.g. {boon_name: duration}&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boons</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">banes</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">banes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -284,7 +288,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">banes</span> <span class="o">=</span> <span class="n">banes</span></div>
 
 
-<div class="viewcode-block" id="Aspect"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Aspect">[docs]</a><span class="k">class</span> <span class="nc">Aspect</span><span class="p">:</span>
+<div class="viewcode-block" id="Aspect"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Aspect">[docs]</a><span class="k">class</span> <span class="nc">Aspect</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;[Component] An entity&#39;s aspects. A static tile modifier. e.g. {aspect_name: duration} &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aspects</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">aspects</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -292,14 +296,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="n">aspects</span></div>
 
 
-<div class="viewcode-block" id="IsGod"><a class="viewcode-back" href="../../../world.html#scripts.world.components.IsGod">[docs]</a><span class="k">class</span> <span class="nc">IsGod</span><span class="p">:</span>
+<div class="viewcode-block" id="IsGod"><a class="viewcode-back" href="../../../world.html#scripts.world.components.IsGod">[docs]</a><span class="k">class</span> <span class="nc">IsGod</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] Whether the entity is a god.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>  <span class="c1"># reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance</span></div>
 
 
-<div class="viewcode-block" id="Opinion"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Opinion">[docs]</a><span class="k">class</span> <span class="nc">Opinion</span><span class="p">:</span>
+<div class="viewcode-block" id="Opinion"><a class="viewcode-back" href="../../../world.html#scripts.world.components.Opinion">[docs]</a><span class="k">class</span> <span class="nc">Opinion</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    [Component] An entity&#39;s views on other entities.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -329,7 +333,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.93.0',
+            VERSION:'0.94.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
