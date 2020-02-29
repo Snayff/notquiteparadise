@@ -13,7 +13,6 @@ from scripts.core.event_hub import publisher
 from scripts.world.data_classes.effect_dataclass import EffectData
 from scripts.world.combat_stats import CombatStats
 from scripts.world.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity
-
 from scripts.world.tile import Tile
 
 if TYPE_CHECKING:
@@ -30,7 +29,7 @@ class SkillMethods:
     """
 
     def __init__(self, manager):
-        self._manager = manager  # type: WorldManager
+        self._manager: WorldManager = manager
 
     ############## CHECKS ###############
 

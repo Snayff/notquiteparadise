@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import tcod
 from typing import TYPE_CHECKING
 from scripts.core.constants import FOVInfo, SkillShapes
@@ -14,7 +13,7 @@ class FOVMethods:
     Methods for querying the fov and fov related info and taking fov actions.
     """
     def __init__(self, manager):
-        self._manager = manager  # type: WorldManager
+        self._manager: WorldManager = manager
         self._players_fov_map = None  # type: tcod.map.Map
 
     def create_player_fov_map(self, width, height):

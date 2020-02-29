@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import dataclasses
-import logging
 import random
 import logging
+import pytweening
 
 from typing import TYPE_CHECKING, Any, Type
 from scripts.core import utilities
-from scripts.core.constants import PrimaryStatTypes, TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
+from scripts.core.constants import TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
 from scripts.core.library import library
 from scripts.core.types import Component
-from scripts.managers.ui_manager.ui_manager import ui
 from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
 from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData, CharacteristicSpritePathsData
@@ -20,8 +19,6 @@ from scripts.world.combat_stats import CombatStats
 if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
     from scripts.managers.world_manager.world_manager import WorldManager
-
-
 
 
 class EntityMethods:
@@ -391,14 +388,8 @@ class EntityMethods:
     def judge_action(self, entity: int, action: Any):
         """
         Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards
-        that  action.
-
-        Args:
-            entity ():
-            action (): Can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
-
+        that  action. Action can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
         """
-
         for ent, (is_god, opinion, identity) in self._manager.World.get_entitys_components(IsGod, Opinion, Identity):
 
             attitudes = library.get_god_attitudes_data(identity.name)
@@ -477,12 +468,37 @@ class EntityMethods:
 
         return chosen_interventions
 
-    def refresh_aesthetic_screen_position(self):
-        """
-        Loop all entities with Position and Aesthetic and update their screen position
-        """
-        for entity, (aesthetic, position) in self.get_components(Aesthetic, Position):
-            aesthetic.screen_x, aesthetic.screen_y = ui.Element.world_to_screen_position((position.x, position.y))
-            aesthetic.target_screen_x = aesthetic.screen_x
-            aesthetic.target_screen_y = aesthetic.screen_y
+    ############### PROCESSORS ##########
 
+    def process_aesthetic_update(self, delta_time: float):
+        """
+        Update real-time timers on entities
+        """
+        get_component = self.get_component
+
+        # move entities screen position towards target
+        for entity, aesthetic in get_component(Aesthetic):
+            max_duration = 0.3
+
+            # increment time
+            aesthetic.current_sprite_duration += delta_time
+
+            # do we need to show moving to a new position? Have we exceeded animation duration?
+            if (aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y) \
+                    and aesthetic.current_sprite_duration <= max_duration:
+                # are we close?
+                if (aesthetic.screen_x - 1 < aesthetic.target_screen_x < aesthetic.screen_x + 1) and \
+                        (aesthetic.screen_y - 1 < aesthetic.target_screen_y < aesthetic.screen_y + 1):
+                    # jump to target
+                    aesthetic.screen_x = aesthetic.target_screen_x
+                    aesthetic.screen_y = aesthetic.target_screen_y
+
+                # keep moving:
+                else:
+                    lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
+                    aesthetic.screen_x = utilities.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
+                    aesthetic.screen_y = utilities.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
+            # not moving so reset to idle
+            else:
+                aesthetic.current_sprite = aesthetic.sprites.idle
+                aesthetic.current_sprite_duration = 0

@@ -10,7 +10,7 @@ from scripts.managers.ui_manager.ui_manager import ui
 from scripts.managers.world_manager.world_manager import world
 from scripts.core.event_hub import Subscriber, publisher
 from scripts.core.constants import EventTopics, GameStates, MessageTypes, VisualInfo, UIElementTypes
-from scripts.world.components import Position
+from scripts.world.components import Position, Aesthetic
 from scripts.events.ui_events import MessageEvent, ClickTile
 
 if TYPE_CHECKING:
@@ -114,8 +114,11 @@ class UiHandler(Subscriber):
         ui.Element.init_message_log()
         ui.Element.init_entity_info()
 
-        # refresh entities screen positions N.B. must be before camera update as camera snapshots current positions
-        world.Entity.refresh_aesthetic_screen_position()
+        # Loop all entities with Position and Aesthetic and update their screen position
+        for entity, (aesthetic, position) in world.Entity.get_components(Aesthetic, Position):
+            aesthetic.screen_x, aesthetic.screen_y = ui.Element.world_to_screen_position((position.x, position.y))
+            aesthetic.target_screen_x = aesthetic.screen_x
+            aesthetic.target_screen_y = aesthetic.screen_y
 
         # update camera
         self.update_camera()
