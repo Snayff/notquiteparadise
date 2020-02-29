@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
 
+from typing import TYPE_CHECKING
 from scripts.managers.game_manager.debug_methods import DebugMethods
 from scripts.managers.game_manager.state_methods import StateMethods
 
