@@ -9,6 +9,7 @@ from scripts.event_handlers.game_handler import GameHandler
 from scripts.core.event_hub import publisher, event_hub
 from scripts.managers.turn_manager import turn
 from scripts.managers.world_manager.world_manager import world
+from scripts.managers.input_manager.input_manager import input
 from scripts.event_handlers.ui_handler import UiHandler
 
 
@@ -27,7 +28,9 @@ def initialise_game():
     player = world.Entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
                                        "dandy", True)
 
+    # tell places about the player
     turn.turn_holder = player
+    input.Control.set_player_id(player)
 
     # create an enemy
     # TODO - remove when enemy gen is in

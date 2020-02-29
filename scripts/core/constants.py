@@ -41,6 +41,7 @@ class GameStates(SimpleNamespace):
     GAME_INITIALISING = 6
     NEW_TURN = 7
     DEV_MODE = 8
+    PREVIOUS = 9
 
 
 class EventTopics(SimpleNamespace):

@@ -206,10 +206,6 @@ class UiHandler(Subscriber):
     def update_camera(start_pos: Tuple = None, target_pos: Tuple = None):
         """
         Update tiles shown in camera.
-
-        Args:
-            start_pos ():
-            target_pos ():
         """
         if target_pos:
             should_move_camera = ui.Element.should_camera_move(start_pos, target_pos)

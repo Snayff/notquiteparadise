@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import MessageTypes, Directions, TargetTags
-from scripts.events.game_events import EndTurnEvent
+from scripts.core.constants import MessageTypes, Directions, TargetTags, GameStates
+from scripts.events.game_events import EndTurnEvent, ChangeGameStateEvent
 from scripts.events.ui_events import MessageEvent
 from scripts.core.library import library
 from scripts.core.event_hub import publisher, Subscriber, Event
+from scripts.managers.game_manager.game_manager import game
 from scripts.managers.turn_manager import turn
 from scripts.managers.ui_manager.ui_manager import ui
 from scripts.managers.world_manager.world_manager import world
 from scripts.world.components import Position, Knowledge, Identity, IsGod, Aesthetic
-from scripts.events.entity_events import UseSkillEvent
+from scripts.events.entity_events import UseSkillEvent, WantToUseSkillEvent
 from scripts.events.entity_events import DieEvent, MoveEvent
 
 if TYPE_CHECKING:
@@ -44,14 +45,14 @@ class EntityHandler(Subscriber):
         elif isinstance(event, DieEvent):
             self.process_die(event)
 
+        elif isinstance(event, WantToUseSkillEvent):
+            self.process_want_to_use_skill(event)
+
     @staticmethod
     def process_move(event: MoveEvent):
         """
         Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
         target tile has entity) or move.
-
-        Args:
-            event(MoveEvent):
         """
         # get info from event
         dir_x, dir_y = event.direction
@@ -159,3 +160,28 @@ class EntityHandler(Subscriber):
 
         # delete from world
         world.Entity.delete(entity)
+
+    @staticmethod
+    def process_want_to_use_skill(event: WantToUseSkillEvent):
+        """
+        Process the desire to use a skill. """
+        skill_number = event.skill_number
+        player = world.Entity.get_player()
+        player_pos = world.Entity.get_entitys_component(player, Position)
+        skill_name = game.State.get_active_skill()
+        skill_pressed = player.actor.known_skills[skill_number]
+
+        # confirm skill pressed doesn't match skill already pressed
+        if skill_pressed != skill_name:
+            knowledge = world.Entity.get_entitys_component(player, Knowledge)
+            skill_name = knowledge.skills[skill_number]
+            skill_data = library.get_skill_data(skill_name)
+
+            if world.Skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
+                publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))
+
+        # skill matches already selected so use skill!
+        else:
+            pass
+            # TODO - activate skill. Need to get selected tile.
+            # publisher.publish(UseSkillEvent(player, skill_name, (player_pos.x, player_pos.y), ))

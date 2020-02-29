@@ -1,4 +1,6 @@
-from scripts.core.constants import EventTopics
+from typing import Type
+
+from scripts.core.constants import EventTopics, GameStates
 from scripts.core.event_hub import Event
 
 
@@ -29,7 +31,7 @@ class ChangeGameStateEvent(Event):
     """
     Event to change the current game state
     """
-    def __init__(self, new_game_state, skill_to_be_used=None):
+    def __init__(self, new_game_state: Type[GameStates], skill_to_be_used: str = None):
         Event.__init__(self, "CHANGE_GAME_STATE", EventTopics.GAME)
         self.new_game_state = new_game_state
         self.skill_to_be_used = skill_to_be_used

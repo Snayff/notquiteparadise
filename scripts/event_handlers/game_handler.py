@@ -49,9 +49,6 @@ class GameHandler(Subscriber):
     def process_change_game_state(event: ChangeGameStateEvent):
         """
         Transition to another game state as specified by the event.
-
-        Args:
-            event ():
         """
         new_game_state = event.new_game_state
 
@@ -70,6 +67,10 @@ class GameHandler(Subscriber):
 
         elif new_game_state == GameStates.TARGETING_MODE:
             game.State.set_active_skill(event.skill_to_be_used)
+
+        # PREVIOUS must be last as it overwrites new_game_state
+        elif new_game_state == GameStates.PREVIOUS:
+            new_game_state = game.State.get_previous()
 
         # update the game state to the intended state
         if new_game_state != game.State.get_current():

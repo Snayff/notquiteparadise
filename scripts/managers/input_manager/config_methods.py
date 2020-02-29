@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 from scripts.core.constants import InputModes
 
@@ -17,7 +16,7 @@ class ConfigMethods:
     """
 
     def __init__(self, manager):
-        self._manager = manager  # type: InputManager
+        self._manager: InputManager = manager
 
         self.mode = None
 
