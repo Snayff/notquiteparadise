@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import pygame
+
 from scripts.core.constants import GameStates
 from scripts.managers.input_manager.input_manager import input
 from scripts.managers.ui_manager.ui_manager import ui
-
 from scripts.managers.world_manager.world_manager import world
 from scripts.managers.game_manager.game_manager import game
 from scripts.core.event_hub import event_hub

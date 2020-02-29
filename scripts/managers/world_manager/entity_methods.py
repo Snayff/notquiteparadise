@@ -5,13 +5,12 @@ import random
 import logging
 import pytweening
 
-from typing import TYPE_CHECKING, Any, Type
+from typing import TYPE_CHECKING, Any, Type, TypeVar
 from scripts.core import utilities
 from scripts.core.constants import TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
 from scripts.core.library import library
-from scripts.core.types import Component
 from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
-    Aesthetic, IsGod, Opinion, HasCombatStats, Blocking
+    Aesthetic, IsGod, Opinion, HasCombatStats, Blocking, Component
 from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData, CharacteristicSpritePathsData
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
@@ -19,6 +18,8 @@ from scripts.world.combat_stats import CombatStats
 if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
     from scripts.managers.world_manager.world_manager import WorldManager
+
+C = TypeVar("C", bound=Component)
 
 
 class EntityMethods:
@@ -45,7 +46,7 @@ class EntityMethods:
             return entity
         return None
 
-    def get_entity(self, unique_component: Type[Component]) -> Union[int, None]:
+    def get_entity(self, unique_component: Type[C]) -> Union[int, None]:
         """
         Get a single entity that has a component. If multiple entities have the given component only the first found
         is returned.
@@ -65,8 +66,8 @@ class EntityMethods:
 
         return entities[0]
 
-    def get_entities(self, component1:  Type[Component], component2:  Type[Component] = None,
-            component3:  Type[Component] = None) -> List[int]:
+    def get_entities(self, component1:  Type[C], component2:  Type[C] = None,
+            component3:  Type[C] = None) -> List[int]:
         """
         Get entities with the specified components. Returns a list of entity IDs
         """
@@ -84,9 +85,9 @@ class EntityMethods:
 
         return entities
 
-    def get_entities_and_components_in_area(self, area: List[Tile], component1:  Type[Component] = None,
-            component2:  Type[Component] = None, component3:  Type[Component] = None) -> \
-            Dict[int, Component]:
+    def get_entities_and_components_in_area(self, area: List[Tile], component1:  Type[C] = None,
+            component2:  Type[C] = None, component3:  Type[C] = None) -> \
+            Dict[int, Tuple[int, C, ...]]:
         """
         Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
         components are specified the return will be (Position, None).
@@ -118,7 +119,7 @@ class EntityMethods:
 
         return entities
 
-    def get_entitys_component(self, entity: int, component:  Type[Component]) -> Union[Component, None]:
+    def get_entitys_component(self, entity: int, component:  Type[C]) -> Union[C, None]:
         """
         Get an entity's component.
         """
@@ -138,7 +139,7 @@ class EntityMethods:
 
         return self.get_entitys_component(entity, Identity)
 
-    def get_component(self, component:  Type[Component]) -> List[Tuple[int, Component]]:
+    def get_component(self, component:  Type[C]) -> List[Tuple[int, C]]:
         """
         Get all entities with the specified component
         """
@@ -209,9 +210,13 @@ class EntityMethods:
         """
         if components is None:
             components = []
+
         world = self._manager.World
+
+        # create the entity
         entity = world.create_entity()
 
+        # add all components
         for component in components:
             world.add_component(entity, component)
 

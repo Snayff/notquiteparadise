@@ -107,7 +107,6 @@ class DebugMethods:
 
         # convert profiling to human readable format
         date_and_time = datetime.datetime.utcnow()
-
         out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
         ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
         ps.strip_dirs().sort_stats("cumulative").print_stats()

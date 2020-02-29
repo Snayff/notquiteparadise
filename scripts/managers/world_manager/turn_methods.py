@@ -87,7 +87,11 @@ class TurnMethods:
 
         # log result
         identity = self._manager.Entity.get_entitys_component(new_turn_holder, Identity)
-        logging.debug(f"-> It is now '{identity.name}'`s turn.")
+        if identity:
+            name = identity.name
+        else:
+            name = "(not found!)"
+        logging.debug(f"-> It is now '{name}'`s turn.")
 
     def next_round(self, time_progressed):
         """
