@@ -145,7 +145,7 @@ class UiHandler(Subscriber):
         """
         Clear all dev mode elements
         """
-        ui.Element.kill_data_editor()
+        ui.Element.kill_element(UIElementTypes.DATA_EDITOR)
 
     ############# HANDLE UI EVENTS #################
 

@@ -698,10 +698,11 @@ class DataEditor(UIWindow):
 
     ############## CLEAR #####################
 
-    def cleanse(self):
+    def kill(self):
         """
         Clear all held data.
         """
+
         if self.category_selector:
             self.category_selector.kill()
             self.category_selector = None
@@ -714,6 +715,8 @@ class DataEditor(UIWindow):
         if self.secondary_data_fields:
             self._kill_details_fields("secondary")
             self.secondary_data_fields = {}
+
+        super().kill()
 
     def _kill_details_fields(self, primary_or_secondary: str):
         """

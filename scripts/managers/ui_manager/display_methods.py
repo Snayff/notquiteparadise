@@ -36,51 +36,45 @@ class DisplayMethods:
 
         self.init_display_config()
 
-    def init_pygame(self):
+    ############# INIT ###############################
+
+    @staticmethod
+    def init_pygame():
         """
         Init pygame
         """
         pygame.init()
 
-    def init_display_config(self):
+    @staticmethod
+    def init_display_config():
         """
         Initialise display settings.
         """
         pygame.display.set_caption("Not Quite Paradise")
         # pygame.display.set_icon() # TODO - add window icon
 
-    def get_screen_scaling_mod(self):
+    ############# GET ##############################
+
+    def get_screen_scaling_mod(self) -> Tuple[int, int]:
         """
         Get the screen scaling modifier
-
-        Returns:
-            Tuple[int,int]
         """
         return self.screen_scaling_mod_x, self.screen_scaling_mod_y
 
-    def get_main_surface(self):
+    def get_main_surface(self) -> pygame.Surface:
         """
         Get the main surface where all draws eventually go.
-
-        Returns:
-            pygame.Surface:
         """
         return self.main_surface
 
-    def get_desired_resolution(self):
+    def get_desired_resolution(self) -> Tuple[int, int]:
         """
-        Get the desired resolution
-
-        Returns:
-            Tuple[int, int]: (width, height)
+        Get the desired resolution as (width, height)
         """
         return self.desired_width, self.desired_height
 
-    def get_window(self):
+    def get_window(self) -> pygame.display:
         """
         Get the window
-
-        Returns:
-
         """
         return self.window

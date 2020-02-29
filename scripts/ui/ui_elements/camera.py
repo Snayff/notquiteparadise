@@ -6,6 +6,7 @@ from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
 from scripts.core.constants import TILE_SIZE
 from scripts.core.event_hub import publisher
+from scripts.core.utilities import clamp
 from scripts.events.ui_events import ClickTile
 from scripts.world.components import Position, Aesthetic
 
@@ -49,13 +50,6 @@ class Camera(UIWindow):
         # confirm init complete
         logging.debug(f"Camera initialised.")
 
-    def update(self, time_delta: float):
-        """
-        Update based on current state and data. Run every frame.
-        """
-        super().update(time_delta)
-        self.update_game_map()
-
     def handle_events(self, event):
         """
         Handle events created by this UI widget
@@ -67,6 +61,15 @@ class Camera(UIWindow):
         if ui_object_id[:len(tile_prefix)] == tile_prefix:
             tile_pos = ui_object_id[len('#tile'):]
             publisher.publish(ClickTile(tile_pos_string=tile_pos))
+
+    ############### UPDATE ###########################
+
+    def update(self, time_delta: float):
+        """
+        Update based on current state and data. Run every frame.
+        """
+        super().update(time_delta)
+        self.update_game_map()
 
     def update_game_map(self):
         """
@@ -156,6 +159,27 @@ class Camera(UIWindow):
 
                 tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
                                 parent_element=self.grid, object_id=f"#tile{tile_x},{tile_y}")
+                
+    def update_camera_tiles(self):
+        """
+        Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.
+        """
+        if self:
+            tiles = []
+    
+            # TODO - moving to top causes circular import. Resolve this.
+            from scripts.managers.world_manager.world_manager import world
+    
+            for x in range(self.start_tile_col, self.start_tile_col + self.columns):
+                for y in range(self.start_tile_row, self.start_tile_row + self.rows):
+                    if world.FOV.is_tile_in_fov(x, y):
+                        tile = world.Map.get_tile((x, y))
+                        if tile:
+                            tiles.append(tile)
+    
+            self.set_tiles(tiles)
+
+    ############## SET #########################
 
     def set_tiles(self, tiles: List):
         """
@@ -192,6 +216,18 @@ class Camera(UIWindow):
             directions (): List of Directions
         """
         self.overlay_directions = directions
+
+    ############# UTILITY #########################
+
+    def move_camera(self, num_cols: int, num_rows: int):
+        """
+        Adjust the camera position by the number of columns and rows
+        """
+        new_start_col = clamp(self.start_tile_col + num_cols, 0, self.columns)
+        new_start_row = clamp(self.start_tile_row + num_rows, 0, self.rows)
+
+        self.start_tile_col = new_start_col
+        self.start_tile_row = new_start_row
         
     def world_to_screen_position(self, pos: Tuple[int, int]):
         """

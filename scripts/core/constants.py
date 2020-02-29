@@ -260,7 +260,7 @@ class UIElementTypes(SimpleNamespace):
     SKILL_BAR = 4
     ENTITY_QUEUE = 5
     CAMERA = 6
-    SKILL_EDITOR = 7
+    DATA_EDITOR = 7
 
 
 class Directions(SimpleNamespace):
