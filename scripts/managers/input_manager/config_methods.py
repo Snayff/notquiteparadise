@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from scripts.core.constants import InputModes
+from scripts.engine.core.constants import InputModes
 
 if TYPE_CHECKING:
     from scripts.managers.input_manager.input_manager import InputManager

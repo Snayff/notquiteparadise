@@ -54,7 +54,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/managers/world_manager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/engine/core" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
   </component>
@@ -67,43 +67,20 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\managers\world_manager" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\world\data_classes" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\managers\game_manager" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\managers\input_manager" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\managers\ui_manager" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\ui_elements" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\entity" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\core" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\nqp" />
+    </key>
   </component>
-  <component name="RunManager" selected="Python.engine">
-    <configuration name="engine" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <output_file path="$PROJECT_DIR$/logs/game.log" />
-      <module name="NotQuiteParadise" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\Gabriel\Documents\NotQuiteParadise\venv\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/core/engine.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="true" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.main">
     <configuration name="fix_png" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="NotQuiteParadise" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -121,6 +98,29 @@
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <output_file path="$PROJECT_DIR$/logs/game.log" />
+      <module name="NotQuiteParadise" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Gabriel\Documents\NotQuiteParadise\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\nqp\main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="true" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
@@ -193,11 +193,11 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.engine" />
       <item itemvalue="Python.fix_png" />
       <item itemvalue="Python.scratch_2" />
       <item itemvalue="Python.scratch_3" />
       <item itemvalue="Python.scratch_4" />
+      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
@@ -317,7 +317,9 @@
       <workItem from="1582889477595" duration="27876000" />
       <workItem from="1582920507288" duration="82000" />
       <workItem from="1582923564915" duration="767000" />
-      <workItem from="1582971001323" duration="17227000" />
+      <workItem from="1582971001323" duration="17544000" />
+      <workItem from="1583001252396" duration="7075000" />
+      <workItem from="1583081307778" duration="6643000" />
     </task>
     <servers />
   </component>
@@ -355,22 +357,22 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1009" y="428" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1576321698166" />
-    <state x="1059" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1582988374852">
+    <state x="1059" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1583086335328">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1059" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1582988374852" />
+    <state x="1059" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583086335328" />
     <state x="1189" y="531" key="#com.intellij.tools.ToolEditorDialog" timestamp="1582723055805">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1189" y="531" key="#com.intellij.tools.ToolEditorDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1582723055805" />
-    <state x="997" y="612" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog" timestamp="1582910146134">
+    <state x="997" y="612" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog" timestamp="1583087195075">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="997" y="612" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1582910146134" />
-    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog" timestamp="1582910102796">
+    <state x="997" y="612" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583087195075" />
+    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog" timestamp="1583086163758">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1582910102796" />
+    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583086163758" />
     <state x="1085" y="325" key="#scratch_5" timestamp="1581948346469">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -391,46 +393,46 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1902" height="947" key="DebuggerActiveHint/0.0.3440.1400@0.0.3440.1400" timestamp="1582990714160" />
-    <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1582985453317">
+    <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1583087929002">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1582985453317" />
-    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog" timestamp="1582724231690">
+    <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1583087929002" />
+    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog" timestamp="1583012252028">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1582724231690" />
-    <state width="1007" height="194" key="GridCell.Tab.0.bottom" timestamp="1582990831821">
+    <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583012252028" />
+    <state width="1007" height="194" key="GridCell.Tab.0.bottom" timestamp="1582991257319">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831821" />
-    <state width="1007" height="194" key="GridCell.Tab.0.center" timestamp="1582990831821">
+    <state width="1007" height="194" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257319" />
+    <state width="1007" height="194" key="GridCell.Tab.0.center" timestamp="1582991257319">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831821" />
-    <state width="1007" height="194" key="GridCell.Tab.0.left" timestamp="1582990831821">
+    <state width="1007" height="194" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257319" />
+    <state width="1007" height="194" key="GridCell.Tab.0.left" timestamp="1582991257318">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831821" />
-    <state width="1007" height="194" key="GridCell.Tab.0.right" timestamp="1582990831821">
+    <state width="1007" height="194" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257318" />
+    <state width="1007" height="194" key="GridCell.Tab.0.right" timestamp="1582991257319">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831821" />
-    <state width="1007" height="194" key="GridCell.Tab.1.bottom" timestamp="1582990831822">
+    <state width="1007" height="194" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257319" />
+    <state width="1007" height="194" key="GridCell.Tab.1.bottom" timestamp="1582991257319">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831822" />
-    <state width="1007" height="194" key="GridCell.Tab.1.center" timestamp="1582990831822">
+    <state width="1007" height="194" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257319" />
+    <state width="1007" height="194" key="GridCell.Tab.1.center" timestamp="1582991257319">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831822" />
-    <state width="1007" height="194" key="GridCell.Tab.1.left" timestamp="1582990831822">
+    <state width="1007" height="194" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257319" />
+    <state width="1007" height="194" key="GridCell.Tab.1.left" timestamp="1582991257319">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831822" />
-    <state width="1007" height="194" key="GridCell.Tab.1.right" timestamp="1582990831822">
+    <state width="1007" height="194" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257319" />
+    <state width="1007" height="194" key="GridCell.Tab.1.right" timestamp="1582991257319">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1007" height="194" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1582990831822" />
+    <state width="1007" height="194" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1582991257319" />
     <state x="717" y="303" key="SettingsEditor" timestamp="1582975772635">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -447,14 +449,14 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1055" height="703" key="XDebugger.FullValuePopup/0.0.3440.1400@0.0.3440.1400" timestamp="1581429262784" />
-    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1582986676231">
+    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1583087876627">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582986676231" />
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1582988417079">
+    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583087876627" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1583012213869">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1582988417079" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583012213869" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

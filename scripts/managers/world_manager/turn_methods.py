@@ -3,12 +3,12 @@ from __future__ import annotations
 import logging
 
 from typing import TYPE_CHECKING
-from scripts.events.game_events import EndRoundEvent
-from scripts.core.event_hub import publisher
-from scripts.world.components import Resources, Identity
+from scripts.engine.events import EndRoundEvent
+from scripts.engine.core.event_core import publisher
+from scripts.engine.components import Resources, Identity
 
 if TYPE_CHECKING:
-    from typing import List, Union, Dict, Tuple
+    from typing import Dict, Tuple
     from scripts.managers.world_manager.world_manager import WorldManager
 
 

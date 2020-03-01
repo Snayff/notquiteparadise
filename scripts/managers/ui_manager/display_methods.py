@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import pygame
-import logging
 from typing import TYPE_CHECKING
-from scripts.core.constants import VisualInfo
+from scripts.engine.core.constants import VisualInfo
 
 
 if TYPE_CHECKING:

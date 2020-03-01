@@ -5,8 +5,8 @@ import math
 import scipy.spatial
 
 from typing import TYPE_CHECKING
-from scripts.core.constants import TargetTags
-from scripts.world.components import Position, Blocking
+from scripts.engine.core.constants import TargetTags
+from scripts.engine.components import Position, Blocking
 from scripts.world.game_map import GameMap
 from scripts.world.tile import Tile
 

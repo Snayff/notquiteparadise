@@ -4,13 +4,13 @@ import logging
 import pygame
 
 from typing import TYPE_CHECKING, Type
-from scripts.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
-from scripts.dev_tools.data_editor import DataEditor
-from scripts.ui.ui_elements.camera import Camera
-from scripts.ui.ui_elements.message_log import MessageLog
-from scripts.ui.ui_elements.entity_info import EntityInfo
-from scripts.ui.ui_elements.screen_message import ScreenMessage
-from scripts.ui.ui_elements.skill_bar import SkillBar
+from scripts.engine.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
+from scripts.nqp.dev_tools import DataEditor
+from scripts.engine.ui import Camera
+from scripts.engine.ui.message_log import MessageLog
+from scripts.engine.ui import EntityInfo
+from scripts.engine.ui.screen_message import ScreenMessage
+from scripts.engine.ui import SkillBar
 from scripts.world.tile import Tile
 
 if TYPE_CHECKING:

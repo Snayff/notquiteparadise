@@ -3,10 +3,9 @@ from __future__ import annotations
 import dataclasses
 import pygame
 from typing import TYPE_CHECKING
-from scripts.core.constants import InputIntents, Directions, GameStates
-from scripts.core.event_hub import publisher
-from scripts.events.entity_events import MoveEvent, WantToUseSkillEvent
-from scripts.events.game_events import ExitGameEvent, ChangeGameStateEvent
+from scripts.engine.core.constants import InputIntents, Directions, GameStates
+from scripts.engine.core.event_core import publisher
+from scripts.engine.events import WantToUseSkillEvent, MoveEvent, ExitGameEvent, ChangeGameStateEvent
 
 if TYPE_CHECKING:
     from scripts.managers.input_manager.input_manager import InputManager

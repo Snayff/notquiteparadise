@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from scripts.core.constants import PrimaryStatTypes, SecondaryStatTypes
-from scripts.core.library import library
-from scripts.world.components import Race, Homeland, Savvy
+from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes
+from scripts.nqp.library import library
+from scripts.engine.components import Race, Homeland, Savvy
 
 if TYPE_CHECKING:
     pass
@@ -84,7 +84,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -112,7 +111,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -139,7 +137,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -167,7 +164,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -195,7 +191,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -222,7 +217,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -249,7 +243,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -276,7 +269,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -345,7 +337,6 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 

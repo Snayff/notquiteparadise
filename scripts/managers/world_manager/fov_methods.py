@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import tcod
 from typing import TYPE_CHECKING
-from scripts.core.constants import FOVInfo, SkillShapes
+from scripts.engine.core.constants import FOVInfo, SkillShapes
 
 if TYPE_CHECKING:
     from scripts.managers.world_manager.world_manager import WorldManager

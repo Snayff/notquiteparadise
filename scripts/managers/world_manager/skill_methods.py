@@ -3,16 +3,15 @@ from __future__ import annotations
 import logging
 import random
 from typing import TYPE_CHECKING
-from scripts.core.constants import MessageTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
+from scripts.engine.core.constants import MessageTypes, PrimaryStatTypes, SecondaryStatTypes, HitValues, HitTypes, \
     EffectTypes, SkillShapes, Directions, TargetTags, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
     HitModifiers, AfflictionCategory
-from scripts.events.entity_events import DieEvent
-from scripts.events.ui_events import MessageEvent
-from scripts.core.library import library
-from scripts.core.event_hub import publisher
-from scripts.world.data_classes.effect_dataclass import EffectData
+from scripts.engine.events import MessageEvent, DieEvent
+from scripts.nqp.library import library
+from scripts.engine.core.event_core import publisher
+from scripts.engine.core.definitions import EffectData
 from scripts.world.combat_stats import CombatStats
-from scripts.world.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity
+from scripts.engine.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity
 from scripts.world.tile import Tile
 
 if TYPE_CHECKING:

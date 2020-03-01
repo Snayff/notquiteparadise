@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
-from scripts.world.components import Position, Blocking
 
 if TYPE_CHECKING:
     import pygame
@@ -10,7 +8,7 @@ if TYPE_CHECKING:
 
 class Tile:
     """
-    A Tile on the GameMap. Can contain an Entity, a Terrain and an Effect.
+    A Tile on the GameMap.
 
     Attributes:
         x(int): tile_x

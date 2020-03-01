@@ -1,7 +1,7 @@
 import logging
 import pygame
 import pygame_gui
-from scripts.core.constants import VisualInfo
+from scripts.engine.core.constants import VisualInfo
 from scripts.managers.ui_manager.display_methods import DisplayMethods
 from scripts.managers.ui_manager.element_methods import ElementMethods
 

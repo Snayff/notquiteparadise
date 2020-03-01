@@ -4,7 +4,7 @@ import logging
 import pygame
 
 from typing import TYPE_CHECKING
-from scripts.core.constants import GameStates
+from scripts.engine.core.constants import GameStates
 from scripts.managers.input_manager.config_methods import ConfigMethods
 from scripts.managers.input_manager.intents_dataclass import IntentsData
 from scripts.managers.input_manager.control_methods import ControlMethods

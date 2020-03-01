@@ -6,12 +6,12 @@ import logging
 import pytweening
 
 from typing import TYPE_CHECKING, Any, Type, TypeVar
-from scripts.core import utilities
-from scripts.core.constants import TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
-from scripts.core.library import library
-from scripts.world.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
+from scripts.engine import utilities
+from scripts.engine.core.constants import TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
+from scripts.nqp.library import library
+from scripts.engine.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking, Component
-from scripts.world.data_classes.sprites_dataclass import CharacteristicSpritesData, CharacteristicSpritePathsData
+from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData
 from scripts.world.tile import Tile
 from scripts.world.combat_stats import CombatStats
 
