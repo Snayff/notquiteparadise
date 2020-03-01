@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import math
+import scipy
 import pygame
 from typing import TYPE_CHECKING, List, Any
 from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE
 
 if TYPE_CHECKING:
-
     from typing import Tuple
 
 
@@ -109,7 +110,7 @@ def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> flo
     """
     amount = clamp(lerp_fraction, 0, 1)
 
-    #print(f"Initial:{initial_value}, Target:{target_value}, Lerp Amount:{amount}")
+    # print(f"Initial:{initial_value}, Target:{target_value}, Lerp Amount:{amount}")
 
     if amount >= 0.99:
         return target_value
@@ -122,3 +123,22 @@ def clamp(value, min_value, max_value):
     Return the value, clamped between min and max.
     """
     return max(min_value, min(value, max_value))
+
+
+def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> float:
+    """
+    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+    This returns a float indicating the straight line distance between the two points.
+    """
+    dx = target_pos[0] - start_pos[0]
+    dy = target_pos[1] - start_pos[1]
+    return math.sqrt(dx ** 2 + dy ** 2)
+
+
+def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+    """
+    Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
+    This returns an int indicating the number of tile moves between the two points.
+    """
+
+    return scipy.spatial.distance.chebyshev(start_pos, target_pos)

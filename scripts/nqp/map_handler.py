@@ -20,7 +20,7 @@ class MapHandler(Subscriber):
 
     def process_event(self, event):
         """
-        Control world events
+        Control world_objects events
 
         Args:
             event(Event): the event in need of processing

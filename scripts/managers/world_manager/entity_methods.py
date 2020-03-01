@@ -12,8 +12,8 @@ from scripts.engine.library import library
 from scripts.engine.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking, Component
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData
-from scripts.engine.world.tile import Tile
-from scripts.engine.world.combat_stats import CombatStats
+from scripts.engine.world_objects.tile import Tile
+from scripts.engine.world_objects.combat_stats import CombatStats
 
 if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
@@ -221,7 +221,7 @@ class EntityMethods:
 
     def delete(self, entity: int):
         """
-        Queues entity for removal from the world. Happens at the next run of World.process.
+        Queues entity for removal from the world_objects. Happens at the next run of World.process.
 
         Args:
             entity:
@@ -317,7 +317,7 @@ class EntityMethods:
 
         # player fov
         if is_player:
-            self._manager.FOV.recompute_player_fov(x, y, stats.sight_range)
+            self._manager.FOV.recompute_fov(x, y, stats.sight_range)
 
         return entity
 

@@ -16,16 +16,17 @@ if TYPE_CHECKING:
 
 class WorldManager:
     """
-    Contains all world related functionality
+    Contains all world_objects related functionality
     """
     def __init__(self):
 
         self.World = esper.World()
         self.Entity = EntityMethods(self)
         self.FOV = FOVMethods(self)
+        self.Map = MapMethods(self)
 
         self.Skill = SkillMethods(self)
-        self.Map = MapMethods(self)
+
         self.Turn = TurnMethods(self)
 
         logging.info(f"WorldManager initialised.")

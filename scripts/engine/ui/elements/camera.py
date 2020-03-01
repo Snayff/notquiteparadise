@@ -231,7 +231,7 @@ class Camera(UIWindow):
         
     def world_to_screen_position(self, pos: Tuple[int, int]):
         """
-        Convert from the world position to the screen position
+        Convert from the world_objects position to the screen position
         """
         tile_width = int(self.game_map.rect.width / self.columns)
         tile_height = int(self.game_map.rect.height / self.rows)

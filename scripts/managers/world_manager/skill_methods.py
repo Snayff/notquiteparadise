@@ -10,9 +10,9 @@ from scripts.engine.events import MessageEvent, DieEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher
 from scripts.engine.core.definitions import EffectData
-from scripts.engine.world.combat_stats import CombatStats
+from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity
-from scripts.engine.world.tile import Tile
+from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from scripts.managers.world_manager.world_manager import WorldManager

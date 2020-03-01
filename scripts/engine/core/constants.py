@@ -9,6 +9,7 @@ ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
 ENTITY_BLOCKS_SIGHT = False
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
+TIME_PER_ROUND = 100
 
 
 class VisualInfo(SimpleNamespace):

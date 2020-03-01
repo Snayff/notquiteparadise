@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class LibraryOfAlexandria:
     """
-    The centre of all knowledge in the world.
+    The centre of all knowledge in the world_objects.
     """
 
     def __init__(self):

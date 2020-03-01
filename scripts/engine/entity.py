@@ -7,13 +7,16 @@ from random import random
 import esper
 from typing import TYPE_CHECKING, TypeVar
 
-from scripts.engine import utilities
-from scripts.engine.components import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, IsGod, \
-    Opinion, Knowledge, Resources, HasCombatStats, Blocking
-from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT
+import tcod
+
+from scripts.engine import utilities, world
+from scripts.engine.components import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
+    IsGod, \
+    Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV
+from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData
-from scripts.engine.world.combat_stats import CombatStats
-from scripts.engine.world.tile import Tile
+from scripts.engine.world_objects.combat_stats import CombatStats
+from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
@@ -21,6 +24,7 @@ if TYPE_CHECKING:
 
 C = TypeVar("C", bound=Component)
 _esper = esper.World()
+
 
 ###################### GET ############################################
 
@@ -180,6 +184,14 @@ def get_primary_stat(entity: int, primary_stat: str) -> int:
     return value
 
 
+def get_player_fov() -> tcod.map.Map:
+    """
+    Get's the player's FOV component
+    """
+    # FIXME - update to ECS
+    return _players_fov_map
+
+
 ############## QUERIES  ################
 
 def has_component(entity: int, component: Type[Component]):
@@ -215,7 +227,7 @@ def create(components: List[Type[Component]] = None) -> int:
 
 def delete(entity: int):
     """
-    Queues entity for removal from the world. Happens at the next run of World.process.
+    Queues entity for removal from the world_objects. Happens at the next run of World.process.
     """
     if entity:
         _esper.delete_entity(entity)
@@ -280,6 +292,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
 
+    actor.append((FOV()))
+
     entity = create(actor)
 
     # give full resources
@@ -310,7 +324,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # player fov
     if is_player:
-        _manager.FOV.recompute_player_fov(x, y, stats.sight_range)
+        world.recompute_fov(x, y, stats.sight_range)
 
     return entity
 
@@ -466,4 +480,3 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
             chosen_interventions.append((ent, chosen_intervention))
 
     return chosen_interventions
-

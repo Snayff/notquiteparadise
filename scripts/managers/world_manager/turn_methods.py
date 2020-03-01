@@ -24,6 +24,7 @@ class TurnMethods:
 
     def __init__(self, manager):
         self._manager: WorldManager = manager
+
         self._turn_queue: Dict[Tuple[int, int]] = {}  # (entity, time)
         self._round: int = 1  # count of the round
         self._time: int = 1  # total time of actions taken

@@ -19,14 +19,14 @@ class Component:
 
 class IsPlayer(Component):
     """
-    [Component] Whether the entity is the player.
+    Whether the entity is the player.
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Position(Component):
     """
-    [Component] An entity's position on the map.
+    An entity's position on the map.
     """
 
     def __init__(self, x: int, y: int):
@@ -36,7 +36,7 @@ class Position(Component):
 
 class Aesthetic(Component):
     """
-    [Component] An entity's sprite.
+    An entity's sprite.
     """
 
     def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
@@ -52,7 +52,7 @@ class Aesthetic(Component):
 
 class Resources(Component):
     """
-    [Component] An entity's resources.
+    An entity's resources.
     """
 
     def __init__(self, health: int = 1, stamina: int = 1):
@@ -63,7 +63,7 @@ class Resources(Component):
 
 class Blocking(Component):
     """
-    [Component] An entity's blocking of other objects.
+    An entity's blocking of other objects.
     """
 
     def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
@@ -73,7 +73,7 @@ class Blocking(Component):
 
 class Identity(Component):
     """
-    [Component] An entity's identity, such as name and description.
+    An entity's identity, such as name and description.
     """
 
     def __init__(self, name: str, description: str = ""):
@@ -83,7 +83,7 @@ class Identity(Component):
 
 class Race(Component):
     """
-    [Component] An entity's people.
+    An entity's people.
     """
 
     def __init__(self, people_name: str):
@@ -92,7 +92,7 @@ class Race(Component):
 
 class Savvy(Component):
     """
-    [Component] An entity's savvy.
+    An entity's savvy.
     """
 
     def __init__(self, savvy_name: str):
@@ -101,7 +101,7 @@ class Savvy(Component):
 
 class Homeland(Component):
     """
-    [Component] An entity's homeland.
+    An entity's homeland.
     """
 
     def __init__(self, homeland_name: str):
@@ -110,17 +110,17 @@ class Homeland(Component):
 
 class AIBasic(Component):
     """
-    [Component] An ai to control an entity.
+    An ai to control an entity.
     """
 
 
 class HasCombatStats(Component):
-    """[Component] A flag to show if an entity has stats used for combat."""
+    """A flag to show if an entity has stats used for combat."""
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Knowledge(Component):
-    """[Component] An entity's knowledge, including skills."""
+    """An entity's knowledge, including skills."""
     def __init__(self, skills: List[str] = None):
         if skills is None:
             skills = []
@@ -128,7 +128,7 @@ class Knowledge(Component):
 
 
 class Affliction(Component):
-    """[Component] An entity's Boons and Banes. e.g. {boon_name: duration}"""
+    """An entity's Boons and Banes. e.g. {boon_name: duration}"""
     def __init__(self, boons: Dict = None, banes: Dict = None):
         if banes is None:
             banes = {}
@@ -139,7 +139,7 @@ class Affliction(Component):
 
 
 class Aspect(Component):
-    """[Component] An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
+    """An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
     def __init__(self, aspects: Dict = None):
         if aspects is None:
             aspects = {}
@@ -148,15 +148,22 @@ class Aspect(Component):
 
 class IsGod(Component):
     """
-    [Component] Whether the entity is a god.
+    Whether the entity is a god.
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Opinion(Component):
     """
-    [Component] An entity's views on other entities.
+    An entity's views on other entities.
     """
     def __init__(self):
         self.opinions = {}
 
+
+class FOV(Component):
+    """
+    An entities field of view.
+    """
+    def __init__(self, fov_map):
+        self.fov_map = fov_map

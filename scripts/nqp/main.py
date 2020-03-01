@@ -193,7 +193,7 @@ def initialise_game():
     world.Map.create_game_map(map_width, map_height)
 
     # init the player
-    world.FOV.create_player_fov_map(map_width, map_height)
+    world.FOV.create_fov_map(map_width, map_height)
     player = world.Entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
                                        "dandy", True)
 
