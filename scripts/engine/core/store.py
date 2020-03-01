@@ -9,6 +9,7 @@ from scripts.engine.core.constants import GameStates
 if TYPE_CHECKING:
     pass
 
+
 class Store:
     """
     Hold the current state info required by the engine

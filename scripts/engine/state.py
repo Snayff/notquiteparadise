@@ -26,14 +26,14 @@ def get_internal_clock():
     return store.internal_clock
 
 
-def get_active_skill():
+def get_active_skill() -> str:
     """
     Get the active skill. Used for targeting mode.
     """
     return store.active_skill
 
 
-def get_delta_time() -> int:
+def get_delta_time() -> float:
     """
     get delta time and set frame rate with .tick()
     """

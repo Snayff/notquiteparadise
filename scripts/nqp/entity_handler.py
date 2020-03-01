@@ -8,7 +8,7 @@ from scripts.engine.events import MessageEvent, WantToUseSkillEvent, UseSkillEve
 from scripts.nqp.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 
-from scripts.managers.ui_manager.ui_manager import ui
+
 from scripts.managers.world_manager.world_manager import world
 from scripts.engine.components import Position, Knowledge, IsGod, Aesthetic
 
@@ -94,7 +94,7 @@ class EntityHandler(Subscriber):
                 position.y = target_y
 
                 aesthetic: Aesthetic = world.Entity.get_entitys_component(entity, Aesthetic)
-                aesthetic.target_screen_x, aesthetic.target_screen_y = ui.Element.world_to_screen_position((target_x,
+                aesthetic.target_screen_x, aesthetic.target_screen_y = ui_manager.Element.world_to_screen_position((target_x,
                 target_y))
                 aesthetic.current_sprite = aesthetic.sprites.move
 

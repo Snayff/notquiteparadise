@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Tuple
 from scripts.engine.state import get_current
 from scripts.nqp.library import library
 
-from scripts.managers.ui_manager.ui_manager import ui
+
 from scripts.managers.world_manager.world_manager import world
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.core.constants import EventTopics, GameStates, MessageTypes, UIElementTypes
@@ -78,7 +78,7 @@ class UiHandler(Subscriber):
 
             elif game.State.get_previous() == GameStates.GAME_INITIALISING:
                 # once everything is initialised present the welcome message
-                ui.Element.create_screen_message("Welcome to Not Quite Paradise", "", 6)
+                ui_manager.Element.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
             elif event.new_game_state == GameStates.TARGETING_MODE:
                 # turn on targeting overlay
@@ -110,14 +110,14 @@ class UiHandler(Subscriber):
         """
         Initialise the UI elements
         """
-        ui.Element.init_camera()
-        ui.Element.init_skill_bar()
-        ui.Element.init_message_log()
-        ui.Element.init_entity_info()
+        ui_manager.Element.init_camera()
+        ui_manager.Element.init_skill_bar()
+        ui_manager.Element.init_message_log()
+        ui_manager.Element.init_entity_info()
 
         # Loop all entities with Position and Aesthetic and update their screen position
         for entity, (aesthetic, position) in world.Entity.get_components(Aesthetic, Position):
-            aesthetic.screen_x, aesthetic.screen_y = ui.Element.world_to_screen_position((position.x, position.y))
+            aesthetic.screen_x, aesthetic.screen_y = ui_manager.Element.world_to_screen_position((position.x, position.y))
             aesthetic.target_screen_x = aesthetic.screen_x
             aesthetic.target_screen_y = aesthetic.screen_y
 
@@ -127,26 +127,26 @@ class UiHandler(Subscriber):
     @staticmethod
     def close_game_ui():
         """
-        Close all game ui elements
+        Close all game ui_manager elements
         """
-        ui.Element.kill_element(UIElementTypes.MESSAGE_LOG)
-        ui.Element.kill_element(UIElementTypes.SKILL_BAR)
-        ui.Element.kill_element(UIElementTypes.CAMERA)
-        ui.Element.kill_element(UIElementTypes.ENTITY_INFO)
+        ui_manager.Element.kill_element(UIElementTypes.MESSAGE_LOG)
+        ui_manager.Element.kill_element(UIElementTypes.SKILL_BAR)
+        ui_manager.Element.kill_element(UIElementTypes.CAMERA)
+        ui_manager.Element.kill_element(UIElementTypes.ENTITY_INFO)
 
     @staticmethod
     def init_dev_ui():
         """
         Initialise all dev mode widgets
         """
-        ui.Element.init_skill_editor()
+        ui_manager.Element.init_skill_editor()
 
     @staticmethod
     def close_dev_ui():
         """
         Clear all dev mode elements
         """
-        ui.Element.kill_element(UIElementTypes.DATA_EDITOR)
+        ui_manager.Element.kill_element(UIElementTypes.DATA_EDITOR)
 
     ############# HANDLE UI EVENTS #################
 
@@ -199,9 +199,9 @@ class UiHandler(Subscriber):
         else:
             directions = []
 
-        ui.Element.set_overlay_directions(directions)
-        ui.Element.set_overlay_visibility(is_visible)
-        ui.Element.update_camera_grid()
+        ui_manager.Element.set_overlay_directions(directions)
+        ui_manager.Element.set_overlay_visibility(is_visible)
+        ui_manager.Element.update_camera_grid()
 
     @staticmethod
     def update_camera(start_pos: Tuple = None, target_pos: Tuple = None):
@@ -209,22 +209,22 @@ class UiHandler(Subscriber):
         Update tiles shown in camera.
         """
         if target_pos:
-            should_move_camera = ui.Element.should_camera_move(start_pos, target_pos)
+            should_move_camera = ui_manager.Element.should_camera_move(start_pos, target_pos)
             target_x, target_y = target_pos
 
             if should_move_camera:
                 start_x, start_y = start_pos
                 move_x = target_x - start_x
                 move_y = target_y - start_y
-                ui.Element.move_camera(move_x, move_y)
+                ui_manager.Element.move_camera(move_x, move_y)
 
             # update player's pos in camera
             tile = world.Map.get_tile((target_x, target_y))
-            ui.Element.set_player_tile(tile)
+            ui_manager.Element.set_player_tile(tile)
 
-        ui.Element.update_cameras_tiles()
-        ui.Element.update_camera_game_map()
-        ui.Element.update_camera_grid()
+        ui_manager.Element.update_cameras_tiles()
+        ui_manager.Element.update_camera_game_map()
+        ui_manager.Element.update_camera_grid()
 
     @staticmethod
     def select_entity(entity: int):
@@ -234,7 +234,7 @@ class UiHandler(Subscriber):
         Args:
             entity ():
         """
-        ui.Element.set_selected_entity(entity)
+        ui_manager.Element.set_selected_entity(entity)
 
     @staticmethod
     def process_message(event: MessageEvent):
@@ -245,10 +245,10 @@ class UiHandler(Subscriber):
             event ():
         """
         if event.message_type == MessageTypes.LOG:
-            ui.Element.add_to_message_log(event.message)
+            ui_manager.Element.add_to_message_log(event.message)
 
         elif event.message_type == MessageTypes.SCREEN:
-            ui.Element.create_screen_message(event.message, event.colour, event.size)
+            ui_manager.Element.create_screen_message(event.message, event.colour, event.size)
 
         elif event.message_type == MessageTypes.ENTITY:
             # TODO - create message over entity

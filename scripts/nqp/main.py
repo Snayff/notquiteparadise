@@ -8,12 +8,12 @@ import pstats
 import time
 import pygame
 from scripts.engine import state
-from scripts.engine.core.constants import GameStates, VERSION
+from scripts.engine.core.constants import GameStates, VERSION, EventTopics
+from scripts.engine.events import ChangeGameStateEvent
+from scripts.engine.ui.manager import UIManager
 from scripts.managers.input_manager.input_manager import input
-from scripts.managers.ui_manager.ui_manager import ui
 from scripts.managers.world_manager.world_manager import world
-from scripts.engine.core.event_core import event_hub
-from scripts.nqp.initialisers import initialise_game, initialise_event_handlers
+from scripts.engine.core.event_core import event_hub, publisher
 
 ####################################################################################################
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -40,6 +40,11 @@ from scripts.nqp.initialisers import initialise_game, initialise_event_handlers
 # TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
 # TODO - edit the UI json
 # TODO - use a global for font size so it can be amended in options
+from scripts.nqp.entity_handler import EntityHandler
+from scripts.nqp.game_handler import GameHandler
+from scripts.nqp.god_handler import GodHandler
+from scripts.nqp.map_handler import MapHandler
+from scripts.nqp.ui_handler import UiHandler
 
 
 def main():
@@ -75,6 +80,8 @@ def game_loop():
     The core game loop, handling input, rendering and logic.
     """
 
+    ui_manager = UIManager
+
     while not state.get_current() == GameStates.EXIT_GAME:
 
         # get delta time to support UI updates
@@ -82,22 +89,21 @@ def game_loop():
 
         if state.get_current() == GameStates.ENEMY_TURN:
             pass
-            #turn.turn_holder.ai.take_turn()
+            # turn.turn_holder.ai.take_turn()
 
         # update based on input events
         for event in pygame.event.get():
             input.update(event, state.get_current())
-            ui.process_ui_events(event)
-            ui.handle_ui_events(event)
+            ui_manager.process_ui_events(event)
 
         # allow everything to update in response to new state
         world.update(delta_time)
-        ui.update(delta_time)
+        ui_manager.update(delta_time)
         event_hub.update()
         state.update_clock()
 
         # show the new state
-        ui.draw()
+        ui_manager.draw()
 
 
 def initialise_logging():
@@ -174,6 +180,59 @@ def dump_profiling_data(profiler):
     ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
+
+def initialise_game():
+    """
+    Init the game`s required info
+    """
+    # TODO - move to event handlers
+
+    map_width = 50
+    map_height = 30
+    world.Map.create_game_map(map_width, map_height)
+
+    # init the player
+    world.FOV.create_player_fov_map(map_width, map_height)
+    player = world.Entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
+                                       "dandy", True)
+
+    # tell places about the player
+    world.Turn.set_turn_holder(player)
+    input.Control.set_player_id(player)
+
+    # create an enemy
+    # TODO - remove when enemy gen is in
+    enemy = world.Entity.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops",
+                                      "dandy")
+
+    # create a god
+    god = world.Entity.create_god("the_small_gods")
+
+    publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
+
+
+def initialise_event_handlers():
+    """
+    Create the various event handlers and subscribe to required events.
+    """
+    game_handler = GameHandler(event_hub)
+    game_handler.subscribe(EventTopics.GAME)
+
+    entity_handler = EntityHandler(event_hub)
+    entity_handler.subscribe(EventTopics.ENTITY)
+    entity_handler.subscribe(EventTopics.GAME)
+
+    map_handler = MapHandler(event_hub)
+    map_handler.subscribe(EventTopics.MAP)
+    map_handler.subscribe(EventTopics.GAME)
+
+    god_handler = GodHandler(event_hub)
+    god_handler.subscribe(EventTopics.ENTITY)
+
+    ui_handler = UiHandler(event_hub)
+    ui_handler.subscribe(EventTopics.ENTITY)
+    ui_handler.subscribe(EventTopics.GAME)
+    ui_handler.subscribe(EventTopics.UI)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

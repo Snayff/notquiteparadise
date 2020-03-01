@@ -16,7 +16,7 @@ class Camera(UIWindow):
     Hold the visual info for the Game Map
     """
 
-    def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager, rows: int, cols: int):
+    def __init__(self, rect: pygame.Rect, manager, rows: int, cols: int):
         # general info
         self.rows = rows
         self.columns = cols

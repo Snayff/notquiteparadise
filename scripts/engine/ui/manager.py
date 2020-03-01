@@ -2,101 +2,127 @@ from __future__ import annotations
 
 import logging
 import pygame
-
-from typing import TYPE_CHECKING, Type
-from scripts.engine.core.constants import UIElementTypes, TILE_SIZE, VisualInfo
-from scripts.nqp.dev_tools import DataEditor
-from scripts.engine.ui import Camera
-from scripts.engine.ui.message_log import MessageLog
-from scripts.engine.ui import EntityInfo
-from scripts.engine.ui.screen_message import ScreenMessage
-from scripts.engine.ui import SkillBar
+import pygame_gui
+from typing import TYPE_CHECKING, Type, Dict, Tuple, List
+from scripts.engine.core.constants import VisualInfo, UIElementTypes, TILE_SIZE
+from scripts.engine.ui.elements.camera import Camera
+from scripts.engine.ui.elements.data_editor import DataEditor
+from scripts.engine.ui.elements.entity_info import EntityInfo
+from scripts.engine.ui.elements.message_log import MessageLog
+from scripts.engine.ui.elements.screen_message import ScreenMessage
+from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.world.tile import Tile
 
 if TYPE_CHECKING:
-    from scripts.managers.ui_manager.ui_manager import UIManager
-    from typing import Tuple, List, Dict
-
-# TODO - rename ui_element to something simpler as we are already in ui.Element.
+    pass
 
 
-class ElementMethods:
+class UIManager:
     """
-    Methods for taking actions with ui elements
-
-    Attributes:
-        manager ():
+    Manage the UI, such as windows, resource bars etc
     """
 
-    def __init__(self, manager):
-        self._manager = manager  # type: UIManager
-        self._elements = {}  # dict of all init'd ui elements
+    def __init__(self):
+        # first action needs to be to init pygame.
+        pygame.init()
 
-    ############### INIT ################
+        # now init the pygame_gui
+        self._gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH,
+            VisualInfo.BASE_WINDOW_HEIGHT), "data/ui_manager/themes.json")
 
-    def init_message_log(self):
-        """
-        Initialise the text log ui element.
-        """
-        width = 400
-        height = 100
-        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
-        y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
-        rect = pygame.Rect((x, y), (width, height))
-        message_log = MessageLog(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.MESSAGE_LOG, message_log)
+        # display info
+        # TODO - allow for selection by player but only multiples of base (16:9)
+        self._desired_width = VisualInfo.BASE_WINDOW_WIDTH
+        self._desired_height = VisualInfo.BASE_WINDOW_HEIGHT
+        self._screen_scaling_mod_x = self._desired_width // VisualInfo.BASE_WINDOW_WIDTH
+        self._screen_scaling_mod_y = self._desired_height // VisualInfo.BASE_WINDOW_HEIGHT
+        self._window: pygame.display = pygame.display.set_mode((self._desired_width, self._desired_height))
+        self._main_surface: pygame.Surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH,
+            VisualInfo.BASE_WINDOW_HEIGHT), pygame.SRCALPHA)
 
-    def init_entity_info(self):
-        """
-        Initialise the selected entity info ui element.
-        """
-        width = 200
-        height = 500
-        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
-        y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
-        rect = pygame.Rect((x, y), (width, height))
-        info = EntityInfo(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.ENTITY_INFO, info)
+        # elements info
+        self._elements = {}  # dict of all init'd ui_manager elements
 
-    def init_skill_bar(self):
-        """
-        Initialise the skill bar.
-        """
-        width = 80
-        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
-        x = VisualInfo.BASE_WINDOW_WIDTH - width
-        y = 2
-        rect = pygame.Rect((x, y), (width, height))
-        skill_bar = SkillBar(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.SKILL_BAR, skill_bar)
+        # process config
+        self._load_display_config()
+        self._load_fonts()
 
-    def init_camera(self):
-        """
-        Initialise the camera.
-        """
-        rows = 10
-        cols = 15
-        width = cols * TILE_SIZE
-        height = rows * TILE_SIZE
-        x = 5
-        y = 5
-        rect = pygame.Rect((x, y), (width, height))
-        camera = Camera(rect, self._manager.Gui, rows, cols)
-        self.add_ui_element(UIElementTypes.CAMERA, camera)
+        logging.info(f"UIManager initialised.")
 
-    def init_skill_editor(self):
-        """
-        Initialise the skill editor ui element.
-        """
-        width = 1200
-        height = 600
-        x = 5
-        y = 10
-        rect = pygame.Rect((x, y), (width, height))
-        editor = DataEditor(rect, self._manager.Gui)
-        self.add_ui_element(UIElementTypes.DATA_EDITOR, editor)
+    ################ CORE METHODS ########################
 
-    ################ ELEMENT ###################
+    def update(self, delta_time: float):
+        """
+        Update all ui_manager elements
+        """
+        self._gui.update(delta_time)
+
+    def process_ui_events(self, event):
+        """
+        Process input events
+        """
+        self._gui.process_events(event)
+
+        # make sure it is a pgui event
+        if event.type == pygame.USEREVENT:
+            elements = self._elements
+
+            for element in elements.values():
+                element.handle_events(event)
+
+    def draw(self):
+        """
+        Draw the UI.
+        """
+        main_surface = self._main_surface
+
+        # clear previous frame
+        main_surface.fill((0, 0, 0))
+
+        self._gui.draw_ui(main_surface)
+
+        # resize the surface to the desired resolution
+        scaled_surface = pygame.transform.scale(main_surface, (self._desired_width, self._desired_height))
+        self._window.blit(scaled_surface, (0, 0))
+
+        # update the display
+        pygame.display.flip()  # make sure to do this as the last drawing element in a frame
+
+    def add_ui_element(self, element_type: Type[UIElementTypes], element: object):
+        """
+        Add ui_manager element to the list of all elements.
+        """
+        self._elements[element_type] = element
+
+    def kill_element(self, element_type: Type[UIElementTypes]):
+        """
+        Remove any reference to the element
+        """
+        element = self.get_ui_element(element_type)
+
+        if element:
+            del self._elements[element_type]
+            element.kill()
+        else:
+            logging.warning(f"Tried to remove {element_type} element but key not found.")
+
+    ##################### GET ############################
+
+    def get_element(self, element_type: Type[UIElementTypes]):
+        """
+        Get UI element. Returns nothing if not found. Won't be found if not init'd.
+        """
+        try:
+            return self._elements[element_type]
+        except KeyError:
+            logging.warning(f"Tried to get {element_type} but key not found, is it init'd?")
+            return None
+
+    def get_gui_manager(self):
+        """
+        Return the pygame_gui UI Manager
+        """
+        return self._gui
 
     def get_ui_element(self, element_type: Type[UIElementTypes]):
         """
@@ -109,38 +135,109 @@ class ElementMethods:
 
     def get_ui_elements(self) -> Dict:
         """
-        Get all the ui elements
+        Get all the ui_manager elements
         """
         return self._elements
 
-    def add_ui_element(self, element_type: Type[UIElementTypes], element: object):
-        """
-        Add ui element to the list of all elements.
-        """
-        self._elements[element_type] = element
+    ##################### INIT, LOAD AND CREATE ############################
 
-    def remove_ui_element(self, element_type: Type[UIElementTypes]):
+    @staticmethod
+    def _load_display_config():
         """
-        Remove ui element from the list of all elements.
+        Initialise display settings.
         """
-        try:
-            del self._elements[element_type]
-        except KeyError:
-            logging.warning(f"Tried to remove {element_type} element but key not found.")
+        pygame.display.set_caption("Not Quite Paradise")
+        # pygame.display.set_icon() # TODO - add window icon
 
-    ############## CAMERA ###################
+    def _load_fonts(self):
+        self._gui.add_font_paths("barlow", "assets/fonts/Barlow-Light.otf")
 
-    def is_target_pos_in_camera_edge(self, target_pos: Tuple):
+    def init_message_log(self):
+        """
+        Initialise the text log ui_manager element.
+        """
+        # TODO - convert to create and move details to nqp
+        width = 400
+        height = 100
+        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
+        rect = pygame.Rect((x, y), (width, height))
+        message_log = MessageLog(rect, self.get_gui_manager)
+        self.add_ui_element(UIElementTypes.MESSAGE_LOG, message_log)
+
+    def init_entity_info(self):
+        """
+        Initialise the selected entity info ui_manager element.
+        """
+        # TODO - convert to create and move details to nqp
+        width = 200
+        height = 500
+        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
+        y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
+        rect = pygame.Rect((x, y), (width, height))
+        info = EntityInfo(rect, self.get_gui_manager)
+        self.add_ui_element(UIElementTypes.ENTITY_INFO, info)
+
+    def init_skill_bar(self):
+        """
+        Initialise the skill bar.
+        """
+        # TODO - convert to create and move details to nqp
+        width = 80
+        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
+        x = VisualInfo.BASE_WINDOW_WIDTH - width
+        y = 2
+        rect = pygame.Rect((x, y), (width, height))
+        skill_bar = SkillBar(rect, self.get_gui_manager)
+        self.add_ui_element(UIElementTypes.SKILL_BAR, skill_bar)
+
+    def init_camera(self):
+        """
+        Initialise the camera.
+        """
+        # TODO - convert to create and move details to nqp
+        rows = 10
+        cols = 15
+        width = cols * TILE_SIZE
+        height = rows * TILE_SIZE
+        x = 5
+        y = 5
+        rect = pygame.Rect((x, y), (width, height))
+        camera = Camera(rect, self.get_gui_manager, rows, cols)
+        self.add_ui_element(UIElementTypes.CAMERA, camera)
+
+    def init_skill_editor(self):
+        """
+        Initialise the skill editor ui_manager element.
+        """
+        # TODO - convert to create and move details to nqp
+        width = 1200
+        height = 600
+        x = 5
+        y = 10
+        rect = pygame.Rect((x, y), (width, height))
+        editor = DataEditor(rect, self.get_gui_manager)
+        self.add_ui_element(UIElementTypes.DATA_EDITOR, editor)
+
+    def create_screen_message(self, message: str, colour, size: int):
+        """
+        Create a message on the screen.
+        """
+        # TODO - respect colour chosen. Use colour mapping to go from RGB to Hex.
+        col = "#531B75"
+        text = f"<font face=barlow color={col} size={size}>{message}</font>"
+        screen_message = ScreenMessage(text, self.get_gui_manager)
+
+        ############## KILL ##################
+
+    ######################## CAMERA ###############################################
+
+    def is_target_pos_in_camera_edge(self, target_pos: Tuple) -> bool:
         """
         Determine if target position is within the edge of the camera
-
-        Args:
-            target_pos (): x,y
-
-        Returns:
-            bool:
         """
         camera = self.get_ui_element(UIElementTypes.CAMERA)
+
         if camera:
             player_x, player_y = target_pos
 
@@ -206,7 +303,7 @@ class ElementMethods:
 
     def set_player_tile(self, tile: Tile):
         """
-        Set the player tile in the Camera ui element.
+        Set the player tile in the Camera ui_manager element.
 
         Args:
             tile ():
@@ -312,7 +409,7 @@ class ElementMethods:
                         "if it draws at all.")
         return 0, 0
 
-    ############## ENTITY INFO ###################
+        ############## ENTITY INFO ###################
 
     def set_selected_entity(self, entity: int):
         """
@@ -329,9 +426,11 @@ class ElementMethods:
         else:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
 
+    ################## ENTITY INFO ####################################
+
     def hide_entity_info(self):
         """
-        Hide the entity info ui element.
+        Hide the entity info ui_manager element.
         """
         entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
@@ -340,41 +439,15 @@ class ElementMethods:
         else:
             logging.warning(f"Tried to kill EntityInfo but key not found. Is it init'd?")
 
-    ############## MESSAGES #####################
+    ######################## MESSAGES #################################
 
     def add_to_message_log(self, message: str):
         """
         Add a text to the message log. Includes processing of the text.
         """
         try:
-            message_log = self._manager.Element.get_ui_element(UIElementTypes.MESSAGE_LOG)
+            message_log = self.get_ui_element(UIElementTypes.MESSAGE_LOG)
             message_log.add_message(message)
 
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")
-
-    def create_screen_message(self, message: str, colour, size: int):
-        """
-        Create a message on the screen.
-
-        Args:
-            message ():
-            colour ():
-            size ():
-        """
-        # TODO - respect colour chosen. Use colour mapping to go from RGB to Hex.
-        col = "#531B75"
-        text = f"<font face=barlow color={col} size={size}>{message}</font>"
-        screen_message = ScreenMessage(text, self._manager.Gui)
-
-    ############## KILL ##################
-
-    def kill_element(self, element_type: Type[UIElementTypes]):
-        """
-        Remove any reference to the element
-        """
-        element = self.get_ui_element(element_type)
-
-        if element:
-            element.kill()
-            self.remove_ui_element(element)

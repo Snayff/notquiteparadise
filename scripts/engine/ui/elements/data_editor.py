@@ -772,7 +772,7 @@ class DataEditor(UIWindow):
 
 class DataField:
     """
-    Holds a set of related data and ui elements
+    Holds a set of related data and ui_manager elements
     """
     def __init__(self, primary_or_secondary: str, key: str, value: Any, value_as_str: str, value_type, labels: List,
         height: int, input_element=None, buttons: Dict[str, UIButton] = None, options: List = None):
@@ -784,14 +784,14 @@ class DataField:
         self.options = options
         self.height = height
 
-        # ui elements
+        # ui_manager elements
         self.input_element = input_element
         self.labels = labels
         self.buttons = buttons
 
     def kill(self):
         """
-        Kill all held ui elements
+        Kill all held ui_manager elements
         """
         if self.input_element:
             self.input_element.kill()
