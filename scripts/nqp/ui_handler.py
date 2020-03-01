@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Tuple
 
 from scripts.engine.state import get_current
-from scripts.nqp.library import library
+from scripts.engine.library import library
 
 
 from scripts.managers.world_manager.world_manager import world

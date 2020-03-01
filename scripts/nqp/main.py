@@ -14,6 +14,12 @@ from scripts.engine.ui.manager import UIManager
 from scripts.managers.input_manager.input_manager import input
 from scripts.managers.world_manager.world_manager import world
 from scripts.engine.core.event_core import event_hub, publisher
+from scripts.nqp import processors
+from scripts.nqp.entity_handler import EntityHandler
+from scripts.nqp.game_handler import GameHandler
+from scripts.nqp.god_handler import GodHandler
+from scripts.nqp.map_handler import MapHandler
+from scripts.nqp.ui_handler import UiHandler
 
 ####################################################################################################
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -40,11 +46,6 @@ from scripts.engine.core.event_core import event_hub, publisher
 # TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
 # TODO - edit the UI json
 # TODO - use a global for font size so it can be amended in options
-from scripts.nqp.entity_handler import EntityHandler
-from scripts.nqp.game_handler import GameHandler
-from scripts.nqp.god_handler import GodHandler
-from scripts.nqp.map_handler import MapHandler
-from scripts.nqp.ui_handler import UiHandler
 
 
 def main():
@@ -97,7 +98,7 @@ def game_loop():
             ui_manager.process_ui_events(event)
 
         # allow everything to update in response to new state
-        world.update(delta_time)
+        processors.process_all(delta_time)
         ui_manager.update(delta_time)
         event_hub.update()
         state.update_clock()

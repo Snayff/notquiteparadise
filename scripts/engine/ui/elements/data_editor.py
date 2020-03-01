@@ -14,7 +14,7 @@ from scripts.engine import utilities
 from scripts.engine.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
     TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
-from scripts.nqp.library import library
+from scripts.engine.library import library
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, InterventionData, \
     InteractionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData, AfflictionData
 

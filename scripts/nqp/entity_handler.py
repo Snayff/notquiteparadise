@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from scripts.engine.core.constants import MessageTypes, TargetTags, GameStates
 from scripts.engine.events import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, EndTurnEvent, \
     ChangeGameStateEvent
-from scripts.nqp.library import library
+from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 
 

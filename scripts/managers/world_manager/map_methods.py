@@ -7,8 +7,8 @@ import scipy.spatial
 from typing import TYPE_CHECKING
 from scripts.engine.core.constants import TargetTags
 from scripts.engine.components import Position, Blocking
-from scripts.world.game_map import GameMap
-from scripts.world.tile import Tile
+from scripts.engine.world.game_map import GameMap
+from scripts.engine.world.tile import Tile
 
 if TYPE_CHECKING:
     from typing import List, Tuple, Union

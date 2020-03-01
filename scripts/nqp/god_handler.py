@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 from scripts.engine.core.constants import EffectTypes, Directions
 from scripts.engine.core.event_core import Subscriber, publisher
-from scripts.nqp.library import library
+from scripts.engine.library import library
 from scripts.managers.world_manager.world_manager import world
 from scripts.engine.components import Position, IsGod
 from scripts.engine.events import UseSkillEvent

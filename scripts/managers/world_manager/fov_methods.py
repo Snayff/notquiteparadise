@@ -32,27 +32,15 @@ class FOVMethods:
 
     def recompute_player_fov(self, x, y, radius):
         """
-
-        Args:
-            x:
-            y:
-            radius:
+        Recalc the player's fov
         """
         tcod.map_compute_fov(self.get_player_fov(), x, y, radius, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
         self._manager.FOV.update_tile_visibility(self.get_player_fov())
 
-    def is_tile_in_fov(self, tile_x, tile_y):
+    def is_tile_in_fov(self, tile_x: int, tile_y: int) -> bool:
         """
         Check if  target tile is in player`s FOV
-
-        Args:
-            tile_x: x of tile
-            tile_y: y of tile
-
-        Returns:
-            bool: True if tile is in FOV
         """
-
         return tcod.map_is_in_fov(self.get_player_fov(), tile_x, tile_y)
 
     def get_player_fov(self):

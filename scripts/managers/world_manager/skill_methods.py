@@ -7,12 +7,12 @@ from scripts.engine.core.constants import MessageTypes, PrimaryStatTypes, Second
     EffectTypes, SkillShapes, Directions, TargetTags, SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, \
     HitModifiers, AfflictionCategory
 from scripts.engine.events import MessageEvent, DieEvent
-from scripts.nqp.library import library
+from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher
 from scripts.engine.core.definitions import EffectData
-from scripts.world.combat_stats import CombatStats
+from scripts.engine.world.combat_stats import CombatStats
 from scripts.engine.components import Resources, Position, HasCombatStats, Affliction, Aspect, Identity
-from scripts.world.tile import Tile
+from scripts.engine.world.tile import Tile
 
 if TYPE_CHECKING:
     from scripts.managers.world_manager.world_manager import WorldManager

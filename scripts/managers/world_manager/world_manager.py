@@ -22,9 +22,10 @@ class WorldManager:
 
         self.World = esper.World()
         self.Entity = EntityMethods(self)
+        self.FOV = FOVMethods(self)
+
         self.Skill = SkillMethods(self)
         self.Map = MapMethods(self)
-        self.FOV = FOVMethods(self)
         self.Turn = TurnMethods(self)
 
         logging.info(f"WorldManager initialised.")

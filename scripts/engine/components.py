@@ -159,3 +159,4 @@ class Opinion(Component):
     """
     def __init__(self):
         self.opinions = {}
+

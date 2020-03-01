@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes
-from scripts.nqp.library import library
+from scripts.engine.library import library
 from scripts.engine.components import Race, Homeland, Savvy
 
 if TYPE_CHECKING:

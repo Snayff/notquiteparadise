@@ -8,12 +8,12 @@ import pytweening
 from typing import TYPE_CHECKING, Any, Type, TypeVar
 from scripts.engine import utilities
 from scripts.engine.core.constants import TILE_SIZE, ENTITY_BLOCKS_SIGHT, ICON_SIZE
-from scripts.nqp.library import library
+from scripts.engine.library import library
 from scripts.engine.components import IsPlayer, Position, Resources, Race, Savvy, Homeland, Knowledge, Identity, \
     Aesthetic, IsGod, Opinion, HasCombatStats, Blocking, Component
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData
-from scripts.world.tile import Tile
-from scripts.world.combat_stats import CombatStats
+from scripts.engine.world.tile import Tile
+from scripts.engine.world.combat_stats import CombatStats
 
 if TYPE_CHECKING:
     from typing import List, Union, Dict, Tuple
@@ -38,9 +38,6 @@ class EntityMethods:
     def get_player(self) -> Union[int, None]:
         """
         Get the player.
-
-        Returns:
-            int: Entity ID
         """
         for entity, flag in self.get_component(IsPlayer):
             return entity

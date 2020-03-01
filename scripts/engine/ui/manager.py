@@ -11,7 +11,7 @@ from scripts.engine.ui.elements.entity_info import EntityInfo
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.screen_message import ScreenMessage
 from scripts.engine.ui.elements.skill_bar import SkillBar
-from scripts.world.tile import Tile
+from scripts.engine.world.tile import Tile
 
 if TYPE_CHECKING:
     pass

@@ -54,7 +54,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/engine/ui/elements" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/engine" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
   </component>
@@ -73,11 +73,11 @@
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\ui\elements" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\ui" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\core" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main">
@@ -319,7 +319,7 @@
       <workItem from="1582923564915" duration="767000" />
       <workItem from="1582971001323" duration="17544000" />
       <workItem from="1583001252396" duration="7075000" />
-      <workItem from="1583081307778" duration="11279000" />
+      <workItem from="1583081307778" duration="14359000" />
     </task>
     <servers />
   </component>
@@ -393,10 +393,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1902" height="947" key="DebuggerActiveHint/0.0.3440.1400@0.0.3440.1400" timestamp="1582990714160" />
-    <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1583091745469">
+    <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1583094830537">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1583091745469" />
+    <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1583094830537" />
     <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog" timestamp="1583012252028">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
