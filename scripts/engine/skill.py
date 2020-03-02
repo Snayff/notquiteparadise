@@ -5,9 +5,9 @@ from random import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
-from scripts.engine.core.constants import MessageTypes, SecondaryStat, SkillExpiryTypes, \
-    SkillTerrainCollisions, SkillTravelTypes, TargetTags, EffectTypes, AfflictionCategory, HitTypes, HitModifiers, \
-    PrimaryStat, HitValues
+from scripts.engine.core.constants import MessageType, SecondaryStat, SkillExpiry, \
+    SkillTerrainCollision, SkillTravel, TargetTag, EffectType, AfflictionCategory, HitType, HitModifier, \
+    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType
 from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent
@@ -48,12 +48,12 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
 
             else:
                 msg = f"You can't afford the cost."
-                publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                publisher.publish(MessageEvent(MessageType.LOG, msg))
 
     return False
 
 
-def can_afford_cost(ent: int, resource: SecondaryStat, cost: int):
+def can_afford_cost(ent: int, resource: Type[SecondaryStatType], cost: int):
     """
     Check if entity can afford the resource cost
     """
@@ -72,7 +72,7 @@ def can_afford_cost(ent: int, resource: SecondaryStat, cost: int):
 
 ########################################### ACTIONS ################################
 
-def pay_resource_cost(ent: int, resource: SecondaryStat, cost: int):
+def pay_resource_cost(ent: int, resource: Type[SecondaryStatType], cost: int):
     """
     Remove the resource cost from the using entity
     """
@@ -124,10 +124,10 @@ int]):
         # are we at max distance?
         if distance >= skill_range:
             # handle expiry type
-            if expiry_type == SkillExpiryTypes.FIZZLE:
+            if expiry_type == SkillExpiry.FIZZLE:
                 fizzle = True
                 logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
-            elif expiry_type == SkillExpiryTypes.ACTIVATE:
+            elif expiry_type == SkillExpiry.ACTIVATE:
                 activate = True
                 logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
         else:
@@ -142,14 +142,14 @@ int]):
                     logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
                 else:
                     # we didnt hit the right thing so what happens now?
-                    if terrain_collision == SkillTerrainCollisions.ACTIVATE:
+                    if terrain_collision == SkillTerrainCollision.ACTIVATE:
                         activate = True
                         logging.debug(f"-> and hit something. Skill will activate at "
                                       f"({current_x},{current_y}).")
-                    elif terrain_collision == SkillTerrainCollisions.REFLECT:
+                    elif terrain_collision == SkillTerrainCollision.REFLECT:
                         dir_x, dir_y = _get_reflected_direction((current_x, current_y), direction)
                         logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
-                    elif terrain_collision == SkillTerrainCollisions.FIZZLE:
+                    elif terrain_collision == SkillTerrainCollision.FIZZLE:
                         activate = False
                         logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
             else:
@@ -169,7 +169,7 @@ int]):
 ########################################## GET ####################################
 
 def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],
-        max_distance: int, travel_type: SkillTravelTypes) -> Tuple[int, int]:
+        max_distance: int, travel_type: SkillTravel) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
     range blocks movement then the last position checked is returned. If all positions in range block movement
@@ -186,10 +186,10 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     check_for_target = False
 
     # determine travel method
-    if travel_type == SkillTravelTypes.PROJECTILE:
+    if travel_type == SkillTravel.PROJECTILE:
         # projectile can hit a target at any point during travel
         check_for_target = True
-    elif travel_type == SkillTravelTypes.THROW:
+    elif travel_type == SkillTravel.THROW:
         # throw can only hit target at end of travel
         check_for_target = False
 
@@ -197,7 +197,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     for distance in range(1, max_distance + 1):
 
         # allow throw to hit target
-        if travel_type == SkillTravelTypes.THROW:
+        if travel_type == SkillTravel.THROW:
             if distance == max_distance + 1:
                 check_for_target = True
 
@@ -208,7 +208,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
 
         if tile:
             # did we hit something causing projectile to stop
-            if world.tile_has_tag(tile, TargetTags.BLOCKED_MOVEMENT):
+            if world.tile_has_tag(tile, TargetTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:
                     # we hit something, go back to last free tile
@@ -232,14 +232,14 @@ def _get_reflected_direction(current_position: Tuple[int, int], target_direction
     # work out position of adjacent walls
     adj_tile = world.get_tile((current_x, current_y - dir_y))
     if adj_tile:
-        collision_adj_y = world.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+        collision_adj_y = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_y = True
 
     adj_tile = world.get_tile((current_x - dir_x, current_y))
     if adj_tile:
-        collision_adj_x = world.tile_has_tag(adj_tile, TargetTags.BLOCKED_MOVEMENT)
+        collision_adj_x = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_x = True
@@ -265,37 +265,37 @@ def _get_reflected_direction(current_position: Tuple[int, int], target_direction
     return dir_x, dir_y
 
 
-def _get_hit_type(to_hit_score: int) -> Type[HitValues]:
+def _get_hit_type(to_hit_score: int) -> Type[HitValue]:
     """
     Get the hit type from the to hit score
     """
-    if to_hit_score >= HitValues.CRIT.value:
-        return HitTypes.CRIT
-    elif to_hit_score >= HitValues.HIT.value:
-        return HitTypes.HIT
+    if to_hit_score >= HitValue.CRIT.value:
+        return HitType.CRIT
+    elif to_hit_score >= HitValue.HIT.value:
+        return HitType.HIT
     else:
-        return HitTypes.GRAZE
+        return HitType.GRAZE
 
 
 ########################################## EFFECTS ####################################
 
-def apply_effect(effect_type: EffectTypes, skill_name: str, effected_tiles: List[Tile], using_entity: int):
+def apply_effect(effect_type: EffectType, skill_name: str, effected_tiles: List[Tile], using_entity: int):
     """
     Apply an effect to all tiles in a list.:
     """
     log_string = f"Applying {effect_type.name} effect; caused by `{skill_name}` from `{using_entity}`."
     logging.debug(log_string)
 
-    if effect_type == EffectTypes.DAMAGE:
+    if effect_type == EffectType.DAMAGE:
         _apply_damage_effect(skill_name, effected_tiles, using_entity)
-    elif effect_type == EffectTypes.APPLY_AFFLICTION:
+    elif effect_type == EffectType.APPLY_AFFLICTION:
         _apply_affliction_effect(skill_name, effected_tiles, using_entity)
-    elif effect_type == EffectTypes.ADD_ASPECT:
+    elif effect_type == EffectType.ADD_ASPECT:
         _apply_aspect_effect(skill_name, effected_tiles)
 
 
 def _apply_aspect_effect(skill_name: str, effected_tiles: List[Tile]):
-    data = library.get_skill_effect_data(skill_name, EffectTypes.ADD_ASPECT)
+    data = library.get_skill_effect_data(skill_name, EffectType.ADD_ASPECT)
 
     for tile in effected_tiles:
         _create_aspect(data.aspect_name, tile)
@@ -314,7 +314,7 @@ def _create_aspect(aspect_name: str, tile: Tile):
 
 
 def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attacker: int):
-    effect_data = library.get_skill_effect_data(skill_name, EffectTypes.APPLY_AFFLICTION)
+    effect_data = library.get_skill_effect_data(skill_name, EffectType.APPLY_AFFLICTION)
     affliction_data = library.get_affliction_data(effect_data.affliction_name)
     attackers_stats = entity.get_combat_stats(attacker)
 
@@ -340,19 +340,19 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
                     hit_type = _get_hit_type(to_hit_score)
 
                     # check if afflictions applied
-                    if hit_type == HitTypes.GRAZE:
+                    if hit_type == HitType.GRAZE:
                         msg = f"{identity.name} resisted {effect_data.affliction_name}."
-                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                        publisher.publish(MessageEvent(MessageType.LOG, msg))
                     else:
                         hit_msg = ""
 
                         # check if there was a crit and if so modify the duration of the afflictions
-                        if hit_type == HitTypes.CRIT:
-                            modified_duration = int(base_duration * HitModifiers.CRIT.value)
+                        if hit_type == HitType.CRIT:
+                            modified_duration = int(base_duration * HitModifier.CRIT.value)
                             hit_msg = f"a critical "
 
                         msg = f"{identity.name} succumbed to {hit_msg}{effect_data.affliction_name}."
-                        publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                        publisher.publish(MessageEvent(MessageType.LOG, msg))
 
                         _create_affliction(defender, effect_data.affliction_name, modified_duration)
 
@@ -415,7 +415,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
 
 
 def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: int):
-    data = library.get_skill_effect_data(skill_name, EffectTypes.DAMAGE)
+    data = library.get_skill_effect_data(skill_name, EffectType.DAMAGE)
     attackers_stats = entity.get_combat_stats(attacker)
 
     # get relevant entities
@@ -447,17 +447,17 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
                     resources.health -= damage
 
                     # log the outcome
-                    if hit_type == HitTypes.GRAZE:
+                    if hit_type == HitType.GRAZE:
                         hit_type_desc = "grazes"
-                    elif hit_type == HitTypes.HIT:
+                    elif hit_type == HitType.HIT:
                         hit_type_desc = "hits"
-                    elif hit_type == HitTypes.CRIT:
+                    elif hit_type == HitType.CRIT:
                         hit_type_desc = "crits"
                     else:
                         hit_type_desc = "does something unknown"  # catch all
 
                     msg = f"{attacker_name} {hit_type_desc} {defender_name} for {damage}."
-                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                    publisher.publish(MessageEvent(MessageType.LOG, msg))
 
                     # TODO - add the damage type to the text and replace the type with an icon
                     # TODO - add the explanation of the damage roll to a tooltip
@@ -468,13 +468,13 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
                 else:
                     # log no damage
                     msg = f" {defender_name} resists damage from {attacker_name}."
-                    publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+                    publisher.publish(MessageEvent(MessageType.LOG, msg))
 
 
 ############################################### CALCULATE ####################################
 
 
-def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitTypes], effect_data: EffectData,
+def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitType], effect_data: EffectData,
         attackers_stats: CombatStats = None) -> int:
     """
     Work out the damage to be dealt. if attacking entity is None then value used is 0.
@@ -504,12 +504,12 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitTypes], ef
     mitigated_damage = (initial_damage + damage_from_stats) - resist_value
 
     # apply to hit modifier to damage
-    if hit_type == HitTypes.CRIT:
-        modified_damage = mitigated_damage * HitModifiers.CRIT.value
-    elif hit_type == HitTypes.HIT:
-        modified_damage = mitigated_damage * HitModifiers.HIT.value
+    if hit_type == HitType.CRIT:
+        modified_damage = mitigated_damage * HitModifier.CRIT.value
+    elif hit_type == HitType.HIT:
+        modified_damage = mitigated_damage * HitModifier.HIT.value
     else:
-        modified_damage = mitigated_damage * HitModifiers.GRAZE.value
+        modified_damage = mitigated_damage * HitModifier.GRAZE.value
 
     # round down the dmg
     int_modified_damage = int(modified_damage)
@@ -523,7 +523,7 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitTypes], ef
 
 
 def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int,
-        stat_to_target: Type[PrimaryStat], attackers_stats: CombatStats = None) -> int:
+        stat_to_target: Type[PrimaryStatType], attackers_stats: CombatStats = None) -> int:
     """
     Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
     """

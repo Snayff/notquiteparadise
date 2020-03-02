@@ -7,7 +7,7 @@ import tcod
 
 from scripts.engine import entity, utility
 from scripts.engine.component import Position, Blocking
-from scripts.engine.core.constants import TargetTags, FOVInfo, SkillShapes
+from scripts.engine.core.constants import TargetTag, FOVInfo, SkillShape
 from scripts.engine.core.store import store
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
@@ -243,7 +243,7 @@ def get_tiles_in_range_and_fov_of_entity(range_from_centre: int, active_entity: 
     """
     # TODO - update to ECS
     # get the tiles in range
-    coords = utility.create_shape(SkillShapes.SQUARE, range_from_centre)  # square as LOS is square
+    coords = utility.create_shape(SkillShape.SQUARE, range_from_centre)  # square as LOS is square
     tiles_in_range = get_tiles(active_entity.x, active_entity.y, coords)
     tiles_in_range_and_fov = []
 
@@ -258,38 +258,38 @@ def get_tiles_in_range_and_fov_of_entity(range_from_centre: int, active_entity: 
 
 ############# QUERIES ############
 
-def tile_has_tag(tile: Tile, tag: TargetTags, active_entity: int = None) -> bool:
+def tile_has_tag(tile: Tile, tag: TargetTag, active_entity: int = None) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
-    if tag == TargetTags.OPEN_SPACE:
+    if tag == TargetTag.OPEN_SPACE:
         # If in bounds check if anything is blocking
         if _is_tile_in_bounds(tile.x, tile.y):
             return not _is_tile_blocking_movement(tile.x, tile.y)
         else:
             return False
-    elif tag == TargetTags.BLOCKED_MOVEMENT:
+    elif tag == TargetTag.BLOCKED_MOVEMENT:
         # If in bounds check if anything is blocking
         if _is_tile_in_bounds(tile.x, tile.y):
             return _is_tile_blocking_movement(tile.x, tile.y)
         else:
             return True
-    elif tag == TargetTags.SELF:
+    elif tag == TargetTag.SELF:
         return _tile_has_entity(tile.x, tile.y, active_entity)
-    elif tag == TargetTags.OTHER_ENTITY:
+    elif tag == TargetTag.OTHER_ENTITY:
         return _tile_has_other_entity(tile.x, tile.y, active_entity)
-    elif tag == TargetTags.NO_ENTITY:
+    elif tag == TargetTag.NO_ENTITY:
         return not _tile_has_any_entity(tile.x, tile.y)
-    elif tag == TargetTags.ANY:
+    elif tag == TargetTag.ANY:
         return True
-    elif tag == TargetTags.IS_VISIBLE:
+    elif tag == TargetTag.IS_VISIBLE:
         return _is_tile_visible_to_player(tile.x, tile.y)
     else:
         # catch all
         return False
 
 
-def tile_has_tags(tile: Tile, tags: List[TargetTags], active_entity: int = None) -> bool:
+def tile_has_tags(tile: Tile, tags: List[TargetTag], active_entity: int = None) -> bool:
     """
     Check a tile has all required tags
     """

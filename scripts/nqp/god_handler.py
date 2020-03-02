@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from scripts.engine import entity
-from scripts.engine.core.constants import EffectTypes, Directions
+from scripts.engine.core.constants import EffectType, Direction
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.library import library
 
@@ -63,13 +63,13 @@ class GodHandler(Subscriber):
             entity.judge_action(entity, effect_data.effect_type)
 
         # check damage type used
-        if EffectTypes.DAMAGE in skill_data.effects:
-            damage_type = skill_data.effects[EffectTypes.DAMAGE].damage_type
+        if EffectType.DAMAGE in skill_data.effects:
+            damage_type = skill_data.effects[EffectType.DAMAGE].damage_type
             entity.judge_action(entity, damage_type)
 
         # check afflictions applied
-        if EffectTypes.APPLY_AFFLICTION in skill_data.effects:
-            affliction_name = skill_data.effects[EffectTypes.APPLY_AFFLICTION].affliction_name
+        if EffectType.APPLY_AFFLICTION in skill_data.effects:
+            affliction_name = skill_data.effects[EffectType.APPLY_AFFLICTION].affliction_name
             entity.judge_action(entity, affliction_name)
 
     @staticmethod
@@ -89,6 +89,6 @@ class GodHandler(Subscriber):
         for god_entity_id, intervention_name in interventions:
             # create use skill event with direction of centre
             publisher.publish(UseSkillEvent(god_entity_id, intervention_name, (position.x, position.y),
-                                            Directions.CENTRE))
+                                            Direction.CENTRE))
 
 

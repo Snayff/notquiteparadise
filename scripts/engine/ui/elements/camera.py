@@ -212,7 +212,7 @@ class Camera(UIWindow):
         Set the overlay with possible targeting directions.
 
         Args:
-            directions (): List of Directions
+            directions (): List of Direction
         """
         self.overlay_directions = directions
 

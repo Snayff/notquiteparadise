@@ -3,13 +3,13 @@ from __future__ import annotations
 import pygame
 from typing import TYPE_CHECKING, Type, Union, Optional
 
-from scripts.engine.core.constants import InputIntents
+from scripts.engine.core.constants import InputIntent, InputIntentType
 
 if TYPE_CHECKING:
     pass
 
 
-def convert_to_intent(event: pygame.event) -> Optional[Type[InputIntents]]:
+def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:
     """
     Convert input to an intent.
     """
@@ -40,21 +40,21 @@ def _check_directions(event: pygame.event):
     # handle key press events
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_UP or event.key == pygame.K_KP8 or event.key == pygame.K_k:
-            return InputIntents.UP
+            return InputIntent.UP
         elif event.key == pygame.K_DOWN or event.key == pygame.K_KP2 or event.key == pygame.K_j:
-            return InputIntents.DOWN
+            return InputIntent.DOWN
         elif event.key == pygame.K_LEFT or event.key == pygame.K_KP4 or event.key == pygame.K_h:
-            return InputIntents.LEFT
+            return InputIntent.LEFT
         elif event.key == pygame.K_RIGHT or event.key == pygame.K_KP6 or event.key == pygame.K_l:
-            return InputIntents.RIGHT
+            return InputIntent.RIGHT
         elif event.key == pygame.K_KP7 or event.key == pygame.K_y:
-            return InputIntents.UP_LEFT
+            return InputIntent.UP_LEFT
         elif event.key == pygame.K_KP9 or event.key == pygame.K_u:
-            return InputIntents.UP_RIGHT
+            return InputIntent.UP_RIGHT
         elif event.key == pygame.K_KP1 or event.key == pygame.K_b:
-            return InputIntents.DOWN_LEFT
+            return InputIntent.DOWN_LEFT
         elif event.key == pygame.K_KP3 or event.key == pygame.K_n:
-            return InputIntents.DOWN_RIGHT
+            return InputIntent.DOWN_RIGHT
 
 
 def _check_actions(event: pygame.event):
@@ -65,19 +65,19 @@ def _check_actions(event: pygame.event):
     # handle key press events
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_1:
-            return InputIntents.SKILL0
+            return InputIntent.SKILL0
         elif event.key == pygame.K_2:
-            return InputIntents.SKILL1
+            return InputIntent.SKILL1
         elif event.key == pygame.K_3:
-            return InputIntents.SKILL2
+            return InputIntent.SKILL2
         elif event.key == pygame.K_4:
-            return InputIntents.SKILL3
+            return InputIntent.SKILL3
         elif event.key == pygame.K_5:
-            return InputIntents.SKILL4
+            return InputIntent.SKILL4
         elif event.key == pygame.K_RETURN:
-            return InputIntents.CONFIRM
+            return InputIntent.CONFIRM
         elif event.key == pygame.K_ESCAPE:
-            return InputIntents.EXIT_GAME
+            return InputIntent.EXIT_GAME
 
 
 def _check_dev_actions(event: pygame.event):
@@ -87,8 +87,8 @@ def _check_dev_actions(event: pygame.event):
     # handle key press events
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_F1:
-            return InputIntents.DEBUG_TOGGLE
+            return InputIntent.DEBUG_TOGGLE
         elif event.key == pygame.K_F5:
-            return InputIntents.REFRESH_DATA
+            return InputIntent.REFRESH_DATA
         elif event.key == pygame.K_F2:
-            return InputIntents.DEV_TOGGLE
+            return InputIntent.DEV_TOGGLE

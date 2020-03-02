@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from scripts.engine import world, chrono, entity, state, skill
-from scripts.engine.core.constants import MessageTypes, TargetTags, GameStates
+from scripts.engine.core.constants import MessageType, TargetTag, GameState
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, EndTurnEvent, \
     ChangeGameStateEvent
 from scripts.engine.library import library
@@ -69,26 +69,26 @@ class EntityHandler(Subscriber):
 
             # check a tile was returned
             if target_tile:
-                is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTags.BLOCKED_MOVEMENT, ent)
-                is_entity_on_tile = world.tile_has_tag(target_tile, TargetTags.OTHER_ENTITY, ent)
+                is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTag.BLOCKED_MOVEMENT, ent)
+                is_entity_on_tile = world.tile_has_tag(target_tile, TargetTag.OTHER_ENTITY, ent)
             else:
                 is_tile_blocking_movement = True
                 is_entity_on_tile = False
 
             # check for no entity in way but tile is blocked
             if not is_entity_on_tile and is_tile_blocking_movement:
-                publisher.publish(MessageEvent(MessageTypes.LOG, f"There`s something in the way!"))
+                publisher.publish(MessageEvent(MessageType.LOG, f"There`s something in the way!"))
 
             # check if entity blocking tile to attack
             elif is_entity_on_tile:
                 knowledge = entity.get_entitys_component(ent, Knowledge)
                 skill_name = knowledge.skills[0]
                 skill_data = library.get_skill_data(skill_name)
-                #direction = Directions((dir_x, dir_y))
+                #direction = Direction((dir_x, dir_y))
                 if (dir_x, dir_y) in skill_data.target_directions:
                     publisher.publish((UseSkillEvent(ent, skill_name, event.start_pos, (dir_x, dir_y))))
                 else:
-                    publisher.publish(MessageEvent(MessageTypes.LOG, f"{skill_name} doesn't go that way!"))
+                    publisher.publish(MessageEvent(MessageType.LOG, f"{skill_name} doesn't go that way!"))
 
             # if nothing in the way, time to move!
             elif not is_entity_on_tile and not is_tile_blocking_movement:
@@ -136,7 +136,7 @@ class EntityHandler(Subscriber):
         else:
             # is it the player that's can't afford it?
             if ent == entity.get_player():
-                publisher.publish(MessageEvent(MessageTypes.LOG, "You cannot afford to do that."))
+                publisher.publish(MessageEvent(MessageType.LOG, "You cannot afford to do that."))
             else:
                 identity = entity.get_identity(ent)
                 logging.warning(f"{identity.name} tried to use {skill_name}, which they can`t afford")
@@ -179,7 +179,7 @@ class EntityHandler(Subscriber):
             skill_data = library.get_skill_data(skill_name)
 
             if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                publisher.publish(ChangeGameStateEvent(GameStates.TARGETING_MODE, skill_name))
+                publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
 
         # skill matches already selected so use skill!
         else:

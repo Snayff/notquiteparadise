@@ -22,8 +22,9 @@ TIME_PER_ROUND = 100
 # replacing NewType with the relevant type.
 #########################################################################
 InputIntentType = NewType("InputIntentType", str)
-SecondaryStatType = NewType("SecondaryStatType", str)
 PrimaryStatType = NewType("PrimaryStatType", str)
+SecondaryStatType = NewType("SecondaryStatType", str)
+
 
 #################### CLASSES ###########################################
 
@@ -46,7 +47,7 @@ class FOVInfo(SimpleNamespace):
     FOV_ALGORITHM = 0
 
 
-class GameStates(SimpleNamespace):
+class GameState(SimpleNamespace):
     """
     States the Game can be in.
     """
@@ -61,7 +62,7 @@ class GameStates(SimpleNamespace):
     PREVIOUS = 9
 
 
-class EventTopics(SimpleNamespace):
+class EventTopic(SimpleNamespace):
     """
     Topics that Events can be associated with.
     """
@@ -71,14 +72,14 @@ class EventTopics(SimpleNamespace):
     MAP = 4
 
 
-class MessageTypes(SimpleNamespace):
+class MessageType(SimpleNamespace):
     """Types of Message Events"""
     LOG = 1
     ENTITY = 2
     SCREEN = 3
 
 
-class TargetTags(SimpleNamespace):
+class TargetTag(SimpleNamespace):
     """
     Types of target
     """
@@ -92,7 +93,7 @@ class TargetTags(SimpleNamespace):
     IS_VISIBLE = 8
 
 
-class DamageTypes(SimpleNamespace):
+class DamageType(SimpleNamespace):
     """
     Damage types
     """
@@ -132,7 +133,7 @@ class SecondaryStat(SimpleNamespace):
     RUSH = SecondaryStatType("rush")
 
 
-class HitTypes(SimpleNamespace):
+class HitType(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
@@ -142,7 +143,7 @@ class HitTypes(SimpleNamespace):
 
 
 # TODO - externalise the values
-class HitValues(SimpleNamespace):
+class HitValue(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
@@ -152,7 +153,7 @@ class HitValues(SimpleNamespace):
 
 
 # TODO - externalise the values
-class HitModifiers(SimpleNamespace):
+class HitModifier(SimpleNamespace):
     """
     The modifier for each hit type
     """
@@ -161,7 +162,7 @@ class HitModifiers(SimpleNamespace):
     CRIT = 1.4
 
 
-class EffectTypes(SimpleNamespace):
+class EffectType(SimpleNamespace):
     """
     Types of effects
     """
@@ -180,7 +181,7 @@ class AfflictionCategory(SimpleNamespace):
     BOON = 2
 
 
-class AfflictionTriggers(SimpleNamespace):
+class AfflictionTrigger(SimpleNamespace):
     """
     When to trigger the afflictions
     """
@@ -196,7 +197,7 @@ class AfflictionTriggers(SimpleNamespace):
     # DEATH = auto()  # apply if afflicted entity dies
 
 
-class SkillShapes(SimpleNamespace):
+class SkillShape(SimpleNamespace):
     """
     When to trigger the afflictions
     """
@@ -206,7 +207,7 @@ class SkillShapes(SimpleNamespace):
     CROSS = 4
 
 
-class SkillTerrainCollisions(SimpleNamespace):
+class SkillTerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
@@ -215,7 +216,7 @@ class SkillTerrainCollisions(SimpleNamespace):
     FIZZLE = 3
 
 
-class SkillTravelTypes(SimpleNamespace):
+class SkillTravel(SimpleNamespace):
     """
     How the skill travels
     """
@@ -223,7 +224,7 @@ class SkillTravelTypes(SimpleNamespace):
     THROW = 2  # only impacts last tile in range
 
 
-class SkillExpiryTypes(SimpleNamespace):
+class SkillExpiry(SimpleNamespace):
     """
     What happens when the skill reaches the range limit
     """
@@ -231,7 +232,7 @@ class SkillExpiryTypes(SimpleNamespace):
     ACTIVATE = 2
 
 
-class InputModes(SimpleNamespace):
+class InputMode(SimpleNamespace):
     """
     Input hardware being used
     """
@@ -239,7 +240,7 @@ class InputModes(SimpleNamespace):
     GAMEPAD = 2
 
 
-class InputIntents(SimpleNamespace):
+class InputIntent(SimpleNamespace):
     """
     Values of the conversion from input to intent. Strings.
     """
@@ -265,7 +266,7 @@ class InputIntents(SimpleNamespace):
     DEV_TOGGLE = InputIntentType("dev_toggle")
 
 
-class UIElementTypes(SimpleNamespace):
+class UIElement(SimpleNamespace):
     """
     The different UI elements
     """
@@ -278,7 +279,7 @@ class UIElementTypes(SimpleNamespace):
     DATA_EDITOR = 7
 
 
-class Directions(SimpleNamespace):
+class Direction(SimpleNamespace):
     """
     Holds a tuple for each direction of the (x, y) relative direction.
     """

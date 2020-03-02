@@ -11,8 +11,8 @@ from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 
 from scripts.engine import utility
-from scripts.engine.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStat, SecondaryStat, \
-    TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
+from scripts.engine.core.constants import EffectType, AfflictionTrigger, DamageType, PrimaryStat, SecondaryStat, \
+    TargetTag, AfflictionCategory, SkillExpiry, SkillShape, Direction, SkillTerrainCollision, SkillTravel
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, InterventionData, \
@@ -494,14 +494,14 @@ class DataEditor(UIWindow):
     def _load_field_options(self):
         """
         Maps the various data keys to their related (options, dataclass). The dataclass is only provided if the key
-        relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData). Loads
+        relates to sub-details that need adding. E.g. effects: (EffectType.__dict__.keys(), EffectData). Loads
         details into self.field_options
         """
         get_members = utility.get_class_members
 
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]
-        effect_options = get_members(EffectTypes)
+        effect_options = get_members(EffectType)
         primary_stat_options = get_members(PrimaryStat)
         secondary_stat_options = get_members(SecondaryStat)
         bool_options = ["True", "False"]
@@ -509,14 +509,14 @@ class DataEditor(UIWindow):
 
         field_options = {
             "effects": (effect_options, EffectData()),
-            "trigger_event": (get_members(AfflictionTriggers), None),
+            "trigger_event": (get_members(AfflictionTrigger), None),
             "affliction_name": (affliction_options, None),
             "aspect_name": (aspect_options, None),
-            "damage_type": (get_members(DamageTypes), None),
+            "damage_type": (get_members(DamageType), None),
             "effect_type": (effect_options, None),
             "stat_to_affect": (primary_stat_options + secondary_stat_options, None),
             "stat_to_target": (primary_stat_options, None),
-            "required_tags": (get_members(TargetTags), None),
+            "required_tags": (get_members(TargetTag), None),
             "mod_stat": (primary_stat_options + secondary_stat_options, None),
             "blocks_movement": (bool_options, None),
             "blocks_sight": (bool_options, None),
@@ -528,12 +528,12 @@ class DataEditor(UIWindow):
             "action": (affliction_options + effect_options + skill_options, None),  # gods attitudes on things
             "skill_key": (skill_options, None),
             "known_skills": (skill_options, None),
-            "expiry_type": (get_members(SkillExpiryTypes), None),
+            "expiry_type": (get_members(SkillExpiry), None),
             "resource_type": (secondary_stat_options, None),
-            "shape": (get_members(SkillShapes), None),
-            "target_directions": (get_members(Directions), None),
-            "terrain_collision": (get_members(SkillTerrainCollisions), None),
-            "travel_type": (get_members(SkillTravelTypes), None),
+            "shape": (get_members(SkillShape), None),
+            "target_directions": (get_members(Direction), None),
+            "terrain_collision": (get_members(SkillTerrainCollision), None),
+            "travel_type": (get_members(SkillTravel), None),
             "interactions": (affliction_options + effect_options + skill_options, InteractionData()),
             "attitudes": (affliction_options + effect_options + skill_options, AttitudeData()),
             "interventions": (skill_options, InterventionData()),

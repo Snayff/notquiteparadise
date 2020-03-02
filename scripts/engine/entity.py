@@ -38,7 +38,7 @@ def get_player() -> Optional[int]:
     return None
 
 
-def get_entity(unique_component: Type[C]) -> Optional[int]:
+def get_entity(unique_component: Type[Component]) -> Optional[int]:
     """
     Get a single entity that has a component. If multiple entities have the given component only the 
     first found is returned.

@@ -10,7 +10,7 @@ from scripts.engine.library import library
 
 
 from scripts.engine.core.event_core import Subscriber, publisher
-from scripts.engine.core.constants import EventTopics, GameStates, MessageTypes, UIElementTypes
+from scripts.engine.core.constants import EventTopic, GameState, MessageType, UIElement
 from scripts.engine.component import Position, Aesthetic
 from scripts.engine.event import MessageEvent, ClickTile, UseSkillEvent, DieEvent, MoveEvent, ChangeGameStateEvent
 from scripts.engine.ui.manager import ui
@@ -34,13 +34,13 @@ class UiHandler(Subscriber):
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
 
-        if event.topic == EventTopics.UI:
+        if event.topic == EventTopic.UI:
             self.process_ui_event(event)
 
-        if event.topic == EventTopics.ENTITY:
+        if event.topic == EventTopic.ENTITY:
             self.process_entity_event(event)
 
-        if event.topic == EventTopics.GAME:
+        if event.topic == EventTopic.GAME:
             self.process_game_event(event)
 
     ############# HANDLE ENTITY EVENTS ##############
@@ -75,36 +75,36 @@ class UiHandler(Subscriber):
         """
         if isinstance(event, ChangeGameStateEvent):
             event: ChangeGameStateEvent
-            if event.new_game_state == GameStates.GAME_INITIALISING:
+            if event.new_game_state == GameState.GAME_INITIALISING:
                 self.init_game_ui()
 
-            elif state.get_previous() == GameStates.GAME_INITIALISING:
+            elif state.get_previous() == GameState.GAME_INITIALISING:
                 # once everything is initialised present the welcome message
                 ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
-            elif event.new_game_state == GameStates.TARGETING_MODE:
+            elif event.new_game_state == GameState.TARGETING_MODE:
                 # turn on targeting overlay
                 self.set_targeting_overlay(True, event.skill_to_be_used)
 
             # check if we are moving to player turn and we are either in, or were just in, targeting
             # this is due to processing order of events
-            elif event.new_game_state == GameStates.PLAYER_TURN and (
-                    state.get_current() == GameStates.TARGETING_MODE or
-                    state.get_previous() == GameStates.TARGETING_MODE):
+            elif event.new_game_state == GameState.PLAYER_TURN and (
+                    state.get_current() == GameState.TARGETING_MODE or
+                    state.get_previous() == GameState.TARGETING_MODE):
 
                 # turn off the targeting overlay
                 self.set_targeting_overlay(False)
 
             # new turn updates
-            elif event.new_game_state == GameStates.NEW_TURN:
+            elif event.new_game_state == GameState.NEW_TURN:
                 # TODO - reflect new turn info
                 pass
 
-            elif event.new_game_state == GameStates.DEV_MODE:
+            elif event.new_game_state == GameState.DEV_MODE:
                 self.init_dev_ui()
                 self.close_game_ui()
 
-            elif state.get_previous() == GameStates.DEV_MODE:
+            elif state.get_previous() == GameState.DEV_MODE:
                 self.close_dev_ui()
                 self.init_game_ui()
 
@@ -131,10 +131,10 @@ class UiHandler(Subscriber):
         """
         Close all game ui_manager elements
         """
-        ui.kill_element(UIElementTypes.MESSAGE_LOG)
-        ui.kill_element(UIElementTypes.SKILL_BAR)
-        ui.kill_element(UIElementTypes.CAMERA)
-        ui.kill_element(UIElementTypes.ENTITY_INFO)
+        ui.kill_element(UIElement.MESSAGE_LOG)
+        ui.kill_element(UIElement.SKILL_BAR)
+        ui.kill_element(UIElement.CAMERA)
+        ui.kill_element(UIElement.ENTITY_INFO)
 
     @staticmethod
     def init_dev_ui():
@@ -148,7 +148,7 @@ class UiHandler(Subscriber):
         """
         Clear all dev mode elements
         """
-        ui.kill_element(UIElementTypes.DATA_EDITOR)
+        ui.kill_element(UIElement.DATA_EDITOR)
 
     ############# HANDLE UI EVENTS #################
 
@@ -158,7 +158,7 @@ class UiHandler(Subscriber):
         """
         if isinstance(event, ClickTile):
             event: ClickTile
-            if state.get_current() == GameStates.PLAYER_TURN:
+            if state.get_current() == GameState.PLAYER_TURN:
 
                 # Select an entity
                 tile = world.get_tile(event.tile_pos_string)
@@ -173,7 +173,7 @@ class UiHandler(Subscriber):
                 for ent in entities:
                     self.select_entity(ent)
                     break
-            elif state.get_current() == GameStates.TARGETING_MODE:
+            elif state.get_current() == GameState.TARGETING_MODE:
                 # use the skill on the clicked tile
                 player = entity.get_player()
                 position = entity.get_entitys_component(player, Position)
@@ -189,7 +189,7 @@ class UiHandler(Subscriber):
     @staticmethod
     def set_targeting_overlay(is_visible: bool, skill_name: str = None):
         """
-        Show or hide targeting overlay, using Directions possible in the skill.
+        Show or hide targeting overlay, using Direction possible in the skill.
         """
         # update directions to either clear or use info from skill
         if is_visible:
@@ -237,13 +237,13 @@ class UiHandler(Subscriber):
         """
         Process a message event
         """
-        if event.message_type == MessageTypes.LOG:
+        if event.message_type == MessageType.LOG:
             ui.add_to_message_log(event.message)
 
-        elif event.message_type == MessageTypes.SCREEN:
+        elif event.message_type == MessageType.SCREEN:
             ui.create_screen_message(event.message, event.colour, event.size)
 
-        elif event.message_type == MessageTypes.ENTITY:
+        elif event.message_type == MessageType.ENTITY:
             # TODO - create message over entity
             #  can we reuse screen message but provide xy?
             pass

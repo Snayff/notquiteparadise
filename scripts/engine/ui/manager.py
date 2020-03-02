@@ -4,7 +4,7 @@ import logging
 import pygame
 import pygame_gui
 from typing import TYPE_CHECKING, Type, Dict, Tuple, List
-from scripts.engine.core.constants import VisualInfo, UIElementTypes, TILE_SIZE
+from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.entity_info import EntityInfo
@@ -88,13 +88,13 @@ class _UIManager:
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
-    def add_ui_element(self, element_type: Type[UIElementTypes], element: object):
+    def add_ui_element(self, element_type: Type[UIElement], element: object):
         """
         Add ui_manager element to the list of all elements.
         """
         self._elements[element_type] = element
 
-    def kill_element(self, element_type: Type[UIElementTypes]):
+    def kill_element(self, element_type: Type[UIElement]):
         """
         Remove any reference to the element
         """
@@ -108,7 +108,7 @@ class _UIManager:
 
     ##################### GET ############################
 
-    def get_element(self, element_type: Type[UIElementTypes]):
+    def get_element(self, element_type: Type[UIElement]):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
         """
@@ -125,7 +125,7 @@ class _UIManager:
         """
         return ui._gui
 
-    def get_ui_element(self, element_type: Type[UIElementTypes]):
+    def get_ui_element(self, element_type: Type[UIElement]):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
         """
@@ -164,7 +164,7 @@ class _UIManager:
         y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
         rect = pygame.Rect((x, y), (width, height))
         message_log = MessageLog(rect, self.get_gui_manager())
-        self.add_ui_element(UIElementTypes.MESSAGE_LOG, message_log)
+        self.add_ui_element(UIElement.MESSAGE_LOG, message_log)
 
     def init_entity_info(self):
         """
@@ -177,7 +177,7 @@ class _UIManager:
         y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
         rect = pygame.Rect((x, y), (width, height))
         info = EntityInfo(rect, self.get_gui_manager())
-        self.add_ui_element(UIElementTypes.ENTITY_INFO, info)
+        self.add_ui_element(UIElement.ENTITY_INFO, info)
 
     def init_skill_bar(self):
         """
@@ -190,7 +190,7 @@ class _UIManager:
         y = 2
         rect = pygame.Rect((x, y), (width, height))
         skill_bar = SkillBar(rect, self.get_gui_manager())
-        self.add_ui_element(UIElementTypes.SKILL_BAR, skill_bar)
+        self.add_ui_element(UIElement.SKILL_BAR, skill_bar)
 
     def init_camera(self):
         """
@@ -205,7 +205,7 @@ class _UIManager:
         y = 5
         rect = pygame.Rect((x, y), (width, height))
         camera = Camera(rect, self.get_gui_manager(), rows, cols)
-        self.add_ui_element(UIElementTypes.CAMERA, camera)
+        self.add_ui_element(UIElement.CAMERA, camera)
 
     def init_skill_editor(self):
         """
@@ -218,7 +218,7 @@ class _UIManager:
         y = 10
         rect = pygame.Rect((x, y), (width, height))
         editor = DataEditor(rect, self.get_gui_manager())
-        self.add_ui_element(UIElementTypes.DATA_EDITOR, editor)
+        self.add_ui_element(UIElement.DATA_EDITOR, editor)
 
     def create_screen_message(self, message: str, colour, size: int):
         """
@@ -237,7 +237,7 @@ class _UIManager:
         """
         Determine if target position is within the edge of the camera
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
 
         if camera:
             player_x, player_y = target_pos
@@ -265,7 +265,7 @@ class _UIManager:
         """
         Increment camera's drawn tiles in the given direction. N.B. Physical position on screen does not change.
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
 
         if camera:
             camera.move_camera(num_cols, num_rows)
@@ -276,7 +276,7 @@ class _UIManager:
         """
         Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
 
         if camera:
             camera.update_camera_tiles()
@@ -287,7 +287,7 @@ class _UIManager:
         """
         Update the camera game map to show what is in the tiles held by the camera.
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
 
         if camera:
             camera.update_game_map()
@@ -296,7 +296,7 @@ class _UIManager:
         """
         Update the camera's grid. Controls tile hover highlighting.
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
         if camera:
             camera.update_grid()
         else:
@@ -309,7 +309,7 @@ class _UIManager:
         Args:
             tile ():
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
 
         if camera:
             camera.set_player_tile(tile)
@@ -323,7 +323,7 @@ class _UIManager:
         Args:
             is_visible ():
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
         if camera:
             camera.set_overlay_visibility(is_visible)
         else:
@@ -334,9 +334,9 @@ class _UIManager:
         Set the overlay with possible targeting directions.
 
         Args:
-            directions (): List of Directions
+            directions (): List of Direction
         """
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
         if camera:
             camera.set_overlay_directions(directions)
         else:
@@ -349,7 +349,7 @@ class _UIManager:
         """
         start_x, start_y = start_pos
         target_x, target_y = target_pos
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
 
         # if camera has been init'd
         if camera:
@@ -401,7 +401,7 @@ class _UIManager:
         Convert from the world_objects position to the screen position. -1, -1 if camera not init'd.
         """
         # TODO - this shouldnt rely on UI, if possible.
-        camera = self.get_ui_element(UIElementTypes.CAMERA)
+        camera = self.get_ui_element(UIElement.CAMERA)
 
         # if camera has been init'd
         if camera:
@@ -416,7 +416,7 @@ class _UIManager:
         """
         Set the selected entity and show it.
         """
-        entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
+        entity_info = self.get_ui_element(UIElement.ENTITY_INFO)
 
         if entity_info:
             if ent:
@@ -433,7 +433,7 @@ class _UIManager:
         """
         Hide the entity info ui_manager element.
         """
-        entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
+        entity_info = self.get_ui_element(UIElement.ENTITY_INFO)
 
         if entity_info:
             entity_info.cleanse()
@@ -447,7 +447,7 @@ class _UIManager:
         Add a text to the message log. Includes processing of the text.
         """
         try:
-            message_log = self.get_ui_element(UIElementTypes.MESSAGE_LOG)
+            message_log = self.get_ui_element(UIElement.MESSAGE_LOG)
             message_log.add_message(message)
 
         except AttributeError:

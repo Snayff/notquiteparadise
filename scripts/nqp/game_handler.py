@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from scripts.engine import entity, chrono, state
-from scripts.engine.core.constants import GameStates
+from scripts.engine.core.constants import GameState
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.state import get_current
 
@@ -31,7 +31,7 @@ class GameHandler(Subscriber):
         logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
 
         if isinstance(event, ExitGameEvent):
-            publisher.publish(ChangeGameStateEvent(GameStates.EXIT_GAME))
+            publisher.publish(ChangeGameStateEvent(GameState.EXIT_GAME))
 
         elif isinstance(event, EndTurnEvent):
             self.process_end_turn(event)
@@ -46,24 +46,24 @@ class GameHandler(Subscriber):
         """
         new_game_state = event.new_game_state
 
-        if new_game_state == GameStates.GAME_INITIALISING:
+        if new_game_state == GameState.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
             publisher.publish(EndTurnEvent(entity.get_player(), 1))  # trigger new turn actions (entity queue)
 
-        elif new_game_state == GameStates.NEW_TURN:
+        elif new_game_state == GameState.NEW_TURN:
             # if turn holder is the player then update to player turn
             if chrono.get_turn_holder() == entity.get_player():
-                publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
+                publisher.publish(ChangeGameStateEvent(GameState.PLAYER_TURN))
             # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
             else:
-                publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
+                publisher.publish(ChangeGameStateEvent(GameState.ENEMY_TURN))
 
-        elif new_game_state == GameStates.TARGETING_MODE:
+        elif new_game_state == GameState.TARGETING_MODE:
             state.set_active_skill(event.skill_to_be_used)
 
         # PREVIOUS must be last as it overwrites new_game_state
-        elif new_game_state == GameStates.PREVIOUS:
+        elif new_game_state == GameState.PREVIOUS:
             new_game_state = state.get_previous()
 
         # update the game state to the intended state
@@ -81,4 +81,4 @@ class GameHandler(Subscriber):
         End turn, move to next turn, change game state to new turn.
         """
         chrono.next_turn()
-        publisher.publish(ChangeGameStateEvent(GameStates.NEW_TURN))
+        publisher.publish(ChangeGameStateEvent(GameState.NEW_TURN))

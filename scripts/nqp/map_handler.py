@@ -75,7 +75,7 @@ class MapHandler(Subscriber):
         #
         #                     # inform player of change
         #                     msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."
-        #                     publisher.publish(MessageEvent(MessageTypes.LOG, msg))
+        #                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 
     @staticmethod
     def process_end_of_turn_updates(event: EndTurnEvent):

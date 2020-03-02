@@ -8,7 +8,7 @@ import pstats
 import time
 import pygame
 from scripts.engine import state, world, entity, chrono, action
-from scripts.engine.core.constants import GameStates, VERSION, EventTopics
+from scripts.engine.core.constants import GameState, VERSION, EventTopic
 from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import _UIManager, ui
 from scripts.engine.core.event_core import event_hub, publisher
@@ -32,7 +32,7 @@ from scripts.nqp.ui_handler import UiHandler
 
 # Project Wide to do list...
 # FIXME - collision isnt working - can walk through walls
-# FIXME - Directions not working - cant basic attack in any direction.
+# FIXME - Direction not working - cant basic attack in any direction.
 # TODO - swap out nose for pytest
 # TODO - remember window position and resume at that place
 # TODO - Review closure
@@ -80,13 +80,13 @@ def game_loop():
     The core game loop, handling input, rendering and logic.
     """
 
-    while not state.get_current() == GameStates.EXIT_GAME:
+    while not state.get_current() == GameState.EXIT_GAME:
 
         # get info to support UI updates and handling events
         delta_time = state.get_delta_time()
         current_state = state.get_current()
 
-        if current_state == GameStates.ENEMY_TURN:
+        if current_state == GameState.ENEMY_TURN:
             pass
             # turn.turn_holder.ai.take_turn()
 
@@ -204,7 +204,7 @@ def initialise_game():
     # create a god
     god = entity.create_god("the_small_gods")
 
-    publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
+    publisher.publish(ChangeGameStateEvent(GameState.GAME_INITIALISING))
 
 
 def initialise_event_handlers():
@@ -212,23 +212,23 @@ def initialise_event_handlers():
     Create the various event handlers and subscribe to required events.
     """
     game_handler = GameHandler(event_hub)
-    game_handler.subscribe(EventTopics.GAME)
+    game_handler.subscribe(EventTopic.GAME)
 
     entity_handler = EntityHandler(event_hub)
-    entity_handler.subscribe(EventTopics.ENTITY)
-    entity_handler.subscribe(EventTopics.GAME)
+    entity_handler.subscribe(EventTopic.ENTITY)
+    entity_handler.subscribe(EventTopic.GAME)
 
     map_handler = MapHandler(event_hub)
-    map_handler.subscribe(EventTopics.MAP)
-    map_handler.subscribe(EventTopics.GAME)
+    map_handler.subscribe(EventTopic.MAP)
+    map_handler.subscribe(EventTopic.GAME)
 
     god_handler = GodHandler(event_hub)
-    god_handler.subscribe(EventTopics.ENTITY)
+    god_handler.subscribe(EventTopic.ENTITY)
 
     ui_handler = UiHandler(event_hub)
-    ui_handler.subscribe(EventTopics.ENTITY)
-    ui_handler.subscribe(EventTopics.GAME)
-    ui_handler.subscribe(EventTopics.UI)
+    ui_handler.subscribe(EventTopic.ENTITY)
+    ui_handler.subscribe(EventTopic.GAME)
+    ui_handler.subscribe(EventTopic.UI)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

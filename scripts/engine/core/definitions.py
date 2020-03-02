@@ -3,9 +3,9 @@ from __future__ import annotations
 import pygame
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List
-from scripts.engine.core.constants import PrimaryStat, SecondaryStat, Directions, \
-    SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, TargetTags, SkillShapes, EffectTypes, \
-    DamageTypes, AfflictionTriggers, AfflictionCategory
+from scripts.engine.core.constants import PrimaryStatType, SecondaryStat, Direction, \
+    SkillTerrainCollision, SkillTravel, SkillExpiry, TargetTag, SkillShape, EffectType, \
+    DamageType, AfflictionTrigger, AfflictionCategory
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -29,7 +29,7 @@ class BasePrimaryStatData:
     Data class for primary  stats
     """
     name: str = "None"
-    primary_stat_type: PrimaryStat = None
+    primary_stat_type: PrimaryStatType = None
     base_value: int = 0
 
 
@@ -40,7 +40,7 @@ class BaseSecondaryStatData:
     Data class for secondary stats
     """
     name: str = "None"
-    secondary_stat_type: SecondaryStat = None
+    secondary_stat_type: SecondaryStatType = None
     base_value: int = 0
     vigour_mod: int = 0
     clout_mod: int = 0
@@ -95,17 +95,17 @@ class SkillData:
     cooldown: int = 0
 
     # how does it travel from the user?
-    target_directions: List[Directions] = field(default_factory=list)
+    target_directions: List[Direction] = field(default_factory=list)
     range: int = 1
-    terrain_collision: SkillTerrainCollisions = None
-    travel_type: SkillTravelTypes = None
+    terrain_collision: SkillTerrainCollision = None
+    travel_type: SkillTravel = None
 
     # when does it interact?
-    expiry_type: SkillExpiryTypes = None
-    required_tags: List[TargetTags] = field(default_factory=list)
+    expiry_type: SkillExpiry = None
+    required_tags: List[TargetTag] = field(default_factory=list)
 
     # how does it interact?
-    shape: SkillShapes = None
+    shape: SkillShape = None
     shape_size: int = 1
     effects: Dict = field(default_factory=dict)
 
@@ -149,19 +149,19 @@ class EffectData:
     """
     Data class for a skill effect
     """
-    effect_type: EffectTypes = None
-    required_tags: List[TargetTags] = field(default_factory=list)
+    effect_type: EffectType = None
+    required_tags: List[TargetTag] = field(default_factory=list)
     damage: int = 0  # TODO - combine with affect stat amount as only one will be on each effect
     affect_stat_amount: int = 0
-    mod_stat: PrimaryStat = None
+    mod_stat: PrimaryStatType = None
     mod_amount: int = 0
-    damage_type: DamageTypes = None
+    damage_type: DamageType = None
     accuracy: int = 0
-    stat_to_target: PrimaryStat = None
+    stat_to_target: PrimaryStatType = None
     aspect_name: str = "None"
     affliction_name: str = "None"
     duration: int = 0
-    stat_to_affect: PrimaryStat = None
+    stat_to_affect: PrimaryStatType = None
 
 
 @register_dataclass_with_json
@@ -217,7 +217,7 @@ class AfflictionData:
     name: str = "None"
     description: str = "None"
     icon: str = "None"
-    trigger_event: AfflictionTriggers = None
+    trigger_event: AfflictionTrigger = None
     category: AfflictionCategory = None
     effects: Dict = field(default_factory=dict)
 
