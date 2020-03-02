@@ -5,7 +5,7 @@ from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes
 from scripts.engine.utility import get_class_members
-from scripts.engine.components import Aesthetic, Identity, Resources
+from scripts.engine.component import Aesthetic, Identity, Resources
 
 
 class EntityInfo(UIWindow):
@@ -102,7 +102,7 @@ class EntityInfo(UIWindow):
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
 
         # TODO - moving to the top causes import issues. Resolve this!
-        from scripts.managers.world_manager.world_manager import world
+
         aesthetic = world.Entity.get_entitys_component(self.selected_entity, Aesthetic)
         image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
 
@@ -119,7 +119,7 @@ class EntityInfo(UIWindow):
         """
         entity = self.selected_entity
         # TODO - moving to the top causes import issues. Resolve this!
-        from scripts.managers.world_manager.world_manager import world
+
         identity = world.Entity.get_entitys_component(entity, Identity)
         resources = world.Entity.get_entitys_component(entity, Resources)
         text = f"{identity.name.capitalize()}" + "<br>"
@@ -146,7 +146,7 @@ class EntityInfo(UIWindow):
         """
         text = ""
         # TODO - moving to the top causes import issues. Resolve this!
-        from scripts.managers.world_manager.world_manager import world
+
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
         all_stats = get_class_members(PrimaryStatTypes)
@@ -182,7 +182,7 @@ class EntityInfo(UIWindow):
         """
         text = ""
         # TODO - moving to the top causes import issues. Resolve this!
-        from scripts.managers.world_manager.world_manager import world
+
         stats = world.Entity.get_combat_stats(self.selected_entity)
 
         all_stats = get_class_members(SecondaryStatTypes)

@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 from scripts.engine.core.constants import EffectTypes, Directions
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.library import library
-from scripts.managers.world_manager.world_manager import world
-from scripts.engine.components import Position, IsGod
-from scripts.engine.events import UseSkillEvent
+
+from scripts.engine.component import Position, IsGod
+from scripts.engine.event import UseSkillEvent
 
 if TYPE_CHECKING:
     pass

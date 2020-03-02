@@ -3,14 +3,14 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.engine.core.constants import MessageTypes, TargetTags, GameStates
-from scripts.engine.events import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, EndTurnEvent, \
+from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, EndTurnEvent, \
     ChangeGameStateEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 
 
-from scripts.managers.world_manager.world_manager import world
-from scripts.engine.components import Position, Knowledge, IsGod, Aesthetic
+
+from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic
 
 if TYPE_CHECKING:
     pass

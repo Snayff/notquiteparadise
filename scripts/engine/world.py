@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import tcod
 
 from scripts.engine import entity
-from scripts.engine.components import Position, Blocking
+from scripts.engine.component import Position, Blocking
 from scripts.engine.core.constants import TargetTags, FOVInfo, SkillShapes
 from scripts.engine.core.store import store
 from scripts.engine.world_objects.game_map import GameMap
@@ -25,9 +25,9 @@ def create_game_map(width, height):
     store.current_game_map = GameMap(width, height)
 
 
-def create_fov_map(width, height):
+def create_fov_map(width, height) -> tcod.map.Map:
     """
-    Create the fov map for the player
+    Create an fov map
     """
     fov_map = tcod.map_new(width, height)
 
@@ -37,7 +37,7 @@ def create_fov_map(width, height):
             if tile:
                 tcod.map_set_properties(fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
 
-    _players_fov_map = fov_map
+    return fov_map
 
 
 ############################# GET ###########################

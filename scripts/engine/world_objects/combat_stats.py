@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes
 from scripts.engine.library import library
-from scripts.engine.components import Race, Homeland, Savvy
+from scripts.engine.component import Race, Homeland, Savvy
 
 if TYPE_CHECKING:
     pass
@@ -23,7 +23,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.VIGOUR
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
+
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -33,7 +33,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.CLOUT
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
+
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -43,7 +43,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.SKULLDUGGERY
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
+
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -53,7 +53,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.BUSTLE
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
+
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -63,7 +63,7 @@ class CombatStats:
         """
         stat = PrimaryStatTypes.EXACTITUDE
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
+
         return world.Entity.get_primary_stat(self.entity, stat)
 
     @property
@@ -283,7 +283,7 @@ class CombatStats:
         Highest value among base contributions then modifiers applied. Cant be less than 0.
         """
         # TODO - moving to the top creates an import error. Resolve it.
-        from scripts.managers.world_manager.world_manager import world
+
 
         stat = SecondaryStatTypes.SIGHT_RANGE
         stat_data = library.get_secondary_stat_data(stat)

@@ -7,8 +7,8 @@ from pygame_gui.elements import UIButton, UIImage
 from scripts.engine.core.constants import TILE_SIZE
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp
-from scripts.engine.events import ClickTile
-from scripts.engine.components import Position, Aesthetic
+from scripts.engine.event import ClickTile
+from scripts.engine.component import Position, Aesthetic
 
 
 class Camera(UIWindow):
@@ -88,7 +88,7 @@ class Camera(UIWindow):
 
         # draw entities
         # TODO - moving to the top creates circular import. Resolve this!
-        from scripts.managers.world_manager.world_manager import world
+
         for entity, (pos, aesthetic) in world.Entity.get_components(Position, Aesthetic):
             # TODO - use FOV
             # if in camera view
@@ -168,7 +168,7 @@ class Camera(UIWindow):
             tiles = []
     
             # TODO - moving to top causes circular import. Resolve this.
-            from scripts.managers.world_manager.world_manager import world
+
     
             for x in range(self.start_tile_col, self.start_tile_col + self.columns):
                 for y in range(self.start_tile_row, self.start_tile_row + self.rows):

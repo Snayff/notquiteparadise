@@ -3,11 +3,11 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.engine import entity
-from scripts.engine.components import Resources, Identity
+from scripts.engine.component import Resources, Identity
 from scripts.engine.core.constants import TIME_PER_ROUND
 from scripts.engine.core.event_core import publisher
 from scripts.engine.core.store import store
-from scripts.engine.events import EndRoundEvent
+from scripts.engine.event import EndRoundEvent
 
 if TYPE_CHECKING:
     from typing import Dict

@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, TypeVar
 import tcod
 
 from scripts.engine import utility, world
-from scripts.engine.components import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
+from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
     IsGod, \
     Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo

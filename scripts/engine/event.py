@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Tuple, Union, Type
 
 from scripts.engine.core.constants import EventTopics, Directions, GameStates, MessageTypes
 from scripts.engine.core.event_core import Event
-from scripts.engine.components import Position
+from scripts.engine.component import Position
 
 if TYPE_CHECKING:
     pass
@@ -53,7 +53,7 @@ class MoveEvent(Event):
         self.distance = distance
 
         # TODO - moving to the top creates circular import. Resolve this.
-        from scripts.managers.world_manager.world_manager import world
+
 
         # determine start pos
         position = world.Entity.get_entitys_component(entity_to_move, Position)

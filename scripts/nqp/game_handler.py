@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 from scripts.engine.core.constants import GameStates
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.state import get_current
-from scripts.managers.world_manager.world_manager import world
 
-from scripts.engine.events import EndTurnEvent, ExitGameEvent, ChangeGameStateEvent
+
+from scripts.engine.event import EndTurnEvent, ExitGameEvent, ChangeGameStateEvent
 
 if TYPE_CHECKING:
     pass

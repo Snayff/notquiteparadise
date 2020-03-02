@@ -7,18 +7,17 @@ import logging
 import pstats
 import time
 import pygame
-from scripts.engine import state
+from scripts.engine import state, world, entity, chrono, action
 from scripts.engine.core.constants import GameStates, VERSION, EventTopics
-from scripts.engine.events import ChangeGameStateEvent
+from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import UIManager
-from scripts.managers.input_manager.input_manager import input
-from scripts.managers.world_manager.world_manager import world
 from scripts.engine.core.event_core import event_hub, publisher
 from scripts.nqp import processors
 from scripts.nqp.entity_handler import EntityHandler
 from scripts.nqp.game_handler import GameHandler
 from scripts.nqp.god_handler import GodHandler
 from scripts.nqp.map_handler import MapHandler
+from scripts.nqp.processors import process_intent
 from scripts.nqp.ui_handler import UiHandler
 
 ####################################################################################################
@@ -81,20 +80,21 @@ def game_loop():
     The core game loop, handling input, rendering and logic.
     """
 
-    ui_manager = UIManager
+    ui_manager = UIManager()
 
     while not state.get_current() == GameStates.EXIT_GAME:
 
-        # get delta time to support UI updates
+        # get info to support UI updates and handling events
         delta_time = state.get_delta_time()
+        current_state = state.get_current()
 
-        if state.get_current() == GameStates.ENEMY_TURN:
+        if current_state == GameStates.ENEMY_TURN:
             pass
             # turn.turn_holder.ai.take_turn()
 
         # update based on input events
         for event in pygame.event.get():
-            input.update(event, state.get_current())
+            process_intent(action.convert_to_intent(event), current_state)
             ui_manager.process_ui_events(event)
 
         # allow everything to update in response to new state
@@ -190,24 +190,23 @@ def initialise_game():
 
     map_width = 50
     map_height = 30
-    world.Map.create_game_map(map_width, map_height)
+    world.create_game_map(map_width, map_height)
 
     # init the player
-    world.FOV.create_fov_map(map_width, map_height)
-    player = world.Entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
+    world.create_fov_map(map_width, map_height)
+    player = entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
                                        "dandy", True)
 
     # tell places about the player
-    world.Turn.set_turn_holder(player)
+    chrono.set_turn_holder(player)
     input.Control.set_player_id(player)
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    enemy = world.Entity.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops",
-                                      "dandy")
+    enemy = entity.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops", "dandy")
 
     # create a god
-    god = world.Entity.create_god("the_small_gods")
+    god = entity.create_god("the_small_gods")
 
     publisher.publish(ChangeGameStateEvent(GameStates.GAME_INITIALISING))
 

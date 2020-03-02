@@ -7,11 +7,11 @@ from scripts.engine.state import get_current
 from scripts.engine.library import library
 
 
-from scripts.managers.world_manager.world_manager import world
+
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.core.constants import EventTopics, GameStates, MessageTypes, UIElementTypes
-from scripts.engine.components import Position, Aesthetic
-from scripts.engine.events import MessageEvent, ClickTile, UseSkillEvent, DieEvent, MoveEvent, ChangeGameStateEvent
+from scripts.engine.component import Position, Aesthetic
+from scripts.engine.event import MessageEvent, ClickTile, UseSkillEvent, DieEvent, MoveEvent, ChangeGameStateEvent
 
 if TYPE_CHECKING:
     pass

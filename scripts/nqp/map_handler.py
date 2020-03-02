@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.engine.core.event_core import Subscriber
-from scripts.managers.world_manager.world_manager import world
-from scripts.engine.components import Position
-from scripts.engine.events import EndTurnEvent, EndRoundEvent, TileInteractionEvent
+
+from scripts.engine.component import Position
+from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent
 
 if TYPE_CHECKING:
     pass

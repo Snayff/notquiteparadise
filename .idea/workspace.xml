@@ -54,7 +54,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/engine" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/scripts/engine/core/definitions.py" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
   </component>
@@ -67,17 +67,17 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\ui_elements" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\entity" />
-      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\ui\elements" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\ui" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\core" />
       <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\engine\" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\scripts\ui\ui_elements" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\entity" />
+      <recent name="C:\Users\Gabriel\Documents\NotQuiteParadise\data\Game\skills" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main">
@@ -320,7 +320,7 @@
       <workItem from="1582971001323" duration="17544000" />
       <workItem from="1583001252396" duration="7075000" />
       <workItem from="1583081307778" duration="18338000" />
-      <workItem from="1583158814124" duration="5519000" />
+      <workItem from="1583158814124" duration="11451000" />
     </task>
     <servers />
   </component>
@@ -370,10 +370,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="997" y="612" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583087195075" />
-    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog" timestamp="1583091034403">
+    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog" timestamp="1583166944543">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583091034403" />
+    <state x="1103" y="312" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583166944543" />
     <state x="1085" y="325" key="#scratch_5" timestamp="1581948346469">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -394,10 +394,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1902" height="947" key="DebuggerActiveHint/0.0.3440.1400@0.0.3440.1400" timestamp="1582990714160" />
-    <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1583094830537">
+    <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1583166943444">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1583094830537" />
+    <state x="1109" y="455" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1583166943444" />
     <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog" timestamp="1583012252028">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -450,10 +450,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1055" height="703" key="XDebugger.FullValuePopup/0.0.3440.1400@0.0.3440.1400" timestamp="1581429262784" />
-    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1583161671367">
+    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1583164379770">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583161671367" />
+    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583164379770" />
     <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1583161063609">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>

@@ -4,13 +4,13 @@ import logging
 from random import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
-from scripts.engine.components import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
+from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
 from scripts.engine.core.constants import MessageTypes, SecondaryStatTypes, SkillShapes, SkillExpiryTypes, \
     SkillTerrainCollisions, SkillTravelTypes, TargetTags, EffectTypes, AfflictionCategory, HitTypes, HitModifiers, \
     PrimaryStatTypes, HitValues
 from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
-from scripts.engine.events import MessageEvent, DieEvent
+from scripts.engine.event import MessageEvent, DieEvent
 from scripts.engine.library import library
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
