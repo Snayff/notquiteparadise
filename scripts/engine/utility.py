@@ -3,8 +3,8 @@ from __future__ import annotations
 import math
 import scipy
 import pygame
-from typing import TYPE_CHECKING, List, Any
-from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE
+from typing import TYPE_CHECKING, List, Any, Type, Tuple
+from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, SkillShapes
 
 if TYPE_CHECKING:
     from typing import Tuple
@@ -142,3 +142,44 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     """
 
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
+
+
+def create_shape(shape: Type[SkillShapes], size: int) -> List[Tuple[int, int]]:
+    """
+    Get a list of coords from a shape and size.
+    """
+    list_of_coords = []
+
+    if shape == SkillShapes.TARGET:
+        list_of_coords.append((0, 0))  # single target, centred on selection
+
+    elif shape == SkillShapes.SQUARE:
+        width = size
+        height = size
+
+        for x in range(-width, width + 1):
+            for y in range(-height, height + 1):
+                list_of_coords.append((x, y))
+
+    elif shape == SkillShapes.CIRCLE:
+        radius = (size + size + 1) / 2
+
+        for x in range(-size, size + 1):
+            for y in range(-size, size + 1):
+                if x * x + y * y < radius * radius:
+                    list_of_coords.append((x, y))
+
+    elif shape == SkillShapes.CROSS:
+        x_coords = [-1, 1]
+
+        for x in x_coords:
+            for y in range(-size, size + 1):
+
+                # ignore 0's to ensure no duplication when running through the range
+                # the multiplication of x by y means they are always both 0 if y is
+                if y != 0:
+                    list_of_coords.append((x * y, y))
+
+        list_of_coords.append((0, 0))  # add selection back in
+
+    return list_of_coords

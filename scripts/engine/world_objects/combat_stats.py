@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes
+
+from scripts.engine import entity
+from scripts.engine.core.constants import PrimaryStat, SecondaryStat
 from scripts.engine.library import library
 from scripts.engine.component import Race, Homeland, Savvy
 
@@ -13,65 +15,61 @@ class CombatStats:
     """
     Object to hold all of an entities stats. Derived from various components.
     """
-    def __init__(self, entity: int):
-        self.entity = entity
+
+    def __init__(self, ent: int):
+        self.entity = ent
 
     @property
     def vigour(self) -> int:
         """
         Influences healthiness. Never below 1.
         """
-        stat = PrimaryStatTypes.VIGOUR
-        # TODO - moving to the top creates an import error. Resolve it.
+        stat = PrimaryStat.VIGOUR
 
-        return world.Entity.get_primary_stat(self.entity, stat)
+        return entity.get_primary_stat(self.entity, stat)
 
     @property
     def clout(self) -> int:
         """
         Influences forceful things. Never below 1.
         """
-        stat = PrimaryStatTypes.CLOUT
-        # TODO - moving to the top creates an import error. Resolve it.
+        stat = PrimaryStat.CLOUT
 
-        return world.Entity.get_primary_stat(self.entity, stat)
+        return entity.get_primary_stat(self.entity, stat)
 
     @property
     def skullduggery(self) -> int:
         """
         Influences sneaky things. Never below 1.
         """
-        stat = PrimaryStatTypes.SKULLDUGGERY
-        # TODO - moving to the top creates an import error. Resolve it.
+        stat = PrimaryStat.SKULLDUGGERY
 
-        return world.Entity.get_primary_stat(self.entity, stat)
+        return entity.get_primary_stat(self.entity, stat)
 
     @property
     def bustle(self) -> int:
         """
         Influences speedy things. Never below 1.
         """
-        stat = PrimaryStatTypes.BUSTLE
-        # TODO - moving to the top creates an import error. Resolve it.
+        stat = PrimaryStat.BUSTLE
 
-        return world.Entity.get_primary_stat(self.entity, stat)
+        return entity.get_primary_stat(self.entity, stat)
 
     @property
     def exactitude(self) -> int:
         """
         Influences preciseness. Never below 1.
         """
-        stat = PrimaryStatTypes.EXACTITUDE
-        # TODO - moving to the top creates an import error. Resolve it.
+        stat = PrimaryStat.EXACTITUDE
 
-        return world.Entity.get_primary_stat(self.entity, stat)
+        return entity.get_primary_stat(self.entity, stat)
 
     @property
     def max_hp(self) -> int:
         """
         Total damage an entity can take before death.
         """
-        stat = SecondaryStatTypes.MAX_HP
+        stat = SecondaryStat.MAX_HP
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -83,7 +81,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -98,7 +95,7 @@ class CombatStats:
         an entities energy to take actions.
 
         """
-        stat = SecondaryStatTypes.MAX_STAMINA
+        stat = SecondaryStat.MAX_STAMINA
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -110,7 +107,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -124,7 +120,7 @@ class CombatStats:
         """
         an entities likelihood to hit.
         """
-        stat = SecondaryStatTypes.ACCURACY
+        stat = SecondaryStat.ACCURACY
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -136,9 +132,8 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
-        affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -151,7 +146,7 @@ class CombatStats:
         an entities resistance to burn damage.
 
         """
-        stat = SecondaryStatTypes.RESIST_BURN
+        stat = SecondaryStat.RESIST_BURN
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -163,9 +158,8 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
-        affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -178,7 +172,7 @@ class CombatStats:
         an entities resistance to cold damage.
 
         """
-        stat = SecondaryStatTypes.RESIST_COLD
+        stat = SecondaryStat.RESIST_COLD
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -190,7 +184,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -204,7 +197,7 @@ class CombatStats:
         """
         an entities resistance to chemical damage.
         """
-        stat = SecondaryStatTypes.RESIST_CHEMICAL
+        stat = SecondaryStat.RESIST_CHEMICAL
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -216,7 +209,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -230,7 +222,7 @@ class CombatStats:
         """
         an entities resistance to astral damage.
         """
-        stat = SecondaryStatTypes.RESIST_ASTRAL
+        stat = SecondaryStat.RESIST_ASTRAL
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -242,7 +234,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -256,7 +247,7 @@ class CombatStats:
         """
         an entities resistance to mundane damage.
         """
-        stat = SecondaryStatTypes.RESIST_MUNDANE
+        stat = SecondaryStat.RESIST_MUNDANE
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -268,7 +259,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -282,14 +272,12 @@ class CombatStats:
         """
         Highest value among base contributions then modifiers applied. Cant be less than 0.
         """
-        # TODO - moving to the top creates an import error. Resolve it.
 
-
-        stat = SecondaryStatTypes.SIGHT_RANGE
+        stat = SecondaryStat.SIGHT_RANGE
         stat_data = library.get_secondary_stat_data(stat)
 
         # from characteristics
-        components = world.Entity.get_entitys_components(self.entity)
+        components = entity.get_entitys_components(self.entity)
         base_value = stat_data.base_value
         for component in components:
             if isinstance(component, Homeland):
@@ -312,7 +300,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd afflictions
-        affliction_changes = 0 # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -324,7 +312,7 @@ class CombatStats:
         """
         how quickly an entity does things. Reduce time cost of actions.
         """
-        stat = SecondaryStatTypes.RUSH
+        stat = SecondaryStat.RUSH
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 
@@ -336,7 +324,6 @@ class CombatStats:
 
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
-        # TODO - moving to the top creates an import error. Resolve it.
         # TODO - readd affliction changes
         affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
@@ -344,4 +331,3 @@ class CombatStats:
         total = max(1, int(stat_total + affliction_changes))
 
         return total
-

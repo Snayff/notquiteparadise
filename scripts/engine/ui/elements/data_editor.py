@@ -6,12 +6,12 @@ import logging
 import pygame
 import pygame_gui
 
-from typing import TYPE_CHECKING, List, Dict, Union
+from typing import TYPE_CHECKING, List, Dict, Union, Optional
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 
 from scripts.engine import utility
-from scripts.engine.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
+from scripts.engine.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStat, SecondaryStat, \
     TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
@@ -41,7 +41,7 @@ class DataEditor(UIWindow):
         self.current_primary_field: str = None
         self.current_secondary_field: str = None
         self.key_being_edited: str = None
-        self.field_options: Dict[str, Tuple[List[str], Union[dataclass, None]]] = {}
+        self.field_options: Dict[str, Tuple[List[str], Optional[dataclass]]] = {}
 
         # data selectors
         self.category_selector: UIDropDownMenu = None
@@ -178,7 +178,7 @@ class DataEditor(UIWindow):
         self.current_data_instance = instance
         self._load_details("primary", self.current_data_instance)
 
-    def _process_dropdown_change(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
+    def _process_dropdown_change(self, object_id: str) -> Tuple[Optional[DataField], Any]:
         """
         Check if new option selected in dropdown and if so return data_field and new value
         """
@@ -197,7 +197,7 @@ class DataEditor(UIWindow):
 
         return None, None
 
-    def _process_textbox_change(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
+    def _process_textbox_change(self, object_id: str) -> Tuple[Optional[DataField], Any]:
         """
         Check if text has changed and return data field and new value"""
         key = object_id
@@ -214,7 +214,7 @@ class DataEditor(UIWindow):
 
         return None, None
 
-    def _process_edit_action(self, object_id: str) -> Tuple[Union[DataField, None], None]:
+    def _process_edit_action(self, object_id: str) -> Tuple[Optional[DataField], None]:
         # get the key
         prefix, key, _object_id = object_id.split("#")
 
@@ -229,7 +229,7 @@ class DataEditor(UIWindow):
         data_field = self.primary_data_fields[key]
         return data_field, None
 
-    def _process_multi_action(self, object_id: str) -> Tuple[Union[DataField, None], Any]:
+    def _process_multi_action(self, object_id: str) -> Tuple[Optional[DataField], Any]:
         """
         Toggle selected option in the relevant field"""
         # get the key
@@ -502,8 +502,8 @@ class DataEditor(UIWindow):
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]
         effect_options = get_members(EffectTypes)
-        primary_stat_options = get_members(PrimaryStatTypes)
-        secondary_stat_options = get_members(SecondaryStatTypes)
+        primary_stat_options = get_members(PrimaryStat)
+        secondary_stat_options = get_members(SecondaryStat)
         bool_options = ["True", "False"]
         skill_options = [key for key in self.all_data["skills"].keys()]
 

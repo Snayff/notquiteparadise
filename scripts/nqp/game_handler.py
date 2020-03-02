@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+
+from scripts.engine import entity, chrono, state
 from scripts.engine.core.constants import GameStates
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.state import get_current
@@ -47,30 +49,30 @@ class GameHandler(Subscriber):
         if new_game_state == GameStates.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
-            publisher.publish(EndTurnEvent(world.Entity.get_player(), 1))  # trigger new turn actions (entity queue)
+            publisher.publish(EndTurnEvent(entity.get_player(), 1))  # trigger new turn actions (entity queue)
 
         elif new_game_state == GameStates.NEW_TURN:
             # if turn holder is the player then update to player turn
-            if world.Turn.get_turn_holder() == world.Entity.get_player():
+            if chrono.get_turn_holder() == entity.get_player():
                 publisher.publish(ChangeGameStateEvent(GameStates.PLAYER_TURN))
             # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
             else:
                 publisher.publish(ChangeGameStateEvent(GameStates.ENEMY_TURN))
 
         elif new_game_state == GameStates.TARGETING_MODE:
-            game.State.set_active_skill(event.skill_to_be_used)
+            state.set_active_skill(event.skill_to_be_used)
 
         # PREVIOUS must be last as it overwrites new_game_state
         elif new_game_state == GameStates.PREVIOUS:
-            new_game_state = game.State.get_previous()
+            new_game_state = state.get_previous()
 
         # update the game state to the intended state
-        if new_game_state != get_current(game.State._current_game_state):
-            game.State.set_new(new_game_state)
+        if new_game_state != state.get_current():
+            state.set_new(new_game_state)
         else:
             # handle wasted attempt to change the game state
             log_string = f"-> new game state {new_game_state} is same as current" \
-                         f" {get_current(game.State._current_game_state)} so state not updated."
+                         f" {state.get_current()} so state not updated."
             logging.info(log_string)
 
     @staticmethod
@@ -78,5 +80,5 @@ class GameHandler(Subscriber):
         """
         End turn, move to next turn, change game state to new turn.
         """
-        world.Turn.next_turn()
+        chrono.next_turn()
         publisher.publish(ChangeGameStateEvent(GameStates.NEW_TURN))

@@ -3,7 +3,7 @@ from __future__ import annotations
 import pygame
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List
-from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes, Directions, \
+from scripts.engine.core.constants import PrimaryStat, SecondaryStat, Directions, \
     SkillTerrainCollisions, SkillTravelTypes, SkillExpiryTypes, TargetTags, SkillShapes, EffectTypes, \
     DamageTypes, AfflictionTriggers, AfflictionCategory
 from scripts.engine.core.extend_json import register_dataclass_with_json
@@ -29,7 +29,7 @@ class BasePrimaryStatData:
     Data class for primary  stats
     """
     name: str = "None"
-    primary_stat_type: PrimaryStatTypes = None
+    primary_stat_type: PrimaryStat = None
     base_value: int = 0
 
 
@@ -40,7 +40,7 @@ class BaseSecondaryStatData:
     Data class for secondary stats
     """
     name: str = "None"
-    secondary_stat_type: SecondaryStatTypes = None
+    secondary_stat_type: SecondaryStat = None
     base_value: int = 0
     vigour_mod: int = 0
     clout_mod: int = 0
@@ -153,15 +153,15 @@ class EffectData:
     required_tags: List[TargetTags] = field(default_factory=list)
     damage: int = 0  # TODO - combine with affect stat amount as only one will be on each effect
     affect_stat_amount: int = 0
-    mod_stat: PrimaryStatTypes = None
+    mod_stat: PrimaryStat = None
     mod_amount: int = 0
     damage_type: DamageTypes = None
     accuracy: int = 0
-    stat_to_target: PrimaryStatTypes = None
+    stat_to_target: PrimaryStat = None
     aspect_name: str = "None"
     affliction_name: str = "None"
     duration: int = 0
-    stat_to_affect: PrimaryStatTypes = None
+    stat_to_affect: PrimaryStat = None
 
 
 @register_dataclass_with_json

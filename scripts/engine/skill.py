@@ -5,13 +5,14 @@ from random import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
-from scripts.engine.core.constants import MessageTypes, SecondaryStatTypes, SkillShapes, SkillExpiryTypes, \
+from scripts.engine.core.constants import MessageTypes, SecondaryStat, SkillExpiryTypes, \
     SkillTerrainCollisions, SkillTravelTypes, TargetTags, EffectTypes, AfflictionCategory, HitTypes, HitModifiers, \
-    PrimaryStatTypes, HitValues
+    PrimaryStat, HitValues
 from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent
 from scripts.engine.library import library
+from scripts.engine.utility import create_shape
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 
@@ -52,7 +53,7 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
     return False
 
 
-def can_afford_cost(ent: int, resource: SecondaryStatTypes, cost: int):
+def can_afford_cost(ent: int, resource: SecondaryStat, cost: int):
     """
     Check if entity can afford the resource cost
     """
@@ -71,7 +72,7 @@ def can_afford_cost(ent: int, resource: SecondaryStatTypes, cost: int):
 
 ########################################### ACTIONS ################################
 
-def pay_resource_cost(ent: int, resource: SecondaryStatTypes, cost: int):
+def pay_resource_cost(ent: int, resource: SecondaryStat, cost: int):
     """
     Remove the resource cost from the using entity
     """
@@ -85,47 +86,6 @@ def pay_resource_cost(ent: int, resource: SecondaryStatTypes, cost: int):
 
     log_string = f"'{identity.name}' paid {cost} {resource.name} and has {resource_left} left."
     logging.debug(log_string)
-
-
-def create_shape(shape: Type[SkillShapes], size: int) -> List[Tuple[int, int]]:
-    """
-    Get a list of coords from a shape and size.
-    """
-    list_of_coords = []
-
-    if shape == SkillShapes.TARGET:
-        list_of_coords.append((0, 0))  # single target, centred on selection
-
-    elif shape == SkillShapes.SQUARE:
-        width = size
-        height = size
-
-        for x in range(-width, width + 1):
-            for y in range(-height, height + 1):
-                list_of_coords.append((x, y))
-
-    elif shape == SkillShapes.CIRCLE:
-        radius = (size + size + 1) / 2
-
-        for x in range(-size, size + 1):
-            for y in range(-size, size + 1):
-                if x * x + y * y < radius * radius:
-                    list_of_coords.append((x, y))
-
-    elif shape == SkillShapes.CROSS:
-        x_coords = [-1, 1]
-
-        for x in x_coords:
-            for y in range(-size, size + 1):
-
-                # ignore 0's to ensure no duplication when running through the range
-                # the multiplication of x by y means they are always both 0 if y is
-                if y != 0:
-                    list_of_coords.append((x * y, y))
-
-        list_of_coords.append((0, 0))  # add selection back in
-
-    return list_of_coords
 
 
 def use(using_entity: int, skill_name: str, start_position: Tuple[int, int], target_direction: Tuple[int,
@@ -149,7 +109,7 @@ int]):
     activate = False
     fizzle = False
 
-    logging.info(f"{identity.name} used {skill_name} at ({start_x},{start_y}) in {Directions(direction)}...")
+    logging.info(f"{identity.name} used {skill_name} at ({start_x},{start_y}) in {direction}...")
 
     # continue finding the position to use the skill on until we fizzle or activate
     while not activate and not fizzle:
@@ -530,7 +490,7 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitTypes], ef
         stat_amount = 0
         # get the stat
         # FIXME - can't loop like this a no longer an enum
-        for stat in PrimaryStatTypes:
+        for stat in PrimaryStat:
             if stat == data.mod_stat:
                 stat_amount = getattr(attackers_stats, stat.name.lower())
                 break
@@ -563,7 +523,7 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitTypes], ef
 
 
 def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int,
-        stat_to_target: Type[PrimaryStatTypes], attackers_stats: CombatStats = None) -> int:
+        stat_to_target: Type[PrimaryStat], attackers_stats: CombatStats = None) -> int:
     """
     Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
     """

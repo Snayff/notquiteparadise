@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+
+from scripts.engine import world, entity
 from scripts.engine.core.event_core import Subscriber
 
 from scripts.engine.component import Position
@@ -64,8 +66,8 @@ class MapHandler(Subscriber):
         #             for interaction in aspect_data.interactions:
         #                 if event.cause == interaction.cause:
         #                     # change aspects
-        #                     world.Map.remove_aspect_from_tile(tile, aspect.name)
-        #                     world.Map.add_aspect_to_tile(tile, interaction.change_to)
+        #                     world.remove_aspect_from_tile(tile, aspect.name)
+        #                     world.add_aspect_to_tile(tile, interaction.change_to)
         #
         #                     # log the change
         #                     log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
@@ -83,20 +85,20 @@ class MapHandler(Subscriber):
         Args:
             event(EndTurnEvent):
         """
-        entity = event.entity
-        position = world.Entity.get_entitys_component(entity, Position)
-        tile = world.Map.get_tile((position.x, position.y))
+        ent = event.entity
+        position = entity.get_entitys_component(ent, Position)
+        tile = world.get_tile((position.x, position.y))
 
         # trigger aspects
         #  TODO - update to EC approach
-        #world.Map.trigger_aspects_on_tile(tile)
+        #world.trigger_aspects_on_tile(tile)
 
     @staticmethod
     def process_end_of_round_updates():
         """
         Update aspect durations
         """
-        game_map = world.Map.get_game_map()
+        game_map = world.get_game_map()
 
         # TODO - set to only apply within X range of player
         #  TODO - update to EC approach
@@ -104,5 +106,5 @@ class MapHandler(Subscriber):
         #     for tile in row:
         #         if tile.aspects:
         #             # update durations
-        #             world.Map.reduce_aspect_durations_on_tile(tile)
-        #             world.Map.cleanse_expired_aspects(tile)
+        #             world.reduce_aspect_durations_on_tile(tile)
+        #             world.cleanse_expired_aspects(tile)

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import tcod
 
-from scripts.engine import entity
+from scripts.engine import entity, utility
 from scripts.engine.component import Position, Blocking
 from scripts.engine.core.constants import TargetTags, FOVInfo, SkillShapes
 from scripts.engine.core.store import store
@@ -25,10 +25,14 @@ def create_game_map(width, height):
     store.current_game_map = GameMap(width, height)
 
 
-def create_fov_map(width, height) -> tcod.map.Map:
+def create_fov_map() -> tcod.map.Map:
     """
     Create an fov map
     """
+    game_map = get_game_map()
+    width = game_map.width
+    height = game_map.height
+
     fov_map = tcod.map_new(width, height)
 
     for x in range(width):
@@ -50,7 +54,7 @@ def get_game_map() -> GameMap:
     return store.current_game_map
 
 
-def get_tile(tile_pos: Union[Tuple[int, int], str]) -> Union[Tile, None]:
+def get_tile(tile_pos: Union[Tuple[int, int], str]) -> Optional[Tile]:
     """
     Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string "x,y".
     Returns None if tile is out of bounds.
@@ -239,7 +243,7 @@ def get_tiles_in_range_and_fov_of_entity(range_from_centre: int, active_entity: 
     """
     # TODO - update to ECS
     # get the tiles in range
-    coords = _manager.Skill.create_shape(SkillShapes.SQUARE, range_from_centre)  # square as LOS is square
+    coords = utility.create_shape(SkillShapes.SQUARE, range_from_centre)  # square as LOS is square
     tiles_in_range = get_tiles(active_entity.x, active_entity.y, coords)
     tiles_in_range_and_fov = []
 

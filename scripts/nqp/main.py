@@ -10,7 +10,7 @@ import pygame
 from scripts.engine import state, world, entity, chrono, action
 from scripts.engine.core.constants import GameStates, VERSION, EventTopics
 from scripts.engine.event import ChangeGameStateEvent
-from scripts.engine.ui.manager import UIManager
+from scripts.engine.ui.manager import _UIManager, ui
 from scripts.engine.core.event_core import event_hub, publisher
 from scripts.nqp import processors
 from scripts.nqp.entity_handler import EntityHandler
@@ -80,8 +80,6 @@ def game_loop():
     The core game loop, handling input, rendering and logic.
     """
 
-    ui_manager = UIManager()
-
     while not state.get_current() == GameStates.EXIT_GAME:
 
         # get info to support UI updates and handling events
@@ -95,16 +93,16 @@ def game_loop():
         # update based on input events
         for event in pygame.event.get():
             process_intent(action.convert_to_intent(event), current_state)
-            ui_manager.process_ui_events(event)
+            ui.process_ui_events(event)
 
         # allow everything to update in response to new state
         processors.process_all(delta_time)
-        ui_manager.update(delta_time)
+        ui.update(delta_time)
         event_hub.update()
         state.update_clock()
 
         # show the new state
-        ui_manager.draw()
+        ui.draw()
 
 
 def initialise_logging():
@@ -193,13 +191,11 @@ def initialise_game():
     world.create_game_map(map_width, map_height)
 
     # init the player
-    world.create_fov_map(map_width, map_height)
     player = entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
                                        "dandy", True)
 
     # tell places about the player
     chrono.set_turn_holder(player)
-    input.Control.set_player_id(player)
 
     # create an enemy
     # TODO - remove when enemy gen is in

@@ -5,7 +5,7 @@ import logging
 from random import random
 
 import esper
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, Optional
 
 import tcod
 
@@ -29,7 +29,7 @@ _esper = esper.World()
 ###################### GET ############################################
 
 
-def get_player() -> Union[int, None]:
+def get_player() -> Optional[int]:
     """
     Get the player.
     """
@@ -38,7 +38,7 @@ def get_player() -> Union[int, None]:
     return None
 
 
-def get_entity(unique_component: Type[C]) -> Union[int, None]:
+def get_entity(unique_component: Type[C]) -> Optional[int]:
     """
     Get a single entity that has a component. If multiple entities have the given component only the 
     first found is returned.
@@ -112,7 +112,7 @@ def get_entities_and_components_in_area(area: List[Tile], component1: Type[C] = 
     return entities
 
 
-def get_entitys_component(entity: int, component: Type[C]) -> Union[C, None]:
+def get_entitys_component(entity: int, component: Type[C]) -> Optional[C]:
     """
     Get an entity's component.
     """
@@ -188,8 +188,10 @@ def get_player_fov() -> tcod.map.Map:
     """
     Get's the player's FOV component
     """
-    # FIXME - update to ECS
-    return _players_fov_map
+    player = get_player()
+    fov_c = get_entitys_component(player, FOV)
+
+    return fov_c.fov_map
 
 
 ############## QUERIES  ################
@@ -212,15 +214,12 @@ def create(components: List[Type[Component]] = None) -> int:
     """
     if components is None:
         components = []
-
-    world = _esper
-
     # create the entity
-    entity = world.create_entity()
+    entity = _esper.create_entity()
 
     # add all components
     for component in components:
-        world.add_component(entity, component)
+        _esper.add_component(entity, component)
 
     return entity
 
@@ -238,13 +237,7 @@ def delete(entity: int):
 
 def create_god(god_name: str) -> int:
     """
-    Create an entity with all of the components to be a god.
-
-    Args:
-        god_name (): god_name must be in the gods json file.
-
-    Returns:
-        int: Entity ID
+    Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
     data = library.get_god_data(god_name)
     god = []
@@ -291,8 +284,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Race(people_name))
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
-
-    actor.append((FOV()))
+    actor.append((FOV(world.create_fov_map())))
 
     entity = create(actor)
 
@@ -321,10 +313,6 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
     sprites = build_characteristic_sprites(characteristics)
     _esper.add_component(entity, Aesthetic(sprites.idle, sprites))
-
-    # player fov
-    if is_player:
-        world.recompute_fov(x, y, stats.sight_range)
 
     return entity
 

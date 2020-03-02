@@ -4,6 +4,8 @@ import pygame_gui
 from typing import List, Tuple
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
+
+from scripts.engine import world, entity
 from scripts.engine.core.constants import TILE_SIZE
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp
@@ -89,7 +91,7 @@ class Camera(UIWindow):
         # draw entities
         # TODO - moving to the top creates circular import. Resolve this!
 
-        for entity, (pos, aesthetic) in world.Entity.get_components(Position, Aesthetic):
+        for ent, (pos, aesthetic) in entity.get_components(Position, Aesthetic):
             # TODO - use FOV
             # if in camera view
             if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:
@@ -166,16 +168,13 @@ class Camera(UIWindow):
         """
         if self:
             tiles = []
-    
-            # TODO - moving to top causes circular import. Resolve this.
 
-    
             for x in range(self.start_tile_col, self.start_tile_col + self.columns):
                 for y in range(self.start_tile_row, self.start_tile_row + self.rows):
-                    if world.FOV.is_tile_in_fov(x, y):
-                        tile = world.Map.get_tile((x, y))
-                        if tile:
-                            tiles.append(tile)
+                    # TODO - readd FOV
+                    tile = world.get_tile((x, y))
+                    if tile:
+                        tiles.append(tile)
     
             self.set_tiles(tiles)
 

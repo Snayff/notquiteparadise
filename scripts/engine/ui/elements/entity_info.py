@@ -3,7 +3,9 @@ import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
-from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes
+
+from scripts.engine import entity
+from scripts.engine.core.constants import PrimaryStat, SecondaryStat
 from scripts.engine.utility import get_class_members
 from scripts.engine.component import Aesthetic, Identity, Resources
 
@@ -51,11 +53,11 @@ class EntityInfo(UIWindow):
         """
         pass
 
-    def set_entity(self, entity: int):
+    def set_entity(self, ent: int):
         """
         Set the selected entity to show the info for that entity.
         """
-        self.selected_entity = entity
+        self.selected_entity = ent
 
     def show(self):
         """
@@ -103,25 +105,21 @@ class EntityInfo(UIWindow):
 
         # TODO - moving to the top causes import issues. Resolve this!
 
-        aesthetic = world.Entity.get_entitys_component(self.selected_entity, Aesthetic)
+        aesthetic = entity.get_entitys_component(self.selected_entity, Aesthetic)
         image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
                                container=self.get_container(), object_id="#entity_image")
         return entity_image
 
-    def create_core_info_section(self):
+    def create_core_info_section(self) -> UITextBox:
         """
         Create the core info section.
-
-        Returns:
-            UITextBox:
         """
-        entity = self.selected_entity
-        # TODO - moving to the top causes import issues. Resolve this!
+        ent = self.selected_entity
 
-        identity = world.Entity.get_entitys_component(entity, Identity)
-        resources = world.Entity.get_entitys_component(entity, Resources)
+        identity = entity.get_entitys_component(ent, Identity)
+        resources = entity.get_entitys_component(ent, Resources)
         text = f"{identity.name.capitalize()}" + "<br>"
         text += f"Current Health: {resources.health}" + "<br>"
         text += f"Current Stamina: {resources.stamina}" + "<br>"
@@ -137,19 +135,15 @@ class EntityInfo(UIWindow):
                               container=self.get_container())
         return core_info
 
-    def create_primary_stats_section(self):
+    def create_primary_stats_section(self) -> UITextBox:
         """
         Create the primary stats section.
-
-        Returns:
-            UITextBox:
         """
         text = ""
-        # TODO - moving to the top causes import issues. Resolve this!
 
-        stats = world.Entity.get_combat_stats(self.selected_entity)
+        stats = entity.get_combat_stats(self.selected_entity)
 
-        all_stats = get_class_members(PrimaryStatTypes)
+        all_stats = get_class_members(PrimaryStat)
         for name in all_stats:
             try:
                 stat_value = getattr(stats, name.lower())
@@ -173,19 +167,15 @@ class EntityInfo(UIWindow):
                                   container=self.get_container())
         return primary_stats
 
-    def create_secondary_stats_section(self):
+    def create_secondary_stats_section(self) -> UITextBox:
         """
         Create the secondary stats section.
-
-        Returns:
-            UITextBox:
         """
         text = ""
-        # TODO - moving to the top causes import issues. Resolve this!
 
-        stats = world.Entity.get_combat_stats(self.selected_entity)
+        stats = entity.get_combat_stats(self.selected_entity)
 
-        all_stats = get_class_members(SecondaryStatTypes)
+        all_stats = get_class_members(SecondaryStat)
         for name in all_stats:
             try:
                 stat_value = getattr(stats, name.lower())

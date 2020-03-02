@@ -32,8 +32,8 @@ class Publisher:
     """
     Class to create events and log them with the event hub
     """
-    def __init__(self, event_hub):
-        self.event_hub = event_hub
+    def __init__(self, hub):
+        self.event_hub = hub
 
     def publish(self, event):
         self.event_hub.notify(event)

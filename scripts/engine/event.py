@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Tuple, Union, Type
 
+from scripts.engine import entity
 from scripts.engine.core.constants import EventTopics, Directions, GameStates, MessageTypes
 from scripts.engine.core.event_core import Event
 from scripts.engine.component import Position
@@ -52,11 +53,8 @@ class MoveEvent(Event):
         self.direction = direction
         self.distance = distance
 
-        # TODO - moving to the top creates circular import. Resolve this.
-
-
         # determine start pos
-        position = world.Entity.get_entitys_component(entity_to_move, Position)
+        position = entity.get_entitys_component(entity_to_move, Position)
         self.start_pos: Tuple[int, int] = (position.x, position.y)
 
 ####################### GAME ############################################
@@ -65,15 +63,10 @@ class MoveEvent(Event):
 class EndTurnEvent(Event):
     """
     Event to end an entities ability to act.
-
-    Args:
-        entity(Entity):
-        time_spent(int):
-
     """
-    def __init__(self, entity, time_spent):
+    def __init__(self, ent, time_spent):
         Event.__init__(self, "END_TURN", EventTopics.GAME)
-        self.entity = entity
+        self.entity = ent
         self.time_spent = time_spent
 
 
@@ -125,10 +118,10 @@ class SelectEntity(Event):
     """
     Event for selecting an entity.
     """
-    def __init__(self, entity: int):
+    def __init__(self, ent: int):
         Event.__init__(self, "SELECT_ENTITY", EventTopics.UI)
 
-        self.selected_entity = entity
+        self.selected_entity = ent
 
 
 class ClickTile(Event):
@@ -146,11 +139,11 @@ class MessageEvent(Event):
     Event to share messages with the player
     """
     def __init__(self, message_type: MessageTypes,  message: str, colour: str = None, size: int = 4,
-            entity: int = None):
+            ent: int = None):
         Event.__init__(self, "MESSAGE", EventTopics.UI)
         self.message = message
         self.message_type = message_type
-        self.entity = entity
+        self.entity = ent
         self.colour = colour
 
         # max size is 7

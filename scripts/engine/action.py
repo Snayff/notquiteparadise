@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pygame
-from typing import TYPE_CHECKING, Type, Union
+from typing import TYPE_CHECKING, Type, Union, Optional
 
 from scripts.engine.core.constants import InputIntents
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     pass
 
 
-def convert_to_intent(event: pygame.event) -> Union[Type[InputIntents], None]:
+def convert_to_intent(event: pygame.event) -> Optional[Type[InputIntents]]:
     """
     Convert input to an intent.
     """

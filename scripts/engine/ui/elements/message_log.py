@@ -45,6 +45,7 @@ class MessageLog(UIWindow):
         """
         pass
 
+    # noinspection PyArgumentList,PyArgumentList
     def add_message(self, message: str):
         """
         Add message to the message log. Formatting the text is done via a subset of HTML tags. Currently supported

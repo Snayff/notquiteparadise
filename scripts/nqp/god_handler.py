@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+
+from scripts.engine import entity
 from scripts.engine.core.constants import EffectTypes, Directions
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.library import library
@@ -40,7 +42,7 @@ class GodHandler(Subscriber):
         if isinstance(event, UseSkillEvent):
             event: UseSkillEvent
             # if the entity isnt another god then judge it
-            if not world.Entity.has_component(event.entity, IsGod):
+            if not entity.has_component(event.entity, IsGod):
                 self.process_judgements(event)
                 self.process_interventions(event)
 
@@ -58,17 +60,17 @@ class GodHandler(Subscriber):
 
         # check effect types used
         for effect_name, effect_data in skill_data.effects.items():
-            world.Entity.judge_action(entity, effect_data.effect_type)
+            entity.judge_action(entity, effect_data.effect_type)
 
         # check damage type used
         if EffectTypes.DAMAGE in skill_data.effects:
             damage_type = skill_data.effects[EffectTypes.DAMAGE].damage_type
-            world.Entity.judge_action(entity, damage_type)
+            entity.judge_action(entity, damage_type)
 
         # check afflictions applied
         if EffectTypes.APPLY_AFFLICTION in skill_data.effects:
             affliction_name = skill_data.effects[EffectTypes.APPLY_AFFLICTION].affliction_name
-            world.Entity.judge_action(entity, affliction_name)
+            entity.judge_action(entity, affliction_name)
 
     @staticmethod
     def process_interventions(event):
@@ -80,9 +82,9 @@ class GodHandler(Subscriber):
         """
         skill_name = event.skill_name
         entity = event.entity
-        position = world.Entity.get_entitys_component(entity, Position)
+        position = entity.get_entitys_component(entity, Position)
 
-        interventions = world.Entity.consider_intervening(entity, skill_name)
+        interventions = entity.consider_intervening(entity, skill_name)
 
         for god_entity_id, intervention_name in interventions:
             # create use skill event with direction of centre

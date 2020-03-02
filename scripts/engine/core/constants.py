@@ -3,6 +3,8 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import NewType
 
+######################## GENERAL CONSTANTS ######################################
+
 VERSION = "0.95.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
@@ -10,6 +12,20 @@ ICON_SIZE = 32
 ENTITY_BLOCKS_SIGHT = False
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 TIME_PER_ROUND = 100
+
+######################## NEW TYPES ######################################
+# NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of
+# that NewType, and that you don't treat that member as a normal str.
+#########################################################################
+# Instructions:
+# To quickly add the new type select the body of a class, replace ([A-Z_]+ = )(".*?")  with $1NewType($2)
+# replacing NewType with the relevant type.
+#########################################################################
+InputIntentType = NewType("InputIntentType", str)
+SecondaryStatType = NewType("SecondaryStatType", str)
+PrimaryStatType = NewType("PrimaryStatType", str)
+
+#################### CLASSES ###########################################
 
 
 class VisualInfo(SimpleNamespace):
@@ -87,33 +103,33 @@ class DamageTypes(SimpleNamespace):
     MUNDANE = 5
 
 
-class PrimaryStatTypes(SimpleNamespace):
+class PrimaryStat(SimpleNamespace):
     """
     Primary stats. Values are strings.
     """
-    VIGOUR = "vigour"
-    CLOUT = "clout"
-    SKULLDUGGERY = "skullduggery"
-    BUSTLE = "bustle"
-    EXACTITUDE = "exactitude"
+    VIGOUR = PrimaryStatType("vigour")
+    CLOUT = PrimaryStatType("clout")
+    SKULLDUGGERY = PrimaryStatType("skullduggery")
+    BUSTLE = PrimaryStatType("bustle")
+    EXACTITUDE = PrimaryStatType("exactitude")
 
 
-class SecondaryStatTypes(SimpleNamespace):
+class SecondaryStat(SimpleNamespace):
     """
     Secondary stats
     """
-    MAX_HP = "max_hp"
-    MAX_STAMINA = "max_stamina"
-    HP = "hp"
-    STAMINA = "stamina"
-    ACCURACY = "accuracy"
-    RESIST_BURN = "resist_burn"
-    RESIST_CHEMICAL = "resist_chemical"
-    RESIST_ASTRAL = "resist_astral"
-    RESIST_COLD = "resist_cold"
-    RESIST_MUNDANE = "resist_mundane"
-    SIGHT_RANGE = "sight_range"
-    RUSH = "rush"
+    MAX_HP = SecondaryStatType("max_hp")
+    MAX_STAMINA = SecondaryStatType("max_stamina")
+    HP = SecondaryStatType("hp")
+    STAMINA = SecondaryStatType("stamina")
+    ACCURACY = SecondaryStatType("accuracy")
+    RESIST_BURN = SecondaryStatType("resist_burn")
+    RESIST_CHEMICAL = SecondaryStatType("resist_chemical")
+    RESIST_ASTRAL = SecondaryStatType("resist_astral")
+    RESIST_COLD = SecondaryStatType("resist_cold")
+    RESIST_MUNDANE = SecondaryStatType("resist_mundane")
+    SIGHT_RANGE = SecondaryStatType("sight_range")
+    RUSH = SecondaryStatType("rush")
 
 
 class HitTypes(SimpleNamespace):
@@ -222,33 +238,31 @@ class InputModes(SimpleNamespace):
     MOUSE_AND_KB = 1
     GAMEPAD = 2
 
-# TODO - add types to the different classes here
-#  e.g. UP = InputIntentType("up")
-InputIntentType = NewType('InputIntentType', str)
+
 class InputIntents(SimpleNamespace):
     """
     Values of the conversion from input to intent. Strings.
     """
-    UP = "up"
-    DOWN = "down"
-    LEFT = "left"
-    RIGHT = "right"
-    UP_RIGHT = "up_right"
-    UP_LEFT = "up_left"
-    DOWN_RIGHT = "down_right"
-    DOWN_LEFT = "down_left"
-    CONFIRM = "confirm"
-    CANCEL = "cancel"
-    EXIT_GAME = "exit_game"
-    DEBUG_TOGGLE = "debug_toggle"
-    SKILL0 = "skill0"
-    SKILL1 = "skill1"
-    SKILL2 = "skill2"
-    SKILL3 = "skill3"
-    SKILL4 = "skill4"
-    SKILL5 = "skill5"
-    REFRESH_DATA = "refresh_data"
-    DEV_TOGGLE = "dev_toggle"
+    UP = InputIntentType("up")
+    DOWN = InputIntentType("down")
+    LEFT = InputIntentType("left")
+    RIGHT = InputIntentType("right")
+    UP_RIGHT = InputIntentType("up_right")
+    UP_LEFT = InputIntentType("up_left")
+    DOWN_RIGHT = InputIntentType("down_right")
+    DOWN_LEFT = InputIntentType("down_left")
+    CONFIRM = InputIntentType("confirm")
+    CANCEL = InputIntentType("cancel")
+    EXIT_GAME = InputIntentType("exit_game")
+    DEBUG_TOGGLE = InputIntentType("debug_toggle")
+    SKILL0 = InputIntentType("skill0")
+    SKILL1 = InputIntentType("skill1")
+    SKILL2 = InputIntentType("skill2")
+    SKILL3 = InputIntentType("skill3")
+    SKILL4 = InputIntentType("skill4")
+    SKILL5 = InputIntentType("skill5")
+    REFRESH_DATA = InputIntentType("refresh_data")
+    DEV_TOGGLE = InputIntentType("dev_toggle")
 
 
 class UIElementTypes(SimpleNamespace):

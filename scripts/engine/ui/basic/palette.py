@@ -1,5 +1,5 @@
+from scripts.engine.ui.basic.colours import Colour
 
-from scripts.engine.ui.basic import Colour
 
 class Palette:
     """

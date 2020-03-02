@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     pass
 
 
-class UIManager:
+class _UIManager:
     """
     Manage the UI, such as windows, resource bars etc
     """
@@ -28,7 +28,7 @@ class UIManager:
 
         # now init the pygame_gui
         self._gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH,
-            VisualInfo.BASE_WINDOW_HEIGHT), "data/ui_manager/themes.json")
+            VisualInfo.BASE_WINDOW_HEIGHT), "data/ui/themes.json")
 
         # display info
         # TODO - allow for selection by player but only multiples of base (16:9)
@@ -118,11 +118,12 @@ class UIManager:
             logging.warning(f"Tried to get {element_type} but key not found, is it init'd?")
             return None
 
-    def get_gui_manager(self):
+    @staticmethod
+    def get_gui_manager() -> pygame_gui.UIManager:
         """
         Return the pygame_gui UI Manager
         """
-        return self._gui
+        return ui._gui
 
     def get_ui_element(self, element_type: Type[UIElementTypes]):
         """
@@ -162,7 +163,7 @@ class UIManager:
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
         rect = pygame.Rect((x, y), (width, height))
-        message_log = MessageLog(rect, self.get_gui_manager)
+        message_log = MessageLog(rect, self.get_gui_manager())
         self.add_ui_element(UIElementTypes.MESSAGE_LOG, message_log)
 
     def init_entity_info(self):
@@ -175,7 +176,7 @@ class UIManager:
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
         rect = pygame.Rect((x, y), (width, height))
-        info = EntityInfo(rect, self.get_gui_manager)
+        info = EntityInfo(rect, self.get_gui_manager())
         self.add_ui_element(UIElementTypes.ENTITY_INFO, info)
 
     def init_skill_bar(self):
@@ -188,7 +189,7 @@ class UIManager:
         x = VisualInfo.BASE_WINDOW_WIDTH - width
         y = 2
         rect = pygame.Rect((x, y), (width, height))
-        skill_bar = SkillBar(rect, self.get_gui_manager)
+        skill_bar = SkillBar(rect, self.get_gui_manager())
         self.add_ui_element(UIElementTypes.SKILL_BAR, skill_bar)
 
     def init_camera(self):
@@ -203,7 +204,7 @@ class UIManager:
         x = 5
         y = 5
         rect = pygame.Rect((x, y), (width, height))
-        camera = Camera(rect, self.get_gui_manager, rows, cols)
+        camera = Camera(rect, self.get_gui_manager(), rows, cols)
         self.add_ui_element(UIElementTypes.CAMERA, camera)
 
     def init_skill_editor(self):
@@ -216,7 +217,7 @@ class UIManager:
         x = 5
         y = 10
         rect = pygame.Rect((x, y), (width, height))
-        editor = DataEditor(rect, self.get_gui_manager)
+        editor = DataEditor(rect, self.get_gui_manager())
         self.add_ui_element(UIElementTypes.DATA_EDITOR, editor)
 
     def create_screen_message(self, message: str, colour, size: int):
@@ -226,7 +227,7 @@ class UIManager:
         # TODO - respect colour chosen. Use colour mapping to go from RGB to Hex.
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
-        screen_message = ScreenMessage(text, self.get_gui_manager)
+        screen_message = ScreenMessage(text, self.get_gui_manager())
 
         ############## KILL ##################
 
@@ -411,15 +412,15 @@ class UIManager:
 
         ############## ENTITY INFO ###################
 
-    def set_selected_entity(self, entity: int):
+    def set_selected_entity(self, ent: int):
         """
         Set the selected entity and show it.
         """
         entity_info = self.get_ui_element(UIElementTypes.ENTITY_INFO)
 
         if entity_info:
-            if entity:
-                entity_info.set_entity(entity)
+            if ent:
+                entity_info.set_entity(ent)
                 entity_info.show()
             else:
                 entity_info.cleanse()
@@ -451,3 +452,6 @@ class UIManager:
 
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")
+
+
+ui = _UIManager()

@@ -5,7 +5,7 @@ import logging
 import os
 from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses
-from scripts.engine.core.constants import EffectTypes, PrimaryStatTypes, SecondaryStatTypes
+from scripts.engine.core.constants import EffectTypes, PrimaryStat, SecondaryStat
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData,\
     InterventionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData, AfflictionData
 
@@ -187,7 +187,7 @@ class LibraryOfAlexandria:
 
         return effect_data
 
-    def get_primary_stat_data(self, primary_stat_type: PrimaryStatTypes) -> BasePrimaryStatData:
+    def get_primary_stat_data(self, primary_stat_type: PrimaryStat) -> BasePrimaryStatData:
         """
         Get data for a primary stat from the library
 
@@ -202,7 +202,7 @@ class LibraryOfAlexandria:
         stat_data = self._base_stats_primary
         return stat_data
 
-    def get_secondary_stat_data(self, secondary_stat_type: SecondaryStatTypes) -> BaseSecondaryStatData:
+    def get_secondary_stat_data(self, secondary_stat_type: SecondaryStat) -> BaseSecondaryStatData:
         """
         Get data for a secondary stat from the library
         """

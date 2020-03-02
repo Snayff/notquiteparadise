@@ -151,7 +151,7 @@ def _process_player_turn_intents(intent):
         publisher.publish(WantToUseSkillEvent(skill_number))
 
     # activate the skill editor
-    if intent.DEV_TOGGLE:
+    if intent == InputIntents.DEV_TOGGLE:
         publisher.publish(ChangeGameStateEvent(GameStates.DEV_MODE))
 
 
