@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pytweening
-from scripts.engine import utilities, entity
+from scripts.engine import utility, entity
 from scripts.engine.components import Aesthetic
 from typing import TYPE_CHECKING
 
@@ -40,8 +40,8 @@ def _process_aesthetic_update(delta_time: float):
             # keep moving:
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
-                aesthetic.screen_x = utilities.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
-                aesthetic.screen_y = utilities.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
+                aesthetic.screen_x = utility.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
+                aesthetic.screen_y = utility.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
         # not moving so reset to idle
         else:
             aesthetic.current_sprite = aesthetic.sprites.idle

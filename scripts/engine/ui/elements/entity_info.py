@@ -4,7 +4,7 @@ import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
 from scripts.engine.core.constants import PrimaryStatTypes, SecondaryStatTypes
-from scripts.engine.utilities import get_class_members
+from scripts.engine.utility import get_class_members
 from scripts.engine.components import Aesthetic, Identity, Resources
 
 

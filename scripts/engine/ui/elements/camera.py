@@ -6,7 +6,7 @@ from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
 from scripts.engine.core.constants import TILE_SIZE
 from scripts.engine.core.event_core import publisher
-from scripts.engine.utilities import clamp
+from scripts.engine.utility import clamp
 from scripts.engine.events import ClickTile
 from scripts.engine.components import Position, Aesthetic
 

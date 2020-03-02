@@ -1,6 +1,6 @@
 from typing import List
 
-from scripts.engine import utilities
+from scripts.engine import utility
 from scripts.engine.core.constants import TILE_SIZE
 from scripts.engine.world_objects.tile import Tile
 
@@ -14,8 +14,8 @@ class GameMap:
         self.width = width
         self.height = height
 
-        floor_sprite = utilities.get_image("assets/world_objects/placeholder/_test.png", (TILE_SIZE, TILE_SIZE))
-        wall_sprite = utilities.get_image("assets/world_objects/placeholder/_testWall.png", (TILE_SIZE, TILE_SIZE))
+        floor_sprite = utility.get_image("assets/world_objects/placeholder/_test.png", (TILE_SIZE, TILE_SIZE))
+        wall_sprite = utility.get_image("assets/world_objects/placeholder/_testWall.png", (TILE_SIZE, TILE_SIZE))
 
         # populate map with tiles
         for x in range(self.width):

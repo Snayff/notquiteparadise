@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, List, Dict, Union
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 
-from scripts.engine import utilities
+from scripts.engine import utility
 from scripts.engine.core.constants import EffectTypes, AfflictionTriggers, DamageTypes, PrimaryStatTypes, SecondaryStatTypes, \
     TargetTags, AfflictionCategory, SkillExpiryTypes, SkillShapes, Directions, SkillTerrainCollisions, SkillTravelTypes
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
@@ -497,7 +497,7 @@ class DataEditor(UIWindow):
         relates to sub-details that need adding. E.g. effects: (EffectTypes.__dict__.keys(), EffectData). Loads
         details into self.field_options
         """
-        get_members = utilities.get_class_members
+        get_members = utility.get_class_members
 
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]

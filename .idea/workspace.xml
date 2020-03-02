@@ -193,11 +193,11 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.fix_png" />
       <item itemvalue="Python.scratch_2" />
       <item itemvalue="Python.scratch_3" />
       <item itemvalue="Python.scratch_4" />
-      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
@@ -319,7 +319,8 @@
       <workItem from="1582923564915" duration="767000" />
       <workItem from="1582971001323" duration="17544000" />
       <workItem from="1583001252396" duration="7075000" />
-      <workItem from="1583081307778" duration="18301000" />
+      <workItem from="1583081307778" duration="18338000" />
+      <workItem from="1583158814124" duration="5519000" />
     </task>
     <servers />
   </component>
@@ -449,14 +450,14 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1055" height="703" key="XDebugger.FullValuePopup/0.0.3440.1400@0.0.3440.1400" timestamp="1581429262784" />
-    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1583097132509">
+    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1583161671367">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583097132509" />
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1583098989604">
+    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583161671367" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1583161063609">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583098989604" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583161063609" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

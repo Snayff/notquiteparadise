@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, TypeVar
 
 import tcod
 
-from scripts.engine import utilities, world
+from scripts.engine import utility, world
 from scripts.engine.components import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
     IsGod, \
     Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV
@@ -250,8 +250,8 @@ def create_god(god_name: str) -> int:
     god = []
 
     # get aesthetic info
-    idle = utilities.get_image(data.sprite_paths.idle, (TILE_SIZE, TILE_SIZE))
-    icon = utilities.get_image(data.sprite_paths.icon, (ICON_SIZE, ICON_SIZE))
+    idle = utility.get_image(data.sprite_paths.idle, (TILE_SIZE, TILE_SIZE))
+    icon = utility.get_image(data.sprite_paths.icon, (ICON_SIZE, ICON_SIZE))
     sprites = CharacteristicSpritesData(icon=icon, idle=idle)
 
     # get knowledge info
@@ -331,9 +331,14 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
 ############### COMPONENT ACTIONS ################################
 
+def add_component(entity: int, component: Type[Component]):
+    """
+    Add a component to the entity
+    """
+    _esper.add_component(entity, component)
 
-def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsData]) \
-        -> CharacteristicSpritesData:
+
+def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsData]) -> CharacteristicSpritesData:
     """
     Build a CharacteristicSpritesData class from a list of sprite paths
     """
@@ -360,11 +365,11 @@ def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsDat
         else:
             size = (TILE_SIZE, TILE_SIZE)
 
-        sprites[name] = utilities.get_images(path_list, size)
+        sprites[name] = utility.get_images(path_list, size)
 
     # flatten the images
     for name, surface_list in sprites.items():
-        flattened_sprites[name] = utilities.flatten_images(surface_list)
+        flattened_sprites[name] = utility.flatten_images(surface_list)
 
     # convert to dataclass
     converted = CharacteristicSpritesData(**flattened_sprites)
