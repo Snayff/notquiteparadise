@@ -155,10 +155,10 @@ class IsGod(Component):
 
 class Opinion(Component):
     """
-    An entity's views on other entities.
+    An entity's views on other entities. {entity, opinion}
     """
     def __init__(self):
-        self.opinions = {}
+        self.opinions: Dict[int, int] = {}
 
 
 class FOV(Component):

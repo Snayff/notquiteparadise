@@ -138,9 +138,9 @@ class GodData:
     """
     name: str = "None"
     description: str = "None"
-    sprite_paths: CharacteristicSpritePathsData = field(default_factory=dict)
-    attitudes: AttitudeData = field(default_factory=dict)
-    interventions: InterventionData = field(default_factory=dict)
+    sprite_paths: Dict[str, CharacteristicSpritePathsData] = field(default_factory=dict)
+    attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
+    interventions: Dict[int, InterventionData] = field(default_factory=dict)
 
 
 @register_dataclass_with_json

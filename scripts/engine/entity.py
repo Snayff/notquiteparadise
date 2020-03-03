@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import dataclasses
 import logging  # type: ignore
+import random
+
 import esper  # type: ignore
+import pygame
 import tcod
-from random import random
 from typing import TYPE_CHECKING, TypeVar, Optional
 from scripts.engine import utility, world
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
@@ -76,7 +78,8 @@ def get_entities(component1: Type[C], component2: Type[C] = None, component3: Ty
 
 
 def get_entities_and_components_in_area(area: List[Tile], component1: Type[C] = None,
-        component2: Type[C] = None, component3: Type[C] = None) -> Dict[int, Tuple[int, C, ...]]:
+        component2: Type[C] = None, component3: Type[C] = None) -> Dict[int, Tuple[Position, Optional[C],
+        Optional[C]]]:
     """
     Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
     components are specified the return will be (Position, None).
@@ -114,7 +117,7 @@ def get_entitys_component(entity: int, component: Type[C]) -> Optional[C]:
     Get an entity's component.
     """
     if _esper.has_component(entity, component):
-        return _esper.component_for_entity(entity, component)
+        return _esper.component_for_entity(entity, component)  # type: ignore
     else:
         return None
 
@@ -126,9 +129,10 @@ def get_entitys_components(entity: int) -> Tuple[Component, ...]:
     return _esper.components_for_entity(entity)
 
 
-def get_identity(entity: int) -> Identity:
-    """Get an entity's Identity component."""
-
+def get_identity(entity: int) -> Optional[Identity]:
+    """
+    Get an entity's Identity component.
+    """
     return get_entitys_component(entity, Identity)
 
 
@@ -136,14 +140,14 @@ def get_component(component: Type[C]) -> List[Tuple[int, C]]:
     """
     Get all entities with the specified component
     """
-    return _esper.get_component(component)
+    return _esper.get_component(component)  # type: ignore
 
 
-def get_components(*components: Type[C]) -> List[Tuple[int, C]]:
+def get_components(*components: Type[C]) -> List[Tuple[int, List[C]]]:
     """
     Get all entities with the specified components
     """
-    return _esper.get_components(*components)
+    return _esper.get_components(*components)  # type: ignore
 
 
 def get_combat_stats(entity: int) -> CombatStats:
@@ -181,14 +185,17 @@ def get_primary_stat(entity: int, primary_stat: str) -> int:
     return value
 
 
-def get_player_fov() -> tcod.map.Map:
+def get_player_fov() -> Optional[tcod.map.Map]:
     """
     Get's the player's FOV component
     """
     player = get_player()
-    fov_c = get_entitys_component(player, FOV)
+    if player:
+        fov_c = get_entitys_component(player, FOV)
+        if fov_c:
+            return fov_c.fov_map
 
-    return fov_c.fov_map
+    return None
 
 
 ############## QUERIES  ################
@@ -237,7 +244,7 @@ def create_god(god_name: str) -> int:
     Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
     data = library.get_god_data(god_name)
-    god = []
+    god: List[Component] = []
 
     # get aesthetic info
     idle = utility.get_image(data.sprite_paths.idle, (TILE_SIZE, TILE_SIZE))
@@ -267,7 +274,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     Create an entity with all of the components to be an actor. is_player is Optional and defaults to false.
     Returns Entity ID.
     """
-    actor = []
+    actor: List[Component] = []
 
     # player components
     if is_player:
@@ -327,9 +334,9 @@ def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsDat
     """
     Build a CharacteristicSpritesData class from a list of sprite paths
     """
-    paths = {}
-    sprites = {}
-    flattened_sprites = {}
+    paths: Dict[str, List[str]] = {}
+    sprites: Dict[str, List[pygame.Surface]] = {}
+    flattened_sprites: Dict[str, pygame.Surface] = {}
 
     # bundle into cross-characteristic sprite path lists
     for characteristic in sprite_paths:
@@ -338,7 +345,7 @@ def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsDat
             # check if key exists
             if name in paths:
                 paths[name].append(path)
-            # if not init the list
+            # if not init the dict
             else:
                 paths[name] = [path]
 
@@ -376,16 +383,13 @@ def spend_time(entity: int, time_spent: int):
 def learn_skill(entity: int, skill_name: str):
     """
     Add the skill name to the entity's knowledge component.
-
-    Args:
-        entity ():
-        skill_name ():
     """
-    if not _esper.has_component(entity, Knowledge):
-        _esper.add_component(entity, Knowledge())
-
+    if not has_component(entity, Knowledge):
+        add_component(entity, Knowledge())
     knowledge = get_entitys_component(entity, Knowledge)
-    knowledge.skills.append(skill_name)
+
+    if knowledge:
+        knowledge.skills.append(skill_name)
 
 
 def judge_action(entity: int, action: Any):
@@ -396,7 +400,6 @@ def judge_action(entity: int, action: Any):
     for ent, (is_god, opinion, identity) in get_components(IsGod, Opinion, Identity):
 
         attitudes = library.get_god_attitudes_data(identity.name)
-
         action_name = action
 
         # check if the god has an attitude towards the action and apply the opinion change,
@@ -414,14 +417,8 @@ def judge_action(entity: int, action: Any):
 
 def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
     """
-    Have all entities consider intervening
-
-    Args:
-        entity (): entity who acted
-        action (object): Can be str if matching name, e.g. affliction name, or class attribute, e.g. Hit Type name.
-
-    Returns:
-        List[Tuple]: List of tuples containing (god_entity_id, intervention name).
+    Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
+    or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
     """
     chosen_interventions = []
     desire_to_intervene = 10

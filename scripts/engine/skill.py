@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging  # type: ignore
-from random import random
+import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
