@@ -4,7 +4,7 @@ import pytweening
 from scripts.engine import utility, entity
 from scripts.engine.component import Aesthetic
 from typing import TYPE_CHECKING
-from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType
+from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
 
@@ -53,7 +53,7 @@ def _process_aesthetic_update(delta_time: float):
 
 ########################### INPUT ###########################
 
-def process_intent(intent: InputIntentType, game_state: GameState):
+def process_intent(intent: InputIntentType, game_state: GameStateType):
     """
     Process the intent in the context of the game state
     """

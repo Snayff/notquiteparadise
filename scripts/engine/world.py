@@ -7,7 +7,7 @@ import tcod
 
 from scripts.engine import entity, utility
 from scripts.engine.component import Position, Blocking
-from scripts.engine.core.constants import TargetTag, FOVInfo, SkillShape
+from scripts.engine.core.constants import TargetTag, FOVInfo, SkillShape, TargetTagType
 from scripts.engine.core.store import store
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
@@ -258,7 +258,7 @@ def get_tiles_in_range_and_fov_of_entity(range_from_centre: int, active_entity: 
 
 ############# QUERIES ############
 
-def tile_has_tag(tile: Tile, tag: TargetTag, active_entity: int = None) -> bool:
+def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: int = None) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
@@ -289,7 +289,7 @@ def tile_has_tag(tile: Tile, tag: TargetTag, active_entity: int = None) -> bool:
         return False
 
 
-def tile_has_tags(tile: Tile, tags: List[TargetTag], active_entity: int = None) -> bool:
+def tile_has_tags(tile: Tile, tags: List[TargetTagType], active_entity: int = None) -> bool:
     """
     Check a tile has all required tags
     """

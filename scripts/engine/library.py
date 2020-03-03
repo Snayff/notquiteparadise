@@ -5,7 +5,8 @@ import logging
 import os
 from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses
-from scripts.engine.core.constants import EffectType, PrimaryStat, SecondaryStat, SecondaryStatType
+from scripts.engine.core.constants import EffectType, PrimaryStat, SecondaryStat, SecondaryStatType, EffectTypeType, \
+    PrimaryStatType
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData,\
     InterventionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData, AfflictionData
 
@@ -73,7 +74,7 @@ class LibraryOfAlexandria:
         data = self._aspects[aspect_name]
         return data
 
-    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectType) -> EffectData:
+    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectTypeType) -> EffectData:
         """
         Get effect data for an aspects from the library
         """
@@ -175,7 +176,7 @@ class LibraryOfAlexandria:
 
         return skill_data
 
-    def get_skill_effect_data(self, skill_name: str, effect_type: EffectType) -> EffectData:
+    def get_skill_effect_data(self, skill_name: str, effect_type: EffectTypeType) -> EffectData:
         """
         Get effect data for a skill from the library
         """
@@ -187,7 +188,7 @@ class LibraryOfAlexandria:
 
         return effect_data
 
-    def get_primary_stat_data(self, primary_stat_type: PrimaryStat) -> BasePrimaryStatData:
+    def get_primary_stat_data(self, primary_stat_type: PrimaryStatType) -> BasePrimaryStatData:
         """
         Get data for a primary stat from the library
 
@@ -260,12 +261,12 @@ class LibraryOfAlexandria:
 
         return effects_data
 
-    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectType) -> \
-            EffectData:
+    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectTypeType) \
+            -> EffectData:
         """
         Get data for a specified effect in a god's intervention from the library
         """
-        effects_data = self._gods[god_name].interventions[intervention_name].effects[effect_type.name]
+        effects_data = self._gods[god_name].interventions[intervention_name].effects[effect_type]
 
         return effects_data
 

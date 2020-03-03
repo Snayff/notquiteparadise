@@ -5,7 +5,9 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List
 from scripts.engine.core.constants import PrimaryStatType, SecondaryStat, Direction, \
     SkillTerrainCollision, SkillTravel, SkillExpiry, TargetTag, SkillShape, EffectType, \
-    DamageType, AfflictionTrigger, AfflictionCategory
+    DamageType, AfflictionTrigger, AfflictionCategory, TargetTagType, EffectTypeType, DamageTypeType, \
+    AfflictionCategoryType, AfflictionTriggerType, SkillShapeType, SkillTerrainCollisionType, SkillTravelType, \
+    SkillExpiryType, DirectionType
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -95,17 +97,17 @@ class SkillData:
     cooldown: int = 0
 
     # how does it travel from the user?
-    target_directions: List[Direction] = field(default_factory=list)
+    target_directions: List[DirectionType] = field(default_factory=list)
     range: int = 1
-    terrain_collision: SkillTerrainCollision = None
-    travel_type: SkillTravel = None
+    terrain_collision: SkillTerrainCollisionType = None
+    travel_type: SkillTravelType = None
 
     # when does it interact?
-    expiry_type: SkillExpiry = None
-    required_tags: List[TargetTag] = field(default_factory=list)
+    expiry_type: SkillExpiryType = None
+    required_tags: List[TargetTagType] = field(default_factory=list)
 
     # how does it interact?
-    shape: SkillShape = None
+    shape: SkillShapeType = None
     shape_size: int = 1
     effects: Dict = field(default_factory=dict)
 
@@ -149,13 +151,13 @@ class EffectData:
     """
     Data class for a skill effect
     """
-    effect_type: EffectType = None
-    required_tags: List[TargetTag] = field(default_factory=list)
+    effect_type: EffectTypeType = None
+    required_tags: List[TargetTagType] = field(default_factory=list)
     damage: int = 0  # TODO - combine with affect stat amount as only one will be on each effect
     affect_stat_amount: int = 0
     mod_stat: PrimaryStatType = None
     mod_amount: int = 0
-    damage_type: DamageType = None
+    damage_type: DamageTypeType = None
     accuracy: int = 0
     stat_to_target: PrimaryStatType = None
     aspect_name: str = "None"
@@ -217,8 +219,8 @@ class AfflictionData:
     name: str = "None"
     description: str = "None"
     icon: str = "None"
-    trigger_event: AfflictionTrigger = None
-    category: AfflictionCategory = None
+    trigger_event: AfflictionTriggerType = None
+    category: AfflictionCategoryType = None
     effects: Dict = field(default_factory=dict)
 
 

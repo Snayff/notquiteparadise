@@ -7,7 +7,7 @@ from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
 from scripts.engine.core.constants import MessageType, SecondaryStat, SkillExpiry, \
     SkillTerrainCollision, SkillTravel, TargetTag, EffectType, AfflictionCategory, HitType, HitModifier, \
-    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType
+    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, EffectTypeType, HitValueType
 from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent
@@ -169,7 +169,7 @@ int]):
 ########################################## GET ####################################
 
 def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],
-        max_distance: int, travel_type: SkillTravel) -> Tuple[int, int]:
+        max_distance: int, travel_type: SkillTravelType) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
     range blocks movement then the last position checked is returned. If all positions in range block movement
@@ -265,13 +265,13 @@ def _get_reflected_direction(current_position: Tuple[int, int], target_direction
     return dir_x, dir_y
 
 
-def _get_hit_type(to_hit_score: int) -> Type[HitValue]:
+def _get_hit_type(to_hit_score: int) -> HitValueType:
     """
     Get the hit type from the to hit score
     """
-    if to_hit_score >= HitValue.CRIT.value:
+    if to_hit_score >= HitValue.CRIT:
         return HitType.CRIT
-    elif to_hit_score >= HitValue.HIT.value:
+    elif to_hit_score >= HitValue.HIT:
         return HitType.HIT
     else:
         return HitType.GRAZE
@@ -279,7 +279,7 @@ def _get_hit_type(to_hit_score: int) -> Type[HitValue]:
 
 ########################################## EFFECTS ####################################
 
-def apply_effect(effect_type: EffectType, skill_name: str, effected_tiles: List[Tile], using_entity: int):
+def apply_effect(effect_type: EffectTypeType, skill_name: str, effected_tiles: List[Tile], using_entity: int):
     """
     Apply an effect to all tiles in a list.:
     """
@@ -348,7 +348,7 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
 
                         # check if there was a crit and if so modify the duration of the afflictions
                         if hit_type == HitType.CRIT:
-                            modified_duration = int(base_duration * HitModifier.CRIT.value)
+                            modified_duration = int(base_duration * HitModifier.CRIT)
                             hit_msg = f"a critical "
 
                         msg = f"{identity.name} succumbed to {hit_msg}{effect_data.affliction_name}."
@@ -474,7 +474,7 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
 ############################################### CALCULATE ####################################
 
 
-def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitType], effect_data: EffectData,
+def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypeType, effect_data: EffectData,
         attackers_stats: CombatStats = None) -> int:
     """
     Work out the damage to be dealt. if attacking entity is None then value used is 0.
@@ -505,11 +505,11 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: Type[HitType], eff
 
     # apply to hit modifier to damage
     if hit_type == HitType.CRIT:
-        modified_damage = mitigated_damage * HitModifier.CRIT.value
+        modified_damage = mitigated_damage * HitModifier.CRIT
     elif hit_type == HitType.HIT:
-        modified_damage = mitigated_damage * HitModifier.HIT.value
+        modified_damage = mitigated_damage * HitModifier.HIT
     else:
-        modified_damage = mitigated_damage * HitModifier.GRAZE.value
+        modified_damage = mitigated_damage * HitModifier.GRAZE
 
     # round down the dmg
     int_modified_damage = int(modified_damage)

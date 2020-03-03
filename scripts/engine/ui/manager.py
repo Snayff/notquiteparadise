@@ -4,7 +4,7 @@ import logging
 import pygame
 import pygame_gui
 from typing import TYPE_CHECKING, Type, Dict, Tuple, List
-from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE
+from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.entity_info import EntityInfo
@@ -88,13 +88,13 @@ class _UIManager:
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
-    def add_ui_element(self, element_type: Type[UIElement], element: object):
+    def add_ui_element(self, element_type: UIElementType, element: object):
         """
         Add ui_manager element to the list of all elements.
         """
         self._elements[element_type] = element
 
-    def kill_element(self, element_type: Type[UIElement]):
+    def kill_element(self, element_type: UIElementType):
         """
         Remove any reference to the element
         """
@@ -108,7 +108,7 @@ class _UIManager:
 
     ##################### GET ############################
 
-    def get_element(self, element_type: Type[UIElement]):
+    def get_element(self, element_type: UIElementType):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
         """
@@ -125,7 +125,7 @@ class _UIManager:
         """
         return ui._gui
 
-    def get_ui_element(self, element_type: Type[UIElement]):
+    def get_ui_element(self, element_type: UIElementType):
         """
         Get UI element. Returns nothing if not found. Won't be found if not init'd.
         """

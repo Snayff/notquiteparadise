@@ -208,7 +208,7 @@ def has_component(entity: int, component: Type[Component]):
 
 ############## ENTITY EXISTENCE ################
 
-def create(components: List[Type[Component]] = None) -> int:
+def create(components: List[Component] = None) -> int:
     """
     Use each component in a list of components to create an entity
     """
@@ -319,7 +319,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
 ############### COMPONENT ACTIONS ################################
 
-def add_component(entity: int, component: Type[Component]):
+def add_component(entity: int, component: Component):
     """
     Add a component to the entity
     """

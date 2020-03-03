@@ -4,7 +4,7 @@ import math
 import scipy
 import pygame
 from typing import TYPE_CHECKING, List, Any, Type, Tuple
-from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, SkillShape
+from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, SkillShape, SkillShapeType
 
 if TYPE_CHECKING:
     from typing import Tuple
@@ -144,7 +144,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
-def create_shape(shape: Type[SkillShape], size: int) -> List[Tuple[int, int]]:
+def create_shape(shape: SkillShapeType, size: int) -> List[Tuple[int, int]]:
     """
     Get a list of coords from a shape and size.
     """

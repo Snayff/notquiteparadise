@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pygame
 from typing import TYPE_CHECKING
-from scripts.engine.core.constants import GameState
+from scripts.engine.core.constants import GameState, GameStateType
 
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple
@@ -15,8 +15,8 @@ class Store:
     """
     def __init__(self):
         # used in state
-        self.current_game_state: GameState = GameState.GAME_INITIALISING
-        self.previous_game_state: GameState = GameState.GAME_INITIALISING
+        self.current_game_state: GameStateType = GameState.GAME_INITIALISING
+        self.previous_game_state: GameStateType = GameState.GAME_INITIALISING
         self.internal_clock = pygame.time.Clock()
         self.active_skill = None
 

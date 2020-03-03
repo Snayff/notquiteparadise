@@ -4,7 +4,6 @@ from types import SimpleNamespace
 from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
-
 VERSION = "0.95.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16

@@ -66,7 +66,7 @@ def update_clock():
     store.internal_clock.tick(VisualInfo.GAME_FPS)
 
 
-def set_new(new_game_state: Type[GameState]):
+def set_new(new_game_state: GameStateType):
     """
     Set the current game state
     """
