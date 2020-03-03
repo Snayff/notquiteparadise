@@ -79,7 +79,7 @@ def get_entities(component1: Type[C], component2: Type[C] = None, component3: Ty
 
 def get_entities_and_components_in_area(area: List[Tile], component1: Type[C] = None,
         component2: Type[C] = None, component3: Type[C] = None) -> Dict[int, Tuple[Position, Optional[C],
-        Optional[C]]]:
+        Optional[C], Optional[C]]]:
     """
     Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
     components are specified the return will be (Position, None).

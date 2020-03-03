@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pygame  # type: ignore
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectTypeType, DamageTypeType, \
     AfflictionCategoryType, AfflictionTriggerType, SkillShapeType, SkillTerrainCollisionType, SkillTravelType, \
     SkillExpiryType, DirectionType, SecondaryStatType
@@ -18,8 +18,8 @@ class BaseStatData:
     """
     Data class to contain primary and secondary stats
     """
-    primary: Dict = field(default_factory=dict)
-    secondary: Dict = field(default_factory=dict)
+    primary: Dict[str, BasePrimaryStatData] = field(default_factory=dict)
+    secondary: Dict[str, BaseSecondaryStatData] = field(default_factory=dict)
 
 
 @register_dataclass_with_json
@@ -89,7 +89,7 @@ class SkillData:
     icon: str = "None"
 
     # what does it cost?
-    resource_type: str = "None"
+    resource_type:  Optional[PrimaryStatType] = None
     resource_cost: int = 0
     time_cost: int = 0
     cooldown: int = 0

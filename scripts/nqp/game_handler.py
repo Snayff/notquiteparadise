@@ -60,7 +60,10 @@ class GameHandler(Subscriber):
                 publisher.publish(ChangeGameStateEvent(GameState.ENEMY_TURN))
 
         elif new_game_state == GameState.TARGETING_MODE:
-            state.set_active_skill(event.skill_to_be_used)
+            if event.skill_to_be_used:
+                state.set_active_skill(event.skill_to_be_used)
+            else:
+                logging.warning("Entered targeting mode with no active skill.")
 
         # PREVIOUS must be last as it overwrites new_game_state
         elif new_game_state == GameState.PREVIOUS:

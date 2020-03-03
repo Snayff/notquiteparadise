@@ -81,16 +81,13 @@ class MapHandler(Subscriber):
     def process_end_of_turn_updates(event: EndTurnEvent):
         """
         Trigger aspects on tile turn holder is on
-
-        Args:
-            event(EndTurnEvent):
         """
         ent = event.entity
-        position = entity.get_entitys_component(ent, Position)
-        tile = world.get_tile((position.x, position.y))
+        # position = entity.get_entitys_component(ent, Position)
+        # tile = world.get_tile((position.x, position.y))
 
         # trigger aspects
-        #  TODO - update to EC approach
+        #  FIXME - update to EC approach
         #world.trigger_aspects_on_tile(tile)
 
     @staticmethod

@@ -395,6 +395,7 @@ class _UIManager:
                 return False
         else:
             logging.warning(f"Tried to check if Camera should move but key not found. Is it init'd?")
+            return False
 
     def world_to_screen_position(self, pos: Tuple[int, int]):
         """

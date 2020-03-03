@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     pass
 
 
-class UiHandler(Subscriber):
+class UIHandler(Subscriber):
     """
     Handle events that effect the UI. The UI handler watches and reacts.
     """
@@ -192,7 +192,7 @@ class UiHandler(Subscriber):
         Show or hide targeting overlay, using Direction possible in the skill.
         """
         # update directions to either clear or use info from skill
-        if is_visible:
+        if is_visible and skill_name:
             data = library.get_skill_data(skill_name)
             directions = data.target_directions
         else:
@@ -207,7 +207,7 @@ class UiHandler(Subscriber):
         """
         Update tiles shown in camera.
         """
-        if target_pos:
+        if start_pos and target_pos:
             should_move_camera = ui.should_camera_move(start_pos, target_pos)
             target_x, target_y = target_pos
 
@@ -219,7 +219,8 @@ class UiHandler(Subscriber):
 
             # update player's pos in camera
             tile = world.get_tile((target_x, target_y))
-            ui.set_player_tile(tile)
+            if tile:
+                ui.set_player_tile(tile)
 
         ui.update_cameras_tiles()
         ui.update_camera_game_map()

@@ -1,10 +1,12 @@
 import logging  # type: ignore
+from typing import Optional
+
 import pygame  # type: ignore
 import pygame_gui  # type: ignore
 from pygame_gui.core import UIWindow  # type: ignore
 from pygame_gui.elements import UIImage, UITextBox  # type: ignore
-from scripts.engine import entity
-from scripts.engine.core.constants import PrimaryStat, SecondaryStat
+from scripts.engine import entity, utility
+from scripts.engine.core.constants import PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH
 from scripts.engine.utility import get_class_members
 from scripts.engine.component import Aesthetic, Identity, Resources
 
@@ -18,11 +20,11 @@ class EntityInfo(UIWindow):
         self.gui_manager = manager
 
         # sections
-        self.selected_entity = None
-        self.entity_image = None
-        self.core_info = None
-        self.primary_stats = None
-        self.secondary_stats = None
+        self.selected_entity: Optional[int] = None
+        self.entity_image: Optional[pygame.Surface] = None
+        self.core_info: Optional[UITextBox] = None
+        self.primary_stats: Optional[UITextBox] = None
+        self.secondary_stats: Optional[UITextBox] = None
         # TODO: add affliction info
 
         # data
@@ -102,10 +104,11 @@ class EntityInfo(UIWindow):
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
 
-        # TODO - moving to the top causes import issues. Resolve this!
-
         aesthetic = entity.get_entitys_component(self.selected_entity, Aesthetic)
-        image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
+        if aesthetic:
+            image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
+        else:
+            image = utility.get_image(IMAGE_NOT_FOUND_PATH)
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
                                container=self.get_container(), object_id="#entity_image")
@@ -117,11 +120,17 @@ class EntityInfo(UIWindow):
         """
         ent = self.selected_entity
 
-        identity = entity.get_entitys_component(ent, Identity)
-        resources = entity.get_entitys_component(ent, Resources)
-        text = f"{identity.name.capitalize()}" + "<br>"
-        text += f"Current Health: {resources.health}" + "<br>"
-        text += f"Current Stamina: {resources.stamina}" + "<br>"
+        if ent:
+            text = ""
+            identity = entity.get_entitys_component(ent, Identity)
+            if identity:
+                text += f"{identity.name.capitalize()}" + "<br>"
+            resources = entity.get_entitys_component(ent, Resources)
+            if resources:
+                text += f"Current Health: {resources.health}" + "<br>"
+                text += f"Current Stamina: {resources.stamina}" + "<br>"
+        else:
+            text = ""
 
         x = self.indent
         y = (self.gap_between_sections * 2) + self.indent + self.entity_image_height
@@ -139,22 +148,21 @@ class EntityInfo(UIWindow):
         Create the primary stats section.
         """
         text = ""
+        if self.selected_entity:
+            stats = entity.get_combat_stats(self.selected_entity)
 
-        stats = entity.get_combat_stats(self.selected_entity)
+            all_stats = get_class_members(PrimaryStat)
+            for name in all_stats:
+                try:
+                    stat_value = getattr(stats, name.lower())
 
-        all_stats = get_class_members(PrimaryStat)
-        for name in all_stats:
-            try:
-                stat_value = getattr(stats, name.lower())
+                    name = name.title()
+                    name = name.replace("_", " ")
+                    text += f"{name}: {stat_value}" + "<br>"
 
-                name = name.title()
-                name = name.replace("_", " ")
-
-                text += f"{name}: {stat_value}" + "<br>"
-
-            # in case it fails to pull expected attribute
-            except AttributeError:
-                logging.warning(f"Attribute {name} not found for EntityInfo.")
+                # in case it fails to pull expected attribute
+                except AttributeError:
+                    logging.warning(f"Attribute {name} not found for EntityInfo.")
 
         x = self.indent
         y = (self.gap_between_sections * 3) + self.indent + self.entity_image_height + self.core_info_height
@@ -172,21 +180,22 @@ class EntityInfo(UIWindow):
         """
         text = ""
 
-        stats = entity.get_combat_stats(self.selected_entity)
+        if self.selected_entity:
+            stats = entity.get_combat_stats(self.selected_entity)
 
-        all_stats = get_class_members(SecondaryStat)
-        for name in all_stats:
-            try:
-                stat_value = getattr(stats, name.lower())
+            all_stats = get_class_members(SecondaryStat)
+            for name in all_stats:
+                try:
+                    stat_value = getattr(stats, name.lower())
 
-                name = name.title()
-                name = name.replace("_", " ")
+                    name = name.title()
+                    name = name.replace("_", " ")
 
-                text += f"{name}: {stat_value}" + "<br>"
+                    text += f"{name}: {stat_value}" + "<br>"
 
-            # in case it fails to pull expected attribute
-            except AttributeError:
-                logging.warning(f"Attribute {name} not found for EntityInfo.")
+                # in case it fails to pull expected attribute
+                except AttributeError:
+                    logging.warning(f"Attribute {name} not found for EntityInfo.")
 
         x = self.indent
         y = (self.gap_between_sections * 3) + self.indent + self.entity_image_height + self.core_info_height + \

@@ -434,7 +434,7 @@ def is_tile_in_fov(x: int, y: int, fov_map) -> bool:
 
 
 ################################ ACTIONS ###############################
-def recompute_fov(x, y, radius, fov_map):
+def recompute_fov(x: int, y: int, radius: int, fov_map: tcod.map.Map):
     """
     Recalc the player's fov
     """
@@ -442,7 +442,7 @@ def recompute_fov(x, y, radius, fov_map):
     update_tile_visibility(fov_map)
 
 
-def update_tile_visibility(fov_map):
+def update_tile_visibility(fov_map: tcod.map.Map):
     """
     Update the target fov
     """

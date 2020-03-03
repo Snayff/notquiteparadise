@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
+
+import tcod
+
 from scripts.engine.core.definitions import CharacteristicSpritesData
 
 if TYPE_CHECKING:
@@ -47,7 +50,7 @@ class Aesthetic(Component):
         self.screen_y: float = 0
         self.target_screen_x: float = 0
         self.target_screen_y: float = 0
-        self.current_sprite_duration = 0
+        self.current_sprite_duration: float = 0
 
 
 class Resources(Component):
@@ -56,9 +59,9 @@ class Resources(Component):
     """
 
     def __init__(self, health: int = 1, stamina: int = 1):
-        self.health = health
-        self.stamina = stamina
-        self.time_spent = 0
+        self.health: int = health
+        self.stamina: int = stamina
+        self.time_spent: int = 0
 
 
 class Blocking(Component):
@@ -67,8 +70,8 @@ class Blocking(Component):
     """
 
     def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
-        self.blocks_movement = blocks_movement
-        self.blocks_sight = blocks_sight
+        self.blocks_movement: bool = blocks_movement
+        self.blocks_sight: bool = blocks_sight
 
 
 class Identity(Component):
@@ -77,8 +80,8 @@ class Identity(Component):
     """
 
     def __init__(self, name: str, description: str = ""):
-        self.name = name
-        self.description = description
+        self.name: str = name
+        self.description: str = description
 
 
 class Race(Component):
@@ -87,7 +90,7 @@ class Race(Component):
     """
 
     def __init__(self, people_name: str):
-        self.name = people_name
+        self.name: str = people_name
 
 
 class Savvy(Component):
@@ -96,7 +99,7 @@ class Savvy(Component):
     """
 
     def __init__(self, savvy_name: str):
-        self.name = savvy_name
+        self.name: str = savvy_name
 
 
 class Homeland(Component):
@@ -105,7 +108,7 @@ class Homeland(Component):
     """
 
     def __init__(self, homeland_name: str):
-        self.name = homeland_name
+        self.name: str = homeland_name
 
 
 class AIBasic(Component):
@@ -124,26 +127,26 @@ class Knowledge(Component):
     def __init__(self, skills: List[str] = None):
         if skills is None:
             skills = []
-        self.skills = skills
+        self.skills: List[str] = skills
 
 
 class Affliction(Component):
     """An entity's Boons and Banes. e.g. {boon_name: duration}"""
-    def __init__(self, boons: Dict = None, banes: Dict = None):
+    def __init__(self, boons: Optional[Dict[str, int]] = None, banes: Optional[Dict[str, int]] = None):
         if banes is None:
             banes = {}
         if boons is None:
             boons = {}
-        self.boons = boons
-        self.banes = banes
+        self.boons: Optional[Dict[str, int]] = boons
+        self.banes: Optional[Dict[str, int]] = banes
 
 
 class Aspect(Component):
     """An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
-    def __init__(self, aspects: Dict = None):
+    def __init__(self, aspects: Optional[Dict[str, int]] = None):
         if aspects is None:
             aspects = {}
-        self.aspects = aspects
+        self.aspects: Optional[Dict[str, int]] = aspects
 
 
 class IsGod(Component):
@@ -165,5 +168,5 @@ class FOV(Component):
     """
     An entities field of view.
     """
-    def __init__(self, fov_map):
-        self.fov_map = fov_map
+    def __init__(self, fov_map: tcod.map.Map):
+        self.fov_map: tcod.map.Map = fov_map

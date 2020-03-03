@@ -7,7 +7,8 @@ from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
 from scripts.engine.core.constants import MessageType, SecondaryStat, SkillExpiry, \
     SkillTerrainCollision, SkillTravel, TargetTag, EffectType, AfflictionCategory, HitType, HitModifier, \
-    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, EffectTypeType, HitValueType
+    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, EffectTypeType, HitValueType, \
+    SkillTravelType
 from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent
@@ -26,11 +27,14 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
     """
     Confirm entity can use skill on targeted position. True if can use the skill. Else False.
     """
+    start_tile = target_tile = False
 
     position = entity.get_entitys_component(ent, Position)
-    start_tile = world.get_tile((position.x, position.y))
-    target_x, target_y = target_pos
-    target_tile = world.get_tile((target_x, target_y))
+    if position:
+        start_tile = world.get_tile((position.x, position.y))
+        target_x, target_y = target_pos
+        target_tile = world.get_tile((target_x, target_y))
+
     skill_data = library.get_skill_data(skill_name)
 
     # check we have everything we need and if so use the skill
@@ -44,7 +48,7 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
                 if distance <= skill_range:
                     return True
                 else:
-                    logging.debug(f"Target out of skill range, range:{skill_range} < distance:{distance}")
+                    logging.debug(f"Target out of skill range, range:{skill_range} < distance:{distance}.")
 
             else:
                 msg = f"You can't afford the cost."
@@ -53,45 +57,57 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
     return False
 
 
-def can_afford_cost(ent: int, resource: Type[SecondaryStatType], cost: int):
+def can_afford_cost(ent: int, resource: SecondaryStatType, cost: int):
     """
     Check if entity can afford the resource cost
     """
     resources = entity.get_entitys_component(ent, Resources)
     identity = entity.get_identity(ent)
 
+    if identity:
+        name = identity.name
+    else:
+        name = f"Identity Component not found for {ent}."
+
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
     if value - cost >= 0:
-        logging.debug(f"'{identity.name}' can afford cost.")
+        logging.debug(f"'{name}' can afford cost.")
         return True
     else:
-        logging.debug(f"'{identity.name}' cannot afford cost.")
+        logging.debug(f"'{name}' cannot afford cost.")
         return False
 
 
 ########################################### ACTIONS ################################
 
-def pay_resource_cost(ent: int, resource: Type[SecondaryStatType], cost: int):
+def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
     """
     Remove the resource cost from the using entity
     """
     resources = entity.get_entitys_component(ent, Resources)
     identity = entity.get_identity(ent)
+    if identity:
+        name = identity.name
+    else:
+        name = f"Identity Component not found for {ent}."
 
-    resource_value = getattr(resources, resource.name.lower())
-    resource_left = resource_value - cost
+    if resources:
+        resource_value = getattr(resources, resource.lower())
+        resource_left = resource_value - cost
 
-    setattr(resources, resource.name.lower(), resource_left)
+        setattr(resources, resource.lower(), resource_left)
 
-    log_string = f"'{identity.name}' paid {cost} {resource.name} and has {resource_left} left."
-    logging.debug(log_string)
+        log_string = f"'{name}' paid {cost} {resource} and has {resource_left} left."
+        logging.debug(log_string)
+    else:
+        logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
 
-def use(using_entity: int, skill_name: str, start_position: Tuple[int, int], target_direction: Tuple[int,
-int]):
+def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
+        target_direction: Tuple[int, int]):
     """
-    Use the skill
+    Use the skill in the target direction from the start position.
     """
     # initial values
     skill_data = library.get_skill_data(skill_name)
@@ -109,7 +125,12 @@ int]):
     activate = False
     fizzle = False
 
-    logging.info(f"{identity.name} used {skill_name} at ({start_x},{start_y}) in {direction}...")
+    if identity:
+        name = identity.name
+    else:
+        name = f"Identity Component not found for {using_entity}."
+
+    logging.info(f"{name} used {skill_name} at ({start_x},{start_y}) in {direction}...")
 
     # continue finding the position to use the skill on until we fizzle or activate
     while not activate and not fizzle:
@@ -265,7 +286,7 @@ def _get_reflected_direction(current_position: Tuple[int, int], target_direction
     return dir_x, dir_y
 
 
-def _get_hit_type(to_hit_score: int) -> HitValueType:
+def _get_hit_type(to_hit_score: int) -> HitTypeType:
     """
     Get the hit type from the to hit score
     """
@@ -283,8 +304,14 @@ def apply_effect(effect_type: EffectTypeType, skill_name: str, effected_tiles: L
     """
     Apply an effect to all tiles in a list.:
     """
-    log_string = f"Applying {effect_type.name} effect; caused by `{skill_name}` from `{using_entity}`."
-    logging.debug(log_string)
+    identity = entity.get_identity(using_entity)
+    if identity:
+        name = identity.name
+    else:
+        name = f"Identity Component not found for {using_entity}."
+
+    log_string = f"Applying {effect_type} effect; caused by '{skill_name}' from '{name}'."
+    logging.info(log_string)
 
     if effect_type == EffectType.DAMAGE:
         _apply_damage_effect(skill_name, effected_tiles, using_entity)
@@ -303,12 +330,12 @@ def _apply_aspect_effect(skill_name: str, effected_tiles: List[Tile]):
 
 def _create_aspect(aspect_name: str, tile: Tile):
     data = library.get_aspect_data(aspect_name)
-    ent, position, aspects = entity.get_entities_and_components_in_area([tile], Aspect)
+    ent, position, aspect = entity.get_entities_and_components_in_area([tile], Aspect)
 
     # if there is an active version of the same aspect already
-    if aspects:
+    if aspect:
         # increase duration to initial value
-        aspects.aspects[aspect_name] = data.duration
+        aspect.aspects[aspect_name] = data.duration
     else:
         entity.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
 
@@ -339,9 +366,14 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
                                                            effect_data.stat_to_target, attackers_stats)
                     hit_type = _get_hit_type(to_hit_score)
 
+                    if identity:
+                        name = identity.name
+                    else:
+                        name = f"Identity Component not found for {attacker}."
+
                     # check if afflictions applied
                     if hit_type == HitType.GRAZE:
-                        msg = f"{identity.name} resisted {effect_data.affliction_name}."
+                        msg = f"{name} resisted {effect_data.affliction_name}."
                         publisher.publish(MessageEvent(MessageType.LOG, msg))
                     else:
                         hit_msg = ""
@@ -351,47 +383,52 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
                             modified_duration = int(base_duration * HitModifier.CRIT)
                             hit_msg = f"a critical "
 
-                        msg = f"{identity.name} succumbed to {hit_msg}{effect_data.affliction_name}."
+                        msg = f"{name} succumbed to {hit_msg}{effect_data.affliction_name}."
                         publisher.publish(MessageEvent(MessageType.LOG, msg))
 
                         _create_affliction(defender, effect_data.affliction_name, modified_duration)
 
                 # Just apply the BOON
-                elif affliction_data.affliction_category == AfflictionCategory.BOON:
+                elif affliction_data.category == AfflictionCategory.BOON:
                     _create_affliction(defender, effect_data.affliction_name, modified_duration)
 
 
 def _create_affliction(ent: int, affliction_name: str, duration: int):
     data = library.get_affliction_data(affliction_name)
     identity = entity.get_identity(ent)
-    afflictions = entity.get_entitys_component(ent, Affliction)
+    affliction = entity.get_entitys_component(ent, Affliction)
     active_affliction_duration = False
     boon = {}
     bane = {}
 
+    if identity:
+        name = identity.name
+    else:
+        name = f"Identity Component not found for {ent}."
+
     # check if entity already has the afflictions component
-    if afflictions:
+    if affliction:
         if data.category == AfflictionCategory.BANE:
-            if afflictions.banes[affliction_name]:
-                active_affliction_duration = afflictions.banes[affliction_name]
+            if affliction.banes[affliction_name]:
+                active_affliction_duration = affliction.banes[affliction_name]
             else:
                 active_affliction_duration = False
         elif data.category == AfflictionCategory.BOON:
-            if afflictions.boons[affliction_name]:
-                active_affliction_duration = afflictions.boons[affliction_name]
+            if affliction.boons[affliction_name]:
+                active_affliction_duration = affliction.boons[affliction_name]
             else:
                 active_affliction_duration = False
 
     # if affliction exists
     if active_affliction_duration:
-        logging.debug(f"{identity.name} already has {affliction_name}:{active_affliction_duration}...")
+        logging.debug(f"{name} already has {affliction_name}:{active_affliction_duration}...")
 
         # alter the duration of the current afflictions if the new one will last longer
         if active_affliction_duration < duration:
             if data.category == AfflictionCategory.BANE:
-                afflictions.banes[affliction_name] = duration
+                affliction.banes[affliction_name] = duration
             elif data.category == AfflictionCategory.BOON:
-                afflictions.boons[affliction_name] = duration
+                affliction.boons[affliction_name] = duration
 
             log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
                          f"{duration} so duration updated."
@@ -404,7 +441,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
 
     # no current afflictions of same type so apply new one
     else:
-        logging.info(f"Applying {affliction_name} afflictions to '{identity.name}' with duration of {duration}.")
+        logging.info(f"Applying {affliction_name} afflictions to '{name}' with duration of {duration}.")
 
     if data.category == AfflictionCategory.BANE:
         bane = {affliction_name: duration}
@@ -435,12 +472,18 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
 
                 # who did the damage? (for informing the player)
                 if attacker:
-                    identity = entity.get_identity(attacker)
-                    attacker_name = identity.name
+                    atk_identity = entity.get_identity(attacker)
+                    if atk_identity:
+                        attacker_name = atk_identity.name
+                    else:
+                        attacker_name = f"Identity Component not found for {attacker}."
                 else:
                     attacker_name = "???"
-                identity = entity.get_identity(defender)
-                defender_name = identity.name
+                def_identity = entity.get_identity(defender)
+                if def_identity:
+                    defender_name = def_identity.name
+                else:
+                    defender_name = f"Identity Component not found for {defender}."
 
                 # resolve the damage
                 if damage > 0:
@@ -488,17 +531,17 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypeType, effec
     # get damage from stats of attacker
     if attackers_stats:
         stat_amount = 0
+
         # get the stat
-        # FIXME - can't loop like this a no longer an enum
-        for stat in PrimaryStat:
+        for stat in PrimaryStat.fields():
             if stat == data.mod_stat:
-                stat_amount = getattr(attackers_stats, stat.name.lower())
+                stat_amount = getattr(attackers_stats, stat.lower())
                 break
 
         damage_from_stats = stat_amount * data.mod_amount
 
     # get resistance value
-    resist_value = getattr(defenders_stats, "resist_" + data.damage_type.name.lower())
+    resist_value = getattr(defenders_stats, "resist_" + data.damage_type.lower())
 
     # mitigate damage with defence
     mitigated_damage = (initial_damage + damage_from_stats) - resist_value
@@ -522,8 +565,8 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypeType, effec
     return int_modified_damage
 
 
-def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int,
-        stat_to_target: Type[PrimaryStatType], attackers_stats: CombatStats = None) -> int:
+def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int, stat_to_target: PrimaryStatType,
+        attackers_stats: CombatStats = None) -> int:
     """
     Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
     """
@@ -540,7 +583,7 @@ def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int,
     modified_to_hit_score = attacker_accuracy + skill_accuracy + roll
 
     # mitigate the to hit
-    defender_value = getattr(defenders_stats, stat_to_target.name.lower())
+    defender_value = getattr(defenders_stats, stat_to_target.lower())
 
     mitigated_to_hit_score = modified_to_hit_score - defender_value
 

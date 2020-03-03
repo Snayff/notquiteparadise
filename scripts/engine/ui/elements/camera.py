@@ -2,15 +2,18 @@ import logging  # type: ignore
 import pygame  # type: ignore
 import pygame_gui  # type: ignore
 from typing import List, Tuple
+
+from pygame_gui import UIManager
 from pygame_gui.core import UIWindow, UIContainer  # type: ignore
 from pygame_gui.elements import UIButton, UIImage  # type: ignore
 
 from scripts.engine import world, entity
-from scripts.engine.core.constants import TILE_SIZE
+from scripts.engine.core.constants import TILE_SIZE, DirectionType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp
 from scripts.engine.event import ClickTile
 from scripts.engine.component import Position, Aesthetic
+from scripts.engine.world_objects.tile import Tile
 
 
 class Camera(UIWindow):
@@ -18,7 +21,7 @@ class Camera(UIWindow):
     Hold the visual info for the Game Map
     """
 
-    def __init__(self, rect: pygame.Rect, manager, rows: int, cols: int):
+    def __init__(self, rect: pygame.Rect, manager: UIManager, rows: int, cols: int):
         # general info
         self.rows = rows
         self.columns = cols
@@ -28,11 +31,11 @@ class Camera(UIWindow):
 
         # game map info
         self.player_tile = None  # the tile in which the player resides
-        self.tiles = []
+        self.tiles: List[Tile] = []
 
         # overlay info
         self.is_overlay_visible = False
-        self.overlay_directions = []  # list of tuples
+        self.overlay_directions: List[DirectionType] = []  # list of tuples
 
         # grid info
         self.selected_tile = None  # the tile in the grid currently being selected

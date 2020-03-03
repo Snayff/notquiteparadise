@@ -2,16 +2,12 @@ from __future__ import annotations
 
 import logging  # type: ignore
 from typing import TYPE_CHECKING
-
-from scripts.engine import world, chrono, entity, state, skill
+from scripts.engine import world, chrono, entity, state, skill, debug
 from scripts.engine.core.constants import MessageType, TargetTag, GameState
-from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, EndTurnEvent, \
-    ChangeGameStateEvent
+from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
+    EndTurnEvent, ChangeGameStateEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
-
-
-
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic
 from scripts.engine.ui.manager import ui
 
@@ -82,30 +78,39 @@ class EntityHandler(Subscriber):
             # check if entity blocking tile to attack
             elif is_entity_on_tile:
                 knowledge = entity.get_entitys_component(ent, Knowledge)
-                skill_name = knowledge.skills[0]
-                skill_data = library.get_skill_data(skill_name)
-                #direction = Direction((dir_x, dir_y))
-                if (dir_x, dir_y) in skill_data.target_directions:
-                    publisher.publish((UseSkillEvent(ent, skill_name, event.start_pos, (dir_x, dir_y))))
+                if knowledge:
+                    skill_name = knowledge.skills[0]
+                    skill_data = library.get_skill_data(skill_name)
+                    # FIXME - how to convert from value to instance attribute?
+                    if (dir_x, dir_y) in skill_data.target_directions:
+                        publisher.publish((UseSkillEvent(ent, skill_name, event.start_pos, (dir_x, dir_y))))
+                    else:
+                        publisher.publish(MessageEvent(MessageType.LOG, f"{skill_name} doesn't go that way!"))
                 else:
-                    publisher.publish(MessageEvent(MessageType.LOG, f"{skill_name} doesn't go that way!"))
+                    debug.log_component_not_found(ent, "use (bump) basic attack", Knowledge)
 
             # if nothing in the way, time to move!
             elif not is_entity_on_tile and not is_tile_blocking_movement:
                 position = entity.get_entitys_component(ent, Position)
-                position.x = target_x
-                position.y = target_y
+                if position:
+                    position.x = target_x
+                    position.y = target_y
+                else:
+                    debug.log_component_not_found(ent, "update sprite to move", Position)
 
-                aesthetic: Aesthetic = entity.get_entitys_component(ent, Aesthetic)
-                aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
-                target_y))
-                aesthetic.current_sprite = aesthetic.sprites.move
+                aesthetic = entity.get_entitys_component(ent, Aesthetic)
+                if aesthetic:
+                    aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
+                    target_y))
+                    aesthetic.current_sprite = aesthetic.sprites.move
+                else:
+                    debug.log_component_not_found(ent, "tried to update sprite to move", Aesthetic)
 
                 # update fov if needed
                 if entity == entity.get_player():
                     stats = entity.get_combat_stats(ent)
                     sight_range = max(0, stats.sight_range)
-                    world.recompute_fov(position.x, position.y, sight_range)
+                    world.recompute_fov(position.x, position.y, sight_range, entity.get_player_fov())
 
                 # if entity that moved is turn holder then end their turn
                 if entity == chrono.get_turn_holder():
@@ -115,8 +120,6 @@ class EntityHandler(Subscriber):
     def process_skill(event: UseSkillEvent):
         """
         Process the entity`s skill
-        Args:
-            event(EntityEvent): the event to process
         """
         ent = event.entity
         skill_name = event.skill_name
@@ -139,7 +142,11 @@ class EntityHandler(Subscriber):
                 publisher.publish(MessageEvent(MessageType.LOG, "You cannot afford to do that."))
             else:
                 identity = entity.get_identity(ent)
-                logging.warning(f"{identity.name} tried to use {skill_name}, which they can`t afford")
+                if identity:
+                    name = identity.name
+                else:
+                    name = f"Identity Component not found for {ent}."
+                logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
 
     @staticmethod
     def process_die(event: DieEvent):
@@ -148,19 +155,19 @@ class EntityHandler(Subscriber):
         """
 
         # TODO add player death
-        entity = event.dying_entity
+        ent = event.dying_entity
         turn_queue = chrono.get_turn_queue()
 
         # remove from turn queue
-        if entity in turn_queue:
-            turn_queue.pop(entity)
+        if ent in turn_queue:
+            turn_queue.pop(ent)
 
         # if turn holder and not player create new queue
         if entity == chrono.get_turn_holder() and entity != entity.get_player():
             chrono.build_new_turn_queue()
 
         # delete from world
-        entity.delete(entity)
+        entity.delete(ent)
 
     @staticmethod
     def process_want_to_use_skill(event: WantToUseSkillEvent):
@@ -168,23 +175,27 @@ class EntityHandler(Subscriber):
         Process the desire to use a skill. """
         skill_number = event.skill_number
         player = entity.get_player()
-        player_pos = entity.get_entitys_component(player, Position)
-        skill_name = state.get_active_skill()
-        skill_pressed = player.actor.known_skills[skill_number]
+        active_skill = state.get_active_skill()
+        knowledge = entity.get_entitys_component(player, Knowledge)
+
+        if knowledge:
+            skill_pressed = knowledge.skills[skill_number]
+        else:
+            skill_pressed = -1
+            debug.log_component_not_found(player, "tried to process wanting to use a skill", Knowledge)
 
         # confirm skill pressed doesn't match skill already pressed
-        if skill_pressed != skill_name:
-            knowledge = entity.get_entitys_component(player, Knowledge)
-            skill_name = knowledge.skills[skill_number]
-            skill_data = library.get_skill_data(skill_name)
+        if skill_pressed != active_skill and knowledge:
+            skill_data = library.get_skill_data(skill_pressed)
 
             if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
+                publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_pressed))
 
         # skill matches already selected so use skill!
         else:
             pass
             # TODO - activate skill. Need to get selected tile.
+            # player_pos = entity.get_entitys_component(player, Position)
             # publisher.publish(UseSkillEvent(player, skill_name, (player_pos.x, player_pos.y), ))
 
     @staticmethod

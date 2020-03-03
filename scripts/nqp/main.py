@@ -18,7 +18,7 @@ from scripts.nqp.game_handler import GameHandler
 from scripts.nqp.god_handler import GodHandler
 from scripts.nqp.map_handler import MapHandler
 from scripts.nqp.processors import process_intent
-from scripts.nqp.ui_handler import UiHandler
+from scripts.nqp.ui_handler import UIHandler
 
 ####################################################################################################
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -224,7 +224,7 @@ def initialise_event_handlers():
     god_handler = GodHandler(event_hub)
     god_handler.subscribe(EventTopic.ENTITY)
 
-    ui_handler = UiHandler(event_hub)
+    ui_handler = UIHandler(event_hub)
     ui_handler.subscribe(EventTopic.ENTITY)
     ui_handler.subscribe(EventTopic.GAME)
     ui_handler.subscribe(EventTopic.UI)

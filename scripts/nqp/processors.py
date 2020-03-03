@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import pytweening
+import pytweening  # type: ignore
 from scripts.engine import utility, entity
 from scripts.engine.component import Aesthetic
 from typing import TYPE_CHECKING
@@ -140,15 +140,16 @@ def _process_player_turn_intents(intent: InputIntentType):
     """
     player = entity.get_player()
 
-    # Player movement
-    dir_x, dir_y = _get_pressed_direction(intent)
-    if dir_x != 0 or dir_y != 0:
-        publisher.publish(MoveEvent(player, (dir_x, dir_y)))
+    if player:
+        # Player movement
+        dir_x, dir_y = _get_pressed_direction(intent)
+        if dir_x != 0 or dir_y != 0:
+            publisher.publish(MoveEvent(player, (dir_x, dir_y)))
 
-    # Use a skill
-    skill_number = _get_pressed_skills_number(intent)
-    if skill_number != -1:
-        publisher.publish(WantToUseSkillEvent(skill_number))
+        # Use a skill
+        skill_number = _get_pressed_skills_number(intent)
+        if skill_number != -1:
+            publisher.publish(WantToUseSkillEvent(skill_number))
 
     # activate the skill editor
     if intent == InputIntent.DEV_TOGGLE:
