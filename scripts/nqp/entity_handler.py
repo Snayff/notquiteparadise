@@ -188,8 +188,9 @@ class EntityHandler(Subscriber):
         if skill_pressed != active_skill and knowledge:
             skill_data = library.get_skill_data(skill_pressed)
 
-            if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_pressed))
+            if skill_data.resource_type and skill_data.resource_cost:
+                if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
+                    publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_pressed))
 
         # skill matches already selected so use skill!
         else:
