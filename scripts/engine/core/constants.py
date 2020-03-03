@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
-from typing import NewType
+from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 
@@ -24,7 +24,24 @@ TIME_PER_ROUND = 100
 InputIntentType = NewType("InputIntentType", str)
 PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
-
+GameStateType = NewType("GameStateType", int)
+EventTopicType = NewType("EventTopicType", int)
+MessageTypeType = NewType("MessageTypeType", int)
+TargetTagType = NewType("TargetTagType", int)
+DamageTypeType = NewType("DamageTypeType", int)
+HitTypeType = NewType("HitTypeType", int)
+HitValueType = NewType("HitValueType", int)
+HitModifierType = NewType("HitModifierType", float)
+EffectTypeType = NewType("EffectTypeType", int)
+AfflictionCategoryType = NewType("AfflictionCategoryType", int)
+AfflictionTriggerType = NewType("AfflictionTriggerType", int)
+SkillShapeType = NewType("SkillShapeType", int)
+SkillTerrainCollisionType = NewType("SkillTerrainCollisionType", int)
+SkillTravelType = NewType("SkillTravelType", int)
+SkillExpiryType = NewType("SkillExpiryType", int)
+InputModeType = NewType("InputModeType", int)
+UIElementType = NewType("UIElementType", int)
+DirectionType = NewType("DirectionType", Tuple[int, int])
 
 #################### CLASSES ###########################################
 
@@ -51,57 +68,57 @@ class GameState(SimpleNamespace):
     """
     States the Game can be in.
     """
-    PLAYER_TURN = 1
-    ENEMY_TURN = 2
-    PLAYER_DEAD = 3
-    TARGETING_MODE = 4
-    EXIT_GAME = 5
-    GAME_INITIALISING = 6
-    NEW_TURN = 7
-    DEV_MODE = 8
-    PREVIOUS = 9
+    PLAYER_TURN = GameStateType(1)
+    ENEMY_TURN = GameStateType(2)
+    PLAYER_DEAD = GameStateType(3)
+    TARGETING_MODE = GameStateType(4)
+    EXIT_GAME = GameStateType(5)
+    GAME_INITIALISING = GameStateType(6)
+    NEW_TURN = GameStateType(7)
+    DEV_MODE = GameStateType(8)
+    PREVIOUS = GameStateType(9)
 
 
 class EventTopic(SimpleNamespace):
     """
     Topics that Events can be associated with.
     """
-    GAME = 1
-    ENTITY = 2
-    UI = 3
-    MAP = 4
+    GAME = EventTopicType(1)
+    ENTITY = EventTopicType(2)
+    UI = EventTopicType(3)
+    MAP = EventTopicType(4)
 
 
 class MessageType(SimpleNamespace):
     """Types of Message Events"""
-    LOG = 1
-    ENTITY = 2
-    SCREEN = 3
+    LOG = MessageTypeType(1)
+    ENTITY = MessageTypeType(2)
+    SCREEN = MessageTypeType(3)
 
 
 class TargetTag(SimpleNamespace):
     """
     Types of target
     """
-    SELF = 1
-    OTHER_ENTITY = 2
-    NO_ENTITY = 3
-    OUT_OF_BOUNDS = 4
-    ANY = 5
-    OPEN_SPACE = 6
-    BLOCKED_MOVEMENT = 7
-    IS_VISIBLE = 8
+    SELF = TargetTagType(1)
+    OTHER_ENTITY = TargetTagType(2)
+    NO_ENTITY = TargetTagType(3)
+    OUT_OF_BOUNDS = TargetTagType(4)
+    ANY = TargetTagType(5)
+    OPEN_SPACE = TargetTagType(6)
+    BLOCKED_MOVEMENT = TargetTagType(7)
+    IS_VISIBLE = TargetTagType(8)
 
 
 class DamageType(SimpleNamespace):
     """
     Damage types
     """
-    BURN = 1
-    CHEMICAL = 2
-    ASTRAL = 3
-    COLD = 4
-    MUNDANE = 5
+    BURN = DamageTypeType(1)
+    CHEMICAL = DamageTypeType(2)
+    ASTRAL = DamageTypeType(3)
+    COLD = DamageTypeType(4)
+    MUNDANE = DamageTypeType(5)
 
 
 class PrimaryStat(SimpleNamespace):
@@ -137,58 +154,58 @@ class HitType(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
-    GRAZE = 1
-    HIT = 2
-    CRIT = 3
+    GRAZE = HitTypeType(1)
+    HIT = HitTypeType(2)
+    CRIT = HitTypeType(3)
 
 
-# TODO - externalise the values
 class HitValue(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
-    GRAZE = 0
-    HIT = 5
-    CRIT = 20
+    # TODO - externalise the values    
+    GRAZE = HitValueType(0)
+    HIT = HitValueType(5)
+    CRIT = HitValueType(20)
 
 
-# TODO - externalise the values
 class HitModifier(SimpleNamespace):
     """
     The modifier for each hit type
     """
-    GRAZE = 0.6
-    HIT = 1
-    CRIT = 1.4
+    # TODO - externalise the values    
+    GRAZE = HitModifierType(0.6)
+    HIT = HitModifierType(1)
+    CRIT = HitModifierType(1.4)
 
 
 class EffectType(SimpleNamespace):
     """
     Types of effects
     """
-    APPLY_AFFLICTION = 1
-    DAMAGE = 2
-    MOVE = 3
-    AFFECT_STAT = 4
-    ADD_ASPECT = 5
+    APPLY_AFFLICTION = EffectTypeType(1)
+    DAMAGE = EffectTypeType(2)
+    MOVE = EffectTypeType(3)
+    AFFECT_STAT = EffectTypeType(4)
+    ADD_ASPECT = EffectTypeType(5)
 
 
 class AfflictionCategory(SimpleNamespace):
     """
     Boon or Bane
     """
-    BANE = 1
-    BOON = 2
+    BANE = AfflictionCategoryType(1)
+    BOON = AfflictionCategoryType(2)
 
 
 class AfflictionTrigger(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    PASSIVE = 1  # always applying effects, overrides duration
-    END_TURN = 2  # apply at end of round turn
-    MOVE = 3  # apply if afflicted entity moves
-    ACTION = 4  # apply when an action is taken
+    PASSIVE = AfflictionTriggerType(1)  # always applying effects, overrides duration
+    END_TURN = AfflictionTriggerType(2)  # apply at end of round turn
+    MOVE = AfflictionTriggerType(3)  # apply if afflicted entity moves
+    ACTION = AfflictionTriggerType(4)  # apply when an action is taken
 
     # Other triggers to consider
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
@@ -201,43 +218,43 @@ class SkillShape(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    TARGET = 1  # single target
-    SQUARE = 2
-    CIRCLE = 3
-    CROSS = 4
+    TARGET = SkillShapeType(1)  # single target
+    SQUARE = SkillShapeType(2)
+    CIRCLE = SkillShapeType(3)
+    CROSS = SkillShapeType(4)
 
 
 class SkillTerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
-    REFLECT = 1
-    ACTIVATE = 2
-    FIZZLE = 3
+    REFLECT = SkillTerrainCollisionType(1)
+    ACTIVATE = SkillTerrainCollisionType(2)
+    FIZZLE = SkillTerrainCollisionType(3)
 
 
 class SkillTravel(SimpleNamespace):
     """
     How the skill travels
     """
-    PROJECTILE = 1  # travels tile by tile
-    THROW = 2  # only impacts last tile in range
+    PROJECTILE = SkillTravelType(1)  # travels tile by tile
+    THROW = SkillTravelType(2)  # only impacts last tile in range
 
 
 class SkillExpiry(SimpleNamespace):
     """
     What happens when the skill reaches the range limit
     """
-    FIZZLE = 1
-    ACTIVATE = 2
+    FIZZLE = SkillExpiryType(1)
+    ACTIVATE = SkillExpiryType(2)
 
 
 class InputMode(SimpleNamespace):
     """
     Input hardware being used
     """
-    MOUSE_AND_KB = 1
-    GAMEPAD = 2
+    MOUSE_AND_KB = InputModeType(1)
+    GAMEPAD = InputModeType(2)
 
 
 class InputIntent(SimpleNamespace):
@@ -270,25 +287,25 @@ class UIElement(SimpleNamespace):
     """
     The different UI elements
     """
-    MESSAGE_LOG = 1
-    ENTITY_INFO = 2
-    TARGETING_OVERLAY = 3
-    SKILL_BAR = 4
-    ENTITY_QUEUE = 5
-    CAMERA = 6
-    DATA_EDITOR = 7
+    MESSAGE_LOG = UIElementType(1)
+    ENTITY_INFO = UIElementType(2)
+    TARGETING_OVERLAY = UIElementType(3)
+    SKILL_BAR = UIElementType(4)
+    ENTITY_QUEUE = UIElementType(5)
+    CAMERA = UIElementType(6)
+    DATA_EDITOR = UIElementType(7)
 
 
 class Direction(SimpleNamespace):
     """
     Holds a tuple for each direction of the (x, y) relative direction.
     """
-    UP_LEFT = (-1, -1)
-    UP = (0, -1)
-    UP_RIGHT = (1, -1)
-    LEFT = (-1, 0)
-    CENTRE = (0, 0)
-    RIGHT = (1, 0)
-    DOWN_LEFT = (-1, 1)
-    DOWN = (0, 1)
-    DOWN_RIGHT = (1, 1)
+    UP_LEFT = DirectionType((-1, -1))
+    UP = DirectionType((0, -1))
+    UP_RIGHT = DirectionType((1, -1))
+    LEFT = DirectionType((-1, 0))
+    CENTRE = DirectionType((0, 0))
+    RIGHT = DirectionType((1, 0))
+    DOWN_LEFT = DirectionType((-1, 1))
+    DOWN = DirectionType((0, 1))
+    DOWN_RIGHT = DirectionType((1, 1))

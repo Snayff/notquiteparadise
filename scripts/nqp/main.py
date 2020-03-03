@@ -39,7 +39,6 @@ from scripts.nqp.ui_handler import UiHandler
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - install mypy
 # TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
 # TODO - write tests / checking for json values - use schema
 # TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5

@@ -10,11 +10,11 @@
 #
 # .. _2-Clause BSD license: http://www.spdx.org/licenses/BSD-2-Clause
 #
-# Revision: $Revision: 7847 $
-# Date: $Date: 2015-03-17 18:30:47 +0100 (Di, 17. Mär 2015) $
+# Revision: $Revision: 8410 $
+# Date: $Date: 2019-11-04 22:14:43 +0100 (Mo, 04. Nov 2019) $
 
 """
-A minimal front end to the Docutils Publisher, producing HTML 5 documents.
+A minimal front end to the Docutils Publisher, producing HTML 5 documents.
 
 The output also conforms to XHTML 1.0 transitional
 (except for the doctype declaration).
@@ -28,7 +28,7 @@ except locale.Error:
 
 from docutils.core import publish_cmdline, default_description
 
-description = (u'Generates HTML 5 documents from standalone '
+description = (u'Generates HTML 5 documents from standalone '
                u'reStructuredText sources '
                + default_description)
 
