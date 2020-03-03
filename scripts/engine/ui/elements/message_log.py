@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import logging
-import pygame
+import logging  # type: ignore
+import pygame  # type: ignore
 from typing import TYPE_CHECKING
-from pygame_gui.core import UIWindow
-from pygame_gui.elements import UITextBox
+from pygame_gui.core import UIWindow  # type: ignore
+from pygame_gui.elements import UITextBox  # type: ignore
 
 if TYPE_CHECKING:
-    import pygame_gui
+    import pygame_gui  # type: ignore
 
 
 class MessageLog(UIWindow):
@@ -65,7 +65,8 @@ class MessageLog(UIWindow):
 
         self.text += message + "<br>"
 
-        self.text_box.kill()
+        if self.text_box:
+            self.text_box.kill()
         rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
         self.text_box = UITextBox(html_text=self.text, relative_rect=rect, manager=self.gui_manager,
                                   wrap_to_height=False, layer_starting_height=1, object_id="#text_box",

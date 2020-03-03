@@ -1,9 +1,9 @@
-import logging
-import pygame
-import pygame_gui
+import logging  # type: ignore
+import pygame  # type: ignore
+import pygame_gui  # type: ignore
 from typing import List, Tuple
-from pygame_gui.core import UIWindow, UIContainer
-from pygame_gui.elements import UIButton, UIImage
+from pygame_gui.core import UIWindow, UIContainer  # type: ignore
+from pygame_gui.elements import UIButton, UIImage  # type: ignore
 
 from scripts.engine import world, entity
 from scripts.engine.core.constants import TILE_SIZE

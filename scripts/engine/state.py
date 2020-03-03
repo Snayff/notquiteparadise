@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import logging
+import logging  # type: ignore
 from typing import TYPE_CHECKING, Type
-from scripts.engine.core.constants import GameState, VisualInfo
+from scripts.engine.core.constants import GameState, VisualInfo, GameStateType
 from scripts.engine.core.store import store
 
 if TYPE_CHECKING:
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 ################### GET ##############################
 
 
-def get_previous() -> GameState:
+def get_previous() -> GameStateType:
     """
     Get the previous game state
     """
@@ -40,7 +40,7 @@ def get_delta_time() -> float:
     return store.internal_clock.tick(VisualInfo.GAME_FPS) / 1000.0
 
 
-def get_current() -> GameState:
+def get_current() -> GameStateType:
     """
     Get the current game state
     """

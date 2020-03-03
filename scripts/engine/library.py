@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-import logging
+import logging  # type: ignore
 import os
 from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses

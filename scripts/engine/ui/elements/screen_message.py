@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import pygame
+import pygame  # type: ignore
 from typing import TYPE_CHECKING
-from pygame_gui.elements import UITextBox
-
+from pygame_gui.elements import UITextBox  # type: ignore
 from scripts.engine.core.constants import VisualInfo
 
 if TYPE_CHECKING:
-    import pygame_gui
+    import pygame_gui  # type: ignore
 
 
 class ScreenMessage(UITextBox):
@@ -30,7 +29,7 @@ class ScreenMessage(UITextBox):
 
         self.view_time = 2  # time in seconds
         self.lifespan = 3  # time in seconds
-        self.time_alive = 0
+        self.time_alive: float = 0.0
 
     def update(self, time_delta: float):
         """

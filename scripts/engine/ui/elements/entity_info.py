@@ -1,9 +1,8 @@
-import logging
-import pygame
-import pygame_gui
-from pygame_gui.core import UIWindow
-from pygame_gui.elements import UIImage, UITextBox
-
+import logging  # type: ignore
+import pygame  # type: ignore
+import pygame_gui  # type: ignore
+from pygame_gui.core import UIWindow  # type: ignore
+from pygame_gui.elements import UIImage, UITextBox  # type: ignore
 from scripts.engine import entity
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat
 from scripts.engine.utility import get_class_members

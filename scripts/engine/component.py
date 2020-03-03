@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from scripts.engine.core.definitions import CharacteristicSpritesData
 
 if TYPE_CHECKING:
-    import pygame
+    import pygame  # type: ignore
     from typing import List, Dict
 
 ##########################################################

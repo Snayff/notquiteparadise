@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-import pygame
+import pygame  # type: ignore
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List
-from scripts.engine.core.constants import PrimaryStatType, SecondaryStat, Direction, \
-    SkillTerrainCollision, SkillTravel, SkillExpiry, TargetTag, SkillShape, EffectType, \
-    DamageType, AfflictionTrigger, AfflictionCategory, TargetTagType, EffectTypeType, DamageTypeType, \
+from typing import TYPE_CHECKING, Dict, List, Optional
+from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectTypeType, DamageTypeType, \
     AfflictionCategoryType, AfflictionTriggerType, SkillShapeType, SkillTerrainCollisionType, SkillTravelType, \
-    SkillExpiryType, DirectionType
+    SkillExpiryType, DirectionType, SecondaryStatType
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -31,7 +29,7 @@ class BasePrimaryStatData:
     Data class for primary  stats
     """
     name: str = "None"
-    primary_stat_type: PrimaryStatType = None
+    primary_stat_type: Optional[PrimaryStatType] = None
     base_value: int = 0
 
 
@@ -42,7 +40,7 @@ class BaseSecondaryStatData:
     Data class for secondary stats
     """
     name: str = "None"
-    secondary_stat_type: SecondaryStatType = None
+    secondary_stat_type: Optional[SecondaryStatType] = None
     base_value: int = 0
     vigour_mod: int = 0
     clout_mod: int = 0
@@ -57,12 +55,12 @@ class CharacteristicSpritesData:
     """
     Possible sprites for a characteristic
     """
-    icon: pygame.Surface = None
-    idle: pygame.Surface = None
-    attack: pygame.Surface = None
-    hit: pygame.Surface = None
-    dead: pygame.Surface = None
-    move: pygame.Surface = None
+    icon: Optional[pygame.Surface] = None
+    idle: Optional[pygame.Surface] = None
+    attack: Optional[pygame.Surface] = None
+    hit: Optional[pygame.Surface] = None
+    dead: Optional[pygame.Surface] = None
+    move: Optional[pygame.Surface] = None
 
 
 @register_dataclass_with_json
@@ -99,15 +97,15 @@ class SkillData:
     # how does it travel from the user?
     target_directions: List[DirectionType] = field(default_factory=list)
     range: int = 1
-    terrain_collision: SkillTerrainCollisionType = None
-    travel_type: SkillTravelType = None
+    terrain_collision: Optional[SkillTerrainCollisionType] = None
+    travel_type: Optional[SkillTravelType] = None
 
     # when does it interact?
-    expiry_type: SkillExpiryType = None
+    expiry_type: Optional[SkillExpiryType] = None
     required_tags: List[TargetTagType] = field(default_factory=list)
 
     # how does it interact?
-    shape: SkillShapeType = None
+    shape: Optional[SkillShapeType] = None
     shape_size: int = 1
     effects: Dict = field(default_factory=dict)
 
@@ -151,19 +149,19 @@ class EffectData:
     """
     Data class for a skill effect
     """
-    effect_type: EffectTypeType = None
+    effect_type: Optional[EffectTypeType] = None
     required_tags: List[TargetTagType] = field(default_factory=list)
-    damage: int = 0  # TODO - combine with affect stat amount as only one will be on each effect
+    damage: int = 0
     affect_stat_amount: int = 0
-    mod_stat: PrimaryStatType = None
+    mod_stat: Optional[PrimaryStatType] = None
     mod_amount: int = 0
-    damage_type: DamageTypeType = None
+    damage_type: Optional[DamageTypeType] = None
     accuracy: int = 0
-    stat_to_target: PrimaryStatType = None
+    stat_to_target: Optional[PrimaryStatType] = None
     aspect_name: str = "None"
     affliction_name: str = "None"
     duration: int = 0
-    stat_to_affect: PrimaryStatType = None
+    stat_to_affect: Optional[PrimaryStatType] = None
 
 
 @register_dataclass_with_json
@@ -192,7 +190,7 @@ class AspectData:
     """
     name: str = "None"
     description: str = "None"
-    duration: int = None
+    duration: Optional[int] = None
     sprite: str = "None"
     blocks_sight: bool = False
     blocks_movement: bool = False
@@ -219,8 +217,8 @@ class AfflictionData:
     name: str = "None"
     description: str = "None"
     icon: str = "None"
-    trigger_event: AfflictionTriggerType = None
-    category: AfflictionCategoryType = None
+    trigger_event: Optional[AfflictionTriggerType] = None
+    category: Optional[AfflictionCategoryType] = None
     effects: Dict = field(default_factory=dict)
 
 

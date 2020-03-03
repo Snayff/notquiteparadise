@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging
+import logging  # type: ignore
 from typing import TYPE_CHECKING, Optional
 
 import tcod
@@ -62,9 +62,9 @@ def get_tile(tile_pos: Union[Tuple[int, int], str]) -> Optional[Tile]:
     game_map = get_game_map()
 
     if isinstance(tile_pos, str):
-        x, y = tile_pos.split(",")
-        x = int(x)  # str to int
-        y = int(y)
+        _x, _y = tile_pos.split(",")
+        x = int(_x)  # str to int
+        y = int(_y)
     else:
         x = tile_pos[0]
         y = tile_pos[1]
@@ -241,24 +241,25 @@ def get_tiles_in_range_and_fov_of_entity(range_from_centre: int, active_entity: 
     """
     Get all of the tiles within a specified range of the player that are also in the FOV
     """
-    # TODO - update to ECS
+    # FIXME - update to ECS
+    pass
     # get the tiles in range
-    coords = utility.create_shape(SkillShape.SQUARE, range_from_centre)  # square as LOS is square
-    tiles_in_range = get_tiles(active_entity.x, active_entity.y, coords)
-    tiles_in_range_and_fov = []
-
-    # only take tiles in range and FOV
-    in_fov = is_tile_in_fov
-    for tile in tiles_in_range:
-        if in_fov(tile.x, tile.y):
-            tiles_in_range_and_fov.append(tile)
-
-    return tiles_in_range_and_fov
+    # coords = utility.create_shape(SkillShape.SQUARE, range_from_centre)  # square as LOS is square
+    # tiles_in_range = get_tiles(active_entity.x, active_entity.y, coords)
+    # tiles_in_range_and_fov = []
+    #
+    # # only take tiles in range and FOV
+    # in_fov = is_tile_in_fov
+    # for tile in tiles_in_range:
+    #     if in_fov(tile.x, tile.y):
+    #         tiles_in_range_and_fov.append(tile)
+    #
+    # return tiles_in_range_and_fov
 
 
 ############# QUERIES ############
 
-def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: int = None) -> bool:
+def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = None) -> bool:
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
@@ -275,9 +276,15 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: int = None) -> b
         else:
             return True
     elif tag == TargetTag.SELF:
-        return _tile_has_entity(tile.x, tile.y, active_entity)
+        if active_entity:
+            return _tile_has_entity(tile.x, tile.y, active_entity)
+        else:
+            logging.warning("Tried to get TargetTag.SELF but gave no active_entity.")
     elif tag == TargetTag.OTHER_ENTITY:
-        return _tile_has_other_entity(tile.x, tile.y, active_entity)
+        if active_entity:
+            return _tile_has_other_entity(tile.x, tile.y, active_entity)
+        else:
+            logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
     elif tag == TargetTag.NO_ENTITY:
         return not _tile_has_any_entity(tile.x, tile.y)
     elif tag == TargetTag.ANY:

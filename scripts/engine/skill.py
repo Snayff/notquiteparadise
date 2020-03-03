@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging
+import logging  # type: ignore
 from random import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility

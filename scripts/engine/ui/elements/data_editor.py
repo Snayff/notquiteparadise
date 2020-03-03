@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import dataclasses
 import json
-import logging
-import pygame
-import pygame_gui
+import logging  # type: ignore
+import pygame  # type: ignore
+import pygame_gui  # type: ignore
 
 from typing import TYPE_CHECKING, List, Dict, Union, Optional
-from pygame_gui.core import UIWindow, UIContainer
-from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
+from pygame_gui.core import UIWindow, UIContainer  # type: ignore
+from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton  # type: ignore
 
 from scripts.engine import utility
 from scripts.engine.core.constants import EffectType, AfflictionTrigger, DamageType, PrimaryStat, SecondaryStat, \
@@ -20,7 +20,7 @@ from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondarySt
 
 if TYPE_CHECKING:
     from typing import Any, Tuple
-    from pygame_gui import UIManager
+    from pygame_gui import UIManager  # type: ignore
     from dataclasses import dataclass
 
 

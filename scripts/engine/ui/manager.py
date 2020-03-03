@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import logging
-import pygame
-import pygame_gui
+import logging  # type: ignore
+import pygame  # type: ignore
+import pygame_gui  # type: ignore
 from typing import TYPE_CHECKING, Type, Dict, Tuple, List
 from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType
 from scripts.engine.ui.elements.camera import Camera

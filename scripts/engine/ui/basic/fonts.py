@@ -1,4 +1,4 @@
-import pygame.freetype
+import pygame  # type: ignore
 
 
 class Font:

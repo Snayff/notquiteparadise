@@ -1,7 +1,9 @@
-import logging
-import pygame
-import pygame_gui
-from pygame_gui.core import UIWindow
+import logging  # type: ignore
+from typing import List
+
+import pygame  # type: ignore
+import pygame_gui  # type: ignore
+from pygame_gui.core import UIWindow  # type: ignore
 
 
 class SkillBar(UIWindow):
@@ -11,7 +13,7 @@ class SkillBar(UIWindow):
 
     def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager):
         # state info
-        self.skills = []
+        self.skills: List[str] = []
         self.max_skills = 5
 
         # init skill list

@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import dataclasses
-import logging
-from random import random
-
-import esper
-from typing import TYPE_CHECKING, TypeVar, Optional
-
+import logging  # type: ignore
+import esper  # type: ignore
 import tcod
-
+from random import random
+from typing import TYPE_CHECKING, TypeVar, Optional
 from scripts.engine import utility, world
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
     IsGod, \
@@ -142,7 +139,7 @@ def get_component(component: Type[C]) -> List[Tuple[int, C]]:
     return _esper.get_component(component)
 
 
-def get_components(*components: type) -> List[Tuple[int, ...]]:
+def get_components(*components: Type[C]) -> List[Tuple[int, C]]:
     """
     Get all entities with the specified components
     """
