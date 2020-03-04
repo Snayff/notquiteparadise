@@ -42,13 +42,14 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
         if world.tile_has_tags(target_tile, skill_data.required_tags, ent):
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
-            if can_afford_cost(ent, resource_type, resource_cost):
-                distance = utility.get_chebyshev_distance((start_tile.x, start_tile.y), target_pos)
-                skill_range = skill_data.range
-                if distance <= skill_range:
-                    return True
-                else:
-                    logging.debug(f"Target out of skill range, range:{skill_range} < distance:{distance}.")
+            if resource_type:
+                if can_afford_cost(ent, resource_type, resource_cost):
+                    distance = utility.get_chebyshev_distance((start_tile.x, start_tile.y), target_pos)
+                    skill_range = skill_data.range
+                    if distance <= skill_range:
+                        return True
+                    else:
+                        logging.debug(f"Target out of skill range, range:{skill_range} < distance:{distance}.")
 
             else:
                 msg = f"You can't afford the cost."
@@ -116,62 +117,64 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     activate = False
     fizzle = False
 
-
     logging.info(f"{name} used {skill_name} at ({start_x},{start_y}) in {direction}...")
 
-    # continue finding the position to use the skill on until we fizzle or activate
-    while not activate and not fizzle:
+    # do we have everything we need?
+    if terrain_collision and travel_type and expiry_type:
+        # continue finding the position to use the skill on until we fizzle or activate
+        while not activate and not fizzle:
 
-        # get last free position in direction
-        current_x, current_y = _get_furthest_free_position(start_position, (dir_x, dir_y), skill_range,
-                                                           travel_type)
+            # get last free position in direction
+            current_x, current_y = _get_furthest_free_position(start_position, (dir_x, dir_y), skill_range,
+                                                               travel_type)
 
-        # determine how far we've travelled
-        distance = max(abs(start_x) - abs(current_x), abs(start_y) - abs(current_y))
+            # determine how far we've travelled
+            distance = max(abs(start_x) - abs(current_x), abs(start_y) - abs(current_y))
 
-        # are we at max distance?
-        if distance >= skill_range:
-            # handle expiry type
-            if expiry_type == SkillExpiry.FIZZLE:
-                fizzle = True
-                logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
-            elif expiry_type == SkillExpiry.ACTIVATE:
-                activate = True
-                logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
-        else:
-            # we arent at max so we must have hit something one space further along
-            current_x, current_y = current_x + dir_x, current_y + dir_y
-            tile = world.get_tile((current_x, current_y))
-
-            if tile:
-                # did we hit something that has the tags we need?
-                if world.tile_has_tags(tile, skill_data.required_tags, using_entity):
+            # are we at max distance?
+            if distance >= skill_range:
+                # handle expiry type
+                if expiry_type == SkillExpiry.FIZZLE:
+                    fizzle = True
+                    logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
+                elif expiry_type == SkillExpiry.ACTIVATE:
                     activate = True
-                    logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
-                else:
-                    # we didnt hit the right thing so what happens now?
-                    if terrain_collision == SkillTerrainCollision.ACTIVATE:
-                        activate = True
-                        logging.debug(f"-> and hit something. Skill will activate at "
-                                      f"({current_x},{current_y}).")
-                    elif terrain_collision == SkillTerrainCollision.REFLECT:
-                        dir_x, dir_y = _get_reflected_direction((current_x, current_y), direction)
-                        logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
-                    elif terrain_collision == SkillTerrainCollision.FIZZLE:
-                        activate = False
-                        logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
+                    logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
             else:
-                activate = False
-                logging.warning(f"-> and went out of bounds at ({current_x},{current_y}).")
+                # we arent at max so we must have hit something one space further along
+                current_x, current_y = current_x + dir_x, current_y + dir_y
+                tile = world.get_tile((current_x, current_y))
+
+                if tile:
+                    # did we hit something that has the tags we need?
+                    if world.tile_has_tags(tile, skill_data.required_tags, using_entity):
+                        activate = True
+                        logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
+                    else:
+                        # we didnt hit the right thing so what happens now?
+                        if terrain_collision == SkillTerrainCollision.ACTIVATE:
+                            activate = True
+                            logging.debug(f"-> and hit something. Skill will activate at "
+                                          f"({current_x},{current_y}).")
+                        elif terrain_collision == SkillTerrainCollision.REFLECT:
+                            dir_x, dir_y = _get_reflected_direction((current_x, current_y), direction)
+                            logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
+                        elif terrain_collision == SkillTerrainCollision.FIZZLE:
+                            activate = False
+                            logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
+                else:
+                    activate = False
+                    logging.warning(f"-> and went out of bounds at ({current_x},{current_y}).")
 
     # deal with activation
     if activate:
-        coords = create_shape(skill_data.shape, skill_data.shape_size)
-        effected_tiles = world.get_tiles(current_x, current_y, coords)
+        if skill_data.shape:
+            coords = create_shape(skill_data.shape, skill_data.shape_size)
+            effected_tiles = world.get_tiles(current_x, current_y, coords)
 
-        # apply any effects
-        for effect_name, effect_data in skill_data.effects.items():
-            apply_effect(effect_data.effect_type, skill_name, effected_tiles, using_entity)
+            # apply any effects
+            for effect_name, effect_data in skill_data.effects.items():
+                apply_effect(effect_data.effect_type, skill_name, effected_tiles, using_entity)
 
 
 ########################################## GET ####################################
@@ -312,7 +315,9 @@ def _apply_aspect_effect(skill_name: str, effected_tiles: List[Tile]):
 
 def _create_aspect(aspect_name: str, tile: Tile):
     data = library.get_aspect_data(aspect_name)
-    ent, position, aspect = entity.get_entities_and_components_in_area([tile], Aspect)
+    position: Position
+    aspect: Aspect
+    ent, (position, aspect) = entity.get_entities_and_components_in_area([tile], Aspect)
 
     # if there is an active version of the same aspect already
     if aspect:
@@ -337,21 +342,22 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
         base_duration = effect_data.duration
         modified_duration = base_duration
         defender_stats = entity.get_combat_stats(defender)
-
-        # check we have all tags
         tile = world.get_tile((position.x, position.y))
+
         if tile:
+            # check we have all tags
             if world.tile_has_tags(tile, effect_data.required_tags, attacker):
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
-                    to_hit_score = _calculate_to_hit_score(defender_stats, effect_data.accuracy,
+                    # if we havent targeted a stat then default to 0
+                    if effect_data.stat_to_target:
+                        to_hit_score = _calculate_to_hit_score(defender_stats, effect_data.accuracy,
                                                            effect_data.stat_to_target, attackers_stats)
+                    else:
+                        to_hit_score = 0
                     hit_type = _get_hit_type(to_hit_score)
 
-                    if identity:
-                        name = identity.name
-                    else:
-                        name = f"Identity Component not found for {attacker}."
+                    name = entity.get_name(attacker)
 
                     # check if afflictions applied
                     if hit_type == HitType.GRAZE:
@@ -379,7 +385,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
     data = library.get_affliction_data(affliction_name)
     name = entity.get_name(ent)
     affliction = entity.get_entitys_component(ent, Affliction)
-    active_affliction_duration = False
+    active_affliction_duration = -1
     boon = {}
     bane = {}
 
@@ -389,32 +395,32 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
             if affliction.banes[affliction_name]:
                 active_affliction_duration = affliction.banes[affliction_name]
             else:
-                active_affliction_duration = False
+                active_affliction_duration = -1
         elif data.category == AfflictionCategory.BOON:
             if affliction.boons[affliction_name]:
                 active_affliction_duration = affliction.boons[affliction_name]
             else:
-                active_affliction_duration = False
+                active_affliction_duration = -1
 
-    # if affliction exists
-    if active_affliction_duration:
-        logging.debug(f"{name} already has {affliction_name}:{active_affliction_duration}...")
+        # if affliction exists
+        if active_affliction_duration:
+            logging.debug(f"{name} already has {affliction_name}:{active_affliction_duration}...")
 
-        # alter the duration of the current afflictions if the new one will last longer
-        if active_affliction_duration < duration:
-            if data.category == AfflictionCategory.BANE:
-                affliction.banes[affliction_name] = duration
-            elif data.category == AfflictionCategory.BOON:
-                affliction.boons[affliction_name] = duration
+            # alter the duration of the current afflictions if the new one will last longer
+            if active_affliction_duration < duration:
+                if data.category == AfflictionCategory.BANE:
+                    affliction.banes[affliction_name] = duration
+                elif data.category == AfflictionCategory.BOON:
+                    affliction.boons[affliction_name] = duration
 
-            log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
-                         f"{duration} so duration updated."
-            logging.debug(log_string)
-        else:
-            # no action taken if duration already longer
-            log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
-                         f" {duration} so duration remains the same."
-            logging.debug(log_string)
+                log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
+                             f"{duration} so duration updated."
+                logging.debug(log_string)
+            else:
+                # no action taken if duration already longer
+                log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
+                             f" {duration} so duration remains the same."
+                logging.debug(log_string)
 
     # no current afflictions of same type so apply new one
     else:
@@ -432,11 +438,9 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
     data = library.get_skill_effect_data(skill_name, EffectType.DAMAGE)
     attackers_stats = entity.get_combat_stats(attacker)
 
-    # get relevant entities
-    entities = entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
-
     # loop all relevant entities
-    for defender, (position, resources, has_stats) in entities.items():
+    for defender, (position, resources, has_stats) in entity.get_entities_and_components_in_area(effected_tiles,
+                                                        Resources, HasCombatStats):
         tile = world.get_tile((position.x, position.y))
         if tile:
             if world.tile_has_tags(tile, data.required_tags, attacker):
@@ -503,7 +507,8 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypeType, effec
         stat_amount = 0
 
         # get the stat
-        for stat in PrimaryStat.fields():
+        all_stats = utility.get_class_members(PrimaryStat)
+        for stat in all_stats:
             if stat == data.mod_stat:
                 stat_amount = getattr(attackers_stats, stat.lower())
                 break
@@ -511,7 +516,10 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypeType, effec
         damage_from_stats = stat_amount * data.mod_amount
 
     # get resistance value
-    resist_value = getattr(defenders_stats, "resist_" + data.damage_type.lower())
+    if data.damage_type:
+        resist_value = getattr(defenders_stats, "resist_" + data.damage_type.lower())
+    else:
+        resist_value = 0
 
     # mitigate damage with defence
     mitigated_damage = (initial_damage + damage_from_stats) - resist_value

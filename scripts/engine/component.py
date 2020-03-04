@@ -132,8 +132,8 @@ class Affliction(Component):
             banes = {}
         if boons is None:
             boons = {}
-        self.boons: Optional[Dict[str, int]] = boons
-        self.banes: Optional[Dict[str, int]] = banes
+        self.boons: Dict[str, int] = boons
+        self.banes: Dict[str, int] = banes
 
 
 class Aspect(Component):

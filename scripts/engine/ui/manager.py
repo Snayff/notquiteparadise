@@ -390,12 +390,10 @@ class _UIManager:
             elif target_pos_in_edge:
                 # we are moving into the edge
                 return True
-
-            else:
-                return False
         else:
             logging.warning(f"Tried to check if Camera should move but key not found. Is it init'd?")
-            return False
+
+        return False
 
     def world_to_screen_position(self, pos: Tuple[int, int]):
         """

@@ -91,7 +91,7 @@ def recursive_replace(obj, key, value_to_replace, new_value):
             recursive_replace(element, key, value_to_replace, new_value)
 
 
-def get_class_members(cls: Any) -> List[str]:
+def get_class_members(cls: Type[Any]) -> List[str]:
     """
     Get a class' members, excluding special methods e.g. anything prefixed with '__'
     """

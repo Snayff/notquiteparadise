@@ -151,7 +151,7 @@ class EntityInfo(UIWindow):
         if self.selected_entity:
             stats = entity.get_combat_stats(self.selected_entity)
 
-            all_stats = get_class_members(PrimaryStat)
+            all_stats = utility.get_class_members(PrimaryStat)
             for name in all_stats:
                 try:
                     stat_value = getattr(stats, name.lower())

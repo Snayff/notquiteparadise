@@ -3,12 +3,11 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-
 import esper
 import pygame
-import tcod
+import tcod.map
 from typing import TYPE_CHECKING, TypeVar, Optional
-from scripts.engine import utility, world
+from scripts.engine import utility, world, debug
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
     IsGod, \
     Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV
@@ -321,7 +320,10 @@ def spend_time(entity: int, time_spent: int):
     # TODO - modify by time modifier stat
     if entity:
         resources = get_entitys_component(entity, Resources)
-        resources.time_spent += time_spent
+        if resources:
+            resources.time_spent += time_spent
+        else:
+            debug.log_component_not_found(entity, "spend time", Resources)
     else:
         logging.error("Tried to spend entity's time but entity was None.")
 

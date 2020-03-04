@@ -105,7 +105,7 @@ str]) -> Tuple[int, int]:
     return dir_x, dir_y
 
 
-def get_tiles(start_tile_col: int, start_tile_row: int, coords: List[Tuple]) -> List[Tile]:
+def get_tiles(start_tile_col: int, start_tile_row: int, coords: List[Tuple[int, int]]) -> List[Tile]:
     """
     Get multiple tiles based on starting position and coordinates given       
     """

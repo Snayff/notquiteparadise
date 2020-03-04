@@ -27,7 +27,7 @@ GameStateType = NewType("GameStateType", int)
 EventTopicType = NewType("EventTopicType", int)
 MessageTypeType = NewType("MessageTypeType", int)
 TargetTagType = NewType("TargetTagType", int)
-DamageTypeType = NewType("DamageTypeType", int)
+DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", int)
 HitValueType = NewType("HitValueType", int)
 HitModifierType = NewType("HitModifierType", float)
@@ -113,11 +113,11 @@ class DamageType(SimpleNamespace):
     """
     Damage types
     """
-    BURN = DamageTypeType(1)
-    CHEMICAL = DamageTypeType(2)
-    ASTRAL = DamageTypeType(3)
-    COLD = DamageTypeType(4)
-    MUNDANE = DamageTypeType(5)
+    BURN = DamageTypeType("burn")
+    CHEMICAL = DamageTypeType("chemical")
+    ASTRAL = DamageTypeType("astral")
+    COLD = DamageTypeType("cold")
+    MUNDANE = DamageTypeType("mundane")
 
 
 class PrimaryStat(SimpleNamespace):

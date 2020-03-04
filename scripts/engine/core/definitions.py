@@ -89,7 +89,7 @@ class SkillData:
     icon: str = "None"
 
     # what does it cost?
-    resource_type:  Optional[PrimaryStatType] = None
+    resource_type:  Optional[SecondaryStatType] = None
     resource_cost: int = 0
     time_cost: int = 0
     cooldown: int = 0
@@ -190,7 +190,7 @@ class AspectData:
     """
     name: str = "None"
     description: str = "None"
-    duration: Optional[int] = None
+    duration: int = 0
     sprite: str = "None"
     blocks_sight: bool = False
     blocks_movement: bool = False
