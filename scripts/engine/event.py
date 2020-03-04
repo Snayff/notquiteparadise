@@ -58,7 +58,11 @@ class MoveEvent(Event):
 
         # determine start pos
         position = entity.get_entitys_component(entity_to_move, Position)
-        self.start_pos: Tuple[int, int] = (position.x, position.y)
+        if position:
+            pos = (position.x, position.y)
+        else:
+            pos = (-1, -1)
+        self.start_pos: Tuple[int, int] = pos
 
 ####################### GAME ############################################
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging  # type: ignore
+import logging
 from typing import TYPE_CHECKING, Type
 from scripts.engine.core.constants import GameState, VisualInfo, GameStateType
 from scripts.engine.core.store import store

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Type
-
 from scripts.engine import entity
 from scripts.engine.component import Component
 
@@ -27,11 +26,7 @@ def log_component_not_found(ent: int, msg: str, component: Type[Component]):
     Use if component not found. Log the error as a warning in the format "{ent} {msg} tried to but no {component]
     found."
     """
-    identity = entity.get_identity(ent)
-    if identity:
-        name = identity.name
-    else:
-        name = f"Identity Component not found for {ent}."
+    name = entity.get_name(ent)
     logging.warning(f"'{name}({ent})' tried to {msg} but no {component.__class__} Component found.")
 
 

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import cProfile  # type: ignore
-import datetime  # type: ignore
-import io  # type: ignore
-import logging  # type: ignore
-import pstats  # type: ignore
-import time  # type: ignore
-import pygame  # type: ignore
+import cProfile  
+import datetime  
+import io  
+import logging  
+import pstats  
+import time  
+import pygame
 from scripts.engine import state, world, entity, chrono, action
 from scripts.engine.core.constants import GameState, VERSION, EventTopic
 from scripts.engine.event import ChangeGameStateEvent

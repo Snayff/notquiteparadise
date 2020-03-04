@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import pytweening  # type: ignore
+import pytweening
 from scripts.engine import utility, entity
 from scripts.engine.component import Aesthetic
 from typing import TYPE_CHECKING

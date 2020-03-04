@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-import logging  # type: ignore
+import logging
 import os
 from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses
@@ -270,7 +270,7 @@ class LibraryOfAlexandria:
 
         return effects_data
 
-    def get_god_attitudes_data(self, god_name: str) -> AttitudeData:
+    def get_god_attitudes_data(self, god_name: str) -> Dict[int, AttitudeData]:
         """
         Get data for a god's attitudes from the library
         """

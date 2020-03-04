@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import dataclasses
-import logging  # type: ignore
+import logging
 import random
 
-import esper  # type: ignore
+import esper
 import pygame
 import tcod
 from typing import TYPE_CHECKING, TypeVar, Optional
@@ -21,11 +21,15 @@ from scripts.engine.library import library
 if TYPE_CHECKING:
     from typing import Union, Type, List, Dict, Tuple, Any
 
-C = TypeVar("C", bound=Component)
+_C = TypeVar("_C", bound=Component)
 _esper = esper.World()
 
-
 ###################### GET ############################################
+get_entitys_components = _esper.components_for_entity
+get_component = _esper.get_component
+get_components = _esper.get_components
+try_component = _esper.try_component
+has_component = _esper.has_component
 
 
 def get_player() -> Optional[int]:
@@ -43,7 +47,7 @@ def get_entity(unique_component: Type[Component]) -> Optional[int]:
     first found is returned.
     """
     entities = []
-    for entity, flag in _esper.get_component(unique_component):
+    for entity, flag in get_component(unique_component):
         entities.append(entity)
 
     num_entities = len(entities)
@@ -58,28 +62,7 @@ def get_entity(unique_component: Type[Component]) -> Optional[int]:
     return entities[0]
 
 
-def get_entities(component1: Type[C], component2: Type[C] = None, component3: Type[C] = None) -> List[int]:
-    """
-    Get entities with the specified components. Returns a list of entity IDs
-    """
-    entities = []
-
-    if not component2 and not component3:
-        for entity, c1 in _esper.get_component(component1):
-            entities.append(entity)
-    elif component2 and not component3:
-        for entity, (c1, c2) in _esper.get_components(component1, component2):
-            entities.append(entity)
-    elif component2 and component3:
-        for entity, (c1, c2, c3) in _esper.get_components(component1, component2, component3):
-            entities.append(entity)
-
-    return entities
-
-
-def get_entities_and_components_in_area(area: List[Tile], component1: Type[C] = None,
-        component2: Type[C] = None, component3: Type[C] = None) -> Dict[int, Tuple[Position, Optional[C],
-        Optional[C], Optional[C]]]:
+def get_entities_and_components_in_area(area: List[Tile], *components: Any) -> Dict[int, Tuple[Any, ...]]:
     """
     Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
     components are specified the return will be (Position, None).
@@ -88,45 +71,34 @@ def get_entities_and_components_in_area(area: List[Tile], component1: Type[C] = 
     """
     entities = {}
 
-    if not component1 and not component2 and not component3:
-        for entity, pos in get_component(Position):
-            for tile in area:
-                if tile.x == pos.x and tile.y == pos.y:
-                    entities[entity] = (pos, None)
-    elif component1 and not component2 and not component3:
-        for entity, (pos, c1) in get_components(Position, component1):
-            for tile in area:
-                if tile.x == pos.x and tile.y == pos.y:
-                    entities[entity] = (pos, c1)
-    elif component1 and component2 and not component3:
-        for entity, (pos, c1, c2) in get_components(Position, component1, component2):
-            for tile in area:
-                if tile.x == pos.x and tile.y == pos.y:
-                    entities[entity] = (pos, c1, c2)
-    elif component1 and component2 and component3:
-        for entity, (pos, c1, c2, c3) in get_components(Position, component1, component2, component3):
-            for tile in area:
-                if tile.x == pos.x and tile.y == pos.y:
-                    entities[entity] = (pos, c1, c2, c3)
-
+    for entity, (pos, *rest) in get_components(*components):
+        for tile in area:
+            if tile.x == pos.x and tile.y == pos.y:
+                entities[entity] = (pos, *rest)
     return entities
 
 
-def get_entitys_component(entity: int, component: Type[C]) -> Optional[C]:
+def get_entitys_component(entity: int, component: Type[_C]) -> Optional[_C]:
     """
     Get an entity's component.
     """
-    if _esper.has_component(entity, component):
-        return _esper.component_for_entity(entity, component)  # type: ignore
+    if has_component(entity, component):
+        return _esper.component_for_entity(entity, component)
     else:
         return None
 
 
-def get_entitys_components(entity: int) -> Tuple[Component, ...]:
+def get_name(entity: int) -> str:
     """
-    Get all of an entity's components.
+    Get an entity's Identity component's name.
     """
-    return _esper.components_for_entity(entity)
+    identity = get_identity(entity)
+    if identity:
+        name = identity.name
+    else:
+        name = f"Identity Component not found for {entity}."
+
+    return name
 
 
 def get_identity(entity: int) -> Optional[Identity]:
@@ -134,20 +106,6 @@ def get_identity(entity: int) -> Optional[Identity]:
     Get an entity's Identity component.
     """
     return get_entitys_component(entity, Identity)
-
-
-def get_component(component: Type[C]) -> List[Tuple[int, C]]:
-    """
-    Get all entities with the specified component
-    """
-    return _esper.get_component(component)  # type: ignore
-
-
-def get_components(*components: Type[C]) -> List[Tuple[int, List[C]]]:
-    """
-    Get all entities with the specified components
-    """
-    return _esper.get_components(*components)  # type: ignore
 
 
 def get_combat_stats(entity: int) -> CombatStats:
@@ -164,15 +122,15 @@ def get_primary_stat(entity: int, primary_stat: str) -> int:
     stat = primary_stat
     value = 0
 
-    for people in _esper.try_component(entity, Race):
+    for people in try_component(entity, Race):
         people_data = library.get_people_data(people.name)
         value += getattr(people_data, stat)
 
-    for savvy in _esper.try_component(entity, Savvy):
+    for savvy in try_component(entity, Savvy):
         savvy_data = library.get_savvy_data(savvy.name)
         value += getattr(savvy_data, stat)
 
-    for homeland in _esper.try_component(entity, Homeland):
+    for homeland in try_component(entity, Homeland):
         homeland_data = library.get_homeland_data(homeland.name)
         value += getattr(homeland_data, stat)
 
@@ -198,18 +156,6 @@ def get_player_fov() -> Optional[tcod.map.Map]:
     return None
 
 
-############## QUERIES  ################
-
-def has_component(entity: int, component: Type[Component]):
-    """
-    Confirm if an entity has a component
-    """
-    if _esper.has_component(entity, component):
-        return True
-    else:
-        return False
-
-
 ############## ENTITY EXISTENCE ################
 
 def create(components: List[Component] = None) -> int:
@@ -223,7 +169,7 @@ def create(components: List[Component] = None) -> int:
 
     # add all components
     for component in components:
-        _esper.add_component(entity, component)
+        add_component(entity, component)
 
     return entity
 
@@ -294,7 +240,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # give full resources
     stats = get_combat_stats(entity)
-    _esper.add_component(entity, Resources(stats.max_hp, stats.max_stamina))
+    add_component(entity, Resources(stats.max_hp, stats.max_stamina))
 
     # get skills from characteristics
     known_skills = ["basic_attack"]  # N.B. All actors start with basic attack
@@ -374,7 +320,7 @@ def spend_time(entity: int, time_spent: int):
     """
     # TODO - modify by time modifier stat
     if entity:
-        resources = _esper.component_for_entity(entity, Resources)
+        resources = get_entitys_component(entity, Resources)
         resources.time_spent += time_spent
     else:
         logging.error("Tried to spend entity's time but entity was None.")
@@ -406,12 +352,12 @@ def judge_action(entity: int, action: Any):
         # adding the entity to the dict if necessary
         if action_name in attitudes:
             if entity in opinion.opinions:
-                opinion.opinions[entity] += attitudes[action_name].opinion_change
+                opinion.opinions[entity] = opinion.opinions[entity] + attitudes[action_name].opinion_change
             else:
                 opinion.opinions[entity] = attitudes[action_name].opinion_change
 
-            entity_identity = get_identity(entity)
-            logging.info(f"'{identity.name}' reacted to '{entity_identity.name}' using {action_name}.  New "
+            name = get_name(entity)
+            logging.info(f"'{identity.name}' reacted to '{name}' using {action_name}.  New "
                          f"opinion = {opinion.opinions[entity]}")
 
 
@@ -426,7 +372,6 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
 
     for ent, (is_god, opinion, identity, knowledge) in get_components(IsGod, Opinion, Identity, Knowledge):
         attitudes = library.get_god_attitudes_data(identity.name)
-
         action_name = action
 
         # check if the god has an attitude towards the action and increase likelihood of intervening

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging  # type: ignore
+import logging
 from typing import TYPE_CHECKING
 from scripts.engine import world, chrono, entity, state, skill, debug
 from scripts.engine.core.constants import MessageType, TargetTag, GameState
@@ -141,11 +141,7 @@ class EntityHandler(Subscriber):
             if ent == entity.get_player():
                 publisher.publish(MessageEvent(MessageType.LOG, "You cannot afford to do that."))
             else:
-                identity = entity.get_identity(ent)
-                if identity:
-                    name = identity.name
-                else:
-                    name = f"Identity Component not found for {ent}."
+                name = entity.get_name(ent)
                 logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
 
     @staticmethod

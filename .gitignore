@@ -64,3 +64,6 @@ logs/
 
 # Temp files
 ~$*
+
+# mypy
+.mypy_cache/

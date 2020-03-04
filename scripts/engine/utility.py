@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import math  # type: ignore
-import scipy  # type: ignore
-import pygame  # type: ignore
+import math
+import scipy
+import pygame
 from typing import TYPE_CHECKING, List, Any, Type, Tuple
 from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, SkillShape, SkillShapeType
 

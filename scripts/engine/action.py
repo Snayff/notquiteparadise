@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import pygame  # type: ignore
+import pygame
 from typing import TYPE_CHECKING, Type, Union, Optional
 
 from scripts.engine.core.constants import InputIntent, InputIntentType

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging  # type: ignore
+import logging
 from typing import TYPE_CHECKING, Optional
 
 import tcod
@@ -280,11 +280,13 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
             return _tile_has_entity(tile.x, tile.y, active_entity)
         else:
             logging.warning("Tried to get TargetTag.SELF but gave no active_entity.")
+            return False
     elif tag == TargetTag.OTHER_ENTITY:
         if active_entity:
             return _tile_has_other_entity(tile.x, tile.y, active_entity)
         else:
             logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
+            return False
     elif tag == TargetTag.NO_ENTITY:
         return not _tile_has_any_entity(tile.x, tile.y)
     elif tag == TargetTag.ANY:

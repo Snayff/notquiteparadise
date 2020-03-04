@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import logging  # type: ignore
-import pygame  # type: ignore
+import logging
+import pygame
 from typing import TYPE_CHECKING
-from pygame_gui.core import UIWindow  # type: ignore
-from pygame_gui.elements import UITextBox  # type: ignore
+from pygame_gui.core import UIWindow
+from pygame_gui.elements import UITextBox
 
 if TYPE_CHECKING:
-    import pygame_gui  # type: ignore
+    import pygame_gui
 
 
 class MessageLog(UIWindow):

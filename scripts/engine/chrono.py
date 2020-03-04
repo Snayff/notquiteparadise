@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging  # type: ignore
+import logging
 from typing import TYPE_CHECKING
 from scripts.engine import entity
 from scripts.engine.component import Resources, Identity
@@ -41,11 +41,9 @@ def build_new_turn_queue():
 
     # log result
     queue = []
-    get_identity = entity.get_identity
     for ent, time in get_turn_queue().items():
-        identity = get_identity(ent)
-        if identity:
-            queue.append((identity.name, time))
+        name = entity.get_name(ent)
+        queue.append((name, time))
 
     logging.debug(f"-> Queue built. {queue}")
 

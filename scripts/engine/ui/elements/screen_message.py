@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import pygame  # type: ignore
+import pygame
 from typing import TYPE_CHECKING
-from pygame_gui.elements import UITextBox  # type: ignore
+from pygame_gui.elements import UITextBox
 from scripts.engine.core.constants import VisualInfo
 
 if TYPE_CHECKING:
-    import pygame_gui  # type: ignore
+    import pygame_gui
 
 
 class ScreenMessage(UITextBox):

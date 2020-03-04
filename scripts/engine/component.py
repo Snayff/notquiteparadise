@@ -7,7 +7,7 @@ import tcod
 from scripts.engine.core.definitions import CharacteristicSpritesData
 
 if TYPE_CHECKING:
-    import pygame  # type: ignore
+    import pygame
     from typing import List, Dict
 
 ##########################################################
@@ -31,7 +31,6 @@ class Position(Component):
     """
     An entity's position on the map.
     """
-
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
@@ -41,7 +40,6 @@ class Aesthetic(Component):
     """
     An entity's sprite.
     """
-
     def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
         self.current_sprite = current_sprite
         self.sprites = sprites
@@ -57,7 +55,6 @@ class Resources(Component):
     """
     An entity's resources.
     """
-
     def __init__(self, health: int = 1, stamina: int = 1):
         self.health: int = health
         self.stamina: int = stamina
@@ -68,7 +65,6 @@ class Blocking(Component):
     """
     An entity's blocking of other objects.
     """
-
     def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
         self.blocks_movement: bool = blocks_movement
         self.blocks_sight: bool = blocks_sight
@@ -78,7 +74,6 @@ class Identity(Component):
     """
     An entity's identity, such as name and description.
     """
-
     def __init__(self, name: str, description: str = ""):
         self.name: str = name
         self.description: str = description

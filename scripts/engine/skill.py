@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import logging  # type: ignore
+import logging
 import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
@@ -27,12 +27,12 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
     """
     Confirm entity can use skill on targeted position. True if can use the skill. Else False.
     """
-    start_tile = target_tile = False
+    start_tile = target_tile = None
 
     position = entity.get_entitys_component(ent, Position)
     if position:
-        start_tile = world.get_tile((position.x, position.y))
         target_x, target_y = target_pos
+        start_tile = world.get_tile((position.x, position.y))
         target_tile = world.get_tile((target_x, target_y))
 
     skill_data = library.get_skill_data(skill_name)
@@ -62,12 +62,7 @@ def can_afford_cost(ent: int, resource: SecondaryStatType, cost: int):
     Check if entity can afford the resource cost
     """
     resources = entity.get_entitys_component(ent, Resources)
-    identity = entity.get_identity(ent)
-
-    if identity:
-        name = identity.name
-    else:
-        name = f"Identity Component not found for {ent}."
+    name = entity.get_name(ent)
 
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
@@ -86,11 +81,7 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
     Remove the resource cost from the using entity
     """
     resources = entity.get_entitys_component(ent, Resources)
-    identity = entity.get_identity(ent)
-    if identity:
-        name = identity.name
-    else:
-        name = f"Identity Component not found for {ent}."
+    name = entity.get_name(ent)
 
     if resources:
         resource_value = getattr(resources, resource.lower())
@@ -115,7 +106,7 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     terrain_collision = skill_data.terrain_collision
     travel_type = skill_data.travel_type
     expiry_type = skill_data.expiry_type
-    identity = entity.get_identity(using_entity)
+    name = entity.get_name(using_entity)
     start_x, start_y = start_position
     current_x, current_y = start_position
     dir_x, dir_y = target_direction
@@ -125,10 +116,6 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     activate = False
     fizzle = False
 
-    if identity:
-        name = identity.name
-    else:
-        name = f"Identity Component not found for {using_entity}."
 
     logging.info(f"{name} used {skill_name} at ({start_x},{start_y}) in {direction}...")
 
@@ -304,12 +291,7 @@ def apply_effect(effect_type: EffectTypeType, skill_name: str, effected_tiles: L
     """
     Apply an effect to all tiles in a list.:
     """
-    identity = entity.get_identity(using_entity)
-    if identity:
-        name = identity.name
-    else:
-        name = f"Identity Component not found for {using_entity}."
-
+    name = entity.get_name(using_entity)
     log_string = f"Applying {effect_type} effect; caused by '{skill_name}' from '{name}'."
     logging.info(log_string)
 
@@ -395,16 +377,11 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
 
 def _create_affliction(ent: int, affliction_name: str, duration: int):
     data = library.get_affliction_data(affliction_name)
-    identity = entity.get_identity(ent)
+    name = entity.get_name(ent)
     affliction = entity.get_entitys_component(ent, Affliction)
     active_affliction_duration = False
     boon = {}
     bane = {}
-
-    if identity:
-        name = identity.name
-    else:
-        name = f"Identity Component not found for {ent}."
 
     # check if entity already has the afflictions component
     if affliction:
@@ -472,18 +449,11 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
 
                 # who did the damage? (for informing the player)
                 if attacker:
-                    atk_identity = entity.get_identity(attacker)
-                    if atk_identity:
-                        attacker_name = atk_identity.name
-                    else:
-                        attacker_name = f"Identity Component not found for {attacker}."
+                    attacker_name = entity.get_name(attacker)
                 else:
                     attacker_name = "???"
-                def_identity = entity.get_identity(defender)
-                if def_identity:
-                    defender_name = def_identity.name
-                else:
-                    defender_name = f"Identity Component not found for {defender}."
+
+                defender_name = name = entity.get_name(defender)
 
                 # resolve the damage
                 if damage > 0:

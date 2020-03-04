@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import pygame  # type: ignore
+import pygame
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectTypeType, DamageTypeType, \
@@ -138,7 +138,7 @@ class GodData:
     """
     name: str = "None"
     description: str = "None"
-    sprite_paths: Dict[str, CharacteristicSpritePathsData] = field(default_factory=dict)
+    sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
     attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
     interventions: Dict[int, InterventionData] = field(default_factory=dict)
 
@@ -172,7 +172,7 @@ class CharacteristicData:
     """
     name: str = "None"
     description: str = "None"
-    sprite_paths: CharacteristicSpritePathsData = field(default_factory=dict)
+    sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
     sight_range: int = 0
     vigour: int = 0
     clout: int = 0
@@ -194,8 +194,9 @@ class AspectData:
     sprite: str = "None"
     blocks_sight: bool = False
     blocks_movement: bool = False
-    effects: Dict = field(default_factory=list)
-    interactions: List[InteractionData] = field(default_factory=list)  # TODO - convert to dict
+    effects: Dict = field(default_factory=dict)
+    interactions: List[InteractionData] = field(default_factory=list)
+    # TODO - convert interactiois to dict as interactions are  unique
 
 
 @register_dataclass_with_json
