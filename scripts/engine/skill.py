@@ -317,14 +317,16 @@ def _create_aspect(aspect_name: str, tile: Tile):
     data = library.get_aspect_data(aspect_name)
     position: Position
     aspect: Aspect
-    ent, (position, aspect) = entity.get_entities_and_components_in_area([tile], Aspect)
+    entities = entity.get_entities_and_components_in_area([tile], Aspect)
 
-    # if there is an active version of the same aspect already
-    if aspect:
-        # increase duration to initial value
-        aspect.aspects[aspect_name] = data.duration
-    else:
-        entity.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
+    for ent, (position, aspect) in entities.items():
+        # if there is an active version of the same aspect already
+        # TODO - should probably move this check outside of this func
+        if aspect:
+            # increase duration to initial value
+            aspect.aspects[aspect_name] = data.duration
+        else:
+            entity.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
 
 
 def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attacker: int):
@@ -438,16 +440,23 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
     data = library.get_skill_effect_data(skill_name, EffectType.DAMAGE)
     attackers_stats = entity.get_combat_stats(attacker)
 
+    entities = entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
+
     # loop all relevant entities
-    for defender, (position, resources, has_stats) in entity.get_entities_and_components_in_area(effected_tiles,
-                                                        Resources, HasCombatStats):
+    for defender, (position, resources, has_stats) in entities.items():
         tile = world.get_tile((position.x, position.y))
         if tile:
             if world.tile_has_tags(tile, data.required_tags, attacker):
                 # get the info to apply the damage
                 entitys_stats = entity.get_combat_stats(defender)
-                to_hit_score = _calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
+
+                # check we have a stat to target, else default to 0
+                if data.stat_to_target:
+                    to_hit_score = _calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
                                                        attackers_stats)
+                else:
+                    to_hit_score = 0
+
                 hit_type = _get_hit_type(to_hit_score)
                 damage = _calculate_damage(entitys_stats, hit_type, data, attackers_stats)
 

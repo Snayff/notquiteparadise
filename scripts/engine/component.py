@@ -141,7 +141,7 @@ class Aspect(Component):
     def __init__(self, aspects: Optional[Dict[str, int]] = None):
         if aspects is None:
             aspects = {}
-        self.aspects: Optional[Dict[str, int]] = aspects
+        self.aspects: Dict[str, int] = aspects
 
 
 class IsGod(Component):

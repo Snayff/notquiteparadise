@@ -107,10 +107,12 @@ class EntityHandler(Subscriber):
                     debug.log_component_not_found(ent, "tried to update sprite to move", Aesthetic)
 
                 # update fov if needed
-                if entity == entity.get_player():
+                if entity == entity.get_player() and position:
                     stats = entity.get_combat_stats(ent)
                     sight_range = max(0, stats.sight_range)
-                    world.recompute_fov(position.x, position.y, sight_range, entity.get_player_fov())
+                    player_fov = entity.get_player_fov()
+                    if player_fov:
+                        world.recompute_fov(position.x, position.y, sight_range, player_fov)
 
                 # if entity that moved is turn holder then end their turn
                 if entity == chrono.get_turn_holder():
@@ -126,23 +128,24 @@ class EntityHandler(Subscriber):
         skill_data = library.get_skill_data(skill_name)
 
         # check it can be afforded
-        if skill.can_afford_cost(ent, skill_data.resource_type, skill_data.resource_cost):
-            skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
+        if skill_data.resource_type:
+            if skill.can_afford_cost(ent, skill_data.resource_type, skill_data.resource_cost):
+                skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
 
-            # use skill
-            skill.use(ent, skill_name, event.start_pos, event.direction)
+                # use skill
+                skill.use(ent, skill_name, event.start_pos, event.direction)
 
-            # end the turn if the entity isnt a god
-            if not ent.has_component(ent, IsGod):
-                publisher.publish(EndTurnEvent(ent, skill_data.time_cost))
+                # end the turn if the entity isnt a god
+                if not entity.has_component(ent, IsGod):
+                    publisher.publish(EndTurnEvent(ent, skill_data.time_cost))
 
-        else:
-            # is it the player that's can't afford it?
-            if ent == entity.get_player():
-                publisher.publish(MessageEvent(MessageType.LOG, "You cannot afford to do that."))
             else:
-                name = entity.get_name(ent)
-                logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
+                # is it the player that's can't afford it?
+                if ent == entity.get_player():
+                    publisher.publish(MessageEvent(MessageType.LOG, "You cannot afford to do that."))
+                else:
+                    name = entity.get_name(ent)
+                    logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
 
     @staticmethod
     def process_die(event: DieEvent):
@@ -171,29 +174,31 @@ class EntityHandler(Subscriber):
         Process the desire to use a skill. """
         skill_number = event.skill_number
         player = entity.get_player()
-        active_skill = state.get_active_skill()
-        knowledge = entity.get_entitys_component(player, Knowledge)
 
-        if knowledge:
-            skill_pressed = knowledge.skills[skill_number]
-        else:
-            skill_pressed = -1
-            debug.log_component_not_found(player, "tried to process wanting to use a skill", Knowledge)
+        if player:
+            active_skill = state.get_active_skill()
+            knowledge = entity.get_entitys_component(player, Knowledge)
 
-        # confirm skill pressed doesn't match skill already pressed
-        if skill_pressed != active_skill and knowledge:
-            skill_data = library.get_skill_data(skill_pressed)
+            if knowledge:
+                skill_pressed = knowledge.skills[skill_number]
+            else:
+                skill_pressed = ""
+                debug.log_component_not_found(player, "tried to process wanting to use a skill", Knowledge)
 
-            if skill_data.resource_type and skill_data.resource_cost:
-                if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                    publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_pressed))
+            # confirm skill pressed doesn't match skill already pressed
+            if skill_pressed != active_skill and knowledge:
+                skill_data = library.get_skill_data(skill_pressed)
 
-        # skill matches already selected so use skill!
-        else:
-            pass
-            # TODO - activate skill. Need to get selected tile.
-            # player_pos = entity.get_entitys_component(player, Position)
-            # publisher.publish(UseSkillEvent(player, skill_name, (player_pos.x, player_pos.y), ))
+                if skill_data.resource_type and skill_data.resource_cost:
+                    if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
+                        publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_pressed))
+
+            # skill matches already selected so use skill!
+            else:
+                pass
+                # TODO - activate skill. Need to get selected tile.
+                # player_pos = entity.get_entitys_component(player, Position)
+                # publisher.publish(UseSkillEvent(player, skill_name, (player_pos.x, player_pos.y), ))
 
     @staticmethod
     def process_end_turn(event: EndTurnEvent):
