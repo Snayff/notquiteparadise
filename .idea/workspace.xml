@@ -193,8 +193,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.fix_png" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.scratch_2" />
       <item itemvalue="Python.scratch_3" />
       <item itemvalue="Python.scratch_4" />
@@ -323,7 +323,7 @@
       <workItem from="1583158814124" duration="19352000" />
       <workItem from="1583235879237" duration="17381000" />
       <workItem from="1583319862936" duration="16850000" />
-      <workItem from="1583579081932" duration="2635000" />
+      <workItem from="1583579081932" duration="3217000" />
     </task>
     <servers />
   </component>
@@ -445,10 +445,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1005" height="193" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1583582068624" />
-    <state x="717" y="303" key="SettingsEditor" timestamp="1583580369762">
+    <state x="717" y="303" key="SettingsEditor" timestamp="1583582769290">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="717" y="303" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1583580369762" />
+    <state x="717" y="303" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1583582769290" />
     <state x="1052" y="445" width="540" height="540" key="StructurePopup" timestamp="1578940051985">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
