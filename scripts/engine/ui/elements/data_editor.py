@@ -5,21 +5,20 @@ import json
 import logging
 import pygame
 import pygame_gui
-
-from typing import TYPE_CHECKING, List, Dict, Union, Optional
+from typing import TYPE_CHECKING
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
-
 from scripts.engine import utility
 from scripts.engine.core.constants import EffectType, AfflictionTrigger, DamageType, PrimaryStat, SecondaryStat, \
     TargetTag, AfflictionCategory, SkillExpiry, SkillShape, Direction, SkillTerrainCollision, SkillTravel
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
-from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, InterventionData, \
-    InteractionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData, AfflictionData
+from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
+    InterventionData, InteractionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData,\
+    AfflictionData
 
 if TYPE_CHECKING:
-    from typing import Any, Tuple
+    from typing import Any, Tuple, List, Dict, Union, Optional
     from pygame_gui import UIManager
     from dataclasses import dataclass
 
@@ -35,7 +34,7 @@ class DataEditor(UIWindow):
         super().__init__(rect, manager, element_ids=element_ids)
 
         # data holders
-        self.all_data: Dict[str, dataclass] = {}
+        self.all_data: Dict[str, Dict[str, dataclass()]] = {}
         self.current_data_category: str = None
         self.current_data_instance: str = None
         self.current_primary_field: str = None
@@ -161,7 +160,7 @@ class DataEditor(UIWindow):
             self.instance_selector = None
 
         # create new instance selector
-        options = []
+        options: List[str] = []
         options.extend(key for key in self.all_data[self.current_data_category].keys())
         options.sort()
         self.instance_selector = self._create_data_instance_selector(options)
@@ -336,8 +335,8 @@ class DataEditor(UIWindow):
         primary_or_secondary, _key = key.split("#")
 
         labels = []
-        prefixed_options = []
-        values_list = []
+        prefixed_options: List[str] = []
+        values_list: List[str] = []
 
         # Turn value into a list of strings
         prefixed_options.extend(f"edit#{_key}#{name.lower()}" for name in options)
@@ -387,8 +386,8 @@ class DataEditor(UIWindow):
         primary_or_secondary, _key = key.split("#")
 
         labels = []
-        prefixed_options = []
-        values_list = []
+        prefixed_options: List[str] = []
+        values_list: List[str] = []
 
         # add prefix
         prefixed_options.extend(f"multi#{_key}#{name.lower()}" for name in options)
@@ -557,19 +556,19 @@ class DataEditor(UIWindow):
         if secondary_keys:
             secondary_key, instance_key = secondary_keys
         else:
-            secondary_key = instance_key = None
+            secondary_key = instance_key = ""
 
         # get initial pos info
         if primary_or_secondary == "primary":
             start_x = self.primary_x
             start_y = self.primary_y
             row_width = self.primary_width
-            self.primary_data_fields = []
+            self.primary_data_fields = {}
         else:
             start_x = self.secondary_x
             start_y = self.secondary_y
             row_width = self.secondary_width
-            self.secondary_data_fields = []
+            self.secondary_data_fields = {}
 
         # get any info we can get ahead of time
         container = self.get_container()
@@ -583,7 +582,7 @@ class DataEditor(UIWindow):
         field_options = self.field_options
 
         # point to the required dataclasses
-        if primary_or_secondary == "secondary" and secondary_key:
+        if primary_or_secondary == "secondary" and secondary_key != "" and instance_key != "":
             instance_dict = getattr(all_data[category][instance], secondary_key)
 
             # see if we have existing values
@@ -623,20 +622,22 @@ class DataEditor(UIWindow):
                 if key in field_options:
                     options, secondary_fields = field_options[key]
                 else:
-                    options = secondary_fields = None
+                    options = []
+                    secondary_fields = ""
 
                 # modify key to include the prefix
                 prefix_key = primary_or_secondary + "#" + key
 
                 # have we identified the secondary fields?
-                if secondary_fields:
+                if secondary_fields != "":
                     data_field = self._create_edit_detail_field(prefix_key, value, options, start_x, current_y,
                                                                 row_width, row_height, container, manager)
                 else:
                     if options:
                         # if key name is plural
                         if key[len(key) - 1:] == "s":
-                            data_field = self._create_multiple_from_options_field(prefix_key, value, options, start_x,
+                            data_field = self._create_multiple_from_options_field(prefix_key, value, options,
+                                                                                  start_x,
                                                                                   current_y, row_width, row_height,
                                                                                   container, manager)
                         # singular name, only pick one
@@ -714,10 +715,10 @@ class DataEditor(UIWindow):
         Clear currently held details in the given dict of data fields.
         """
         if primary_or_secondary == "primary":
-            self.current_primary_field = None
+            self.current_primary_field = ""
             data_fields = self.primary_data_fields
         elif primary_or_secondary == "secondary":
-            self.current_secondary_field = None
+            self.current_secondary_field = ""
             data_fields = self.secondary_data_fields
         else:
             data_fields = self.primary_data_fields

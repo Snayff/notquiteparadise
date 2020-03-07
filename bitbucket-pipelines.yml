@@ -31,7 +31,7 @@ pipelines:
 
           # code analysis
           - echo "Code Analysis"
-          - mypy --config-file mypy.ini . > logs\mypy.log
+          - mypy --config-file mypy.ini
 
           # documentation
           - echo "Build Documentation"
