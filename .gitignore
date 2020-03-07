@@ -58,9 +58,6 @@ target/
 # Environments
 .env
 
-# Logs
-logs/
-
 
 # Temp files
 ~$*
