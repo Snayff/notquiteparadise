@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 from scripts.engine import entity
 from scripts.engine.component import Component
 
 if TYPE_CHECKING:
-    pass
+    from typing import Type
 
 # TODO - show debug info
 # TODO - approach to type commands to trigger actions e.g. spawn creature

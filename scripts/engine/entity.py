@@ -1,4 +1,4 @@
-from __future__ import annotations
+from __future__ import annotations as _annotations
 
 import dataclasses
 import logging
@@ -6,7 +6,7 @@ import random
 import esper
 import pygame
 import tcod.map
-from typing import TYPE_CHECKING, TypeVar, Optional
+from typing import TYPE_CHECKING, TypeVar
 from scripts.engine import utility, world, debug
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
     IsGod, \
@@ -18,7 +18,7 @@ from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
-    from typing import Union, Type, List, Dict, Tuple, Any
+    from typing import Union, Type, List, Dict, Tuple, Any, Optional
 
 _C = TypeVar("_C", bound=Component)
 _esper = esper.World()

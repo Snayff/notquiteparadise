@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional
-
 import tcod
-
+from typing import TYPE_CHECKING
 from scripts.engine.core.definitions import CharacteristicSpritesData
 
 if TYPE_CHECKING:
     import pygame
-    from typing import List, Dict
+    from typing import List, Dict, Optional
 
 ##########################################################
 # Components are to hold data that is subject to change.

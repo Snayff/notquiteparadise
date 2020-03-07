@@ -5,8 +5,8 @@ import logging
 import os
 from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses
-from scripts.engine.core.constants import EffectType, PrimaryStat, SecondaryStat, SecondaryStatType, EffectTypeType, \
-    PrimaryStatType
+from scripts.engine.core.constants import EffectType, PrimaryStat, SecondaryStat, SecondaryStatType, \
+    EffectTypeType, PrimaryStatType
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData,\
     InterventionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData, AfflictionData
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from typing import Dict
 
 
-class LibraryOfAlexandria:
+class _LibraryOfAlexandria:
     """
     The centre of all knowledge in the world_objects.
     """
@@ -341,4 +341,4 @@ class LibraryOfAlexandria:
         self._skills = data
 
 
-library = LibraryOfAlexandria()
+library = _LibraryOfAlexandria()

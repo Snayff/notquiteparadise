@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import pygame
 import pygame_gui
-from typing import TYPE_CHECKING, Type, Dict, Tuple, List
+from typing import TYPE_CHECKING
 from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
@@ -14,7 +14,7 @@ from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    pass
+    from typing import TYPE_CHECKING, Type, Dict, Tuple, List
 
 
 class _UIManager:

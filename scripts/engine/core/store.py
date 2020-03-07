@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple
 
 
-class Store:
+class _Store:
     """
     Hold the current state info required by the engine.
     Should only be accessed via getters and setters, not directly.
@@ -23,7 +23,7 @@ class Store:
         # used in world
         self.current_game_map = None
 
-        # used in
+        # used in chrono
         self.turn_queue: Dict[int, int] = {}  # (entity, time)
         self.round: int = 1  # count of the round
         self.time: int = 1  # total time of actions taken
@@ -32,4 +32,4 @@ class Store:
         self.turn_holder: int = -1  # current acting entity
 
 
-store = Store()
+store = _Store()

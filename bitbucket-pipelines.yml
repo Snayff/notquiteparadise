@@ -28,17 +28,24 @@ pipelines:
           # - echo "Unused Scripts"
           # error: vulture errors for some reason
           # - vulture --sort-by-size  scripts\
-          
+
+          # code analysis
+          - echo "Code Analysis"
+          - mypy --config-file mypy.ini . > logs\mypy.log
+
           # documentation
           - echo "Build Documentation"
           - cd docs
           - make html
+
+          # commit all
           - cd ..
           - git add .
-          - git commit -m "[skip ci] Updated documentation"
+          - git commit -m "[skip ci] Updated documentation and completed code analysis"
           - git push
         artifacts:
           - docs/**
+          - logs/**
 
           
 
