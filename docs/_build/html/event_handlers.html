@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>Event Handlers &mdash; NotQuiteParadise 0.94.0 documentation</title>
+  <title>Event Handlers &mdash; NotQuiteParadise 0.95.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.95.0 documentation" href="index.html"/>
         <link rel="next" title="Events" href="events.html"/>
         <link rel="prev" title="Dev Tools" href="dev_tools.html"/>
 
@@ -60,34 +60,34 @@
           
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">Core</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.library">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_tools.html">Dev Tools</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dev_tools.html#module-scripts.dev_tools.data_editor">Data Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_tools.html#data-editor">Data Editor</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ui">UI</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="events.html">Events</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.entity_events">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.game_events">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.map_events">Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="events.html#module-scripts.events.ui_events">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#ui">UI</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
@@ -102,10 +102,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.combat_stats">Combat Stats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.components">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.game_map">Game Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.tile">Tile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#combat-stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#game-map">Game Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#tile">Tile</a></li>
 </ul>
 </li>
 </ul>
@@ -153,135 +153,14 @@
 <div class="section" id="entity">
 <h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.event_handlers.game_handler">
-<span id="game"></span><h2>Game<a class="headerlink" href="#module-scripts.event_handlers.game_handler" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.event_handlers.game_handler.GameHandler">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.game_handler.</code><code class="sig-name descname">GameHandler</code><span class="sig-paren">(</span><em class="sig-param">event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Subscriber</span></code></p>
-<p>Handle core Game related actions, driven by events. Turn changes exist here, too.</p>
-<dl class="method">
-<dt id="scripts.event_handlers.game_handler.GameHandler.process_event">
-<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler.process_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process game events.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.event_handlers.game_handler.GameHandler.process_change_game_state">
-<em class="property">static </em><code class="sig-name descname">process_change_game_state</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler.process_change_game_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler.process_change_game_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transition to another game state as specified by the event.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="events.html#scripts.events.game_events.ChangeGameStateEvent" title="scripts.events.game_events.ChangeGameStateEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChangeGameStateEvent</span></code></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.event_handlers.game_handler.GameHandler.process_end_turn">
-<em class="property">static </em><code class="sig-name descname">process_end_turn</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/game_handler.html#GameHandler.process_end_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.game_handler.GameHandler.process_end_turn" title="Permalink to this definition">¶</a></dt>
-<dd><p>End turn, move to next turn, change game state to new turn.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="events.html#scripts.events.game_events.EndTurnEvent" title="scripts.events.game_events.EndTurnEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EndTurnEvent</span></code></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="game">
+<h2>Game<a class="headerlink" href="#game" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.event_handlers.god_handler">
-<span id="god"></span><h2>God<a class="headerlink" href="#module-scripts.event_handlers.god_handler" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.event_handlers.god_handler.GodHandler">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.god_handler.</code><code class="sig-name descname">GodHandler</code><span class="sig-paren">(</span><em class="sig-param">event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/god_handler.html#GodHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.god_handler.GodHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Subscriber</span></code></p>
-<p>Handle events affecting entities</p>
-<dl class="method">
-<dt id="scripts.event_handlers.god_handler.GodHandler.process_event">
-<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/god_handler.html#GodHandler.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.god_handler.GodHandler.process_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Control god actions from events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event</strong> (<em>Event</em>) – the event in need of processing</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.event_handlers.god_handler.GodHandler.process_judgements">
-<em class="property">static </em><code class="sig-name descname">process_judgements</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/god_handler.html#GodHandler.process_judgements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.god_handler.GodHandler.process_judgements" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass any actions taken to be judged by the gods.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>event</em>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.event_handlers.god_handler.GodHandler.process_interventions">
-<em class="property">static </em><code class="sig-name descname">process_interventions</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/god_handler.html#GodHandler.process_interventions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.god_handler.GodHandler.process_interventions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consider taking possible interventions and then take them.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>(</strong><strong>)</strong> (<em>event</em>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="god">
+<h2>God<a class="headerlink" href="#god" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.event_handlers.map_handler">
-<span id="map"></span><h2>Map<a class="headerlink" href="#module-scripts.event_handlers.map_handler" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.event_handlers.map_handler.MapHandler">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.event_handlers.map_handler.</code><code class="sig-name descname">MapHandler</code><span class="sig-paren">(</span><em class="sig-param">event_hub</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/map_handler.html#MapHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.map_handler.MapHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Subscriber</span></code></p>
-<p>Handle map related events</p>
-<dl class="method">
-<dt id="scripts.event_handlers.map_handler.MapHandler.process_event">
-<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/map_handler.html#MapHandler.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.map_handler.MapHandler.process_event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Control world events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event</strong> (<em>Event</em>) – the event in need of processing</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.event_handlers.map_handler.MapHandler.process_tile_interaction">
-<em class="property">static </em><code class="sig-name descname">process_tile_interaction</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/map_handler.html#MapHandler.process_tile_interaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.map_handler.MapHandler.process_tile_interaction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check the cause on the aspects of a tile and trigger any interactions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="events.html#scripts.events.map_events.TileInteractionEvent" title="scripts.events.map_events.TileInteractionEvent"><em>TileInteractionEvent</em></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.event_handlers.map_handler.MapHandler.process_end_of_turn_updates">
-<em class="property">static </em><code class="sig-name descname">process_end_of_turn_updates</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/map_handler.html#MapHandler.process_end_of_turn_updates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.map_handler.MapHandler.process_end_of_turn_updates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trigger aspects on tile turn holder is on</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="events.html#scripts.events.game_events.EndTurnEvent" title="scripts.events.game_events.EndTurnEvent"><em>EndTurnEvent</em></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="scripts.event_handlers.map_handler.MapHandler.process_end_of_round_updates">
-<em class="property">static </em><code class="sig-name descname">process_end_of_round_updates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/event_handlers/map_handler.html#MapHandler.process_end_of_round_updates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.event_handlers.map_handler.MapHandler.process_end_of_round_updates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update aspect durations</p>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="map">
+<h2>Map<a class="headerlink" href="#map" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="ui">
 <h2>UI<a class="headerlink" href="#ui" title="Permalink to this headline">¶</a></h2>
@@ -320,7 +199,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.94.0',
+            VERSION:'0.95.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

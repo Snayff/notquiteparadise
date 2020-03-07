@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   
-  <title>Events &mdash; NotQuiteParadise 0.94.0 documentation</title>
+  <title>Events &mdash; NotQuiteParadise 0.95.0 documentation</title>
   
 
   
@@ -24,7 +24,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="NotQuiteParadise 0.94.0 documentation" href="index.html"/>
+    <link rel="top" title="NotQuiteParadise 0.95.0 documentation" href="index.html"/>
         <link rel="next" title="Managers" href="managers.html"/>
         <link rel="prev" title="Event Handlers" href="event_handlers.html"/>
 
@@ -60,34 +60,34 @@
           
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">Core</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.constants">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="core.html#module-scripts.core.library">Library of Alexandria</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#library-of-alexandria">Library of Alexandria</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_tools.html">Dev Tools</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dev_tools.html#module-scripts.dev_tools.data_editor">Data Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_tools.html#data-editor">Data Editor</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="event_handlers.html">Event Handlers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.game_handler">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.god_handler">God</a></li>
-<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#module-scripts.event_handlers.map_handler">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#god">God</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event_handlers.html#map">Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="event_handlers.html#ui">UI</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Events</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.entity_events">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.game_events">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.map_events">Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scripts.events.ui_events">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#map">Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ui">UI</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="managers.html">Managers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.game_manager.game_manager">Game</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.input_manager.input_manager">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#input">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="managers.html#ui">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="managers.html#module-scripts.managers.world_manager.world_manager">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="managers.html#world">World</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skills.html">Skills</a><ul>
@@ -102,10 +102,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="world.html">World</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.combat_stats">Combat Stats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.components">Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.game_map">Game Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="world.html#module-scripts.world.tile">Tile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#combat-stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#game-map">Game Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html#tile">Tile</a></li>
 </ul>
 </li>
 </ul>
@@ -150,245 +150,17 @@
 	    <div id="content" class="hfeed entry-container hentry">
   <div class="section" id="events">
 <h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-scripts.events.entity_events">
-<span id="entity"></span><h2>Entity<a class="headerlink" href="#module-scripts.events.entity_events" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.events.entity_events.WantToUseSkillEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">WantToUseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param">skill_number</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#WantToUseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.WantToUseSkillEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event for player pressing a skill number</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>skill_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>skill_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.entity_events.UseSkillEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">UseSkillEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_using_skill</em>, <em class="sig-param">skill_name</em>, <em class="sig-param">start_pos</em>, <em class="sig-param">direction</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#UseSkillEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.UseSkillEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event for entity using a skill</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entity_using_skill</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-<li><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>start_pos</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – </p></li>
-<li><p><strong>direction</strong> (<em>Union</em><em>[</em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em><em>, </em><em>Type</em><em>[</em><a class="reference internal" href="core.html#scripts.core.constants.Directions" title="scripts.core.constants.Directions"><em>Directions</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entity_using_skill</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-<li><p><strong>skill_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>start_pos</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – </p></li>
-<li><p><strong>direction</strong> (<em>Union</em><em>[</em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em><em>, </em><em>Type</em><em>[</em><a class="reference internal" href="core.html#scripts.core.constants.Directions" title="scripts.core.constants.Directions"><em>Directions</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.entity_events.DieEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">DieEvent</code><span class="sig-paren">(</span><em class="sig-param">dying_entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#DieEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.DieEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event for handling the death of an entity.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dying_entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dying_entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.entity_events.MoveEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.entity_events.</code><code class="sig-name descname">MoveEvent</code><span class="sig-paren">(</span><em class="sig-param">entity_to_move</em>, <em class="sig-param">direction</em>, <em class="sig-param">distance=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/entity_events.html#MoveEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.entity_events.MoveEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event to move an entity as a basic move action</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entity_to_move</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-<li><p><strong>direction</strong> (<em>Union</em><em>[</em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em><em>, </em><em>Type</em><em>[</em><a class="reference internal" href="core.html#scripts.core.constants.Directions" title="scripts.core.constants.Directions"><em>Directions</em></a><em>]</em><em>]</em>) – </p></li>
-<li><p><strong>distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entity_to_move</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-<li><p><strong>direction</strong> (<em>Union</em><em>[</em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em><em>, </em><em>Type</em><em>[</em><a class="reference internal" href="core.html#scripts.core.constants.Directions" title="scripts.core.constants.Directions"><em>Directions</em></a><em>]</em><em>]</em>) – </p></li>
-<li><p><strong>distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="entity">
+<h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.events.game_events">
-<span id="game"></span><h2>Game<a class="headerlink" href="#module-scripts.events.game_events" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.events.game_events.EndTurnEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">EndTurnEvent</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">time_spent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/game_events.html#EndTurnEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.EndTurnEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event to end an entities ability to act.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entity</strong> (<em>Entity</em>) – </p></li>
-<li><p><strong>time_spent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-<p>Base class for events</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.game_events.ExitGameEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">ExitGameEvent</code><a class="reference internal" href="_modules/scripts/events/game_events.html#ExitGameEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.ExitGameEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event to exit the game</p>
-<p>Base class for events</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.game_events.ChangeGameStateEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">ChangeGameStateEvent</code><span class="sig-paren">(</span><em class="sig-param">new_game_state</em>, <em class="sig-param">skill_to_be_used=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/game_events.html#ChangeGameStateEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.ChangeGameStateEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event to change the current game state</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>new_game_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="core.html#scripts.core.constants.GameStates" title="scripts.core.constants.GameStates"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameStates</span></code></a>]) – </p></li>
-<li><p><strong>skill_to_be_used</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – </p></li>
-</ul>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>new_game_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="core.html#scripts.core.constants.GameStates" title="scripts.core.constants.GameStates"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameStates</span></code></a>]) – </p></li>
-<li><p><strong>skill_to_be_used</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.game_events.EndRoundEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.game_events.</code><code class="sig-name descname">EndRoundEvent</code><a class="reference internal" href="_modules/scripts/events/game_events.html#EndRoundEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.game_events.EndRoundEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event to process the end of a round</p>
-<p>Base class for events</p>
-</dd></dl>
-
+<div class="section" id="game">
+<h2>Game<a class="headerlink" href="#game" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.events.map_events">
-<span id="map"></span><h2>Map<a class="headerlink" href="#module-scripts.events.map_events" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.events.map_events.TileInteractionEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.map_events.</code><code class="sig-name descname">TileInteractionEvent</code><span class="sig-paren">(</span><em class="sig-param">tiles</em>, <em class="sig-param">cause</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/map_events.html#TileInteractionEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.map_events.TileInteractionEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event for updating a tile in response to actions taken</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tiles</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>[</em><a class="reference internal" href="world.html#scripts.world.tile.Tile" title="scripts.world.tile.Tile"><em>Tile</em></a><em>]</em>) – a list of effected tiles</p></li>
-<li><p><strong>cause</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – name of the effect or affliction that has taken place on the tile</p></li>
-</ul>
-</dd>
-</dl>
-<p>Base class for events</p>
-</dd></dl>
-
+<div class="section" id="map">
+<h2>Map<a class="headerlink" href="#map" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-scripts.events.ui_events">
-<span id="ui"></span><h2>UI<a class="headerlink" href="#module-scripts.events.ui_events" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="scripts.events.ui_events.SelectEntity">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">SelectEntity</code><span class="sig-paren">(</span><em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#SelectEntity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.SelectEntity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event for selecting an entity.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.ui_events.ClickTile">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">ClickTile</code><span class="sig-paren">(</span><em class="sig-param">tile_pos_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#ClickTile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.ClickTile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event for clicking a tile</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tile_pos_string</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tile_pos_string</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="scripts.events.ui_events.MessageEvent">
-<em class="property">class </em><code class="sig-prename descclassname">scripts.events.ui_events.</code><code class="sig-name descname">MessageEvent</code><span class="sig-paren">(</span><em class="sig-param">message_type</em>, <em class="sig-param">message</em>, <em class="sig-param">colour=None</em>, <em class="sig-param">size=4</em>, <em class="sig-param">entity=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/events/ui_events.html#MessageEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.events.ui_events.MessageEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.core.event_hub.Event</span></code></p>
-<p>Event to share messages with the player</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>message_type</strong> (<a class="reference internal" href="core.html#scripts.core.constants.MessageTypes" title="scripts.core.constants.MessageTypes"><em>MessageTypes</em></a>) – </p></li>
-<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>colour</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-<p>Base class for events</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>message_type</strong> (<a class="reference internal" href="core.html#scripts.core.constants.MessageTypes" title="scripts.core.constants.MessageTypes"><em>MessageTypes</em></a>) – </p></li>
-<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>colour</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – </p></li>
-<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-<li><p><strong>entity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="ui">
+<h2>UI<a class="headerlink" href="#ui" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -424,7 +196,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.94.0',
+            VERSION:'0.95.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
