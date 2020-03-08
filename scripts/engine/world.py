@@ -7,7 +7,7 @@ import tcod
 
 from scripts.engine import entity, utility
 from scripts.engine.component import Position, Blocking
-from scripts.engine.core.constants import TargetTag, FOVInfo, SkillShape, TargetTagType
+from scripts.engine.core.constants import TargetTag, FOVInfo, Shape, TargetTagType
 from scripts.engine.core.store import store
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
@@ -244,7 +244,7 @@ def get_tiles_in_range_and_fov_of_entity(range_from_centre: int, active_entity: 
     # FIXME - update to ECS
     pass
     # get the tiles in range
-    # coords = utility.create_shape(SkillShape.SQUARE, range_from_centre)  # square as LOS is square
+    # coords = utility.create_shape(Shape.SQUARE, range_from_centre)  # square as LOS is square
     # tiles_in_range = get_tiles(active_entity.x, active_entity.y, coords)
     # tiles_in_range_and_fov = []
     #

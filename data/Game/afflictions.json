@@ -23,7 +23,7 @@
         },
         "icon": "placeholder/icon_00.png",
         "name": "bogged down",
-        "trigger_event": "PASSIVE"
+        "trigger_event": "ALWAYS"
     },
     "flaming": {
         "__dataclass__": "AfflictionData",

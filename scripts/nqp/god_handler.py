@@ -55,22 +55,22 @@ class GodHandler(Subscriber):
             event ():
         """
         skill_name = event.skill_name
-        entity = event.entity
+        ent = event.entity
         skill_data = library.get_skill_data(skill_name)
 
         # check effect types used
         for effect_name, effect_data in skill_data.effects.items():
-            entity.judge_action(entity, effect_data.effect_type)
+            entity.judge_action(ent, effect_data.effect_type)
 
         # check damage type used
         if EffectType.DAMAGE in skill_data.effects:
             damage_type = skill_data.effects[EffectType.DAMAGE].damage_type
-            entity.judge_action(entity, damage_type)
+            entity.judge_action(ent, damage_type)
 
         # check afflictions applied
         if EffectType.APPLY_AFFLICTION in skill_data.effects:
             affliction_name = skill_data.effects[EffectType.APPLY_AFFLICTION].affliction_name
-            entity.judge_action(entity, affliction_name)
+            entity.judge_action(ent, affliction_name)
 
     @staticmethod
     def process_interventions(event):

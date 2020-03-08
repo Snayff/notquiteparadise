@@ -5,10 +5,10 @@ import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
-from scripts.engine.core.constants import MessageType, SecondaryStat, SkillExpiry, \
-    SkillTerrainCollision, SkillTravel, TargetTag, EffectType, AfflictionCategory, HitType, HitModifier, \
+from scripts.engine.core.constants import MessageType, SecondaryStat, ProjectileExpiry, \
+    ProjectileTerrainCollision, ProjectileTravel, TargetTag, EffectType, AfflictionCategory, HitType, HitModifier, \
     PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, EffectTypeType, HitValueType, \
-    SkillTravelType
+    ProjectileTravelType
 from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent
@@ -19,6 +19,24 @@ from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import List, Tuple, Type
+
+#########################################################################################
+########################   SKILL  & EFFECTS REQS. #######################################
+# all skills create a projectile, use that to specify conditions such as speed and sprite. <-
+    # TODO - create the projectile
+    # TODO - fix the directions
+# use a standardised collection of triggers
+# allow for conditional criteria
+# each effect is unique so each effect must be able to accept multiple params e.g. damage types
+# there should be Active and Passive Skills
+# passive skills, when learnt, apply the relevant affliction with an infinite duration
+# the effects must be ordered and apply in order
+# have the ability to create entities, e.g. summons, traps, etc.
+# ability to target automatically based on condition, e.g. nearest, lowest health etc.
+# cooldowns applied and respected
+# can only spend resource types, which map to secondary stats, not secondary stats directly
+
+########################################################################################
 
 
 ######################################## CHECKS ######################################
@@ -134,10 +152,10 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
             # are we at max distance?
             if distance >= skill_range:
                 # handle expiry type
-                if expiry_type == SkillExpiry.FIZZLE:
+                if expiry_type == ProjectileExpiry.FIZZLE:
                     fizzle = True
                     logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
-                elif expiry_type == SkillExpiry.ACTIVATE:
+                elif expiry_type == ProjectileExpiry.ACTIVATE:
                     activate = True
                     logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
             else:
@@ -152,14 +170,14 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
                         logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
                     else:
                         # we didnt hit the right thing so what happens now?
-                        if terrain_collision == SkillTerrainCollision.ACTIVATE:
+                        if terrain_collision == ProjectileTerrainCollision.ACTIVATE:
                             activate = True
                             logging.debug(f"-> and hit something. Skill will activate at "
                                           f"({current_x},{current_y}).")
-                        elif terrain_collision == SkillTerrainCollision.REFLECT:
+                        elif terrain_collision == ProjectileTerrainCollision.REFLECT:
                             dir_x, dir_y = _get_reflected_direction((current_x, current_y), direction)
                             logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
-                        elif terrain_collision == SkillTerrainCollision.FIZZLE:
+                        elif terrain_collision == ProjectileTerrainCollision.FIZZLE:
                             activate = False
                             logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
                 else:
@@ -180,7 +198,7 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
 ########################################## GET ####################################
 
 def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],
-        max_distance: int, travel_type: SkillTravelType) -> Tuple[int, int]:
+        max_distance: int, travel_type: ProjectileTravelType) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
     range blocks movement then the last position checked is returned. If all positions in range block movement
@@ -197,10 +215,10 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     check_for_target = False
 
     # determine travel method
-    if travel_type == SkillTravel.PROJECTILE:
-        # projectile can hit a target at any point during travel
+    if travel_type == ProjectileTravel.DIRECT:
+        # direct can hit a target at any point during travel
         check_for_target = True
-    elif travel_type == SkillTravel.THROW:
+    elif travel_type == ProjectileTravel.ARC:
         # throw can only hit target at end of travel
         check_for_target = False
 
@@ -208,7 +226,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     for distance in range(1, max_distance + 1):
 
         # allow throw to hit target
-        if travel_type == SkillTravel.THROW:
+        if travel_type == ProjectileTravel.ARC:
             if distance == max_distance + 1:
                 check_for_target = True
 
@@ -218,7 +236,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
         tile = world.get_tile((current_x, current_y))
 
         if tile:
-            # did we hit something causing projectile to stop
+            # did we hit something causing direct to stop
             if world.tile_has_tag(tile, TargetTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:

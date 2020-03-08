@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
-VERSION = "0.95.0"
+VERSION = "0.96.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
@@ -34,16 +34,17 @@ HitModifierType = NewType("HitModifierType", float)
 EffectTypeType = NewType("EffectTypeType", int)
 AfflictionCategoryType = NewType("AfflictionCategoryType", int)
 AfflictionTriggerType = NewType("AfflictionTriggerType", int)
-SkillShapeType = NewType("SkillShapeType", int)
-SkillTerrainCollisionType = NewType("SkillTerrainCollisionType", int)
-SkillTravelType = NewType("SkillTravelType", int)
-SkillExpiryType = NewType("SkillExpiryType", int)
+ShapeType = NewType("ShapeType", int)
+ProjectileTerrainCollisionType = NewType("ProjectileTerrainCollisionType", int)
+ProjectileTravelType = NewType("ProjectileTravelType", int)
+ProjectileExpiryType = NewType("ProjectileExpiryType", int)
+ProjectileSpeedType = NewType("ProjectileSpeedType", int)
 InputModeType = NewType("InputModeType", int)
 UIElementType = NewType("UIElementType", int)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 
-#################### CLASSES ###########################################
 
+#################### CLASSES ###########################################
 
 class VisualInfo(SimpleNamespace):
     """
@@ -201,7 +202,7 @@ class AfflictionTrigger(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    PASSIVE = AfflictionTriggerType(1)  # always applying effects, overrides duration
+    ALWAYS = AfflictionTriggerType(1)  # always applying effects
     END_TURN = AfflictionTriggerType(2)  # apply at end of round turn
     MOVE = AfflictionTriggerType(3)  # apply if afflicted entity moves
     ACTION = AfflictionTriggerType(4)  # apply when an action is taken
@@ -213,39 +214,49 @@ class AfflictionTrigger(SimpleNamespace):
     # DEATH = auto()  # apply if afflicted entity dies
 
 
-class SkillShape(SimpleNamespace):
+class Shape(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    TARGET = SkillShapeType(1)  # single target
-    SQUARE = SkillShapeType(2)
-    CIRCLE = SkillShapeType(3)
-    CROSS = SkillShapeType(4)
+    TARGET = ShapeType(1)  # single target
+    SQUARE = ShapeType(2)
+    CIRCLE = ShapeType(3)
+    CROSS = ShapeType(4)
 
 
-class SkillTerrainCollision(SimpleNamespace):
+class ProjectileTerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
-    REFLECT = SkillTerrainCollisionType(1)
-    ACTIVATE = SkillTerrainCollisionType(2)
-    FIZZLE = SkillTerrainCollisionType(3)
+    REFLECT = ProjectileTerrainCollisionType(1)
+    ACTIVATE = ProjectileTerrainCollisionType(2)
+    FIZZLE = ProjectileTerrainCollisionType(3)
 
 
-class SkillTravel(SimpleNamespace):
+class ProjectileTravel(SimpleNamespace):
     """
     How the skill travels
     """
-    PROJECTILE = SkillTravelType(1)  # travels tile by tile
-    THROW = SkillTravelType(2)  # only impacts last tile in range
+    DIRECT = ProjectileTravelType(1)  # travels tile by tile
+    ARC = ProjectileTravelType(2)  # only impacts last tile in range, bounces
+    INSTANT = ProjectileTravelType(3)  # doesn't travel, doesn't interact with terrain except for blocking
 
 
-class SkillExpiry(SimpleNamespace):
+class ProjectileExpiry(SimpleNamespace):
     """
     What happens when the skill reaches the range limit
     """
-    FIZZLE = SkillExpiryType(1)
-    ACTIVATE = SkillExpiryType(2)
+    FIZZLE = ProjectileExpiryType(1)
+    ACTIVATE = ProjectileExpiryType(2)
+
+
+class ProjectileSpeed(SimpleNamespace):
+    """
+    The speed at which a projectile travels. How much time to move a tile.
+    """
+    # TODO - externalise the values
+    SLOW = ProjectileSpeedType(10)
+    FAST = ProjectileSpeedType(30)
 
 
 class InputMode(SimpleNamespace):

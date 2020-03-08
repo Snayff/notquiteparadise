@@ -4,8 +4,8 @@ import pygame
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectTypeType, DamageTypeType, \
-    AfflictionCategoryType, AfflictionTriggerType, SkillShapeType, SkillTerrainCollisionType, SkillTravelType, \
-    SkillExpiryType, DirectionType, SecondaryStatType
+    AfflictionCategoryType, AfflictionTriggerType, ShapeType, ProjectileTerrainCollisionType, ProjectileTravelType, \
+    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -96,18 +96,40 @@ class SkillData:
 
     # how does it travel from the user?
     target_directions: List[DirectionType] = field(default_factory=list)
-    range: int = 1
-    terrain_collision: Optional[SkillTerrainCollisionType] = None
-    travel_type: Optional[SkillTravelType] = None
-
-    # when does it interact?
-    expiry_type: Optional[SkillExpiryType] = None
-    required_tags: List[TargetTagType] = field(default_factory=list)
+    projectile: ProjectileData = field(default_factory=dict)
 
     # how does it interact?
-    shape: Optional[SkillShapeType] = None
-    shape_size: int = 1
     effects: Dict = field(default_factory=dict)
+
+
+@register_dataclass_with_json
+@dataclass
+class ProjectileData:
+    """
+    Data class for a projectile
+    """
+    # what created it?
+    skill_name: str = "None"
+
+    # what does it look like?
+    sprite: str = "None"
+
+    # how does it travel?
+    direction: Optional[DirectionType] = None
+    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    travel_type: Optional[ProjectileTravelType] = None
+    range: int = 1
+
+    # when does it interact?
+    required_tags: List[TargetTagType] = field(default_factory=list)
+    expiry_type: Optional[ProjectileExpiryType] = None
+
+    # how does it interact?
+    terrain_collision: Optional[ProjectileTerrainCollisionType] = None
+
+    # what is the area of effect?
+    shape: Optional[ShapeType] = None
+    shape_size: int = 1
 
 
 @register_dataclass_with_json

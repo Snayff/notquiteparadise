@@ -10,7 +10,7 @@ from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.engine import utility
 from scripts.engine.core.constants import EffectType, AfflictionTrigger, DamageType, PrimaryStat, SecondaryStat, \
-    TargetTag, AfflictionCategory, SkillExpiry, SkillShape, Direction, SkillTerrainCollision, SkillTravel
+    TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, ProjectileTerrainCollision, ProjectileTravel
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
@@ -527,12 +527,12 @@ class DataEditor(UIWindow):
             "action": (affliction_options + effect_options + skill_options, None),  # gods attitudes on things
             "skill_key": (skill_options, None),
             "known_skills": (skill_options, None),
-            "expiry_type": (get_members(SkillExpiry), None),
+            "expiry_type": (get_members(ProjectileExpiry), None),
             "resource_type": (secondary_stat_options, None),
-            "shape": (get_members(SkillShape), None),
+            "shape": (get_members(Shape), None),
             "target_directions": (get_members(Direction), None),
-            "terrain_collision": (get_members(SkillTerrainCollision), None),
-            "travel_type": (get_members(SkillTravel), None),
+            "terrain_collision": (get_members(ProjectileTerrainCollision), None),
+            "travel_type": (get_members(ProjectileTravel), None),
             "interactions": (affliction_options + effect_options + skill_options, InteractionData()),
             "attitudes": (affliction_options + effect_options + skill_options, AttitudeData()),
             "interventions": (skill_options, InterventionData()),
