@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 # allow for conditional criteria
 # each effect is unique so each effect must be able to accept multiple params e.g. damage types
 # there should be Active and Passive Skills
-# passive skills, when learnt, apply the relevant affliction with an infinite duration
+# passive skills, when learnt, apply the relevant affliction with an infinite duration and cannot be dispelled.
 # the effects must be ordered and apply in order
 # have the ability to create entities, e.g. summons, traps, etc.
 # ability to target automatically based on condition, e.g. nearest, lowest health etc.

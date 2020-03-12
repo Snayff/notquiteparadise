@@ -15,36 +15,32 @@ TIME_PER_ROUND = 100
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of
 # that NewType, and that you don't treat that member as a normal str.
-#########################################################################
-# Instructions:
-# To quickly add the new type select the body of a class, replace ([A-Z_]+ = )(".*?")  with $1NewType($2)
-# replacing NewType with the relevant type.
-#########################################################################
+
 InputIntentType = NewType("InputIntentType", str)
 PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
 GameStateType = NewType("GameStateType", int)
 EventTopicType = NewType("EventTopicType", int)
 MessageTypeType = NewType("MessageTypeType", int)
-TargetTagType = NewType("TargetTagType", int)
+TargetTagType = NewType("TargetTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
-HitTypeType = NewType("HitTypeType", int)
+HitTypeType = NewType("HitTypeType", str)
 HitValueType = NewType("HitValueType", int)
 HitModifierType = NewType("HitModifierType", float)
-EffectTypeType = NewType("EffectTypeType", int)
-AfflictionCategoryType = NewType("AfflictionCategoryType", int)
-AfflictionTriggerType = NewType("AfflictionTriggerType", int)
-ShapeType = NewType("ShapeType", int)
-ProjectileTerrainCollisionType = NewType("ProjectileTerrainCollisionType", int)
-ProjectileTravelType = NewType("ProjectileTravelType", int)
-ProjectileExpiryType = NewType("ProjectileExpiryType", int)
+EffectTypeType = NewType("EffectTypeType", str)
+AfflictionCategoryType = NewType("AfflictionCategoryType", str)
+AfflictionTriggerType = NewType("AfflictionTriggerType", str)
+ShapeType = NewType("ShapeType", str)
+ProjectileTerrainCollisionType = NewType("ProjectileTerrainCollisionType", str)
+ProjectileTravelType = NewType("ProjectileTravelType", str)
+ProjectileExpiryType = NewType("ProjectileExpiryType", str)
 ProjectileSpeedType = NewType("ProjectileSpeedType", int)
 InputModeType = NewType("InputModeType", int)
 UIElementType = NewType("UIElementType", int)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 
 
-#################### CLASSES ###########################################
+#################### INTERNAL, NON-SERIALISED ###########################################
 
 class VisualInfo(SimpleNamespace):
     """
@@ -96,18 +92,102 @@ class MessageType(SimpleNamespace):
     SCREEN = MessageTypeType(3)
 
 
+class InputMode(SimpleNamespace):
+    """
+    Input hardware being used
+    """
+    MOUSE_AND_KB = InputModeType(1)
+    GAMEPAD = InputModeType(2)
+
+
+class UIElement(SimpleNamespace):
+    """
+    The different UI elements
+    """
+    MESSAGE_LOG = UIElementType(1)
+    ENTITY_INFO = UIElementType(2)
+    TARGETING_OVERLAY = UIElementType(3)
+    SKILL_BAR = UIElementType(4)
+    ENTITY_QUEUE = UIElementType(5)
+    CAMERA = UIElementType(6)
+    DATA_EDITOR = UIElementType(7)
+
+
+class HitValue(SimpleNamespace):
+    """
+    The value of each hit type. The value is the starting amount.
+    """
+    # TODO - externalise the values
+    GRAZE = HitValueType(0)
+    HIT = HitValueType(5)
+    CRIT = HitValueType(20)
+
+
+class HitModifier(SimpleNamespace):
+    """
+    The modifier for each hit type
+    """
+    # TODO - externalise the values
+    GRAZE = HitModifierType(0.6)
+    HIT = HitModifierType(1)
+    CRIT = HitModifierType(1.4)
+
+
+class Direction(SimpleNamespace):
+    """
+    Holds a tuple for each direction of the (x, y) relative direction.
+    """
+    UP_LEFT = DirectionType((-1, -1))
+    UP = DirectionType((0, -1))
+    UP_RIGHT = DirectionType((1, -1))
+    LEFT = DirectionType((-1, 0))
+    CENTRE = DirectionType((0, 0))
+    RIGHT = DirectionType((1, 0))
+    DOWN_LEFT = DirectionType((-1, 1))
+    DOWN = DirectionType((0, 1))
+    DOWN_RIGHT = DirectionType((1, 1))
+
+
+class InputIntent(SimpleNamespace):
+    """
+    Values of the conversion from input to intent. Strings.
+    """
+    UP = InputIntentType("up")
+    DOWN = InputIntentType("down")
+    LEFT = InputIntentType("left")
+    RIGHT = InputIntentType("right")
+    UP_RIGHT = InputIntentType("up_right")
+    UP_LEFT = InputIntentType("up_left")
+    DOWN_RIGHT = InputIntentType("down_right")
+    DOWN_LEFT = InputIntentType("down_left")
+    CONFIRM = InputIntentType("confirm")
+    CANCEL = InputIntentType("cancel")
+    EXIT_GAME = InputIntentType("exit_game")
+    DEBUG_TOGGLE = InputIntentType("debug_toggle")
+    SKILL0 = InputIntentType("skill0")
+    SKILL1 = InputIntentType("skill1")
+    SKILL2 = InputIntentType("skill2")
+    SKILL3 = InputIntentType("skill3")
+    SKILL4 = InputIntentType("skill4")
+    SKILL5 = InputIntentType("skill5")
+    REFRESH_DATA = InputIntentType("refresh_data")
+    DEV_TOGGLE = InputIntentType("dev_toggle")
+
+
+#################### EXTERNAL, SERIALISED ###########################################
+
 class TargetTag(SimpleNamespace):
     """
     Types of target
     """
-    SELF = TargetTagType(1)
-    OTHER_ENTITY = TargetTagType(2)
-    NO_ENTITY = TargetTagType(3)
-    OUT_OF_BOUNDS = TargetTagType(4)
-    ANY = TargetTagType(5)
-    OPEN_SPACE = TargetTagType(6)
-    BLOCKED_MOVEMENT = TargetTagType(7)
-    IS_VISIBLE = TargetTagType(8)
+    SELF = TargetTagType("self")
+    OTHER_ENTITY = TargetTagType("other_entity")
+    NO_ENTITY = TargetTagType("no_entity")
+    OUT_OF_BOUNDS = TargetTagType("out_of_bounds")
+    ANY = TargetTagType("any")
+    OPEN_SPACE = TargetTagType("open_space")
+    BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
+    IS_VISIBLE = TargetTagType("is_visible")
 
 
 class DamageType(SimpleNamespace):
@@ -154,58 +234,38 @@ class HitType(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
-    GRAZE = HitTypeType(1)
-    HIT = HitTypeType(2)
-    CRIT = HitTypeType(3)
-
-
-class HitValue(SimpleNamespace):
-    """
-    The value of each hit type. The value is the starting amount.
-    """
-    # TODO - externalise the values    
-    GRAZE = HitValueType(0)
-    HIT = HitValueType(5)
-    CRIT = HitValueType(20)
-
-
-class HitModifier(SimpleNamespace):
-    """
-    The modifier for each hit type
-    """
-    # TODO - externalise the values    
-    GRAZE = HitModifierType(0.6)
-    HIT = HitModifierType(1)
-    CRIT = HitModifierType(1.4)
+    GRAZE = HitTypeType("graze")
+    HIT = HitTypeType("hit")
+    CRIT = HitTypeType("crit")
 
 
 class EffectType(SimpleNamespace):
     """
     Types of effects
     """
-    APPLY_AFFLICTION = EffectTypeType(1)
-    DAMAGE = EffectTypeType(2)
-    MOVE = EffectTypeType(3)
-    AFFECT_STAT = EffectTypeType(4)
-    ADD_ASPECT = EffectTypeType(5)
+    APPLY_AFFLICTION = EffectTypeType("apply_affliction")
+    DAMAGE = EffectTypeType("damage")
+    MOVE = EffectTypeType("move")
+    AFFECT_STAT = EffectTypeType("affect_stat")
+    ADD_ASPECT = EffectTypeType("add_aspect")
 
 
 class AfflictionCategory(SimpleNamespace):
     """
     Boon or Bane
     """
-    BANE = AfflictionCategoryType(1)
-    BOON = AfflictionCategoryType(2)
+    BANE = AfflictionCategoryType("boon")
+    BOON = AfflictionCategoryType("bane")
 
 
 class AfflictionTrigger(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    ALWAYS = AfflictionTriggerType(1)  # always applying effects
-    END_TURN = AfflictionTriggerType(2)  # apply at end of round turn
-    MOVE = AfflictionTriggerType(3)  # apply if afflicted entity moves
-    ACTION = AfflictionTriggerType(4)  # apply when an action is taken
+    ALWAYS = AfflictionTriggerType("always")  # always applying effects
+    END_TURN = AfflictionTriggerType("end_turn")  # apply at end of round turn
+    MOVE = AfflictionTriggerType("move")  # apply if afflicted entity moves
+    ACTION = AfflictionTriggerType("action")  # apply when an action is taken
 
     # Other triggers to consider
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
@@ -218,36 +278,36 @@ class Shape(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    TARGET = ShapeType(1)  # single target
-    SQUARE = ShapeType(2)
-    CIRCLE = ShapeType(3)
-    CROSS = ShapeType(4)
+    TARGET = ShapeType("shape")  # single target
+    SQUARE = ShapeType("square")
+    CIRCLE = ShapeType("circle")
+    CROSS = ShapeType("cross")
 
 
 class ProjectileTerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
-    REFLECT = ProjectileTerrainCollisionType(1)
-    ACTIVATE = ProjectileTerrainCollisionType(2)
-    FIZZLE = ProjectileTerrainCollisionType(3)
+    REFLECT = ProjectileTerrainCollisionType("reflect")
+    ACTIVATE = ProjectileTerrainCollisionType("activate")
+    FIZZLE = ProjectileTerrainCollisionType("fizzle")
 
 
 class ProjectileTravel(SimpleNamespace):
     """
     How the skill travels
     """
-    DIRECT = ProjectileTravelType(1)  # travels tile by tile
-    ARC = ProjectileTravelType(2)  # only impacts last tile in range, bounces
-    INSTANT = ProjectileTravelType(3)  # doesn't travel, doesn't interact with terrain except for blocking
+    DIRECT = ProjectileTravelType("direct")  # travels tile by tile
+    ARC = ProjectileTravelType("arc")  # only impacts last tile in range, bounces
+    INSTANT = ProjectileTravelType("instant")  # doesn't travel, doesn't interact with terrain except for blocking
 
 
 class ProjectileExpiry(SimpleNamespace):
     """
     What happens when the skill reaches the range limit
     """
-    FIZZLE = ProjectileExpiryType(1)
-    ACTIVATE = ProjectileExpiryType(2)
+    FIZZLE = ProjectileExpiryType("fizzle")
+    ACTIVATE = ProjectileExpiryType("activate")
 
 
 class ProjectileSpeed(SimpleNamespace):
@@ -257,65 +317,3 @@ class ProjectileSpeed(SimpleNamespace):
     # TODO - externalise the values
     SLOW = ProjectileSpeedType(10)
     FAST = ProjectileSpeedType(30)
-
-
-class InputMode(SimpleNamespace):
-    """
-    Input hardware being used
-    """
-    MOUSE_AND_KB = InputModeType(1)
-    GAMEPAD = InputModeType(2)
-
-
-class InputIntent(SimpleNamespace):
-    """
-    Values of the conversion from input to intent. Strings.
-    """
-    UP = InputIntentType("up")
-    DOWN = InputIntentType("down")
-    LEFT = InputIntentType("left")
-    RIGHT = InputIntentType("right")
-    UP_RIGHT = InputIntentType("up_right")
-    UP_LEFT = InputIntentType("up_left")
-    DOWN_RIGHT = InputIntentType("down_right")
-    DOWN_LEFT = InputIntentType("down_left")
-    CONFIRM = InputIntentType("confirm")
-    CANCEL = InputIntentType("cancel")
-    EXIT_GAME = InputIntentType("exit_game")
-    DEBUG_TOGGLE = InputIntentType("debug_toggle")
-    SKILL0 = InputIntentType("skill0")
-    SKILL1 = InputIntentType("skill1")
-    SKILL2 = InputIntentType("skill2")
-    SKILL3 = InputIntentType("skill3")
-    SKILL4 = InputIntentType("skill4")
-    SKILL5 = InputIntentType("skill5")
-    REFRESH_DATA = InputIntentType("refresh_data")
-    DEV_TOGGLE = InputIntentType("dev_toggle")
-
-
-class UIElement(SimpleNamespace):
-    """
-    The different UI elements
-    """
-    MESSAGE_LOG = UIElementType(1)
-    ENTITY_INFO = UIElementType(2)
-    TARGETING_OVERLAY = UIElementType(3)
-    SKILL_BAR = UIElementType(4)
-    ENTITY_QUEUE = UIElementType(5)
-    CAMERA = UIElementType(6)
-    DATA_EDITOR = UIElementType(7)
-
-
-class Direction(SimpleNamespace):
-    """
-    Holds a tuple for each direction of the (x, y) relative direction.
-    """
-    UP_LEFT = DirectionType((-1, -1))
-    UP = DirectionType((0, -1))
-    UP_RIGHT = DirectionType((1, -1))
-    LEFT = DirectionType((-1, 0))
-    CENTRE = DirectionType((0, 0))
-    RIGHT = DirectionType((1, 0))
-    DOWN_LEFT = DirectionType((-1, 1))
-    DOWN = DirectionType((0, 1))
-    DOWN_RIGHT = DirectionType((1, 1))
