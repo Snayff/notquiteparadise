@@ -183,3 +183,16 @@ def create_shape(shape: ShapeType, size: int) -> List[Tuple[int, int]]:
         list_of_coords.append((0, 0))  # add selection back in
 
     return list_of_coords
+
+
+def value_to_member(value: Any, cls: Type[Any]) -> str:
+    """
+    Get a member of a class that matches the value given
+    """
+    members = get_class_members(cls)
+
+    for member in members:
+        if getattr(cls, member) == value:
+            return member
+
+    return "No member with value found."

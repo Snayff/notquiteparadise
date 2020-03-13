@@ -521,7 +521,6 @@ class DataEditor(UIWindow):
             "blocks_sight": (bool_options, None),
             "category": (get_members(AfflictionCategory), None),
             "cause": (affliction_options + effect_options + skill_options, None),  # interaction trigger
-            "change_to": (aspect_options, None),
             "primary_stat_type": (primary_stat_options, None),
             "secondary_stat_type": (secondary_stat_options, None),
             "action": (affliction_options + effect_options + skill_options, None),  # gods attitudes on things

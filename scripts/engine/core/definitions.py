@@ -28,7 +28,7 @@ class BasePrimaryStatData:
     """
     Data class for primary  stats
     """
-    name: str = "None"
+    name: str = field(default="None")
     primary_stat_type: Optional[PrimaryStatType] = None
     base_value: int = 0
 
@@ -39,7 +39,7 @@ class BaseSecondaryStatData:
     """
     Data class for secondary stats
     """
-    name: str = "None"
+    name: str = field(default="None")
     secondary_stat_type: Optional[SecondaryStatType] = None
     base_value: int = 0
     vigour_mod: int = 0
@@ -69,12 +69,12 @@ class CharacteristicSpritePathsData:
     """
     Possible sprites paths for a characteristic
     """
-    icon: str = "none"
-    idle: str = "none"
-    attack: str = "none"
-    hit: str = "none"
-    dead: str = "none"
-    move: str = "none"
+    icon: str = field(default="None")
+    idle: str = field(default="None")
+    attack: str = field(default="None")
+    hit: str = field(default="None")
+    dead: str = field(default="None")
+    move: str = field(default="None")
 
 
 @register_dataclass_with_json
@@ -84,9 +84,9 @@ class SkillData:
     Data class for a skill. Used by the library to load from json.
     """
     # how do we know it?
-    name: str = "None"
-    description: str = "None"
-    icon: str = "None"
+    name: str = field(default="None")
+    description: str = field(default="None")
+    icon: str = field(default="None")
 
     # what does it cost?
     resource_type:  Optional[SecondaryStatType] = None
@@ -99,7 +99,7 @@ class SkillData:
     projectile: ProjectileData = field(default_factory=dict)
 
     # how does it interact?
-    effects: Dict = field(default_factory=dict)
+    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
 
 
 @register_dataclass_with_json
@@ -109,10 +109,10 @@ class ProjectileData:
     Data class for a projectile
     """
     # what created it?
-    skill_name: str = "None"
+    skill_name: str = field(default="None")
 
     # what does it look like?
-    sprite: str = "None"
+    sprite: str = field(default="None")
 
     # how does it travel?
     direction: Optional[DirectionType] = None
@@ -138,7 +138,7 @@ class InterventionData:
     """
     Data class for a god's intervention
     """
-    skill_key: str = "None"
+    skill_key: str = field(default="None")
     required_opinion: int = 0
 
 
@@ -148,8 +148,8 @@ class InteractionData:
     """
     Data class for an interaction
     """
-    cause: str = "None"
-    change_to: str = "None"
+    cause: str = field(default="None")
+    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
 
 
 @register_dataclass_with_json
@@ -158,8 +158,8 @@ class GodData:
     """
     Data class for a god
     """
-    name: str = "None"
-    description: str = "None"
+    name: str = field(default="None")
+    description: str = field(default="None")
     sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
     attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
     interventions: Dict[int, InterventionData] = field(default_factory=dict)
@@ -180,8 +180,8 @@ class EffectData:
     damage_type: Optional[DamageTypeType] = None
     accuracy: int = 0
     stat_to_target: Optional[PrimaryStatType] = None
-    aspect_name: str = "None"
-    affliction_name: str = "None"
+    aspect_name: str = field(default="None")
+    affliction_name: str = field(default="None")
     duration: int = 0
     stat_to_affect: Optional[PrimaryStatType] = None
 
@@ -192,8 +192,8 @@ class CharacteristicData:
     """
     Data class for an aspects
     """
-    name: str = "None"
-    description: str = "None"
+    name: str = field(default="None")
+    description: str = field(default="None")
     sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
     sight_range: int = 0
     vigour: int = 0
@@ -210,15 +210,15 @@ class AspectData:
     """
     Data class for an aspects
     """
-    name: str = "None"
-    description: str = "None"
+    name: str = field(default="None")
+    description: str = field(default="None")
     duration: int = 0
-    sprite: str = "None"
+    sprite: str = field(default="None")
     blocks_sight: bool = False
     blocks_movement: bool = False
-    effects: Dict = field(default_factory=dict)
+    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
     interactions: List[InteractionData] = field(default_factory=list)
-    # TODO - convert interactiois to dict as interactions are  unique
+    # TODO - convert interactions to dict as interactions are  unique
 
 
 @register_dataclass_with_json
@@ -227,7 +227,7 @@ class AttitudeData:
     """
     Data class for  a god's attitude
     """
-    action: str = "None"
+    action: str = field(default="None")
     opinion_change: int = 0
 
 
@@ -237,38 +237,16 @@ class AfflictionData:
     """
     Data class for an Affliction
     """
-    name: str = "None"
-    description: str = "None"
-    icon: str = "None"
+    name: str = field(default="None")
+    description: str = field(default="None")
+    icon: str = field(default="None")
     trigger_event: Optional[AfflictionTriggerType] = None
     category: Optional[AfflictionCategoryType] = None
-    effects: Dict = field(default_factory=dict)
+    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
 
 
-@register_dataclass_with_json
-@dataclass
-class IntentsData:
-    """
-    Hold the input intents
-    """
-    up: bool = False
-    down: bool = False
-    left: bool = False
-    right: bool = False
-    up_right: bool = False
-    up_left: bool = False
-    down_right: bool = False
-    down_left: bool = False
-    confirm: bool = False
-    cancel: bool = False
-    exit_game: bool = False
-    skill0: bool = False
-    skill1: bool = False
-    skill2: bool = False
-    skill3: bool = False
-    skill4: bool = False
-    skill5: bool = False
-    refresh_data: bool = False
-    button_pressed: bool = False
-    debug_toggle: bool = False
-    dev_toggle: bool = False
+######################### VALIDATORS ####################################
+#
+# def _validate_effect_type(s):
+#     if s is not None and not hasattr(EffectType, s):
+#         raise ValidationError(f"{s} is not a valid effect type")

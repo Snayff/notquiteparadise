@@ -65,11 +65,11 @@ class CombatStats:
         return entity.get_primary_stat(self.entity, stat)
 
     @property
-    def max_hp(self) -> int:
+    def max_health(self) -> int:
         """
         Total damage an entity can take before death.
         """
-        stat = SecondaryStat.MAX_HP
+        stat = SecondaryStat.MAX_HEALTH
         stat_data = library.get_secondary_stat_data(stat)
         base_value = stat_data.base_value
 

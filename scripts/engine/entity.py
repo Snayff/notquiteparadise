@@ -9,8 +9,7 @@ import tcod.map
 from typing import TYPE_CHECKING, TypeVar
 from scripts.engine import utility, world, debug
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
-    IsGod, \
-    Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV
+    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -24,6 +23,7 @@ _C = TypeVar("_C", bound=Component)
 _esper = esper.World()
 
 ###################### GET ############################################
+
 get_entitys_components = _esper.components_for_entity
 get_component = _esper.get_component
 get_components = _esper.get_components
@@ -155,7 +155,7 @@ def get_player_fov() -> Optional[tcod.map.Map]:
     return None
 
 
-############## ENTITY EXISTENCE ################
+######################### ENTITY EXISTENCE ##############################
 
 def create(components: List[Component] = None) -> int:
     """
@@ -239,7 +239,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # give full resources
     stats = get_combat_stats(entity)
-    add_component(entity, Resources(stats.max_hp, stats.max_stamina))
+    add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
     # get skills from characteristics
     known_skills = ["basic_attack"]  # N.B. All actors start with basic attack
@@ -266,7 +266,23 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     return entity
 
 
-############### COMPONENT ACTIONS ################################
+def create_projectile(creators_name: str):
+    pass
+# "__dataclass__": "ProjectileData",
+#             "sprite": "",
+#             "speed": "slow",
+#             "travel_type": "instant",
+#             "range": 1,
+#             "required_tags": [
+#                 "other_entity"
+#             ],
+#             "expiry_type": "fizzle",
+#             "terrain_collision": "fizzle",
+#             "shape": "target",
+#             "shape_size": 1
+
+
+############################## COMPONENT ACTIONS ################################
 
 def add_component(entity: int, component: Component):
     """

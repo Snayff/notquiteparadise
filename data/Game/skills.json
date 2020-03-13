@@ -5,8 +5,8 @@
         "description": "A simple attack.",
         "icon": "placeholder/icon_00.png",
         "name": "basic attack",
-        "resource_cost": "10",
-        "resource_type": "hp",
+        "resource_cost": 10,
+        "resource_type": "health",
         "target_directions": [
             "down",
             "down_left",

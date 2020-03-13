@@ -29,7 +29,44 @@
             "flaming": {
                 "__dataclass__": "InteractionData",
                 "cause": "flaming",
-                "change_to": "dirt"
+                "effects": {
+                    "add_aspect": {
+                        "__dataclass__": "EffectData",
+                        "accuracy": 100,
+                        "affect_stat_amount": 0,
+                        "affliction_name": "None",
+                        "aspect_name": "dirt",
+                        "damage": 0,
+                        "damage_type": null,
+                        "duration": 3,
+                        "effect_type": "add_aspect",
+                        "mod_amount": 0,
+                        "mod_stat": null,
+                        "required_tags": [
+                            "any"
+                        ],
+                        "stat_to_affect": null,
+                        "stat_to_target": "None"
+                    },
+                    "remove_aspect": {
+                        "__dataclass__": "EffectData",
+                        "accuracy": 100,
+                        "affect_stat_amount": 0,
+                        "affliction_name": "None",
+                        "aspect_name": "bog",
+                        "damage": 0,
+                        "damage_type": null,
+                        "duration": 3,
+                        "effect_type": "remove_aspect",
+                        "mod_amount": 0,
+                        "mod_stat": null,
+                        "required_tags": [
+                            "any"
+                        ],
+                        "stat_to_affect": null,
+                        "stat_to_target": "None"
+                    }
+                }
             }
         },
         "name": "bog",

@@ -216,9 +216,9 @@ class SecondaryStat(SimpleNamespace):
     """
     Secondary stats
     """
-    MAX_HP = SecondaryStatType("max_hp")
+    MAX_HEALTH = SecondaryStatType("max_health")
     MAX_STAMINA = SecondaryStatType("max_stamina")
-    HP = SecondaryStatType("hp")
+    HEALTH = SecondaryStatType("health")
     STAMINA = SecondaryStatType("stamina")
     ACCURACY = SecondaryStatType("accuracy")
     RESIST_BURN = SecondaryStatType("resist_burn")
@@ -248,6 +248,7 @@ class EffectType(SimpleNamespace):
     MOVE = EffectTypeType("move")
     AFFECT_STAT = EffectTypeType("affect_stat")
     ADD_ASPECT = EffectTypeType("add_aspect")
+    REMOVE_ASPECT = EffectTypeType("remove_aspect")
 
 
 class AfflictionCategory(SimpleNamespace):

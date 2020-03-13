@@ -3,13 +3,14 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.engine import world, chrono, entity, state, skill, debug
-from scripts.engine.core.constants import MessageType, TargetTag, GameState
+from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
     EndTurnEvent, ChangeGameStateEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic
 from scripts.engine.ui.manager import ui
+from scripts.engine.utility import value_to_member
 
 if TYPE_CHECKING:
     pass
@@ -81,8 +82,8 @@ class EntityHandler(Subscriber):
                 if knowledge:
                     skill_name = knowledge.skills[0]
                     skill_data = library.get_skill_data(skill_name)
-                    # FIXME - how to convert from value to instance attribute?
-                    if (dir_x, dir_y) in skill_data.target_directions:
+                    direction = value_to_member((dir_x, dir_y), Direction)
+                    if direction.lower() in skill_data.target_directions:
                         publisher.publish((UseSkillEvent(ent, skill_name, event.start_pos, (dir_x, dir_y))))
                     else:
                         publisher.publish(MessageEvent(MessageType.LOG, f"{skill_name} doesn't go that way!"))

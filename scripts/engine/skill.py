@@ -24,7 +24,6 @@ if TYPE_CHECKING:
 ########################   SKILL  & EFFECTS REQS. #######################################
 # all skills create a projectile, use that to specify conditions such as speed and sprite. <-
     # TODO - create the projectile
-    # TODO - fix the directions
 # use a standardised collection of triggers
 # allow for conditional criteria
 # each effect is unique so each effect must be able to accept multiple params e.g. damage types
@@ -119,6 +118,7 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     """
     Use the skill in the target direction from the start position.
     """
+    # TODO - rewrite to create projectile
     # initial values
     skill_data = library.get_skill_data(skill_name)
     skill_range = skill_data.range

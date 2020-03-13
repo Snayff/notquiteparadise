@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import tcod
+from abc import ABC
 from typing import TYPE_CHECKING
-from scripts.engine.core.definitions import CharacteristicSpritesData
+from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
 
 if TYPE_CHECKING:
     import pygame
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 #########################################################
 
 
-class Component:
+class Component(ABC):
     """ Base component"""
     pass
 
@@ -81,7 +82,6 @@ class Race(Component):
     """
     An entity's people.
     """
-
     def __init__(self, people_name: str):
         self.name: str = people_name
 
@@ -90,7 +90,6 @@ class Savvy(Component):
     """
     An entity's savvy.
     """
-
     def __init__(self, savvy_name: str):
         self.name: str = savvy_name
 
@@ -99,14 +98,13 @@ class Homeland(Component):
     """
     An entity's homeland.
     """
-
     def __init__(self, homeland_name: str):
         self.name: str = homeland_name
 
 
-class AIBasic(Component):
+class Behaviour(Component):
     """
-    An ai to control an entity.
+    An ai behaviour to control an entity.
     """
 
 
@@ -163,3 +161,11 @@ class FOV(Component):
     """
     def __init__(self, fov_map: tcod.map.Map):
         self.fov_map: tcod.map.Map = fov_map
+
+
+class Interaction(Component):
+    """
+    The effects triggered when a specific criteria is met
+    """
+    def __init__(self, interactions: List[InteractionData]):
+        self.interactions = interactions
