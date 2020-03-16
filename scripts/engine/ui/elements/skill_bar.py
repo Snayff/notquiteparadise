@@ -1,9 +1,10 @@
-import logging
-from typing import List, Optional
+from __future__ import annotations
 
+import logging
 import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow
+from typing import List, Optional
 
 
 class SkillBar(UIWindow):

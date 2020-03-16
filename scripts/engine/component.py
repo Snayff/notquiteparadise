@@ -3,7 +3,6 @@ from __future__ import annotations
 import tcod.map
 from abc import ABC
 from typing import TYPE_CHECKING
-
 from scripts.engine.ai import AIBehaviour
 from scripts.engine.core.constants import InteractionCauseType
 from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
@@ -18,7 +17,9 @@ if TYPE_CHECKING:
 
 
 class Component(ABC):
-    """ Base component"""
+    """
+    Base component
+    """
     pass
 
 
@@ -114,12 +115,16 @@ class Behaviour(Component):
 
 
 class HasCombatStats(Component):
-    """A flag to show if an entity has stats used for combat."""
+    """
+    A flag to show if an entity has stats used for combat.
+    """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Knowledge(Component):
-    """An entity's knowledge, including skills."""
+    """"
+    An entity's knowledge, including skills.
+    """
     def __init__(self, skills: List[str] = None):
         if skills is None:
             skills = []
@@ -127,7 +132,9 @@ class Knowledge(Component):
 
 
 class Affliction(Component):
-    """An entity's Boons and Banes. e.g. {boon_name: duration}"""
+    """
+    An entity's Boons and Banes. held in dict as {boon_name: duration}
+    """
     def __init__(self, boons: Optional[Dict[str, int]] = None, banes: Optional[Dict[str, int]] = None):
         if banes is None:
             banes = {}
@@ -138,7 +145,9 @@ class Affliction(Component):
 
 
 class Aspect(Component):
-    """An entity's aspects. A static tile modifier. e.g. {aspect_name: duration} """
+    """
+    An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
+    """
     def __init__(self, aspects: Optional[Dict[str, int]] = None):
         if aspects is None:
             aspects = {}

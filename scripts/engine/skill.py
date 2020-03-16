@@ -5,25 +5,24 @@ import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
-from scripts.engine.core.constants import MessageType, SecondaryStat, ProjectileExpiry, \
-    TerrainCollision, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, HitModifier, \
-    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, EffectType, HitValueType, \
-    TravelMethodType
-from scripts.engine.core.definitions import EffectData
+from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, HitModifier, \
+    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction
+from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
+    AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MessageEvent, DieEvent
+from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent
 from scripts.engine.library import library
-from scripts.engine.utility import get_coords_from_shape
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import List, Tuple, Type
+    from typing import List, Tuple
+
 
 #########################################################################################
 ########################   SKILL  & EFFECTS REQS. #######################################
-# all skills create a projectile, create_projectile that to specify conditions such as speed and sprite. <-
-# create_projectile a standardised collection of triggers
+# all skills create a projectile, use that to specify conditions such as speed and sprite. <-
+# use a standardised collection of triggers
 # allow for conditional criteria
 # each effect is unique so each effect must be able to accept multiple params e.g. damage types
 # there should be Active and Passive Skills
@@ -41,7 +40,7 @@ if TYPE_CHECKING:
 
 def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
     """
-    Confirm entity can create_projectile skill on targeted position. True if can create_projectile the skill. Else False.
+    Confirm entity can use skill on targeted position. True if can use the skill. Else False.
     """
     start_tile = target_tile = None
 
@@ -53,7 +52,7 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
 
     skill_data = library.get_skill_data(skill_name)
 
-    # check we have everything we need and if so create_projectile the skill
+    # check we have everything we need and if so use the skill
     if start_tile and target_tile:
         if world.tile_has_tags(target_tile, skill_data.required_tags, ent):
             resource_type = skill_data.resource_type
@@ -112,87 +111,22 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
 
-def create_projectile(using_entity: int, skill_name: str, start_position: Tuple[int, int],
+def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
         target_direction: Tuple[int, int]):
     """
-    Creates a projectile containing relevant skill details
+    Creates a projectile containing relevant skill details.
     """
-    # TODO - rewrite to create projectile
+
     # initial values
-    skill_data = library.get_skill_data(skill_name)
-    skill_range = skill_data.range
-    terrain_collision = skill_data.terrain_collision
-    travel_type = skill_data.travel_type
-    expiry_type = skill_data.expiry_type
     name = entity.get_name(using_entity)
     start_x, start_y = start_position
     current_x, current_y = start_position
     dir_x, dir_y = target_direction
-    direction = (target_direction[0], target_direction[1])
+    direction = utility.value_to_member((target_direction[0], target_direction[1]), Direction)
 
-    # flags
-    activate = False
-    fizzle = False
+    logging.info(f"{name} used {skill_name} at ({start_x}, {start_y}) in {direction}...")
 
-    logging.info(f"{name} used {skill_name} at ({start_x},{start_y}) in {direction}...")
-
-    # do we have everything we need?
-    if terrain_collision and travel_type and expiry_type:
-        # continue finding the position to use the skill on until we fizzle or activate
-        while not activate and not fizzle:
-
-            # get last free position in direction
-            current_x, current_y = _get_furthest_free_position(start_position, (dir_x, dir_y), skill_range,
-                                                               travel_type)
-
-            # determine how far we've travelled
-            distance = max(abs(start_x) - abs(current_x), abs(start_y) - abs(current_y))
-
-            # are we at max distance?
-            if distance >= skill_range:
-                pass
-                # # handle expiry type
-                # if expiry_type == ProjectileExpiry.FIZZLE:
-                #     fizzle = True
-                #     logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
-                # elif expiry_type == ProjectileExpiry.ACTIVATE:
-                #     activate = True
-                #     logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
-            else:
-                # we arent at max so we must have hit something one space further along
-                current_x, current_y = current_x + dir_x, current_y + dir_y
-                tile = world.get_tile((current_x, current_y))
-
-                if tile:
-                    # did we hit something that has the tags we need?
-                    if world.tile_has_tags(tile, skill_data.required_tags, using_entity):
-                        activate = True
-                        logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
-                    # else:
-                    #     # we didnt hit the right thing so what happens now?
-                    #     if terrain_collision == TerrainCollision.ACTIVATE:
-                    #         activate = True
-                    #         logging.debug(f"-> and hit something. Skill will activate at "
-                    #                       f"({current_x},{current_y}).")
-                    #     elif terrain_collision == TerrainCollision.REFLECT:
-                    #         dir_x, dir_y = get_reflected_direction((current_x, current_y), direction)
-                    #         logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
-                    #     elif terrain_collision == TerrainCollision.FIZZLE:
-                    #         activate = False
-                    #         logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
-                else:
-                    activate = False
-                    logging.warning(f"-> and went out of bounds at ({current_x},{current_y}).")
-
-    # deal with activation
-    if activate:
-        if skill_data.shape:
-            coords = get_coords_from_shape(skill_data.shape, skill_data.shape_size)
-            effected_tiles = world.get_tiles(current_x, current_y, coords)
-
-            # apply any effects
-            for effect_name, effect_data in skill_data.effects.items():
-                apply_effect(effect_data.effect_type, skill_name, effected_tiles, using_entity)
+    entity.create_projectile(using_entity, skill_name, current_x, current_y, dir_x, dir_y)
 
 
 ########################################## GET ####################################
@@ -251,49 +185,6 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     return current_x, current_y
 
 
-def get_reflected_direction(current_position: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
-    """
-    Use surrounding walls to understand how the object should be reflected.
-    """
-    current_x, current_y = current_position
-    dir_x, dir_y = target_direction
-
-    # work out position of adjacent walls
-    adj_tile = world.get_tile((current_x, current_y - dir_y))
-    if adj_tile:
-        collision_adj_y = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
-    else:
-        # found no tile
-        collision_adj_y = True
-
-    adj_tile = world.get_tile((current_x - dir_x, current_y))
-    if adj_tile:
-        collision_adj_x = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
-    else:
-        # found no tile
-        collision_adj_x = True
-
-    # where did we collide?
-    if collision_adj_x:
-        if collision_adj_y:
-            # hit a corner, bounce back towards entity
-            dir_x *= -1
-            dir_y *= -1
-        else:
-            # hit horizontal wall, reverse y direction
-            dir_y *= -1
-    else:
-        if collision_adj_y:
-            # hit a vertical wall, reverse x direction
-            dir_x *= -1
-        else:  # not collision_adj_x and not collision_adj_y:
-            # hit a single piece, on the corner, bounce back towards entity
-            dir_x *= -1
-            dir_y *= -1
-
-    return dir_x, dir_y
-
-
 def _get_hit_type(to_hit_score: int) -> HitTypeType:
     """
     Get the hit type from the to hit score
@@ -308,30 +199,53 @@ def _get_hit_type(to_hit_score: int) -> HitTypeType:
 
 ########################################## EFFECTS ####################################
 
-def apply_effect(effect: EffectData, effected_tiles: List[Tile], causing_entity: int):
+def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entity: int):
     """
     Apply an effect to all tiles in a list.
     """
-    effect_type = effect.effect_type
-
-    # FIXME - re build to use effect not skill_name
     name = entity.get_name(causing_entity)
-    log_string = f"Applying {effect_type} effect, caused by '{name}'."
+    log_string = f"Applying {effect.effect_type} effect, caused by '{name}'."
     logging.info(log_string)
 
-    if effect_type == Effect.DAMAGE:
-        _apply_damage_effect(skill_name, effected_tiles, causing_entity)
-    elif effect_type == Effect.APPLY_AFFLICTION:
-        _apply_affliction_effect(skill_name, effected_tiles, causing_entity)
-    elif effect_type == Effect.ADD_ASPECT:
-        _apply_aspect_effect(skill_name, effected_tiles)
+    if isinstance(effect, DamageEffectData):
+        _process_damage_effect(effect, effected_tiles, causing_entity)
+    elif isinstance(effect, ApplyAfflictionEffectData):
+        _process_apply_affliction_effect(effect, effected_tiles, causing_entity)
+    elif isinstance(effect, AddAspectEffectData):
+        _process_add_aspect_effect(effect, effected_tiles)
+    elif isinstance(effect, RemoveAspectEffectData):
+        _process_remove_aspect_effect(effect, effected_tiles)
+    elif isinstance(effect, TriggerSkillEffectData):
+        _process_trigger_skill_effect(effect, effected_tiles, causing_entity)
+    elif isinstance(effect, AffectStatEffectData):
+        logging.warning("Trying to process affect stat. This applies passively. What are you doing?")
 
 
-def _apply_aspect_effect(skill_name: str, effected_tiles: List[Tile]):
-    data = library.get_skill_effect_data(skill_name, Effect.ADD_ASPECT)
+def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles: List[Tile], attacker: int):
+    skill_name = effect.skill_name
+    data = library.get_skill_data(skill_name)
+    position = entity.get_entitys_component(attacker, Position)
+    start_pos = (position.x, position.y)
+    # uses first tile in list for target direction. Should only be one tile when triggering trigger skill.
+    target_dir = (effected_tiles[0].x, effected_tiles[0].y)
+    direction = world.get_direction(start_pos, target_dir)
 
+    publisher.publish(UseSkillEvent(attacker, skill_name, start_pos, direction, data.time_cost))
+
+
+def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles: List[Tile]):
+    aspect_name = effect.aspect_name
+    entities = entity.get_entities_and_components_in_area(effected_tiles, Aspect)
+
+    # loop all relevant aspects and if one is matching delete the entity
+    for ent, (position, aspect) in entities.items():
+        if aspect_name in aspect.aspects:
+            entity.delete(ent)
+
+
+def _process_add_aspect_effect(effect: AddAspectEffectData, effected_tiles: List[Tile]):
     for tile in effected_tiles:
-        _create_aspect(data.aspect_name, tile)
+        _create_aspect(effect.aspect_name, tile)
 
 
 def _create_aspect(aspect_name: str, tile: Tile):
@@ -342,7 +256,6 @@ def _create_aspect(aspect_name: str, tile: Tile):
 
     for ent, (position, aspect) in entities.items():
         # if there is an active version of the same aspect already
-        # TODO - should probably move this check outside of this func
         if aspect:
             # increase duration to initial value
             aspect.aspects[aspect_name] = data.duration
@@ -350,9 +263,8 @@ def _create_aspect(aspect_name: str, tile: Tile):
             entity.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
 
 
-def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attacker: int):
-    effect_data = library.get_skill_effect_data(skill_name, Effect.APPLY_AFFLICTION)
-    affliction_data = library.get_affliction_data(effect_data.affliction_name)
+def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected_tiles: List[Tile], attacker: int):
+    affliction_data = library.get_affliction_data(effect.affliction_name)
     attackers_stats = entity.get_combat_stats(attacker)
 
     # get relevant entities
@@ -362,20 +274,20 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
     for defender, (position, resources, has_stats, identity) in entities.items():
 
         # create var to hold the modified duration, if it does change, or the base duration
-        base_duration = effect_data.duration
+        base_duration = effect.duration
         modified_duration = base_duration
         defender_stats = entity.get_combat_stats(defender)
         tile = world.get_tile((position.x, position.y))
 
         if tile:
             # check we have all tags
-            if world.tile_has_tags(tile, effect_data.required_tags, attacker):
+            if world.tile_has_tags(tile, effect.required_tags, attacker):
                 # Roll for BANE application
                 if affliction_data.category == AfflictionCategory.BANE:
                     # if we havent targeted a stat then default to 0
-                    if effect_data.stat_to_target:
-                        to_hit_score = _calculate_to_hit_score(defender_stats, effect_data.accuracy,
-                                                           effect_data.stat_to_target, attackers_stats)
+                    if effect.stat_to_target:
+                        to_hit_score = _calculate_to_hit_score(defender_stats, effect.accuracy,
+                                                           effect.stat_to_target, attackers_stats)
                     else:
                         to_hit_score = 0
                     hit_type = _get_hit_type(to_hit_score)
@@ -384,7 +296,8 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
 
                     # check if afflictions applied
                     if hit_type == HitType.GRAZE:
-                        msg = f"{name} resisted {effect_data.affliction_name}."
+                        msg = f"{name} resisted {effect.affliction_name}."
+                        # TODO - ensure if player involved it shows as "You"
                         publisher.publish(MessageEvent(MessageType.LOG, msg))
                     else:
                         hit_msg = ""
@@ -394,14 +307,15 @@ def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attack
                             modified_duration = int(base_duration * HitModifier.CRIT)
                             hit_msg = f"a critical "
 
-                        msg = f"{name} succumbed to {hit_msg}{effect_data.affliction_name}."
+                        msg = f"{name} succumbed to {hit_msg}{effect.affliction_name}."
+                        # TODO - ensure if player involved it shows as "You"
                         publisher.publish(MessageEvent(MessageType.LOG, msg))
 
-                        _create_affliction(defender, effect_data.affliction_name, modified_duration)
+                        _create_affliction(defender, effect.affliction_name, modified_duration)
 
-                # Just apply the BOON
+                # Just process the BOON
                 elif affliction_data.category == AfflictionCategory.BOON:
-                    _create_affliction(defender, effect_data.affliction_name, modified_duration)
+                    _create_affliction(defender, effect.affliction_name, modified_duration)
 
 
 def _create_affliction(ent: int, affliction_name: str, duration: int):
@@ -445,7 +359,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
                              f" {duration} so duration remains the same."
                 logging.debug(log_string)
 
-    # no current afflictions of same type so apply new one
+    # no current afflictions of same type so process new one
     else:
         logging.info(f"Applying {affliction_name} afflictions to '{name}' with duration of {duration}.")
 
@@ -457,8 +371,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
     entity.add_component(ent, Affliction(boon, bane))
 
 
-def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: int):
-    data = library.get_skill_effect_data(skill_name, Effect.DAMAGE)
+def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):
     attackers_stats = entity.get_combat_stats(attacker)
 
     entities = entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
@@ -467,19 +380,19 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
     for defender, (position, resources, has_stats) in entities.items():
         tile = world.get_tile((position.x, position.y))
         if tile:
-            if world.tile_has_tags(tile, data.required_tags, attacker):
-                # get the info to apply the damage
+            if world.tile_has_tags(tile, effect.required_tags, attacker):
+                # get the info to process the damage
                 entitys_stats = entity.get_combat_stats(defender)
 
                 # check we have a stat to target, else default to 0
-                if data.stat_to_target:
-                    to_hit_score = _calculate_to_hit_score(entitys_stats, data.accuracy, data.stat_to_target,
+                if effect.stat_to_target:
+                    to_hit_score = _calculate_to_hit_score(entitys_stats, effect.accuracy, effect.stat_to_target,
                                                        attackers_stats)
                 else:
                     to_hit_score = 0
 
                 hit_type = _get_hit_type(to_hit_score)
-                damage = _calculate_damage(entitys_stats, hit_type, data, attackers_stats)
+                damage = _calculate_damage(entitys_stats, hit_type, effect, attackers_stats)
 
                 # who did the damage? (for informing the player)
                 if attacker:
@@ -508,6 +421,7 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
 
                     # TODO - add the damage type to the text and replace the type with an icon
                     # TODO - add the explanation of the damage roll to a tooltip
+                    # TODO - ensure if player involved it shows as "You"
 
                     if resources.health <= 0:
                         publisher.publish(DieEvent(defender))
@@ -515,6 +429,7 @@ def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: 
                 else:
                     # log no damage
                     msg = f" {defender_name} resists damage from {attacker_name}."
+                    # TODO - ensure if player involved it shows as "You"
                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 
 

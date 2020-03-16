@@ -3,14 +3,16 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.engine import world, chrono, entity, state, skill, debug
-from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction
+from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
+    BASE_MOVE_COST
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
     EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic
+from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import value_to_member
+from scripts.engine.world_objects.combat_stats import CombatStats
 
 if TYPE_CHECKING:
     pass
@@ -57,8 +59,6 @@ class EntityHandler(Subscriber):
         old_x, old_y = event.start_pos
         target_x = old_x + dir_x
         target_y = old_y + dir_y
-
-        # is there something in the way?
         target_tile = world.get_tile((target_x, target_y))
 
         # check a tile was returned
@@ -74,35 +74,24 @@ class EntityHandler(Subscriber):
             publisher.publish(TerrainCollisionEvent(ent, target_tile, (target_x, target_y), event.start_pos))
             publisher.publish(MessageEvent(MessageType.LOG, f"I can't go that way!"))
 
-        # check if entity blocking tile to attack
+        # check if entity blocking tile
         elif is_entity_on_tile:
             entities_at_location = entity.get_entities_and_components_in_area([target_tile], None)
-            blocking_entity = next(iter(entities_at_location))
+            blocking_entity = next(iter(entities_at_location))  # we only have one entity per tile so get that
             publisher.publish(EntityCollisionEvent(ent, blocking_entity, (target_x, target_y), event.start_pos))
-
-
-            knowledge = entity.get_entitys_component(ent, Knowledge)
-            if knowledge:
-                skill_name = knowledge.skills[0]
-                skill_data = library.get_skill_data(skill_name)
-                direction = value_to_member((dir_x, dir_y), Direction)
-                if direction.lower() in skill_data.target_directions:
-                    publisher.publish(UseSkillEvent(ent, skill_name, event.start_pos, (dir_x, dir_y),
-                                                    skill_data.time_cost))
-                else:
-                    publisher.publish(MessageEvent(MessageType.LOG, f"{skill_name} doesn't go that way!"))
-            else:
-                debug.log_component_not_found(ent, "create_projectile (bump) basic attack", Knowledge)
 
         # if nothing in the way, time to move!
         elif not is_entity_on_tile and not is_tile_blocking_movement:
             position = entity.get_entitys_component(ent, Position)
+
+            # update position
             if position:
                 position.x = target_x
                 position.y = target_y
             else:
                 debug.log_component_not_found(ent, "update sprite to move", Position)
 
+            # TODO - move to UI handler
             aesthetic = entity.get_entitys_component(ent, Aesthetic)
             if aesthetic:
                 aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
@@ -112,16 +101,22 @@ class EntityHandler(Subscriber):
                 debug.log_component_not_found(ent, "tried to update sprite to move", Aesthetic)
 
             # update fov if needed
-            if entity == entity.get_player() and position:
-                stats = entity.get_combat_stats(ent)
-                sight_range = max(0, stats.sight_range)
-                player_fov = entity.get_player_fov()
-                if player_fov:
-                    world.recompute_fov(position.x, position.y, sight_range, player_fov)
+            if entity.has_component(ent, FOV):
+                if entity.has_component(ent, CombatStats):
+                    stats = entity.get_combat_stats(ent)
+                    sight_range = max(0, stats.sight_range)
+                else:
+                    sight_range = DEFAULT_SIGHT_RANGE
+                fov_map = entity.get_entitys_component(ent, FOV).map
+                world.recompute_fov(position.x, position.y, sight_range, fov_map)
+
+                # update tiles if it is player
+                if ent == entity.get_player():
+                    world.update_tile_visibility(fov_map)
 
             # if entity that moved is turn holder then end their turn
             if entity == chrono.get_turn_holder():
-                publisher.publish(EndTurnEvent(entity, 10))  # TODO - get cost from preceding event
+                publisher.publish(EndTurnEvent(entity, BASE_MOVE_COST))
 
     @staticmethod
     def process_skill(event: UseSkillEvent):
@@ -137,8 +132,8 @@ class EntityHandler(Subscriber):
             if skill.can_afford_cost(ent, skill_data.resource_type, skill_data.resource_cost):
                 skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
 
-                # create_projectile skill
-                skill.create_projectile(ent, skill_name, event.start_pos, event.direction)
+                # use skill i.e create projectile
+                skill.use(ent, skill_name, event.start_pos, event.direction)
 
                 # end the turn if the entity isnt a god
                 if not entity.has_component(ent, IsGod):
@@ -147,10 +142,10 @@ class EntityHandler(Subscriber):
             else:
                 # is it the player that's can't afford it?
                 if ent == entity.get_player():
-                    publisher.publish(MessageEvent(MessageType.LOG, "You cannot afford to do that."))
+                    publisher.publish(MessageEvent(MessageType.LOG, "I cannot afford to do that."))
                 else:
                     name = entity.get_name(ent)
-                    logging.warning(f"{name} tried to create_projectile {skill_name}, which they can`t afford")
+                    logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
 
     @staticmethod
     def process_die(event: DieEvent):
@@ -176,7 +171,7 @@ class EntityHandler(Subscriber):
     @staticmethod
     def process_want_to_use_skill(event: WantToUseSkillEvent):
         """
-        Process the desire to create_projectile a skill. """
+        Process the desire to use a skill. """
         skill_number = event.skill_number
         player = entity.get_player()
 
@@ -188,7 +183,7 @@ class EntityHandler(Subscriber):
                 skill_pressed = knowledge.skills[skill_number]
             else:
                 skill_pressed = ""
-                debug.log_component_not_found(player, "tried to process wanting to create_projectile a skill", Knowledge)
+                debug.log_component_not_found(player, "tried to process wanting to use a skill", Knowledge)
 
             # confirm skill pressed doesn't match skill already pressed
             if skill_pressed != active_skill and knowledge:
@@ -198,7 +193,7 @@ class EntityHandler(Subscriber):
                     if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
                         publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_pressed))
 
-            # skill matches already selected so create_projectile skill!
+            # skill matches already selected so use skill!
             else:
                 pass
                 # TODO - activate skill. Need to get selected tile.

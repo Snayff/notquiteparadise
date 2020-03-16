@@ -163,7 +163,7 @@ def _process_targeting_mode_intents(intent):
     """
     Process intents for the player turn game state.
     """
-    # Cancel create_projectile
+    # Cancel use
     if intent == InputIntent.CANCEL:
         publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
 

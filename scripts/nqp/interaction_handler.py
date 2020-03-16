@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+
+import scripts.engine.world
 from scripts.engine import world, entity, skill, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision
 from scripts.engine.core.event_core import Subscriber
@@ -134,7 +136,7 @@ class InteractionHandler(Subscriber):
                 self._apply_effects_to_tiles(ent, InteractionCause.TERRAIN_COLLISION, (target_x, target_y))
 
             elif terrain_collision == TerrainCollision.REFLECT:
-                dir_x, dir_y = skill.get_reflected_direction((current_x, current_y), event.direction)
+                dir_x, dir_y = scripts.engine.world.get_reflected_direction((current_x, current_y), event.direction)
                 logging.info(f"-> change direction to ({dir_x}, {dir_y}).")
                 behaviour.behaviour.direction = (dir_x, dir_y)
 
@@ -171,4 +173,4 @@ class InteractionHandler(Subscriber):
                     effected_tiles = world.get_tiles(target_x, target_y, coords)
 
                     # apply effects
-                    skill.apply_effect(effect, effected_tiles, causing_entity)
+                    skill.process_effect(effect, effected_tiles, causing_entity)

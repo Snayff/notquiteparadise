@@ -8,10 +8,12 @@ import pygame
 import tcod.map
 from typing import TYPE_CHECKING, TypeVar
 from scripts.engine import utility, world, debug
+from scripts.engine.ai import ProjectileBehaviour
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
-    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interaction
-from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo
-from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData
+    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interaction, IsProjectile, Behaviour
+from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect
+from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData, InteractionData, \
+    TriggerSkillEffectData
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
@@ -22,6 +24,7 @@ if TYPE_CHECKING:
 _C = TypeVar("_C", bound=Component)
 _esper = esper.World()
 
+# TODO - Consider renaming module. Existence? Being?
 ###################### GET ############################################
 
 get_entitys_components = _esper.components_for_entity
@@ -217,8 +220,10 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
         savvy_name: str, is_player: bool = False) -> int:
     """
     Create an entity with all of the components to be an actor. is_player is Optional and defaults to false.
-    Returns Entity ID.
+    Returns entity ID.
     """
+    # TODO - rename create player. add new method for create actor that uses actor characteristic
+
     actor: List[Component] = []
 
     # player components
@@ -233,8 +238,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Race(people_name))
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
-    actor.append((FOV(world.create_fov_map())))
-    actor.append(Interaction({}))
+    actor.append(FOV(world.create_fov_map()))
 
     entity = create(actor)
 
@@ -242,8 +246,14 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     stats = get_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
+    # setup basic attack as a known skill and an interaction
+    basic_attack_name = "basic_attack"
+    known_skills = [basic_attack_name]  # N.B. All actors start with basic attack
+    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name)
+    basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
+    actor.append(Interaction({InteractionCause.ENTITY_COLLISION: basic_attack}))
+
     # get skills from characteristics
-    known_skills = ["basic_attack"]  # N.B. All actors start with basic attack
     people_data = library.get_people_data(people_name)
     if people_data.known_skills != ["none"]:
         known_skills += people_data.known_skills
@@ -257,30 +267,36 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
         known_skills += savvy_data.known_skills
 
     # add skills to entity
-    _esper.add_component(entity, Knowledge(known_skills))
+    add_component(entity, Knowledge(known_skills))
 
     # add aesthetic
     characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
     sprites = build_characteristic_sprites(characteristics)
-    _esper.add_component(entity, Aesthetic(sprites.idle, sprites))
+    add_component(entity, Aesthetic(sprites.idle, sprites))
 
     return entity
 
-# TODO - fix naming conflict with skill.create_projectile
-def create_projectile(creators_name: str):
-    pass
-# "__dataclass__": "ProjectileData",
-#             "sprite": "",
-#             "speed": "slow",
-#             "travel_type": "instant",
-#             "range": 1,
-#             "required_tags": [
-#                 "other_entity"
-#             ],
-#             "expiry_type": "fizzle",
-#             "terrain_collision": "fizzle",
-#             "shape": "target",
-#             "shape_size": 1
+
+def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, target_dir_x: int, target_dir_y: int):
+    """
+    Create an entity with all of the components to be a projectile. Returns entity ID.
+    """
+    data = library.get_skill_data(skill_name).projectile
+    projectile: List[Component] = []
+
+    # TODO - get aesthetic info
+    name = get_name(creating_entity)
+    projectile_name = f"{skill_name}'s projectile"
+    desc = f"{name}'s {skill_name} projectile"
+    projectile.append(Identity(projectile_name, desc))
+    projectile.append(IsProjectile())
+    projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
+    projectile.append(Behaviour(ProjectileBehaviour(creating_entity, (target_dir_x, target_dir_y), data.range,
+                                                    skill_name)))
+
+    entity = create(projectile)
+
+    return entity
 
 
 ############################## COMPONENT ACTIONS ################################
@@ -424,7 +440,7 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
 
         # which intervention, if any, shall the god consider using?
         chosen_intervention, = random.choices(eligible_interventions, intervention_weightings)
-        # N.B. create_projectile , to unpack the result
+        # N.B. use , to unpack the result
 
         # if god has chosen to take an action then add to list
         if chosen_intervention != "Nothing":

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import tcod.map
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Tuple
 from scripts.engine import entity, utility
 from scripts.engine.component import Position, Blocking
 from scripts.engine.core.constants import TargetTag, FOVInfo, Shape, TargetTagType
@@ -437,10 +437,9 @@ def is_tile_in_fov(x: int, y: int, fov_map) -> bool:
 
 def recompute_fov(x: int, y: int, radius: int, fov_map: tcod.map.Map):
     """
-    Recalc the player's fov
+    Recalc the  fov
     """
     tcod.map_compute_fov(fov_map, x, y, radius, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
-    update_tile_visibility(fov_map)
 
 
 def update_tile_visibility(fov_map: tcod.map.Map):
@@ -452,3 +451,46 @@ def update_tile_visibility(fov_map: tcod.map.Map):
     for x in range(0, game_map.width):
         for y in range(0, game_map.height):
             game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
+
+
+def get_reflected_direction(current_position: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
+    """
+    Use surrounding walls to understand how the object should be reflected.
+    """
+    current_x, current_y = current_position
+    dir_x, dir_y = target_direction
+
+    # work out position of adjacent walls
+    adj_tile = world.get_tile((current_x, current_y - dir_y))
+    if adj_tile:
+        collision_adj_y = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+    else:
+        # found no tile
+        collision_adj_y = True
+
+    adj_tile = world.get_tile((current_x - dir_x, current_y))
+    if adj_tile:
+        collision_adj_x = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+    else:
+        # found no tile
+        collision_adj_x = True
+
+    # where did we collide?
+    if collision_adj_x:
+        if collision_adj_y:
+            # hit a corner, bounce back towards entity
+            dir_x *= -1
+            dir_y *= -1
+        else:
+            # hit horizontal wall, reverse y direction
+            dir_y *= -1
+    else:
+        if collision_adj_y:
+            # hit a vertical wall, reverse x direction
+            dir_x *= -1
+        else:  # not collision_adj_x and not collision_adj_y:
+            # hit a single piece, on the corner, bounce back towards entity
+            dir_x *= -1
+            dir_y *= -1
+
+    return dir_x, dir_y

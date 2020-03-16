@@ -28,7 +28,7 @@ class AIBehaviour(ABC):
         pass
 
 
-class Projectile(AIBehaviour):
+class ProjectileBehaviour(AIBehaviour):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
@@ -57,12 +57,6 @@ class Projectile(AIBehaviour):
             publisher.publish(DieEvent(ent))
 
     # TODO -
-    # move in direction 1 tile, pay speed/time cost
-    # rename  interaction cause to trigger
-    # change terrain collision (everywhere) to an interaction/InteractionData
-    # ? standardise effects to create_projectile interactions. interaction cause can be collision
-    #   that would prevent any issues with multiple effects in same dict
-    #   but doesn't solve wanting multiple of same effect from same cause e.g. damage types
-    # introduce death interaction trigger
-    # expiry to trigger interaction
-    # implement robust way of checking interactions
+    #  rename  interaction cause to trigger
+    #  change terrain collision (everywhere) to an interaction/InteractionData
+    #  introduce death interaction trigger
