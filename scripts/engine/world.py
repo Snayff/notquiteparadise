@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import logging
+import tcod.map
 from typing import TYPE_CHECKING, Optional
-
-import tcod
-
 from scripts.engine import entity, utility
 from scripts.engine.component import Position, Blocking
 from scripts.engine.core.constants import TargetTag, FOVInfo, Shape, TargetTagType
@@ -105,7 +103,7 @@ str]) -> Tuple[int, int]:
     return dir_x, dir_y
 
 
-def get_tiles(start_tile_col: int, start_tile_row: int, coords: List[Tuple[int, int]]) -> List[Tile]:
+def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List[Tile]:
     """
     Get multiple tiles based on starting position and coordinates given       
     """
@@ -113,8 +111,8 @@ def get_tiles(start_tile_col: int, start_tile_row: int, coords: List[Tuple[int, 
     tiles = []
 
     for coord in coords:
-        tile_x = coord[0] + start_tile_col
-        tile_y = coord[1] + start_tile_row
+        tile_x = coord[0] + start_x
+        tile_y = coord[1] + start_y
 
         # make sure it is in bounds
         if _is_tile_in_bounds(tile_x, tile_y):
@@ -244,7 +242,7 @@ def get_tiles_in_range_and_fov_of_entity(range_from_centre: int, active_entity: 
     # FIXME - update to ECS
     pass
     # get the tiles in range
-    # coords = utility.create_shape(Shape.SQUARE, range_from_centre)  # square as LOS is square
+    # coords = utility.get_coords_from_shape(Shape.SQUARE, range_from_centre)  # square as LOS is square
     # tiles_in_range = get_tiles(active_entity.x, active_entity.y, coords)
     # tiles_in_range_and_fov = []
     #
@@ -436,6 +434,7 @@ def is_tile_in_fov(x: int, y: int, fov_map) -> bool:
 
 
 ################################ ACTIONS ###############################
+
 def recompute_fov(x: int, y: int, radius: int, fov_map: tcod.map.Map):
     """
     Recalc the player's fov

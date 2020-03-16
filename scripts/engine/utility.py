@@ -93,7 +93,7 @@ def recursive_replace(obj, key, value_to_replace, new_value):
 
 def get_class_members(cls: Type[Any]) -> List[str]:
     """
-    Get a class' members, excluding special methods e.g. anything prefixed with '__'
+    Get a class' members, excluding special methods e.g. anything prefixed with '__'. Useful for use with dataclasses.
     """
     members = []
 
@@ -144,7 +144,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
-def create_shape(shape: ShapeType, size: int) -> List[Tuple[int, int]]:
+def get_coords_from_shape(shape: ShapeType, size: int) -> List[Tuple[int, int]]:
     """
     Get a list of coords from a shape and size.
     """

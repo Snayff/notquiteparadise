@@ -150,7 +150,7 @@ def get_player_fov() -> Optional[tcod.map.Map]:
     if player:
         fov_c = get_entitys_component(player, FOV)
         if fov_c:
-            return fov_c.fov_map
+            return fov_c.map
 
     return None
 

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from scripts.engine import world, chrono, entity, state, skill, debug
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
-    EndTurnEvent, ChangeGameStateEvent
+    EndTurnEvent, ChangeGameStateEvent, ExpireEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic
@@ -51,6 +51,7 @@ class EntityHandler(Subscriber):
         Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
         target tile has entity) or move.
         """
+        # FIXME - remove distance
         # get info from event
         dir_x, dir_y = event.direction
         distance = event.distance

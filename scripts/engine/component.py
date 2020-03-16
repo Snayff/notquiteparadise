@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-import tcod
+import tcod.map
 from abc import ABC
 from typing import TYPE_CHECKING
+
+from scripts.engine.core.constants import InteractionCauseType
 from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
 
 if TYPE_CHECKING:
@@ -160,12 +162,12 @@ class FOV(Component):
     An entities field of view.
     """
     def __init__(self, fov_map: tcod.map.Map):
-        self.fov_map: tcod.map.Map = fov_map
+        self.map: tcod.map.Map = fov_map
 
 
 class Interaction(Component):
     """
     The effects triggered when a specific criteria is met
     """
-    def __init__(self, interactions: List[InteractionData]):
+    def __init__(self, interactions: Dict[InteractionCauseType, InteractionData]):
         self.interactions = interactions

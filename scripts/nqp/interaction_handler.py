@@ -1,50 +1,53 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
-from scripts.engine import world, entity
+from scripts.engine import world, entity, skill, utility
+from scripts.engine.core.constants import InteractionCause, InteractionCauseType
 from scripts.engine.core.event_core import Subscriber
-
-from scripts.engine.component import Position
-from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent
+from scripts.engine.component import Position, Interaction
+from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent, ExpireEvent
+from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    pass
+    from typing import List
 
 
-class MapHandler(Subscriber):
+class InteractionHandler(Subscriber):
     """
-    Handle map related events
+    Handle interaction events
     """
     def __init__(self, event_hub):
-        Subscriber.__init__(self, "map_handler", event_hub)
+        Subscriber.__init__(self, "interaction_handler", event_hub)
 
     def process_event(self, event):
         """
-        Control world_objects events
-
-        Args:
-            event(Event): the event in need of processing
+        Control interaction events
         """
-
         # log that event has been received
         logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
 
         if isinstance(event, TileInteractionEvent):
-            event: TileInteractionEvent
-            self.process_tile_interaction(event)
+            self._process_tile_interaction(event)
 
         elif isinstance(event, EndTurnEvent):
-            event: EndTurnEvent
-            self.process_end_of_turn_updates(event)
+            self._process_end_turn(event)
 
         elif isinstance(event, EndRoundEvent):
-            event: EndRoundEvent
-            self.process_end_of_round_updates()
+            self._process_end_round()
+
+        elif isinstance(event, ExpireEvent):
+            self._process_expiry(event)
 
     @staticmethod
-    def process_tile_interaction(event: TileInteractionEvent):
+    def _process_expiry(event: ExpireEvent):
+        ent = event.entity
+        interactions = entity.get_entitys_component(ent, Interaction)
+        interaction = interactions.interactions.get(InteractionCause.EXPIRE)
+
+    @staticmethod
+    def _process_tile_interaction(event: TileInteractionEvent):
         """
         Check the cause on the aspects of a tile and trigger any interactions.
 
@@ -78,7 +81,7 @@ class MapHandler(Subscriber):
         #                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 
     @staticmethod
-    def process_end_of_turn_updates(event: EndTurnEvent):
+    def _process_end_turn(event: EndTurnEvent):
         """
         Trigger aspects on tile turn holder is on
         """
@@ -91,13 +94,13 @@ class MapHandler(Subscriber):
         #world.trigger_aspects_on_tile(tile)
 
     @staticmethod
-    def process_end_of_round_updates():
+    def _process_end_round():
         """
         Update aspect durations
         """
         game_map = world.get_game_map()
 
-        # TODO - set to only apply within X range of player
+        # TODO - set to only apply to activated entities
         #  TODO - update to EC approach
         # for row in game_map.tiles:
         #     for tile in row:
@@ -105,3 +108,32 @@ class MapHandler(Subscriber):
         #             # update durations
         #             world.reduce_aspect_durations_on_tile(tile)
         #             world.cleanse_expired_aspects(tile)
+
+    @staticmethod
+    def _apply_effects_to_tiles(ent: int, interaction_cause: InteractionCauseType):
+        """
+        Apply all effects relating to a cause of interaction.
+        """
+        # get current position
+        position = entity.get_entitys_component(ent, Position)
+        current_x = position.x
+        current_y = position.y
+
+        # get interactions effects for specified cause
+        interactions = entity.get_entitys_component(ent, Interaction)
+        caused_interactions = interactions.interactions.get(interaction_cause)
+        effect_names = utility.get_class_members(Type[caused_interactions])
+
+        # loop each effect name and get the data from the field
+        for effect_name in effect_names:
+            if effect_name != "cause":
+                effect = getattr(caused_interactions, effect_name)
+
+                # if we have details for the effect
+                if effect:
+                    # each effect applies to a different area so get effected tiles
+                    coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
+                    effected_tiles = world.get_tiles(current_x, current_y, coords)
+
+                    # apply effects
+                    skill.apply_effect(effect, effected_tiles, ent)

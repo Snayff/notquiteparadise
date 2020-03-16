@@ -16,7 +16,7 @@ from scripts.nqp import processors
 from scripts.nqp.entity_handler import EntityHandler
 from scripts.nqp.game_handler import GameHandler
 from scripts.nqp.god_handler import GodHandler
-from scripts.nqp.map_handler import MapHandler
+from scripts.nqp.interaction_handler import InteractionHandler
 from scripts.nqp.processors import process_intent
 from scripts.nqp.ui_handler import UIHandler
 
@@ -217,7 +217,7 @@ def initialise_event_handlers():
     entity_handler.subscribe(EventTopic.ENTITY)
     entity_handler.subscribe(EventTopic.GAME)
 
-    map_handler = MapHandler(event_hub)
+    map_handler = InteractionHandler(event_hub)
     map_handler.subscribe(EventTopic.MAP)
     map_handler.subscribe(EventTopic.GAME)
 

@@ -13,7 +13,7 @@ from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent
 from scripts.engine.library import library
-from scripts.engine.utility import create_shape
+from scripts.engine.utility import get_coords_from_shape
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 
@@ -186,7 +186,7 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     # deal with activation
     if activate:
         if skill_data.shape:
-            coords = create_shape(skill_data.shape, skill_data.shape_size)
+            coords = get_coords_from_shape(skill_data.shape, skill_data.shape_size)
             effected_tiles = world.get_tiles(current_x, current_y, coords)
 
             # apply any effects
@@ -307,18 +307,21 @@ def _get_hit_type(to_hit_score: int) -> HitTypeType:
 
 ########################################## EFFECTS ####################################
 
-def apply_effect(effect_type: EffectType, skill_name: str, effected_tiles: List[Tile], using_entity: int):
+def apply_effect(effect: EffectData, effected_tiles: List[Tile], causing_entity: int):
     """
-    Apply an effect to all tiles in a list.:
+    Apply an effect to all tiles in a list.
     """
-    name = entity.get_name(using_entity)
-    log_string = f"Applying {effect_type} effect; caused by '{skill_name}' from '{name}'."
+    effect_type = effect.effect_type
+
+    # FIXME - re build to use effect not skill_name
+    name = entity.get_name(causing_entity)
+    log_string = f"Applying {effect_type} effect, caused by '{name}'."
     logging.info(log_string)
 
     if effect_type == Effect.DAMAGE:
-        _apply_damage_effect(skill_name, effected_tiles, using_entity)
+        _apply_damage_effect(skill_name, effected_tiles, causing_entity)
     elif effect_type == Effect.APPLY_AFFLICTION:
-        _apply_affliction_effect(skill_name, effected_tiles, using_entity)
+        _apply_affliction_effect(skill_name, effected_tiles, causing_entity)
     elif effect_type == Effect.ADD_ASPECT:
         _apply_aspect_effect(skill_name, effected_tiles)
 

@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
     AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
-    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed
+    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -101,7 +101,7 @@ class SkillData:
     projectile: ProjectileData = field(default_factory=dict)
 
     # how does it interact?
-    interactions: Optional[InteractionData] = None
+    interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
 
 
 @register_dataclass_with_json
@@ -180,6 +180,7 @@ class ApplyAfflictionEffectData(EffectData):
     """
     Data for the Apply Affliction effect.
     """
+    effect_type = Effect.APPLY_AFFLICTION
     duration: int = 0
     affliction_name: str = field(default="None")
 
@@ -190,6 +191,7 @@ class DamageEffectData(EffectData):
     """
     Data for the Damage effect.
     """
+    effect_type = Effect.DAMAGE
     damage: int = 0
     damage_type: Optional[DamageTypeType] = None
     mod_stat: Optional[PrimaryStatType] = None
@@ -202,6 +204,7 @@ class AffectStatEffectData(EffectData):
     """
     Data for the Affect Stat effect.
     """
+    effect_type = Effect.AFFECT_STAT
     stat_to_affect: Optional[PrimaryStatType] = None
     affect_stat_amount: int = 0
 
@@ -212,6 +215,7 @@ class AddAspectEffectData(EffectData):
     """
     Data for the Add Aspect effect.
     """
+    effect_type = Effect.ADD_ASPECT
     aspect_name: str = field(default="None")
 
 
@@ -221,6 +225,7 @@ class RemoveAspectEffectData(EffectData):
     """
     Data for the Remove Aspect effect.
     """
+    effect_type = Effect.REMOVE_ASPECT
     aspect_name: str = field(default="None")
 
 
@@ -268,7 +273,7 @@ class AspectData:
     sprite: str = field(default="None")
     blocks_sight: bool = False
     blocks_movement: bool = False
-    interactions: Optional[InteractionData] = None
+    interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
 
 
 @register_dataclass_with_json
@@ -291,7 +296,7 @@ class AfflictionData:
     description: str = field(default="None")
     icon: str = field(default="None")
     category: Optional[AfflictionCategoryType] = None
-    interactions: Optional[InteractionData] = None
+    interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
 
 ######################### VALIDATORS ####################################
 #
