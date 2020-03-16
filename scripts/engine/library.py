@@ -5,7 +5,7 @@ import logging
 import os
 from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses
-from scripts.engine.core.constants import SecondaryStatType, EffectTypeType, PrimaryStatType
+from scripts.engine.core.constants import SecondaryStatType, EffectType, PrimaryStatType
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData,\
     InterventionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData, AfflictionData
 
@@ -73,7 +73,7 @@ class _LibraryOfAlexandria:
         data = self._aspects[aspect_name]
         return data
 
-    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectTypeType) -> EffectData:
+    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectType) -> EffectData:
         """
         Get effect data for an aspects from the library
         """
@@ -175,7 +175,7 @@ class _LibraryOfAlexandria:
 
         return skill_data
 
-    def get_skill_effect_data(self, skill_name: str, effect_type: EffectTypeType) -> EffectData:
+    def get_skill_effect_data(self, skill_name: str, effect_type: EffectType) -> EffectData:
         """
         Get effect data for a skill from the library
         """
@@ -260,7 +260,7 @@ class _LibraryOfAlexandria:
 
         return effects_data
 
-    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectTypeType) \
+    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectType) \
             -> EffectData:
         """
         Get data for a specified effect in a god's intervention from the library

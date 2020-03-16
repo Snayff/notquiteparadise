@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from marshmallow import Schema, fields, ValidationError
-from scripts.engine.core.constants import EffectType
+from scripts.engine.core.constants import Effect
 
 if TYPE_CHECKING:
     from typing import Type, Union, Optional, Any, Tuple, Dict, List
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 ######################### VALIDATORS ####################################
 
 def _validate_effect_type(s):
-    if s is not None and not hasattr(EffectType, s):
+    if s is not None and not hasattr(Effect, s):
         raise ValidationError(f"{s} is not a valid effect type")
 
 

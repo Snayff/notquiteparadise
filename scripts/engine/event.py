@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Tuple, Union, Type, List
-
+from typing import TYPE_CHECKING
 from scripts.engine import entity
-from scripts.engine.core.constants import EventTopic, Direction, GameState, MessageType, GameStateType, MessageTypeType, \
-    DirectionType
+from scripts.engine.core.constants import EventTopic, Direction, GameState, MessageType, GameStateType, \
+    MessageTypeType, DirectionType, TravelMethodType
 from scripts.engine.core.event_core import Event
 from scripts.engine.component import Position
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    pass
+    from typing import Tuple, Union, Type, List
 
 
 ####################### ENTITY ############################################
@@ -29,8 +28,9 @@ class UseSkillEvent(Event):
     Event for entity using a skill
     """
     def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
-            direction: Union[Tuple[int, int], DirectionType]):
+            direction: Union[Tuple[int, int], DirectionType], base_time_cost: int):
         Event.__init__(self, "SKILL", EventTopic.ENTITY)
+        self.base_time_cost = base_time_cost
         self.entity = entity_using_skill
         self.direction = direction
         self.skill_name = skill_name
@@ -43,18 +43,20 @@ class DieEvent(Event):
     """
     def __init__(self, dying_entity: int):
         Event.__init__(self, "DIE", EventTopic.ENTITY)
-        self.dying_entity = dying_entity
+        self.entity = dying_entity
 
 
 class MoveEvent(Event):
     """
     Event to move an entity as a basic move action
     """
-    def __init__(self, entity_to_move: int, direction: Union[Tuple[int, int], DirectionType], distance: int = 1):
+    def __init__(self, entity_to_move: int, direction: Union[Tuple[int, int], DirectionType],
+            travel_type: TravelMethodType, base_time_cost: int):
         Event.__init__(self, "MOVE", EventTopic.ENTITY)
+        self.travel_type = travel_type
+        self.base_time_cost = base_time_cost
         self.entity = entity_to_move
         self.direction = direction
-        self.distance = distance
 
         # determine start pos
         position = entity.get_entitys_component(entity_to_move, Position)
@@ -63,6 +65,15 @@ class MoveEvent(Event):
         else:
             pos = (-1, -1)
         self.start_pos: Tuple[int, int] = pos
+
+
+class ExpireEvent(Event):
+    """
+    Event for handling the expiry of an entity, ususally a projectile.
+    """
+    def __init__(self, expiring_entity: int):
+        Event.__init__(self, "EXPIRE", EventTopic.ENTITY)
+        self.entity = expiring_entity
 
 ####################### GAME ############################################
 
@@ -108,10 +119,6 @@ class EndRoundEvent(Event):
 class TileInteractionEvent(Event):
     """
     Event for updating a tile in response to actions taken
-
-    Args:
-        tiles(list[Tile]): a list of effected tiles
-        cause (str): name of the effect or affliction that has taken place on the tile
     """
     def __init__(self, tiles: List[Tile], cause: str):
         Event.__init__(self, "TILE_INTERACTION", EventTopic.MAP)

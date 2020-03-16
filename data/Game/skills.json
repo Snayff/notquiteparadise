@@ -28,9 +28,7 @@
                 "other_entity"
             ],
             "expiry_type": "fizzle",
-            "terrain_collision": "fizzle",
-            "shape": "target",
-            "shape_size": 1
+            "terrain_collision": "fizzle"
         },
         "effects": {
             "damage": {
@@ -49,7 +47,9 @@
                     "any"
                 ],
                 "stat_to_affect": null,
-                "stat_to_target": null
+                "stat_to_target": null,
+                "shape": "target",
+                "shape_size": 1
             }
         }
     }

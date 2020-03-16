@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from abc import ABC
+
 import pygame
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
-from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectTypeType, DamageTypeType, \
-    AfflictionCategoryType, AfflictionTriggerType, ShapeType, ProjectileTerrainCollisionType, ProjectileTravelType, \
+from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
+    AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
@@ -89,7 +91,7 @@ class SkillData:
     icon: str = field(default="None")
 
     # what does it cost?
-    resource_type:  Optional[SecondaryStatType] = None
+    resource_type: Optional[SecondaryStatType] = None
     resource_cost: int = 0
     time_cost: int = 0
     cooldown: int = 0
@@ -99,7 +101,7 @@ class SkillData:
     projectile: ProjectileData = field(default_factory=dict)
 
     # how does it interact?
-    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
+    interactions: Optional[InteractionData] = None
 
 
 @register_dataclass_with_json
@@ -117,7 +119,7 @@ class ProjectileData:
     # how does it travel?
     direction: Optional[DirectionType] = None
     speed: ProjectileSpeedType = ProjectileSpeed.SLOW
-    travel_type: Optional[ProjectileTravelType] = None
+    travel_type: Optional[TravelMethodType] = None
     range: int = 1
 
     # when does it interact?
@@ -125,11 +127,7 @@ class ProjectileData:
     expiry_type: Optional[ProjectileExpiryType] = None
 
     # how does it interact?
-    terrain_collision: Optional[ProjectileTerrainCollisionType] = None
-
-    # what is the area of effect?
-    shape: Optional[ShapeType] = None
-    shape_size: int = 1
+    terrain_collision: Optional[TerrainCollisionType] = None
 
 
 @register_dataclass_with_json
@@ -140,16 +138,6 @@ class InterventionData:
     """
     skill_key: str = field(default="None")
     required_opinion: int = 0
-
-
-@register_dataclass_with_json
-@dataclass
-class InteractionData:
-    """
-    Data class for an interaction
-    """
-    cause: str = field(default="None")
-    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
 
 
 @register_dataclass_with_json
@@ -167,23 +155,87 @@ class GodData:
 
 @register_dataclass_with_json
 @dataclass
-class EffectData:
+class EffectData(ABC):
     """
-    Data class for a skill effect
+    Base data class for an effect.
     """
-    effect_type: Optional[EffectTypeType] = None
+    # who am I?
+    effect_type: Optional[EffectType] = None
+
+    # who are we targeting?
     required_tags: List[TargetTagType] = field(default_factory=list)
+
+    # how are we targeting?
+    stat_to_target: Optional[PrimaryStatType] = None
+    accuracy: int = 0
+
+    # what is the area of effect?
+    shape: Optional[ShapeType] = None
+    shape_size: int = 1
+
+
+@register_dataclass_with_json
+@dataclass
+class ApplyAfflictionEffectData(EffectData):
+    """
+    Data for the Apply Affliction effect.
+    """
+    duration: int = 0
+    affliction_name: str = field(default="None")
+
+
+@register_dataclass_with_json
+@dataclass
+class DamageEffectData(EffectData):
+    """
+    Data for the Damage effect.
+    """
     damage: int = 0
-    affect_stat_amount: int = 0
+    damage_type: Optional[DamageTypeType] = None
     mod_stat: Optional[PrimaryStatType] = None
     mod_amount: int = 0
-    damage_type: Optional[DamageTypeType] = None
-    accuracy: int = 0
-    stat_to_target: Optional[PrimaryStatType] = None
-    aspect_name: str = field(default="None")
-    affliction_name: str = field(default="None")
-    duration: int = 0
+
+
+@register_dataclass_with_json
+@dataclass
+class AffectStatEffectData(EffectData):
+    """
+    Data for the Affect Stat effect.
+    """
     stat_to_affect: Optional[PrimaryStatType] = None
+    affect_stat_amount: int = 0
+
+
+@register_dataclass_with_json
+@dataclass
+class AddAspectEffectData(EffectData):
+    """
+    Data for the Add Aspect effect.
+    """
+    aspect_name: str = field(default="None")
+
+
+@register_dataclass_with_json
+@dataclass
+class RemoveAspectEffectData(EffectData):
+    """
+    Data for the Remove Aspect effect.
+    """
+    aspect_name: str = field(default="None")
+
+
+@register_dataclass_with_json
+@dataclass
+class InteractionData:
+    """
+    Data class for an interaction
+    """
+    cause: Optional[InteractionCauseType] = None
+    apply_affliction: Optional[ApplyAfflictionEffectData] = None
+    damage: Optional[DamageEffectData] = None
+    affect_stat: Optional[AffectStatEffectData] = None
+    add_aspect: Optional[AddAspectEffectData] = None
+    remove_aspect: Optional[RemoveAspectEffectData] = None
 
 
 @register_dataclass_with_json
@@ -216,9 +268,7 @@ class AspectData:
     sprite: str = field(default="None")
     blocks_sight: bool = False
     blocks_movement: bool = False
-    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
-    interactions: List[InteractionData] = field(default_factory=list)
-    # TODO - convert interactions to dict as interactions are  unique
+    interactions: Optional[InteractionData] = None
 
 
 @register_dataclass_with_json
@@ -240,13 +290,11 @@ class AfflictionData:
     name: str = field(default="None")
     description: str = field(default="None")
     icon: str = field(default="None")
-    trigger_event: Optional[AfflictionTriggerType] = None
     category: Optional[AfflictionCategoryType] = None
-    effects: Dict[str, EffectTypeType] = field(default_factory=dict)
-
+    interactions: Optional[InteractionData] = None
 
 ######################### VALIDATORS ####################################
 #
 # def _validate_effect_type(s):
-#     if s is not None and not hasattr(EffectType, s):
+#     if s is not None and not hasattr(Effect, s):
 #         raise ValidationError(f"{s} is not a valid effect type")

@@ -178,8 +178,10 @@ class UIHandler(Subscriber):
                 player = entity.get_player()
                 position = entity.get_entitys_component(player, Position)
                 direction = world.get_direction((position.x, position.y), event.tile_pos_string)
-                publisher.publish(UseSkillEvent(player, state.get_active_skill(), (position.x, position.y),
-                                                direction))
+                skill_name = state.get_active_skill()
+                skill_data = library.get_skill_data(skill_name)
+                publisher.publish(UseSkillEvent(player, skill_name, (position.x, position.y),
+                                                direction, skill_data.time_cost))
 
         elif isinstance(event, MessageEvent):
             # process a message

@@ -27,12 +27,12 @@ DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
 HitValueType = NewType("HitValueType", int)
 HitModifierType = NewType("HitModifierType", float)
-EffectTypeType = NewType("EffectTypeType", str)
+EffectType = NewType("EffectType", str)
 AfflictionCategoryType = NewType("AfflictionCategoryType", str)
-AfflictionTriggerType = NewType("AfflictionTriggerType", str)
+InteractionCauseType = NewType("InteractionCauseType", str)
 ShapeType = NewType("ShapeType", str)
-ProjectileTerrainCollisionType = NewType("ProjectileTerrainCollisionType", str)
-ProjectileTravelType = NewType("ProjectileTravelType", str)
+TerrainCollisionType = NewType("TerrainCollisionType", str)
+TravelMethodType = NewType("TravelMethodType", str)
 ProjectileExpiryType = NewType("ProjectileExpiryType", str)
 ProjectileSpeedType = NewType("ProjectileSpeedType", int)
 InputModeType = NewType("InputModeType", int)
@@ -239,16 +239,16 @@ class HitType(SimpleNamespace):
     CRIT = HitTypeType("crit")
 
 
-class EffectType(SimpleNamespace):
+class Effect(SimpleNamespace):
     """
     Types of effects
     """
-    APPLY_AFFLICTION = EffectTypeType("apply_affliction")
-    DAMAGE = EffectTypeType("damage")
-    MOVE = EffectTypeType("move")
-    AFFECT_STAT = EffectTypeType("affect_stat")
-    ADD_ASPECT = EffectTypeType("add_aspect")
-    REMOVE_ASPECT = EffectTypeType("remove_aspect")
+    APPLY_AFFLICTION = EffectType("apply_affliction")
+    DAMAGE = EffectType("damage")
+    # MOVE = EffectType("move")  # TODO - Add Move effect
+    AFFECT_STAT = EffectType("affect_stat")
+    ADD_ASPECT = EffectType("add_aspect")
+    REMOVE_ASPECT = EffectType("remove_aspect")
 
 
 class AfflictionCategory(SimpleNamespace):
@@ -259,14 +259,18 @@ class AfflictionCategory(SimpleNamespace):
     BOON = AfflictionCategoryType("bane")
 
 
-class AfflictionTrigger(SimpleNamespace):
+class InteractionCause(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    ALWAYS = AfflictionTriggerType("always")  # always applying effects
-    END_TURN = AfflictionTriggerType("end_turn")  # apply at end of round turn
-    MOVE = AfflictionTriggerType("move")  # apply if afflicted entity moves
-    ACTION = AfflictionTriggerType("action")  # apply when an action is taken
+    EXPIRE = InteractionCauseType("expire")  # when the entity expires
+    ENTITY_COLLISION = InteractionCauseType("entity_collision")
+    TERRAIN_COLLISION = InteractionCauseType("terrain_collision")
+    END_TURN = InteractionCauseType("end_turn")  # when entity ends their turn
+    MOVE = InteractionCauseType("move")  # when entity moves
+
+    ALWAYS = InteractionCauseType("always")  # always applying effects  # TODO - remove this. We need passives and any.
+    ACTION = InteractionCauseType("action")  # apply when an action is taken  # TODO - remove as too broad.
 
     # Other triggers to consider
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
@@ -285,22 +289,22 @@ class Shape(SimpleNamespace):
     CROSS = ShapeType("cross")
 
 
-class ProjectileTerrainCollision(SimpleNamespace):
+class TerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
-    REFLECT = ProjectileTerrainCollisionType("reflect")
-    ACTIVATE = ProjectileTerrainCollisionType("activate")
-    FIZZLE = ProjectileTerrainCollisionType("fizzle")
+    REFLECT = TerrainCollisionType("reflect")
+    ACTIVATE = TerrainCollisionType("activate")
+    FIZZLE = TerrainCollisionType("fizzle")
 
 
-class ProjectileTravel(SimpleNamespace):
+class TravelMethod(SimpleNamespace):
     """
     How the skill travels
     """
-    DIRECT = ProjectileTravelType("direct")  # travels tile by tile
-    ARC = ProjectileTravelType("arc")  # only impacts last tile in range, bounces
-    INSTANT = ProjectileTravelType("instant")  # doesn't travel, doesn't interact with terrain except for blocking
+    DIRECT = TravelMethodType("direct")  # travels tile by tile
+    ARC = TravelMethodType("arc")  # only impacts last tile in range, bounces
+    INSTANT = TravelMethodType("instant")  # doesn't travel, doesn't interact with terrain except for blocking
 
 
 class ProjectileExpiry(SimpleNamespace):

@@ -9,8 +9,8 @@ from typing import TYPE_CHECKING
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.engine import utility
-from scripts.engine.core.constants import EffectType, AfflictionTrigger, DamageType, PrimaryStat, SecondaryStat, \
-    TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, ProjectileTerrainCollision, ProjectileTravel
+from scripts.engine.core.constants import Effect, InteractionCause, DamageType, PrimaryStat, SecondaryStat, \
+    TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, TerrainCollision, TravelMethod
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
@@ -493,14 +493,14 @@ class DataEditor(UIWindow):
     def _load_field_options(self):
         """
         Maps the various data keys to their related (options, dataclass). The dataclass is only provided if the key
-        relates to sub-details that need adding. E.g. effects: (EffectType.__dict__.keys(), EffectData). Loads
+        relates to sub-details that need adding. E.g. effects: (Effect.__dict__.keys(), EffectData). Loads
         details into self.field_options
         """
         get_members = utility.get_class_members
 
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]
-        effect_options = get_members(EffectType)
+        effect_options = get_members(Effect)
         primary_stat_options = get_members(PrimaryStat)
         secondary_stat_options = get_members(SecondaryStat)
         bool_options = ["True", "False"]
@@ -508,7 +508,7 @@ class DataEditor(UIWindow):
 
         field_options = {
             "effects": (effect_options, EffectData()),
-            "trigger_event": (get_members(AfflictionTrigger), None),
+            "trigger_event": (get_members(InteractionCause), None),
             "affliction_name": (affliction_options, None),
             "aspect_name": (aspect_options, None),
             "damage_type": (get_members(DamageType), None),
@@ -530,8 +530,8 @@ class DataEditor(UIWindow):
             "resource_type": (secondary_stat_options, None),
             "shape": (get_members(Shape), None),
             "target_directions": (get_members(Direction), None),
-            "terrain_collision": (get_members(ProjectileTerrainCollision), None),
-            "travel_type": (get_members(ProjectileTravel), None),
+            "terrain_collision": (get_members(TerrainCollision), None),
+            "travel_type": (get_members(TravelMethod), None),
             "interactions": (affliction_options + effect_options + skill_options, InteractionData()),
             "attitudes": (affliction_options + effect_options + skill_options, AttitudeData()),
             "interventions": (skill_options, InterventionData()),

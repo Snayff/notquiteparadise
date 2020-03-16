@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from scripts.engine import entity
-from scripts.engine.core.constants import EffectType, Direction
+from scripts.engine.core.constants import Effect, Direction
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.library import library
 
@@ -63,13 +63,13 @@ class GodHandler(Subscriber):
             entity.judge_action(ent, effect_data.effect_type)
 
         # check damage type used
-        if EffectType.DAMAGE in skill_data.effects:
-            damage_type = skill_data.effects[EffectType.DAMAGE].damage_type
+        if Effect.DAMAGE in skill_data.effects:
+            damage_type = skill_data.effects[Effect.DAMAGE].damage_type
             entity.judge_action(ent, damage_type)
 
         # check afflictions applied
-        if EffectType.APPLY_AFFLICTION in skill_data.effects:
-            affliction_name = skill_data.effects[EffectType.APPLY_AFFLICTION].affliction_name
+        if Effect.APPLY_AFFLICTION in skill_data.effects:
+            affliction_name = skill_data.effects[Effect.APPLY_AFFLICTION].affliction_name
             entity.judge_action(ent, affliction_name)
 
     @staticmethod
@@ -81,14 +81,15 @@ class GodHandler(Subscriber):
             event ():
         """
         skill_name = event.skill_name
-        entity = event.entity
-        position = entity.get_entitys_component(entity, Position)
+        ent = event.entity
+        position = entity.get_entitys_component(ent, Position)
 
-        interventions = entity.consider_intervening(entity, skill_name)
+        interventions = entity.consider_intervening(ent, skill_name)
 
         for god_entity_id, intervention_name in interventions:
             # create use skill event with direction of centre
+            # N.B. 0 time cost because god's dont spend time
             publisher.publish(UseSkillEvent(god_entity_id, intervention_name, (position.x, position.y),
-                                            Direction.CENTRE))
+                                            Direction.CENTRE, 0))
 
 

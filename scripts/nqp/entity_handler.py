@@ -84,7 +84,8 @@ class EntityHandler(Subscriber):
                     skill_data = library.get_skill_data(skill_name)
                     direction = value_to_member((dir_x, dir_y), Direction)
                     if direction.lower() in skill_data.target_directions:
-                        publisher.publish((UseSkillEvent(ent, skill_name, event.start_pos, (dir_x, dir_y))))
+                        publisher.publish(UseSkillEvent(ent, skill_name, event.start_pos, (dir_x, dir_y),
+                                                        skill_data.time_cost))
                     else:
                         publisher.publish(MessageEvent(MessageType.LOG, f"{skill_name} doesn't go that way!"))
                 else:
@@ -117,7 +118,7 @@ class EntityHandler(Subscriber):
 
                 # if entity that moved is turn holder then end their turn
                 if entity == chrono.get_turn_holder():
-                    publisher.publish(EndTurnEvent(entity, 10))  # TODO - replace magic number with cost to move
+                    publisher.publish(EndTurnEvent(entity, 10))  # TODO - get cost from preceding event
 
     @staticmethod
     def process_skill(event: UseSkillEvent):
@@ -155,7 +156,7 @@ class EntityHandler(Subscriber):
         """
 
         # TODO add player death
-        ent = event.dying_entity
+        ent = event.entity
         turn_queue = chrono.get_turn_queue()
 
         # remove from turn queue
@@ -198,6 +199,7 @@ class EntityHandler(Subscriber):
             else:
                 pass
                 # TODO - activate skill. Need to get selected tile.
+                # TODO - add time cost
                 # player_pos = entity.get_entitys_component(player, Position)
                 # publisher.publish(UseSkillEvent(player, skill_name, (player_pos.x, player_pos.y), ))
 

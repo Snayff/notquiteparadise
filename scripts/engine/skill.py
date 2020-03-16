@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
 from scripts.engine.core.constants import MessageType, SecondaryStat, ProjectileExpiry, \
-    ProjectileTerrainCollision, ProjectileTravel, TargetTag, EffectType, AfflictionCategory, HitType, HitModifier, \
-    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, EffectTypeType, HitValueType, \
-    ProjectileTravelType
+    TerrainCollision, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, HitModifier, \
+    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, EffectType, HitValueType, \
+    TravelMethodType
 from scripts.engine.core.definitions import EffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent
@@ -23,7 +23,6 @@ if TYPE_CHECKING:
 #########################################################################################
 ########################   SKILL  & EFFECTS REQS. #######################################
 # all skills create a projectile, use that to specify conditions such as speed and sprite. <-
-    # TODO - create the projectile
 # use a standardised collection of triggers
 # allow for conditional criteria
 # each effect is unique so each effect must be able to accept multiple params e.g. damage types
@@ -170,14 +169,14 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
                         logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
                     else:
                         # we didnt hit the right thing so what happens now?
-                        if terrain_collision == ProjectileTerrainCollision.ACTIVATE:
+                        if terrain_collision == TerrainCollision.ACTIVATE:
                             activate = True
                             logging.debug(f"-> and hit something. Skill will activate at "
                                           f"({current_x},{current_y}).")
-                        elif terrain_collision == ProjectileTerrainCollision.REFLECT:
+                        elif terrain_collision == TerrainCollision.REFLECT:
                             dir_x, dir_y = _get_reflected_direction((current_x, current_y), direction)
                             logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
-                        elif terrain_collision == ProjectileTerrainCollision.FIZZLE:
+                        elif terrain_collision == TerrainCollision.FIZZLE:
                             activate = False
                             logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
                 else:
@@ -198,7 +197,7 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
 ########################################## GET ####################################
 
 def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],
-        max_distance: int, travel_type: ProjectileTravelType) -> Tuple[int, int]:
+        max_distance: int, travel_type: TravelMethodType) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
     range blocks movement then the last position checked is returned. If all positions in range block movement
@@ -215,10 +214,10 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     check_for_target = False
 
     # determine travel method
-    if travel_type == ProjectileTravel.DIRECT:
+    if travel_type == TravelMethod.DIRECT:
         # direct can hit a target at any point during travel
         check_for_target = True
-    elif travel_type == ProjectileTravel.ARC:
+    elif travel_type == TravelMethod.ARC:
         # throw can only hit target at end of travel
         check_for_target = False
 
@@ -226,7 +225,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     for distance in range(1, max_distance + 1):
 
         # allow throw to hit target
-        if travel_type == ProjectileTravel.ARC:
+        if travel_type == TravelMethod.ARC:
             if distance == max_distance + 1:
                 check_for_target = True
 
@@ -308,7 +307,7 @@ def _get_hit_type(to_hit_score: int) -> HitTypeType:
 
 ########################################## EFFECTS ####################################
 
-def apply_effect(effect_type: EffectTypeType, skill_name: str, effected_tiles: List[Tile], using_entity: int):
+def apply_effect(effect_type: EffectType, skill_name: str, effected_tiles: List[Tile], using_entity: int):
     """
     Apply an effect to all tiles in a list.:
     """
@@ -316,16 +315,16 @@ def apply_effect(effect_type: EffectTypeType, skill_name: str, effected_tiles: L
     log_string = f"Applying {effect_type} effect; caused by '{skill_name}' from '{name}'."
     logging.info(log_string)
 
-    if effect_type == EffectType.DAMAGE:
+    if effect_type == Effect.DAMAGE:
         _apply_damage_effect(skill_name, effected_tiles, using_entity)
-    elif effect_type == EffectType.APPLY_AFFLICTION:
+    elif effect_type == Effect.APPLY_AFFLICTION:
         _apply_affliction_effect(skill_name, effected_tiles, using_entity)
-    elif effect_type == EffectType.ADD_ASPECT:
+    elif effect_type == Effect.ADD_ASPECT:
         _apply_aspect_effect(skill_name, effected_tiles)
 
 
 def _apply_aspect_effect(skill_name: str, effected_tiles: List[Tile]):
-    data = library.get_skill_effect_data(skill_name, EffectType.ADD_ASPECT)
+    data = library.get_skill_effect_data(skill_name, Effect.ADD_ASPECT)
 
     for tile in effected_tiles:
         _create_aspect(data.aspect_name, tile)
@@ -348,7 +347,7 @@ def _create_aspect(aspect_name: str, tile: Tile):
 
 
 def _apply_affliction_effect(skill_name: str, effected_tiles: List[Tile], attacker: int):
-    effect_data = library.get_skill_effect_data(skill_name, EffectType.APPLY_AFFLICTION)
+    effect_data = library.get_skill_effect_data(skill_name, Effect.APPLY_AFFLICTION)
     affliction_data = library.get_affliction_data(effect_data.affliction_name)
     attackers_stats = entity.get_combat_stats(attacker)
 
@@ -455,7 +454,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
 
 
 def _apply_damage_effect(skill_name: str, effected_tiles: List[Tile], attacker: int):
-    data = library.get_skill_effect_data(skill_name, EffectType.DAMAGE)
+    data = library.get_skill_effect_data(skill_name, Effect.DAMAGE)
     attackers_stats = entity.get_combat_stats(attacker)
 
     entities = entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)

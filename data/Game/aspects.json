@@ -46,7 +46,9 @@
                             "any"
                         ],
                         "stat_to_affect": null,
-                        "stat_to_target": "None"
+                        "stat_to_target": "None",
+                        "shape": "target",
+                        "shape_size": 1
                     },
                     "remove_aspect": {
                         "__dataclass__": "EffectData",
@@ -64,7 +66,9 @@
                             "any"
                         ],
                         "stat_to_affect": null,
-                        "stat_to_target": "None"
+                        "stat_to_target": "None",
+                        "shape": "target",
+                        "shape_size": 1
                     }
                 }
             }
@@ -106,7 +110,9 @@
                     "other_entity"
                 ],
                 "stat_to_affect": null,
-                "stat_to_target": "bustle"
+                "stat_to_target": "bustle",
+                "shape": "target",
+                "shape_size": 1
             }
         },
         "interactions": {},

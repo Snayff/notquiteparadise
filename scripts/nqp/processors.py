@@ -4,7 +4,8 @@ import pytweening
 from scripts.engine import utility, entity
 from scripts.engine.component import Aesthetic
 from typing import TYPE_CHECKING
-from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType
+from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
+    TravelMethod
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
 
@@ -144,7 +145,8 @@ def _process_player_turn_intents(intent: InputIntentType):
         # Player movement
         dir_x, dir_y = _get_pressed_direction(intent)
         if dir_x != 0 or dir_y != 0:
-            publisher.publish(MoveEvent(player, (dir_x, dir_y)))
+            publisher.publish(MoveEvent(player, (dir_x, dir_y), TravelMethod.DIRECT, 10))
+            # TODO - replace magic number with cost to move
 
         # Use a skill
         skill_number = _get_pressed_skills_number(intent)
