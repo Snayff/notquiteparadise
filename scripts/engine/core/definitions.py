@@ -122,12 +122,9 @@ class ProjectileData:
     travel_type: Optional[TravelMethodType] = None
     range: int = 1
 
-    # when does it interact?
-    required_tags: List[TargetTagType] = field(default_factory=list)
-    expiry_type: Optional[ProjectileExpiryType] = None
-
     # how does it interact?
     terrain_collision: Optional[TerrainCollisionType] = None
+    expiry_type: Optional[ProjectileExpiryType] = None
 
 
 @register_dataclass_with_json

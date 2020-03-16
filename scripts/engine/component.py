@@ -4,6 +4,7 @@ import tcod.map
 from abc import ABC
 from typing import TYPE_CHECKING
 
+from scripts.engine.ai import AIBehaviour
 from scripts.engine.core.constants import InteractionCauseType
 from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
 
@@ -108,6 +109,8 @@ class Behaviour(Component):
     """
     An ai behaviour to control an entity.
     """
+    def __init__(self, behaviour: AIBehaviour):
+        self.behaviour = behaviour
 
 
 class HasCombatStats(Component):
@@ -171,3 +174,10 @@ class Interaction(Component):
     """
     def __init__(self, interactions: Dict[InteractionCauseType, InteractionData]):
         self.interactions = interactions
+
+
+class IsProjectile(Component):
+    """
+    Whether the entity is a projectile.
+    """
+    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance

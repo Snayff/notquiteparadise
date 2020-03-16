@@ -50,30 +50,49 @@ class MoveEvent(Event):
     """
     Event to move an entity as a basic move action
     """
-    def __init__(self, entity_to_move: int, direction: Union[Tuple[int, int], DirectionType],
+    def __init__(self, entity_to_move: int, start_pos: Tuple[int, int], direction: Tuple[int, int],
             travel_type: TravelMethodType, base_time_cost: int):
         Event.__init__(self, "MOVE", EventTopic.ENTITY)
+        self.start_pos = start_pos
         self.travel_type = travel_type
         self.base_time_cost = base_time_cost
         self.entity = entity_to_move
         self.direction = direction
 
-        # determine start pos
-        position = entity.get_entitys_component(entity_to_move, Position)
-        if position:
-            pos = (position.x, position.y)
-        else:
-            pos = (-1, -1)
-        self.start_pos: Tuple[int, int] = pos
-
 
 class ExpireEvent(Event):
     """
-    Event for handling the expiry of an entity, ususally a projectile.
+    Event for handling the expiry of an entity, usually a projectile.
     """
     def __init__(self, expiring_entity: int):
         Event.__init__(self, "EXPIRE", EventTopic.ENTITY)
         self.entity = expiring_entity
+
+
+class EntityCollisionEvent(Event):
+    """
+    Event for handling two entities colliding.
+    """
+    def __init__(self, active_entity: int, blocking_entity: int, direction: Tuple[int, int],
+            start_pos: Tuple[int, int]):
+        Event.__init__(self, "ENTITY_COLLISION", EventTopic.ENTITY)
+        self.start_pos = start_pos
+        self.direction = direction
+        self.entity = active_entity
+        self.blocking_entity = blocking_entity
+
+
+class TerrainCollisionEvent(Event):
+    """
+    Event for handling an entity colliding with terrain.
+    """
+    def __init__(self, active_entity: int, blocking_tile: Tile, direction: Tuple[int, int],
+            start_pos: Tuple[int, int]):
+        Event.__init__(self, "TERRAIN_COLLISION", EventTopic.ENTITY)
+        self.start_pos = start_pos
+        self.direction = direction
+        self.entity = active_entity
+        self.blocking_tile = blocking_tile
 
 ####################### GAME ############################################
 

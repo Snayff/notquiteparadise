@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Type
-
+from typing import TYPE_CHECKING
 from scripts.engine import world, entity, skill, utility
-from scripts.engine.core.constants import InteractionCause, InteractionCauseType
+from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision
 from scripts.engine.core.event_core import Subscriber
-from scripts.engine.component import Position, Interaction
-from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent, ExpireEvent
-from scripts.engine.world_objects.tile import Tile
+from scripts.engine.component import Position, Interaction, Behaviour, IsProjectile
+from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent, ExpireEvent, \
+    EntityCollisionEvent, TerrainCollisionEvent
+from scripts.engine.library import library
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import List, Type, Tuple
 
 
 class InteractionHandler(Subscriber):
@@ -40,11 +40,11 @@ class InteractionHandler(Subscriber):
         elif isinstance(event, ExpireEvent):
             self._process_expiry(event)
 
-    @staticmethod
-    def _process_expiry(event: ExpireEvent):
-        ent = event.entity
-        interactions = entity.get_entitys_component(ent, Interaction)
-        interaction = interactions.interactions.get(InteractionCause.EXPIRE)
+        elif isinstance(event, EntityCollisionEvent):
+            self._process_entity_collision(event)
+
+    def _process_expiry(self, event: ExpireEvent):
+        self._apply_effects_to_tiles(event.entity, InteractionCause.EXPIRE)
 
     @staticmethod
     def _process_tile_interaction(event: TileInteractionEvent):
@@ -58,7 +58,7 @@ class InteractionHandler(Subscriber):
 
         # # check all tiles
         # for tile in event.tiles:
-        #     # TODO - rebuild to work for EC
+        #     # FIXME - rebuild to work for EC
         #     # only aspects have interactions...
         #     if tile.aspects:
         #
@@ -109,18 +109,53 @@ class InteractionHandler(Subscriber):
         #             world.reduce_aspect_durations_on_tile(tile)
         #             world.cleanse_expired_aspects(tile)
 
+    def _process_entity_collision(self, event: EntityCollisionEvent):
+        current_x, current_y = event.start_pos[0], event.start_pos[1]
+        target_x, target_y = current_x + event.direction[0], current_y + event.direction[1]
+
+        self._apply_effects_to_tiles(event.entity, InteractionCause.ENTITY_COLLISION, (target_x, target_y))
+
+    def _process_terrain_collision(self, event: TerrainCollisionEvent):
+        ent = event.entity
+        name = entity.get_name(ent)
+        current_x, current_y = event.start_pos[0], event.start_pos[1]
+        target_x, target_y = current_x + event.direction[0], current_y + event.direction[1]
+
+        # what hit the terrain?
+        # Is it a projectile?
+        if entity.has_component(ent, IsProjectile):
+            logging.debug(f"{name} hit a blocking tile and will...")
+            behaviour = entity.get_entitys_component(ent, Behaviour)
+            projectile_data = library.get_skill_data(behaviour.behaviour.skill_name).projectile
+            terrain_collision = projectile_data.terrain_collision
+
+            if terrain_collision == TerrainCollision.ACTIVATE:
+                logging.debug(f"-> activate at ({target_x}, {target_y}).")
+                self._apply_effects_to_tiles(ent, InteractionCause.TERRAIN_COLLISION, (target_x, target_y))
+
+            elif terrain_collision == TerrainCollision.REFLECT:
+                dir_x, dir_y = skill.get_reflected_direction((current_x, current_y), event.direction)
+                logging.info(f"-> change direction to ({dir_x}, {dir_y}).")
+                behaviour.behaviour.direction = (dir_x, dir_y)
+
+            elif terrain_collision == TerrainCollision.FIZZLE:
+                logging.info(f"fizzle at ({current_x}, {current_y}).")
+
+            else:
+                logging.debug(f"{name} hit blocking tile and did nothing.")
+
     @staticmethod
-    def _apply_effects_to_tiles(ent: int, interaction_cause: InteractionCauseType):
+    def _apply_effects_to_tiles(causing_entity: int, interaction_cause: InteractionCauseType,
+            target_pos: Tuple[int, int]):
         """
         Apply all effects relating to a cause of interaction.
         """
         # get current position
-        position = entity.get_entitys_component(ent, Position)
-        current_x = position.x
-        current_y = position.y
+
+        target_x, target_y = target_pos[0],  target_pos[1]
 
         # get interactions effects for specified cause
-        interactions = entity.get_entitys_component(ent, Interaction)
+        interactions = entity.get_entitys_component(causing_entity, Interaction)
         caused_interactions = interactions.interactions.get(interaction_cause)
         effect_names = utility.get_class_members(Type[caused_interactions])
 
@@ -133,7 +168,7 @@ class InteractionHandler(Subscriber):
                 if effect:
                     # each effect applies to a different area so get effected tiles
                     coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
-                    effected_tiles = world.get_tiles(current_x, current_y, coords)
+                    effected_tiles = world.get_tiles(target_x, target_y, coords)
 
                     # apply effects
-                    skill.apply_effect(effect, effected_tiles, ent)
+                    skill.apply_effect(effect, effected_tiles, causing_entity)

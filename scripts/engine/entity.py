@@ -9,7 +9,7 @@ import tcod.map
 from typing import TYPE_CHECKING, TypeVar
 from scripts.engine import utility, world, debug
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
-    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV
+    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interaction
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -234,6 +234,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
     actor.append((FOV(world.create_fov_map())))
+    actor.append(Interaction({}))
 
     entity = create(actor)
 
@@ -265,7 +266,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     return entity
 
-
+# TODO - fix naming conflict with skill.create_projectile
 def create_projectile(creators_name: str):
     pass
 # "__dataclass__": "ProjectileData",
@@ -423,7 +424,7 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
 
         # which intervention, if any, shall the god consider using?
         chosen_intervention, = random.choices(eligible_interventions, intervention_weightings)
-        # N.B. use , to unpack the result
+        # N.B. create_projectile , to unpack the result
 
         # if god has chosen to take an action then add to list
         if chosen_intervention != "Nothing":

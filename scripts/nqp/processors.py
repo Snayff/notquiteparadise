@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytweening
 from scripts.engine import utility, entity
-from scripts.engine.component import Aesthetic
+from scripts.engine.component import Aesthetic, Position
 from typing import TYPE_CHECKING
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
     TravelMethod
@@ -145,7 +145,8 @@ def _process_player_turn_intents(intent: InputIntentType):
         # Player movement
         dir_x, dir_y = _get_pressed_direction(intent)
         if dir_x != 0 or dir_y != 0:
-            publisher.publish(MoveEvent(player, (dir_x, dir_y), TravelMethod.DIRECT, 10))
+            position = entity.get_entitys_component(player, Position)
+            publisher.publish(MoveEvent(player, (position.x, position.y), (dir_x, dir_y), TravelMethod.DIRECT, 10))
             # TODO - replace magic number with cost to move
 
         # Use a skill
@@ -162,7 +163,7 @@ def _process_targeting_mode_intents(intent):
     """
     Process intents for the player turn game state.
     """
-    # Cancel use
+    # Cancel create_projectile
     if intent == InputIntent.CANCEL:
         publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
 

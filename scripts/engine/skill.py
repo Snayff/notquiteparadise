@@ -22,8 +22,8 @@ if TYPE_CHECKING:
 
 #########################################################################################
 ########################   SKILL  & EFFECTS REQS. #######################################
-# all skills create a projectile, use that to specify conditions such as speed and sprite. <-
-# use a standardised collection of triggers
+# all skills create a projectile, create_projectile that to specify conditions such as speed and sprite. <-
+# create_projectile a standardised collection of triggers
 # allow for conditional criteria
 # each effect is unique so each effect must be able to accept multiple params e.g. damage types
 # there should be Active and Passive Skills
@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 
 def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
     """
-    Confirm entity can use skill on targeted position. True if can use the skill. Else False.
+    Confirm entity can create_projectile skill on targeted position. True if can create_projectile the skill. Else False.
     """
     start_tile = target_tile = None
 
@@ -53,7 +53,7 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
 
     skill_data = library.get_skill_data(skill_name)
 
-    # check we have everything we need and if so use the skill
+    # check we have everything we need and if so create_projectile the skill
     if start_tile and target_tile:
         if world.tile_has_tags(target_tile, skill_data.required_tags, ent):
             resource_type = skill_data.resource_type
@@ -112,10 +112,10 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
 
-def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
+def create_projectile(using_entity: int, skill_name: str, start_position: Tuple[int, int],
         target_direction: Tuple[int, int]):
     """
-    Use the skill in the target direction from the start position.
+    Creates a projectile containing relevant skill details
     """
     # TODO - rewrite to create projectile
     # initial values
@@ -150,13 +150,14 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
 
             # are we at max distance?
             if distance >= skill_range:
-                # handle expiry type
-                if expiry_type == ProjectileExpiry.FIZZLE:
-                    fizzle = True
-                    logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
-                elif expiry_type == ProjectileExpiry.ACTIVATE:
-                    activate = True
-                    logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
+                pass
+                # # handle expiry type
+                # if expiry_type == ProjectileExpiry.FIZZLE:
+                #     fizzle = True
+                #     logging.info(f"-> and hit nothing. Skill fizzled at ({current_x},{current_y}).")
+                # elif expiry_type == ProjectileExpiry.ACTIVATE:
+                #     activate = True
+                #     logging.debug(f"-> and hit nothing. Skill will activate at ({current_x},{current_y}).")
             else:
                 # we arent at max so we must have hit something one space further along
                 current_x, current_y = current_x + dir_x, current_y + dir_y
@@ -167,18 +168,18 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
                     if world.tile_has_tags(tile, skill_data.required_tags, using_entity):
                         activate = True
                         logging.debug(f"-> and found suitable target at ({current_x},{current_y}).")
-                    else:
-                        # we didnt hit the right thing so what happens now?
-                        if terrain_collision == TerrainCollision.ACTIVATE:
-                            activate = True
-                            logging.debug(f"-> and hit something. Skill will activate at "
-                                          f"({current_x},{current_y}).")
-                        elif terrain_collision == TerrainCollision.REFLECT:
-                            dir_x, dir_y = _get_reflected_direction((current_x, current_y), direction)
-                            logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
-                        elif terrain_collision == TerrainCollision.FIZZLE:
-                            activate = False
-                            logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
+                    # else:
+                    #     # we didnt hit the right thing so what happens now?
+                    #     if terrain_collision == TerrainCollision.ACTIVATE:
+                    #         activate = True
+                    #         logging.debug(f"-> and hit something. Skill will activate at "
+                    #                       f"({current_x},{current_y}).")
+                    #     elif terrain_collision == TerrainCollision.REFLECT:
+                    #         dir_x, dir_y = get_reflected_direction((current_x, current_y), direction)
+                    #         logging.info(f"-> and hit something. Skill`s direction changed to ({dir_x},{dir_y}).")
+                    #     elif terrain_collision == TerrainCollision.FIZZLE:
+                    #         activate = False
+                    #         logging.info(f"-> and hit something. Skill fizzled at ({current_x},{current_y}).")
                 else:
                     activate = False
                     logging.warning(f"-> and went out of bounds at ({current_x},{current_y}).")
@@ -250,7 +251,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     return current_x, current_y
 
 
-def _get_reflected_direction(current_position: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
+def get_reflected_direction(current_position: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
     """
     Use surrounding walls to understand how the object should be reflected.
     """

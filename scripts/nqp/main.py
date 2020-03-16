@@ -25,8 +25,8 @@ from scripts.nqp.ui_handler import UIHandler
 # FLOW - Periods of impetus to ensure the player is driven forward appropriately. Periods of openness to allow
 # self pacing, reflection and exploration.
 # TRANSPARENT - information pertinent to the player is always made available.
-# COHERENT - easy to parse data, utilising a mix of art and text. Avoid need for external resource use e.g. a wiki.
-# FLEXIBLE (input)- can use keyboard, mouse or controller interchangeably, with minimal difference in experience
+# COHERENT - easy to parse data, utilising a mix of art and text. Avoid need for external resource create_projectile e.g. a wiki.
+# FLEXIBLE (input)- can create_projectile keyboard, mouse or controller interchangeably, with minimal difference in experience
 # CUSTOMISABLE - near-core game settings can be influenced or set by the player allowing for personalisation.
 ####################################################################################################
 
@@ -39,11 +39,11 @@ from scripts.nqp.ui_handler import UIHandler
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
-# TODO - write tests / checking for json values - use schema
+# TODO - standardise create_projectile of xy and tile xy. xy as standard, meaning tiles. otherwise create_projectile screen_xy
+# TODO - write tests / checking for json values - create_projectile schema
 # TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
 # TODO - edit the UI json
-# TODO - use a global for font size so it can be amended in options
+# TODO - create_projectile a global for font size so it can be amended in options
 
 
 def main():

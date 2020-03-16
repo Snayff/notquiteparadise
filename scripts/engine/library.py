@@ -179,6 +179,7 @@ class _LibraryOfAlexandria:
         """
         Get effect data for a skill from the library
         """
+        # FIXME - determine if still necessary as effects now held by interactions
         try:
             effect_data = self._skills[skill_name].effects[effect_type]
 
