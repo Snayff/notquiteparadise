@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
-
 import scripts.engine.world
+from typing import TYPE_CHECKING
 from scripts.engine import world, entity, skill, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision
 from scripts.engine.core.event_core import Subscriber
 from scripts.engine.component import Position, Interaction, Behaviour, IsProjectile
 from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent, ExpireEvent, \
-    EntityCollisionEvent, TerrainCollisionEvent
+    EntityCollisionEvent, TerrainCollisionEvent, MoveEvent
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
@@ -45,8 +44,17 @@ class InteractionHandler(Subscriber):
         elif isinstance(event, EntityCollisionEvent):
             self._process_entity_collision(event)
 
+        elif isinstance(event, MoveEvent):
+            self._process_move(event)
+
+    def _process_move(self, event: MoveEvent):
+        # N.B. impacts moving entities current position
+        position = entity.get_entitys_component(event.entity, Position)
+        self._apply_effects_to_tiles(event.entity, InteractionCause.MOVE, (position.x, position.y))
+
     def _process_expiry(self, event: ExpireEvent):
-        self._apply_effects_to_tiles(event.entity, InteractionCause.EXPIRE)
+        position = entity.get_entitys_component(event.entity, Position)
+        self._apply_effects_to_tiles(event.entity, InteractionCause.EXPIRE, (position.x, position.y))
 
     @staticmethod
     def _process_tile_interaction(event: TileInteractionEvent):

@@ -6,14 +6,13 @@ from typing import TYPE_CHECKING
 
 from scripts.engine import utility, entity
 from scripts.engine.component import Position
-from scripts.engine.core.constants import TravelMethodType, TargetTagType, ProjectileExpiryType, \
-    TerrainCollision, ShapeType, ProjectileExpiry, Direction, TerrainCollisionType
+from scripts.engine.core.constants import ProjectileExpiry
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MoveEvent, DieEvent, ExpireEvent
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
-    from typing import Type, Union, Optional, Any, Tuple, Dict, List
+    from typing import Union, Optional, Any, Tuple, Dict, List
 
 
 class AIBehaviour(ABC):

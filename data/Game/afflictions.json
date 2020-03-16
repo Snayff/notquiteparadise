@@ -1,24 +1,35 @@
 {
-    "bogged down": {
+    "bogged_down": {
         "__dataclass__": "AfflictionData",
         "category": "BANE",
         "description": "It weakens mundane defence and makes you a little bit slower.",
-        "effects": {
-            "affect_stat": {
-                "__dataclass__": "EffectData",
-                "accuracy": 0,
-                "affect_stat_amount": -25,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 0,
-                "effect_type": "affect_stat",
-                "mod_amount": 0,
-                "mod_stat": null,
-                "required_tags": [],
-                "stat_to_affect": "bustle",
-                "stat_to_target": null
+        "interactions": {
+            "entity_collision": {
+                "__dataclass__": "InteractionData",
+                "cause": "entity_collision",
+                "apply_affliction": {
+                    "__dataclass__": "ApplyAfflictionEffectData"
+                },
+                "damage": {
+                    "__dataclass__": "DamageEffectData"
+                },
+                "affect_stat": {
+                    "__dataclass__": "AffectStatEffectData",
+                    "accuracy": 0,
+                    "affect_stat_amount": -25,
+                    "effect_type": "affect_stat",
+                    "required_tags": [],
+                    "stat_to_affect": "bustle"
+                },
+                "add_aspect": {
+                    "__dataclass__": "AddAspectEffectData"
+                },
+                "remove_aspect": {
+                    "__dataclass__": "RemoveAspectEffectData"
+                },
+                "trigger_skill": {
+                    "__dataclass__": "TriggerSkillEffectData"
+                }
             }
         },
         "icon": "placeholder/icon_00.png",
@@ -31,7 +42,7 @@
         "description": "It does damage.",
         "effects": {
             "damage": {
-                "__dataclass__": "EffectData",
+                "__dataclass__": "ApplyAfflictionEffectData",
                 "accuracy": 10,
                 "affect_stat_amount": 0,
                 "affliction_name": "None",
@@ -59,7 +70,7 @@
         "description": "You can't see very well.",
         "effects": {
             "affect_stat": {
-                "__dataclass__": "EffectData",
+                "__dataclass__": "ApplyAfflictionEffectData",
                 "accuracy": 0,
                 "affect_stat_amount": -2,
                 "affliction_name": "None",

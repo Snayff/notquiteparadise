@@ -5,8 +5,8 @@ import random
 from typing import TYPE_CHECKING
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
-from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, HitModifier, \
-    PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction
+from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType,\
+    HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction
 from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData
 from scripts.engine.core.event_core import publisher
@@ -22,17 +22,14 @@ if TYPE_CHECKING:
 #########################################################################################
 ########################   SKILL  & EFFECTS REQS. #######################################
 # all skills create a projectile, use that to specify conditions such as speed and sprite. <-
-# use a standardised collection of triggers
 # allow for conditional criteria
+# (depending on previous) the effects must be ordered and apply in order
 # each effect is unique so each effect must be able to accept multiple params e.g. damage types
-# there should be Active and Passive Skills
 # passive skills, when learnt, apply the relevant affliction with an infinite duration and cannot be dispelled.
-# the effects must be ordered and apply in order
 # have the ability to create entities, e.g. summons, traps, etc.
-# ability to target automatically based on condition, e.g. nearest, lowest health etc.
+# ability to specify target/ target automatically based on condition, e.g. nearest, lowest health etc.
 # cooldowns applied and respected
 # can only spend resource types, which map to secondary stats, not secondary stats directly
-
 ########################################################################################
 
 
@@ -67,7 +64,7 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
                         logging.debug(f"Target out of skill range, range:{skill_range} < distance:{distance}.")
 
             else:
-                msg = f"You can't afford the cost."
+                msg = f"I can't afford the cost."
                 publisher.publish(MessageEvent(MessageType.LOG, msg))
 
     return False

@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-import tcod.map
 from abc import ABC
 from typing import TYPE_CHECKING
-from scripts.engine.ai import AIBehaviour
-from scripts.engine.core.constants import InteractionCauseType
-from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional
+    from scripts.engine.ai import AIBehaviour
+    from scripts.engine.core.constants import InteractionCauseType
+    from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
+    import tcod.map
 
 ##########################################################
 # Components are to hold data that is subject to change.
