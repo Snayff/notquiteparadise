@@ -216,6 +216,8 @@ def create_god(god_name: str) -> int:
     god.append((Resources(9999, 9999)))
     entity = create(god)
 
+    logging.debug(f"{data.name} created.")
+
     return entity
 
 
@@ -246,7 +248,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     # setup basic attack as a known skill and an interaction
     basic_attack_name = "basic_attack"
     data = library.get_skill_data(basic_attack_name).interactions.get(InteractionCause.ENTITY_COLLISION).damage
-    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name, required_tags=data.required_tags,
+    trigger_skill = TriggerSkillEffectData(effect_type=Effect.TRIGGER_SKILL, skill_name=basic_attack_name,
+                                           required_tags=data.required_tags,
                                            stat_to_target=data.stat_to_target, accuracy=data.accuracy,
                                            shape=data.shape, shape_size=data.shape_size)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
@@ -281,6 +284,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     stats = get_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
+    logging.debug(f"{name} created.")
+
     return entity
 
 
@@ -302,6 +307,7 @@ def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, tar
                                                     skill_name)))
 
     entity = create(projectile)
+    logging.debug(f"{name} created.")
 
     return entity
 
@@ -427,7 +433,11 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
             intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
-            opinion_score = opinion.opinions[entity]
+            try:
+                opinion_score = opinion.opinions[entity]
+            except KeyError:
+                opinion_score = 0
+
             required_opinion = intervention_data.required_opinion
             # check if greater or lower, depending on whether required opinion is positive or negative
             if 0 <= required_opinion < opinion_score:

@@ -48,13 +48,13 @@ class InteractionHandler(Subscriber):
             self._process_move(event)
 
     def _process_move(self, event: MoveEvent):
-        # N.B. impacts moving entities current position
-        position = entity.get_entitys_component(event.entity, Position)
-        self._apply_effects_to_tiles(event.entity, InteractionCause.MOVE, (position.x, position.y))
+        self._apply_effects_to_tiles(event.entity, InteractionCause.MOVE, (event.start_pos[0], event.start_pos[1]),
+                                     (event.direction[0], event.direction[1]))
 
     def _process_expiry(self, event: ExpireEvent):
         position = entity.get_entitys_component(event.entity, Position)
-        self._apply_effects_to_tiles(event.entity, InteractionCause.EXPIRE, (position.x, position.y))
+        self._apply_effects_to_tiles(event.entity, InteractionCause.EXPIRE, (position.x, position.y),
+                                     (position.x, position.y))
 
     @staticmethod
     def _process_tile_interaction(event: TileInteractionEvent):
@@ -121,7 +121,8 @@ class InteractionHandler(Subscriber):
 
     def _process_entity_collision(self, event: EntityCollisionEvent):
         target_x, target_y = event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1]
-        self._apply_effects_to_tiles(event.entity, InteractionCause.ENTITY_COLLISION, (target_x, target_y))
+        self._apply_effects_to_tiles(event.entity, InteractionCause.ENTITY_COLLISION,
+                                     (event.start_pos[0], event.start_pos[1]), (target_x, target_y))
 
     def _process_terrain_collision(self, event: TerrainCollisionEvent):
         ent = event.entity
@@ -139,7 +140,8 @@ class InteractionHandler(Subscriber):
 
             if terrain_collision == TerrainCollision.ACTIVATE:
                 logging.debug(f"-> activate at ({target_x}, {target_y}).")
-                self._apply_effects_to_tiles(ent, InteractionCause.TERRAIN_COLLISION, (target_x, target_y))
+                self._apply_effects_to_tiles(ent, InteractionCause.TERRAIN_COLLISION, (current_x, current_y),
+                                             (target_x, target_y))
 
             elif terrain_collision == TerrainCollision.REFLECT:
                 dir_x, dir_y = scripts.engine.world.get_reflected_direction((current_x, current_y), event.direction)
@@ -154,11 +156,12 @@ class InteractionHandler(Subscriber):
 
     @staticmethod
     def _apply_effects_to_tiles(causing_entity: int, interaction_cause: InteractionCauseType,
-            target_pos: Tuple[int, int]):
+            start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
         """
         Apply all effects relating to a cause of interaction.
         """
-        # get current position
+        # get positions
+        start_x, start_y = start_pos[0], start_pos[1]
         target_x, target_y = target_pos[0],  target_pos[1]
 
         # get interactions effects for specified cause

@@ -21,7 +21,7 @@
                 "skill_key": "slow_the_mighty"
             }
         },
-        "name": "the small gods",
+        "name": "the_small_gods",
         "sprite_paths": {
             "__dataclass__": "CharacteristicSpritePathsData",
             "idle": "assets/world/placeholder/Mobs_crow_01.png",

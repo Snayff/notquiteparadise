@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.engine import world, chrono, entity, state, skill, debug
+from scripts.engine import world, chrono, entity, state, skill, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
     BASE_MOVE_COST
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
@@ -56,10 +56,12 @@ class EntityHandler(Subscriber):
         # get info from event
         dir_x, dir_y = event.direction
         ent = event.entity
+        name = entity.get_name(ent)
         old_x, old_y = event.start_pos
         target_x = old_x + dir_x
         target_y = old_y + dir_y
         target_tile = world.get_tile((target_x, target_y))
+        direction_name = utility.value_to_member((target_x, target_y), Direction)
 
         # check a tile was returned
         if target_tile:
@@ -73,13 +75,15 @@ class EntityHandler(Subscriber):
         if not is_entity_on_tile and is_tile_blocking_movement:
             publisher.publish(TerrainCollisionEvent(ent, target_tile, (target_x, target_y), event.start_pos))
             publisher.publish(MessageEvent(MessageType.LOG, f"I can't go that way!"))
+            logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked by "
+                          f"terrain. ")
 
         # check if entity blocking tile
         elif is_entity_on_tile:
             entities = entity.get_entities_and_components_in_area([target_tile], Blocking)
             for blocking_entity, (position, blocking, *rest) in entities.items():
                 if blocking.blocks_movement:
-                    publisher.publish(EntityCollisionEvent(ent, blocking_entity, (target_x, target_y),
+                    publisher.publish(EntityCollisionEvent(ent, blocking_entity, event.direction,
                                                            event.start_pos))
                     break
 

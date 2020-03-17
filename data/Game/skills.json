@@ -35,7 +35,7 @@
                 "damage": {
                     "__dataclass__": "DamageEffectData",
                     "accuracy": 0,
-                    "stat_to_target": null,
+                    "stat_to_target": "vigour",
                     "shape": "target",
                     "shape_size": 1,
                     "required_tags": [

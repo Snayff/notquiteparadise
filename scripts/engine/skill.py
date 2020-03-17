@@ -102,8 +102,7 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
 
         setattr(resources, resource.lower(), resource_left)
 
-        log_string = f"'{name}' paid {cost} {resource} and has {resource_left} left."
-        logging.debug(log_string)
+        logging.info(f"'{name}' paid {cost} {resource} and has {resource_left} left.")
     else:
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
@@ -121,7 +120,10 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     dir_x, dir_y = target_direction
     direction_name = utility.value_to_member((target_direction[0], target_direction[1]), Direction)
 
-    logging.info(f"{name} used {skill_name} at ({start_x}, {start_y}) in {direction_name}...")
+    logging.info(f"'{name}' used {skill_name} at ({start_x}, {start_y}) in {direction_name}...")
+    if name == "player":
+        name = "I"
+    publisher.publish(MessageEvent(MessageType.LOG, f"{name} used {skill_name}."))
 
     entity.create_projectile(using_entity, skill_name, current_x, current_y, dir_x, dir_y)
 
@@ -228,8 +230,8 @@ def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles
     position = entity.get_entitys_component(attacker, Position)
     start_pos = (position.x, position.y)
     # uses first tile in list for target direction. Should only be one tile when triggering trigger skill.
-    target_dir = (effected_tiles[0].x, effected_tiles[0].y)
-    direction = world.get_direction(start_pos, target_dir)
+    target_pos = (effected_tiles[0].x, effected_tiles[0].y)
+    direction = world.get_direction(start_pos, target_pos)
 
     publisher.publish(UseSkillEvent(attacker, skill_name, start_pos, direction, data.time_cost))
 
