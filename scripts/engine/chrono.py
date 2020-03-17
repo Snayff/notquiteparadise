@@ -52,7 +52,7 @@ def next_turn():
     """
     Proceed to the next turn, setting the next entity to act as the turn holder.
     """
-    logging.debug(f"Moving to the next turn...")
+    logging.info(f"Moving to the next turn...")
 
     if not store.turn_queue:
         build_new_turn_queue()

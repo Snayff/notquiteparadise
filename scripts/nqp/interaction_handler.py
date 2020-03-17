@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import logging
 import scripts.engine.world
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 from scripts.engine import world, entity, skill, utility
-from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision
+from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect
 from scripts.engine.core.event_core import Subscriber
 from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile
 from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent, ExpireEvent, \
@@ -27,7 +27,7 @@ class InteractionHandler(Subscriber):
         Control interaction events
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
+        logging.debug(f"{self.name} received {event.__class__.__name__}...")
 
         if isinstance(event, TileInteractionEvent):
             self._process_tile_interaction(event)
@@ -120,9 +120,7 @@ class InteractionHandler(Subscriber):
         #             world.cleanse_expired_aspects(tile)
 
     def _process_entity_collision(self, event: EntityCollisionEvent):
-        current_x, current_y = event.start_pos[0], event.start_pos[1]
-        target_x, target_y = current_x + event.direction[0], current_y + event.direction[1]
-
+        target_x, target_y = event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1]
         self._apply_effects_to_tiles(event.entity, InteractionCause.ENTITY_COLLISION, (target_x, target_y))
 
     def _process_terrain_collision(self, event: TerrainCollisionEvent):
@@ -161,24 +159,30 @@ class InteractionHandler(Subscriber):
         Apply all effects relating to a cause of interaction.
         """
         # get current position
-
         target_x, target_y = target_pos[0],  target_pos[1]
 
         # get interactions effects for specified cause
-        interactions = entity.get_entitys_component(causing_entity, Interactions)
-        caused_interactions = interactions.get(interaction_cause)
-        effect_names = utility.get_class_members(Type[caused_interactions])
+        if entity.has_component(causing_entity, Interactions):
+            interactions = entity.get_entitys_component(causing_entity, Interactions)
+            caused_interactions = interactions.get(interaction_cause)
 
-        # loop each effect name and get the data from the field
-        for effect_name in effect_names:
-            if effect_name != "cause":
-                effect = getattr(caused_interactions, effect_name)
+            # do we have anything we need to trigger?
+            if caused_interactions:
+                effect_names = utility.get_class_members(Effect)
 
-                # if we have details for the effect
-                if effect:
-                    # each effect applies to a different area so get effected tiles
-                    coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
-                    effected_tiles = world.get_tiles(target_x, target_y, coords)
+                # loop each effect name and get the data from the field
+                for effect_name in effect_names:
+                    effect_name = effect_name.lower()
 
-                    # apply effects
-                    skill.process_effect(effect, effected_tiles, causing_entity)
+                    if effect_name != "cause":
+                        try:
+                            effect = getattr(caused_interactions, effect_name)
+
+                            # each effect applies to a different area so get effected tiles
+                            coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
+                            effected_tiles = world.get_tiles(target_x, target_y, coords)
+
+                            # apply effects
+                            skill.process_effect(effect, effected_tiles, causing_entity)
+                        except AttributeError:
+                            pass

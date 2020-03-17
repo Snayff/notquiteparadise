@@ -28,7 +28,7 @@ class GameHandler(Subscriber):
         Process game events.
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
+        logging.debug(f"{self.name} received {event.__class__.__name__}.")
 
         if isinstance(event, ExitGameEvent):
             publisher.publish(ChangeGameStateEvent(GameState.EXIT_GAME))
@@ -76,7 +76,7 @@ class GameHandler(Subscriber):
             # handle wasted attempt to change the game state
             log_string = f"-> new game state {new_game_state} is same as current" \
                          f" {state.get_current()} so state not updated."
-            logging.info(log_string)
+            logging.debug(log_string)
 
     @staticmethod
     def process_end_turn(event: EndTurnEvent):

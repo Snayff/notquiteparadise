@@ -9,7 +9,7 @@ from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEven
     EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV
+from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import value_to_member
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -30,7 +30,7 @@ class EntityHandler(Subscriber):
         Control entity events
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}.")
+        logging.debug(f"{self.name} received {event.__class__.__name__}.")
 
         if isinstance(event, MoveEvent):
             self.process_move(event)
@@ -76,9 +76,12 @@ class EntityHandler(Subscriber):
 
         # check if entity blocking tile
         elif is_entity_on_tile:
-            entities_at_location = entity.get_entities_and_components_in_area([target_tile], None)
-            blocking_entity = next(iter(entities_at_location))  # we only have one entity per tile so get that
-            publisher.publish(EntityCollisionEvent(ent, blocking_entity, (target_x, target_y), event.start_pos))
+            entities = entity.get_entities_and_components_in_area([target_tile], Blocking)
+            for blocking_entity, (position, blocking, *rest) in entities.items():
+                if blocking.blocks_movement:
+                    publisher.publish(EntityCollisionEvent(ent, blocking_entity, (target_x, target_y),
+                                                           event.start_pos))
+                    break
 
         # if nothing in the way, time to move!
         elif not is_entity_on_tile and not is_tile_blocking_movement:

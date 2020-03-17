@@ -274,9 +274,6 @@ class InteractionCause(SimpleNamespace):
     PASSIVE = InteractionCauseType("passive")  # passively affects entity at all times. usually modifiers.
     BURNED = InteractionCauseType("burn")  # when burn damage applied
 
-    ALWAYS = InteractionCauseType("always")  # always applying effects  # TODO - remove this. We need passives and any.
-    ACTION = InteractionCauseType("action")  # apply when an action is taken  # TODO - remove as too broad.
-
     # Other triggers to consider
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
     # TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage
@@ -288,7 +285,7 @@ class Shape(SimpleNamespace):
     """
     When to trigger the afflictions
     """
-    TARGET = ShapeType("shape")  # single target
+    TARGET = ShapeType("target")  # single target
     SQUARE = ShapeType("square")
     CIRCLE = ShapeType("circle")
     CROSS = ShapeType("cross")

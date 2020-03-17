@@ -119,9 +119,9 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     start_x, start_y = start_position
     current_x, current_y = start_position
     dir_x, dir_y = target_direction
-    direction = utility.value_to_member((target_direction[0], target_direction[1]), Direction)
+    direction_name = utility.value_to_member((target_direction[0], target_direction[1]), Direction)
 
-    logging.info(f"{name} used {skill_name} at ({start_x}, {start_y}) in {direction}...")
+    logging.info(f"{name} used {skill_name} at ({start_x}, {start_y}) in {direction_name}...")
 
     entity.create_projectile(using_entity, skill_name, current_x, current_y, dir_x, dir_y)
 
@@ -201,8 +201,12 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
     Apply an effect to all tiles in a list.
     """
     name = entity.get_name(causing_entity)
-    log_string = f"Applying {effect.effect_type} effect, caused by '{name}'."
-    logging.info(log_string)
+    if effect.effect_type is None:
+        logging.critical(f"Processing effect, caused by '{name}', but effect_type is None.")
+    elif len(effected_tiles) == 0:
+        logging.critical(f"Processing effect, caused by '{name}', but no tiles provided.")
+    else:
+        logging.debug(f"Processing {effect.effect_type} effect, caused by '{name}'.")
 
     if isinstance(effect, DamageEffectData):
         _process_damage_effect(effect, effected_tiles, causing_entity)

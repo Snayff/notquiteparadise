@@ -72,8 +72,11 @@ def get_entities_and_components_in_area(area: List[Tile], *components: Any) -> D
     N.B. Do not specify Position as a component.
     """
     entities = {}
+    # add position and remove any None values
+    _components = (Position,) + components
+    _components = (c for c in _components if c is not None)
 
-    for entity, (pos, *rest) in get_components(*components):
+    for entity, (pos, *rest) in get_components(*_components):
         for tile in area:
             if tile.x == pos.x and tile.y == pos.y:
                 entities[entity] = (pos, *rest)
@@ -240,18 +243,15 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Savvy(savvy_name))
     actor.append(FOV(world.create_fov_map()))
 
-    entity = create(actor)
-
-    # give full resources
-    stats = get_combat_stats(entity)
-    add_component(entity, Resources(stats.max_health, stats.max_stamina))
-
     # setup basic attack as a known skill and an interaction
     basic_attack_name = "basic_attack"
-    known_skills = [basic_attack_name]  # N.B. All actors start with basic attack
-    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name)
+    data = library.get_skill_data(basic_attack_name).interactions.get(InteractionCause.ENTITY_COLLISION).damage
+    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name, required_tags=data.required_tags,
+                                           stat_to_target=data.stat_to_target, accuracy=data.accuracy,
+                                           shape=data.shape, shape_size=data.shape_size)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
+    known_skills = [basic_attack_name]  # N.B. All actors start with basic attack
 
     # get skills from characteristics
     people_data = library.get_people_data(people_name)
@@ -267,12 +267,19 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
         known_skills += savvy_data.known_skills
 
     # add skills to entity
-    add_component(entity, Knowledge(known_skills))
+    actor.append(Knowledge(known_skills))
 
     # add aesthetic
     characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
     sprites = build_characteristic_sprites(characteristics)
-    add_component(entity, Aesthetic(sprites.idle, sprites))
+    actor.append(Aesthetic(sprites.idle, sprites))
+
+    # create the entity
+    entity = create(actor)
+
+    # give full resources N.B. Can only be added once entity is created
+    stats = get_combat_stats(entity)
+    add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
     return entity
 

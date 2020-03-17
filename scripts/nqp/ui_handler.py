@@ -32,7 +32,7 @@ class UIHandler(Subscriber):
         Control the events
         """
         # log that event has been received
-        logging.debug(f"{self.name} received {event.topic}:{event.__class__.__name__}...")
+        logging.debug(f"{self.name} received {event.__class__.__name__}...")
 
         if event.topic == EventTopic.UI:
             self.process_ui_event(event)
