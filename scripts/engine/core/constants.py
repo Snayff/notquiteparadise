@@ -271,6 +271,8 @@ class InteractionCause(SimpleNamespace):
     TERRAIN_COLLISION = InteractionCauseType("terrain_collision")
     END_TURN = InteractionCauseType("end_turn")  # when entity ends their turn
     MOVE = InteractionCauseType("move")  # when entity moves
+    PASSIVE = InteractionCauseType("passive")  # passively affects entity at all times. usually modifiers.
+    BURNED = InteractionCauseType("burn")  # when burn damage applied
 
     ALWAYS = InteractionCauseType("always")  # always applying effects  # TODO - remove this. We need passives and any.
     ACTION = InteractionCauseType("action")  # apply when an action is taken  # TODO - remove as too broad.

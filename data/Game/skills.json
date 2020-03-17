@@ -24,32 +24,32 @@
             "speed": "slow",
             "travel_type": "instant",
             "range": 1,
-            "required_tags": [
-                "other_entity"
-            ],
             "expiry_type": "fizzle",
             "terrain_collision": "fizzle"
         },
-        "effects": {
-            "damage": {
-                "__dataclass__": "EffectData",
-                "accuracy": 0,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 0,
-                "effect_type": null,
-                "mod_amount": 0,
-                "mod_stat": null,
-                "required_tags": [
-                    "any"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": null,
-                "shape": "target",
-                "shape_size": 1
+        "interactions": {
+            "entity_collision": {
+                "__dataclass__": "InteractionData",
+                "cause": "entity_collision",
+                "apply_affliction": null,
+                "damage": {
+                    "__dataclass__": "DamageEffectData",
+                    "accuracy": 0,
+                    "stat_to_target": null,
+                    "shape": "target",
+                    "shape_size": 1,
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "damage": 2,
+                    "damage_type": "mundane",
+                    "mod_amount": 0.1,
+                    "mod_stat": "clout"
+                },
+                "affect_stat": null,
+                "add_aspect": null,
+                "remove_aspect": null,
+                "trigger_skill": null
             }
         }
     }

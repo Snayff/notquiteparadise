@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
+from scripts.engine.core.constants import InteractionCauseType
+from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional
     from scripts.engine.ai import AIBehaviour
-    from scripts.engine.core.constants import InteractionCauseType
-    from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
     import tcod.map
 
 ##########################################################
@@ -177,12 +177,11 @@ class FOV(Component):
         self.map: tcod.map.Map = fov_map
 
 
-class Interaction(Component):
+class Interactions(Dict[InteractionCauseType, InteractionData], Component):
     """
     The effects triggered when a specific criteria is met
     """
-    def __init__(self, interactions: Dict[InteractionCauseType, InteractionData]):
-        self.interactions = interactions
+    pass
 
 
 class IsProjectile(Component):

@@ -1,93 +1,58 @@
 {
     "bogged_down": {
         "__dataclass__": "AfflictionData",
-        "category": "BANE",
+        "category": "bane",
         "description": "It weakens mundane defence and makes you a little bit slower.",
         "interactions": {
-            "entity_collision": {
+            "passive": {
                 "__dataclass__": "InteractionData",
-                "cause": "entity_collision",
-                "apply_affliction": {
-                    "__dataclass__": "ApplyAfflictionEffectData"
-                },
-                "damage": {
-                    "__dataclass__": "DamageEffectData"
-                },
+                "cause": "passive",
+                "apply_affliction": null,
+                "damage": null,
                 "affect_stat": {
                     "__dataclass__": "AffectStatEffectData",
                     "accuracy": 0,
-                    "affect_stat_amount": -25,
-                    "effect_type": "affect_stat",
-                    "required_tags": [],
+                    "affect_stat_amount": -10,
+                    "required_tags": [
+                        "other_entity"
+                    ],
                     "stat_to_affect": "bustle"
                 },
-                "add_aspect": {
-                    "__dataclass__": "AddAspectEffectData"
-                },
-                "remove_aspect": {
-                    "__dataclass__": "RemoveAspectEffectData"
-                },
-                "trigger_skill": {
-                    "__dataclass__": "TriggerSkillEffectData"
-                }
+                "add_aspect": null,
+                "remove_aspect": null,
+                "trigger_skill": null
             }
         },
         "icon": "placeholder/icon_00.png",
-        "name": "bogged down",
-        "trigger_event": "ALWAYS"
+        "name": "bogged down"
     },
     "flaming": {
         "__dataclass__": "AfflictionData",
-        "category": "BANE",
+        "category": "bane",
         "description": "It does damage.",
-        "effects": {
-            "damage": {
-                "__dataclass__": "ApplyAfflictionEffectData",
-                "accuracy": 10,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 15,
-                "damage_type": "burn",
-                "duration": 0,
-                "effect_type": "damage",
-                "mod_amount": 0,
-                "mod_stat": null,
-                "required_tags": [
-                    "other_entity"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "bustle"
+        "interactions": {
+            "move": {
+                "__dataclass__": "InteractionData",
+                "cause": "move",
+                "apply_affliction": null,
+                "damage": {
+                    "__dataclass__": "DamageEffectData",
+                    "damage": 15,
+                    "damage_type": "burn",
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "stat_to_target": "bustle",
+                    "mod_amount": 0.1,
+                    "mod_stat": "skullduggery"
+                },
+                "affect_stat": null,
+                "add_aspect": null,
+                "remove_aspect": null,
+                "trigger_skill": null
             }
         },
         "icon": "placeholder/icon_00.png",
-        "name": "flaming",
-        "trigger_event": "ACTION"
-    },
-    "myopic": {
-        "__dataclass__": "AfflictionData",
-        "category": "BANE",
-        "description": "You can't see very well.",
-        "effects": {
-            "affect_stat": {
-                "__dataclass__": "ApplyAfflictionEffectData",
-                "accuracy": 0,
-                "affect_stat_amount": -2,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 0,
-                "effect_type": "affect_stat",
-                "mod_amount": 0,
-                "mod_stat": null,
-                "required_tags": [],
-                "stat_to_affect": "sight_range",
-                "stat_to_target": null
-            }
-        },
-        "icon": "placeholder/icon_00.png",
-        "name": "myopic",
-        "trigger_event": "passive"
+        "name": "flaming"
     }
 }

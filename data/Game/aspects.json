@@ -1,76 +1,61 @@
 {
     "bog": {
         "__dataclass__": "AspectData",
-        "blocks_movement": "False",
-        "blocks_sight": "True",
+        "blocks_movement": false,
+        "blocks_sight": true,
         "description": "This is the bog aspect. It slows entities down.",
         "duration": null,
-        "effects": {
-            "apply_affliction": {
-                "__dataclass__": "EffectData",
-                "accuracy": 100,
-                "affect_stat_amount": 0,
-                "affliction_name": "bogged down",
-                "aspect_name": "None",
-                "damage": 0,
-                "damage_type": null,
-                "duration": 3,
-                "effect_type": "apply_affliction",
-                "mod_amount": 0,
-                "mod_stat": null,
-                "required_tags": [
-                    "other_entity"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "skullduggery"
-            }
-        },
         "interactions": {
-            "flaming": {
+            "entity_collision": {
                 "__dataclass__": "InteractionData",
-                "cause": "flaming",
-                "effects": {
-                    "add_aspect": {
-                        "__dataclass__": "EffectData",
-                        "accuracy": 100,
-                        "affect_stat_amount": 0,
-                        "affliction_name": "None",
-                        "aspect_name": "dirt",
-                        "damage": 0,
-                        "damage_type": null,
-                        "duration": 3,
-                        "effect_type": "add_aspect",
-                        "mod_amount": 0,
-                        "mod_stat": null,
-                        "required_tags": [
-                            "any"
-                        ],
-                        "stat_to_affect": null,
-                        "stat_to_target": "None",
-                        "shape": "target",
-                        "shape_size": 1
-                    },
-                    "remove_aspect": {
-                        "__dataclass__": "EffectData",
-                        "accuracy": 100,
-                        "affect_stat_amount": 0,
-                        "affliction_name": "None",
-                        "aspect_name": "bog",
-                        "damage": 0,
-                        "damage_type": null,
-                        "duration": 3,
-                        "effect_type": "remove_aspect",
-                        "mod_amount": 0,
-                        "mod_stat": null,
-                        "required_tags": [
-                            "any"
-                        ],
-                        "stat_to_affect": null,
-                        "stat_to_target": "None",
-                        "shape": "target",
-                        "shape_size": 1
-                    }
-                }
+                "cause": "entity_collision",
+                "apply_affliction": {
+                    "__dataclass__": "ApplyAfflictionEffectData",
+                    "accuracy": 100,
+                    "stat_to_target": "skullduggery",
+                    "shape": null,
+                    "shape_size": 1,
+                    "required_tags": [
+                        "other_entity"
+                    ],
+                    "duration": 3,
+                    "affliction_name": "bogged down"
+                },
+                "damage": null,
+                "affect_stat": null,
+                "add_aspect": null,
+                "remove_aspect": null,
+                "trigger_skill": null
+            },
+            "burned": {
+                "__dataclass__": "InteractionData",
+                "cause": "burned",
+                "apply_affliction": null,
+                "damage": null,
+                "affect_stat": null,
+                "add_aspect": {
+                    "__dataclass__": "AddAspectEffectData",
+                    "accuracy": 0,
+                    "stat_to_target": null,
+                    "shape": null,
+                    "shape_size": 1,
+                    "required_tags": [
+                        "self"
+                    ],
+                    "aspect_name": "dirt"
+                },
+                "remove_aspect": {
+                    "__dataclass__": "RemoveAspectEffectData",
+                    "accuracy": 0,
+                    "stat_to_target": null,
+                    "shape": null,
+                    "shape_size": 1,
+                    "required_tags": [
+                        "self"
+                    ],
+                    "aspect_name": "bog"
+                },
+                "trigger_skill": null
             }
         },
         "name": "bog",
@@ -82,41 +67,8 @@
         "blocks_sight": false,
         "description": "This is the dirt aspect. It does nothing interesting.",
         "duration": null,
-        "effects": {},
-        "interactions": {},
+        "interactions": null,
         "name": "dirt",
         "sprite": "placeholder/77.png"
-    },
-    "shrapnel": {
-        "__dataclass__": "AspectData",
-        "blocks_movement": false,
-        "blocks_sight": false,
-        "description": "Sharp pointy things litter the floor.",
-        "duration": 3,
-        "effects": {
-            "damage": {
-                "__dataclass__": "EffectData",
-                "accuracy": 100,
-                "affect_stat_amount": 0,
-                "affliction_name": "None",
-                "aspect_name": "None",
-                "damage": 1,
-                "damage_type": "mundane",
-                "duration": 0,
-                "effect_type": "damage",
-                "mod_amount": 0,
-                "mod_stat": "",
-                "required_tags": [
-                    "other_entity"
-                ],
-                "stat_to_affect": null,
-                "stat_to_target": "bustle",
-                "shape": "target",
-                "shape_size": 1
-            }
-        },
-        "interactions": {},
-        "name": "shrapnel",
-        "sprite": "placeholder/78.png"
     }
 }

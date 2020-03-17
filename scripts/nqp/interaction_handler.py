@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from scripts.engine import world, entity, skill, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision
 from scripts.engine.core.event_core import Subscriber
-from scripts.engine.component import Position, Interaction, Behaviour, IsProjectile
+from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile
 from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent, ExpireEvent, \
     EntityCollisionEvent, TerrainCollisionEvent, MoveEvent
 from scripts.engine.library import library
@@ -165,8 +165,8 @@ class InteractionHandler(Subscriber):
         target_x, target_y = target_pos[0],  target_pos[1]
 
         # get interactions effects for specified cause
-        interactions = entity.get_entitys_component(causing_entity, Interaction)
-        caused_interactions = interactions.interactions.get(interaction_cause)
+        interactions = entity.get_entitys_component(causing_entity, Interactions)
+        caused_interactions = interactions.get(interaction_cause)
         effect_names = utility.get_class_members(Type[caused_interactions])
 
         # loop each effect name and get the data from the field

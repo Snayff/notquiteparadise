@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, TypeVar
 from scripts.engine import utility, world, debug
 from scripts.engine.ai import ProjectileBehaviour
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
-    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interaction, IsProjectile, Behaviour
+    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData, InteractionData, \
     TriggerSkillEffectData
@@ -251,7 +251,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     known_skills = [basic_attack_name]  # N.B. All actors start with basic attack
     trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
-    actor.append(Interaction({InteractionCause.ENTITY_COLLISION: basic_attack}))
+    actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
 
     # get skills from characteristics
     people_data = library.get_people_data(people_name)

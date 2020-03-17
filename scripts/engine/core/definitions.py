@@ -110,7 +110,7 @@ class DamageEffectData(EffectData):
     damage: int = 0
     damage_type: Optional[DamageTypeType] = None
     mod_stat: Optional[PrimaryStatType] = None
-    mod_amount: int = 0
+    mod_amount: float = 0.0
 
 
 @register_dataclass_with_json
@@ -133,7 +133,7 @@ class AddAspectEffectData(EffectData):
     """
     effect_type = Effect.ADD_ASPECT
 
-    aspect_name: str = field(default="None")
+    aspect_name: str = field(default="None")  # TODO - confirm if we want aspect name or key
 
 
 @register_dataclass_with_json
@@ -144,7 +144,7 @@ class RemoveAspectEffectData(EffectData):
     """
     effect_type = Effect.REMOVE_ASPECT
 
-    aspect_name: str = field(default="None")
+    aspect_name: str = field(default="None")  # TODO - confirm if we want aspect name or key
 
 
 @register_dataclass_with_json
@@ -155,7 +155,7 @@ class TriggerSkillEffectData(EffectData):
     """
     effect_type = Effect.TRIGGER_SKILL
 
-    skill_name: str = field(default="None")
+    skill_name: str = field(default="None")  # TODO - confirm if we want skill name or key
 
 
 ##################### ACTORS #################################
@@ -297,7 +297,7 @@ class AttitudeData:
     """
     Data class for  a god's attitude
     """
-    action: str = field(default="None")
+    action: str = field(default="None")  # TODO - standardise what this can be
     opinion_change: int = 0
 
 
@@ -307,7 +307,7 @@ class InterventionData:
     """
     Data class for a god's intervention
     """
-    skill_key: str = field(default="None")
+    skill_key: str = field(default="None")  # TODO - confirm if we want skill key or name
     required_opinion: int = 0
 
 
