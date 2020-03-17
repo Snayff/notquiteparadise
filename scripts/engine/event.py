@@ -59,41 +59,6 @@ class MoveEvent(Event):
         self.entity = entity_to_move
         self.direction = direction
 
-
-class ExpireEvent(Event):
-    """
-    Event for handling the expiry of an entity, usually a projectile.
-    """
-    def __init__(self, expiring_entity: int):
-        Event.__init__(self, "EXPIRE", EventTopic.ENTITY)
-        self.entity = expiring_entity
-
-
-class EntityCollisionEvent(Event):
-    """
-    Event for handling two entities colliding.
-    """
-    def __init__(self, active_entity: int, blocking_entity: int, direction: Tuple[int, int],
-            start_pos: Tuple[int, int]):
-        Event.__init__(self, "ENTITY_COLLISION", EventTopic.ENTITY)
-        self.start_pos = start_pos
-        self.direction = direction
-        self.entity = active_entity
-        self.blocking_entity = blocking_entity
-
-
-class TerrainCollisionEvent(Event):
-    """
-    Event for handling an entity colliding with terrain.
-    """
-    def __init__(self, active_entity: int, blocking_tile: Tile, direction: Tuple[int, int],
-            start_pos: Tuple[int, int]):
-        Event.__init__(self, "TERRAIN_COLLISION", EventTopic.ENTITY)
-        self.start_pos = start_pos
-        self.direction = direction
-        self.entity = active_entity
-        self.blocking_tile = blocking_tile
-
 ####################### GAME ############################################
 
 
@@ -133,16 +98,51 @@ class EndRoundEvent(Event):
         Event.__init__(self, "END_ROUND", EventTopic.GAME)
 
 
-####################### MAP ############################################
+####################### INTERACTION ############################################
 
-class TileInteractionEvent(Event):
+
+class CreatedTimedEntityEvent(Event):
     """
-    Event for updating a tile in response to actions taken
+    Event for handling the creation of an entity that uses time.
     """
-    def __init__(self, tiles: List[Tile], cause: str):
-        Event.__init__(self, "TILE_INTERACTION", EventTopic.MAP)
-        self.tiles = tiles
-        self.cause = cause
+    def __init__(self, created_entity: int):
+        Event.__init__(self, "CREATED_TIMED_ENTITY", EventTopic.INTERACTION)
+        self.entity = created_entity
+
+
+class ExpireEvent(Event):
+    """
+    Event for handling the expiry of an entity, usually a projectile.
+    """
+    def __init__(self, expiring_entity: int):
+        Event.__init__(self, "EXPIRE", EventTopic.INTERACTION)
+        self.entity = expiring_entity
+
+
+class EntityCollisionEvent(Event):
+    """
+    Event for handling two entities colliding.
+    """
+    def __init__(self, active_entity: int, blocking_entity: int, direction: Tuple[int, int],
+            start_pos: Tuple[int, int]):
+        Event.__init__(self, "ENTITY_COLLISION", EventTopic.INTERACTION)
+        self.start_pos = start_pos
+        self.direction = direction
+        self.entity = active_entity
+        self.blocking_entity = blocking_entity
+
+
+class TerrainCollisionEvent(Event):
+    """
+    Event for handling an entity colliding with terrain.
+    """
+    def __init__(self, active_entity: int, blocking_tile: Tile, direction: Tuple[int, int],
+            start_pos: Tuple[int, int]):
+        Event.__init__(self, "TERRAIN_COLLISION", EventTopic.INTERACTION)
+        self.start_pos = start_pos
+        self.direction = direction
+        self.entity = active_entity
+        self.blocking_tile = blocking_tile
 
 ####################### UI ############################################
 

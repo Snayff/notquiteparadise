@@ -7,10 +7,10 @@ import esper
 import pygame
 import tcod.map
 from typing import TYPE_CHECKING, TypeVar
-from scripts.engine import utility, world, debug
+from scripts.engine import utility, world, debug, chrono
 from scripts.engine.ai import ProjectileBehaviour
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
-    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour
+    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour, Tracked
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData, InteractionData, \
     TriggerSkillEffectData
@@ -185,7 +185,8 @@ def delete(entity: int):
     """
     if entity:
         _esper.delete_entity(entity)
-        logging.info(f"Entity ({entity}) deleted.")
+        name = get_name(entity)
+        logging.info(f"{name} ({entity}) added to stack to be deleted on next frame.")
     else:
         logging.error("Tried to delete an entity but entity was None.")
 
@@ -244,6 +245,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
     actor.append(FOV(world.create_fov_map()))
+    actor.append(Tracked(chrono.get_time()))
 
     # setup basic attack as a known skill and an interaction
     basic_attack_name = "basic_attack"
@@ -289,7 +291,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     return entity
 
 
-def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, target_dir_x: int, target_dir_y: int):
+def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, target_dir_x: int,
+        target_dir_y: int) -> int:
     """
     Create an entity with all of the components to be a projectile. Returns entity ID.
     """
@@ -302,12 +305,13 @@ def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, tar
     desc = f"{name}'s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
     projectile.append(IsProjectile())
+    projectile.append(Tracked(chrono.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     projectile.append(Behaviour(ProjectileBehaviour(creating_entity, (target_dir_x, target_dir_y), data.range,
                                                     skill_name)))
 
     entity = create(projectile)
-    logging.debug(f"{name} created.")
+    logging.debug(f"{name}`s projectile created.")
 
     return entity
 
@@ -365,11 +369,11 @@ def spend_time(entity: int, time_spent: int):
     """
     # TODO - modify by time modifier stat
     if entity:
-        resources = get_entitys_component(entity, Resources)
-        if resources:
-            resources.time_spent += time_spent
+        tracked = get_entitys_component(entity, Tracked)
+        if tracked:
+            tracked.time_spent += time_spent
         else:
-            debug.log_component_not_found(entity, "spend time", Resources)
+            debug.log_component_not_found(entity, "spend time", Tracked)
     else:
         logging.error("Tried to spend entity's time but entity was None.")
 

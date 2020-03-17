@@ -7,8 +7,8 @@ from scripts.engine import world, entity, skill, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect
 from scripts.engine.core.event_core import Subscriber
 from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile
-from scripts.engine.event import EndTurnEvent, EndRoundEvent, TileInteractionEvent, ExpireEvent, \
-    EntityCollisionEvent, TerrainCollisionEvent, MoveEvent
+from scripts.engine.event import EndTurnEvent, EndRoundEvent, ExpireEvent, \
+    EntityCollisionEvent, TerrainCollisionEvent, MoveEvent, CreatedTimedEntityEvent
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
@@ -29,10 +29,7 @@ class InteractionHandler(Subscriber):
         # log that event has been received
         logging.debug(f"{self.name} received {event.__class__.__name__}...")
 
-        if isinstance(event, TileInteractionEvent):
-            self._process_tile_interaction(event)
-
-        elif isinstance(event, EndTurnEvent):
+        if isinstance(event, EndTurnEvent):
             self._process_end_turn(event)
 
         elif isinstance(event, EndRoundEvent):
@@ -55,40 +52,7 @@ class InteractionHandler(Subscriber):
         position = entity.get_entitys_component(event.entity, Position)
         self._apply_effects_to_tiles(event.entity, InteractionCause.EXPIRE, (position.x, position.y),
                                      (position.x, position.y))
-
-    @staticmethod
-    def _process_tile_interaction(event: TileInteractionEvent):
-        """
-        Check the cause on the aspects of a tile and trigger any interactions.
-
-        Args:
-            event(TileInteractionEvent):
-        """
-        pass
-
-        # # check all tiles
-        # for tile in event.tiles:
-        #     # FIXME - rebuild to work for EC
-        #     # only aspects have interactions...
-        #     if tile.aspects:
-        #
-        #         for key, aspect in tile.aspects.items():
-        #             aspect_data = library.get_aspect_data(aspect.name)
-        #
-        #             # check cause is a valid trigger for an interaction
-        #             for interaction in aspect_data.interactions:
-        #                 if event.cause == interaction.cause:
-        #                     # change aspects
-        #                     world.remove_aspect_from_tile(tile, aspect.name)
-        #                     world.add_aspect_to_tile(tile, interaction.change_to)
-        #
-        #                     # log the change
-        #                     log_string = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}"
-        #                     logging.info(log_string)
-        #
-        #                     # inform player of change
-        #                     msg = f"{interaction.cause} changed {aspect_data.name} to {interaction.change_to}."
-        #                     publisher.publish(MessageEvent(MessageType.LOG, msg))
+        entity.delete(event.entity)
 
     @staticmethod
     def _process_end_turn(event: EndTurnEvent):

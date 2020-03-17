@@ -219,9 +219,7 @@ def initialise_event_handlers():
     entity_handler.subscribe(EventTopic.GAME)
 
     interaction_handler = InteractionHandler(event_hub)
-    interaction_handler.subscribe(EventTopic.MAP)
-    interaction_handler.subscribe(EventTopic.GAME)
-    interaction_handler.subscribe(EventTopic.ENTITY)
+    interaction_handler.subscribe(EventTopic.INTERACTION)
 
     god_handler = GodHandler(event_hub)
     god_handler.subscribe(EventTopic.ENTITY)

@@ -32,7 +32,7 @@ class _LibraryOfAlexandria:
 
         self.refresh_library_data()
 
-        logging.info(f"Data Library initialised.")
+        logging.info(f"Data Library initialised.")  # FIXME - this isnt being logged
 
     ####################### LIBRARY MANAGEMENT ####################
 

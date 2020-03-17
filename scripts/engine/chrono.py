@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.engine import entity
-from scripts.engine.component import Resources, Identity
+from scripts.engine.component import Resources, Identity, Tracked
 from scripts.engine.core.constants import TIME_PER_ROUND
 from scripts.engine.core.event_core import publisher
 from scripts.engine.core.store import store
@@ -15,14 +15,14 @@ if TYPE_CHECKING:
 # TODO What do we need from the turn queue?
 #  Add all entities that are within X range of the player;
 #  Add new entities to the queue as they get into range;
-#  Amend an entities position in the queue;
+#  Function to amend an entities position in the queue;
 
 
 ############ ACTIONS ##################
 
-def build_new_turn_queue():
+def rebuild_turn_queue():
     """
-    Build a new turn queue for all entities
+    Build a new turn queue that includes all timed entities
     """
     logging.debug(f"Building a new turn queue...")
 
@@ -30,13 +30,12 @@ def build_new_turn_queue():
 
     # create a turn queue from the entities list
     new_queue = {}
-    for ent, resource in get_component(Resources):
-        new_queue[ent] = resource.time_spent
+    for ent, tracked in get_component(Tracked):
+        new_queue[ent] = tracked.time_spent
     set_turn_queue(new_queue)
 
     # get the next entity in the queue
-    turn_queue = get_turn_queue()
-    new_turn_holder = min(turn_queue, key=turn_queue.get)
+    new_turn_holder = min(new_queue, key=new_queue.get)
     set_turn_holder(new_turn_holder)
 
     # log result
@@ -55,13 +54,13 @@ def next_turn():
     logging.info(f"Moving to the next turn...")
 
     if not store.turn_queue:
-        build_new_turn_queue()
+        rebuild_turn_queue()
 
     turn_holder = get_turn_holder()
 
     # update time using last action and when new turn holder can act
-    resources = entity.get_entitys_component(turn_holder, Resources)
-    time_progressed = resources.time_spent - get_time_of_last_turn()
+    tracked = entity.get_entitys_component(turn_holder, Tracked)
+    time_progressed = tracked.time_spent - get_time_of_last_turn()
     add_time(time_progressed)
     set_time_of_last_turn(get_time())
 

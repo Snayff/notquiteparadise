@@ -84,7 +84,7 @@ class EventTopic(SimpleNamespace):
     GAME = EventTopicType(1)
     ENTITY = EventTopicType(2)
     UI = EventTopicType(3)
-    MAP = EventTopicType(4)
+    INTERACTION = EventTopicType(4)
 
 
 class MessageType(SimpleNamespace):
@@ -272,7 +272,7 @@ class InteractionCause(SimpleNamespace):
     END_TURN = InteractionCauseType("end_turn")  # when entity ends their turn
     MOVE = InteractionCauseType("move")  # when entity moves
     PASSIVE = InteractionCauseType("passive")  # passively affects entity at all times. usually modifiers.
-    BURNED = InteractionCauseType("burn")  # when burn damage applied
+    BURNED = InteractionCauseType("burned")  # when an entity is affected by burn damage
 
     # Other triggers to consider
     # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage

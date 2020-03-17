@@ -54,6 +54,14 @@ class Aesthetic(Component):
         self.current_sprite_duration: float = 0
 
 
+class Tracked(Component):
+    """
+    A component to hold info on activities of an entity
+    """
+    def __init__(self, time_spent: int = 0):
+        self.time_spent: int = time_spent
+
+
 class Resources(Component):
     """
     An entity's resources.
@@ -61,7 +69,6 @@ class Resources(Component):
     def __init__(self, health: int = 1, stamina: int = 1):
         self.health: int = health
         self.stamina: int = stamina
-        self.time_spent: int = 0
 
 
 class Blocking(Component):
@@ -83,6 +90,7 @@ class Identity(Component):
 
 
 class Race(Component):
+    # TODO - inherit from str and add name directly
     """
     An entity's people.
     """
@@ -91,6 +99,7 @@ class Race(Component):
 
 
 class Savvy(Component):
+    # TODO - inherit from str and add name directly
     """
     An entity's savvy.
     """
@@ -99,6 +108,7 @@ class Savvy(Component):
 
 
 class Homeland(Component):
+    # TODO - inherit from str and add name directly
     """
     An entity's homeland.
     """
@@ -145,6 +155,7 @@ class Affliction(Component):
 
 
 class Aspect(Component):
+    # TODO - inherit from dict and add to that
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
     """
@@ -162,6 +173,7 @@ class IsGod(Component):
 
 
 class Opinion(Component):
+    # TODO - inherit from dict and add to that
     """
     An entity's views on other entities. {entity, opinion}
     """
