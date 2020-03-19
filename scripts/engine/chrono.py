@@ -47,12 +47,6 @@ def next_turn():
     """
     logging.info(f"Moving to the next turn...")
 
-    # in case we don't have an initial queue to work from
-    # if not get_turn_queue():
-    #     rebuild_turn_queue()
-
-    #turn_holder = get_turn_holder()
-
     # update the queue
     rebuild_turn_queue()
 
@@ -63,25 +57,20 @@ def next_turn():
     next_entity_time = entity.get_entitys_component(turn_holder, Tracked).time_spent
     time_progressed = next_entity_time - get_time_of_last_turn()
 
-    # tracked = entity.get_entitys_component(turn_holder, Tracked)
-    # time_progressed = tracked.time_spent - get_time_of_last_turn()
-
     # add the difference to the time
     add_time(time_progressed)
     set_time_of_last_turn(get_time())
 
-
     # check if we need to set new round
-    if get_time_in_round() + time_progressed > TIME_PER_ROUND:
+    if get_time_in_round() + time_progressed >= TIME_PER_ROUND:
         next_round(time_progressed)
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
 
-
-
     # log new turn holder
     name = entity.get_name(turn_holder)
-    logging.debug(f"-> Current time is {get_time()}. It is now '{name}'s turn.")
+    logging.debug(f"-> Current time is {get_time()}. We are {get_time_in_round()} TU`s into round {get_round()}.")
+    logging.debug(f"-> It is now '{name}'s turn.")
 
 
 def next_round(time_progressed: int):

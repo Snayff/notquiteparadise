@@ -186,7 +186,7 @@ def delete(entity: int):
     if entity:
         _esper.delete_entity(entity)
         name = get_name(entity)
-        logging.info(f"{name} ({entity}) added to stack to be deleted on next frame.")
+        logging.info(f"'{name}' ({entity}) added to stack to be deleted on next frame.")
     else:
         logging.error("Tried to delete an entity but entity was None.")
 
@@ -244,6 +244,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Tracked(chrono.get_time()))
 
     # setup basic attack as a known skill and an interaction
+    # TODO - change this to bump attack, not interaction
     basic_attack_name = "basic_attack"
     data = library.get_skill_data(basic_attack_name).interactions.get(InteractionCause.ENTITY_COLLISION).damage
     trigger_skill = TriggerSkillEffectData(effect_type=Effect.TRIGGER_SKILL, skill_name=basic_attack_name,
@@ -302,8 +303,8 @@ def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, tar
 
     # TODO - get aesthetic info
     name = get_name(creating_entity)
-    projectile_name = f"{skill_name}'s projectile"
-    desc = f"{name}'s {skill_name} projectile"
+    projectile_name = f"{skill_name}s projectile"
+    desc = f"{name}s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
     projectile.append(IsProjectile())
     projectile.append(Tracked(chrono.get_time()))
@@ -476,6 +477,6 @@ def take_turn(entity: int):
     """
     Process the entity's Behaviour component. If no component found then EndTurn event is fired.
     """
-    logging.debug(f"{get_name(entity)} is beginning their turn.")
+    logging.debug(f"'{get_name(entity)}' is beginning their turn.")
     behaviour = get_entitys_component(entity, Behaviour)
     behaviour.behaviour.act()
