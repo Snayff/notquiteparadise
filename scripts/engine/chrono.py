@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Tuple, List
 from scripts.engine import entity
 from scripts.engine.component import Resources, Identity, Tracked
 from scripts.engine.core.constants import TIME_PER_ROUND
@@ -34,35 +34,42 @@ def rebuild_turn_queue():
         new_queue[ent] = tracked.time_spent
     set_turn_queue(new_queue)
 
-    # get the next entity in the queue
-    new_turn_holder = min(new_queue, key=new_queue.get)
-    set_turn_holder(new_turn_holder)
+    # get the next entity in the queue and set as new turn holder
+    set_turn_holder(_get_next_entity_in_queue())
 
     # log result
-    queue = []
-    for ent, time in get_turn_queue().items():
-        name = entity.get_name(ent)
-        queue.append((name, time))
-
-    logging.debug(f"-> Queue built. {queue}")
+    logging.debug(f"-> New queue built: {_get_pretty_queue()}")
 
 
 def next_turn():
     """
-    Proceed to the next turn, setting the next entity to act as the turn holder.
+    Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.
     """
     logging.info(f"Moving to the next turn...")
 
-    if not store.turn_queue:
-        rebuild_turn_queue()
+    # in case we don't have an initial queue to work from
+    # if not get_turn_queue():
+    #     rebuild_turn_queue()
 
+    #turn_holder = get_turn_holder()
+
+    # update the queue
+    rebuild_turn_queue()
+
+    # get next entity in queue
     turn_holder = get_turn_holder()
 
-    # update time using last action and when new turn holder can act
-    tracked = entity.get_entitys_component(turn_holder, Tracked)
-    time_progressed = tracked.time_spent - get_time_of_last_turn()
+    # whats the difference between current time and when they last acted?
+    next_entity_time = entity.get_entitys_component(turn_holder, Tracked).time_spent
+    time_progressed = next_entity_time - get_time_of_last_turn()
+
+    # tracked = entity.get_entitys_component(turn_holder, Tracked)
+    # time_progressed = tracked.time_spent - get_time_of_last_turn()
+
+    # add the difference to the time
     add_time(time_progressed)
     set_time_of_last_turn(get_time())
+
 
     # check if we need to set new round
     if get_time_in_round() + time_progressed > TIME_PER_ROUND:
@@ -70,13 +77,11 @@ def next_turn():
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
 
-    # log result
-    identity = entity.get_entitys_component(turn_holder, Identity)
-    if identity:
-        name = identity.name
-    else:
-        name = "(not found!)"
-    logging.debug(f"-> It is now '{name}'`s turn.")
+
+
+    # log new turn holder
+    name = entity.get_name(turn_holder)
+    logging.debug(f"-> Current time is {get_time()}. It is now '{name}'s turn.")
 
 
 def next_round(time_progressed: int):
@@ -151,6 +156,20 @@ def get_round() -> int:
     Get the current round
     """
     return store.round
+
+
+def _get_pretty_queue() -> List[Tuple[str, int]]:
+    queue = []
+    for ent, time in get_turn_queue().items():
+        name = entity.get_name(ent)
+        queue.append((name, time))
+    return queue
+
+
+def _get_next_entity_in_queue() -> int:
+    queue = get_turn_queue()
+    next_entity = min(queue, key=queue.get)
+    return next_entity
 
 
 ############# SET ###################

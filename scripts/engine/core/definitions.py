@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
     AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
-    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect
+    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -39,6 +39,7 @@ class SkillData:
 
     # how does it interact?
     interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
+    file_name: str = ""
 
 
 @register_dataclass_with_json
@@ -52,6 +53,9 @@ class ProjectileData:
 
     # what does it look like?
     sprite: str = field(default="None")
+
+    # who are we targeting?
+    required_tags: List[TargetTagType] = field(default_factory=list)
 
     # how does it travel?
     direction: Optional[DirectionType] = None
@@ -83,7 +87,7 @@ class EffectData(ABC):
     accuracy: int = 0
 
     # what is the area of effect?
-    shape: Optional[ShapeType] = None
+    shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
 
@@ -152,6 +156,17 @@ class RemoveAspectEffectData(EffectData):
 class TriggerSkillEffectData(EffectData):
     """
     Data for the  Trigger Skill effect.
+    """
+    effect_type = Effect.TRIGGER_SKILL
+
+    skill_name: str = field(default="None")  # TODO - confirm if we want skill name or key
+
+
+@register_dataclass_with_json
+@dataclass
+class ActivateSkillEffectData(EffectData):
+    """
+    Data for the  Activate Skill effect.
     """
     effect_type = Effect.TRIGGER_SKILL
 
@@ -238,6 +253,7 @@ class InteractionData:
     add_aspect: Optional[AddAspectEffectData] = None
     remove_aspect: Optional[RemoveAspectEffectData] = None
     trigger_skill: Optional[TriggerSkillEffectData] = None
+    activate_skill: Optional[ActivateSkillEffectData] = None
 
 
 @register_dataclass_with_json

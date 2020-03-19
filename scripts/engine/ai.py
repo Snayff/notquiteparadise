@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING
 
 from scripts.engine import utility, entity
 from scripts.engine.component import Position
-from scripts.engine.core.constants import ProjectileExpiry
+from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MoveEvent, DieEvent, ExpireEvent
+from scripts.engine.event import MoveEvent, DieEvent, ExpireEvent, MessageEvent, EndTurnEvent
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
@@ -59,3 +59,16 @@ class ProjectileBehaviour(AIBehaviour):
     #  rename  interaction cause to trigger
     #  change terrain collision (everywhere) to an interaction/InteractionData
     #  introduce death interaction trigger
+
+
+class SkipTurn(AIBehaviour):
+    """
+    Just skips turn
+    """
+    def __init__(self, ent: int):
+        self.entity = ent
+
+    def act(self):
+        name = entity.get_name(self.entity)
+        publisher.publish(MessageEvent(MessageType.LOG, f"{name} skipped their turn."))
+        publisher.publish((EndTurnEvent(self.entity, BASE_MOVE_COST)))

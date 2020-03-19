@@ -17,7 +17,6 @@ from scripts.nqp.entity_handler import EntityHandler
 from scripts.nqp.game_handler import GameHandler
 from scripts.nqp.god_handler import GodHandler
 from scripts.nqp.interaction_handler import InteractionHandler
-from scripts.nqp.processors import process_intent
 from scripts.nqp.ui_handler import UIHandler
 
 ####################################################################################################
@@ -45,6 +44,7 @@ from scripts.nqp.ui_handler import UIHandler
 # TODO - edit the UI json
 # TODO - use a global for font size so it can be amended in options
 # TODO - add light component. Then only show tiles that are visible and lit. Draw light in gradient.
+# TODO - move message events out of engine unless is is explicitly needed. Should log in engine, message in nqp.
 
 
 def main():
@@ -86,13 +86,13 @@ def game_loop():
         delta_time = state.get_delta_time()
         current_state = state.get_current()
 
+        # have enemy take turn
         if current_state == GameState.ENEMY_TURN:
-            pass
-            # turn.turn_holder.ai.take_turn()
+            entity.take_turn(chrono.get_turn_holder())
 
         # update based on input events
         for event in pygame.event.get():
-            process_intent(action.convert_to_intent(event), current_state)
+            processors.process_intent(action.convert_to_intent(event), current_state)
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
@@ -211,9 +211,6 @@ def initialise_event_handlers():
     """
     Create the various event handlers and subscribe to required events.
     """
-    game_handler = GameHandler(event_hub)
-    game_handler.subscribe(EventTopic.GAME)
-
     entity_handler = EntityHandler(event_hub)
     entity_handler.subscribe(EventTopic.ENTITY)
     entity_handler.subscribe(EventTopic.GAME)
@@ -228,6 +225,10 @@ def initialise_event_handlers():
     ui_handler.subscribe(EventTopic.ENTITY)
     ui_handler.subscribe(EventTopic.GAME)
     ui_handler.subscribe(EventTopic.UI)
+
+    # expected last
+    game_handler = GameHandler(event_hub)
+    game_handler.subscribe(EventTopic.GAME)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

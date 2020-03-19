@@ -5,7 +5,6 @@ from scripts.engine import entity
 from scripts.engine.core.constants import EventTopic, Direction, GameState, MessageType, GameStateType, \
     MessageTypeType, DirectionType, TravelMethodType
 from scripts.engine.core.event_core import Event
-from scripts.engine.component import Position
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -29,12 +28,23 @@ class UseSkillEvent(Event):
     """
     def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
             direction: Union[Tuple[int, int], DirectionType], base_time_cost: int):
-        Event.__init__(self, "SKILL", EventTopic.ENTITY)
+        Event.__init__(self, "USE_SKILL", EventTopic.ENTITY)
         self.base_time_cost = base_time_cost
         self.entity = entity_using_skill
         self.direction = direction
         self.skill_name = skill_name
         self.start_pos = start_pos
+
+
+class ActivateSkillEvent(Event):
+    """
+    Event for activating a skill
+    """
+    def __init__(self, entity_activating_skill: int, skill_name: str, activation_pos: Tuple[int, int]):
+        Event.__init__(self, "ACTIVATE_SKILL", EventTopic.ENTITY)
+        self.entity = entity_activating_skill
+        self.skill_name = skill_name
+        self.activation_pos = activation_pos
 
 
 class DieEvent(Event):
@@ -58,6 +68,15 @@ class MoveEvent(Event):
         self.base_time_cost = base_time_cost
         self.entity = entity_to_move
         self.direction = direction
+
+
+class CreatedTimedEntityEvent(Event):
+    """
+    Event for handling the creation of an entity that uses time.
+    """
+    def __init__(self, created_entity: int):
+        Event.__init__(self, "CREATED_TIMED_ENTITY", EventTopic.ENTITY)
+        self.entity = created_entity
 
 ####################### GAME ############################################
 
@@ -99,15 +118,6 @@ class EndRoundEvent(Event):
 
 
 ####################### INTERACTION ############################################
-
-
-class CreatedTimedEntityEvent(Event):
-    """
-    Event for handling the creation of an entity that uses time.
-    """
-    def __init__(self, created_entity: int):
-        Event.__init__(self, "CREATED_TIMED_ENTITY", EventTopic.INTERACTION)
-        self.entity = created_entity
 
 
 class ExpireEvent(Event):

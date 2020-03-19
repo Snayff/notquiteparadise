@@ -1,6 +1,7 @@
 {
     "basic_attack": {
         "__dataclass__": "SkillData",
+        "file_name": "basic_attack",
         "cooldown": 1,
         "description": "A simple attack.",
         "icon": "placeholder/icon_00.png",
@@ -25,7 +26,10 @@
             "travel_type": "instant",
             "range": 1,
             "expiry_type": "fizzle",
-            "terrain_collision": "fizzle"
+            "terrain_collision": "fizzle",
+            "required_tags": [
+                        "other_entity"
+                    ]
         },
         "interactions": {
             "entity_collision": {

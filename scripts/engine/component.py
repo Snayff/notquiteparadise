@@ -44,6 +44,7 @@ class Aesthetic(Component):
     An entity's sprite.
     """
     def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
+        # TODO - add render layer
         self.current_sprite = current_sprite
         self.sprites = sprites
 
@@ -142,6 +143,7 @@ class Knowledge(Component):
 
 
 class Affliction(Component):
+    # TODO - Amalgamate positive and negative afflictions in the component.
     """
     An entity's Boons and Banes. held in dict as {boon_name: duration}
     """

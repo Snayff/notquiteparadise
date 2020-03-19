@@ -8,12 +8,12 @@ import pygame
 import tcod.map
 from typing import TYPE_CHECKING, TypeVar
 from scripts.engine import utility, world, debug, chrono
-from scripts.engine.ai import ProjectileBehaviour
+from scripts.engine.ai import ProjectileBehaviour, SkipTurn
 from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
     IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour, Tracked
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData, InteractionData, \
-    TriggerSkillEffectData
+    TriggerSkillEffectData, ActivateSkillEffectData
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
@@ -232,10 +232,6 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     actor: List[Component] = []
 
-    # player components
-    if is_player:
-        actor.append(IsPlayer())
-
     # actor components
     actor.append(Identity(name, description))
     actor.append(Position(x, y))  # TODO - check position not blocked before spawning
@@ -251,9 +247,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     basic_attack_name = "basic_attack"
     data = library.get_skill_data(basic_attack_name).interactions.get(InteractionCause.ENTITY_COLLISION).damage
     trigger_skill = TriggerSkillEffectData(effect_type=Effect.TRIGGER_SKILL, skill_name=basic_attack_name,
-                                           required_tags=data.required_tags,
-                                           stat_to_target=data.stat_to_target, accuracy=data.accuracy,
-                                           shape=data.shape, shape_size=data.shape_size)
+                                           required_tags=data.required_tags)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
     known_skills = [basic_attack_name]  # N.B. All actors start with basic attack
@@ -286,6 +280,13 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     stats = get_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
+    # player components
+    if is_player:
+        add_component(entity, IsPlayer())
+    # TODO - alter in line with change to separate player and actor
+    else:
+        add_component(entity, Behaviour(SkipTurn(entity)))
+
     logging.debug(f"{name} created.")
 
     return entity
@@ -309,7 +310,10 @@ def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, tar
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     projectile.append(Behaviour(ProjectileBehaviour(creating_entity, (target_dir_x, target_dir_y), data.range,
                                                     skill_name)))
-
+    activate_skill = ActivateSkillEffectData(effect_type=Effect.ACTIVATE_SKILL, skill_name=skill_name,
+                                           required_tags=data.required_tags)
+    _skill = InteractionData(cause=InteractionCause.ENTITY_COLLISION, activate_skill=activate_skill)
+    projectile.append(Interactions({InteractionCause.ENTITY_COLLISION: _skill}))
     entity = create(projectile)
     logging.debug(f"{name}`s projectile created.")
 
@@ -368,14 +372,12 @@ def spend_time(entity: int, time_spent: int):
     Add time_spent to the entity's total time spent.
     """
     # TODO - modify by time modifier stat
-    if entity:
+    try:
         tracked = get_entitys_component(entity, Tracked)
-        if tracked:
-            tracked.time_spent += time_spent
-        else:
-            debug.log_component_not_found(entity, "spend time", Tracked)
-    else:
-        logging.error("Tried to spend entity's time but entity was None.")
+        tracked.time_spent += time_spent
+
+    except KeyError:
+        debug.log_component_not_found(entity, "spend time", Tracked)
 
 
 def learn_skill(entity: int, skill_name: str):
@@ -468,3 +470,12 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
             chosen_interventions.append((ent, chosen_intervention))
 
     return chosen_interventions
+
+
+def take_turn(entity: int):
+    """
+    Process the entity's Behaviour component. If no component found then EndTurn event is fired.
+    """
+    logging.debug(f"{get_name(entity)} is beginning their turn.")
+    behaviour = get_entitys_component(entity, Behaviour)
+    behaviour.behaviour.act()

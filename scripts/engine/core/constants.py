@@ -252,6 +252,7 @@ class Effect(SimpleNamespace):
     ADD_ASPECT = EffectType("add_aspect")
     REMOVE_ASPECT = EffectType("remove_aspect")
     TRIGGER_SKILL = EffectType("trigger_skill")
+    ACTIVATE_SKILL = EffectType("activate_skill")
 
 
 class AfflictionCategory(SimpleNamespace):

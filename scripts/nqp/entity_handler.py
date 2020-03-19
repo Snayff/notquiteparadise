@@ -6,7 +6,8 @@ from scripts.engine import world, chrono, entity, state, skill, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
     BASE_MOVE_COST
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
-    EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, CreatedTimedEntityEvent
+    EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, \
+    CreatedTimedEntityEvent, ActivateSkillEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking
@@ -36,7 +37,10 @@ class EntityHandler(Subscriber):
             self._process_move(event)
 
         elif isinstance(event, UseSkillEvent):
-            self._process_skill(event)
+            self._process_use_skill(event)
+
+        elif isinstance(event, ActivateSkillEvent):
+            self._process_activate_skill(event)
 
         elif isinstance(event, DieEvent):
             self._process_die(event)
@@ -125,13 +129,14 @@ class EntityHandler(Subscriber):
                     world.update_tile_visibility(fov_map)
 
             # if entity that moved is turn holder then end their turn
-            if entity == chrono.get_turn_holder():
-                publisher.publish(EndTurnEvent(entity, BASE_MOVE_COST))
+            if ent == chrono.get_turn_holder():
+                publisher.publish(EndTurnEvent(ent, BASE_MOVE_COST))
 
     @staticmethod
-    def _process_skill(event: UseSkillEvent):
+    def _process_use_skill(event: UseSkillEvent):
         """
-        Process the entity`s skill
+        Process the entity`s use of a skill. Tests affordability and pays resource cost. Creates a projectile to
+        carry the skill.
         """
         ent = event.entity
         name = entity.get_name(ent)
@@ -145,15 +150,7 @@ class EntityHandler(Subscriber):
             if skill.can_afford_cost(ent, skill_data.resource_type, skill_data.resource_cost):
                 skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
 
-                # log whats happening
-                direction_name = utility.value_to_member((dir_x, dir_y), Direction)
-                logging.info(f"'{name}' used {skill_name} at ({start_x}, {start_y}) in {direction_name}...")
-
-                # create projectile
-                projectile = entity.create_projectile(ent, skill_name, start_x, start_y, dir_x, dir_y)
-
-                # we created an entity so let everyone know
-                publisher.publish(CreatedTimedEntityEvent(projectile))
+                skill.use(ent, skill_name, (start_x, start_y), (dir_x, dir_y))
 
                 # confirm to player
                 if name == "player":
@@ -171,6 +168,16 @@ class EntityHandler(Subscriber):
                 else:
                     name = entity.get_name(ent)
                     logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
+
+    @staticmethod
+    def _process_activate_skill(event: ActivateSkillEvent):
+        ent = event.entity
+        name = entity.get_name(ent)
+        skill_name = event.skill_name
+        skill_data = library.get_skill_data(skill_name)
+        start_x, start_y = event.activation_pos[0], event.activation_pos[1]
+
+        skill.activate(ent, skill_name, (start_x, start_y))
 
     @staticmethod
     def _process_die(event: DieEvent):

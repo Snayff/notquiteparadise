@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType,\
@@ -10,10 +10,11 @@ from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, 
 from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent
+from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, CreatedTimedEntityEvent
 from scripts.engine.library import library
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
+from importlib import reload, import_module
 
 if TYPE_CHECKING:
     from typing import List, Tuple
@@ -110,22 +111,52 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
 def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
         target_direction: Tuple[int, int]):
     """
-    Creates a projectile containing relevant skill details.
+    Creates a projectile containing relevant skill details and calls the skills use function.
     """
 
     # initial values
     name = entity.get_name(using_entity)
+    skill_data = library.get_skill_data(skill_name)
     start_x, start_y = start_position
-    current_x, current_y = start_position
     dir_x, dir_y = target_direction
-    direction_name = utility.value_to_member((target_direction[0], target_direction[1]), Direction)
 
-    logging.info(f"'{name}' used {skill_name} at ({start_x}, {start_y}) in {direction_name}...")
-    if name == "player":
-        name = "I"
-    publisher.publish(MessageEvent(MessageType.LOG, f"{name} used {skill_name}."))
+    # log whats happening
+    direction_name = utility.value_to_member((dir_x, dir_y), Direction)
+    logging.info(f"'{name}' used {skill_name} at ({start_x}, {start_y}) in {direction_name}.")
 
-    entity.create_projectile(using_entity, skill_name, current_x, current_y, dir_x, dir_y)
+    # use the skills associated function
+    _call_skill_func(skill_data.file_name, "use")
+
+    # create projectile
+    projectile = entity.create_projectile(using_entity, skill_name, start_x, start_y, dir_x, dir_y)
+
+    # TODO - check if collision on init tile and immediately apply (how?!)
+
+    # we created an entity so let everyone know
+    publisher.publish(CreatedTimedEntityEvent(projectile))
+
+
+def activate(activating_entity: int, skill_name: str, activation_position: Tuple[int, int]):
+    """
+    Activate the skill by calling the skill's activate function.
+    """
+    start_x, start_y = activation_position
+    name = entity.get_name(activating_entity)
+    logging.info(f"'{name}' activated {skill_name} at ({start_x}, {start_y}).")
+
+    # use the skills associated function
+    skill_data = library.get_skill_data(skill_name)
+    _call_skill_func(skill_data.file_name, "activate")
+
+
+def _call_skill_func(file_name: str, function_name: str) -> Any:
+    # dynamically call a function from skills.<file_name>.py
+    module_name = "skills." + file_name
+    module = import_module(module_name)
+    module = reload(module)
+    func_to_call = getattr(module, function_name)
+    result = func_to_call()
+    return result
 
 
 ########################################## GET ####################################
@@ -227,8 +258,10 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
 def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles: List[Tile], attacker: int):
     skill_name = effect.skill_name
     data = library.get_skill_data(skill_name)
+
     position = entity.get_entitys_component(attacker, Position)
     start_pos = (position.x, position.y)
+
     # uses first tile in list for target direction. Should only be one tile when triggering trigger skill.
     target_pos = (effected_tiles[0].x, effected_tiles[0].y)
     direction = world.get_direction(start_pos, target_pos)
