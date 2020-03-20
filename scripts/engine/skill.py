@@ -271,7 +271,7 @@ def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles
 
 def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles: List[Tile]):
     aspect_name = effect.aspect_name
-    entities = entity.get_entities_and_components_in_area(effected_tiles, Aspect)
+    entities = entity.get_entities_and_components_in_area(effected_tiles, [Aspect])
 
     # loop all relevant aspects and if one is matching delete the entity
     for ent, (position, aspect) in entities.items():
@@ -288,7 +288,7 @@ def _create_aspect(aspect_name: str, tile: Tile):
     data = library.get_aspect_data(aspect_name)
     position: Position
     aspect: Aspect
-    entities = entity.get_entities_and_components_in_area([tile], Aspect)
+    entities = entity.get_entities_and_components_in_area([tile], [Aspect])
 
     for ent, (position, aspect) in entities.items():
         # if there is an active version of the same aspect already
@@ -304,7 +304,7 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
     attackers_stats = entity.get_combat_stats(attacker)
 
     # get relevant entities
-    entities = entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats, Identity)
+    entities = entity.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats, Identity])
 
     # loop all relevant entities
     for defender, (position, resources, has_stats, identity) in entities.items():
@@ -410,7 +410,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
 def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):
     attackers_stats = entity.get_combat_stats(attacker)
 
-    entities = entity.get_entities_and_components_in_area(effected_tiles, Resources, HasCombatStats)
+    entities = entity.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats])
 
     # loop all relevant entities
     for defender, (position, resources, has_stats) in entities.items():

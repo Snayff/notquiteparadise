@@ -26,11 +26,11 @@ def rebuild_turn_queue():
     """
     logging.debug(f"Building a new turn queue...")
 
-    get_component = entity.get_component
+    get_component = entity.get_components
 
     # create a turn queue from the entities list
     new_queue = {}
-    for ent, tracked in get_component(Tracked):
+    for ent, (tracked, ) in get_component([Tracked]):
         new_queue[ent] = tracked.time_spent
     set_turn_queue(new_queue)
 

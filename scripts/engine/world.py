@@ -325,7 +325,7 @@ def _is_tile_blocking_sight(x: int, y: int) -> bool:
             return True
 
         # Any entities that block movement?
-        for ent, (position, blocking) in entity.get_components(Position, Blocking):
+        for ent, (position, blocking) in entity.get_components([Position, Blocking]):
             if position.x == tile.x and position.y == tile.y and blocking.blocks_sight:
                 return True
 
@@ -368,7 +368,7 @@ def _is_tile_blocking_movement(x: int, y: int) -> bool:
             return True
 
         # Any entities that block movement?
-        for ent, (position, blocking) in entity.get_components(Position, Blocking):
+        for ent, (position, blocking) in entity.get_components([Position, Blocking]):
             if position.x == tile.x and position.y == tile.y and blocking.blocks_movement:
                 return True
 
@@ -384,7 +384,7 @@ def _tile_has_any_entity(x: int, y: int) -> bool:
 
     if tile:
         # Any entities on the tile?
-        for ent, position in entity.get_component(Position):
+        for ent, (position, ) in entity.get_components([Position]):
             if position.x == tile.x and position.y == tile.y:
                 return True
 
@@ -400,7 +400,7 @@ def _tile_has_other_entity(x: int, y: int, active_entity: int) -> bool:
 
     if tile:
         # ensure active entity is the same as the targeted one
-        for ent, position in entity.get_component(Position):
+        for ent, (position, ) in entity.get_components([Position]):
             if position.x == tile.x and position.y == tile.y:
                 if active_entity != ent:
                     return True
@@ -417,7 +417,7 @@ def _tile_has_entity(x: int, y: int, active_entity: int) -> bool:
 
     if tile:
         # ensure active entity is the same as the targeted one
-        for ent, position in entity.get_component(Position):
+        for ent, (position, ) in entity.get_components([Position]):
             if position.x == tile.x and position.y == tile.y:
                 if active_entity == ent:
                     return True

@@ -10,7 +10,7 @@ from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEven
     CreatedTimedEntityEvent, ActivateSkillEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking
+from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking, HasCombatStats
 from scripts.engine.ui.manager import ui
 from scripts.engine.utility import value_to_member
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -87,7 +87,7 @@ class EntityHandler(Subscriber):
 
         # check if entity blocking tile
         elif is_entity_on_tile:
-            entities = entity.get_entities_and_components_in_area([target_tile], Blocking)
+            entities = entity.get_entities_and_components_in_area([target_tile], [Blocking])
             for blocking_entity, (position, blocking, *rest) in entities.items():
                 if blocking.blocks_movement:
                     publisher.publish(EntityCollisionEvent(ent, blocking_entity, event.direction, event.start_pos))
@@ -115,7 +115,7 @@ class EntityHandler(Subscriber):
 
             # update fov if needed
             if entity.has_component(ent, FOV):
-                if entity.has_component(ent, CombatStats):
+                if entity.has_component(ent, HasCombatStats):
                     stats = entity.get_combat_stats(ent)
                     sight_range = max(0, stats.sight_range)
                 else:

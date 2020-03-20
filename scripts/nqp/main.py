@@ -28,6 +28,11 @@ from scripts.nqp.ui_handler import UIHandler
 # FLEXIBLE (input)- can use keyboard, mouse or controller interchangeably, with minimal difference in experience
 # CUSTOMISABLE - near-core game settings can be influenced or set by the player allowing for personalisation.
 ####################################################################################################
+########################### CODE STYLE GUIDE ####################################################
+# If a function returns something, its name describes what it returns. # TODO - review
+# If a function is named after a verb, its return value is of no significance or returns nothing. # TODO - review
+# If checking a bool use IsA or HasA.
+
 
 # Project Wide to do list...
 # FIXME - collision isnt working - can walk through walls

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from abc import ABC
 from typing import TYPE_CHECKING, Dict
+from snecs import RegisteredComponent
 from scripts.engine.core.constants import InteractionCauseType
 from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
 
@@ -10,27 +10,20 @@ if TYPE_CHECKING:
     from typing import List, Dict, Optional
     from scripts.engine.ai import AIBehaviour
     import tcod.map
-
+    
+    
 ##########################################################
 # Components are to hold data that is subject to change.
 #########################################################
 
-
-class Component(ABC):
-    """
-    Base component
-    """
-    pass
-
-
-class IsPlayer(Component):
+class IsPlayer(RegisteredComponent):
     """
     Whether the entity is the player.
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
-class Position(Component):
+class Position(RegisteredComponent):
     """
     An entity's position on the map.
     """
@@ -39,12 +32,12 @@ class Position(Component):
         self.y = y
 
 
-class Aesthetic(Component):
+class Aesthetic(RegisteredComponent):
     """
     An entity's sprite.
     """
     def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
-        # TODO - add render layer
+        # TODO - add render layer/order
         self.current_sprite = current_sprite
         self.sprites = sprites
 
@@ -55,7 +48,7 @@ class Aesthetic(Component):
         self.current_sprite_duration: float = 0
 
 
-class Tracked(Component):
+class Tracked(RegisteredComponent):
     """
     A component to hold info on activities of an entity
     """
@@ -63,7 +56,7 @@ class Tracked(Component):
         self.time_spent: int = time_spent
 
 
-class Resources(Component):
+class Resources(RegisteredComponent):
     """
     An entity's resources.
     """
@@ -72,7 +65,7 @@ class Resources(Component):
         self.stamina: int = stamina
 
 
-class Blocking(Component):
+class Blocking(RegisteredComponent):
     """
     An entity's blocking of other objects.
     """
@@ -81,7 +74,7 @@ class Blocking(Component):
         self.blocks_sight: bool = blocks_sight
 
 
-class Identity(Component):
+class Identity(RegisteredComponent):
     """
     An entity's identity, such as name and description.
     """
@@ -90,7 +83,7 @@ class Identity(Component):
         self.description: str = description
 
 
-class Race(Component):
+class People(RegisteredComponent):
     # TODO - inherit from str and add name directly
     """
     An entity's people.
@@ -99,7 +92,7 @@ class Race(Component):
         self.name: str = people_name
 
 
-class Savvy(Component):
+class Savvy(RegisteredComponent):
     # TODO - inherit from str and add name directly
     """
     An entity's savvy.
@@ -108,7 +101,7 @@ class Savvy(Component):
         self.name: str = savvy_name
 
 
-class Homeland(Component):
+class Homeland(RegisteredComponent):
     # TODO - inherit from str and add name directly
     """
     An entity's homeland.
@@ -117,7 +110,7 @@ class Homeland(Component):
         self.name: str = homeland_name
 
 
-class Behaviour(Component):
+class Behaviour(RegisteredComponent):
     """
     An ai behaviour to control an entity.
     """
@@ -125,14 +118,14 @@ class Behaviour(Component):
         self.behaviour = behaviour
 
 
-class HasCombatStats(Component):
+class HasCombatStats(RegisteredComponent):
     """
     A flag to show if an entity has stats used for combat.
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
-class Knowledge(Component):
+class Knowledge(RegisteredComponent):
     """"
     An entity's knowledge, including skills.
     """
@@ -142,7 +135,7 @@ class Knowledge(Component):
         self.skills: List[str] = skills
 
 
-class Affliction(Component):
+class Affliction(RegisteredComponent):
     # TODO - Amalgamate positive and negative afflictions in the component.
     """
     An entity's Boons and Banes. held in dict as {boon_name: duration}
@@ -156,7 +149,7 @@ class Affliction(Component):
         self.banes: Dict[str, int] = banes
 
 
-class Aspect(Component):
+class Aspect(RegisteredComponent):
     # TODO - inherit from dict and add to that
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
@@ -167,14 +160,14 @@ class Aspect(Component):
         self.aspects: Dict[str, int] = aspects
 
 
-class IsGod(Component):
+class IsGod(RegisteredComponent):
     """
     Whether the entity is a god.
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
-class Opinion(Component):
+class Opinion(RegisteredComponent):
     # TODO - inherit from dict and add to that
     """
     An entity's views on other entities. {entity, opinion}
@@ -183,7 +176,7 @@ class Opinion(Component):
         self.opinions: Dict[int, int] = {}
 
 
-class FOV(Component):
+class FOV(RegisteredComponent):
     """
     An entities field of view.
     """
@@ -191,14 +184,14 @@ class FOV(Component):
         self.map: tcod.map.Map = fov_map
 
 
-class Interactions(Dict[InteractionCauseType, InteractionData], Component):
+class Interactions(Dict[InteractionCauseType, InteractionData], RegisteredComponent):
     """
     The effects triggered when a specific criteria is met
     """
     pass
 
 
-class IsProjectile(Component):
+class IsProjectile(RegisteredComponent):
     """
     Whether the entity is a projectile.
     """

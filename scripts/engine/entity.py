@@ -3,17 +3,23 @@ from __future__ import annotations as _annotations
 import dataclasses
 import logging
 import random
-import esper
 import pygame
+import snecs
 import tcod.map
 from typing import TYPE_CHECKING, TypeVar
+from snecs import Component
+from snecs._detail import EntityID
+from snecs.ecs import new_entity
+from snecs.query import query
+
 from scripts.engine import utility, world, debug, chrono
 from scripts.engine.ai import ProjectileBehaviour, SkipTurn
-from scripts.engine.component import Component, IsPlayer, Position, Identity, Race, Savvy, Homeland, Aesthetic, \
-    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour, Tracked
+from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy, Homeland, Aesthetic,\
+    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour,\
+    Tracked
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect
-from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData, InteractionData, \
-    TriggerSkillEffectData, ActivateSkillEffectData
+from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData,\
+    InteractionData, TriggerSkillEffectData, ActivateSkillEffectData
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
@@ -22,23 +28,22 @@ if TYPE_CHECKING:
     from typing import Union, Type, List, Dict, Tuple, Any, Optional
 
 _C = TypeVar("_C", bound=Component)
-_esper = esper.World()
+
 
 # TODO - Consider renaming module. Existence? Being?
+
 ###################### GET ############################################
 
-get_entitys_components = _esper.components_for_entity
-get_component = _esper.get_component
-get_components = _esper.get_components
-try_component = _esper.try_component
-has_component = _esper.has_component
+get_entitys_components = snecs.entity_components
+get_components = query
+has_component = snecs.has_component
 
 
-def get_player() -> Optional[int]:
+def get_player() -> Optional[EntityID]:
     """
     Get the player.
     """
-    for entity, flag in get_component(IsPlayer):
+    for entity, (flag, ) in get_components([IsPlayer]):
         return entity
     return None
 
@@ -49,7 +54,7 @@ def get_entity(unique_component: Type[Component]) -> Optional[int]:
     first found is returned.
     """
     entities = []
-    for entity, flag in get_component(unique_component):
+    for entity, (flag, ) in get_components([unique_component]):
         entities.append(entity)
 
     num_entities = len(entities)
@@ -64,7 +69,8 @@ def get_entity(unique_component: Type[Component]) -> Optional[int]:
     return entities[0]
 
 
-def get_entities_and_components_in_area(area: List[Tile], *components: Any) -> Dict[int, Tuple[Any, ...]]:
+def get_entities_and_components_in_area(area: List[Tile],
+        components: List[Type[Component]]) -> Dict[int, Tuple[Any, ...]]:
     """
     Return a dict of entities and their specified components, plus Position. e.g. (Position, component1). If no
     components are specified the return will be (Position, None).
@@ -73,27 +79,27 @@ def get_entities_and_components_in_area(area: List[Tile], *components: Any) -> D
     """
     entities = {}
     # add position and remove any None values
-    _components = (Position,) + components
-    _components = (c for c in _components if c is not None)
+    _components = [Position, *components]
+    _components = [c for c in _components if c is not None]
 
-    for entity, (pos, *rest) in get_components(*_components):
+    for entity, (pos, *rest) in get_components(_components):
         for tile in area:
             if tile.x == pos.x and tile.y == pos.y:
                 entities[entity] = (pos, *rest)
     return entities
 
 
-def get_entitys_component(entity: int, component: Type[_C]) -> Optional[_C]:
+def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]:
     """
     Get an entity's component.
     """
     if has_component(entity, component):
-        return _esper.component_for_entity(entity, component)
+        return snecs.entity_component(entity, component)
     else:
         return None
 
 
-def get_name(entity: int) -> str:
+def get_name(entity: EntityID) -> str:
     """
     Get an entity's Identity component's name.
     """
@@ -106,38 +112,38 @@ def get_name(entity: int) -> str:
     return name
 
 
-def get_identity(entity: int) -> Optional[Identity]:
+def get_identity(entity: EntityID) -> Optional[Identity]:
     """
     Get an entity's Identity component.
     """
     return get_entitys_component(entity, Identity)
 
 
-def get_combat_stats(entity: int) -> CombatStats:
+def get_combat_stats(entity: EntityID) -> CombatStats:
     """
     Create and return a stat object  for an entity.
     """
     return CombatStats(entity)
 
 
-def get_primary_stat(entity: int, primary_stat: str) -> int:
+def get_primary_stat(entity: EntityID, primary_stat: str) -> EntityID:
     """
     Get an entity's primary stat.
     """
     stat = primary_stat
     value = 0
 
-    for people in try_component(entity, Race):
-        people_data = library.get_people_data(people.name)
-        value += getattr(people_data, stat)
+    people = get_entitys_component(entity, People)
+    people_data = library.get_people_data(people.name)
+    value += getattr(people_data, stat)
 
-    for savvy in try_component(entity, Savvy):
-        savvy_data = library.get_savvy_data(savvy.name)
-        value += getattr(savvy_data, stat)
+    savvy = get_entitys_component(entity, Savvy)
+    savvy_data = library.get_savvy_data(savvy.name)
+    value += getattr(savvy_data, stat)
 
-    for homeland in try_component(entity, Homeland):
-        homeland_data = library.get_homeland_data(homeland.name)
-        value += getattr(homeland_data, stat)
+    homeland = get_entitys_component(entity, Homeland)
+    homeland_data = library.get_homeland_data(homeland.name)
+    value += getattr(homeland_data, stat)
 
     # TODO - re add afflicitons
     # value += _manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
@@ -163,35 +169,34 @@ def get_player_fov() -> Optional[tcod.map.Map]:
 
 ######################### ENTITY EXISTENCE ##############################
 
-def create(components: List[Component] = None) -> int:
+def create(components: List[Component] = None) -> EntityID:
     """
     Use each component in a list of components to create an entity
     """
     if components is None:
-        components = []
-    # create the entity
-    entity = _esper.create_entity()
+        _components = []
+    else:
+        _components = components
 
-    # add all components
-    for component in components:
-        add_component(entity, component)
+    # create the entity
+    entity = new_entity(_components)
 
     return entity
 
 
-def delete(entity: int):
+def delete(entity: EntityID):
     """
     Queues entity for removal from the world_objects. Happens at the next run of World.process.
     """
     if entity:
-        _esper.delete_entity(entity)
+        snecs.delete_entity(entity)
         name = get_name(entity)
         logging.info(f"'{name}' ({entity}) added to stack to be deleted on next frame.")
     else:
         logging.error("Tried to delete an entity but entity was None.")
 
 
-def create_god(god_name: str) -> int:
+def create_god(god_name: str) -> EntityID:
     """
     Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
@@ -223,7 +228,7 @@ def create_god(god_name: str) -> int:
 
 
 def create_actor(name: str, description: str, x: int, y: int, people_name: str, homeland_name: str,
-        savvy_name: str, is_player: bool = False) -> int:
+        savvy_name: str, is_player: bool = False) -> EntityID:
     """
     Create an entity with all of the components to be an actor. is_player is Optional and defaults to false.
     Returns entity ID.
@@ -237,7 +242,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Position(x, y))  # TODO - check position not blocked before spawning
     actor.append(HasCombatStats())
     actor.append(Blocking(True, ENTITY_BLOCKS_SIGHT))
-    actor.append(Race(people_name))
+    actor.append(People(people_name))
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
     actor.append(FOV(world.create_fov_map()))
@@ -293,8 +298,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     return entity
 
 
-def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, target_dir_x: int,
-        target_dir_y: int) -> int:
+def create_projectile(creating_entity: EntityID, skill_name: str, x: int, y: int, target_dir_x: int,
+        target_dir_y: int) -> EntityID:
     """
     Create an entity with all of the components to be a projectile. Returns entity ID.
     """
@@ -323,11 +328,11 @@ def create_projectile(creating_entity: int, skill_name: str, x: int, y: int, tar
 
 ############################## COMPONENT ACTIONS ################################
 
-def add_component(entity: int, component: Component):
+def add_component(entity: EntityID, component: Component):
     """
     Add a component to the entity
     """
-    _esper.add_component(entity, component)
+    snecs.add_component(entity, component)
 
 
 def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsData]) -> CharacteristicSpritesData:
@@ -368,7 +373,7 @@ def build_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsDat
     return converted
 
 
-def spend_time(entity: int, time_spent: int):
+def spend_time(entity: EntityID, time_spent: int):
     """
     Add time_spent to the entity's total time spent.
     """
@@ -381,7 +386,7 @@ def spend_time(entity: int, time_spent: int):
         debug.log_component_not_found(entity, "spend time", Tracked)
 
 
-def learn_skill(entity: int, skill_name: str):
+def learn_skill(entity: EntityID, skill_name: str):
     """
     Add the skill name to the entity's knowledge component.
     """
@@ -393,12 +398,12 @@ def learn_skill(entity: int, skill_name: str):
         knowledge.skills.append(skill_name)
 
 
-def judge_action(entity: int, action: Any):
+def judge_action(entity: EntityID, action: Any):
     """
     Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards
     that  action. Action can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
     """
-    for ent, (is_god, opinion, identity) in get_components(IsGod, Opinion, Identity):
+    for ent, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
 
         attitudes = library.get_god_attitudes_data(identity.name)
         action_name = action
@@ -416,7 +421,7 @@ def judge_action(entity: int, action: Any):
                          f"opinion = {opinion.opinions[entity]}")
 
 
-def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
+def consider_intervening(entity: EntityID, action: Any) -> List[Tuple[int, Any]]:
     """
     Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
     or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
@@ -425,7 +430,7 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
     desire_to_intervene = 10
     desire_to_do_nothing = 75  # weighting for doing nothing # TODO - move magic number to config
 
-    for ent, (is_god, opinion, identity, knowledge) in get_components(IsGod, Opinion, Identity, Knowledge):
+    for ent, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
         attitudes = library.get_god_attitudes_data(identity.name)
         action_name = action
 
@@ -473,7 +478,7 @@ def consider_intervening(entity: int, action: Any) -> List[Tuple[int, Any]]:
     return chosen_interventions
 
 
-def take_turn(entity: int):
+def take_turn(entity: EntityID):
     """
     Process the entity's Behaviour component. If no component found then EndTurn event is fired.
     """

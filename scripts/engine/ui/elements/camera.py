@@ -92,9 +92,8 @@ class Camera(UIWindow):
             map_surf.blit(tile.sprite, (screen_x, screen_y))
 
         # draw entities
-        # TODO - moving to the top creates circular import. Resolve this!
-
-        for ent, (pos, aesthetic) in entity.get_components(Position, Aesthetic):
+        test = entity.get_components([Position, Aesthetic])
+        for ent, (pos, aesthetic) in entity.get_components([Position, Aesthetic]):
             # TODO - use FOV
             # if in camera view
             if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:
@@ -126,7 +125,7 @@ class Camera(UIWindow):
 
             # draw the overlay
             for direction in directions:
-                offset_tile_x, offset_tile_y = direction.value
+                offset_tile_x, offset_tile_y = direction
                 x = ((player_tile_x + offset_tile_x) - start_col) * TILE_SIZE
                 y = ((player_tile_y + offset_tile_y) - start_row) * TILE_SIZE
                 tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)

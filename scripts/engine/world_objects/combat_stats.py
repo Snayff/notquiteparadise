@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from scripts.engine import entity
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat
 from scripts.engine.library import library
-from scripts.engine.component import Race, Homeland, Savvy
+from scripts.engine.component import People, Homeland, Savvy
 
 if TYPE_CHECKING:
     pass
@@ -286,7 +286,7 @@ class CombatStats:
             elif isinstance(component, Savvy):
                 data = library.get_savvy_data(component.name)
                 base_value = max(base_value, data.sight_range)
-            elif isinstance(component, Race):
+            elif isinstance(component, People):
                 data = library.get_people_data(component.name)
                 base_value = max(base_value, data.sight_range)
 

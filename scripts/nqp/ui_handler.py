@@ -118,7 +118,7 @@ class UIHandler(Subscriber):
         ui.init_entity_info()
 
         # Loop all entities with Position and Aesthetic and update their screen position
-        for ent, (aesthetic, position) in entity.get_components(Aesthetic, Position):
+        for ent, (aesthetic, position) in entity.get_components([Aesthetic, Position]):
             aesthetic.screen_x, aesthetic.screen_y = ui.world_to_screen_position((position.x, position.y))
             aesthetic.target_screen_x = aesthetic.screen_x
             aesthetic.target_screen_y = aesthetic.screen_y
@@ -165,7 +165,7 @@ class UIHandler(Subscriber):
 
                 # ensure there is a tile
                 if tile:
-                    entities = entity.get_entities_and_components_in_area([tile])
+                    entities = entity.get_entities_and_components_in_area([tile], [])
                 else:
                     entities = []
 
