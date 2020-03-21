@@ -7,6 +7,8 @@ import logging
 import pstats  
 import time  
 import pygame
+import snecs
+from snecs.world import default_world
 from scripts.engine import state, world, entity, chrono, action
 from scripts.engine.core.constants import GameState, VERSION, EventTopic
 from scripts.engine.event import ChangeGameStateEvent
@@ -90,6 +92,9 @@ def game_loop():
         # get info to support UI updates and handling events
         delta_time = state.get_delta_time()
         current_state = state.get_current()
+
+        # process any deletions from last frame
+        snecs.process_pending_deletions(default_world)
 
         # have enemy take turn
         if current_state == GameState.ENEMY_TURN:

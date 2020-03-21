@@ -8,7 +8,7 @@ from scripts.engine.component import Position, Resources, Aspect, HasCombatStats
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType,\
     HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction
 from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
-    AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData
+    AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, CreatedTimedEntityEvent
 from scripts.engine.library import library
@@ -122,7 +122,7 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
 
     # log whats happening
     direction_name = utility.value_to_member((dir_x, dir_y), Direction)
-    logging.info(f"'{name}' used {skill_name} at ({start_x}, {start_y}) in {direction_name}.")
+    logging.info(f"'{name}' used {skill_name} at ({start_x}, {start_y}), aiming {direction_name}.")
 
     # use the skills associated function
     _call_skill_func(skill_data.file_name, "use")
@@ -134,19 +134,6 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
 
     # we created an entity so let everyone know
     publisher.publish(CreatedTimedEntityEvent(projectile))
-
-
-def activate(activating_entity: int, skill_name: str, activation_position: Tuple[int, int]):
-    """
-    Activate the skill by calling the skill's activate function.
-    """
-    start_x, start_y = activation_position
-    name = entity.get_name(activating_entity)
-    logging.info(f"'{name}' activated {skill_name} at ({start_x}, {start_y}).")
-
-    # use the skills associated function
-    skill_data = library.get_skill_data(skill_name)
-    _call_skill_func(skill_data.file_name, "activate")
 
 
 def _call_skill_func(file_name: str, function_name: str) -> Any:
@@ -251,6 +238,8 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
         _process_remove_aspect_effect(effect, effected_tiles)
     elif isinstance(effect, TriggerSkillEffectData):
         _process_trigger_skill_effect(effect, effected_tiles, causing_entity)
+    elif isinstance(effect, ActivateSkillEffectData):
+        _process_activate_skill(effect, effected_tiles, causing_entity)
     elif isinstance(effect, AffectStatEffectData):
         logging.warning("Trying to process affect stat. This applies passively. What are you doing?")
 
@@ -267,6 +256,22 @@ def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles
     direction = world.get_direction(start_pos, target_pos)
 
     publisher.publish(UseSkillEvent(attacker, skill_name, start_pos, direction, data.time_cost))
+
+
+def _process_activate_skill(effect: ActivateSkillEffectData, effected_tiles: List[Tile], attacker: int):
+    """
+    Activate the skill by calling the skill's activate function.
+    """
+    num_tiles = len(effected_tiles)
+    name = entity.get_name(attacker)
+    skill_name = effect.skill_name
+    skill_data = library.get_skill_data(skill_name)
+    logging.info(f"'{name}' about to activate {skill_name} on {num_tiles} tiles...")
+
+    for tile in effected_tiles:
+        # use the skills associated function
+        _call_skill_func(skill_data.file_name, "activate")
+        logging.info(f"-> effected ({tile.x}, {tile.y}).")
 
 
 def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles: List[Tile]):

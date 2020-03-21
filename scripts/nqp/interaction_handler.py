@@ -24,7 +24,7 @@ class InteractionHandler(Subscriber):
 
     def process_event(self, event):
         """
-        Control interaction events
+        Control interaction events. Looks for InteractionCause associated events.
         """
         # log that event has been received
         logging.debug(f"{self.name} received {event.__class__.__name__}...")

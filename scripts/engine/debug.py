@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from snecs import Component
-from snecs._detail import EntityID
+from snecs.types import EntityID
 
 from scripts.engine import entity
 

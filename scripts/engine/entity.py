@@ -8,7 +8,7 @@ import snecs
 import tcod.map
 from typing import TYPE_CHECKING, TypeVar
 from snecs import Component
-from snecs._detail import EntityID
+from snecs.types import EntityID
 from snecs.ecs import new_entity
 from snecs.query import query
 
@@ -314,13 +314,15 @@ def create_projectile(creating_entity: EntityID, skill_name: str, x: int, y: int
     projectile.append(IsProjectile())
     projectile.append(Tracked(chrono.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
-    projectile.append(Behaviour(ProjectileBehaviour(creating_entity, (target_dir_x, target_dir_y), data.range,
-                                                    skill_name)))
     activate_skill = ActivateSkillEffectData(effect_type=Effect.ACTIVATE_SKILL, skill_name=skill_name,
                                            required_tags=data.required_tags)
     _skill = InteractionData(cause=InteractionCause.ENTITY_COLLISION, activate_skill=activate_skill)
     projectile.append(Interactions({InteractionCause.ENTITY_COLLISION: _skill}))
     entity = create(projectile)
+
+    add_component(entity, Behaviour(ProjectileBehaviour(creating_entity, entity, (target_dir_x, target_dir_y),
+                                                    data.range, skill_name)))
+
     logging.debug(f"{name}`s projectile created.")
 
     return entity

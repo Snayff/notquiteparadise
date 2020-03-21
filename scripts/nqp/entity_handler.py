@@ -7,13 +7,11 @@ from scripts.engine.core.constants import MessageType, TargetTag, GameState, Dir
     BASE_MOVE_COST
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
     EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, \
-    CreatedTimedEntityEvent, ActivateSkillEvent
+    CreatedTimedEntityEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking, HasCombatStats
 from scripts.engine.ui.manager import ui
-from scripts.engine.utility import value_to_member
-from scripts.engine.world_objects.combat_stats import CombatStats
 
 if TYPE_CHECKING:
     pass
@@ -39,8 +37,8 @@ class EntityHandler(Subscriber):
         elif isinstance(event, UseSkillEvent):
             self._process_use_skill(event)
 
-        elif isinstance(event, ActivateSkillEvent):
-            self._process_activate_skill(event)
+        # elif isinstance(event, ActivateSkillEvent):
+        #     self._process_activate_skill(event)
 
         elif isinstance(event, DieEvent):
             self._process_die(event)
@@ -169,15 +167,15 @@ class EntityHandler(Subscriber):
                     name = entity.get_name(ent)
                     logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
 
-    @staticmethod
-    def _process_activate_skill(event: ActivateSkillEvent):
-        ent = event.entity
-        name = entity.get_name(ent)
-        skill_name = event.skill_name
-        skill_data = library.get_skill_data(skill_name)
-        start_x, start_y = event.activation_pos[0], event.activation_pos[1]
-
-        skill.activate(ent, skill_name, (start_x, start_y))
+    # @staticmethod
+    # def _process_activate_skill(event: ActivateSkillEvent):
+    #     ent = event.entity
+    #     name = entity.get_name(ent)
+    #     skill_name = event.skill_name
+    #     skill_data = library.get_skill_data(skill_name)
+    #     start_x, start_y = event.activation_pos[0], event.activation_pos[1]
+    #
+    #     skill.activate(ent, skill_name, (start_x, start_y))
 
     @staticmethod
     def _process_die(event: DieEvent):
@@ -189,13 +187,12 @@ class EntityHandler(Subscriber):
         ent = event.entity
         turn_queue = chrono.get_turn_queue()
 
-        # remove from turn queue
-        if ent in turn_queue:
+        # if turn holder and not player create new queue without entity
+        if ent == chrono.get_turn_holder() and ent != entity.get_player():
+            chrono.rebuild_turn_queue(ent)
+        elif ent in turn_queue:
+            # remove from turn queue
             turn_queue.pop(ent)
-
-        # if turn holder and not player create new queue
-        if entity == chrono.get_turn_holder() and entity != entity.get_player():
-            chrono.rebuild_turn_queue()
 
         # delete from world
         entity.delete(ent)

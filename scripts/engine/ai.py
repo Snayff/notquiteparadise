@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
-
+from snecs.types import EntityID
 from scripts.engine import utility, entity
 from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
@@ -31,21 +31,27 @@ class ProjectileBehaviour(AIBehaviour):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
-    def __init__(self, ent: int, direction: Tuple[int, int], max_range: int, skill_name: str):
-        self.entity = ent
+    def __init__(self, creating_entity: EntityID, attached_entity: EntityID, direction: Tuple[int, int], max_range:
+    int,
+            skill_name:
+    str):
+        self.entity = attached_entity  # the entity this component is attached too
+        self.creating_entity = creating_entity
         self.direction = direction
         self.max_range = max_range
         self.distance_travelled = 0
         self.skill_name = skill_name
 
     def act(self):
+        creating_entity = self.creating_entity
         ent = self.entity
 
         # if we havent travelled max distance then move
         if self.distance_travelled < self.max_range:
             position = entity.get_entitys_component(ent, Position)
             projectile_data = library.get_skill_data(self.skill_name).projectile
-            publisher.publish(MoveEvent(ent, (position.x, position.y), (self.direction[0], self.direction[1]),
+            publisher.publish(MoveEvent(ent, (position.x, position.y),
+                                        (self.direction[0], self.direction[1]),
                                         projectile_data.travel_type, projectile_data.speed))
             self.distance_travelled += 1
         else:
@@ -55,18 +61,13 @@ class ProjectileBehaviour(AIBehaviour):
                 publisher.publish(ExpireEvent(ent))
             publisher.publish(DieEvent(ent))
 
-    # TODO -
-    #  rename  interaction cause to trigger
-    #  change terrain collision (everywhere) to an interaction/InteractionData
-    #  introduce death interaction trigger
-
 
 class SkipTurn(AIBehaviour):
     """
     Just skips turn
     """
-    def __init__(self, ent: int):
-        self.entity = ent
+    def __init__(self, attached_entity: int):
+        self.entity = attached_entity
 
     def act(self):
         name = entity.get_name(self.entity)

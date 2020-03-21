@@ -36,15 +36,15 @@ class UseSkillEvent(Event):
         self.start_pos = start_pos
 
 
-class ActivateSkillEvent(Event):
-    """
-    Event for activating a skill
-    """
-    def __init__(self, entity_activating_skill: int, skill_name: str, activation_pos: Tuple[int, int]):
-        Event.__init__(self, "ACTIVATE_SKILL", EventTopic.ENTITY)
-        self.entity = entity_activating_skill
-        self.skill_name = skill_name
-        self.activation_pos = activation_pos
+# class ActivateSkillEvent(Event):
+#     """
+#     Event for activating a skill
+#     """
+#     def __init__(self, entity_activating_skill: int, skill_name: str, activation_pos: Tuple[int, int]):
+#         Event.__init__(self, "ACTIVATE_SKILL", EventTopic.ENTITY)
+#         self.entity = entity_activating_skill
+#         self.skill_name = skill_name
+#         self.activation_pos = activation_pos
 
 
 class DieEvent(Event):

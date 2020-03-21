@@ -21,7 +21,7 @@
         "time_cost": 20,
         "projectile": {
             "__dataclass__": "ProjectileData",
-            "sprite": "",
+            "sprite": "placeholder/icon_00.png",
             "speed": "slow",
             "travel_type": "instant",
             "range": 1,
