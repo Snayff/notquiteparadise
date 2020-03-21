@@ -27,9 +27,6 @@ class GameHandler(Subscriber):
         """
         Process game events.
         """
-        # log that event has been received
-        logging.debug(f"{self.name} received {event.__class__.__name__}.")
-
         if isinstance(event, ExitGameEvent):
             publisher.publish(ChangeGameStateEvent(GameState.EXIT_GAME))
 

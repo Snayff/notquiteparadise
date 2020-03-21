@@ -1,4 +1,7 @@
 # TODO - clean up module
+import logging
+
+from scripts.engine.core.constants import DEBUG_LOG_EVENT_RECEIPTS
 
 
 class EventHub:
@@ -32,8 +35,8 @@ class Publisher:
     """
     Class to create events and log them with the event hub
     """
-    def __init__(self, hub):
-        self.event_hub = hub
+    def __init__(self, event_hub):
+        self.event_hub = event_hub
 
     def publish(self, event):
         self.event_hub.notify(event)
@@ -52,6 +55,14 @@ class Subscriber:
 
     def unsubscribe(self, event):
         self.event_hub.unsubscribe(event, self)
+
+    def process_event(self, event):
+        """
+        Process game events.
+        """
+        if DEBUG_LOG_EVENT_RECEIPTS:
+            # log that event has been received
+            logging.debug(f"{self.name} received {event.__class__.__name__}.")
 
 
 # TODO - make ABC

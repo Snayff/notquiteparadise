@@ -4,7 +4,8 @@ import logging
 import scripts.engine.world
 from typing import TYPE_CHECKING, Type
 from scripts.engine import world, entity, skill, utility
-from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect
+from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect, \
+    DEBUG_LOG_EVENT_RECEIPTS
 from scripts.engine.core.event_core import Subscriber
 from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile
 from scripts.engine.event import EndTurnEvent, EndRoundEvent, ExpireEvent, \
@@ -26,8 +27,9 @@ class InteractionHandler(Subscriber):
         """
         Control interaction events. Looks for InteractionCause associated events.
         """
-        # log that event has been received
-        logging.debug(f"{self.name} received {event.__class__.__name__}...")
+        if DEBUG_LOG_EVENT_RECEIPTS:
+            # log that event has been received
+            logging.debug(f"{self.name} received {event.__class__.__name__}...")
 
         if isinstance(event, EndTurnEvent):
             self._process_end_turn(event)
@@ -84,6 +86,9 @@ class InteractionHandler(Subscriber):
         #             world.cleanse_expired_aspects(tile)
 
     def _process_entity_collision(self, event: EntityCollisionEvent):
+        a_name = entity.get_name(event.entity)
+        b_name = entity.get_name(event.blocking_entity)
+        logging.debug(f"'{a_name}' collided with '{b_name}'.")
         target_x, target_y = event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1]
         self._apply_effects_to_tiles(event.entity, InteractionCause.ENTITY_COLLISION,
                                      (event.start_pos[0], event.start_pos[1]), (target_x, target_y))

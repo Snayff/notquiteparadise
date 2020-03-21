@@ -107,7 +107,8 @@ def get_name(entity: EntityID) -> str:
     if identity:
         name = identity.name
     else:
-        name = f"Identity Component not found for {entity}."
+        debug.log_component_not_found(entity, "get name", Identity)
+        name = "not found"
 
     return name
 

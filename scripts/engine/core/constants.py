@@ -13,6 +13,7 @@ IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 TIME_PER_ROUND = 100
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. only used if entity has no combatstats
 BASE_MOVE_COST = 20  # amount of time spent.
+DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log handlers receiving events or not
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of

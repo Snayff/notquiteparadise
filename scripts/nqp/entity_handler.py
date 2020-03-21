@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 from scripts.engine import world, chrono, entity, state, skill, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
-    BASE_MOVE_COST
+    BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
     EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, \
     CreatedTimedEntityEvent
@@ -28,9 +28,6 @@ class EntityHandler(Subscriber):
         """
         Control entity events
         """
-        # log that event has been received
-        logging.debug(f"{self.name} received {event.__class__.__name__}.")
-
         if isinstance(event, MoveEvent):
             self._process_move(event)
 
