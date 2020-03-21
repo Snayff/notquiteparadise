@@ -20,18 +20,20 @@ if TYPE_CHECKING:
     from typing import List, Tuple
 
 
-#########################################################################################
-########################   SKILL  & EFFECTS REQS. #######################################
-# all skills create a projectile, use that to specify conditions such as speed and sprite. <-
-# allow for conditional criteria
-# (depending on previous) the effects must be ordered and apply in order
-# each effect is unique so each effect must be able to accept multiple params e.g. damage types
-# passive skills, when learnt, apply the relevant affliction with an infinite duration and cannot be dispelled.
-# have the ability to create entities, e.g. summons, traps, etc.
-# ability to specify target/ target automatically based on condition, e.g. nearest, lowest health etc.
-# cooldowns applied and respected
-# can only spend resource types, which map to secondary stats, not secondary stats directly
+#############################################################################################
+####################### HOW DO SKILLS WORK? #################################################
+# something triggers a UseSkillEvent
+# entity handler picks this up and checks affordability, pays skill costs and calls skills.use
+# skills.use calls the "use" function in the relevant {skill_name}.py and creates a projectile
+# projectile given turn, as any other entity
+# projectile travels in direction until it activates or expires
+# on collision with another entity the projectile calls the relevant "activate" function in the {skill_name}.py
 ########################################################################################
+
+# TODO - have the ability to create entities, e.g. summons, traps, etc.
+# TODO - ability to specify target/ target automatically based on condition, e.g. nearest, lowest health etc.
+# TODO - cooldowns applied and respected
+# TODO - can only spend resource types, which map to secondary stats, not secondary stats directly
 
 
 ######################################## CHECKS ######################################

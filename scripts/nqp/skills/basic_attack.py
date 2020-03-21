@@ -24,7 +24,7 @@ def activate(causing_entity: EntityID, target_tiles: List[Tile]):
         "required_tags": [
             TargetTag.OTHER_ENTITY
         ],
-        "damage": 2,
+        "damage": 20,
         "damage_type": DamageType.MUNDANE,
         "mod_amount": 0.1,
         "mod_stat": PrimaryStat.CLOUT
@@ -36,16 +36,7 @@ def activate(causing_entity: EntityID, target_tiles: List[Tile]):
         effected_tiles = world.get_tiles(tile.x, tile.y, coords)
         skill.process_effect(effect, effected_tiles, causing_entity)
 
+# TODO -  use base values and an offset
 
 
-##################################################
-# something triggers a UseSkillEvent
-# this checks affordability, pays skill costs and  creates a projectile
-# -> we could move projectile creation to a "use" method here to allow for additional creation actions
-# projectile given turn, as any other entity
-# projectile travels in direction until it activates or expires
-# -> this should call the relevant skill activation
 
-# ! make sure to use standardised funcs held in skills.py where possible
-# ! think about how to make it easy to amend lots of values - use base values and an offset?
-# ! there probs needs to be an activation effect in the json
