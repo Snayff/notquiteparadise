@@ -77,7 +77,7 @@ class EffectData(ABC):
     Base data class for an effect.
     """
     # who am I?
-    effect_type: Optional[EffectType] = None
+    effect_type = None
 
     # who are we targeting?
     required_tags: List[TargetTagType] = field(default_factory=list)

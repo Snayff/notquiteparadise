@@ -31,16 +31,11 @@ class UIHandler(Subscriber):
         """
         Control the events
         """
-        # log that event has been received
-        logging.debug(f"{self.name} received {event.__class__.__name__}...")
-
         if event.topic == EventTopic.UI:
             self.process_ui_event(event)
-
-        if event.topic == EventTopic.ENTITY:
+        elif event.topic == EventTopic.ENTITY:
             self.process_entity_event(event)
-
-        if event.topic == EventTopic.GAME:
+        elif event.topic == EventTopic.GAME:
             self.process_game_event(event)
 
     ############# HANDLE ENTITY EVENTS ##############

@@ -70,14 +70,6 @@ class MoveEvent(Event):
         self.direction = direction
 
 
-class CreatedTimedEntityEvent(Event):
-    """
-    Event for handling the creation of an entity that uses time.
-    """
-    def __init__(self, created_entity: int):
-        Event.__init__(self, "CREATED_TIMED_ENTITY", EventTopic.ENTITY)
-        self.entity = created_entity
-
 ####################### GAME ############################################
 
 

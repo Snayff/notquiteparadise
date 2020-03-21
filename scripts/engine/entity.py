@@ -30,7 +30,8 @@ if TYPE_CHECKING:
 _C = TypeVar("_C", bound=Component)
 
 
-# TODO - Consider renaming module. Existence? Being?
+# TODO - Consider renaming module. Existence? Being? Body? Reality? Thing?
+
 
 ###################### GET ############################################
 
@@ -253,7 +254,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     # TODO - change this to bump attack, not interaction
     basic_attack_name = "basic_attack"
     data = library.get_skill_data(basic_attack_name).interactions.get(InteractionCause.ENTITY_COLLISION).damage
-    trigger_skill = TriggerSkillEffectData(effect_type=Effect.TRIGGER_SKILL, skill_name=basic_attack_name,
+    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name,
                                            required_tags=data.required_tags)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
@@ -312,16 +313,16 @@ def create_projectile(creating_entity: EntityID, skill_name: str, x: int, y: int
     projectile_name = f"{skill_name}s projectile"
     desc = f"{name}s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
-    projectile.append(IsProjectile())
+    projectile.append(IsProjectile(creating_entity))
     projectile.append(Tracked(chrono.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
-    activate_skill = ActivateSkillEffectData(effect_type=Effect.ACTIVATE_SKILL, skill_name=skill_name,
+    activate_skill = ActivateSkillEffectData(skill_name=skill_name,
                                            required_tags=data.required_tags)
     _skill = InteractionData(cause=InteractionCause.ENTITY_COLLISION, activate_skill=activate_skill)
     projectile.append(Interactions({InteractionCause.ENTITY_COLLISION: _skill}))
     entity = create(projectile)
 
-    add_component(entity, Behaviour(ProjectileBehaviour(creating_entity, entity, (target_dir_x, target_dir_y),
+    add_component(entity, Behaviour(ProjectileBehaviour(entity, (target_dir_x, target_dir_y),
                                                     data.range, skill_name)))
 
     logging.debug(f"{name}`s projectile created.")

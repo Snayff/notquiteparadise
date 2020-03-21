@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from typing import List, Dict, Optional
     from scripts.engine.ai import AIBehaviour
     import tcod.map
+    from snecs.types import EntityID
     
     
 ##########################################################
@@ -195,4 +196,5 @@ class IsProjectile(RegisteredComponent):
     """
     Whether the entity is a projectile.
     """
-    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
+    def __init__(self, creator: EntityID):
+        self.creator = creator

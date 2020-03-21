@@ -1,38 +1,42 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
+from snecs.types import EntityID
+from scripts.engine import skill, utility, world
+from scripts.engine.core.constants import PrimaryStat, Shape, TargetTag, DamageType
+from scripts.engine.core.definitions import DamageEffectData
+from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
 
 def use():
-    print("used skill")
-
-def activate():
-    print("activated")
-
-#                 "damage": {
-#                     "__dataclass__": "DamageEffectData",
-#                     "accuracy": 0,
-#                     "stat_to_target": "vigour",
-#                     "shape": "target",
-#                     "shape_size": 1,
-#                     "required_tags": [
-#                         "other_entity"
-#                     ],
-#                     "damage": 2,
-#                     "damage_type": "mundane",
-#                     "mod_amount": 0.1,
-#                     "mod_stat": "clout"
-#                 },
+    pass
 
 
-# from importlib import reload,import_module
-#     module_name = "skills." + data.file_name
-#     module = import_module(module_name)
-#     module = reload(module)
-#     method_to_call = getattr(module, "use")
-#     result = method_to_call()
+def activate(causing_entity: EntityID, target_tiles: List[Tile]):
+    # create damage effect
+    effect_dict = {
+        "accuracy": 0,
+        "stat_to_target": PrimaryStat.VIGOUR,
+        "shape": Shape.TARGET,
+        "shape_size": 1,
+        "required_tags": [
+            TargetTag.OTHER_ENTITY
+        ],
+        "damage": 2,
+        "damage_type": DamageType.MUNDANE,
+        "mod_amount": 0.1,
+        "mod_stat": PrimaryStat.CLOUT
+    }
+    effect = DamageEffectData(**effect_dict)
+
+    for tile in target_tiles:
+        coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
+        effected_tiles = world.get_tiles(tile.x, tile.y, coords)
+        skill.process_effect(effect, effected_tiles, causing_entity)
+
+
 
 ##################################################
 # something triggers a UseSkillEvent

@@ -31,19 +31,15 @@ class ProjectileBehaviour(AIBehaviour):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
-    def __init__(self, creating_entity: EntityID, attached_entity: EntityID, direction: Tuple[int, int], max_range:
-    int,
-            skill_name:
-    str):
+    def __init__(self, attached_entity: EntityID, direction: Tuple[int, int], max_range: int,
+            skill_name: str):
         self.entity = attached_entity  # the entity this component is attached too
-        self.creating_entity = creating_entity
         self.direction = direction
         self.max_range = max_range
         self.distance_travelled = 0
         self.skill_name = skill_name
 
     def act(self):
-        creating_entity = self.creating_entity
         ent = self.entity
 
         # if we havent travelled max distance then move

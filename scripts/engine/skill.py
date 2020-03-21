@@ -10,7 +10,7 @@ from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, 
 from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, CreatedTimedEntityEvent
+from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent
 from scripts.engine.library import library
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
@@ -132,17 +132,14 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
 
     # TODO - check if collision on init tile and immediately apply (how?!)
 
-    # we created an entity so let everyone know
-    publisher.publish(CreatedTimedEntityEvent(projectile))
 
-
-def _call_skill_func(file_name: str, function_name: str) -> Any:
+def _call_skill_func(file_name: str, function_name: str, **func_args) -> Any:
     # dynamically call a function from skills.<file_name>.py
     module_name = "skills." + file_name
     module = import_module(module_name)
     module = reload(module)
     func_to_call = getattr(module, function_name)
-    result = func_to_call()
+    result = func_to_call(**func_args)
     return result
 
 
@@ -258,19 +255,19 @@ def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles
     publisher.publish(UseSkillEvent(attacker, skill_name, start_pos, direction, data.time_cost))
 
 
-def _process_activate_skill(effect: ActivateSkillEffectData, effected_tiles: List[Tile], attacker: int):
+def _process_activate_skill(effect: ActivateSkillEffectData, target_tiles: List[Tile], attacker: int):
     """
     Activate the skill by calling the skill's activate function.
     """
-    num_tiles = len(effected_tiles)
+    num_tiles = len(target_tiles)
     name = entity.get_name(attacker)
     skill_name = effect.skill_name
     skill_data = library.get_skill_data(skill_name)
     logging.info(f"'{name}' about to activate {skill_name} on {num_tiles} tiles...")
 
-    for tile in effected_tiles:
+    for tile in target_tiles:
         # use the skills associated function
-        _call_skill_func(skill_data.file_name, "activate")
+        _call_skill_func(skill_data.file_name, "activate", causing_entity=attacker, target_tiles=[tile])
         logging.info(f"-> effected ({tile.x}, {tile.y}).")
 
 
@@ -423,17 +420,17 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
         if tile:
             if world.tile_has_tags(tile, effect.required_tags, attacker):
                 # get the info to process the damage
-                entitys_stats = entity.get_combat_stats(defender)
+                defenders_stats = entity.get_combat_stats(defender)
 
                 # check we have a stat to target, else default to 0
                 if effect.stat_to_target:
-                    to_hit_score = _calculate_to_hit_score(entitys_stats, effect.accuracy, effect.stat_to_target,
+                    to_hit_score = _calculate_to_hit_score(defenders_stats, effect.accuracy, effect.stat_to_target,
                                                        attackers_stats)
                 else:
                     to_hit_score = 0
 
                 hit_type = _get_hit_type(to_hit_score)
-                damage = _calculate_damage(entitys_stats, hit_type, effect, attackers_stats)
+                damage = _calculate_damage(defenders_stats, hit_type, effect, attackers_stats)
 
                 # who did the damage? (for informing the player)
                 if attacker:
@@ -469,7 +466,7 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
 
                 else:
                     # log no damage
-                    msg = f" {defender_name} resists damage from {attacker_name}."
+                    msg = f"{defender_name} resists damage from {attacker_name}."
                     # TODO - ensure if player involved it shows as "You"
                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 

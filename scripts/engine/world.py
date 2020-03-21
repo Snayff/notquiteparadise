@@ -105,7 +105,8 @@ str]) -> Tuple[int, int]:
 
 def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List[Tile]:
     """
-    Get multiple tiles based on starting position and coordinates given       
+    Get multiple tiles based on starting position and coordinates given. Coords are relative  to start
+    position given.
     """
     game_map = get_game_map()
     tiles = []

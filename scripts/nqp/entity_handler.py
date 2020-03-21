@@ -6,8 +6,7 @@ from scripts.engine import world, chrono, entity, state, skill, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
     BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
-    EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, \
-    CreatedTimedEntityEvent
+    EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking, HasCombatStats
@@ -34,9 +33,6 @@ class EntityHandler(Subscriber):
         elif isinstance(event, UseSkillEvent):
             self._process_use_skill(event)
 
-        # elif isinstance(event, ActivateSkillEvent):
-        #     self._process_activate_skill(event)
-
         elif isinstance(event, DieEvent):
             self._process_die(event)
 
@@ -45,9 +41,6 @@ class EntityHandler(Subscriber):
 
         elif isinstance(event, EndTurnEvent):
             self._process_end_turn(event)
-
-        elif isinstance(event, CreatedTimedEntityEvent):
-            self._process_created_timed_entity(event)
 
     @staticmethod
     def _process_move(event: MoveEvent):
@@ -164,16 +157,6 @@ class EntityHandler(Subscriber):
                     name = entity.get_name(ent)
                     logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
 
-    # @staticmethod
-    # def _process_activate_skill(event: ActivateSkillEvent):
-    #     ent = event.entity
-    #     name = entity.get_name(ent)
-    #     skill_name = event.skill_name
-    #     skill_data = library.get_skill_data(skill_name)
-    #     start_x, start_y = event.activation_pos[0], event.activation_pos[1]
-    #
-    #     skill.activate(ent, skill_name, (start_x, start_y))
-
     @staticmethod
     def _process_die(event: DieEvent):
         """
@@ -234,9 +217,5 @@ class EntityHandler(Subscriber):
         """
         #  update turn holder`s time spent
         entity.spend_time(event.entity, event.time_spent)
-
-    @staticmethod
-    def _process_created_timed_entity(event: CreatedTimedEntityEvent):
-        chrono.rebuild_turn_queue()
 
 

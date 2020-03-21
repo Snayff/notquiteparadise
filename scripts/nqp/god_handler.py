@@ -36,9 +36,6 @@ class GodHandler(Subscriber):
         #  create events for causing and receiving hit type
         #  create events for being the cause of death
 
-        # log that event has been received
-        logging.debug(f"{self.name} received {event.__class__.__name__}...")
-
         if isinstance(event, UseSkillEvent):
             event: UseSkillEvent
             # if the entity isnt another god then judge it

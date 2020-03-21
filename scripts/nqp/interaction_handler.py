@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import logging
 import scripts.engine.world
-from typing import TYPE_CHECKING, Type
+from snecs.types import EntityID
+from typing import TYPE_CHECKING, Type, Optional
 from scripts.engine import world, entity, skill, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect, \
     DEBUG_LOG_EVENT_RECEIPTS
 from scripts.engine.core.event_core import Subscriber
 from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile
 from scripts.engine.event import EndTurnEvent, EndRoundEvent, ExpireEvent, \
-    EntityCollisionEvent, TerrainCollisionEvent, MoveEvent, CreatedTimedEntityEvent
+    EntityCollisionEvent, TerrainCollisionEvent, MoveEvent
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
@@ -27,10 +28,6 @@ class InteractionHandler(Subscriber):
         """
         Control interaction events. Looks for InteractionCause associated events.
         """
-        if DEBUG_LOG_EVENT_RECEIPTS:
-            # log that event has been received
-            logging.debug(f"{self.name} received {event.__class__.__name__}...")
-
         if isinstance(event, EndTurnEvent):
             self._process_end_turn(event)
 
@@ -86,12 +83,24 @@ class InteractionHandler(Subscriber):
         #             world.cleanse_expired_aspects(tile)
 
     def _process_entity_collision(self, event: EntityCollisionEvent):
-        a_name = entity.get_name(event.entity)
+        ent = event.entity
+        a_name = entity.get_name(ent)
         b_name = entity.get_name(event.blocking_entity)
         logging.debug(f"'{a_name}' collided with '{b_name}'.")
+
+        # check if projectile as we would need the instigating entity
+        is_projectile = entity.get_entitys_component(ent, IsProjectile)
+
+        # ensure creator is passed if projectile hit someone
+        if is_projectile:
+            instigating_entity = is_projectile.creator
+        else:
+            instigating_entity = None
+
         target_x, target_y = event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1]
-        self._apply_effects_to_tiles(event.entity, InteractionCause.ENTITY_COLLISION,
-                                     (event.start_pos[0], event.start_pos[1]), (target_x, target_y))
+        self._apply_effects_to_tiles(ent, InteractionCause.ENTITY_COLLISION,
+                                     (event.start_pos[0], event.start_pos[1]), (target_x, target_y),
+                                     instigating_entity)
 
     def _process_terrain_collision(self, event: TerrainCollisionEvent):
         ent = event.entity
@@ -125,7 +134,7 @@ class InteractionHandler(Subscriber):
 
     @staticmethod
     def _apply_effects_to_tiles(causing_entity: int, interaction_cause: InteractionCauseType,
-            start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
+            start_pos: Tuple[int, int], target_pos: Tuple[int, int], instigating_entity: Optional[EntityID] = None):
         """
         Apply all effects relating to a cause of interaction.
         """
@@ -154,7 +163,13 @@ class InteractionHandler(Subscriber):
                             coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
                             effected_tiles = world.get_tiles(target_x, target_y, coords)
 
+                            # pass the entity to refer back to for stats and such
+                            if instigating_entity:
+                                originating_entity = instigating_entity
+                            else:
+                                originating_entity = causing_entity
+
                             # apply effects
-                            skill.process_effect(effect, effected_tiles, causing_entity)
+                            skill.process_effect(effect, effected_tiles, originating_entity)
                         except AttributeError:
                             pass
