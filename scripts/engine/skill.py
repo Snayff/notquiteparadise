@@ -412,8 +412,8 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
 
 def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):
     attackers_stats = entity.get_combat_stats(attacker)
-
     entities = entity.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats])
+    skill_name = effect.creator
 
     # loop all relevant entities
     for defender, (position, resources, has_stats) in entities.items():
@@ -439,7 +439,7 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
                 else:
                     attacker_name = "???"
 
-                defender_name = name = entity.get_name(defender)
+                defender_name = entity.get_name(defender)
 
                 # resolve the damage
                 if damage > 0:
@@ -447,15 +447,18 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
 
                     # log the outcome
                     if hit_type == HitType.GRAZE:
-                        hit_type_desc = "grazes"
+                        hit_type_desc = "grazed"
                     elif hit_type == HitType.HIT:
-                        hit_type_desc = "hits"
+                        hit_type_desc = "hit"
                     elif hit_type == HitType.CRIT:
-                        hit_type_desc = "crits"
+                        hit_type_desc = "crit"
                     else:
                         hit_type_desc = "does something unknown"  # catch all
 
-                    msg = f"{attacker_name} {hit_type_desc} {defender_name} for {damage}."
+                    # confirm to the player that they damaged someone
+                    if attacker_name == "player":
+                        attacker_name = "I"
+                    msg = f"{attacker_name} {hit_type_desc} {defender_name} with {skill_name} for {damage}."
                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 
                     # TODO - add the damage type to the text and replace the type with an icon
@@ -466,9 +469,12 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
                         publisher.publish(DieEvent(defender))
 
                 else:
-                    # log no damage
-                    msg = f"{defender_name} resists damage from {attacker_name}."
-                    # TODO - ensure if player involved it shows as "You"
+                    # inform player of no damage
+                    if attacker_name == "player":
+                        msg = f"{defender_name} resisted damage from my {skill_name}."
+                    else:
+                        msg = f"{defender_name} resisted damage from {attacker_name}'s {skill_name}."
+
                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 
 

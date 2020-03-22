@@ -46,7 +46,6 @@ from scripts.nqp.ui_handler import UIHandler
 # FIXME - collision isnt working - can walk through walls
 # TODO - upgrade snecs
 # TODO - SKILLS:
-#  clean up skill data
 #  animate hit, attack and effects
 #  add second skill
 #  refine afflictions design

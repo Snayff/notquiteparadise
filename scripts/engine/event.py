@@ -13,7 +13,8 @@ if TYPE_CHECKING:
 
 class WantToUseSkillEvent(Event):
     """
-    Event for entity wanting to use a skill.
+    Event for entity wanting to use a skill. Should be used for all instances where you want checks to be completed
+    before using the skill.
     """
     def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
             direction: Optional[Union[Tuple[int, int], DirectionType]]):
@@ -26,7 +27,8 @@ class WantToUseSkillEvent(Event):
 
 class UseSkillEvent(Event):
     """
-    Event for entity using a skill.
+    Event for entity using a skill. Should only be called as a result of WantToUseSkillEvent being processed
+    successfully.
     """
     def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
             direction: Union[Tuple[int, int], DirectionType]):

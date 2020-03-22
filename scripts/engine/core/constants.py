@@ -194,7 +194,7 @@ class TargetTag(SimpleNamespace):
     OPEN_SPACE = TargetTagType("open_space")
     BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
     IS_VISIBLE = TargetTagType("is_visible")
-    NO_BLOCKING_TILE = TargetTagType("no_blocking_terrain")
+    NO_BLOCKING_TILE = TargetTagType("no_blocking_tile")
 
 
 class DamageType(SimpleNamespace):

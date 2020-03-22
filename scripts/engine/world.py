@@ -279,7 +279,7 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
             return True
     elif tag == TargetTag.BLOCKED_MOVEMENT:
         # if anything is blocking
-        if _is_tile_blocking_movement(tile) and _tile_has_entity_blocking_movement(tile):
+        if _is_tile_blocking_movement(tile) or _tile_has_entity_blocking_movement(tile):
             return True
     elif tag == TargetTag.SELF:
         # if entity on tile is same as active entity
@@ -290,6 +290,7 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
     elif tag == TargetTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
+            # checks isnt self
             return not _tile_has_specific_entity(tile, active_entity)
         else:
             logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")

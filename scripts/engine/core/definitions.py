@@ -79,6 +79,7 @@ class EffectData(ABC):
     Base data class for an effect.
     """
     # who am I?
+    creator: Optional[str] = None
     effect_type = None
 
     # who are we targeting?

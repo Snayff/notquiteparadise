@@ -10,6 +10,7 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
 
+
 def use():
     pass
 
@@ -17,11 +18,12 @@ def use():
 def activate(causing_entity: EntityID, target_tiles: List[Tile]):
     # create damage effect
     effect_dict = {
+        "creator": "basic_attack",
         "accuracy": BASE_ACCURACY + 5,
         "stat_to_target": PrimaryStat.VIGOUR,
         "shape": Shape.TARGET,
         "shape_size": 1,
-        "activate_required_tags": [
+        "required_tags": [
             TargetTag.OTHER_ENTITY
         ],
         "damage": BASE_DAMAGE + 20,

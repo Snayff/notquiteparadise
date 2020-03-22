@@ -133,10 +133,7 @@ class EntityHandler(Subscriber):
         skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
         skill.use(ent, skill_name, (start_x, start_y), (dir_x, dir_y))
 
-        # confirm to the player that the skill took place
-        if name == "player":
-            name = "I"
-        publisher.publish(MessageEvent(MessageType.LOG, f"{name} used {skill_name}."))
+        logging.debug(f"'{name}' used {skill_name}.")
 
         # end the turn if the entity is the turn holder
         if ent == chrono.get_turn_holder():

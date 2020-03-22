@@ -314,7 +314,7 @@ def create_projectile(creating_entity: EntityID, skill_name: str, x: int, y: int
     projectile.append(Tracked(chrono.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     activate_skill = ActivateSkillEffectData(skill_name=skill_name,
-                                           required_tags=data.required_tags)
+                                           required_tags=data.activate_required_tags)
     _skill = InteractionData(cause=InteractionCause.ENTITY_COLLISION, activate_skill=activate_skill)
     projectile.append(Interactions({InteractionCause.ENTITY_COLLISION: _skill}))
     entity = create(projectile)
