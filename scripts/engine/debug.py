@@ -25,12 +25,12 @@ if TYPE_CHECKING:
 #     """
 
 
-def log_component_not_found(ent: EntityID, msg: str, component: Type[Component]):
+def log_component_not_found(ent: EntityID, component: Type[Component]):
     """
-    Use if component not found. Log the error as a warning in the format "{ent} {msg} tried to but no {component]
-    found."
+    Use if component not found. Log the error as a warning in the format "{ent} tried to get {component} but it was
+    not found."
     """
     name = entity.get_name(ent)
-    logging.warning(f"'{name}({ent})' tried to {msg} but no {component.__class__} Component found.")
+    logging.warning(f"'{name}'({ent}) tried to get {component.__class__.__name__}, but it was not found.")
 
 

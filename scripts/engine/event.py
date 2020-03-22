@@ -1,50 +1,40 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-from scripts.engine import entity
-from scripts.engine.core.constants import EventTopic, Direction, GameState, MessageType, GameStateType, \
-    MessageTypeType, DirectionType, TravelMethodType
+from typing import TYPE_CHECKING, Optional
+from scripts.engine.core.constants import EventTopic, GameStateType, MessageTypeType, DirectionType, TravelMethodType
 from scripts.engine.core.event_core import Event
-from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Tuple, Union, Type, List
+    from scripts.engine.world_objects.tile import Tile
 
 
 ####################### ENTITY ############################################
 
 class WantToUseSkillEvent(Event):
     """
-    Event for player pressing a skill number
-    """
-    def __init__(self, skill_number: int):
-        Event.__init__(self, "WANT_TO_USE_SKILL", EventTopic.ENTITY)
-        self.skill_number = skill_number
-
-
-class UseSkillEvent(Event):
-    """
-    Event for entity using a skill
+    Event for entity wanting to use a skill.
     """
     def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
-            direction: Union[Tuple[int, int], DirectionType], base_time_cost: int):
-        Event.__init__(self, "USE_SKILL", EventTopic.ENTITY)
-        self.base_time_cost = base_time_cost
+            direction: Optional[Union[Tuple[int, int], DirectionType]]):
+        Event.__init__(self, "WANT_TO_USE_SKILL", EventTopic.ENTITY)
         self.entity = entity_using_skill
         self.direction = direction
         self.skill_name = skill_name
         self.start_pos = start_pos
 
 
-# class ActivateSkillEvent(Event):
-#     """
-#     Event for activating a skill
-#     """
-#     def __init__(self, entity_activating_skill: int, skill_name: str, activation_pos: Tuple[int, int]):
-#         Event.__init__(self, "ACTIVATE_SKILL", EventTopic.ENTITY)
-#         self.entity = entity_activating_skill
-#         self.skill_name = skill_name
-#         self.activation_pos = activation_pos
+class UseSkillEvent(Event):
+    """
+    Event for entity using a skill.
+    """
+    def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
+            direction: Union[Tuple[int, int], DirectionType]):
+        Event.__init__(self, "USE_SKILL", EventTopic.ENTITY)
+        self.entity = entity_using_skill
+        self.direction = direction
+        self.skill_name = skill_name
+        self.start_pos = start_pos
 
 
 class DieEvent(Event):

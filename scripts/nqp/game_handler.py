@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from scripts.engine import entity, chrono, state
+from scripts.engine import entity, chrono, state, utility
 from scripts.engine.core.constants import GameState
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.state import get_current
@@ -31,17 +31,18 @@ class GameHandler(Subscriber):
             publisher.publish(ChangeGameStateEvent(GameState.EXIT_GAME))
 
         elif isinstance(event, EndTurnEvent):
-            self.process_end_turn(event)
+            self._process_end_turn(event)
 
         elif isinstance(event, ChangeGameStateEvent):
-            self.process_change_game_state(event)
+            self._process_change_game_state(event)
 
     @staticmethod
-    def process_change_game_state(event: ChangeGameStateEvent):
+    def _process_change_game_state(event: ChangeGameStateEvent):
         """
         Transition to another game state as specified by the event.
         """
         new_game_state = event.new_game_state
+        current_game_state = state.get_current()
 
         if new_game_state == GameState.GAME_INITIALISING:
             # transition to post-initialisation game state
@@ -67,16 +68,18 @@ class GameHandler(Subscriber):
             new_game_state = state.get_previous()
 
         # update the game state to the intended state
-        if new_game_state != state.get_current():
+        if new_game_state != current_game_state:
             state.set_new(new_game_state)
         else:
             # handle wasted attempt to change the game state
-            log_string = f"-> new game state {new_game_state} is same as current" \
-                         f" {state.get_current()} so state not updated."
+            new_state_name = utility.value_to_member(new_game_state, GameState)
+            current_state_name = utility.value_to_member(current_game_state, GameState)
+            log_string = f"-> new game state {new_state_name} is same as current {current_state_name} so state not" \
+                         f" updated. However, lower level details may still have changed."
             logging.debug(log_string)
 
     @staticmethod
-    def process_end_turn(event: EndTurnEvent):
+    def _process_end_turn(event: EndTurnEvent):
         """
         End turn, move to next turn, change game state to new turn.
         """

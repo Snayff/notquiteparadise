@@ -59,6 +59,7 @@ def get_tile(tile_pos: Union[Tuple[int, int], str]) -> Optional[Tile]:
     """
     game_map = get_game_map()
 
+    # clean up tile pos
     if isinstance(tile_pos, str):
         _x, _y = tile_pos.split(",")
         x = int(_x)  # str to int
@@ -67,11 +68,36 @@ def get_tile(tile_pos: Union[Tuple[int, int], str]) -> Optional[Tile]:
         x = tile_pos[0]
         y = tile_pos[1]
 
-    if _is_tile_in_bounds(x, y):
-        return game_map.tiles[x][y]
-    else:
+    try:
+        _tile = game_map.tiles[x][y]
+        if not _is_tile_in_bounds(_tile):
+            _tile = None
+
+    except KeyError:
         logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
-        return None
+        _tile = None
+
+    return _tile
+
+
+def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List[Tile]:
+    """
+    Get multiple tiles based on starting position and coordinates given. Coords are relative  to start
+    position given.
+    """
+    game_map = get_game_map()
+    tiles = []
+
+    for coord in coords:
+        tile_x = coord[0] + start_x
+        tile_y = coord[1] + start_y
+
+        # make sure it is in bounds
+        tile = get_tile((tile_x, tile_y))
+        if _is_tile_in_bounds(tile):
+            tiles.append(game_map.tiles[tile_x][tile_y])
+
+    return tiles
 
 
 def get_direction(start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int],
@@ -101,25 +127,6 @@ str]) -> Tuple[int, int]:
         dir_y = -1
 
     return dir_x, dir_y
-
-
-def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List[Tile]:
-    """
-    Get multiple tiles based on starting position and coordinates given. Coords are relative  to start
-    position given.
-    """
-    game_map = get_game_map()
-    tiles = []
-
-    for coord in coords:
-        tile_x = coord[0] + start_x
-        tile_y = coord[1] + start_y
-
-        # make sure it is in bounds
-        if _is_tile_in_bounds(tile_x, tile_y):
-            tiles.append(game_map.tiles[tile_x][tile_y])
-
-    return tiles
 
 
 def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
@@ -262,39 +269,46 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
     """
     Check if a given tag applies to the tile.  True if tag applies.
     """
+    # before we even check tags, lets confirm it is in bounds
+    if not _is_tile_in_bounds(tile):
+        return False
+
     if tag == TargetTag.OPEN_SPACE:
-        # If in bounds check if anything is blocking
-        if _is_tile_in_bounds(tile.x, tile.y):
-            return not _is_tile_blocking_movement(tile.x, tile.y)
-        else:
-            return False
+        # if nothing is blocking movement
+        if not _is_tile_blocking_movement(tile) and not _tile_has_entity_blocking_movement(tile):
+            return True
     elif tag == TargetTag.BLOCKED_MOVEMENT:
-        # If in bounds check if anything is blocking
-        if _is_tile_in_bounds(tile.x, tile.y):
-            return _is_tile_blocking_movement(tile.x, tile.y)
-        else:
+        # if anything is blocking
+        if _is_tile_blocking_movement(tile) and _tile_has_entity_blocking_movement(tile):
             return True
     elif tag == TargetTag.SELF:
+        # if entity on tile is same as active entity
         if active_entity:
-            return _tile_has_entity(tile.x, tile.y, active_entity)
+            return _tile_has_specific_entity(tile, active_entity)
         else:
             logging.warning("Tried to get TargetTag.SELF but gave no active_entity.")
-            return False
     elif tag == TargetTag.OTHER_ENTITY:
+        # if entity on tile is not active entity
         if active_entity:
-            return _tile_has_other_entity(tile.x, tile.y, active_entity)
+            return not _tile_has_specific_entity(tile, active_entity)
         else:
             logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
-            return False
     elif tag == TargetTag.NO_ENTITY:
-        return not _tile_has_any_entity(tile.x, tile.y)
+        # if the tile has no entity
+        return _tile_has_any_entity(tile)
     elif tag == TargetTag.ANY:
+        # if the tile is anything at all
         return True
     elif tag == TargetTag.IS_VISIBLE:
-        return _is_tile_visible_to_player(tile.x, tile.y)
-    else:
-        # catch all
-        return False
+        # if player can see the tile
+        return _is_tile_visible_to_player(tile)
+    elif tag == TargetTag.NO_BLOCKING_TILE:
+        # if tile isnt blocking movement
+        if _is_tile_in_bounds(tile):
+            return not _is_tile_blocking_movement(tile)
+
+    # If we've hit here it must be false!
+    return False
 
 
 def tile_has_tags(tile: Tile, tags: List[TargetTagType], active_entity: int = None) -> bool:
@@ -314,116 +328,88 @@ def tile_has_tags(tile: Tile, tags: List[TargetTagType], active_entity: int = No
         return False
 
 
-def _is_tile_blocking_sight(x: int, y: int) -> bool:
+def _is_tile_blocking_sight(tile: Tile) -> bool:
     """
     Check if a tile is blocking sight
     """
-    tile = get_tile((x, y))
-
-    if tile:
-        # Does the tile block movement?
-        if tile.blocks_sight:
-            return True
-
-        # Any entities that block movement?
-        for ent, (position, blocking) in entity.get_components([Position, Blocking]):
-            if position.x == tile.x and position.y == tile.y and blocking.blocks_sight:
-                return True
-
-    # We found nothing blocking the tile
-    return False
+    # Does the tile block sight?
+    return tile.blocks_sight
 
 
-def _is_tile_visible_to_player(x: int, y: int) -> bool:
+def _is_tile_visible_to_player(tile: Tile) -> bool:
     """
     Check if the specified tile is visible to the player
     """
-    tile = get_tile((x, y))
-    if tile:
-        return tile.is_visible
-    else:
-        return False
+    return tile.is_visible
 
 
-def _is_tile_in_bounds(x: int, y: int) -> bool:
+def _is_tile_in_bounds(tile: Tile) -> bool:
     """
     Check if specified tile is in the map.
     """
     game_map = get_game_map()
 
-    if (0 <= x < game_map.width) and (0 <= y < game_map.height):
+    if (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height):
         return True
     else:
         return False
 
 
-def _is_tile_blocking_movement(x: int, y: int) -> bool:
+def _is_tile_blocking_movement(tile: Tile) -> bool:
     """
     Check if the specified tile is blocking movement
     """
-    tile = get_tile((x, y))
-
-    if tile:
-        # Does the tile block movement?
-        if tile.blocks_movement:
-            return True
-
-        # Any entities that block movement?
-        for ent, (position, blocking) in entity.get_components([Position, Blocking]):
-            if position.x == tile.x and position.y == tile.y and blocking.blocks_movement:
-                return True
-
-    # We found nothing blocking the tile
-    return False
+    return tile.blocks_movement
 
 
-def _tile_has_any_entity(x: int, y: int) -> bool:
+def _tile_has_any_entity(tile: Tile) -> bool:
     """
     Check if the specified tile  has an entity on it
     """
-    tile = get_tile((x, y))
-
-    if tile:
-        # Any entities on the tile?
-        for ent, (position, ) in entity.get_components([Position]):
-            if position.x == tile.x and position.y == tile.y:
-                return True
+    x = tile.x
+    y = tile.y
+    # Any entities on the tile?
+    for ent, (position,) in entity.get_components([Position]):
+        if position.x == x and position.y == y:
+            return True
 
     # We found no entities on the tile
     return False
 
 
-def _tile_has_other_entity(x: int, y: int, active_entity: int) -> bool:
+def _tile_has_specific_entity(tile: Tile, active_entity: int) -> bool:
     """
-    Check if the specified tile  has an entity that isnt the active entity on it
+    Check if the specified tile  has the specified entity on it
     """
-    tile = get_tile((x, y))
+    x = tile.x
+    y = tile.y
+    # ensure active entity is the same as the returned one
+    for ent, (position,) in entity.get_components([Position]):
+        if position.x == x and position.y == y:
+            if active_entity == ent:
+                return True
 
-    if tile:
-        # ensure active entity is the same as the targeted one
-        for ent, (position, ) in entity.get_components([Position]):
-            if position.x == tile.x and position.y == tile.y:
-                if active_entity != ent:
-                    return True
-
-    # no other entity found
+    # no matching entity found
     return False
 
 
-def _tile_has_entity(x: int, y: int, active_entity: int) -> bool:
-    """
-    Check if the specified tile  has the active entity on it
-    """
-    tile = get_tile((x, y))
+def _tile_has_entity_blocking_movement(tile: Tile):
+    x = tile.x
+    y = tile.y
+    # Any entities that block movement?
+    for ent, (position, blocking) in entity.get_components([Position, Blocking]):
+        if position.x == x and position.y == y and blocking.blocks_movement:
+            return True
+    return False
 
-    if tile:
-        # ensure active entity is the same as the targeted one
-        for ent, (position, ) in entity.get_components([Position]):
-            if position.x == tile.x and position.y == tile.y:
-                if active_entity == ent:
-                    return True
 
-    # no matching entity found
+def _tile_has_entity_blocking_sight(tile: Tile):
+    x = tile.x
+    y = tile.y
+    # Any entities that block sight?
+    for ent, (position, blocking) in entity.get_components([Position, Blocking]):
+        if position.x == x and position.y == y and blocking.blocks_sight:
+            return True
     return False
 
 
@@ -462,16 +448,16 @@ def get_reflected_direction(current_position: Tuple[int, int], target_direction:
     dir_x, dir_y = target_direction
 
     # work out position of adjacent walls
-    adj_tile = world.get_tile((current_x, current_y - dir_y))
+    adj_tile = get_tile((current_x, current_y - dir_y))
     if adj_tile:
-        collision_adj_y = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_y = tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_y = True
 
-    adj_tile = world.get_tile((current_x - dir_x, current_y))
+    adj_tile = get_tile((current_x - dir_x, current_y))
     if adj_tile:
-        collision_adj_x = world.tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
+        collision_adj_x = tile_has_tag(adj_tile, TargetTag.BLOCKED_MOVEMENT)
     else:
         # found no tile
         collision_adj_x = True

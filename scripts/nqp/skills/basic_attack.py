@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Type
 from snecs.types import EntityID
 from scripts.engine import skill, utility, world
-from scripts.engine.core.constants import PrimaryStat, Shape, TargetTag, DamageType
+from scripts.engine.core.constants import PrimaryStat, Shape, TargetTag, DamageType, BASE_ACCURACY, BASE_DAMAGE
 from scripts.engine.core.definitions import DamageEffectData
 from scripts.engine.world_objects.tile import Tile
 
@@ -17,14 +17,14 @@ def use():
 def activate(causing_entity: EntityID, target_tiles: List[Tile]):
     # create damage effect
     effect_dict = {
-        "accuracy": 0,
+        "accuracy": BASE_ACCURACY + 5,
         "stat_to_target": PrimaryStat.VIGOUR,
         "shape": Shape.TARGET,
         "shape_size": 1,
-        "required_tags": [
+        "activate_required_tags": [
             TargetTag.OTHER_ENTITY
         ],
-        "damage": 20,
+        "damage": BASE_DAMAGE + 20,
         "damage_type": DamageType.MUNDANE,
         "mod_amount": 0.1,
         "mod_stat": PrimaryStat.CLOUT
@@ -35,8 +35,6 @@ def activate(causing_entity: EntityID, target_tiles: List[Tile]):
         coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
         effected_tiles = world.get_tiles(tile.x, tile.y, coords)
         skill.process_effect(effect, effected_tiles, causing_entity)
-
-# TODO -  use base values and an offset
 
 
 

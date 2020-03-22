@@ -10,7 +10,7 @@ from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, 
 from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent
+from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, WantToUseSkillEvent
 from scripts.engine.library import library
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
@@ -86,7 +86,7 @@ def can_afford_cost(ent: int, resource: SecondaryStatType, cost: int):
         logging.debug(f"'{name}' can afford cost.")
         return True
     else:
-        logging.debug(f"'{name}' cannot afford cost.")
+        logging.info(f"'{name}' cannot afford cost.")
         return False
 
 
@@ -165,8 +165,8 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     check_for_target = False
 
     # determine travel method
-    if travel_type == TravelMethod.DIRECT:
-        # direct can hit a target at any point during travel
+    if travel_type == TravelMethod.STANDARD:
+        # standard can hit a target at any point during travel
         check_for_target = True
     elif travel_type == TravelMethod.ARC:
         # throw can only hit target at end of travel
@@ -186,7 +186,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
         tile = world.get_tile((current_x, current_y))
 
         if tile:
-            # did we hit something causing direct to stop
+            # did we hit something causing standard to stop
             if world.tile_has_tag(tile, TargetTag.BLOCKED_MOVEMENT):
                 # if we're ready to check for a target, do so
                 if check_for_target:
@@ -245,7 +245,6 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
 
 def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles: List[Tile], attacker: int):
     skill_name = effect.skill_name
-    data = library.get_skill_data(skill_name)
 
     position = entity.get_entitys_component(attacker, Position)
     start_pos = (position.x, position.y)
@@ -254,7 +253,7 @@ def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles
     target_pos = (effected_tiles[0].x, effected_tiles[0].y)
     direction = world.get_direction(start_pos, target_pos)
 
-    publisher.publish(UseSkillEvent(attacker, skill_name, start_pos, direction, data.time_cost))
+    publisher.publish(WantToUseSkillEvent(attacker, skill_name, start_pos, direction))
 
 
 def _process_activate_skill(effect: ActivateSkillEffectData, target_tiles: List[Tile], attacker: int):

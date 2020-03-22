@@ -97,6 +97,7 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]
     if has_component(entity, component):
         return snecs.entity_component(entity, component)
     else:
+        debug.log_component_not_found(entity, Knowledge)
         return None
 
 
@@ -108,7 +109,6 @@ def get_name(entity: EntityID) -> str:
     if identity:
         name = identity.name
     else:
-        debug.log_component_not_found(entity, "get name", Identity)
         name = "not found"
 
     return name
@@ -251,11 +251,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Tracked(chrono.get_time()))
 
     # setup basic attack as a known skill and an interaction
-    # TODO - change this to bump attack, not interaction
     basic_attack_name = "basic_attack"
-    data = library.get_skill_data(basic_attack_name).interactions.get(InteractionCause.ENTITY_COLLISION).damage
-    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name,
-                                           required_tags=data.required_tags)
+    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
     known_skills = [basic_attack_name]  # N.B. All actors start with basic attack
@@ -387,7 +384,7 @@ def spend_time(entity: EntityID, time_spent: int):
         tracked.time_spent += time_spent
 
     except KeyError:
-        debug.log_component_not_found(entity, "spend time", Tracked)
+        debug.log_component_not_found(entity, Tracked)
 
 
 def learn_skill(entity: EntityID, skill_name: str):

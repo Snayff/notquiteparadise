@@ -4,6 +4,7 @@ from types import SimpleNamespace
 from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
+# TODO - segregate to relevant sections and modules
 VERSION = "0.96.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
@@ -11,9 +12,11 @@ ICON_SIZE = 32
 ENTITY_BLOCKS_SIGHT = False
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 TIME_PER_ROUND = 100
-DEFAULT_SIGHT_RANGE = 2  # amount in tiles. only used if entity has no combatstats
+DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
 BASE_MOVE_COST = 20  # amount of time spent.
-DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log handlers receiving events or not
+BASE_ACCURACY = 100
+BASE_DAMAGE = 5
+DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log event_handlers receiving events or not
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of
@@ -191,6 +194,7 @@ class TargetTag(SimpleNamespace):
     OPEN_SPACE = TargetTagType("open_space")
     BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
     IS_VISIBLE = TargetTagType("is_visible")
+    NO_BLOCKING_TILE = TargetTagType("no_blocking_terrain")
 
 
 class DamageType(SimpleNamespace):
@@ -306,8 +310,9 @@ class TravelMethod(SimpleNamespace):
     """
     How the skill travels
     """
-    DIRECT = TravelMethodType("direct")  # travels tile by tile
-    ARC = TravelMethodType("arc")  # only impacts last tile in range, bounces
+    STANDARD = TravelMethodType("standard")  # travels tile by tile
+    # TODO - extend to allow throw shorter than total length and implement bounces
+    ARC = TravelMethodType("arc")  # only impacts last tile in range, can reflect if hits terrain early.
     INSTANT = TravelMethodType("instant")  # doesn't travel, doesn't interact with terrain except for blocking
 
 

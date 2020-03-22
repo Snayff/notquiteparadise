@@ -26,5 +26,9 @@ class Tile:
         self.blocks_sight = blocks_sight
         self.blocks_movement = blocks_movement
 
+        # TODO - implement following members
+        # self.is_lit  # currently in range of a light source
+        # self.seen_by_player  # whether the player has seen the tile before
+
 
 

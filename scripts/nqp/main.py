@@ -36,23 +36,42 @@ from scripts.nqp.ui_handler import UIHandler
 # If checking a bool use IsA or HasA.
 
 
-# Project Wide to do list...
+############################### PRE-MERGE CHECKLIST ######################################
+# mypy no errors
+# sphinx config pointing to correct files
+# manual sphinx docs up to date
+# requirement.txt up to date
+
+############################# PROJECT WIDE TO DO LIST #####################################
 # FIXME - collision isnt working - can walk through walls
-# FIXME - Direction not working - cant basic attack in any direction.
-# TODO - swap out nose for pytest
-# TODO - remember window position and resume at that place
+# TODO - upgrade snecs
+# TODO - SKILLS:
+#  clean up skill data
+#  animate hit, attack and effects
+#  add second skill
+#  refine afflictions design
+#  implement temporary and permanent afflictions
+# TODO - ACTOR != player:
+#  separate actor and player creation (actor is any entity that can act, player is a special entity)
+#  create enemy(?) characteristic (so they dont need to use the 3 player selectable ones)
+#  make target dummy enemy
+# TODO - CLEANING ENGINE:
+#  standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
+#  move message events out of engine unless is is explicitly needed. Should log in engine, message in nqp.
+#  define __all__ in each engine module
+# TODO - LIGHTING AND FOV
+#  add lighting component
+#  add rendering rules for light i.e. only drawn if in player fov and any light
+#  add lighting rules/processing i.e. updating is_lit on tile
+#  update map drawing to respect rendering rules
+#  consider drawing light in gradient i.e. add translucent black of increasing opacity further from player
+
 # TODO - Review closure
 #  https://en.wikipedia.org/wiki/Closure_(computer_programming)
 # TODO - Review compression example
 #  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
-# TODO - write tests / checking for json values - use schema
-# TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
 # TODO - edit the UI json
-# TODO - use a global for font size so it can be amended in options
-# TODO - add light component. Then only show tiles that are visible and lit. Draw light in gradient.
-# TODO - move message events out of engine unless is is explicitly needed. Should log in engine, message in nqp.
-
+# TODO - consider using haemorrhage instead of bleed and blighted or rotting instead of poison
 
 def main():
     """

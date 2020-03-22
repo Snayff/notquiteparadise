@@ -340,6 +340,7 @@
       <workItem from="1584611836965" duration="12303000" />
       <workItem from="1584696227955" duration="16629000" />
       <workItem from="1584791554611" duration="13946000" />
+      <workItem from="1584879835651" duration="12534000" />
     </task>
     <servers />
   </component>
@@ -417,10 +418,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1128" y="554" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.3440.1400@0.0.3440.1400" timestamp="1584106929056" />
-    <state width="1902" height="947" key="DebuggerActiveHint" timestamp="1584802456884">
+    <state width="1902" height="947" key="DebuggerActiveHint" timestamp="1584894832440">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1902" height="947" key="DebuggerActiveHint/0.0.3440.1400@0.0.3440.1400" timestamp="1584802456884" />
+    <state width="1902" height="947" key="DebuggerActiveHint/0.0.3440.1400@0.0.3440.1400" timestamp="1584894832440" />
     <state x="1109" y="455" key="FileChooserDialogImpl" timestamp="1584385645810">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -429,42 +430,42 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1140" y="595" width="382" height="209" key="Github.CreateGistDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1583012252028" />
-    <state width="1002" height="189" key="GridCell.Tab.0.bottom" timestamp="1584810200717">
+    <state width="1002" height="187" key="GridCell.Tab.0.bottom" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200717" />
-    <state width="1002" height="189" key="GridCell.Tab.0.center" timestamp="1584810200716">
+    <state width="1002" height="187" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state width="1002" height="187" key="GridCell.Tab.0.center" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200716" />
-    <state width="1002" height="189" key="GridCell.Tab.0.left" timestamp="1584810200716">
+    <state width="1002" height="187" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state width="1002" height="187" key="GridCell.Tab.0.left" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200716" />
-    <state width="1002" height="189" key="GridCell.Tab.0.right" timestamp="1584810200716">
+    <state width="1002" height="187" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state width="1002" height="187" key="GridCell.Tab.0.right" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200716" />
-    <state width="1002" height="189" key="GridCell.Tab.1.bottom" timestamp="1584810200717">
+    <state width="1002" height="187" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state width="1002" height="187" key="GridCell.Tab.1.bottom" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200717" />
-    <state width="1002" height="189" key="GridCell.Tab.1.center" timestamp="1584810200717">
+    <state width="1002" height="187" key="GridCell.Tab.1.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state width="1002" height="187" key="GridCell.Tab.1.center" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200717" />
-    <state width="1002" height="189" key="GridCell.Tab.1.left" timestamp="1584810200717">
+    <state width="1002" height="187" key="GridCell.Tab.1.center/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state width="1002" height="187" key="GridCell.Tab.1.left" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200717" />
-    <state width="1002" height="189" key="GridCell.Tab.1.right" timestamp="1584810200717">
+    <state width="1002" height="187" key="GridCell.Tab.1.left/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state width="1002" height="187" key="GridCell.Tab.1.right" timestamp="1584894944209">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state width="1002" height="189" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1584810200717" />
-    <state x="396" y="211" width="998" height="1071" key="SettingsEditor" timestamp="1584454649866">
+    <state width="1002" height="187" key="GridCell.Tab.1.right/0.0.3440.1400@0.0.3440.1400" timestamp="1584894944209" />
+    <state x="396" y="211" width="998" height="1071" key="SettingsEditor" timestamp="1584891645362">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="396" y="211" width="998" height="1071" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1584454649866" />
+    <state x="396" y="211" width="998" height="1071" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1584891645362" />
     <state x="1052" y="445" width="540" height="540" key="StructurePopup" timestamp="1578940051985">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
@@ -477,18 +478,18 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="1055" height="703" key="XDebugger.FullValuePopup/0.0.3440.1400@0.0.3440.1400" timestamp="1581429262784" />
-    <state x="643" y="253" width="784" height="630" key="find.popup" timestamp="1584805246022">
+    <state x="1367" y="280" width="784" height="630" key="find.popup" timestamp="1584891851908">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="643" y="253" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1584805246022" />
+    <state x="1367" y="280" width="784" height="630" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1584891851908" />
     <state width="600" height="440" key="javadoc.popup" timestamp="1583580420347">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1583580420347" />
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1584804219162">
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1584892251530">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1584804219162" />
+    <state x="992" y="320" width="672" height="678" key="search.everywhere.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1584892251530" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -508,6 +509,11 @@
           <line>223</line>
           <option name="timeStamp" value="37" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/engine/skill.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -520,7 +526,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/NotQuiteParadise$scratch_1.coverage" NAME="scratch_1 Coverage Results" MODIFIED="1574966546181" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
-    <SUITE FILE_PATH="coverage/NotQuiteParadise$main.coverage" NAME="main Coverage Results" MODIFIED="1584805384258" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NotQuiteParadise$main.coverage" NAME="main Coverage Results" MODIFIED="1584894940621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NotQuiteParadise$scratch_3.coverage" NAME="scratch_3 Coverage Results" MODIFIED="1581359823918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/NotQuiteParadise$scratch_2.coverage" NAME="scratch_2 Coverage Results" MODIFIED="1577626892555" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
     <SUITE FILE_PATH="coverage/NotQuiteParadise$scratch_4.coverage" NAME="scratch_4 Coverage Results" MODIFIED="1581425871272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />

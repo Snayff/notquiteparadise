@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import logging
+
 import pytweening
 from scripts.engine import utility, entity
-from scripts.engine.component import Aesthetic, Position
+from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
-    TravelMethod
+    TravelMethod, BASE_MOVE_COST
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
 
@@ -141,18 +143,27 @@ def _process_player_turn_intents(intent: InputIntentType):
     """
     player = entity.get_player()
 
+    # if player exists, which it should, because we're in PLAYER_TURN game state
     if player:
         # Player movement
         dir_x, dir_y = _get_pressed_direction(intent)
         if dir_x != 0 or dir_y != 0:
             position = entity.get_entitys_component(player, Position)
-            publisher.publish(MoveEvent(player, (position.x, position.y), (dir_x, dir_y), TravelMethod.DIRECT, 10))
-            # TODO - replace magic number with cost to move
+            publisher.publish(MoveEvent(player, (position.x, position.y), (dir_x, dir_y), TravelMethod.STANDARD,
+                                        BASE_MOVE_COST))
 
         # Use a skill
         skill_number = _get_pressed_skills_number(intent)
         if skill_number != -1:
-            publisher.publish(WantToUseSkillEvent(skill_number))
+            knowledge = entity.get_entitys_component(player, Knowledge)
+            position = entity.get_entitys_component(player, Position)
+            try:
+                skill_name = knowledge.skills[skill_number]
+                # None to trigger targeting mode
+                publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
+            except KeyError:
+                logging.debug(f"Tried to get skill {skill_number} but player only knows {len(knowledge.skills)} "
+                              f"skills.")
 
     # activate the skill editor
     if intent == InputIntent.DEV_TOGGLE:

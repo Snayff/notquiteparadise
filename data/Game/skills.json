@@ -19,6 +19,9 @@
             "up_right"
         ],
         "time_cost": 20,
+        "use_required_tags": [
+            "no_blocking_tile"
+        ],
         "projectile": {
             "__dataclass__": "ProjectileData",
             "sprite": "placeholder/icon_00.png",
@@ -27,34 +30,9 @@
             "range": 1,
             "expiry_type": "fizzle",
             "terrain_collision": "fizzle",
-            "required_tags": [
+            "activate_required_tags": [
                         "other_entity"
                     ]
-        },
-        "interactions": {
-            "entity_collision": {
-                "__dataclass__": "InteractionData",
-                "cause": "entity_collision",
-                "apply_affliction": null,
-                "damage": {
-                    "__dataclass__": "DamageEffectData",
-                    "accuracy": 0,
-                    "stat_to_target": "vigour",
-                    "shape": "target",
-                    "shape_size": 1,
-                    "required_tags": [
-                        "other_entity"
-                    ],
-                    "damage": 2,
-                    "damage_type": "mundane",
-                    "mod_amount": 0.1,
-                    "mod_stat": "clout"
-                },
-                "affect_stat": null,
-                "add_aspect": null,
-                "remove_aspect": null,
-                "trigger_skill": null
-            }
         }
     }
 }

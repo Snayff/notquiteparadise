@@ -19,6 +19,8 @@ class EntityInfo(UIWindow):
     def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager):
         self.gui_manager = manager
 
+        # FIXME - entity info  doesn't update when entity info changes.
+
         # sections
         self.selected_entity: Optional[int] = None
         self.entity_image: Optional[pygame.Surface] = None

@@ -12,7 +12,8 @@ from scripts.engine.library import library
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.core.constants import EventTopic, GameState, MessageType, UIElement
 from scripts.engine.component import Position, Aesthetic
-from scripts.engine.event import MessageEvent, ClickTile, UseSkillEvent, DieEvent, MoveEvent, ChangeGameStateEvent
+from scripts.engine.event import MessageEvent, ClickTile, UseSkillEvent, DieEvent, MoveEvent, ChangeGameStateEvent, \
+    WantToUseSkillEvent
 from scripts.engine.ui.manager import ui
 
 if TYPE_CHECKING:
@@ -50,7 +51,7 @@ class UIHandler(Subscriber):
         if isinstance(event, DieEvent):
             event: DieEvent
             # remove the entity from the camera
-            self.update_camera()
+            self._update_camera()
 
         elif isinstance(event, MoveEvent):
             event: MoveEvent
@@ -58,9 +59,9 @@ class UIHandler(Subscriber):
             player = entity.get_player()
             if event.entity == player:
                 position = entity.get_entitys_component(player, Position)
-                self.update_camera(event.start_pos, (position.x, position.y))
+                self._update_camera(event.start_pos, (position.x, position.y))
             else:
-                self.update_camera()
+                self._update_camera()
 
     ############# HANDLE GAME EVENTS ###############
 
@@ -79,7 +80,7 @@ class UIHandler(Subscriber):
 
             elif event.new_game_state == GameState.TARGETING_MODE:
                 # turn on targeting overlay
-                self.set_targeting_overlay(True, event.skill_to_be_used)
+                self._set_targeting_overlay(True, event.skill_to_be_used)
 
             # check if we are moving to player turn and we are either in, or were just in, targeting
             # this is due to processing order of events
@@ -88,7 +89,7 @@ class UIHandler(Subscriber):
                     state.get_previous() == GameState.TARGETING_MODE):
 
                 # turn off the targeting overlay
-                self.set_targeting_overlay(False)
+                self._set_targeting_overlay(False)
 
             # new turn updates
             elif event.new_game_state == GameState.NEW_TURN:
@@ -119,7 +120,7 @@ class UIHandler(Subscriber):
             aesthetic.target_screen_y = aesthetic.screen_y
 
         # update camera
-        self.update_camera()
+        self._update_camera()
 
     @staticmethod
     def close_game_ui():
@@ -152,8 +153,8 @@ class UIHandler(Subscriber):
         Process UI topic event
         """
         if isinstance(event, ClickTile):
-            event: ClickTile
-            if state.get_current() == GameState.PLAYER_TURN:
+            game_state = state.get_current()
+            if game_state == GameState.PLAYER_TURN:
 
                 # Select an entity
                 tile = world.get_tile(event.tile_pos_string)
@@ -166,25 +167,23 @@ class UIHandler(Subscriber):
 
                 # there should only be one entity, but just in case...
                 for ent in entities:
-                    self.select_entity(ent)
+                    self._select_entity(ent)
                     break
-            elif state.get_current() == GameState.TARGETING_MODE:
+
+            elif game_state == GameState.TARGETING_MODE:
                 # use the skill on the clicked tile
                 player = entity.get_player()
                 position = entity.get_entitys_component(player, Position)
                 direction = world.get_direction((position.x, position.y), event.tile_pos_string)
                 skill_name = state.get_active_skill()
-                skill_data = library.get_skill_data(skill_name)
-                publisher.publish(UseSkillEvent(player, skill_name, (position.x, position.y),
-                                                direction, skill_data.time_cost))
+                publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y), direction))
 
         elif isinstance(event, MessageEvent):
             # process a message
-            event: MessageEvent
-            self.process_message(event)
+            self._process_message(event)
 
     @staticmethod
-    def set_targeting_overlay(is_visible: bool, skill_name: str = None):
+    def _set_targeting_overlay(is_visible: bool, skill_name: str = None):
         """
         Show or hide targeting overlay, using Direction possible in the skill.
         """
@@ -200,7 +199,7 @@ class UIHandler(Subscriber):
         ui.update_camera_grid()
 
     @staticmethod
-    def update_camera(start_pos: Tuple = None, target_pos: Tuple = None):
+    def _update_camera(start_pos: Tuple = None, target_pos: Tuple = None):
         """
         Update tiles shown in camera.
         """
@@ -224,14 +223,14 @@ class UIHandler(Subscriber):
         ui.update_camera_grid()
 
     @staticmethod
-    def select_entity(ent: int):
+    def _select_entity(ent: int):
         """
         Set the selected entity
         """
         ui.set_selected_entity(ent)
 
     @staticmethod
-    def process_message(event: MessageEvent):
+    def _process_message(event: MessageEvent):
         """
         Process a message event
         """

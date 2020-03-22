@@ -27,6 +27,9 @@ class SkillData:
     description: str = field(default="None")
     icon: str = field(default="None")
 
+    # when do we use it?
+    use_required_tags: List[TargetTagType] = field(default_factory=list)
+
     # what does it cost?
     resource_type: Optional[SecondaryStatType] = None
     resource_cost: int = 0
@@ -38,7 +41,6 @@ class SkillData:
     projectile: ProjectileData = field(default_factory=dict)
 
     # how does it interact?
-    interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
     file_name: str = ""
 
 
@@ -55,7 +57,7 @@ class ProjectileData:
     sprite: str = field(default="None")
 
     # who are we targeting?
-    required_tags: List[TargetTagType] = field(default_factory=list)
+    activate_required_tags: List[TargetTagType] = field(default_factory=list)
 
     # how does it travel?
     direction: Optional[DirectionType] = None
@@ -160,6 +162,7 @@ class TriggerSkillEffectData(EffectData):
     effect_type = Effect.TRIGGER_SKILL
 
     skill_name: str = field(default="None")  # TODO - confirm if we want skill name or key
+    required_tags = None  # use use the tags of the skill referenced
 
 
 @register_dataclass_with_json

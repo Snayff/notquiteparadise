@@ -61,7 +61,7 @@ class EntityHandler(Subscriber):
         # check a tile was returned
         if target_tile:
             is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTag.BLOCKED_MOVEMENT, ent)
-            is_entity_on_tile = world.tile_has_tag(target_tile, TargetTag.OTHER_ENTITY, ent)
+            is_entity_on_tile = world.tile_has_tag(target_tile, TargetTag.NO_ENTITY)
         else:
             is_tile_blocking_movement = True
             is_entity_on_tile = False
@@ -89,8 +89,6 @@ class EntityHandler(Subscriber):
             if position:
                 position.x = target_x
                 position.y = target_y
-            else:
-                debug.log_component_not_found(ent, "update sprite to move", Position)
 
             # TODO - move to UI handler
             aesthetic = entity.get_entitys_component(ent, Aesthetic)
@@ -98,8 +96,6 @@ class EntityHandler(Subscriber):
                 aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
                 target_y))
                 aesthetic.current_sprite = aesthetic.sprites.move
-            else:
-                debug.log_component_not_found(ent, "tried to update sprite to move", Aesthetic)
 
             # update fov if needed
             if entity.has_component(ent, FOV):
@@ -133,29 +129,18 @@ class EntityHandler(Subscriber):
         start_x, start_y = event.start_pos[0], event.start_pos[1]
         dir_x, dir_y = event.direction[0], event.direction[1]
 
-        # check it can be afforded
-        if skill_data.resource_type:
-            if skill.can_afford_cost(ent, skill_data.resource_type, skill_data.resource_cost):
-                skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
+        # pay then use the skill
+        skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
+        skill.use(ent, skill_name, (start_x, start_y), (dir_x, dir_y))
 
-                skill.use(ent, skill_name, (start_x, start_y), (dir_x, dir_y))
+        # confirm to the player that the skill took place
+        if name == "player":
+            name = "I"
+        publisher.publish(MessageEvent(MessageType.LOG, f"{name} used {skill_name}."))
 
-                # confirm to player
-                if name == "player":
-                    name = "I"
-                publisher.publish(MessageEvent(MessageType.LOG, f"{name} used {skill_name}."))
-
-                # end the turn if the entity is the turn holder
-                if ent == chrono.get_turn_holder():
-                    publisher.publish(EndTurnEvent(ent, skill_data.time_cost))
-
-            else:
-                # is it the player that's can't afford it?
-                if ent == entity.get_player():
-                    publisher.publish(MessageEvent(MessageType.LOG, "I cannot afford to do that."))
-                else:
-                    name = entity.get_name(ent)
-                    logging.warning(f"{name} tried to use {skill_name}, which they can`t afford")
+        # end the turn if the entity is the turn holder
+        if ent == chrono.get_turn_holder():
+            publisher.publish(EndTurnEvent(ent, skill_data.time_cost))
 
     @staticmethod
     def _process_die(event: DieEvent):
@@ -180,35 +165,61 @@ class EntityHandler(Subscriber):
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):
         """
-        Process the desire to use a skill. """
-        skill_number = event.skill_number
+        Process the desire to use a skill.
+        """
         player = entity.get_player()
+        ent = event.entity
+        start_x, start_y = event.start_pos
+        direction = event.direction
+        skill_name = event.skill_name
+        skill_data = library.get_skill_data(skill_name)
+        can_afford = skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost)
 
-        if player:
-            active_skill = state.get_active_skill()
-            knowledge = entity.get_entitys_component(player, Knowledge)
+        # if its the player wanting to use their skill but we dont have a target direction
+        if player and player == ent and not direction:
+            game_state = state.get_current()
 
-            if knowledge:
-                skill_pressed = knowledge.skills[skill_number]
+            # are we already in targeting mode?
+            if game_state == GameState.TARGETING_MODE:
+                active_skill = state.get_active_skill()
+
+                # if skill pressed doesn't match skill already being targeted
+                if skill_name != active_skill:
+                    # reactivate targeting mode with the new skill
+                    if can_afford:
+                        publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
+
+                else:
+                    # player pressed the already active skill, so they want to use it
+                    if can_afford:
+                        # TODO - get selected tile then get direction between that and player
+                        logging.warning(f"Tried to use skill from a key press in targeting mode. Not implemented.")
+                    pass
+
             else:
-                skill_pressed = ""
-                debug.log_component_not_found(player, "tried to process wanting to use a skill", Knowledge)
+                # we're not in targeting mode but have no direction for skill, so let's get a target
+                if can_afford:
+                    publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
 
-            # confirm skill pressed doesn't match skill already pressed
-            if skill_pressed != active_skill and knowledge:
-                skill_data = library.get_skill_data(skill_pressed)
+        elif direction:
+            # we have a direction, let's actually use the skill!
+            dir_x, dir_y = direction
+            tile = world.get_tile((start_x + dir_x, start_y + dir_y))
+            has_right_target = world.tile_has_tags(tile, skill_data.use_required_tags, ent)
+            if can_afford and has_right_target:
+                publisher.publish(UseSkillEvent(ent, skill_name, (start_x, start_y), direction))
+            elif not has_right_target:
+                publisher.publish(MessageEvent(MessageType.LOG, "I can't do that there!"))
+                # TODO - change to an informational, on screen message.
 
-                if skill_data.resource_type and skill_data.resource_cost:
-                    if skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost):
-                        publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_pressed))
-
-            # skill matches already selected so use skill!
+        # log/inform lack of affordability
+        if not can_afford:
+            # is it the player that's can't afford it?
+            if ent == player:
+                publisher.publish(MessageEvent(MessageType.LOG, "I cannot afford to do that."))
             else:
-                pass
-                # TODO - activate skill. Need to get selected tile.
-                # TODO - add time cost
-                # player_pos = entity.get_entitys_component(player, Position)
-                # publisher.publish(UseSkillEvent(player, skill_name, (player_pos.x, player_pos.y), ))
+                name = entity.get_name(ent)
+                logging.warning(f"'{name}' tried to use {skill_name}, which they can`t afford.")
 
     @staticmethod
     def _process_end_turn(event: EndTurnEvent):

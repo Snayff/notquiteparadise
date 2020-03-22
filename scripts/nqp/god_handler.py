@@ -9,7 +9,7 @@ from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.library import library
 
 from scripts.engine.component import Position, IsGod
-from scripts.engine.event import UseSkillEvent
+from scripts.engine.event import UseSkillEvent, WantToUseSkillEvent
 
 if TYPE_CHECKING:
     pass
@@ -37,7 +37,6 @@ class GodHandler(Subscriber):
         #  create events for being the cause of death
 
         if isinstance(event, UseSkillEvent):
-            event: UseSkillEvent
             # if the entity isnt another god then judge it
             if not entity.has_component(event.entity, IsGod):
                 self.process_judgements(event)
@@ -80,8 +79,7 @@ class GodHandler(Subscriber):
 
         for god_entity_id, intervention_name in interventions:
             # create use skill event with direction of centre
-            # N.B. 0 time cost because god's dont spend time
-            publisher.publish(UseSkillEvent(god_entity_id, intervention_name, (position.x, position.y),
-                                            Direction.CENTRE, 0))
+            publisher.publish(WantToUseSkillEvent(god_entity_id, intervention_name, (position.x, position.y),
+                                            Direction.CENTRE))
 
 
