@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from snecs.types import EntityID
+from snecs.typedefs import EntityID
 from scripts.engine import entity
 from scripts.engine.component import Resources, Identity, Tracked
 from scripts.engine.core.constants import TIME_PER_ROUND

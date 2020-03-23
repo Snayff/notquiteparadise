@@ -8,9 +8,9 @@ import snecs
 import tcod.map
 from typing import TYPE_CHECKING, TypeVar
 from snecs import Component
-from snecs.types import EntityID
+from snecs.typedefs import EntityID
 from snecs.ecs import new_entity
-from snecs.query import query
+from snecs.query import Query
 
 from scripts.engine import utility, world, debug, chrono
 from scripts.engine.ai import ProjectileBehaviour, SkipTurn
@@ -35,8 +35,8 @@ _C = TypeVar("_C", bound=Component)
 
 ###################### GET ############################################
 
-get_entitys_components = snecs.entity_components
-get_components = query
+get_entitys_components = snecs.all_components
+get_components = Query
 has_component = snecs.has_component
 
 
@@ -191,9 +191,12 @@ def delete(entity: EntityID):
     Queues entity for removal from the world_objects. Happens at the next run of World.process.
     """
     if entity:
-        snecs.delete_entity(entity)
-        name = get_name(entity)
-        logging.info(f"'{name}' ({entity}) added to stack to be deleted on next frame.")
+        if snecs.exists(entity, snecs.world.default_world):
+            snecs.schedule_for_deletion(entity)
+            name = get_name(entity)
+            logging.info(f"'{name}' ({entity}) added to stack to be deleted on next frame.")
+        else:
+            logging.warning(f"Tried to delete entity {entity} but they don't exist!")
     else:
         logging.error("Tried to delete an entity but entity was None.")
 

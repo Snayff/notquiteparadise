@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import scripts.engine.world
-from snecs.types import EntityID
+from snecs.typedefs import EntityID
 from typing import TYPE_CHECKING, Type, Optional
 from scripts.engine import world, entity, skill, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect, \

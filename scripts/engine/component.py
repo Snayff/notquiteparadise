@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from typing import List, Dict, Optional
     from scripts.engine.ai import AIBehaviour
     import tcod.map
-    from snecs.types import EntityID
+    from snecs.typedefs import EntityID
     
     
 ##########################################################

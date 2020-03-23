@@ -3,9 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from snecs import Component
-from snecs.types import EntityID
+from snecs.typedefs import EntityID
 from scripts.engine import entity
-
 
 if TYPE_CHECKING:
     from typing import Type

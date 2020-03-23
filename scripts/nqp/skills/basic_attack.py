@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
-from snecs.types import EntityID
+from snecs.typedefs import EntityID
 from scripts.engine import skill, utility, world
 from scripts.engine.core.constants import PrimaryStat, Shape, TargetTag, DamageType, BASE_ACCURACY, BASE_DAMAGE
 from scripts.engine.core.definitions import DamageEffectData
