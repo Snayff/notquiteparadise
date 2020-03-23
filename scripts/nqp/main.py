@@ -41,9 +41,10 @@ from scripts.nqp.ui_handler import UIHandler
 # sphinx config pointing to correct files
 # manual sphinx docs up to date
 # requirement.txt up to date
+# runs at consistent FPS
 
 ############################# PROJECT WIDE TO DO LIST #####################################
-# FIXME - collision isnt working - can walk through walls
+# TODO - add FPS counter (could we print the avg fps on exit?)
 # TODO - upgrade snecs
 # TODO - SKILLS:
 #  animate hit, attack and effects
@@ -115,7 +116,7 @@ def game_loop():
         snecs.process_pending_deletions(default_world)
 
         # have enemy take turn
-        if current_state == GameState.ENEMY_TURN:
+        if current_state == GameState.NPC_TURN:
             entity.take_turn(chrono.get_turn_holder())
 
         # update based on input events

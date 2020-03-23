@@ -71,7 +71,7 @@ class GameState(SimpleNamespace):
     States the Game can be in.
     """
     PLAYER_TURN = GameStateType(1)
-    ENEMY_TURN = GameStateType(2)
+    NPC_TURN = GameStateType(2)
     PLAYER_DEAD = GameStateType(3)
     TARGETING_MODE = GameStateType(4)
     EXIT_GAME = GameStateType(5)

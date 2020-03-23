@@ -97,7 +97,7 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]
     if has_component(entity, component):
         return snecs.entity_component(entity, component)
     else:
-        debug.log_component_not_found(entity, Knowledge)
+        debug.log_component_not_found(entity, component)
         return None
 
 

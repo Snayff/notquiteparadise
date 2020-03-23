@@ -174,14 +174,24 @@ def _process_targeting_mode_intents(intent):
     """
     Process intents for the player turn game state.
     """
+    player = entity.get_player()
+
     # Cancel use
     if intent == InputIntent.CANCEL:
         publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
 
-    # Consider using the skill, handle if different skill pressed
+    # Use a skill
     skill_number = _get_pressed_skills_number(intent)
     if skill_number != -1:
-        publisher.publish(WantToUseSkillEvent(skill_number))
+        knowledge = entity.get_entitys_component(player, Knowledge)
+        position = entity.get_entitys_component(player, Position)
+        try:
+            skill_name = knowledge.skills[skill_number]
+            # None to trigger targeting mode
+            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
+        except KeyError:
+            logging.debug(f"Tried to get skill {skill_number} but player only knows {len(knowledge.skills)} "
+                          f"skills.")
 
 
 def _process_dev_mode_intents(intent):

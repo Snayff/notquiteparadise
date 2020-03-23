@@ -55,7 +55,7 @@ class GameHandler(Subscriber):
                 publisher.publish(ChangeGameStateEvent(GameState.PLAYER_TURN))
             # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
             else:
-                publisher.publish(ChangeGameStateEvent(GameState.ENEMY_TURN))
+                publisher.publish(ChangeGameStateEvent(GameState.NPC_TURN))
 
         elif new_game_state == GameState.TARGETING_MODE:
             if event.skill_to_be_used:

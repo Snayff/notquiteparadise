@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-
 from snecs import Component
 from snecs.types import EntityID
-
 from scripts.engine import entity
 
 
@@ -27,10 +25,10 @@ if TYPE_CHECKING:
 
 def log_component_not_found(ent: EntityID, component: Type[Component]):
     """
-    Use if component not found. Log the error as a warning in the format "{ent} tried to get {component} but it was
-    not found."
+    Use if component not found. Log the error as a warning in the format '{ent} tried to get {component} but it was
+    not found.'
     """
     name = entity.get_name(ent)
-    logging.warning(f"'{name}'({ent}) tried to get {component.__class__.__name__}, but it was not found.")
+    logging.warning(f"'{name}'({ent}) tried to get {component.__name__}, but it was not found.")
 
 
