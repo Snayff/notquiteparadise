@@ -59,7 +59,7 @@ class Tracked(RegisteredComponent):
 
 class Resources(RegisteredComponent):
     """
-    An entity's resources.
+    An entity's resources. Members align to Resource constants.
     """
     def __init__(self, health: int = 1, stamina: int = 1):
         self.health: int = health
@@ -130,10 +130,14 @@ class Knowledge(RegisteredComponent):
     """"
     An entity's knowledge, including skills.
     """
-    def __init__(self, skills: List[str] = None):
+    def __init__(self, skills: Dict[str, int] = None, skill_order: List[str] = None):
         if skills is None:
-            skills = []
-        self.skills: List[str] = skills
+            skills = {}
+        if skill_order is None:
+            skill_order = []
+
+        self.skill_order = skill_order  # list of skill names, to allow access by index
+        self.skills: Dict[str, int] = skills  # skill_name : cooldown
 
 
 class Affliction(RegisteredComponent):

@@ -5,7 +5,7 @@ import logging
 import pytweening
 from scripts.engine import utility, entity
 from scripts.engine.component import Aesthetic, Position, Knowledge
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
     TravelMethod, BASE_MOVE_COST
 from scripts.engine.core.event_core import publisher
@@ -97,24 +97,28 @@ def _get_pressed_direction(intent: InputIntentType) -> Tuple[int, int]:
     return dir_x, dir_y
 
 
-def _get_pressed_skills_number(intent: InputIntentType) -> int:
+def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
     """
-    Get the pressed skill number. Returns value of skill number pressed. Returns -1 if none.
+    Get the pressed skill number. Returns value of skill number pressed. If not found returns None.
     """
-    if intent == InputIntent.SKILL0:
-        skill_number = 0
-    elif intent == InputIntent.SKILL1:
-        skill_number = 1
-    elif intent == InputIntent.SKILL2:
-        skill_number = 2
-    elif intent == InputIntent.SKILL3:
-        skill_number = 3
-    elif intent == InputIntent.SKILL4:
-        skill_number = 4
-    else:
-        skill_number = -1
+    player = entity.get_player()
+    skills = entity.get_entitys_component(player, Knowledge).skill_order
 
-    return skill_number
+    if intent == InputIntent.SKILL0:
+        skill_name = skills[0]
+    elif intent == InputIntent.SKILL1:
+        skill_name = skills[1]
+    elif intent == InputIntent.SKILL2:
+        skill_name = skills[2]
+    elif intent == InputIntent.SKILL3:
+        skill_name = skills[3]
+    elif intent == InputIntent.SKILL4:
+        skill_name = skills[4]
+    else:
+        skill_name = None
+        logging.warning(f"Tried to get skill for {intent} but not found.")
+
+    return skill_name
 
 
 def _process_stateless_intents(intent: InputIntentType):
@@ -153,17 +157,11 @@ def _process_player_turn_intents(intent: InputIntentType):
                                         BASE_MOVE_COST))
 
         # Use a skill
-        skill_number = _get_pressed_skills_number(intent)
-        if skill_number != -1:
-            knowledge = entity.get_entitys_component(player, Knowledge)
+        skill_name = _get_pressed_skills_name(intent)
+        if skill_name:
             position = entity.get_entitys_component(player, Position)
-            try:
-                skill_name = knowledge.skills[skill_number]
-                # None to trigger targeting mode
-                publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
-            except KeyError:
-                logging.debug(f"Tried to get skill {skill_number} but player only knows {len(knowledge.skills)} "
-                              f"skills.")
+            # None to trigger targeting mode
+            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
 
     # activate the skill editor
     if intent == InputIntent.DEV_TOGGLE:
@@ -181,17 +179,11 @@ def _process_targeting_mode_intents(intent):
         publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
 
     # Use a skill
-    skill_number = _get_pressed_skills_number(intent)
-    if skill_number != -1:
-        knowledge = entity.get_entitys_component(player, Knowledge)
+    skill_name = _get_pressed_skills_name(intent)
+    if skill_name:
         position = entity.get_entitys_component(player, Position)
-        try:
-            skill_name = knowledge.skills[skill_number]
-            # None to trigger targeting mode
-            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
-        except KeyError:
-            logging.debug(f"Tried to get skill {skill_number} but player only knows {len(knowledge.skills)} "
-                          f"skills.")
+        # None to trigger targeting mode
+        publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
 
 
 def _process_dev_mode_intents(intent):

@@ -25,6 +25,7 @@ DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log event_handlers receiving even
 InputIntentType = NewType("InputIntentType", str)
 PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
+ResourceType = NewType("ResourceType", str)
 GameStateType = NewType("GameStateType", int)
 EventTopicType = NewType("EventTopicType", int)
 MessageTypeType = NewType("MessageTypeType", int)
@@ -235,6 +236,14 @@ class SecondaryStat(SimpleNamespace):
     RESIST_MUNDANE = SecondaryStatType("resist_mundane")
     SIGHT_RANGE = SecondaryStatType("sight_range")
     RUSH = SecondaryStatType("rush")
+
+
+class Resource(SimpleNamespace):
+    """
+    Resources that can be used. Must map to secondary stats.
+    """
+    HEALTH = ResourceType("health")
+    STAMINA = ResourceType("stamina")
 
 
 class HitType(SimpleNamespace):

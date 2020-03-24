@@ -31,8 +31,7 @@
         "name": "shoom",
         "sight_range": 4,
         "known_skills": [
-            "eye_watering_mistake",
-            "fractious_fungi"
+            "none"
         ],
         "skullduggery": 2,
         "sprite_paths": {

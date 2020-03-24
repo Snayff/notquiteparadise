@@ -5,8 +5,9 @@ import random
 from typing import TYPE_CHECKING, Any
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
-from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType,\
-    HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction
+from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
+    HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction, \
+    ResourceType
 from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData
 from scripts.engine.core.event_core import publisher
@@ -73,7 +74,7 @@ def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
     return False
 
 
-def can_afford_cost(ent: int, resource: SecondaryStatType, cost: int):
+def can_afford_cost(ent: int, resource: ResourceType, cost: int):
     """
     Check if entity can afford the resource cost
     """

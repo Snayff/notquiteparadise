@@ -7,7 +7,8 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
     AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
-    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape
+    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape, \
+    ResourceType
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -22,6 +23,7 @@ class SkillData:
     """
     Data class for a skill. Used by the library to load from json.
     """
+    # TODO - rename relevant sections to indicate they are base values
     # how do we know it?
     name: str = field(default="None")
     description: str = field(default="None")
@@ -31,7 +33,7 @@ class SkillData:
     use_required_tags: List[TargetTagType] = field(default_factory=list)
 
     # what does it cost?
-    resource_type: Optional[SecondaryStatType] = None
+    resource_type: Optional[ResourceType] = None
     resource_cost: int = 0
     time_cost: int = 0
     cooldown: int = 0

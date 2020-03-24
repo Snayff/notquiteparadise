@@ -215,15 +215,18 @@ def create_god(god_name: str) -> EntityID:
 
     # get knowledge info
     interventions = data.interventions
-    intervention_names = []
+    intervention_names = {}
+    skill_order = []
     for name, intervention in interventions.items():
-        intervention_names.append(intervention.skill_key)
+        skill_key = intervention.skill_key
+        skill_order.append(skill_key)
+        intervention_names[skill_key] = library.get_skill_data(skill_key)
 
     god.append(Identity(data.name, data.description))
     god.append(Aesthetic(sprites.idle, sprites))
     god.append(IsGod())
     god.append(Opinion())
-    god.append(Knowledge(intervention_names))
+    god.append(Knowledge(intervention_names, skill_order))
     god.append((Resources(9999, 9999)))
     entity = create(god)
 
@@ -258,23 +261,30 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
-    known_skills = [basic_attack_name]  # N.B. All actors start with basic attack
+    known_skills = {basic_attack_name: 1}  # N.B. All actors start with basic attack
+    skill_order = [basic_attack_name]
 
     # get skills from characteristics
     people_data = library.get_people_data(people_name)
     if people_data.known_skills != ["none"]:
-        known_skills += people_data.known_skills
+        for skill in people_data.known_skills:
+            known_skills[skill] = library.get_skill_data(skill).cooldown
+            skill_order.append(skill)
 
     homeland_data = library.get_homeland_data(homeland_name)
     if homeland_data.known_skills != ["none"]:
-        known_skills += homeland_data.known_skills
+        for skill in homeland_data.known_skills:
+            known_skills[skill] = library.get_skill_data(skill).cooldown
+            skill_order.append(skill)
 
     savvy_data = library.get_savvy_data(savvy_name)
     if savvy_data.known_skills != ["none"]:
-        known_skills += savvy_data.known_skills
+        for skill in savvy_data.known_skills:
+            known_skills[skill] = library.get_skill_data(skill).cooldown
+            skill_order.append(skill)
 
     # add skills to entity
-    actor.append(Knowledge(known_skills))
+    actor.append(Knowledge(known_skills, skill_order))
 
     # add aesthetic
     characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
@@ -399,7 +409,8 @@ def learn_skill(entity: EntityID, skill_name: str):
     knowledge = get_entitys_component(entity, Knowledge)
 
     if knowledge:
-        knowledge.skills.append(skill_name)
+        knowledge.skills[skill_name] = library.get_skill_data(skill_name).cooldown
+        knowledge.skill_order.append(skill_name)
 
 
 def judge_action(entity: EntityID, action: Any):
@@ -445,7 +456,7 @@ def consider_intervening(entity: EntityID, action: Any) -> List[Tuple[int, Any]]
         # get eligible interventions and their weightings. Need separate lists for random.choices
         eligible_interventions = []
         intervention_weightings = []
-        for intervention_name in knowledge.skills:
+        for intervention_name in knowledge.skills.keys():
             intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion

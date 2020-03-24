@@ -10,7 +10,7 @@ from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.engine import utility
 from scripts.engine.core.constants import Effect, InteractionCause, DamageType, PrimaryStat, SecondaryStat, \
-    TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, TerrainCollision, TravelMethod
+    TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, TerrainCollision, TravelMethod, Resource
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
@@ -503,6 +503,7 @@ class DataEditor(UIWindow):
         effect_options = get_members(Effect)
         primary_stat_options = get_members(PrimaryStat)
         secondary_stat_options = get_members(SecondaryStat)
+        resource_options = get_members(Resource)
         bool_options = ["True", "False"]
         skill_options = [key for key in self.all_data["skills"].keys()]
 
@@ -527,7 +528,7 @@ class DataEditor(UIWindow):
             "skill_key": (skill_options, None),
             "known_skills": (skill_options, None),
             "expiry_type": (get_members(ProjectileExpiry), None),
-            "resource_type": (secondary_stat_options, None),
+            "resource_type": (resource_options, None),
             "shape": (get_members(Shape), None),
             "target_directions": (get_members(Direction), None),
             "terrain_collision": (get_members(TerrainCollision), None),
