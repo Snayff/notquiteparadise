@@ -6,7 +6,7 @@ from scripts.engine import world, chrono, entity, state, skill, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
     BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
-    EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent
+    EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, EndRoundEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking, HasCombatStats
@@ -41,6 +41,9 @@ class EntityHandler(Subscriber):
 
         elif isinstance(event, EndTurnEvent):
             self._process_end_turn(event)
+
+        elif isinstance(event, EndRoundEvent):
+            self._process_end_round(event)
 
     @staticmethod
     def _process_move(event: MoveEvent):
@@ -135,6 +138,10 @@ class EntityHandler(Subscriber):
 
         logging.debug(f"'{name}' used {skill_name}.")
 
+        # update the cooldown
+        knowledge = entity.get_entitys_component(ent, Knowledge)
+        knowledge.skills[skill_name] = skill_data.cooldown  # TODO - modify by entity's stats
+
         # end the turn if the entity is the turn holder
         if ent == chrono.get_turn_holder():
             publisher.publish(EndTurnEvent(ent, skill_data.time_cost))
@@ -171,6 +178,11 @@ class EntityHandler(Subscriber):
         skill_name = event.skill_name
         skill_data = library.get_skill_data(skill_name)
         can_afford = skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost)
+        cooldown = entity.get_entitys_component(player, Knowledge).skills[skill_name]
+        if cooldown <= 0:
+            not_on_cooldown = True
+        else:
+            not_on_cooldown = False
 
         # if its the player wanting to use their skill but we dont have a target direction
         if player and player == ent and not direction:
@@ -183,19 +195,19 @@ class EntityHandler(Subscriber):
                 # if skill pressed doesn't match skill already being targeted
                 if skill_name != active_skill:
                     # reactivate targeting mode with the new skill
-                    if can_afford:
+                    if can_afford and not_on_cooldown:
                         publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
 
                 else:
                     # player pressed the already active skill, so they want to use it
-                    if can_afford:
+                    if can_afford and not_on_cooldown:
                         # TODO - get selected tile then get direction between that and player
                         logging.warning(f"Tried to use skill from a key press in targeting mode. Not implemented.")
                     pass
 
             else:
                 # we're not in targeting mode but have no direction for skill, so let's get a target
-                if can_afford:
+                if can_afford and not_on_cooldown:
                     publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
 
         elif direction:
@@ -203,9 +215,11 @@ class EntityHandler(Subscriber):
             dir_x, dir_y = direction
             tile = world.get_tile((start_x + dir_x, start_y + dir_y))
             has_right_target = world.tile_has_tags(tile, skill_data.use_required_tags, ent)
-            if can_afford and has_right_target:
+
+            if can_afford and has_right_target and not_on_cooldown:
                 publisher.publish(UseSkillEvent(ent, skill_name, (start_x, start_y), direction))
-            elif not has_right_target:
+
+            if not has_right_target:
                 publisher.publish(MessageEvent(MessageType.LOG, "I can't do that there!"))
                 # TODO - change to an informational, on screen message.
 
@@ -218,6 +232,15 @@ class EntityHandler(Subscriber):
                 name = entity.get_name(ent)
                 logging.warning(f"'{name}' tried to use {skill_name}, which they can`t afford.")
 
+        # log/inform on cooldown
+        if not not_on_cooldown:
+            # is it the player that's can't afford it?
+            if ent == player:
+                publisher.publish(MessageEvent(MessageType.LOG, "I'm not ready to do that, yet."))
+            else:
+                name = entity.get_name(ent)
+                logging.warning(f"'{name}' tried to use {skill_name}, but needs to wait {cooldown} more rounds.")
+
     @staticmethod
     def _process_end_turn(event: EndTurnEvent):
         """
@@ -225,5 +248,16 @@ class EntityHandler(Subscriber):
         """
         #  update turn holder`s time spent
         entity.spend_time(event.entity, event.time_spent)
+
+    @staticmethod
+    def _process_end_round(event: EndRoundEvent):
+        """
+        Reduce cooldowns
+        """
+        for ent, (knowledge, ) in entity.get_components([Knowledge]):
+            name = entity.get_name(ent)
+            for _skill, cd in knowledge.skills.items():
+                if cd > 0:
+                    knowledge.skills[_skill] = cd - 1
 
 

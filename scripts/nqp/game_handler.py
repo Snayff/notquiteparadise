@@ -81,7 +81,7 @@ class GameHandler(Subscriber):
     @staticmethod
     def _process_end_turn(event: EndTurnEvent):
         """
-        End turn, move to next turn, change game state to new turn.
+        Move to next turn, change game state to new turn.
         """
         chrono.next_turn()
         publisher.publish(ChangeGameStateEvent(GameState.NEW_TURN))

@@ -116,7 +116,6 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
         skill_name = skills[4]
     else:
         skill_name = None
-        logging.warning(f"Tried to get skill for {intent} but not found.")
 
     return skill_name
 

@@ -11,7 +11,6 @@ from snecs import Component
 from snecs.typedefs import EntityID
 from snecs.ecs import new_entity
 from snecs.query import Query
-
 from scripts.engine import utility, world, debug, chrono
 from scripts.engine.ai import ProjectileBehaviour, SkipTurn
 from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy, Homeland, Aesthetic,\
@@ -219,8 +218,8 @@ def create_god(god_name: str) -> EntityID:
     skill_order = []
     for name, intervention in interventions.items():
         skill_key = intervention.skill_key
+        intervention_names[skill_key] = library.get_skill_data(skill_key).cooldown
         skill_order.append(skill_key)
-        intervention_names[skill_key] = library.get_skill_data(skill_key)
 
     god.append(Identity(data.name, data.description))
     god.append(Aesthetic(sprites.idle, sprites))
@@ -261,7 +260,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name)
     basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
-    known_skills = {basic_attack_name: 1}  # N.B. All actors start with basic attack
+    known_skills = {basic_attack_name: 0}  # N.B. All actors start with basic attack
     skill_order = [basic_attack_name]
 
     # get skills from characteristics
