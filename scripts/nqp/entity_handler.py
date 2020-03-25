@@ -151,20 +151,23 @@ class EntityHandler(Subscriber):
         """
         Control the entity death
         """
-
-        # TODO add player death
         ent = event.entity
         turn_queue = chrono.get_turn_queue()
 
-        # if turn holder and not player create new queue without entity
-        if ent == chrono.get_turn_holder() and ent != entity.get_player():
-            chrono.rebuild_turn_queue(ent)
-        elif ent in turn_queue:
-            # remove from turn queue
-            turn_queue.pop(ent)
+        # if  not player
+        # TODO add player death
+        if ent != entity.get_player():
+            # if turn holder create new queue without them
+            if ent == chrono.get_turn_holder():
+                chrono.rebuild_turn_queue(ent)
+            elif ent in turn_queue:
+                # remove from turn queue
+                turn_queue.pop(ent)
 
-        # delete from world
-        entity.delete(ent)
+            # delete from world
+            entity.delete(ent)
+        else:
+            publisher.publish(MessageEvent(MessageType.LOG, "I should have died just then."))
 
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):

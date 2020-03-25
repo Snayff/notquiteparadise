@@ -1,25 +1,62 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from snecs import Component
 from snecs.typedefs import EntityID
-from scripts.engine import entity
+from scripts.engine import entity, state
+
 
 if TYPE_CHECKING:
     from typing import Type
+
 
 # TODO - show debug info
 # TODO - approach to type commands to trigger actions e.g. spawn creature
 # TODO - approach to show required info, e.g. rounds & time, FPS
 
+
 ########################  ###########################
 
+class _Debugger:
+    def __init__(self):
+        self.current_fps = 0
+        self.average_fps = 0
+        self.frames = 0
 
-# def set_visibility(self, visible: bool):
-#     """
-#     Set whether the debug info is visible
-#     """
+        self.fps_visible = True
+
+    def update(self):
+        self.frames += 1
+        self.current_fps = state.get_internal_clock().get_fps()
+        self.average_fps += (self.current_fps - self.average_fps) / self.frames
+        # new_moving_average = previous_moving_average + (1/ current_fps) * (new_sample - previous_sample)
+
+
+def update():
+    """
+    Update all values held in the debugger.
+    """
+    _debugger.update()
+
+
+def set_fps_visibility(is_visible: bool):
+    """
+    Set whether the FPS is visible
+    """
+    _debugger.fps_visible = is_visible
+
+
+def get_visible_values() -> List[str]:
+    """"
+    Get all visible values from the debugger
+    """
+    values = []
+    if _debugger.fps_visible:
+        format(state.get_internal_clock().get_fps(), ".2f")
+        values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, Avg={format(_debugger.average_fps, '.2f')}")
+
+    return values
 
 
 def log_component_not_found(ent: EntityID, component: Type[Component]):
@@ -31,3 +68,4 @@ def log_component_not_found(ent: EntityID, component: Type[Component]):
     logging.warning(f"'{name}'({ent}) tried to get {component.__name__}, but it was not found.")
 
 
+_debugger = _Debugger()

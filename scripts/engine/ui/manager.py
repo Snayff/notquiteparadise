@@ -4,7 +4,10 @@ import logging
 import pygame
 import pygame_gui
 from typing import TYPE_CHECKING
+
+from scripts.engine import debug
 from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType
+from scripts.engine.ui.basic.fonts import Font
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.entity_info import EntityInfo
@@ -81,12 +84,23 @@ class _UIManager:
 
         self._gui.draw_ui(main_surface)
 
+        self._draw_debug()
+
         # resize the surface to the desired resolution
         scaled_surface = pygame.transform.scale(main_surface, (self._desired_width, self._desired_height))
         self._window.blit(scaled_surface, (0, 0))
 
         # update the display
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
+
+    def _draw_debug(self):
+        values = debug.get_visible_values()
+        y = 10
+
+        for value in values:
+            text, rect = Font().debug.render(value, (255,255,255))
+            self._main_surface.blit(text, (0, y))
+            y += 10
 
     def add_ui_element(self, element_type: UIElementType, element: object):
         """
@@ -228,8 +242,6 @@ class _UIManager:
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
         screen_message = ScreenMessage(text, self.get_gui_manager())
-
-        ############## KILL ##################
 
     ######################## CAMERA ###############################################
 

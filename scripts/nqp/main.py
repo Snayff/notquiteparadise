@@ -9,7 +9,7 @@ import time
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import state, world, entity, chrono, action
+from scripts.engine import state, world, entity, chrono, action, debug
 from scripts.engine.core.constants import GameState, VERSION, EventTopic
 from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import ui
@@ -99,6 +99,7 @@ def game_loop():
 
         # allow everything to update in response to new state
         processors.process_all(delta_time)
+        debug.update()
         ui.update(delta_time)
         event_hub.update()
         state.update_clock()
