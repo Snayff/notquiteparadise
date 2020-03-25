@@ -4,12 +4,12 @@ import logging
 from typing import TYPE_CHECKING
 from scripts.engine import world, chrono, entity, state, skill, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
-    BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS
+    BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS, INFINITE
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
     EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, EndRoundEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking, HasCombatStats
+from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking, HasCombatStats, Afflictions
 from scripts.engine.ui.manager import ui
 
 if TYPE_CHECKING:
@@ -252,12 +252,23 @@ class EntityHandler(Subscriber):
     @staticmethod
     def _process_end_round(event: EndRoundEvent):
         """
-        Reduce cooldowns
+        Reduce cooldowns and durations
         """
+        # skill cooldowns
         for ent, (knowledge, ) in entity.get_components([Knowledge]):
-            name = entity.get_name(ent)
             for _skill, cd in knowledge.skills.items():
                 if cd > 0:
                     knowledge.skills[_skill] = cd - 1
 
+        # affliction durations
+        for ent, (afflictions, ) in entity.get_components([Afflictions]):
+            for affliction, duration in afflictions.items():
+                if duration - 1 <= 0:
+                    # expired
+                    # TODO - create expiry event.
+                    del afflictions[affliction]
+
+                elif duration != INFINITE:
+                    # reduce duration if not infinite
+                    afflictions[affliction] = duration - 1
 

@@ -460,6 +460,7 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
 
                 else:
                     # inform player of no damage
+                    # TODO - doesnt read properly for afflictions
                     if attacker_name == "player":
                         msg = f"{defender_name} resisted damage from my {effect_creator}."
                     else:

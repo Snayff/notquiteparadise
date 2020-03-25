@@ -171,7 +171,7 @@ class _UIManager:
         Initialise the selected entity info ui_manager element.
         """
         # TODO - convert to create and move details to nqp
-        width = 200
+        width = 280
         height = 500
         x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
         y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
