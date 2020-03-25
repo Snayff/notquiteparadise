@@ -151,6 +151,8 @@ class InteractionHandler(Subscriber):
                 interactions = library.get_affliction_data(affliction).interactions
                 caused_interactions = interactions.get(interaction_cause)
                 if caused_interactions:
+                    # these effects have not been unpacked into Interactions so need to do so now
+                    caused_interactions = caused_interactions.effects
                     self._apply_effects_to_tiles(causing_entity, caused_interactions, start_pos, target_pos,
                                                  effect_creator=affliction)
 
@@ -161,34 +163,26 @@ class InteractionHandler(Subscriber):
         """
         Apply all effects relating to a cause of interaction.
         """
-        effect_names = utility.get_class_members(Effect)
-
         # get positions
         start_x, start_y = start_pos[0], start_pos[1]
         target_x, target_y = target_pos[0],  target_pos[1]
 
+        # copy effects so we can extend list with new effects
+        effects = caused_interaction.copy()
+
         # loop each effect name and get the data from the field
-        for effect_name in effect_names:
-            effect_name = effect_name.lower()
+        for effect in effects:
+            # each effect applies to a different area so get effected tiles
+            coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
+            effected_tiles = world.get_tiles(target_x, target_y, coords)
 
-            if effect_name != "cause":
-                try:
-                    effect = getattr(caused_interaction, effect_name)
+            # pass the entity to refer back to for stats and such
+            if instigating_entity:
+                originating_entity = instigating_entity
+            else:
+                originating_entity = causing_entity
 
-                    # each effect applies to a different area so get effected tiles
-                    coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
-                    effected_tiles = world.get_tiles(target_x, target_y, coords)
-
-                    # pass the entity to refer back to for stats and such
-                    if instigating_entity:
-                        originating_entity = instigating_entity
-                    else:
-                        originating_entity = causing_entity
-
-                    # apply effects
-                    if effect_creator:
-                        effect.creator = effect_creator
-                    skill.process_effect(effect, effected_tiles, originating_entity)
-
-                except AttributeError:
-                    pass
+            # apply effects
+            if effect_creator:
+                effect.creator = effect_creator
+            skill.process_effect(effect, effected_tiles, originating_entity)

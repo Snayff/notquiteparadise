@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, List
 from snecs import RegisteredComponent
 from scripts.engine.core.constants import InteractionCauseType
-from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
+from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData, EffectData
 
 if TYPE_CHECKING:
     import pygame
@@ -183,9 +183,9 @@ class FOV(RegisteredComponent):
         self.map: tcod.map.Map = fov_map
 
 
-class Interactions(Dict[InteractionCauseType, InteractionData], RegisteredComponent):
+class Interactions(Dict[InteractionCauseType, List[EffectData]], RegisteredComponent):
     """
-    The effects triggered when a specific criteria is met
+    The effects triggered when a specific criteria is met.
     """
     pass
 

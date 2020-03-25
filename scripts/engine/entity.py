@@ -259,9 +259,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # setup basic attack as a known skill and an interaction
     basic_attack_name = "basic_attack"
-    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name)
-    basic_attack = InteractionData(cause=InteractionCause.ENTITY_COLLISION, trigger_skill=trigger_skill)
-    actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
+    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name, creator=name)
+    actor.append(Interactions({InteractionCause.ENTITY_COLLISION: [trigger_skill]}))
     known_skills = {basic_attack_name: 0}  # N.B. All actors start with basic attack
     skill_order = [basic_attack_name]
     afflictions = Afflictions()
@@ -338,14 +337,12 @@ def create_projectile(creating_entity: EntityID, skill_name: str, x: int, y: int
     projectile.append(IsProjectile(creating_entity))
     projectile.append(Tracked(chrono.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
-    activate_skill = ActivateSkillEffectData(skill_name=skill_name,
-                                           required_tags=data.activate_required_tags)
-    _skill = InteractionData(cause=InteractionCause.ENTITY_COLLISION, activate_skill=activate_skill)
-    projectile.append(Interactions({InteractionCause.ENTITY_COLLISION: _skill}))
+    activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.activate_required_tags,
+                                             creator=name)
+    projectile.append(Interactions({InteractionCause.ENTITY_COLLISION: [activate_skill]}))
     entity = create(projectile)
 
-    add_component(entity, Behaviour(ProjectileBehaviour(entity, (target_dir_x, target_dir_y),
-                                                    data.range, skill_name)))
+    add_component(entity, Behaviour(ProjectileBehaviour(entity, (target_dir_x, target_dir_y), data.range, skill_name)))
 
     logging.debug(f"{name}`s projectile created.")
 

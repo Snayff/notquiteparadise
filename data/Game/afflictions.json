@@ -7,20 +7,17 @@
             "passive": {
                 "__dataclass__": "InteractionData",
                 "cause": "passive",
-                "apply_affliction": null,
-                "damage": null,
-                "affect_stat": {
-                    "__dataclass__": "AffectStatEffectData",
-                    "accuracy": 0,
-                    "affect_stat_amount": -10,
-                    "required_tags": [
-                        "other_entity"
-                    ],
-                    "stat_to_affect": "bustle"
-                },
-                "add_aspect": null,
-                "remove_aspect": null,
-                "trigger_skill": null
+                "effects": [
+                    {
+                        "__dataclass__": "AffectStatEffectData",
+                        "accuracy": 0,
+                        "affect_stat_amount": -10,
+                        "required_tags": [
+                            "other_entity"
+                        ],
+                        "stat_to_affect": "bustle"
+                    }
+                ]
             }
         },
         "icon": "placeholder/icon_00.png",
@@ -34,22 +31,19 @@
             "move": {
                 "__dataclass__": "InteractionData",
                 "cause": "move",
-                "apply_affliction": null,
-                "damage": {
-                    "__dataclass__": "DamageEffectData",
-                    "damage": 15,
-                    "damage_type": "burn",
-                    "required_tags": [
-                        "self"
-                    ],
-                    "stat_to_target": "bustle",
-                    "mod_amount": 0.1,
-                    "mod_stat": "skullduggery"
-                },
-                "affect_stat": null,
-                "add_aspect": null,
-                "remove_aspect": null,
-                "trigger_skill": null
+                "effects": [
+                    {
+                        "__dataclass__": "DamageEffectData",
+                        "damage": 15,
+                        "damage_type": "burn",
+                        "required_tags": [
+                            "self"
+                        ],
+                        "stat_to_target": "bustle",
+                        "mod_amount": 0.1,
+                        "mod_stat": "skullduggery"
+                    }
+                ]
             }
         },
         "icon": "placeholder/icon_00.png",

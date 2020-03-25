@@ -4,10 +4,10 @@
         "file_name": "basic_attack",
         "cooldown": 1,
         "description": "A simple attack.",
-        "icon": "placeholder/icon_00.png",
+        "icon": "placeholder/basic_attack.png",
         "name": "basic attack",
         "resource_cost": 10,
-        "resource_type": "health",
+        "resource_type": "stamina",
         "target_directions": [
             "down",
             "down_left",
@@ -24,15 +24,51 @@
         ],
         "projectile": {
             "__dataclass__": "ProjectileData",
-            "sprite": "placeholder/icon_00.png",
+            "sprite": "none",
             "speed": "slow",
             "travel_type": "instant",
             "range": 1,
             "expiry_type": "fizzle",
             "terrain_collision": "fizzle",
             "activate_required_tags": [
-                        "other_entity"
-                    ]
+                "other_entity"
+            ]
+        }
+    },
+        "lunge": {
+        "__dataclass__": "SkillData",
+        "file_name": "lunge",
+        "cooldown": 1,
+        "description": "Launch forwards and hit the enemy in your way.",
+        "icon": "placeholder/lunge.png",
+        "name": "lunge",
+        "resource_cost": 15,
+        "resource_type": "stamina",
+        "target_directions": [
+            "down",
+            "down_left",
+            "down_right",
+            "left",
+            "right",
+            "up",
+            "up_left",
+            "up_right"
+        ],
+        "time_cost": 30,
+        "use_required_tags": [
+            "no_blocking_tile"
+        ],
+        "projectile": {
+            "__dataclass__": "ProjectileData",
+            "sprite": "none",
+            "speed": "slow",
+            "travel_type": "instant",
+            "range": 1,
+            "expiry_type": "fizzle",
+            "terrain_collision": "fizzle",
+            "activate_required_tags": [
+                "other_entity"
+            ]
         }
     }
 }

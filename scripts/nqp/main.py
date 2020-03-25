@@ -6,6 +6,8 @@ import io
 import logging
 import pstats
 import time
+import traceback
+
 import pygame
 import snecs
 from snecs.world import default_world
@@ -67,6 +69,7 @@ def main():
         game_loop()
     except Exception as error:
         logging.critical(f"Something went wrong and killed the game loop. Error: {error}")
+        traceback.print_exc()
 
     # we've left the game loop so now close everything down
     disable_profiling(profiler)

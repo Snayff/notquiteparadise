@@ -253,13 +253,7 @@ class InteractionData:
     Data class for an interaction
     """
     cause: Optional[InteractionCauseType] = None
-    apply_affliction: Optional[ApplyAfflictionEffectData] = None
-    damage: Optional[DamageEffectData] = None
-    affect_stat: Optional[AffectStatEffectData] = None
-    add_aspect: Optional[AddAspectEffectData] = None
-    remove_aspect: Optional[RemoveAspectEffectData] = None
-    trigger_skill: Optional[TriggerSkillEffectData] = None
-    activate_skill: Optional[ActivateSkillEffectData] = None
+    effects: List[EffectData] = field(default_factory=list)
 
 
 @register_dataclass_with_json
