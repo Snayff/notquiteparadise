@@ -242,6 +242,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     Returns entity ID.
     """
     # TODO - rename create player. add new method for create actor that uses actor/npc characteristic
+    # TODO - simplify looping. Use same approach as action.convert_to_intent
 
     actor: List[Component] = []
 

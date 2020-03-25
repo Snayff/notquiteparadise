@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import cProfile  
-import datetime  
-import io  
-import logging  
-import pstats  
-import time  
+import cProfile
+import datetime
+import io
+import logging
+import pstats
+import time
 import pygame
 import snecs
 from snecs.world import default_world
@@ -20,6 +20,7 @@ from scripts.nqp.game_handler import GameHandler
 from scripts.nqp.god_handler import GodHandler
 from scripts.nqp.interaction_handler import InteractionHandler
 from scripts.nqp.ui_handler import UIHandler
+
 
 ####################################################################################################
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -62,12 +63,18 @@ def main():
     initialise_game()
 
     # run the game
-    game_loop()
+    try:
+        game_loop()
+    except Exception as error:
+        logging.critical(f"Something went wrong and killed the game loop. Error: {error}")
 
     # we've left the game loop so now close everything down
     disable_profiling(profiler)
     dump_profiling_data(profiler)
     disable_logging()
+
+    # print debug values
+    debug.dump()
 
     pygame.quit()  # clean up pygame resources
 
@@ -90,7 +97,11 @@ def game_loop():
 
         # have enemy take turn
         if current_state == GameState.NPC_TURN:
-            entity.take_turn(chrono.get_turn_holder())
+            # just in case the turn holder has died but not been replaced as expected
+            try:
+                entity.take_turn(chrono.get_turn_holder())
+            except AttributeError:
+                chrono.rebuild_turn_queue()
 
         # update based on input events
         for event in pygame.event.get():
@@ -195,7 +206,7 @@ def initialise_game():
 
     # init the player
     player = entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
-                                       "dandy", True)
+                                 "dandy", True)
 
     # tell places about the player
     chrono.set_turn_holder(player)

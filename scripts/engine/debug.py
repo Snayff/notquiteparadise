@@ -11,10 +11,7 @@ if TYPE_CHECKING:
     from typing import Type
 
 
-# TODO - show debug info
 # TODO - approach to type commands to trigger actions e.g. spawn creature
-# TODO - approach to show required info, e.g. rounds & time, FPS
-
 
 ########################  ###########################
 
@@ -40,10 +37,18 @@ def update():
     _debugger.update()
 
 
+def dump():
+    """
+    Print the debuggers stats.
+    """
+    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}")
+
+
 def set_fps_visibility(is_visible: bool):
     """
     Set whether the FPS is visible
     """
+    # TODO - this needs to be called from somewhere
     _debugger.fps_visible = is_visible
 
 
@@ -53,7 +58,6 @@ def get_visible_values() -> List[str]:
     """
     values = []
     if _debugger.fps_visible:
-        format(state.get_internal_clock().get_fps(), ".2f")
         values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, Avg={format(_debugger.average_fps, '.2f')}")
 
     return values

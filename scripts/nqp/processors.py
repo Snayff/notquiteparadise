@@ -149,10 +149,11 @@ def _process_player_turn_intents(intent: InputIntentType):
     # if player exists, which it should, because we're in PLAYER_TURN game state
     if player:
         # Player movement
-        dir_x, dir_y = _get_pressed_direction(intent)
-        if dir_x != 0 or dir_y != 0:
+        direction = _get_pressed_direction(intent)
+        possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+        if direction in possible_moves:
             position = entity.get_entitys_component(player, Position)
-            publisher.publish(MoveEvent(player, (position.x, position.y), (dir_x, dir_y), TravelMethod.STANDARD,
+            publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD,
                                         BASE_MOVE_COST))
 
         # Use a skill
