@@ -7,8 +7,9 @@ from typing import TYPE_CHECKING, Type, Optional
 from scripts.engine import world, entity, skill, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect, \
     DEBUG_LOG_EVENT_RECEIPTS
+from scripts.engine.core.definitions import InteractionData
 from scripts.engine.core.event_core import Subscriber
-from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile
+from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile, Afflictions
 from scripts.engine.event import EndTurnEvent, EndRoundEvent, ExpireEvent, \
     EntityCollisionEvent, TerrainCollisionEvent, MoveEvent
 from scripts.engine.library import library
@@ -44,12 +45,13 @@ class InteractionHandler(Subscriber):
             self._process_move(event)
 
     def _process_move(self, event: MoveEvent):
-        self._apply_effects_to_tiles(event.entity, InteractionCause.MOVE, (event.start_pos[0], event.start_pos[1]),
-                                     (event.direction[0], event.direction[1]))
+        target_pos = (event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1])
+        self._process_caused_interactions(event.entity, InteractionCause.MOVE, (event.start_pos[0], event.start_pos[1]),
+                                     target_pos)
 
     def _process_expiry(self, event: ExpireEvent):
         position = entity.get_entitys_component(event.entity, Position)
-        self._apply_effects_to_tiles(event.entity, InteractionCause.EXPIRE, (position.x, position.y),
+        self._process_caused_interactions(event.entity, InteractionCause.EXPIRE, (position.x, position.y),
                                      (position.x, position.y))
         entity.delete(event.entity)
 
@@ -98,7 +100,7 @@ class InteractionHandler(Subscriber):
             instigating_entity = None
 
         target_x, target_y = event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1]
-        self._apply_effects_to_tiles(ent, InteractionCause.ENTITY_COLLISION,
+        self._process_caused_interactions(ent, InteractionCause.ENTITY_COLLISION,
                                      (event.start_pos[0], event.start_pos[1]), (target_x, target_y),
                                      instigating_entity)
 
@@ -118,7 +120,7 @@ class InteractionHandler(Subscriber):
 
             if terrain_collision == TerrainCollision.ACTIVATE:
                 logging.debug(f"-> activate at ({target_x}, {target_y}).")
-                self._apply_effects_to_tiles(ent, InteractionCause.TERRAIN_COLLISION, (current_x, current_y),
+                self._process_caused_interactions(ent, InteractionCause.TERRAIN_COLLISION, (current_x, current_y),
                                              (target_x, target_y))
 
             elif terrain_collision == TerrainCollision.REFLECT:
@@ -132,44 +134,61 @@ class InteractionHandler(Subscriber):
             else:
                 logging.debug(f"{name} hit blocking tile and did nothing.")
 
-    @staticmethod
-    def _apply_effects_to_tiles(causing_entity: int, interaction_cause: InteractionCauseType,
+    def _process_caused_interactions(self, causing_entity: int, interaction_cause: InteractionCauseType,
             start_pos: Tuple[int, int], target_pos: Tuple[int, int], instigating_entity: Optional[EntityID] = None):
-        """
-        Apply all effects relating to a cause of interaction.
-        """
-        # get positions
-        start_x, start_y = start_pos[0], start_pos[1]
-        target_x, target_y = target_pos[0],  target_pos[1]
 
         # get interactions effects for specified cause
         if entity.has_component(causing_entity, Interactions):
             interactions = entity.get_entitys_component(causing_entity, Interactions)
             caused_interactions = interactions.get(interaction_cause)
-
-            # do we have anything we need to trigger?
             if caused_interactions:
-                effect_names = utility.get_class_members(Effect)
+                self._apply_effects_to_tiles(causing_entity, caused_interactions, start_pos, target_pos,
+                                             instigating_entity)
 
-                # loop each effect name and get the data from the field
-                for effect_name in effect_names:
-                    effect_name = effect_name.lower()
+        if entity.has_component(causing_entity, Afflictions):
+            afflictions = entity.get_entitys_component(causing_entity, Afflictions)
+            for affliction in afflictions.keys():
+                interactions = library.get_affliction_data(affliction).interactions
+                caused_interactions = interactions.get(interaction_cause)
+                if caused_interactions:
+                    self._apply_effects_to_tiles(causing_entity, caused_interactions, start_pos, target_pos,
+                                                 effect_creator=affliction)
 
-                    if effect_name != "cause":
-                        try:
-                            effect = getattr(caused_interactions, effect_name)
+    @staticmethod
+    def _apply_effects_to_tiles(causing_entity: int, caused_interaction: InteractionData,
+            start_pos: Tuple[int, int], target_pos: Tuple[int, int], instigating_entity: Optional[EntityID] = None,
+            effect_creator: Optional[str] = ""):
+        """
+        Apply all effects relating to a cause of interaction.
+        """
+        effect_names = utility.get_class_members(Effect)
 
-                            # each effect applies to a different area so get effected tiles
-                            coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
-                            effected_tiles = world.get_tiles(target_x, target_y, coords)
+        # get positions
+        start_x, start_y = start_pos[0], start_pos[1]
+        target_x, target_y = target_pos[0],  target_pos[1]
 
-                            # pass the entity to refer back to for stats and such
-                            if instigating_entity:
-                                originating_entity = instigating_entity
-                            else:
-                                originating_entity = causing_entity
+        # loop each effect name and get the data from the field
+        for effect_name in effect_names:
+            effect_name = effect_name.lower()
 
-                            # apply effects
-                            skill.process_effect(effect, effected_tiles, originating_entity)
-                        except AttributeError:
-                            pass
+            if effect_name != "cause":
+                try:
+                    effect = getattr(caused_interaction, effect_name)
+
+                    # each effect applies to a different area so get effected tiles
+                    coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
+                    effected_tiles = world.get_tiles(target_x, target_y, coords)
+
+                    # pass the entity to refer back to for stats and such
+                    if instigating_entity:
+                        originating_entity = instigating_entity
+                    else:
+                        originating_entity = causing_entity
+
+                    # apply effects
+                    if effect_creator:
+                        effect.creator = effect_creator
+                    skill.process_effect(effect, effected_tiles, originating_entity)
+
+                except AttributeError:
+                    pass

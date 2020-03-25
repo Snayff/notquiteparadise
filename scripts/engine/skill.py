@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Union, Optional
+
+from snecs.typedefs import EntityID
+
 from scripts.engine import entity, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
@@ -33,9 +36,6 @@ if TYPE_CHECKING:
 
 # TODO - have the ability to create entities, e.g. summons, traps, etc.
 # TODO - ability to specify target/ target automatically based on condition, e.g. nearest, lowest health etc.
-# TODO - cooldowns applied and respected
-# TODO - can only spend resource types, which map to secondary stats, not secondary stats directly
-
 
 ######################################## CHECKS ######################################
 
@@ -216,11 +216,18 @@ def _get_hit_type(to_hit_score: int) -> HitTypeType:
 
 ########################################## EFFECTS ####################################
 
-def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entity: int):
+def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entity: int,
+        instigator: Optional[Union[EntityID, str]] = None):
     """
     Apply an effect to all tiles in a list.
     """
-    name = entity.get_name(causing_entity)
+    if isinstance(instigator, EntityID):
+        name = entity.get_name(instigator)
+    elif isinstance(instigator, str):
+        name = instigator
+    else:
+        name = entity.get_name(causing_entity)
+
     if effect.effect_type is None:
         logging.critical(f"Processing effect, caused by '{name}', but effect_type is None.")
     elif len(effected_tiles) == 0:
@@ -396,7 +403,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
 def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):
     attackers_stats = entity.get_combat_stats(attacker)
     entities = entity.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats])
-    skill_name = effect.creator
+    effect_creator = effect.creator
 
     # loop all relevant entities
     for defender, (position, resources, has_stats) in entities.items():
@@ -441,12 +448,12 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
                     # confirm to the player that they damaged someone
                     if attacker_name == "player":
                         attacker_name = "I"
-                    msg = f"{attacker_name} {hit_type_desc} {defender_name} with {skill_name} for {damage}."
+                    msg = f"{attacker_name} {hit_type_desc} {defender_name} with {effect_creator} for {damage}."
                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 
                     # TODO - add the damage type to the text and replace the type with an icon
                     # TODO - add the explanation of the damage roll to a tooltip
-                    # TODO - ensure if player involved it shows as "You"
+                    # TODO - ensure if player involved it shows as "You/I"
 
                     if resources.health <= 0:
                         publisher.publish(DieEvent(defender))
@@ -454,9 +461,9 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
                 else:
                     # inform player of no damage
                     if attacker_name == "player":
-                        msg = f"{defender_name} resisted damage from my {skill_name}."
+                        msg = f"{defender_name} resisted damage from my {effect_creator}."
                     else:
-                        msg = f"{defender_name} resisted damage from {attacker_name}'s {skill_name}."
+                        msg = f"{defender_name} resisted damage from {attacker_name}'s {effect_creator}."
 
                     publisher.publish(MessageEvent(MessageType.LOG, msg))
 

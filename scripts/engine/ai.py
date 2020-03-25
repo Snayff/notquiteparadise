@@ -67,5 +67,5 @@ class SkipTurn(AIBehaviour):
 
     def act(self):
         name = entity.get_name(self.entity)
-        publisher.publish(MessageEvent(MessageType.LOG, f"{name} skipped their turn."))
+        logging.debug(f"'{name}' skipped their turn.")
         publisher.publish((EndTurnEvent(self.entity, BASE_MOVE_COST)))

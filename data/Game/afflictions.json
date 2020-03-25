@@ -40,7 +40,7 @@
                     "damage": 15,
                     "damage_type": "burn",
                     "required_tags": [
-                        "other_entity"
+                        "self"
                     ],
                     "stat_to_target": "bustle",
                     "mod_amount": 0.1,

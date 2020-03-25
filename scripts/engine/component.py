@@ -115,6 +115,7 @@ class Behaviour(RegisteredComponent):
     """
     An ai behaviour to control an entity.
     """
+    # TODO - inherit from AIBehaviour
     def __init__(self, behaviour: AIBehaviour):
         self.behaviour = behaviour
 

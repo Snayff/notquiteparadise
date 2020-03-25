@@ -219,6 +219,7 @@ def initialise_event_handlers():
 
     interaction_handler = InteractionHandler(event_hub)
     interaction_handler.subscribe(EventTopic.INTERACTION)
+    interaction_handler.subscribe(EventTopic.ENTITY)
 
     god_handler = GodHandler(event_hub)
     god_handler.subscribe(EventTopic.ENTITY)
