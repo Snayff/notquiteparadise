@@ -140,18 +140,11 @@ class Knowledge(RegisteredComponent):
         self.skills: Dict[str, int] = skills  # skill_name : cooldown
 
 
-class Affliction(RegisteredComponent):
-    # TODO - Amalgamate positive and negative afflictions in the component.
+class Afflictions(Dict[str, int], RegisteredComponent):
     """
-    An entity's Boons and Banes. held in dict as {boon_name: duration}
+    An entity's Boons and Banes. held in dict as {affliction_name: duration}
     """
-    def __init__(self, boons: Optional[Dict[str, int]] = None, banes: Optional[Dict[str, int]] = None):
-        if banes is None:
-            banes = {}
-        if boons is None:
-            boons = {}
-        self.boons: Dict[str, int] = boons
-        self.banes: Dict[str, int] = banes
+    pass
 
 
 class Aspect(RegisteredComponent):

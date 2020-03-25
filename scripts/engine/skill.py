@@ -4,7 +4,7 @@ import logging
 import random
 from typing import TYPE_CHECKING, Any
 from scripts.engine import entity, world, utility
-from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Affliction
+from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
     HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction, \
     ResourceType
@@ -361,54 +361,36 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
 def _create_affliction(ent: int, affliction_name: str, duration: int):
     data = library.get_affliction_data(affliction_name)
     name = entity.get_name(ent)
-    affliction = entity.get_entitys_component(ent, Affliction)
-    active_affliction_duration = -1
-    boon = {}
-    bane = {}
+    affliction = entity.get_entitys_component(ent, Afflictions)
 
     # check if entity already has the afflictions component
     if affliction:
-        if data.category == AfflictionCategory.BANE:
-            if affliction.banes[affliction_name]:
-                active_affliction_duration = affliction.banes[affliction_name]
-            else:
-                active_affliction_duration = -1
-        elif data.category == AfflictionCategory.BOON:
-            if affliction.boons[affliction_name]:
-                active_affliction_duration = affliction.boons[affliction_name]
-            else:
-                active_affliction_duration = -1
+        # one exists so do we have an active version of the same affliction
+        if affliction[affliction_name]:
+            active_affliction_duration = affliction[affliction_name]
+        else:
+            active_affliction_duration = None
 
         # if affliction exists
         if active_affliction_duration:
-            logging.debug(f"{name} already has {affliction_name}:{active_affliction_duration}...")
+            logging.debug(f"'{name}' already has {affliction_name}:{active_affliction_duration}...")
 
             # alter the duration of the current afflictions if the new one will last longer
-            if active_affliction_duration < duration:
-                if data.category == AfflictionCategory.BANE:
-                    affliction.banes[affliction_name] = duration
-                elif data.category == AfflictionCategory.BOON:
-                    affliction.boons[affliction_name] = duration
+            affliction[affliction_name] = duration
 
-                log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
-                             f"{duration} so duration updated."
-                logging.debug(log_string)
-            else:
-                # no action taken if duration already longer
-                log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
-                             f" {duration} so duration remains the same."
-                logging.debug(log_string)
+            log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
+                         f"{duration} so duration updated."
+            logging.debug(log_string)
+        else:
+            # no action taken if duration already longer
+            log_string = f"-> Active duration {active_affliction_duration} is less than new duration " \
+                         f" {duration} so duration remains the same."
+            logging.debug(log_string)
 
     # no current afflictions of same type so process new one
     else:
         logging.info(f"Applying {affliction_name} afflictions to '{name}' with duration of {duration}.")
-
-    if data.category == AfflictionCategory.BANE:
-        bane = {affliction_name: duration}
-    elif data.category == AfflictionCategory.BOON:
-        boon = {affliction_name: duration}
-
-    entity.add_component(ent, Affliction(boon, bane))
+        entity.add_component(ent, Afflictions({affliction_name: duration}))
 
 
 def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):

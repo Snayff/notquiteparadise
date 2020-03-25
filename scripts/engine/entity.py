@@ -13,10 +13,11 @@ from snecs.ecs import new_entity
 from snecs.query import Query
 from scripts.engine import utility, world, debug, chrono
 from scripts.engine.ai import ProjectileBehaviour, SkipTurn
-from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy, Homeland, Aesthetic,\
-    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour,\
-    Tracked
-from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect
+from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy, Homeland, Aesthetic, \
+    IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour, \
+    Tracked, Afflictions
+from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect, \
+    INFINITE
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData,\
     InteractionData, TriggerSkillEffectData, ActivateSkillEffectData
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -147,7 +148,7 @@ def get_primary_stat(entity: EntityID, primary_stat: str) -> EntityID:
     value += getattr(homeland_data, stat)
 
     # TODO - re add afflicitons
-    # value += _manager.Affliction.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+    # value += _manager.Afflictions.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
 
     # ensure no dodgy numbers, like floats or negative
     value = max(1, int(value))
@@ -226,7 +227,7 @@ def create_god(god_name: str) -> EntityID:
     god.append(IsGod())
     god.append(Opinion())
     god.append(Knowledge(intervention_names, skill_order))
-    god.append((Resources(9999, 9999)))
+    god.append((Resources(INFINITE, INFINITE)))  # TODO - find a way to have gos use skills without need for resources
     entity = create(god)
 
     logging.debug(f"{data.name} created.")
@@ -240,7 +241,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     Create an entity with all of the components to be an actor. is_player is Optional and defaults to false.
     Returns entity ID.
     """
-    # TODO - rename create player. add new method for create actor that uses actor characteristic
+    # TODO - rename create player. add new method for create actor that uses actor/npc characteristic
 
     actor: List[Component] = []
 
@@ -262,28 +263,39 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: basic_attack}))
     known_skills = {basic_attack_name: 0}  # N.B. All actors start with basic attack
     skill_order = [basic_attack_name]
+    afflictions = Afflictions()
 
-    # get skills from characteristics
+    # get skills and perm afflictions from characteristics
     people_data = library.get_people_data(people_name)
     if people_data.known_skills != ["none"]:
         for skill in people_data.known_skills:
             known_skills[skill] = library.get_skill_data(skill).cooldown
             skill_order.append(skill)
+    if people_data.permanent_afflictions != ["none"]:
+        for affliction in people_data.permanent_afflictions:
+            afflictions[affliction] = INFINITE
 
     homeland_data = library.get_homeland_data(homeland_name)
     if homeland_data.known_skills != ["none"]:
         for skill in homeland_data.known_skills:
             known_skills[skill] = library.get_skill_data(skill).cooldown
             skill_order.append(skill)
+    if homeland_data.permanent_afflictions != ["none"]:
+        for affliction in people_data.permanent_afflictions:
+            afflictions[affliction] = INFINITE
 
     savvy_data = library.get_savvy_data(savvy_name)
     if savvy_data.known_skills != ["none"]:
         for skill in savvy_data.known_skills:
             known_skills[skill] = library.get_skill_data(skill).cooldown
             skill_order.append(skill)
+    if savvy_data.permanent_afflictions != ["none"]:
+        for affliction in savvy_data.permanent_afflictions:
+            afflictions[affliction] = INFINITE
 
     # add skills to entity
     actor.append(Knowledge(known_skills, skill_order))
+    actor.append(afflictions)
 
     # add aesthetic
     characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
@@ -300,7 +312,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     # player components
     if is_player:
         add_component(entity, IsPlayer())
-    # TODO - alter in line with change to separate player and actor
+    # TODO - alter in line with change to separating player and actor
     else:
         add_component(entity, Behaviour(SkipTurn(entity)))
 

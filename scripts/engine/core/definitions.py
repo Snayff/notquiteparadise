@@ -25,9 +25,9 @@ class SkillData:
     """
     # TODO - rename relevant sections to indicate they are base values
     # how do we know it?
-    name: str = field(default="None")
-    description: str = field(default="None")
-    icon: str = field(default="None")
+    name: str = field(default="none")
+    description: str = field(default="none")
+    icon: str = field(default="none")
 
     # when do we use it?
     use_required_tags: List[TargetTagType] = field(default_factory=list)
@@ -53,10 +53,10 @@ class ProjectileData:
     Data class for a projectile
     """
     # what created it?
-    skill_name: str = field(default="None")
+    skill_name: str = field(default="none")
 
     # what does it look like?
-    sprite: str = field(default="None")
+    sprite: str = field(default="none")
 
     # who are we targeting?
     activate_required_tags: List[TargetTagType] = field(default_factory=list)
@@ -100,12 +100,12 @@ class EffectData(ABC):
 @dataclass
 class ApplyAfflictionEffectData(EffectData):
     """
-    Data for the Apply Affliction effect.
+    Data for the Apply Afflictions effect.
     """
     effect_type = Effect.APPLY_AFFLICTION
 
     duration: int = 0
-    affliction_name: str = field(default="None")
+    affliction_name: str = field(default="none")
 
 
 @register_dataclass_with_json
@@ -142,7 +142,7 @@ class AddAspectEffectData(EffectData):
     """
     effect_type = Effect.ADD_ASPECT
 
-    aspect_name: str = field(default="None")  # TODO - confirm if we want aspect name or key
+    aspect_name: str = field(default="none")  # TODO - confirm if we want aspect name or key
 
 
 @register_dataclass_with_json
@@ -153,7 +153,7 @@ class RemoveAspectEffectData(EffectData):
     """
     effect_type = Effect.REMOVE_ASPECT
 
-    aspect_name: str = field(default="None")  # TODO - confirm if we want aspect name or key
+    aspect_name: str = field(default="none")  # TODO - confirm if we want aspect name or key
 
 
 @register_dataclass_with_json
@@ -164,7 +164,7 @@ class TriggerSkillEffectData(EffectData):
     """
     effect_type = Effect.TRIGGER_SKILL
 
-    skill_name: str = field(default="None")  # TODO - confirm if we want skill name or key
+    skill_name: str = field(default="none")  # TODO - confirm if we want skill name or key
     required_tags = None  # use use the tags of the skill referenced
 
 
@@ -176,7 +176,7 @@ class ActivateSkillEffectData(EffectData):
     """
     effect_type = Effect.TRIGGER_SKILL
 
-    skill_name: str = field(default="None")  # TODO - confirm if we want skill name or key
+    skill_name: str = field(default="none")  # TODO - confirm if we want skill name or key
 
 
 ##################### ACTORS #################################
@@ -197,7 +197,7 @@ class BasePrimaryStatData:
     """
     Data class for primary  stats
     """
-    name: str = field(default="None")
+    name: str = field(default="none")
     primary_stat_type: Optional[PrimaryStatType] = None
     base_value: int = 0
 
@@ -208,7 +208,7 @@ class BaseSecondaryStatData:
     """
     Data class for secondary stats
     """
-    name: str = field(default="None")
+    name: str = field(default="none")
     secondary_stat_type: Optional[SecondaryStatType] = None
     base_value: int = 0
     vigour_mod: int = 0
@@ -238,12 +238,12 @@ class CharacteristicSpritePathsData:
     """
     Possible sprites paths for a characteristic
     """
-    icon: str = field(default="None")
-    idle: str = field(default="None")
-    attack: str = field(default="None")
-    hit: str = field(default="None")
-    dead: str = field(default="None")
-    move: str = field(default="None")
+    icon: str = field(default="none")
+    idle: str = field(default="none")
+    attack: str = field(default="none")
+    hit: str = field(default="none")
+    dead: str = field(default="none")
+    move: str = field(default="none")
 
 
 @register_dataclass_with_json
@@ -268,8 +268,8 @@ class CharacteristicData:
     """
     Data class for an aspects
     """
-    name: str = field(default="None")
-    description: str = field(default="None")
+    name: str = field(default="none")
+    description: str = field(default="none")
     sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
     sight_range: int = 0
     vigour: int = 0
@@ -278,17 +278,18 @@ class CharacteristicData:
     bustle: int = 0
     exactitude: int = 0
     known_skills: List[str] = field(default_factory=list)
+    permanent_afflictions: List[str] = field(default_factory=list)
 
 
 @register_dataclass_with_json
 @dataclass()
 class AfflictionData:
     """
-    Data class for an Affliction
+    Data class for an Afflictions
     """
-    name: str = field(default="None")
-    description: str = field(default="None")
-    icon: str = field(default="None")
+    name: str = field(default="none")
+    description: str = field(default="none")
+    icon: str = field(default="none")
     category: Optional[AfflictionCategoryType] = None
     interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
 
@@ -301,10 +302,10 @@ class AspectData:
     """
     Data class for an aspects
     """
-    name: str = field(default="None")
-    description: str = field(default="None")
+    name: str = field(default="none")
+    description: str = field(default="none")
     duration: int = 0
-    sprite: str = field(default="None")
+    sprite: str = field(default="none")
     blocks_sight: bool = False
     blocks_movement: bool = False
     interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
@@ -319,7 +320,7 @@ class AttitudeData:
     """
     Data class for  a god's attitude
     """
-    action: str = field(default="None")  # TODO - standardise what this can be
+    action: str = field(default="none")  # TODO - standardise what this can be
     opinion_change: int = 0
 
 
@@ -329,7 +330,7 @@ class InterventionData:
     """
     Data class for a god's intervention
     """
-    skill_key: str = field(default="None")  # TODO - confirm if we want skill key or name
+    skill_key: str = field(default="none")  # TODO - confirm if we want skill key or name
     required_opinion: int = 0
 
 
@@ -339,8 +340,8 @@ class GodData:
     """
     Data class for a god
     """
-    name: str = field(default="None")
-    description: str = field(default="None")
+    name: str = field(default="none")
+    description: str = field(default="none")
     sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
     attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
     interventions: Dict[int, InterventionData] = field(default_factory=dict)

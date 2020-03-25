@@ -82,7 +82,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -108,7 +108,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -133,7 +133,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -159,7 +159,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -185,7 +185,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -210,7 +210,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -235,7 +235,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -260,7 +260,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -300,7 +300,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd afflictions
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))
@@ -325,7 +325,7 @@ class CombatStats:
         stat_total = base_value + from_vigour + from_clout + from_skullduggery + from_bustle + from_exactitude
 
         # TODO - readd affliction changes
-        affliction_changes = 0  # world.Affliction.get_stat_change_from_afflictions_on_entity(self.entity, stat)
+        affliction_changes = 0  # world.Afflictions.get_stat_change_from_afflictions_on_entity(self.entity, stat)
 
         # ensure 1 or above
         total = max(1, int(stat_total + affliction_changes))

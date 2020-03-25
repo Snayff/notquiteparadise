@@ -10,6 +10,9 @@
         "known_skills": [
             "none"
         ],
+        "permanent_afflictions": [
+            "none"
+        ],
         "skullduggery": 4,
         "sprite_paths": {
             "__dataclass__": "CharacteristicSpritePathsData",
@@ -32,6 +35,9 @@
         "sight_range": 5,
         "known_skills": [
             "none"
+        ],
+        "permanent_afflictions": [
+            "flaming"
         ],
         "skullduggery": 1,
         "sprite_paths": {
