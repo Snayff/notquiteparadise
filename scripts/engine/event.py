@@ -67,9 +67,9 @@ class EndTurnEvent(Event):
     """
     Event to end an entities ability to act.
     """
-    def __init__(self, ent: EntityID, time_spent):
+    def __init__(self, entity: EntityID, time_spent):
         Event.__init__(self, "END_TURN", EventTopic.GAME)
-        self.entity = ent
+        self.entity = entity
         self.time_spent = time_spent
 
 
@@ -144,10 +144,10 @@ class SelectEntity(Event):
     """
     Event for selecting an entity.
     """
-    def __init__(self, ent: EntityID):
+    def __init__(self, entity: EntityID):
         Event.__init__(self, "SELECT_ENTITY", EventTopic.UI)
 
-        self.selected_entity = ent
+        self.selected_entity = entity
 
 
 class ClickTile(Event):
@@ -165,11 +165,11 @@ class MessageEvent(Event):
     Event to share messages with the player
     """
     def __init__(self, message_type: MessageTypeType,  message: str, colour: str = None, size: int = 4,
-            ent: int = None):
+            entity: int = None):
         Event.__init__(self, "MESSAGE", EventTopic.UI)
         self.message = message
         self.message_type = message_type
-        self.entity = ent
+        self.entity = entity
         self.colour = colour
 
         # max size is 7

@@ -51,11 +51,11 @@ class EntityInfo(UIWindow):
         """
         pass
 
-    def set_entity(self, ent: int):
+    def set_entity(self, entity: int):
         """
         Set the selected entity to show the info for that entity.
         """
-        self.selected_entity = ent
+        self.selected_entity = entity
 
     def show(self):
         """
@@ -107,17 +107,17 @@ class EntityInfo(UIWindow):
         """
         Create the core info section.
         """
-        ent = self.selected_entity
+        entity = self.selected_entity
         gap = "|-----------------------| <br>"
 
-        if ent:
+        if entity:
             text = ""
 
             # basic info
-            identity = existence.get_entitys_component(ent, Identity)
+            identity = existence.get_entitys_component(entity, Identity)
             if identity:
                 text += f"{identity.name.capitalize()}" + "<br>"
-            resources = existence.get_entitys_component(ent, Resources)
+            resources = existence.get_entitys_component(entity, Resources)
             if resources:
                 text += f"Current Health: {resources.health}" + "<br>"
                 text += f"Current Stamina: {resources.stamina}" + "<br>"
@@ -126,7 +126,7 @@ class EntityInfo(UIWindow):
             text += gap
 
             # afflictions
-            afflictions = existence.get_entitys_component(ent, Afflictions)
+            afflictions = existence.get_entitys_component(entity, Afflictions)
             if afflictions:
                 for affliction, duration in afflictions.items():
                     if duration == INFINITE:

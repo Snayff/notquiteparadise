@@ -60,8 +60,8 @@ class InteractionHandler(Subscriber):
         """
         Trigger aspects on tile turn holder is on
         """
-        ent = event.entity
-        # position = entity.get_entitys_component(ent, Position)
+        entity = event.entity
+        # position = entity.get_entitys_component(entity, Position)
         # tile = world.get_tile((position.x, position.y))
 
         # trigger aspects
@@ -85,13 +85,14 @@ class InteractionHandler(Subscriber):
         #             world.cleanse_expired_aspects(tile)
 
     def _process_entity_collision(self, event: EntityCollisionEvent):
-        ent = event.entity
-        a_name = existence.get_name(ent)
+        entity = event.entity
+        a_name = existence.get_name(entity)
         b_name = existence.get_name(event.blocking_entity)
         logging.debug(f"'{a_name}' collided with '{b_name}'.")
 
         # check if projectile as we would need the instigating entity
-        is_projectile = existence.get_entitys_component(ent, IsProjectile)
+        is_projectile = existence.get_entitys_component(entity, IsProjectile)
+        # FIXME - throws regular warning as regularly not a projectile
 
         # ensure creator is passed if projectile hit someone
         if is_projectile:
@@ -100,27 +101,27 @@ class InteractionHandler(Subscriber):
             instigating_entity = None
 
         target_x, target_y = event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1]
-        self._process_caused_interactions(ent, InteractionCause.ENTITY_COLLISION,
+        self._process_caused_interactions(entity, InteractionCause.ENTITY_COLLISION,
                                      (event.start_pos[0], event.start_pos[1]), (target_x, target_y),
                                      instigating_entity)
 
     def _process_terrain_collision(self, event: TerrainCollisionEvent):
-        ent = event.entity
-        name = existence.get_name(ent)
+        entity = event.entity
+        name = existence.get_name(entity)
         current_x, current_y = event.start_pos[0], event.start_pos[1]
         target_x, target_y = current_x + event.direction[0], current_y + event.direction[1]
 
         # what hit the terrain?
         # Is it a projectile?
-        if existence.has_component(ent, IsProjectile):
+        if existence.has_component(entity, IsProjectile):
             logging.debug(f"{name} hit a blocking tile and will...")
-            behaviour = existence.get_entitys_component(ent, Behaviour)
+            behaviour = existence.get_entitys_component(entity, Behaviour)
             projectile_data = library.get_skill_data(behaviour.behaviour.skill_name).projectile
             terrain_collision = projectile_data.terrain_collision
 
             if terrain_collision == TerrainCollision.ACTIVATE:
                 logging.debug(f"-> activate at ({target_x}, {target_y}).")
-                self._process_caused_interactions(ent, InteractionCause.TERRAIN_COLLISION, (current_x, current_y),
+                self._process_caused_interactions(entity, InteractionCause.TERRAIN_COLLISION, (current_x, current_y),
                                              (target_x, target_y))
 
             elif terrain_collision == TerrainCollision.REFLECT:

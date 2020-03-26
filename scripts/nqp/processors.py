@@ -27,7 +27,7 @@ def _process_aesthetic_update(delta_time: float):
     Update real-time timers on entities
     """
     # move entities screen position towards target
-    for ent, (aesthetic, ) in existence.get_components([Aesthetic]):
+    for entity, (aesthetic, ) in existence.get_components([Aesthetic]):
         max_duration = 0.3
 
         # increment time

@@ -179,8 +179,8 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     # game_map = _manager.game_map
     # entities = []
     # # TODO - update to use ECS
-    # for ent, (pos, blocking) in _manager.World.get_entitys_components(Position, Blocking):
-    #     entities.append(ent)
+    # for entity, (pos, blocking) in _manager.World.get_entitys_components(Position, Blocking):
+    #     entities.append(entity)
     # entity_to_move = start_entity
     # target = target_entity
     #
@@ -370,7 +370,7 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     x = tile.x
     y = tile.y
     # Any entities on the tile?
-    for ent, (position,) in existence.get_components([Position]):
+    for entity, (position,) in existence.get_components([Position]):
         if position.x == x and position.y == y:
             return True
 
@@ -385,9 +385,9 @@ def _tile_has_specific_entity(tile: Tile, active_entity: int) -> bool:
     x = tile.x
     y = tile.y
     # ensure active entity is the same as the returned one
-    for ent, (position,) in existence.get_components([Position]):
+    for entity, (position,) in existence.get_components([Position]):
         if position.x == x and position.y == y:
-            if active_entity == ent:
+            if active_entity == entity:
                 return True
 
     # no matching entity found
@@ -398,7 +398,7 @@ def _tile_has_entity_blocking_movement(tile: Tile):
     x = tile.x
     y = tile.y
     # Any entities that block movement?
-    for ent, (position, blocking) in existence.get_components([Position, Blocking]):
+    for entity, (position, blocking) in existence.get_components([Position, Blocking]):
         if position.x == x and position.y == y and blocking.blocks_movement:
             return True
     return False
@@ -408,7 +408,7 @@ def _tile_has_entity_blocking_sight(tile: Tile):
     x = tile.x
     y = tile.y
     # Any entities that block sight?
-    for ent, (position, blocking) in existence.get_components([Position, Blocking]):
+    for entity, (position, blocking) in existence.get_components([Position, Blocking]):
         if position.x == x and position.y == y and blocking.blocks_sight:
             return True
     return False

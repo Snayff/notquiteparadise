@@ -42,13 +42,13 @@ if TYPE_CHECKING:
 
 ######################################## CHECKS ######################################
 
-def can_use_skill(ent: int, target_pos: Tuple[int, int], skill_name: str):
+def can_use_skill(entity: int, target_pos: Tuple[int, int], skill_name: str):
     """
     Confirm entity can use skill on targeted position. True if can use the skill. Else False.
     """
     start_tile = target_tile = None
 
-    position = existence.get_entitys_component(ent, Position)
+    position = existence.get_entitys_component(entity, Position)
     if position:
         target_x, target_y = target_pos
         start_tile = world.get_tile((position.x, position.y))
@@ -58,11 +58,11 @@ def can_use_skill(ent: int, target_pos: Tuple[int, int], skill_name: str):
 
     # check we have everything we need and if so use the skill
     if start_tile and target_tile:
-        if world.tile_has_tags(target_tile, skill_data.required_tags, ent):
+        if world.tile_has_tags(target_tile, skill_data.required_tags, entity):
             resource_type = skill_data.resource_type
             resource_cost = skill_data.resource_cost
             if resource_type:
-                if can_afford_cost(ent, resource_type, resource_cost):
+                if can_afford_cost(entity, resource_type, resource_cost):
                     distance = utility.get_chebyshev_distance((start_tile.x, start_tile.y), target_pos)
                     skill_range = skill_data.range
                     if distance <= skill_range:
@@ -77,12 +77,12 @@ def can_use_skill(ent: int, target_pos: Tuple[int, int], skill_name: str):
     return False
 
 
-def can_afford_cost(ent: int, resource: ResourceType, cost: int):
+def can_afford_cost(entity: int, resource: ResourceType, cost: int):
     """
     Check if entity can afford the resource cost
     """
-    resources = existence.get_entitys_component(ent, Resources)
-    name = existence.get_name(ent)
+    resources = existence.get_entitys_component(entity, Resources)
+    name = existence.get_name(entity)
 
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
@@ -96,12 +96,12 @@ def can_afford_cost(ent: int, resource: ResourceType, cost: int):
 
 ########################################### ACTIONS ################################
 
-def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
+def pay_resource_cost(entity: int, resource: SecondaryStatType, cost: int):
     """
     Remove the resource cost from the using entity
     """
-    resources = existence.get_entitys_component(ent, Resources)
-    name = existence.get_name(ent)
+    resources = existence.get_entitys_component(entity, Resources)
+    name = existence.get_name(entity)
 
     if resources:
         resource_value = getattr(resources, resource.lower())
@@ -286,9 +286,9 @@ def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles
     entities = existence.get_entities_and_components_in_area(effected_tiles, [Aspect])
 
     # loop all relevant aspects and if one is matching delete the entity
-    for ent, (position, aspect) in entities.items():
+    for entity, (position, aspect) in entities.items():
         if aspect_name in aspect.aspects:
-            existence.delete(ent)
+            existence.delete(entity)
 
 
 def _process_add_aspect_effect(effect: AddAspectEffectData, effected_tiles: List[Tile]):
@@ -302,7 +302,7 @@ def _create_aspect(aspect_name: str, tile: Tile):
     aspect: Aspect
     entities = existence.get_entities_and_components_in_area([tile], [Aspect])
 
-    for ent, (position, aspect) in entities.items():
+    for entity, (position, aspect) in entities.items():
         # if there is an active version of the same aspect already
         if aspect:
             # increase duration to initial value
@@ -366,10 +366,10 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
                     _create_affliction(defender, effect.affliction_name, modified_duration)
 
 
-def _create_affliction(ent: int, affliction_name: str, duration: int):
+def _create_affliction(entity: int, affliction_name: str, duration: int):
     data = library.get_affliction_data(affliction_name)
-    name = existence.get_name(ent)
-    affliction = existence.get_entitys_component(ent, Afflictions)
+    name = existence.get_name(entity)
+    affliction = existence.get_entitys_component(entity, Afflictions)
 
     # check if entity already has the afflictions component
     if affliction:
@@ -398,7 +398,7 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
     # no current afflictions of same type so process new one
     else:
         logging.info(f"Applying {affliction_name} afflictions to '{name}' with duration of {duration}.")
-        existence.add_component(ent, Afflictions({affliction_name: duration}))
+        existence.add_component(entity, Afflictions({affliction_name: duration}))
 
 
 def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):

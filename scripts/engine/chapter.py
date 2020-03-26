@@ -32,9 +32,9 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
 
     # create a turn queue from the entities list
     new_queue = {}
-    for ent, (tracked, ) in get_component([Tracked]):
-        if ent != entity_to_exclude:
-            new_queue[ent] = tracked.time_spent
+    for entity, (tracked, ) in get_component([Tracked]):
+        if entity != entity_to_exclude:
+            new_queue[entity] = tracked.time_spent
     set_turn_queue(new_queue)
 
     # get the next entity in the queue and set as new turn holder
@@ -152,8 +152,8 @@ def get_round() -> int:
 
 def _get_pretty_queue() -> List[Tuple[str, int]]:
     queue = []
-    for ent, time in get_turn_queue().items():
-        name = existence.get_name(ent)
+    for entity, time in get_turn_queue().items():
+        name = existence.get_name(entity)
         queue.append((name, time))
     return queue
 

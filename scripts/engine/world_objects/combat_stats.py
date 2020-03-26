@@ -16,8 +16,8 @@ class CombatStats:
     Object to hold all of an entities stats. Derived from various components.
     """
 
-    def __init__(self, ent: int):
-        self.entity = ent
+    def __init__(self, entity: int):
+        self.entity = entity
 
     @property
     def vigour(self) -> int:

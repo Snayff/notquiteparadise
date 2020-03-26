@@ -431,7 +431,7 @@ def judge_action(entity: EntityID, action: Any):
     Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards
     that  action. Action can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
     """
-    for ent, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
+    for entity, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
 
         attitudes = library.get_god_attitudes_data(identity.name)
         action_name = action
@@ -458,7 +458,7 @@ def consider_intervening(entity: EntityID, action: Any) -> List[Tuple[int, Any]]
     desire_to_intervene = 10
     desire_to_do_nothing = 75  # weighting for doing nothing # TODO - move magic number to config
 
-    for ent, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
+    for entity, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
         attitudes = library.get_god_attitudes_data(identity.name)
         action_name = action
 
@@ -501,7 +501,7 @@ def consider_intervening(entity: EntityID, action: Any) -> List[Tuple[int, Any]]
 
         # if god has chosen to take an action then add to list
         if chosen_intervention != "Nothing":
-            chosen_interventions.append((ent, chosen_intervention))
+            chosen_interventions.append((entity, chosen_intervention))
 
     return chosen_interventions
 

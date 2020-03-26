@@ -114,7 +114,7 @@ class UIHandler(Subscriber):
         ui.init_entity_info()
 
         # Loop all entities with Position and Aesthetic and update their screen position
-        for ent, (aesthetic, position) in existence.get_components([Aesthetic, Position]):
+        for entity, (aesthetic, position) in existence.get_components([Aesthetic, Position]):
             aesthetic.screen_x, aesthetic.screen_y = ui.world_to_screen_position((position.x, position.y))
             aesthetic.target_screen_x = aesthetic.screen_x
             aesthetic.target_screen_y = aesthetic.screen_y
@@ -148,7 +148,7 @@ class UIHandler(Subscriber):
 
     ############# HANDLE UI EVENTS #################
 
-    def process_ui_event(self, event, ent=None):
+    def process_ui_event(self, event, entity=None):
         """
         Process UI topic event
         """
@@ -166,8 +166,8 @@ class UIHandler(Subscriber):
                     entities = []
 
                 # there should only be one entity, but just in case...
-                for ent in entities:
-                    self._select_entity(ent)
+                for entity in entities:
+                    self._select_entity(entity)
                     break
 
             elif game_state == GameState.TARGETING_MODE:
@@ -223,11 +223,11 @@ class UIHandler(Subscriber):
         ui.update_camera_grid()
 
     @staticmethod
-    def _select_entity(ent: int):
+    def _select_entity(entity: int):
         """
         Set the selected entity
         """
-        ui.set_selected_entity(ent)
+        ui.set_selected_entity(entity)
 
     @staticmethod
     def _process_message(event: MessageEvent):

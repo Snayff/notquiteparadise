@@ -40,13 +40,13 @@ class ProjectileBehaviour(AIBehaviour):
         self.skill_name = skill_name
 
     def act(self):
-        ent = self.entity
+        entity = self.entity
 
         # if we havent travelled max distance then move
         if self.distance_travelled < self.max_range:
-            position = existence.get_entitys_component(ent, Position)
+            position = existence.get_entitys_component(entity, Position)
             projectile_data = library.get_skill_data(self.skill_name).projectile
-            publisher.publish(MoveEvent(ent, (position.x, position.y),
+            publisher.publish(MoveEvent(entity, (position.x, position.y),
                                         (self.direction[0], self.direction[1]),
                                         projectile_data.travel_type, projectile_data.speed))
             self.distance_travelled += 1
@@ -54,8 +54,8 @@ class ProjectileBehaviour(AIBehaviour):
             # we have reached the limit, process expiry and then die
             projectile_data = library.get_skill_data(self.skill_name).projectile
             if projectile_data.expiry_type == ProjectileExpiry.ACTIVATE:
-                publisher.publish(ExpireEvent(ent))
-            publisher.publish(DieEvent(ent))
+                publisher.publish(ExpireEvent(entity))
+            publisher.publish(DieEvent(entity))
 
 
 class SkipTurn(AIBehaviour):

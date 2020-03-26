@@ -93,7 +93,7 @@ class Camera(UIWindow):
 
         # draw entities
         test = existence.get_components([Position, Aesthetic])
-        for ent, (pos, aesthetic) in existence.get_components([Position, Aesthetic]):
+        for entity, (pos, aesthetic) in existence.get_components([Position, Aesthetic]):
             # TODO - use FOV
             # if in camera view
             if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:

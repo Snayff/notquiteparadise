@@ -72,13 +72,13 @@ def get_visible_values() -> List[str]:
     return values
 
 
-def log_component_not_found(ent: EntityID, component: Type[Component]):
+def log_component_not_found(entity: EntityID, component: Type[Component]):
     """
-    Use if component not found. Log the error as a warning in the format '{ent} tried to get {component} but it was
+    Use if component not found. Log the error as a warning in the format '{entity} tried to get {component} but it was
     not found.'
     """
-    name = existence.get_name(ent)
-    logging.warning(f"'{name}'({ent}) tried to get {component.__name__}, but it was not found.")
+    name = existence.get_name(entity)
+    logging.warning(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")
 
 
 _debugger = _Debugger()

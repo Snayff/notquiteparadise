@@ -423,15 +423,15 @@ class _UIManager:
 
         ############## ENTITY INFO ###################
 
-    def set_selected_entity(self, ent: int):
+    def set_selected_entity(self, entity: int):
         """
         Set the selected entity and show it.
         """
         entity_info = self.get_ui_element(UIElement.ENTITY_INFO)
 
         if entity_info:
-            if ent:
-                entity_info.set_entity(ent)
+            if entity:
+                entity_info.set_entity(entity)
                 entity_info.show()
             else:
                 entity_info.cleanse()
