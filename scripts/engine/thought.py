@@ -4,7 +4,7 @@ import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
-from scripts.engine import utility, entity
+from scripts.engine import utility, existence
 from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
 from scripts.engine.core.event_core import publisher
@@ -44,7 +44,7 @@ class ProjectileBehaviour(AIBehaviour):
 
         # if we havent travelled max distance then move
         if self.distance_travelled < self.max_range:
-            position = entity.get_entitys_component(ent, Position)
+            position = existence.get_entitys_component(ent, Position)
             projectile_data = library.get_skill_data(self.skill_name).projectile
             publisher.publish(MoveEvent(ent, (position.x, position.y),
                                         (self.direction[0], self.direction[1]),
@@ -66,6 +66,6 @@ class SkipTurn(AIBehaviour):
         self.entity = attached_entity
 
     def act(self):
-        name = entity.get_name(self.entity)
+        name = existence.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
         publisher.publish((EndTurnEvent(self.entity, BASE_MOVE_COST)))

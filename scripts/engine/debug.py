@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING, List
 from snecs import Component
 from snecs.typedefs import EntityID
-from scripts.engine import entity, state
+from scripts.engine import existence, state
 
 
 if TYPE_CHECKING:
@@ -68,7 +68,7 @@ def log_component_not_found(ent: EntityID, component: Type[Component]):
     Use if component not found. Log the error as a warning in the format '{ent} tried to get {component} but it was
     not found.'
     """
-    name = entity.get_name(ent)
+    name = existence.get_name(ent)
     logging.warning(f"'{name}'({ent}) tried to get {component.__name__}, but it was not found.")
 
 

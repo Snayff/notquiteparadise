@@ -7,7 +7,7 @@ from pygame_gui import UIManager
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIButton, UIImage
 
-from scripts.engine import world, entity
+from scripts.engine import world, existence
 from scripts.engine.core.constants import TILE_SIZE, DirectionType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp
@@ -92,8 +92,8 @@ class Camera(UIWindow):
             map_surf.blit(tile.sprite, (screen_x, screen_y))
 
         # draw entities
-        test = entity.get_components([Position, Aesthetic])
-        for ent, (pos, aesthetic) in entity.get_components([Position, Aesthetic]):
+        test = existence.get_components([Position, Aesthetic])
+        for ent, (pos, aesthetic) in existence.get_components([Position, Aesthetic]):
             # TODO - use FOV
             # if in camera view
             if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:

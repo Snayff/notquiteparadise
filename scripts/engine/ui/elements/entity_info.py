@@ -5,7 +5,7 @@ import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
-from scripts.engine import entity, utility
+from scripts.engine import existence, utility
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, INFINITE
 from scripts.engine.utility import get_class_members
 from scripts.engine.component import Aesthetic, Identity, Resources, Afflictions
@@ -93,7 +93,7 @@ class EntityInfo(UIWindow):
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
 
-        aesthetic = entity.get_entitys_component(self.selected_entity, Aesthetic)
+        aesthetic = existence.get_entitys_component(self.selected_entity, Aesthetic)
         if aesthetic:
             image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
         else:
@@ -114,10 +114,10 @@ class EntityInfo(UIWindow):
             text = ""
 
             # basic info
-            identity = entity.get_entitys_component(ent, Identity)
+            identity = existence.get_entitys_component(ent, Identity)
             if identity:
                 text += f"{identity.name.capitalize()}" + "<br>"
-            resources = entity.get_entitys_component(ent, Resources)
+            resources = existence.get_entitys_component(ent, Resources)
             if resources:
                 text += f"Current Health: {resources.health}" + "<br>"
                 text += f"Current Stamina: {resources.stamina}" + "<br>"
@@ -126,7 +126,7 @@ class EntityInfo(UIWindow):
             text += gap
 
             # afflictions
-            afflictions = entity.get_entitys_component(ent, Afflictions)
+            afflictions = existence.get_entitys_component(ent, Afflictions)
             if afflictions:
                 for affliction, duration in afflictions.items():
                     if duration == INFINITE:
@@ -137,7 +137,7 @@ class EntityInfo(UIWindow):
             text += gap
 
             # stats info
-            stats = entity.get_combat_stats(self.selected_entity)
+            stats = existence.get_combat_stats(self.selected_entity)
             primary_stats = utility.get_class_members(PrimaryStat)
             for name in primary_stats:
                 try:

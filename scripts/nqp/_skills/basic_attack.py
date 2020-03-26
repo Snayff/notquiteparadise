@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
 from snecs.typedefs import EntityID
-from scripts.engine import skill, utility, world
+from scripts.engine import act, utility, world
 from scripts.engine.core.constants import PrimaryStat, Shape, TargetTag, DamageType, BASE_ACCURACY, BASE_DAMAGE
 from scripts.engine.core.definitions import DamageEffectData
 from scripts.engine.world_objects.tile import Tile
@@ -36,7 +36,7 @@ def activate(causing_entity: EntityID, target_tiles: List[Tile]):
     for tile in target_tiles:
         coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
         effected_tiles = world.get_tiles(tile.x, tile.y, coords)
-        skill.process_effect(effect, effected_tiles, causing_entity)
+        act.process_effect(effect, effected_tiles, causing_entity)
 
 
 

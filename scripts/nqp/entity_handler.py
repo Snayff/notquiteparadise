@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-from scripts.engine import world, chrono, entity, state, skill, debug, utility
+from scripts.engine import world, chapter, existence, state, act, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
-    BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS, INFINITE
+    BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS, INFINITE, TargetingMethod
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
     EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, EndRoundEvent
 from scripts.engine.library import library
@@ -54,7 +54,7 @@ class EntityHandler(Subscriber):
         # get info from event
         dir_x, dir_y = event.direction
         ent = event.entity
-        name = entity.get_name(ent)
+        name = existence.get_name(ent)
         old_x, old_y = event.start_pos
         target_x = old_x + dir_x
         target_y = old_y + dir_y
@@ -78,7 +78,7 @@ class EntityHandler(Subscriber):
 
         # check if entity blocking tile
         elif is_entity_on_tile:
-            entities = entity.get_entities_and_components_in_area([target_tile], [Blocking])
+            entities = existence.get_entities_and_components_in_area([target_tile], [Blocking])
             for blocking_entity, (position, blocking, *rest) in entities.items():
                 if blocking.blocks_movement:
                     publisher.publish(EntityCollisionEvent(ent, blocking_entity, event.direction, event.start_pos))
@@ -86,7 +86,7 @@ class EntityHandler(Subscriber):
 
         # if nothing in the way, time to move!
         elif not is_entity_on_tile and not is_tile_blocking_movement:
-            position = entity.get_entitys_component(ent, Position)
+            position = existence.get_entitys_component(ent, Position)
 
             # update position
             if position:
@@ -94,94 +94,59 @@ class EntityHandler(Subscriber):
                 position.y = target_y
 
             # TODO - move to UI handler
-            aesthetic = entity.get_entitys_component(ent, Aesthetic)
+            aesthetic = existence.get_entitys_component(ent, Aesthetic)
             if aesthetic:
                 aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
                 target_y))
                 aesthetic.current_sprite = aesthetic.sprites.move
 
             # update fov if needed
-            if entity.has_component(ent, FOV):
-                if entity.has_component(ent, HasCombatStats):
-                    stats = entity.get_combat_stats(ent)
+            if existence.has_component(ent, FOV):
+                if existence.has_component(ent, HasCombatStats):
+                    stats = existence.get_combat_stats(ent)
                     sight_range = max(0, stats.sight_range)
                 else:
                     sight_range = DEFAULT_SIGHT_RANGE
-                fov_map = entity.get_entitys_component(ent, FOV).map
+                fov_map = existence.get_entitys_component(ent, FOV).map
                 world.recompute_fov(position.x, position.y, sight_range, fov_map)
 
                 # update tiles if it is player
-                if ent == entity.get_player():
+                if ent == existence.get_player():
                     # TODO - should probably sit in world handler
                     world.update_tile_visibility(fov_map)
 
             # if entity that moved is turn holder then end their turn
-            if ent == chrono.get_turn_holder():
+            if ent == chapter.get_turn_holder():
                 publisher.publish(EndTurnEvent(ent, BASE_MOVE_COST))
-
-    @staticmethod
-    def _process_use_skill(event: UseSkillEvent):
-        """
-        Process the entity`s use of a skill. Tests affordability and pays resource cost. Creates a projectile to
-        carry the skill.
-        """
-        ent = event.entity
-        name = entity.get_name(ent)
-        skill_name = event.skill_name
-        skill_data = library.get_skill_data(skill_name)
-        start_x, start_y = event.start_pos[0], event.start_pos[1]
-        dir_x, dir_y = event.direction[0], event.direction[1]
-
-        # pay then use the skill
-        skill.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
-        skill.use(ent, skill_name, (start_x, start_y), (dir_x, dir_y))
-
-        logging.debug(f"'{name}' used {skill_name}.")
-
-        # update the cooldown
-        knowledge = entity.get_entitys_component(ent, Knowledge)
-        knowledge.skills[skill_name] = skill_data.cooldown  # TODO - modify by entity's stats
-
-        # end the turn if the entity is the turn holder
-        if ent == chrono.get_turn_holder():
-            publisher.publish(EndTurnEvent(ent, skill_data.time_cost))
-
-    @staticmethod
-    def _process_die(event: DieEvent):
-        """
-        Control the entity death
-        """
-        ent = event.entity
-        turn_queue = chrono.get_turn_queue()
-
-        # if  not player
-        # TODO add player death
-        if ent != entity.get_player():
-            # if turn holder create new queue without them
-            if ent == chrono.get_turn_holder():
-                chrono.rebuild_turn_queue(ent)
-            elif ent in turn_queue:
-                # remove from turn queue
-                turn_queue.pop(ent)
-
-            # delete from world
-            entity.delete(ent)
-        else:
-            publisher.publish(MessageEvent(MessageType.LOG, "I should have died just then."))
 
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):
         """
         Process the desire to use a skill.
         """
-        player = entity.get_player()
+        player = existence.get_player()
         ent = event.entity
         start_x, start_y = event.start_pos
         direction = event.direction
         skill_name = event.skill_name
         skill_data = library.get_skill_data(skill_name)
-        can_afford = skill.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost)
-        cooldown = entity.get_entitys_component(player, Knowledge).skills[skill_name]
+
+        # flags
+        target_needed = target_needed_provided = can_afford = False
+
+        # complete initial checks
+        targeting = skill_data.targeting_method
+        if targeting == TargetingMethod.TARGET:
+            target_needed = True
+        elif targeting == TargetingMethod.AUTO:
+            target_needed = False
+
+        if target_needed and direction:
+            target_needed_provided = True
+
+        can_afford = act.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost)
+
+        cooldown = existence.get_entitys_component(player, Knowledge).skills[skill_name]
         if cooldown <= 0:
             not_on_cooldown = True
         else:
@@ -213,8 +178,10 @@ class EntityHandler(Subscriber):
                 if can_afford and not_on_cooldown:
                     publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
 
-        elif direction:
+        elif target_needed_provided:
             # we have a direction, let's actually use the skill!
+            # TODO - get targets from skill method
+
             dir_x, dir_y = direction
             tile = world.get_tile((start_x + dir_x, start_y + dir_y))
             has_right_target = world.tile_has_tags(tile, skill_data.use_required_tags, ent)
@@ -228,11 +195,11 @@ class EntityHandler(Subscriber):
 
         # log/inform lack of affordability
         if not can_afford:
-            # is it the player that's can't afford it?
+            # is it the player that can't afford it?
             if ent == player:
                 publisher.publish(MessageEvent(MessageType.LOG, "I cannot afford to do that."))
             else:
-                name = entity.get_name(ent)
+                name = existence.get_name(ent)
                 logging.warning(f"'{name}' tried to use {skill_name}, which they can`t afford.")
 
         # log/inform on cooldown
@@ -241,8 +208,58 @@ class EntityHandler(Subscriber):
             if ent == player:
                 publisher.publish(MessageEvent(MessageType.LOG, "I'm not ready to do that, yet."))
             else:
-                name = entity.get_name(ent)
+                name = existence.get_name(ent)
                 logging.warning(f"'{name}' tried to use {skill_name}, but needs to wait {cooldown} more rounds.")
+
+    @staticmethod
+    def _process_use_skill(event: UseSkillEvent):
+        """
+        Process the entity`s use of a skill. Tests affordability and pays resource cost. Creates a projectile to
+        carry the skill.
+        """
+        ent = event.entity
+        name = existence.get_name(ent)
+        skill_name = event.skill_name
+        skill_data = library.get_skill_data(skill_name)
+        start_x, start_y = event.start_pos[0], event.start_pos[1]
+        dir_x, dir_y = event.direction[0], event.direction[1]
+
+        # pay then use the skill
+        act.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
+        act.use_skill(ent, skill_name, (start_x, start_y), (dir_x, dir_y))
+
+        logging.debug(f"'{name}' used {skill_name}.")
+
+        # update the cooldown
+        knowledge = existence.get_entitys_component(ent, Knowledge)
+        knowledge.skills[skill_name].cooldown = skill_data.cooldown  # TODO - modify by entity's stats
+
+        # end the turn if the entity is the turn holder
+        if ent == chapter.get_turn_holder():
+            publisher.publish(EndTurnEvent(ent, skill_data.time_cost))
+
+    @staticmethod
+    def _process_die(event: DieEvent):
+        """
+        Control the entity death
+        """
+        ent = event.entity
+        turn_queue = chapter.get_turn_queue()
+
+        # if  not player
+        # TODO add player death
+        if ent != existence.get_player():
+            # if turn holder create new queue without them
+            if ent == chapter.get_turn_holder():
+                chapter.rebuild_turn_queue(ent)
+            elif ent in turn_queue:
+                # remove from turn queue
+                turn_queue.pop(ent)
+
+            # delete from world
+            existence.delete(ent)
+        else:
+            publisher.publish(MessageEvent(MessageType.LOG, "I should have died just then."))
 
     @staticmethod
     def _process_end_turn(event: EndTurnEvent):
@@ -250,7 +267,7 @@ class EntityHandler(Subscriber):
         Have entity spend their time
         """
         #  update turn holder`s time spent
-        entity.spend_time(event.entity, event.time_spent)
+        existence.spend_time(event.entity, event.time_spent)
 
     @staticmethod
     def _process_end_round(event: EndRoundEvent):
@@ -258,13 +275,13 @@ class EntityHandler(Subscriber):
         Reduce cooldowns and durations
         """
         # skill cooldowns
-        for ent, (knowledge, ) in entity.get_components([Knowledge]):
-            for _skill, cd in knowledge.skills.items():
-                if cd > 0:
-                    knowledge.skills[_skill] = cd - 1
+        for ent, (knowledge, ) in existence.get_components([Knowledge]):
+            for _skill in knowledge.skills.values():
+                if _skill.cooldown > 0:
+                    knowledge.skills[_skill].cooldown = _skill.cooldown - 1
 
         # affliction durations
-        for ent, (afflictions, ) in entity.get_components([Afflictions]):
+        for ent, (afflictions, ) in existence.get_components([Afflictions]):
             for affliction, duration in afflictions.items():
                 if duration - 1 <= 0:
                     # expired

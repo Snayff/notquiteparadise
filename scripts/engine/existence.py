@@ -11,8 +11,8 @@ from snecs import Component
 from snecs.typedefs import EntityID
 from snecs.ecs import new_entity
 from snecs.query import Query
-from scripts.engine import utility, world, debug, chrono
-from scripts.engine.ai import ProjectileBehaviour, SkipTurn
+from scripts.engine import utility, world, debug, chapter, act
+from scripts.engine.thought import ProjectileBehaviour, SkipTurn
 from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy, Homeland, Aesthetic, \
     IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour, \
     Tracked, Afflictions
@@ -219,7 +219,7 @@ def create_god(god_name: str) -> EntityID:
     skill_order = []
     for name, intervention in interventions.items():
         skill_key = intervention.skill_key
-        intervention_names[skill_key] = library.get_skill_data(skill_key).cooldown
+        intervention_names[skill_key] = act.create_skill_instance(library.get_skill_data(skill_key).class_name)
         skill_order.append(skill_key)
 
     god.append(Identity(data.name, data.description))
@@ -255,13 +255,14 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
     actor.append(FOV(world.create_fov_map()))
-    actor.append(Tracked(chrono.get_time()))
+    actor.append(Tracked(chapter.get_time()))
 
     # setup basic attack as a known skill and an interaction
     basic_attack_name = "basic_attack"
     trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name, creator=name)
     actor.append(Interactions({InteractionCause.ENTITY_COLLISION: [trigger_skill]}))
-    known_skills = {basic_attack_name: 0}  # N.B. All actors start with basic attack
+    # N.B. All actors start with basic attack
+    known_skills = {basic_attack_name: act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name)}
     skill_order = [basic_attack_name]
     afflictions = Afflictions()
 
@@ -335,7 +336,7 @@ def create_projectile(creating_entity: EntityID, skill_name: str, x: int, y: int
     desc = f"{name}s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
     projectile.append(IsProjectile(creating_entity))
-    projectile.append(Tracked(chrono.get_time()))
+    projectile.append(Tracked(chapter.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.activate_required_tags,
                                              creator=name)

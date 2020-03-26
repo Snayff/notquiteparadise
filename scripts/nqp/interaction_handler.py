@@ -4,7 +4,7 @@ import logging
 import scripts.engine.world
 from snecs.typedefs import EntityID
 from typing import TYPE_CHECKING, Type, Optional
-from scripts.engine import world, entity, skill, utility
+from scripts.engine import world, existence, act, utility
 from scripts.engine.core.constants import InteractionCause, InteractionCauseType, TerrainCollision, Effect, \
     DEBUG_LOG_EVENT_RECEIPTS
 from scripts.engine.core.definitions import InteractionData
@@ -50,10 +50,10 @@ class InteractionHandler(Subscriber):
                                      target_pos)
 
     def _process_expiry(self, event: ExpireEvent):
-        position = entity.get_entitys_component(event.entity, Position)
+        position = existence.get_entitys_component(event.entity, Position)
         self._process_caused_interactions(event.entity, InteractionCause.EXPIRE, (position.x, position.y),
                                      (position.x, position.y))
-        entity.delete(event.entity)
+        existence.delete(event.entity)
 
     @staticmethod
     def _process_end_turn(event: EndTurnEvent):
@@ -86,12 +86,12 @@ class InteractionHandler(Subscriber):
 
     def _process_entity_collision(self, event: EntityCollisionEvent):
         ent = event.entity
-        a_name = entity.get_name(ent)
-        b_name = entity.get_name(event.blocking_entity)
+        a_name = existence.get_name(ent)
+        b_name = existence.get_name(event.blocking_entity)
         logging.debug(f"'{a_name}' collided with '{b_name}'.")
 
         # check if projectile as we would need the instigating entity
-        is_projectile = entity.get_entitys_component(ent, IsProjectile)
+        is_projectile = existence.get_entitys_component(ent, IsProjectile)
 
         # ensure creator is passed if projectile hit someone
         if is_projectile:
@@ -106,15 +106,15 @@ class InteractionHandler(Subscriber):
 
     def _process_terrain_collision(self, event: TerrainCollisionEvent):
         ent = event.entity
-        name = entity.get_name(ent)
+        name = existence.get_name(ent)
         current_x, current_y = event.start_pos[0], event.start_pos[1]
         target_x, target_y = current_x + event.direction[0], current_y + event.direction[1]
 
         # what hit the terrain?
         # Is it a projectile?
-        if entity.has_component(ent, IsProjectile):
+        if existence.has_component(ent, IsProjectile):
             logging.debug(f"{name} hit a blocking tile and will...")
-            behaviour = entity.get_entitys_component(ent, Behaviour)
+            behaviour = existence.get_entitys_component(ent, Behaviour)
             projectile_data = library.get_skill_data(behaviour.behaviour.skill_name).projectile
             terrain_collision = projectile_data.terrain_collision
 
@@ -138,15 +138,15 @@ class InteractionHandler(Subscriber):
             start_pos: Tuple[int, int], target_pos: Tuple[int, int], instigating_entity: Optional[EntityID] = None):
 
         # get interactions effects for specified cause
-        if entity.has_component(causing_entity, Interactions):
-            interactions = entity.get_entitys_component(causing_entity, Interactions)
+        if existence.has_component(causing_entity, Interactions):
+            interactions = existence.get_entitys_component(causing_entity, Interactions)
             caused_interactions = interactions.get(interaction_cause)
             if caused_interactions:
                 self._apply_effects_to_tiles(causing_entity, caused_interactions, start_pos, target_pos,
                                              instigating_entity)
 
-        if entity.has_component(causing_entity, Afflictions):
-            afflictions = entity.get_entitys_component(causing_entity, Afflictions)
+        if existence.has_component(causing_entity, Afflictions):
+            afflictions = existence.get_entitys_component(causing_entity, Afflictions)
             for affliction in afflictions.keys():
                 interactions = library.get_affliction_data(affliction).interactions
                 caused_interactions = interactions.get(interaction_cause)
@@ -185,4 +185,4 @@ class InteractionHandler(Subscriber):
             # apply effects
             if effect_creator:
                 effect.creator = effect_creator
-            skill.process_effect(effect, effected_tiles, originating_entity)
+            act.process_effect(effect, effected_tiles, originating_entity)

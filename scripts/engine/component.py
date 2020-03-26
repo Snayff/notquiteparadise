@@ -4,11 +4,12 @@ from typing import TYPE_CHECKING, Dict, List
 from snecs import RegisteredComponent
 from scripts.engine.core.constants import InteractionCauseType
 from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData, EffectData
+from scripts.nqp.skills import BaseSkill
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional
-    from scripts.engine.ai import AIBehaviour
+    from scripts.engine.thought import AIBehaviour
     import tcod.map
     from snecs.typedefs import EntityID
     
@@ -131,14 +132,14 @@ class Knowledge(RegisteredComponent):
     """"
     An entity's knowledge, including skills.
     """
-    def __init__(self, skills: Dict[str, int] = None, skill_order: List[str] = None):
+    def __init__(self, skills: Dict[str, BaseSkill] = None, skill_order: List[str] = None):
         if skills is None:
             skills = {}
         if skill_order is None:
             skill_order = []
 
         self.skill_order = skill_order  # list of skill names, to allow access by index
-        self.skills: Dict[str, int] = skills  # skill_name : cooldown
+        self.skills: Dict[str, BaseSkill] = skills  # skill_name : Skill
 
 
 class Afflictions(Dict[str, int], RegisteredComponent):

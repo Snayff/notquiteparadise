@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Tuple
 
-from scripts.engine import entity, world, state
+from scripts.engine import existence, world, state
 from scripts.engine.state import get_current
 from scripts.engine.library import library
 
@@ -56,9 +56,9 @@ class UIHandler(Subscriber):
         elif isinstance(event, MoveEvent):
             event: MoveEvent
             # show the entity in the new tile
-            player = entity.get_player()
+            player = existence.get_player()
             if event.entity == player:
-                position = entity.get_entitys_component(player, Position)
+                position = existence.get_entitys_component(player, Position)
                 self._update_camera(event.start_pos, (position.x, position.y))
             else:
                 self._update_camera()
@@ -114,7 +114,7 @@ class UIHandler(Subscriber):
         ui.init_entity_info()
 
         # Loop all entities with Position and Aesthetic and update their screen position
-        for ent, (aesthetic, position) in entity.get_components([Aesthetic, Position]):
+        for ent, (aesthetic, position) in existence.get_components([Aesthetic, Position]):
             aesthetic.screen_x, aesthetic.screen_y = ui.world_to_screen_position((position.x, position.y))
             aesthetic.target_screen_x = aesthetic.screen_x
             aesthetic.target_screen_y = aesthetic.screen_y
@@ -161,7 +161,7 @@ class UIHandler(Subscriber):
 
                 # ensure there is a tile
                 if tile:
-                    entities = entity.get_entities_and_components_in_area([tile], [])
+                    entities = existence.get_entities_and_components_in_area([tile], [])
                 else:
                     entities = []
 
@@ -172,8 +172,8 @@ class UIHandler(Subscriber):
 
             elif game_state == GameState.TARGETING_MODE:
                 # use the skill on the clicked tile
-                player = entity.get_player()
-                position = entity.get_entitys_component(player, Position)
+                player = existence.get_player()
+                position = existence.get_entitys_component(player, Position)
                 direction = world.get_direction((position.x, position.y), event.tile_pos_string)
                 skill_name = state.get_active_skill()
                 publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y), direction))

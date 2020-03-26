@@ -46,6 +46,7 @@ ProjectileSpeedType = NewType("ProjectileSpeedType", int)
 InputModeType = NewType("InputModeType", int)
 UIElementType = NewType("UIElementType", int)
 DirectionType = NewType("DirectionType", Tuple[int, int])
+TargetingMethodType = NewType("TargetingMethodType", str)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
@@ -276,6 +277,14 @@ class AfflictionCategory(SimpleNamespace):
     """
     BANE = AfflictionCategoryType("boon")
     BOON = AfflictionCategoryType("bane")
+
+
+class TargetingMethod(SimpleNamespace):
+    """
+    Specify the way in which as skill is targeted
+    """
+    AUTO = TargetingMethodType("auto")
+    TARGET = TargetingMethodType("target")
 
 
 class InteractionCause(SimpleNamespace):

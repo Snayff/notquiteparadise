@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 import pytweening
-from scripts.engine import utility, entity
+from scripts.engine import utility, existence
 from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING, Optional
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
@@ -27,7 +27,7 @@ def _process_aesthetic_update(delta_time: float):
     Update real-time timers on entities
     """
     # move entities screen position towards target
-    for ent, (aesthetic, ) in entity.get_components([Aesthetic]):
+    for ent, (aesthetic, ) in existence.get_components([Aesthetic]):
         max_duration = 0.3
 
         # increment time
@@ -101,8 +101,8 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
     """
     Get the pressed skill number. Returns value of skill number pressed. If not found returns None.
     """
-    player = entity.get_player()
-    skills = entity.get_entitys_component(player, Knowledge).skill_order
+    player = existence.get_player()
+    skills = existence.get_entitys_component(player, Knowledge).skill_order
 
     if intent == InputIntent.SKILL0:
         skill_name = skills[0]
@@ -144,7 +144,7 @@ def _process_player_turn_intents(intent: InputIntentType):
     """
     Process intents for the player turn game state.
     """
-    player = entity.get_player()
+    player = existence.get_player()
 
     # if player exists, which it should, because we're in PLAYER_TURN game state
     if player:
@@ -152,14 +152,14 @@ def _process_player_turn_intents(intent: InputIntentType):
         direction = _get_pressed_direction(intent)
         possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
         if direction in possible_moves:
-            position = entity.get_entitys_component(player, Position)
+            position = existence.get_entitys_component(player, Position)
             publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD,
                                         BASE_MOVE_COST))
 
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)
         if skill_name:
-            position = entity.get_entitys_component(player, Position)
+            position = existence.get_entitys_component(player, Position)
             # None to trigger targeting mode
             publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
 
@@ -172,7 +172,7 @@ def _process_targeting_mode_intents(intent):
     """
     Process intents for the player turn game state.
     """
-    player = entity.get_player()
+    player = existence.get_player()
 
     # Cancel use
     if intent == InputIntent.CANCEL:
@@ -181,7 +181,7 @@ def _process_targeting_mode_intents(intent):
     # Use a skill
     skill_name = _get_pressed_skills_name(intent)
     if skill_name:
-        position = entity.get_entitys_component(player, Position)
+        position = existence.get_entitys_component(player, Position)
         # None to trigger targeting mode
         publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
 

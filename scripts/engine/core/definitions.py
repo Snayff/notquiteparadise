@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
     AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape, \
-    ResourceType
+    ResourceType, TargetingMethod, TargetingMethodType
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -28,6 +28,7 @@ class SkillData:
     name: str = field(default="none")
     description: str = field(default="none")
     icon: str = field(default="none")
+    class_name: str = ""
 
     # when do we use it?
     use_required_tags: List[TargetTagType] = field(default_factory=list)
@@ -39,11 +40,9 @@ class SkillData:
     cooldown: int = 0
 
     # how does it travel from the user?
+    targeting_method: TargetingMethodType = TargetingMethod.TARGET
     target_directions: List[DirectionType] = field(default_factory=list)
     projectile: ProjectileData = field(default_factory=dict)
-
-    # how does it interact?
-    file_name: str = ""
 
 
 @register_dataclass_with_json

@@ -1,13 +1,14 @@
 {
     "basic_attack": {
         "__dataclass__": "SkillData",
-        "file_name": "basic_attack",
+        "class_name": "BasicAttack",
         "cooldown": 1,
         "description": "A simple attack.",
         "icon": "placeholder/basic_attack.png",
         "name": "basic attack",
         "resource_cost": 10,
         "resource_type": "stamina",
+        "targeting_method": "target",
         "target_directions": [
             "down",
             "down_left",
@@ -35,15 +36,16 @@
             ]
         }
     },
-        "lunge": {
+    "lunge": {
         "__dataclass__": "SkillData",
-        "file_name": "lunge",
+        "class_name": "lunge",
         "cooldown": 1,
         "description": "Launch forwards and hit the enemy in your way.",
         "icon": "placeholder/lunge.png",
         "name": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
+        "targeting_method": "target",
         "target_directions": [
             "down",
             "down_left",

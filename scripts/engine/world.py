@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import tcod.map
 from typing import TYPE_CHECKING, Optional, Tuple
-from scripts.engine import entity, utility
+from scripts.engine import existence, utility
 from scripts.engine.component import Position, Blocking
 from scripts.engine.core.constants import TargetTag, FOVInfo, Shape, TargetTagType
 from scripts.engine.core.store import store
@@ -370,7 +370,7 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     x = tile.x
     y = tile.y
     # Any entities on the tile?
-    for ent, (position,) in entity.get_components([Position]):
+    for ent, (position,) in existence.get_components([Position]):
         if position.x == x and position.y == y:
             return True
 
@@ -385,7 +385,7 @@ def _tile_has_specific_entity(tile: Tile, active_entity: int) -> bool:
     x = tile.x
     y = tile.y
     # ensure active entity is the same as the returned one
-    for ent, (position,) in entity.get_components([Position]):
+    for ent, (position,) in existence.get_components([Position]):
         if position.x == x and position.y == y:
             if active_entity == ent:
                 return True
@@ -398,7 +398,7 @@ def _tile_has_entity_blocking_movement(tile: Tile):
     x = tile.x
     y = tile.y
     # Any entities that block movement?
-    for ent, (position, blocking) in entity.get_components([Position, Blocking]):
+    for ent, (position, blocking) in existence.get_components([Position, Blocking]):
         if position.x == x and position.y == y and blocking.blocks_movement:
             return True
     return False
@@ -408,7 +408,7 @@ def _tile_has_entity_blocking_sight(tile: Tile):
     x = tile.x
     y = tile.y
     # Any entities that block sight?
-    for ent, (position, blocking) in entity.get_components([Position, Blocking]):
+    for ent, (position, blocking) in existence.get_components([Position, Blocking]):
         if position.x == x and position.y == y and blocking.blocks_sight:
             return True
     return False

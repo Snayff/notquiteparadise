@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Union, Optional
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import entity, world, utility
+from scripts.engine import existence, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
     HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction, \
@@ -26,12 +26,17 @@ if TYPE_CHECKING:
 
 #############################################################################################
 ####################### HOW DO SKILLS WORK? #################################################
-# something triggers a UseSkillEvent
-# entity handler picks this up and checks affordability, pays skill costs and calls skills.use
-# skills.use calls the "use" function in the relevant {skill_name}.py and creates a projectile
-# projectile given turn, as any other entity
-# projectile travels in direction until it activates or expires
-# on collision with another entity the projectile calls the relevant "activate" function in the {skill_name}.py
+# something triggers a WantToUseSkillEvent
+# entity handler picks this up and:
+#   checks affordability, pays skill costs, get's target/s and creates a UseSkillEvent
+# entity handler picks this up and:
+#   calls skills.use
+# skills.use calls the "use" method of the relevant {skill_name} in nqp.skills which may:
+#   create a projectile
+#       projectile given turn, as any other entity travels in a direction until it activates or expires
+#       on collision with another entity the projectile calls the  "activate" method {skill_name} in nqp.skills
+#           create ActivateSkillEvent and pass effects
+#   else call "activate"
 ########################################################################################
 
 # TODO - have the ability to create entities, e.g. summons, traps, etc.
@@ -39,13 +44,13 @@ if TYPE_CHECKING:
 
 ######################################## CHECKS ######################################
 
-def can_use(ent: int, target_pos: Tuple[int, int], skill_name: str):
+def can_use_skill(ent: int, target_pos: Tuple[int, int], skill_name: str):
     """
     Confirm entity can use skill on targeted position. True if can use the skill. Else False.
     """
     start_tile = target_tile = None
 
-    position = entity.get_entitys_component(ent, Position)
+    position = existence.get_entitys_component(ent, Position)
     if position:
         target_x, target_y = target_pos
         start_tile = world.get_tile((position.x, position.y))
@@ -78,8 +83,8 @@ def can_afford_cost(ent: int, resource: ResourceType, cost: int):
     """
     Check if entity can afford the resource cost
     """
-    resources = entity.get_entitys_component(ent, Resources)
-    name = entity.get_name(ent)
+    resources = existence.get_entitys_component(ent, Resources)
+    name = existence.get_name(ent)
 
     # Check if cost can be paid
     value = getattr(resources, resource.lower())
@@ -97,8 +102,8 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
     """
     Remove the resource cost from the using entity
     """
-    resources = entity.get_entitys_component(ent, Resources)
-    name = entity.get_name(ent)
+    resources = existence.get_entitys_component(ent, Resources)
+    name = existence.get_name(ent)
 
     if resources:
         resource_value = getattr(resources, resource.lower())
@@ -111,14 +116,14 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
 
-def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
+def use_skill(using_entity: int, skill_name: str, start_position: Tuple[int, int],
         target_direction: Tuple[int, int]):
     """
     Creates a projectile containing relevant skill details and calls the skills use function.
     """
 
     # initial values
-    name = entity.get_name(using_entity)
+    name = existence.get_name(using_entity)
     skill_data = library.get_skill_data(skill_name)
     start_x, start_y = start_position
     dir_x, dir_y = target_direction
@@ -131,7 +136,7 @@ def use(using_entity: int, skill_name: str, start_position: Tuple[int, int],
     _call_skill_func(skill_data.file_name, "use")
 
     # create projectile
-    projectile = entity.create_projectile(using_entity, skill_name, start_x, start_y, dir_x, dir_y)
+    projectile = existence.create_projectile(using_entity, skill_name, start_x, start_y, dir_x, dir_y)
 
     # TODO - check if collision on init tile and immediately apply (how?!)
 
@@ -146,7 +151,21 @@ def _call_skill_func(file_name: str, function_name: str, **func_args) -> Any:
     return result
 
 
+def create_skill_instance(skill_class_name: str):
+    """
+    Create an instance of the skill class
+    """
+    module_name = "skills"
+    module = import_module(module_name)
+    cls = getattr(module, skill_class_name)
+    return cls()
+
+
 ########################################## GET ####################################
+
+def get_target_tiles(skill_name: str, start_position: Tuple[int, int], target_position: Tuple[int, int]) -> List[Tile]:
+    pass
+
 
 def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],
         max_distance: int, travel_type: TravelMethodType) -> Tuple[int, int]:
@@ -222,11 +241,11 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
     Apply an effect to all tiles in a list.
     """
     if isinstance(instigator, EntityID):
-        name = entity.get_name(instigator)
+        name = existence.get_name(instigator)
     elif isinstance(instigator, str):
         name = instigator
     else:
-        name = entity.get_name(causing_entity)
+        name = existence.get_name(causing_entity)
 
     if effect.effect_type is None:
         logging.critical(f"Processing effect, caused by '{name}', but effect_type is None.")
@@ -254,7 +273,7 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
 def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles: List[Tile], attacker: int):
     skill_name = effect.skill_name
 
-    position = entity.get_entitys_component(attacker, Position)
+    position = existence.get_entitys_component(attacker, Position)
     start_pos = (position.x, position.y)
 
     # uses first tile in list for target direction. Should only be one tile when triggering trigger skill.
@@ -269,7 +288,7 @@ def _process_activate_skill(effect: ActivateSkillEffectData, target_tiles: List[
     Activate the skill by calling the skill's activate function.
     """
     num_tiles = len(target_tiles)
-    name = entity.get_name(attacker)
+    name = existence.get_name(attacker)
     skill_name = effect.skill_name
     skill_data = library.get_skill_data(skill_name)
     logging.info(f"'{name}' about to activate {skill_name} on {num_tiles} tiles...")
@@ -282,12 +301,12 @@ def _process_activate_skill(effect: ActivateSkillEffectData, target_tiles: List[
 
 def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles: List[Tile]):
     aspect_name = effect.aspect_name
-    entities = entity.get_entities_and_components_in_area(effected_tiles, [Aspect])
+    entities = existence.get_entities_and_components_in_area(effected_tiles, [Aspect])
 
     # loop all relevant aspects and if one is matching delete the entity
     for ent, (position, aspect) in entities.items():
         if aspect_name in aspect.aspects:
-            entity.delete(ent)
+            existence.delete(ent)
 
 
 def _process_add_aspect_effect(effect: AddAspectEffectData, effected_tiles: List[Tile]):
@@ -299,7 +318,7 @@ def _create_aspect(aspect_name: str, tile: Tile):
     data = library.get_aspect_data(aspect_name)
     position: Position
     aspect: Aspect
-    entities = entity.get_entities_and_components_in_area([tile], [Aspect])
+    entities = existence.get_entities_and_components_in_area([tile], [Aspect])
 
     for ent, (position, aspect) in entities.items():
         # if there is an active version of the same aspect already
@@ -307,15 +326,15 @@ def _create_aspect(aspect_name: str, tile: Tile):
             # increase duration to initial value
             aspect.aspects[aspect_name] = data.duration
         else:
-            entity.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
+            existence.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
 
 
 def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected_tiles: List[Tile], attacker: int):
     affliction_data = library.get_affliction_data(effect.affliction_name)
-    attackers_stats = entity.get_combat_stats(attacker)
+    attackers_stats = existence.get_combat_stats(attacker)
 
     # get relevant entities
-    entities = entity.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats, Identity])
+    entities = existence.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats, Identity])
 
     # loop all relevant entities
     for defender, (position, resources, has_stats, identity) in entities.items():
@@ -323,7 +342,7 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
         # create var to hold the modified duration, if it does change, or the base duration
         base_duration = effect.duration
         modified_duration = base_duration
-        defender_stats = entity.get_combat_stats(defender)
+        defender_stats = existence.get_combat_stats(defender)
         tile = world.get_tile((position.x, position.y))
 
         if tile:
@@ -334,12 +353,12 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
                     # if we havent targeted a stat then default to 0
                     if effect.stat_to_target:
                         to_hit_score = _calculate_to_hit_score(defender_stats, effect.accuracy,
-                                                           effect.stat_to_target, attackers_stats)
+                                                               effect.stat_to_target, attackers_stats)
                     else:
                         to_hit_score = 0
                     hit_type = _get_hit_type(to_hit_score)
 
-                    name = entity.get_name(attacker)
+                    name = existence.get_name(attacker)
 
                     # check if afflictions applied
                     if hit_type == HitType.GRAZE:
@@ -367,8 +386,8 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
 
 def _create_affliction(ent: int, affliction_name: str, duration: int):
     data = library.get_affliction_data(affliction_name)
-    name = entity.get_name(ent)
-    affliction = entity.get_entitys_component(ent, Afflictions)
+    name = existence.get_name(ent)
+    affliction = existence.get_entitys_component(ent, Afflictions)
 
     # check if entity already has the afflictions component
     if affliction:
@@ -397,12 +416,12 @@ def _create_affliction(ent: int, affliction_name: str, duration: int):
     # no current afflictions of same type so process new one
     else:
         logging.info(f"Applying {affliction_name} afflictions to '{name}' with duration of {duration}.")
-        entity.add_component(ent, Afflictions({affliction_name: duration}))
+        existence.add_component(ent, Afflictions({affliction_name: duration}))
 
 
 def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):
-    attackers_stats = entity.get_combat_stats(attacker)
-    entities = entity.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats])
+    attackers_stats = existence.get_combat_stats(attacker)
+    entities = existence.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats])
     effect_creator = effect.creator
 
     # loop all relevant entities
@@ -411,12 +430,12 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
         if tile:
             if world.tile_has_tags(tile, effect.required_tags, attacker):
                 # get the info to process the damage
-                defenders_stats = entity.get_combat_stats(defender)
+                defenders_stats = existence.get_combat_stats(defender)
 
                 # check we have a stat to target, else default to 0
                 if effect.stat_to_target:
                     to_hit_score = _calculate_to_hit_score(defenders_stats, effect.accuracy, effect.stat_to_target,
-                                                       attackers_stats)
+                                                           attackers_stats)
                 else:
                     to_hit_score = 0
 
@@ -425,11 +444,11 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
 
                 # who did the damage? (for informing the player)
                 if attacker:
-                    attacker_name = entity.get_name(attacker)
+                    attacker_name = existence.get_name(attacker)
                 else:
                     attacker_name = "???"
 
-                defender_name = entity.get_name(defender)
+                defender_name = existence.get_name(defender)
 
                 # resolve the damage
                 if damage > 0:
