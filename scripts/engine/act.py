@@ -3,14 +3,12 @@ from __future__ import annotations
 import logging
 import random
 from typing import TYPE_CHECKING, Any, Union, Optional
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import existence, world, utility
-from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions
+from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions, Knowledge
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
     HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction, \
-    ResourceType
+    ResourceType, INFINITE
 from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData
 from scripts.engine.core.event_core import publisher
@@ -107,64 +105,48 @@ def pay_resource_cost(ent: int, resource: SecondaryStatType, cost: int):
 
     if resources:
         resource_value = getattr(resources, resource.lower())
-        resource_left = resource_value - cost
 
-        setattr(resources, resource.lower(), resource_left)
+        if resource_value != INFINITE:
+            resource_left = resource_value - cost
 
-        logging.info(f"'{name}' paid {cost} {resource} and has {resource_left} left.")
+            setattr(resources, resource.lower(), resource_left)
+
+            logging.info(f"'{name}' paid {cost} {resource} and has {resource_left} left.")
+        else:
+            logging.info(f"'{name}' paid nothing as they have infinite {resource}.")
     else:
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
 
-def use_skill(using_entity: int, skill_name: str, start_position: Tuple[int, int],
-        target_direction: Tuple[int, int]):
+def use_skill(using_entity: int, skill_name: str, target_tiles: List[Tile]):
     """
-    Creates a projectile containing relevant skill details and calls the skills use function.
+    Calls the skills "use" function. N.B. target_tiles are the tiles the skill we be used on.
     """
-
-    # initial values
+    knowledge = existence.get_entitys_component(using_entity, Knowledge)
+    knowledge.skills[skill_name].use(target_tiles)
     name = existence.get_name(using_entity)
-    skill_data = library.get_skill_data(skill_name)
-    start_x, start_y = start_position
-    dir_x, dir_y = target_direction
-
-    # log whats happening
-    direction_name = utility.value_to_member((dir_x, dir_y), Direction)
-    logging.info(f"'{name}' used {skill_name} at ({start_x}, {start_y}), aiming {direction_name}.")
-
-    # use the skills associated function
-    _call_skill_func(skill_data.file_name, "use")
-
-    # create projectile
-    projectile = existence.create_projectile(using_entity, skill_name, start_x, start_y, dir_x, dir_y)
-
-    # TODO - check if collision on init tile and immediately apply (how?!)
+    logging.info(f"'{name}' used {skill_name} on {target_tiles}.")
 
 
-def _call_skill_func(file_name: str, function_name: str, **func_args) -> Any:
-    # dynamically call a function from skills.<file_name>.py
-    module_name = "skills." + file_name
-    module = import_module(module_name)
-    module = reload(module)
-    func_to_call = getattr(module, function_name)
-    result = func_to_call(**func_args)
-    return result
-
-
-def create_skill_instance(skill_class_name: str):
+def create_skill_instance(skill_class_name: str, **kwargs):
     """
     Create an instance of the skill class
     """
     module_name = "skills"
     module = import_module(module_name)
     cls = getattr(module, skill_class_name)
-    return cls()
+    return cls(**kwargs)
 
 
 ########################################## GET ####################################
 
-def get_target_tiles(skill_name: str, start_position: Tuple[int, int], target_position: Tuple[int, int]) -> List[Tile]:
-    pass
+def get_target_tiles(using_entity: EntityID, skill_name: str, start_position: Tuple[int, int],
+        target_position: Tuple[int, int]) -> List[Optional[Tile]]:
+    """
+    Call the skills "get_target_tiles" method. Checks for appropriate tiles based on target position and the skill
+    """
+    knowledge = existence.get_entitys_component(using_entity, Knowledge)
+    return knowledge.skills[skill_name].get_target_tiles(start_position, target_position)
 
 
 def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],

@@ -213,22 +213,23 @@ def create_god(god_name: str) -> EntityID:
     icon = utility.get_image(data.sprite_paths.icon, (ICON_SIZE, ICON_SIZE))
     sprites = CharacteristicSpritesData(icon=icon, idle=idle)
 
+    god.append(Identity(data.name, data.description))
+    god.append(Aesthetic(sprites.idle, sprites))
+    god.append(IsGod())
+    god.append(Opinion())
+    god.append((Resources(INFINITE, INFINITE)))
+    entity = create(god)
+
     # get knowledge info
     interventions = data.interventions
     intervention_names = {}
     skill_order = []
     for name, intervention in interventions.items():
         skill_key = intervention.skill_key
-        intervention_names[skill_key] = act.create_skill_instance(library.get_skill_data(skill_key).class_name)
+        _skill = act.create_skill_instance(library.get_skill_data(skill_key).class_name, owning_entity=entity)
+        intervention_names[skill_key] = _skill
         skill_order.append(skill_key)
-
-    god.append(Identity(data.name, data.description))
-    god.append(Aesthetic(sprites.idle, sprites))
-    god.append(IsGod())
-    god.append(Opinion())
-    god.append(Knowledge(intervention_names, skill_order))
-    god.append((Resources(INFINITE, INFINITE)))  # TODO - find a way to have gos use skills without need for resources
-    entity = create(god)
+    add_component(entity, Knowledge(intervention_names, skill_order))
 
     logging.debug(f"{data.name} created.")
 
@@ -244,6 +245,10 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     # TODO - rename create player. add new method for create actor that uses actor/npc characteristic
     # TODO - simplify looping. Use same approach as action.convert_to_intent
 
+    people_data = library.get_people_data(people_name)
+    homeland_data = library.get_homeland_data(homeland_name)
+    savvy_data = library.get_savvy_data(savvy_name)
+
     actor: List[Component] = []
 
     # actor components
@@ -257,17 +262,25 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(FOV(world.create_fov_map()))
     actor.append(Tracked(chapter.get_time()))
 
-    # setup basic attack as a known skill and an interaction
+    # add aesthetic
+    characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
+    sprites = build_characteristic_sprites(characteristics)
+    actor.append(Aesthetic(sprites.idle, sprites))
+
+    # create the entity
+    entity = create(actor)
+
+    # setup basic attack as a known skill and an interaction  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
     trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name, creator=name)
-    actor.append(Interactions({InteractionCause.ENTITY_COLLISION: [trigger_skill]}))
+    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [trigger_skill]}))
     # N.B. All actors start with basic attack
-    known_skills = {basic_attack_name: act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name)}
+    skill = act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name, owning_entity=entity)
+    known_skills = {basic_attack_name: skill}
     skill_order = [basic_attack_name]
     afflictions = Afflictions()
 
     # get skills and perm afflictions from characteristics
-    people_data = library.get_people_data(people_name)
     if people_data.known_skills != ["none"]:
         for skill in people_data.known_skills:
             known_skills[skill] = library.get_skill_data(skill).cooldown
@@ -276,7 +289,6 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
         for affliction in people_data.permanent_afflictions:
             afflictions[affliction] = INFINITE
 
-    homeland_data = library.get_homeland_data(homeland_name)
     if homeland_data.known_skills != ["none"]:
         for skill in homeland_data.known_skills:
             known_skills[skill] = library.get_skill_data(skill).cooldown
@@ -285,7 +297,6 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
         for affliction in people_data.permanent_afflictions:
             afflictions[affliction] = INFINITE
 
-    savvy_data = library.get_savvy_data(savvy_name)
     if savvy_data.known_skills != ["none"]:
         for skill in savvy_data.known_skills:
             known_skills[skill] = library.get_skill_data(skill).cooldown
@@ -295,16 +306,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
             afflictions[affliction] = INFINITE
 
     # add skills to entity
-    actor.append(Knowledge(known_skills, skill_order))
-    actor.append(afflictions)
-
-    # add aesthetic
-    characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
-    sprites = build_characteristic_sprites(characteristics)
-    actor.append(Aesthetic(sprites.idle, sprites))
-
-    # create the entity
-    entity = create(actor)
+    add_component(entity, Knowledge(known_skills, skill_order))
+    add_component(entity, afflictions)
 
     # give full resources N.B. Can only be added once entity is created
     stats = get_combat_stats(entity)

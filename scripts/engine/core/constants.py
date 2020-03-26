@@ -71,7 +71,7 @@ class FOVInfo(SimpleNamespace):
 
 class GameState(SimpleNamespace):
     """
-    States the Game can be in.
+    States the game can be in.
     """
     PLAYER_TURN = GameStateType(1)
     NPC_TURN = GameStateType(2)

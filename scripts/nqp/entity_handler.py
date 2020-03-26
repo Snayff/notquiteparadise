@@ -128,32 +128,26 @@ class EntityHandler(Subscriber):
         ent = event.entity
         start_x, start_y = event.start_pos
         direction = event.direction
+        dir_x, dir_y = direction
         skill_name = event.skill_name
         skill_data = library.get_skill_data(skill_name)
 
         # flags
-        target_needed = target_needed_provided = can_afford = False
+        got_target = can_afford = not_on_cooldown = False
 
         # complete initial checks
         targeting = skill_data.targeting_method
-        if targeting == TargetingMethod.TARGET:
-            target_needed = True
-        elif targeting == TargetingMethod.AUTO:
-            target_needed = False
-
-        if target_needed and direction:
-            target_needed_provided = True
+        if (targeting == TargetingMethod.TARGET and direction) or targeting == TargetingMethod.AUTO:
+            got_target = True
 
         can_afford = act.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost)
 
-        cooldown = existence.get_entitys_component(player, Knowledge).skills[skill_name]
+        cooldown = existence.get_entitys_component(player, Knowledge).skills[skill_name].cooldown
         if cooldown <= 0:
             not_on_cooldown = True
-        else:
-            not_on_cooldown = False
 
         # if its the player wanting to use their skill but we dont have a target direction
-        if player and player == ent and not direction:
+        if player and player == ent and not got_target:
             game_state = state.get_current()
 
             # are we already in targeting mode?
@@ -178,20 +172,24 @@ class EntityHandler(Subscriber):
                 if can_afford and not_on_cooldown:
                     publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
 
-        elif target_needed_provided:
-            # we have a direction, let's actually use the skill!
-            # TODO - get targets from skill method
+        elif got_target:
+            # we have a direction, let's see if we can use the skill
+            if can_afford and not_on_cooldown:
+                target_pos = (start_x + dir_x, start_y + dir_y)
+                target_tiles = act.get_target_tiles(ent, skill_name, (start_x, start_y), target_pos)
 
-            dir_x, dir_y = direction
-            tile = world.get_tile((start_x + dir_x, start_y + dir_y))
-            has_right_target = world.tile_has_tags(tile, skill_data.use_required_tags, ent)
+                # we have someone to target, let's go
+                if target_tiles:
+                    publisher.publish(UseSkillEvent(ent, skill_name, target_tiles))
+                else:
+                    # no suitable targets
+                    publisher.publish(MessageEvent(MessageType.LOG, "I can't do that there!"))
+                    # TODO - change to an informational, on screen message.
 
-            if can_afford and has_right_target and not_on_cooldown:
-                publisher.publish(UseSkillEvent(ent, skill_name, (start_x, start_y), direction))
-
-            if not has_right_target:
-                publisher.publish(MessageEvent(MessageType.LOG, "I can't do that there!"))
-                # TODO - change to an informational, on screen message.
+        else:
+            # not player and no target
+            # TODO - ai approach
+            pass
 
         # log/inform lack of affordability
         if not can_afford:
@@ -221,14 +219,12 @@ class EntityHandler(Subscriber):
         name = existence.get_name(ent)
         skill_name = event.skill_name
         skill_data = library.get_skill_data(skill_name)
-        start_x, start_y = event.start_pos[0], event.start_pos[1]
-        dir_x, dir_y = event.direction[0], event.direction[1]
 
         # pay then use the skill
         act.pay_resource_cost(ent, skill_data.resource_type, skill_data.resource_cost)
-        act.use_skill(ent, skill_name, (start_x, start_y), (dir_x, dir_y))
+        act.use_skill(ent, skill_name, event.target_tiles)
 
-        logging.debug(f"'{name}' used {skill_name}.")
+        logging.debug(f"'{name}' used {skill_name} on .")
 
         # update the cooldown
         knowledge = existence.get_entitys_component(ent, Knowledge)
@@ -276,9 +272,9 @@ class EntityHandler(Subscriber):
         """
         # skill cooldowns
         for ent, (knowledge, ) in existence.get_components([Knowledge]):
-            for _skill in knowledge.skills.values():
-                if _skill.cooldown > 0:
-                    knowledge.skills[_skill].cooldown = _skill.cooldown - 1
+            for skill_name, skill in knowledge.skills.items():
+                if skill.cooldown > 0:
+                    knowledge.skills[skill_name].cooldown = skill.cooldown - 1
 
         # affliction durations
         for ent, (afflictions, ) in existence.get_components([Afflictions]):

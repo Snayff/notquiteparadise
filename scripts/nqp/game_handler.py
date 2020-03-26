@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class GameHandler(Subscriber):
     """
-    Handle core Game related actions, driven by events. Turn changes exist here, too.
+    Handle core game related actions, driven by events. Turn changes exist here, too.
     """
 
     def __init__(self, event_hub):

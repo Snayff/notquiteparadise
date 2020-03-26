@@ -80,7 +80,8 @@ class EffectData(ABC):
     Base data class for an effect.
     """
     # who am I?
-    creator: Optional[str] = None
+    originator: Optional[str] = None  # actor's name
+    creator: Optional[str] = None  # skill, projectile, etc.'s name
     effect_type = None
 
     # who are we targeting?

@@ -18,7 +18,7 @@ from scripts.engine.world_objects.tile import Tile
 
 class Camera(UIWindow):
     """
-    Hold the visual info for the Game Map
+    Hold the visual info for the game Map
     """
 
     def __init__(self, rect: pygame.Rect, manager: UIManager, rows: int, cols: int):

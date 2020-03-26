@@ -102,20 +102,25 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
     Get the pressed skill number. Returns value of skill number pressed. If not found returns None.
     """
     player = existence.get_player()
-    skills = existence.get_entitys_component(player, Knowledge).skill_order
+    skill_name = None
 
-    if intent == InputIntent.SKILL0:
-        skill_name = skills[0]
-    elif intent == InputIntent.SKILL1:
-        skill_name = skills[1]
-    elif intent == InputIntent.SKILL2:
-        skill_name = skills[2]
-    elif intent == InputIntent.SKILL3:
-        skill_name = skills[3]
-    elif intent == InputIntent.SKILL4:
-        skill_name = skills[4]
-    else:
-        skill_name = None
+    try:
+        skills = existence.get_entitys_component(player, Knowledge).skill_order
+
+        if intent == InputIntent.SKILL0:
+            skill_name = skills[0]
+        elif intent == InputIntent.SKILL1:
+            skill_name = skills[1]
+        elif intent == InputIntent.SKILL2:
+            skill_name = skills[2]
+        elif intent == InputIntent.SKILL3:
+            skill_name = skills[3]
+        elif intent == InputIntent.SKILL4:
+            skill_name = skills[4]
+        else:
+            skill_name = None
+    except AttributeError:
+        pass
 
     return skill_name
 
@@ -153,8 +158,7 @@ def _process_player_turn_intents(intent: InputIntentType):
         possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
         if direction in possible_moves:
             position = existence.get_entitys_component(player, Position)
-            publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD,
-                                        BASE_MOVE_COST))
+            publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD))
 
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)

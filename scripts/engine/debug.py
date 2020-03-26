@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 class _Debugger:
     def __init__(self):
         self.current_fps = 0
+        self.recent_average_fps = 0
         self.average_fps = 0
         self.frames = 0
 
@@ -27,7 +28,13 @@ class _Debugger:
         self.frames += 1
         self.current_fps = state.get_internal_clock().get_fps()
         self.average_fps += (self.current_fps - self.average_fps) / self.frames
-        # new_moving_average = previous_moving_average + (1/ current_fps) * (new_sample - previous_sample)
+
+        # get recent fps
+        if self.frames >= 600:
+            frames_to_count = 600
+        else:
+            frames_to_count = self.frames
+        self.recent_average_fps += (self.current_fps - self.average_fps) / frames_to_count
 
 
 def update():
@@ -58,7 +65,9 @@ def get_visible_values() -> List[str]:
     """
     values = []
     if _debugger.fps_visible:
-        values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, Avg={format(_debugger.average_fps, '.2f')}")
+        values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, "
+                      f"C_Avg={format(_debugger.recent_average_fps, '.2f')}"
+                      f"Avg={format(_debugger.average_fps, '.2f')}")
 
     return values
 

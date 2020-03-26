@@ -67,7 +67,7 @@ class UIHandler(Subscriber):
 
     def process_game_event(self, event):
         """
-        Process Game topic event
+        Process game topic event
         """
         if isinstance(event, ChangeGameStateEvent):
             event: ChangeGameStateEvent

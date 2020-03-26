@@ -3,8 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, List
 from snecs import RegisteredComponent
 from scripts.engine.core.constants import InteractionCauseType
-from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData, EffectData
-from scripts.nqp.skills import BaseSkill
+from scripts.engine.core.definitions import EffectData
 
 if TYPE_CHECKING:
     import pygame
@@ -12,6 +11,8 @@ if TYPE_CHECKING:
     from scripts.engine.thought import AIBehaviour
     import tcod.map
     from snecs.typedefs import EntityID
+    from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
+    from scripts.nqp.skills import BaseSkill
     
     
 ##########################################################
