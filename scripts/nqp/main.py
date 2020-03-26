@@ -7,7 +7,7 @@ import logging
 import pstats
 import time
 import traceback
-
+import sys
 import pygame
 import snecs
 from snecs.world import default_world
@@ -67,8 +67,13 @@ def main():
     # run the game
     try:
         game_loop()
-    except Exception as error:
-        logging.critical(f"Something went wrong and killed the game loop. Error: {error}")
+    except Exception:
+        logging.critical(f"Something went wrong and killed the game loop")
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        tb_list = traceback.format_exception(exc_type, exc_value, exc_traceback)
+        for line in tb_list:
+            clean_line = line.replace("\n", "")
+            logging.critical(f"{clean_line}")
         traceback.print_exc()
 
     # we've left the game loop so now close everything down

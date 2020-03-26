@@ -48,7 +48,8 @@ def dump():
     """
     Print the debuggers stats.
     """
-    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}")
+    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}, "
+          f"R_Avg: {format(_debugger.recent_average_fps, '.2f')}")
 
 
 def set_fps_visibility(is_visible: bool):
@@ -66,7 +67,7 @@ def get_visible_values() -> List[str]:
     values = []
     if _debugger.fps_visible:
         values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, "
-                      f"C_Avg={format(_debugger.recent_average_fps, '.2f')}"
+                      f"R_Avg={format(_debugger.recent_average_fps, '.2f')}, "
                       f"Avg={format(_debugger.average_fps, '.2f')}")
 
     return values
