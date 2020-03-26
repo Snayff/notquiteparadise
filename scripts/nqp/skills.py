@@ -18,7 +18,6 @@ if TYPE_CHECKING:
 
 class BaseSkill(ABC):
     def __init__(self, name: str, owning_entity: EntityID):
-        self.effects = []
         self.name = name
         self.entity = owning_entity
         self.cooldown = 0
@@ -34,7 +33,7 @@ class BaseSkill(ABC):
     @abstractmethod
     def use(self, target_tiles: List[Tile]):
         """
-        Create the relevant effects for the skill.
+        Trigger any use effects. e.g. create projectile. If no projectile call activate directly.
         """
         pass
 
@@ -45,6 +44,23 @@ class BaseSkill(ABC):
         """
         pass
 
+    @abstractmethod
+    def activate(self, target_tiles: List[Tile]):
+        """
+        Trigger the effects on the given tiles.
+        """
+        pass
+
+    def _process_result(self, result: bool, effect: EffectData) -> Optional[EffectData]:
+        """
+        Get the success/fail effect, if there is one
+        """
+        if result and effect.success_effect:
+            return effect.success_effect
+        elif not result and effect.fail_effect:
+            return effect.fail_effect
+
+        return None
 
 class BasicAttack(BaseSkill):
 
@@ -67,18 +83,43 @@ class BasicAttack(BaseSkill):
         return tiles_with_tags
 
     def use(self, target_tiles: List[Tile]):
+        # no projectile so call activate directly
+        self.activate(target_tiles)
+
+    def activate(self, target_tiles: List[Tile]):
         effects = self.create_effects()
         entity = self.entity
 
         # process all effects on all tiles
-        for effect in effects:
+        while effects:
+            effect = effects.pop()  # FIFO
             for tile in target_tiles:
                 coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
                 effected_tiles = world.get_tiles(tile.x, tile.y, coords)
-                act.process_effect(effect, effected_tiles, entity)
+                result = act.process_effect(effect, effected_tiles, entity)
+                result_effect = self._process_result(result, effect)
+                if result_effect:
+                    effects.append(result_effect)
+
 
     def create_effects(self) -> List[EffectData]:
         effects = []
+        success_effect_dict = {
+            "originator": self.entity,
+            "creator": self.name,
+            "accuracy": BASE_ACCURACY + 5,
+            "stat_to_target": PrimaryStat.VIGOUR,
+            "shape": Shape.TARGET,
+            "shape_size": 1,
+            "required_tags": [
+                TargetTag.OTHER_ENTITY
+            ],
+            "damage": BASE_DAMAGE + 99,
+            "damage_type": DamageType.MUNDANE,
+            "mod_amount": 0.1,
+            "mod_stat": PrimaryStat.CLOUT,
+        }
+        success_effect = DamageEffectData(**success_effect_dict)
 
         effect_dict = {
             "originator": self.entity,
@@ -93,7 +134,8 @@ class BasicAttack(BaseSkill):
             "damage": BASE_DAMAGE + 20,
             "damage_type": DamageType.MUNDANE,
             "mod_amount": 0.1,
-            "mod_stat": PrimaryStat.CLOUT
+            "mod_stat": PrimaryStat.CLOUT,
+            "success_effect": success_effect
         }
         effects.append(DamageEffectData(**effect_dict))
 

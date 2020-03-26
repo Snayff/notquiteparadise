@@ -95,6 +95,10 @@ class EffectData(ABC):
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
+    # what next?
+    success_effect: Optional[EffectData] = None
+    fail_effect: Optional[EffectData] = None
+
 
 @register_dataclass_with_json
 @dataclass
@@ -158,7 +162,7 @@ class RemoveAspectEffectData(EffectData):
 
 @register_dataclass_with_json
 @dataclass
-class TriggerSkillEffectData(EffectData):
+class UseSkillEffectData(EffectData):
     """
     Data for the  Trigger Skill effect.
     """

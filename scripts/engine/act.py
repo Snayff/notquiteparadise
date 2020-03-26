@@ -9,14 +9,14 @@ from scripts.engine.component import Position, Resources, Aspect, HasCombatStats
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
     HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction, \
     ResourceType, INFINITE
-from scripts.engine.core.definitions import EffectData, TriggerSkillEffectData, RemoveAspectEffectData, \
+from scripts.engine.core.definitions import EffectData, UseSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, WantToUseSkillEvent
 from scripts.engine.library import library
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
-from importlib import reload, import_module
+from importlib import import_module
 
 if TYPE_CHECKING:
     from typing import List, Tuple
@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 
 #############################################################################################
 ####################### HOW DO SKILLS WORK? #################################################
+# TODO - rewrite and update
 # something triggers a WantToUseSkillEvent
 # entity handler picks this up and:
 #   checks affordability, pays skill costs, get's target/s and creates a UseSkillEvent
@@ -125,7 +126,8 @@ def use_skill(using_entity: int, skill_name: str, target_tiles: List[Tile]):
     knowledge = existence.get_entitys_component(using_entity, Knowledge)
     knowledge.skills[skill_name].use(target_tiles)
     name = existence.get_name(using_entity)
-    logging.info(f"'{name}' used {skill_name} on {target_tiles}.")
+    tiles = [(tile.x, tile.y) for tile in target_tiles]
+    logging.info(f"'{name}' used {skill_name} on {tiles}.")
 
 
 def create_skill_instance(skill_class_name: str, **kwargs):
@@ -217,8 +219,8 @@ def _get_hit_type(to_hit_score: int) -> HitTypeType:
 
 ########################################## EFFECTS ####################################
 
-def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entity: int,
-        instigator: Optional[Union[EntityID, str]] = None):
+def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entity: EntityID,
+        instigator: Optional[Union[EntityID, str]] = None) -> bool:
     """
     Apply an effect to all tiles in a list.
     """
@@ -237,22 +239,23 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
         logging.debug(f"Processing {effect.effect_type} effect, caused by '{name}'.")
 
     if isinstance(effect, DamageEffectData):
-        _process_damage_effect(effect, effected_tiles, causing_entity)
+        return _process_damage_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, ApplyAfflictionEffectData):
-        _process_apply_affliction_effect(effect, effected_tiles, causing_entity)
+        return _process_apply_affliction_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, AddAspectEffectData):
-        _process_add_aspect_effect(effect, effected_tiles)
+        return _process_add_aspect_effect(effect, effected_tiles)
     elif isinstance(effect, RemoveAspectEffectData):
-        _process_remove_aspect_effect(effect, effected_tiles)
-    elif isinstance(effect, TriggerSkillEffectData):
-        _process_trigger_skill_effect(effect, effected_tiles, causing_entity)
+        return _process_remove_aspect_effect(effect, effected_tiles)
+    elif isinstance(effect, UseSkillEffectData):
+        return _process_use_skill_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, ActivateSkillEffectData):
-        _process_activate_skill(effect, effected_tiles, causing_entity)
+        return _process_activate_skill_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, AffectStatEffectData):
         logging.warning("Trying to process affect stat. This applies passively. What are you doing?")
 
 
-def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles: List[Tile], attacker: int):
+def _process_use_skill_effect(effect: UseSkillEffectData, effected_tiles: List[Tile],
+        attacker: EntityID) -> bool:
     skill_name = effect.skill_name
 
     position = existence.get_entitys_component(attacker, Position)
@@ -263,25 +266,27 @@ def _process_trigger_skill_effect(effect: TriggerSkillEffectData, effected_tiles
     direction = world.get_direction(start_pos, target_pos)
 
     publisher.publish(WantToUseSkillEvent(attacker, skill_name, start_pos, direction))
+    return True
 
 
-def _process_activate_skill(effect: ActivateSkillEffectData, target_tiles: List[Tile], attacker: int):
+def _process_activate_skill_effect(effect: ActivateSkillEffectData, target_tiles: List[Tile],
+        attacker: EntityID) -> bool:
     """
     Activate the skill by calling the skill's activate function.
     """
-    num_tiles = len(target_tiles)
     name = existence.get_name(attacker)
     skill_name = effect.skill_name
-    skill_data = library.get_skill_data(skill_name)
-    logging.info(f"'{name}' about to activate {skill_name} on {num_tiles} tiles...")
-
-    for tile in target_tiles:
-        # use the skills associated function
-        _call_skill_func(skill_data.file_name, "activate", causing_entity=attacker, target_tiles=[tile])
-        logging.info(f"-> effected ({tile.x}, {tile.y}).")
+    logging.info(f"'{name}' about to activate {skill_name}.")
+    knowledge = existence.get_entitys_component(attacker, Knowledge)
+    knowledge.skills[effect.skill_name].activate(target_tiles)
+    return True
 
 
-def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles: List[Tile]):
+def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles: List[Tile]) -> bool:
+    """
+    Success on removing aspect
+    """
+    success = False
     aspect_name = effect.aspect_name
     entities = existence.get_entities_and_components_in_area(effected_tiles, [Aspect])
 
@@ -289,12 +294,20 @@ def _process_remove_aspect_effect(effect: RemoveAspectEffectData, effected_tiles
     for entity, (position, aspect) in entities.items():
         if aspect_name in aspect.aspects:
             existence.delete(entity)
+            success = True
+
+    return success
 
 
-def _process_add_aspect_effect(effect: AddAspectEffectData, effected_tiles: List[Tile]):
+def _process_add_aspect_effect(effect: AddAspectEffectData, effected_tiles: List[Tile]) -> bool:
+    """
+    Success on adding aspect
+    """
+    success = False
     for tile in effected_tiles:
         _create_aspect(effect.aspect_name, tile)
-
+        success = True
+    return success
 
 def _create_aspect(aspect_name: str, tile: Tile):
     data = library.get_aspect_data(aspect_name)
@@ -311,7 +324,12 @@ def _create_aspect(aspect_name: str, tile: Tile):
             existence.create([Position(position.x, position.y), Aspect({aspect_name: data.duration})])
 
 
-def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected_tiles: List[Tile], attacker: int):
+def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected_tiles: List[Tile],
+        attacker: EntityID) -> bool:
+    """
+    Success on applying affliction
+    """
+    success = False
     affliction_data = library.get_affliction_data(effect.affliction_name)
     attackers_stats = existence.get_combat_stats(attacker)
 
@@ -360,10 +378,14 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
                         publisher.publish(MessageEvent(MessageType.LOG, msg))
 
                         _create_affliction(defender, effect.affliction_name, modified_duration)
+                        success = True
 
                 # Just process the BOON
                 elif affliction_data.category == AfflictionCategory.BOON:
                     _create_affliction(defender, effect.affliction_name, modified_duration)
+                    success = True
+
+    return success
 
 
 def _create_affliction(entity: int, affliction_name: str, duration: int):
@@ -401,7 +423,11 @@ def _create_affliction(entity: int, affliction_name: str, duration: int):
         existence.add_component(entity, Afflictions({affliction_name: duration}))
 
 
-def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int):
+def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile], attacker: int) -> bool:
+    """
+    Success determined by doing >0 damage
+    """
+    success = False
     attackers_stats = existence.get_combat_stats(attacker)
     entities = existence.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats])
     effect_creator = effect.creator
@@ -434,6 +460,7 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
 
                 # resolve the damage
                 if damage > 0:
+                    success = True
                     resources.health -= damage
 
                     # log the outcome
@@ -468,6 +495,8 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
                         msg = f"{defender_name} resisted damage from {attacker_name}'s {effect_creator}."
 
                     publisher.publish(MessageEvent(MessageType.LOG, msg))
+
+                return success
 
 
 ############################################### CALCULATE ####################################

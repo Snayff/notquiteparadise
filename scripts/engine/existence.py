@@ -19,7 +19,7 @@ from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect, \
     INFINITE
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData,\
-    InteractionData, TriggerSkillEffectData, ActivateSkillEffectData
+    InteractionData, UseSkillEffectData, ActivateSkillEffectData
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
@@ -272,7 +272,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # setup basic attack as a known skill and an interaction  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
-    trigger_skill = TriggerSkillEffectData(skill_name=basic_attack_name, creator=name)
+    trigger_skill = UseSkillEffectData(skill_name=basic_attack_name, creator=name)
     add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [trigger_skill]}))
     # N.B. All actors start with basic attack
     skill = act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name, owning_entity=entity)
