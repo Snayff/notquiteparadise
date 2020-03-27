@@ -158,14 +158,20 @@ def _process_player_turn_intents(intent: InputIntentType):
         possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
         if direction in possible_moves:
             position = existence.get_entitys_component(player, Position)
-            publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD))
+            publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD,
+                                        BASE_MOVE_COST))
 
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)
         if skill_name:
             position = existence.get_entitys_component(player, Position)
-            # None to trigger targeting mode
-            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
+            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y),
+                                                  (0, 1)))
+
+            # TODO - uncomment when targeting working again
+            # position = existence.get_entitys_component(player, Position)
+            # # None to trigger targeting mode
+            # publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
 
     # activate the skill editor
     if intent == InputIntent.DEV_TOGGLE:

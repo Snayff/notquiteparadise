@@ -39,15 +39,16 @@ class Aesthetic(RegisteredComponent):
     """
     An entity's sprite.
     """
-    def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData):
+    def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData, screen_x: float,
+            screen_y: float):
         # TODO - add render layer/order
         self.current_sprite = current_sprite
         self.sprites = sprites
 
-        self.screen_x: float = 0
-        self.screen_y: float = 0
-        self.target_screen_x: float = 0
-        self.target_screen_y: float = 0
+        self.screen_x: float = screen_x
+        self.screen_y: float = screen_y
+        self.target_screen_x: float = screen_x
+        self.target_screen_y: float = screen_y
         self.current_sprite_duration: float = 0
 
 

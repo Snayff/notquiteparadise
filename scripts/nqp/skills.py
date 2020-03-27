@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING, Type
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import world, utility, act
+from scripts.engine import world, utility, act, existence
 from scripts.engine.core.constants import Direction, BASE_ACCURACY, PrimaryStat, Shape, TargetTag, BASE_DAMAGE, \
-    DamageType
-from scripts.engine.core.definitions import EffectData, DamageEffectData
+    DamageType, DirectionType, ProjectileSpeed, TravelMethod, TerrainCollision, ProjectileExpiry
+from scripts.engine.core.definitions import EffectData, DamageEffectData, ProjectileData
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
@@ -22,16 +22,27 @@ class BaseSkill(ABC):
         self.entity = owning_entity
         self.cooldown = 0
 
-    @abstractmethod
-    def get_target_tiles(self, start_position: Tuple[int, int],
-            target_position: Tuple[int, int]) -> List[Optional[Tile]]:
+    def get_use_tiles_and_directions(self, start_position: Tuple[int, int],
+            target_position: Tuple[int, int]) -> List[Optional[Tuple[Tile, DirectionType]]]:
         """
-        Get the target tiles based on the skills expectations
+        Get the target tiles and relative directions
         """
-        pass
+        target_tiles = []
+        data = library.get_skill_data(self.name)
+        tags = data.use_required_tags
+
+        # target centre of target pos
+        tiles = world.get_tiles(target_position[0], target_position[1], [(0, 0)])
+
+        for tile in tiles:
+            if world.tile_has_tags(tile, tags, self.entity):
+                direction = world.get_direction(start_position, (tile.x, tile.y))
+                target_tiles.append((tile, direction))
+
+        return target_tiles
 
     @abstractmethod
-    def use(self, target_tiles: List[Tile]):
+    def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
         """
         Trigger any use effects. e.g. create projectile. If no projectile call activate directly.
         """
@@ -51,7 +62,8 @@ class BaseSkill(ABC):
         """
         pass
 
-    def _process_result(self, result: bool, effect: EffectData) -> Optional[EffectData]:
+    @staticmethod
+    def _process_result(result: bool, effect: EffectData) -> Optional[EffectData]:
         """
         Get the success/fail effect, if there is one
         """
@@ -62,29 +74,49 @@ class BaseSkill(ABC):
 
         return None
 
-class BasicAttack(BaseSkill):
 
+################# EXAMPLES ################################
+########## "use" a projectile ###########################
+#         _name = self.name + "s projectile"
+#         _desc = existence.get_name(self.entity) + self.name + "s projectile"
+#         proj_data = ProjectileData(
+#             creator=self.entity,
+#             skill_name=self.name,
+#             name=_name,
+#             description=_desc,
+#             sprite="skills/placeholder/icon_01.png",
+#             required_tags=[TargetTag.OTHER_ENTITY],
+#             speed=ProjectileSpeed.SLOW,
+#             travel_type=TravelMethod.STANDARD,
+#             range=3,
+#             terrain_collision=TerrainCollision.FIZZLE,
+#             expiry_type=ProjectileExpiry.FIZZLE
+#         )
+#
+#         for tile, direction in use_tiles_and_directions:
+#             proj_data.direction = direction
+#             existence.create_projectile(self.entity, tile.x, tile.y, proj_data)
+#
+############### "use" without projectile ###############
+#         tiles = []
+#         for tile, direction in use_tiles_and_directions:
+#             tiles.append(tile)
+#         self.activate(tiles)
+
+
+class BasicAttack(BaseSkill):
+    """
+    Purpose: To provide a simple damaging effect as the fall back option for entities. Also for use with bump attacks.
+    """
     def __init__(self, owning_entity):
         super().__init__("basic_attack", owning_entity)
 
-    def get_target_tiles(self, start_position: Tuple[int, int],
-            target_position: Tuple[int, int]) -> List[Optional[Tile]]:
-        tiles_with_tags = []
-        data = library.get_skill_data(self.name)
-        tags = data.use_required_tags
-
-        # target centre of target pos
-        tiles = world.get_tiles(target_position[0], target_position[1], [Direction.CENTRE])
-
-        for tile in tiles:
-            if world.tile_has_tags(tile, tags, self.entity):
-                tiles_with_tags.append(tile)
-
-        return tiles_with_tags
-
-    def use(self, target_tiles: List[Tile]):
+    def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
         # no projectile so call activate directly
-        self.activate(target_tiles)
+        tiles = []
+        for tile, direction in use_tiles_and_directions:
+            tiles.append(tile)
+        self.activate(tiles)
 
     def activate(self, target_tiles: List[Tile]):
         effects = self.create_effects()
@@ -101,25 +133,8 @@ class BasicAttack(BaseSkill):
                 if result_effect:
                     effects.append(result_effect)
 
-
     def create_effects(self) -> List[EffectData]:
         effects = []
-        success_effect_dict = {
-            "originator": self.entity,
-            "creator": self.name,
-            "accuracy": BASE_ACCURACY + 5,
-            "stat_to_target": PrimaryStat.VIGOUR,
-            "shape": Shape.TARGET,
-            "shape_size": 1,
-            "required_tags": [
-                TargetTag.OTHER_ENTITY
-            ],
-            "damage": BASE_DAMAGE + 99,
-            "damage_type": DamageType.MUNDANE,
-            "mod_amount": 0.1,
-            "mod_stat": PrimaryStat.CLOUT,
-        }
-        success_effect = DamageEffectData(**success_effect_dict)
 
         effect_dict = {
             "originator": self.entity,
@@ -135,7 +150,6 @@ class BasicAttack(BaseSkill):
             "damage_type": DamageType.MUNDANE,
             "mod_amount": 0.1,
             "mod_stat": PrimaryStat.CLOUT,
-            "success_effect": success_effect
         }
         effects.append(DamageEffectData(**effect_dict))
 

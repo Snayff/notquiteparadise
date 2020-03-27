@@ -5,7 +5,7 @@ import tcod.map
 from typing import TYPE_CHECKING, Optional, Tuple
 from scripts.engine import existence, utility
 from scripts.engine.component import Position, Blocking
-from scripts.engine.core.constants import TargetTag, FOVInfo, Shape, TargetTagType
+from scripts.engine.core.constants import TargetTag, FOVInfo, Shape, TargetTagType, DirectionType, Direction
 from scripts.engine.core.store import store
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
@@ -101,7 +101,7 @@ def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List
 
 
 def get_direction(start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int],
-str]) -> Tuple[int, int]:
+str]) -> DirectionType:
     """
     Get the direction between two locations. Positions expect either "x,y", or handles tuples (x, y)
     """
@@ -113,7 +113,7 @@ str]) -> Tuple[int, int]:
         dir_y = target_tile.y - start_tile.y
     else:
         # at least one of the tiles is out of bounds so return centre
-        return 0, 0
+        return Direction.CENTRE
 
     # handle any mistaken values coming in
     if dir_x > 1:

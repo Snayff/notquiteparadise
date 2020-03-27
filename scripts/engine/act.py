@@ -8,9 +8,10 @@ from scripts.engine import existence, world, utility
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions, Knowledge
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
     HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction, \
-    ResourceType, INFINITE
+    ResourceType, INFINITE, DirectionType
 from scripts.engine.core.definitions import EffectData, UseSkillEffectData, RemoveAspectEffectData, \
-    AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData
+    AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData, \
+    KillEntityEffectData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, WantToUseSkillEvent
 from scripts.engine.library import library
@@ -119,14 +120,14 @@ def pay_resource_cost(entity: int, resource: SecondaryStatType, cost: int):
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
 
-def use_skill(using_entity: int, skill_name: str, target_tiles: List[Tile]):
+def use_skill(using_entity: int, skill_name: str, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
     """
-    Calls the skills "use" function. N.B. target_tiles are the tiles the skill we be used on.
+    Calls the skills "use" function. N.B. use_tiles_and_directions are the tiles the skill we be used on.
     """
     knowledge = existence.get_entitys_component(using_entity, Knowledge)
-    knowledge.skills[skill_name].use(target_tiles)
+    knowledge.skills[skill_name].use(use_tiles_and_directions)
     name = existence.get_name(using_entity)
-    tiles = [(tile.x, tile.y) for tile in target_tiles]
+    tiles = [(tile.x, tile.y) for tile, direction in use_tiles_and_directions]
     logging.info(f"'{name}' used {skill_name} on {tiles}.")
 
 
@@ -142,13 +143,14 @@ def create_skill_instance(skill_class_name: str, **kwargs):
 
 ########################################## GET ####################################
 
-def get_target_tiles(using_entity: EntityID, skill_name: str, start_position: Tuple[int, int],
-        target_position: Tuple[int, int]) -> List[Optional[Tile]]:
+def get_use_tiles_and_directions(using_entity: EntityID, skill_name: str, start_position: Tuple[int, int],
+        target_position: Tuple[int, int]) -> List[Optional[Tuple[Tile, DirectionType]]]:
     """
-    Call the skills "get_target_tiles" method. Checks for appropriate tiles based on target position and the skill
+    Call the skills "get_use_tiles_and_directions" method. Checks for appropriate tiles based on
+    target position and the skill
     """
     knowledge = existence.get_entitys_component(using_entity, Knowledge)
-    return knowledge.skills[skill_name].get_target_tiles(start_position, target_position)
+    return knowledge.skills[skill_name].get_use_tiles_and_directions(start_position, target_position)
 
 
 def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],
@@ -236,7 +238,7 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
     elif len(effected_tiles) == 0:
         logging.critical(f"Processing effect, caused by '{name}', but no tiles provided.")
     else:
-        logging.debug(f"Processing {effect.effect_type} effect, caused by '{name}'.")
+        logging.debug(f"Processing {effect.effect_type} effect, caused by '{name}'s {effect.creator}.")
 
     if isinstance(effect, DamageEffectData):
         return _process_damage_effect(effect, effected_tiles, causing_entity)
@@ -250,6 +252,8 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
         return _process_use_skill_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, ActivateSkillEffectData):
         return _process_activate_skill_effect(effect, effected_tiles, causing_entity)
+    elif isinstance(effect, KillEntityEffectData):
+        return _process_kill_entity_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, AffectStatEffectData):
         logging.warning("Trying to process affect stat. This applies passively. What are you doing?")
 
@@ -308,6 +312,7 @@ def _process_add_aspect_effect(effect: AddAspectEffectData, effected_tiles: List
         _create_aspect(effect.aspect_name, tile)
         success = True
     return success
+
 
 def _create_aspect(aspect_name: str, tile: Tile):
     data = library.get_aspect_data(aspect_name)
@@ -498,6 +503,14 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
 
                 return success
 
+
+def _process_kill_entity_effect(effect: UseSkillEffectData, effected_tiles: List[Tile],
+        attacker: EntityID) -> bool:
+    success = False
+    for tile in effected_tiles:
+        publisher.publish(DieEvent(effect.target_entity))
+        success = True
+    return success
 
 ############################################### CALCULATE ####################################
 

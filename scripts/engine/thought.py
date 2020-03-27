@@ -7,9 +7,9 @@ from snecs.typedefs import EntityID
 from scripts.engine import utility, existence
 from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
+from scripts.engine.core.definitions import ProjectileData
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import MoveEvent, DieEvent, ExpireEvent, MessageEvent, EndTurnEvent
-from scripts.engine.library import library
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -31,29 +31,24 @@ class ProjectileBehaviour(AIBehaviour):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
-    def __init__(self, attached_entity: EntityID, direction: Tuple[int, int], max_range: int,
-            skill_name: str):
+    def __init__(self, attached_entity: EntityID, data: ProjectileData):
         self.entity = attached_entity  # the entity this component is attached too
-        self.direction = direction
-        self.max_range = max_range
+        self.data = data
         self.distance_travelled = 0
-        self.skill_name = skill_name
 
     def act(self):
         entity = self.entity
 
         # if we havent travelled max distance then move
-        if self.distance_travelled < self.max_range:
+        if self.distance_travelled < self.data.range:
             position = existence.get_entitys_component(entity, Position)
-            projectile_data = library.get_skill_data(self.skill_name).projectile
             publisher.publish(MoveEvent(entity, (position.x, position.y),
-                                        (self.direction[0], self.direction[1]),
-                                        projectile_data.travel_type, projectile_data.speed))
+                                        (self.data.direction[0], self.data.direction[1]),
+                                        self.data.travel_type, self.data.speed))
             self.distance_travelled += 1
         else:
             # we have reached the limit, process expiry and then die
-            projectile_data = library.get_skill_data(self.skill_name).projectile
-            if projectile_data.expiry_type == ProjectileExpiry.ACTIVATE:
+            if self.data.expiry_type == ProjectileExpiry.ACTIVATE:
                 publisher.publish(ExpireEvent(entity))
             publisher.publish(DieEvent(entity))
 

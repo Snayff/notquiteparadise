@@ -59,7 +59,7 @@ class EntityHandler(Subscriber):
         target_x = old_x + dir_x
         target_y = old_y + dir_y
         target_tile = world.get_tile((target_x, target_y))
-        direction_name = utility.value_to_member((target_x, target_y), Direction)
+        direction_name = utility.value_to_member((dir_x, dir_y), Direction)
 
         # check a tile was returned
         if target_tile:
@@ -117,7 +117,7 @@ class EntityHandler(Subscriber):
 
             # if entity that moved is turn holder then end their turn
             if entity == chapter.get_turn_holder():
-                publisher.publish(EndTurnEvent(entity, BASE_MOVE_COST))
+                publisher.publish(EndTurnEvent(entity, event.base_cost))
 
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):
@@ -128,7 +128,6 @@ class EntityHandler(Subscriber):
         entity = event.entity
         start_x, start_y = event.start_pos
         direction = event.direction
-        dir_x, dir_y = direction
         skill_name = event.skill_name
         skill_data = library.get_skill_data(skill_name)
 
@@ -175,8 +174,9 @@ class EntityHandler(Subscriber):
         elif got_target:
             # we have a direction, let's see if we can use the skill
             if can_afford and not_on_cooldown:
+                dir_x, dir_y = direction
                 target_pos = (start_x + dir_x, start_y + dir_y)
-                target_tiles = act.get_target_tiles(entity, skill_name, (start_x, start_y), target_pos)
+                target_tiles = act.get_use_tiles_and_directions(entity, skill_name, (start_x, start_y), target_pos)
 
                 # we have someone to target, let's go
                 if target_tiles:
@@ -245,6 +245,8 @@ class EntityHandler(Subscriber):
             # if turn holder create new queue without them
             if entity == chapter.get_turn_holder():
                 chapter.rebuild_turn_queue(entity)
+                # ensure the game state reflects the new queue
+                publisher.publish(ChangeGameStateEvent(GameState.NEW_TURN))
             elif entity in turn_queue:
                 # remove from turn queue
                 turn_queue.pop(entity)

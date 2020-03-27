@@ -17,9 +17,10 @@ from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy
     IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour, \
     Tracked, Afflictions
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect, \
-    INFINITE
-from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData,\
-    InteractionData, UseSkillEffectData, ActivateSkillEffectData
+    INFINITE, ProjectileSpeedType, TargetTagType, TargetTag
+from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData, \
+    InteractionData, UseSkillEffectData, ActivateSkillEffectData, ProjectileData, KillEntityEffectData
+from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
@@ -214,7 +215,7 @@ def create_god(god_name: str) -> EntityID:
     sprites = CharacteristicSpritesData(icon=icon, idle=idle)
 
     god.append(Identity(data.name, data.description))
-    god.append(Aesthetic(sprites.idle, sprites))
+    god.append(Aesthetic(sprites.idle, sprites, 0, 0))
     god.append(IsGod())
     god.append(Opinion())
     god.append((Resources(INFINITE, INFINITE)))
@@ -265,7 +266,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     # add aesthetic
     characteristics = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
     sprites = build_characteristic_sprites(characteristics)
-    actor.append(Aesthetic(sprites.idle, sprites))
+    screen_x, screen_y = ui.world_to_screen_position((x, y))
+    actor.append(Aesthetic(sprites.idle, sprites, screen_x, screen_y))
 
     # create the entity
     entity = create(actor)
@@ -325,28 +327,32 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     return entity
 
 
-def create_projectile(creating_entity: EntityID, skill_name: str, x: int, y: int, target_dir_x: int,
-        target_dir_y: int) -> EntityID:
+def create_projectile(creating_entity: EntityID, x: int, y: int, data: ProjectileData) -> EntityID:
     """
     Create an entity with all of the components to be a projectile. Returns entity ID.
     """
-    data = library.get_skill_data(skill_name).projectile
+    skill_name = data.skill_name
     projectile: List[Component] = []
 
-    # TODO - get aesthetic info
     name = get_name(creating_entity)
     projectile_name = f"{skill_name}s projectile"
     desc = f"{name}s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
+
+    sprites = CharacteristicSpritesData(move=utility.get_image(data.sprite), idle=utility.get_image(data.sprite))
+    screen_x, screen_y = ui.world_to_screen_position((x, y))
+    projectile.append(Aesthetic(sprites.move, sprites, screen_x, screen_y))
     projectile.append(IsProjectile(creating_entity))
     projectile.append(Tracked(chapter.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
-    activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.activate_required_tags,
-                                             creator=name)
-    projectile.append(Interactions({InteractionCause.ENTITY_COLLISION: [activate_skill]}))
     entity = create(projectile)
 
-    add_component(entity, Behaviour(ProjectileBehaviour(entity, (target_dir_x, target_dir_y), data.range, skill_name)))
+    activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.required_tags,
+                                             creator=name)
+    kill_entity = KillEntityEffectData(target_entity=entity)
+    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [activate_skill, kill_entity]}))
+
+    add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
     logging.debug(f"{name}`s projectile created.")
 

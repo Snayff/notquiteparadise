@@ -47,18 +47,6 @@
         "time_cost": 30,
         "use_required_tags": [
             "no_blocking_tile"
-        ],
-        "projectile": {
-            "__dataclass__": "ProjectileData",
-            "sprite": "none",
-            "speed": "slow",
-            "travel_type": "instant",
-            "range": 1,
-            "expiry_type": "fizzle",
-            "terrain_collision": "fizzle",
-            "activate_required_tags": [
-                "other_entity"
-            ]
-        }
+        ]
     }
 }

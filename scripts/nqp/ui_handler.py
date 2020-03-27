@@ -33,28 +33,23 @@ class UIHandler(Subscriber):
         Control the events
         """
         if event.topic == EventTopic.UI:
-            self.process_ui_event(event)
+            self._process_ui_event(event)
         elif event.topic == EventTopic.ENTITY:
-            self.process_entity_event(event)
+            self._process_entity_event(event)
         elif event.topic == EventTopic.GAME:
-            self.process_game_event(event)
+            self._process_game_event(event)
 
     ############# HANDLE ENTITY EVENTS ##############
 
-    def process_entity_event(self, event):
+    def _process_entity_event(self, event):
         """
         Process entity topic event
-
-        Args:
-            event ():
         """
         if isinstance(event, DieEvent):
-            event: DieEvent
             # remove the entity from the camera
             self._update_camera()
 
         elif isinstance(event, MoveEvent):
-            event: MoveEvent
             # show the entity in the new tile
             player = existence.get_player()
             if event.entity == player:
@@ -65,14 +60,14 @@ class UIHandler(Subscriber):
 
     ############# HANDLE GAME EVENTS ###############
 
-    def process_game_event(self, event):
+    def _process_game_event(self, event):
         """
         Process game topic event
         """
         if isinstance(event, ChangeGameStateEvent):
             event: ChangeGameStateEvent
             if event.new_game_state == GameState.GAME_INITIALISING:
-                self.init_game_ui()
+                self._init_game_ui()
 
             elif state.get_previous() == GameState.GAME_INITIALISING:
                 # once everything is initialised present the welcome message
@@ -97,14 +92,14 @@ class UIHandler(Subscriber):
                 pass
 
             elif event.new_game_state == GameState.DEV_MODE:
-                self.init_dev_ui()
-                self.close_game_ui()
+                self._init_dev_ui()
+                self._close_game_ui()
 
             elif state.get_previous() == GameState.DEV_MODE:
-                self.close_dev_ui()
-                self.init_game_ui()
+                self._close_dev_ui()
+                self._init_game_ui()
 
-    def init_game_ui(self):
+    def _init_game_ui(self):
         """
         Initialise the UI elements
         """
@@ -123,7 +118,7 @@ class UIHandler(Subscriber):
         self._update_camera()
 
     @staticmethod
-    def close_game_ui():
+    def _close_game_ui():
         """
         Close all game ui_manager elements
         """
@@ -133,14 +128,14 @@ class UIHandler(Subscriber):
         ui.kill_element(UIElement.ENTITY_INFO)
 
     @staticmethod
-    def init_dev_ui():
+    def _init_dev_ui():
         """
         Initialise all dev mode widgets
         """
         ui.init_skill_editor()
 
     @staticmethod
-    def close_dev_ui():
+    def _close_dev_ui():
         """
         Clear all dev mode elements
         """
@@ -148,7 +143,7 @@ class UIHandler(Subscriber):
 
     ############# HANDLE UI EVENTS #################
 
-    def process_ui_event(self, event, entity=None):
+    def _process_ui_event(self, event, entity=None):
         """
         Process UI topic event
         """

@@ -31,7 +31,7 @@ class UseSkillEvent(Event):
     Event for entity using a skill. Should only be called as a result of WantToUseSkillEvent being processed
     successfully.
     """
-    def __init__(self, entity_using_skill: EntityID, skill_name: str, target_tiles: List[Tile]):
+    def __init__(self, entity_using_skill: EntityID, skill_name: str, target_tiles: List[Tuple[Tile, DirectionType]]):
         Event.__init__(self, "USE_SKILL", EventTopic.ENTITY)
         self.entity = entity_using_skill
         self.skill_name = skill_name
@@ -52,12 +52,13 @@ class MoveEvent(Event):
     Event to move an entity as a basic move action
     """
     def __init__(self, entity_to_move: int, start_pos: Tuple[int, int], direction: Tuple[int, int],
-            travel_type: TravelMethodType):
+            travel_type: TravelMethodType, cost: int):
         Event.__init__(self, "MOVE", EventTopic.ENTITY)
         self.start_pos = start_pos
         self.travel_type = travel_type
         self.entity = entity_to_move
         self.direction = direction
+        self.base_cost = cost  # most entities use BASE_MOVE_COST but not all, e.g. projectiles
 
 
 ####################### GAME ############################################

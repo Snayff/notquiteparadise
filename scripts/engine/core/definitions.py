@@ -5,6 +5,9 @@ from abc import ABC
 import pygame
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
+
+from snecs.typedefs import EntityID
+
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
     AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape, \
@@ -52,13 +55,16 @@ class ProjectileData:
     Data class for a projectile
     """
     # what created it?
+    creator: EntityID
     skill_name: str = field(default="none")
+    name: str = ""
+    description: str = ""
 
     # what does it look like?
     sprite: str = field(default="none")
 
     # who are we targeting?
-    activate_required_tags: List[TargetTagType] = field(default_factory=list)
+    required_tags: List[TargetTagType] = field(default_factory=list)
 
     # how does it travel?
     direction: Optional[DirectionType] = None
@@ -181,6 +187,18 @@ class ActivateSkillEffectData(EffectData):
     effect_type = Effect.TRIGGER_SKILL
 
     skill_name: str = field(default="none")  # TODO - confirm if we want skill name or key
+
+
+@register_dataclass_with_json
+@dataclass
+class KillEntityEffectData(EffectData):
+    """
+    Data for the  Kill Entity effect.
+    """
+    effect_type = Effect.KILL_ENTITY
+
+    def __init__(self, target_entity):
+        self.target_entity: EntityID = target_entity
 
 
 ##################### ACTORS #################################
