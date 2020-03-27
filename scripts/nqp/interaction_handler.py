@@ -94,7 +94,7 @@ class InteractionHandler(Subscriber):
         is_projectile = existence.get_entitys_component(entity, IsProjectile)
         # FIXME - throws regular warning as regularly not a projectile
 
-        # ensure creator is passed if projectile hit someone
+        # ensure creators_name is passed if projectile hit someone
         if is_projectile:
             instigating_entity = is_projectile.creator
         else:

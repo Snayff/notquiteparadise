@@ -34,7 +34,7 @@
         "name": "irascible dandy",
         "sight_range": 5,
         "known_skills": [
-            "none"
+            "lunge"
         ],
         "permanent_afflictions": [
             "flaming"

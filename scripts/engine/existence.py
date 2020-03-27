@@ -15,7 +15,7 @@ from scripts.engine import utility, world, debug, chapter, act
 from scripts.engine.thought import ProjectileBehaviour, SkipTurn
 from scripts.engine.component import IsPlayer, Position, Identity, People, Savvy, Homeland, Aesthetic, \
     IsGod, Opinion, Knowledge, Resources, HasCombatStats, Blocking, FOV, Interactions, IsProjectile, Behaviour, \
-    Tracked, Afflictions
+    Tracked, Afflictions, IsActor
 from scripts.engine.core.constants import TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, FOVInfo, InteractionCause, Effect, \
     INFINITE, ProjectileSpeedType, TargetTagType, TargetTag
 from scripts.engine.core.definitions import CharacteristicSpritesData, CharacteristicSpritePathsData, \
@@ -79,6 +79,8 @@ def get_entities_and_components_in_area(area: List[Tile],
 
     N.B. Do not specify Position as a component.
     """
+    # TODO - replace this with either other methods or handling where currently called from.
+
     entities = {}
     # add position and remove any None values
     _components = [Position, *components]
@@ -253,6 +255,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor: List[Component] = []
 
     # actor components
+    actor.append(IsActor())
     actor.append(Identity(name, description))
     actor.append(Position(x, y))  # TODO - check position not blocked before spawning
     actor.append(HasCombatStats())
@@ -274,8 +277,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # setup basic attack as a known skill and an interaction  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
-    trigger_skill = UseSkillEffectData(skill_name=basic_attack_name, creator=name)
-    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [trigger_skill]}))
+    use_skill = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
+    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill]}))
     # N.B. All actors start with basic attack
     skill = act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name, owning_entity=entity)
     known_skills = {basic_attack_name: skill}
@@ -284,25 +287,31 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # get skills and perm afflictions from characteristics
     if people_data.known_skills != ["none"]:
-        for skill in people_data.known_skills:
-            known_skills[skill] = library.get_skill_data(skill).cooldown
-            skill_order.append(skill)
+        for skill_name in people_data.known_skills:
+            skill = act.create_skill_instance(library.get_skill_data(skill_name).class_name,
+                                              owning_entity=entity)
+            known_skills[skill_name] = skill
+            skill_order.append(skill_name)
     if people_data.permanent_afflictions != ["none"]:
         for affliction in people_data.permanent_afflictions:
             afflictions[affliction] = INFINITE
 
     if homeland_data.known_skills != ["none"]:
-        for skill in homeland_data.known_skills:
-            known_skills[skill] = library.get_skill_data(skill).cooldown
-            skill_order.append(skill)
+        for skill_name in homeland_data.known_skills:
+            skill = act.create_skill_instance(library.get_skill_data(skill_name).class_name,
+                                              owning_entity=entity)
+            known_skills[skill_name] = skill
+            skill_order.append(skill_name)
     if homeland_data.permanent_afflictions != ["none"]:
         for affliction in people_data.permanent_afflictions:
             afflictions[affliction] = INFINITE
 
     if savvy_data.known_skills != ["none"]:
-        for skill in savvy_data.known_skills:
-            known_skills[skill] = library.get_skill_data(skill).cooldown
-            skill_order.append(skill)
+        for skill_name in savvy_data.known_skills:
+            skill = act.create_skill_instance(library.get_skill_data(skill_name).class_name,
+                                              owning_entity=entity)
+            known_skills[skill_name] = skill
+            skill_order.append(skill_name)
     if savvy_data.permanent_afflictions != ["none"]:
         for affliction in savvy_data.permanent_afflictions:
             afflictions[affliction] = INFINITE

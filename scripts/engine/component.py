@@ -13,11 +13,13 @@ if TYPE_CHECKING:
     from snecs.typedefs import EntityID
     from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
     from scripts.nqp.skills import BaseSkill
-    
-    
+
+
 ##########################################################
 # Components are to hold data that is subject to change.
 #########################################################
+
+########################### FLAGS ##############################
 
 class IsPlayer(RegisteredComponent):
     """
@@ -26,10 +28,44 @@ class IsPlayer(RegisteredComponent):
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
+class IsGod(RegisteredComponent):
+    """
+    Whether the entity is a god.
+    """
+    __slots__ = ()
+
+
+class IsProjectile(RegisteredComponent):
+    """
+    Whether the entity is a projectile.
+    """
+
+    def __init__(self, creator: EntityID):
+        self.creator = creator
+
+
+class IsActor(RegisteredComponent):
+    """
+    Whether the entity is an actor.
+    """
+    __slots__ = ()
+
+
+class HasCombatStats(RegisteredComponent):
+    """
+    A flag to show if an entity has stats used for combat.
+    """
+    __slots__ = ()
+
+
+#################### OTHERS #########################
+
+
 class Position(RegisteredComponent):
     """
     An entity's position on the map.
     """
+
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
@@ -39,6 +75,7 @@ class Aesthetic(RegisteredComponent):
     """
     An entity's sprite.
     """
+
     def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData, screen_x: float,
             screen_y: float):
         # TODO - add render layer/order
@@ -56,6 +93,7 @@ class Tracked(RegisteredComponent):
     """
     A component to hold info on activities of an entity
     """
+
     def __init__(self, time_spent: int = 0):
         self.time_spent: int = time_spent
 
@@ -64,6 +102,7 @@ class Resources(RegisteredComponent):
     """
     An entity's resources. Members align to Resource constants.
     """
+
     def __init__(self, health: int = 1, stamina: int = 1):
         self.health: int = health
         self.stamina: int = stamina
@@ -73,6 +112,7 @@ class Blocking(RegisteredComponent):
     """
     An entity's blocking of other objects.
     """
+
     def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
         self.blocks_movement: bool = blocks_movement
         self.blocks_sight: bool = blocks_sight
@@ -82,6 +122,7 @@ class Identity(RegisteredComponent):
     """
     An entity's identity, such as name and description.
     """
+
     def __init__(self, name: str, description: str = ""):
         self.name: str = name
         self.description: str = description
@@ -92,6 +133,7 @@ class People(RegisteredComponent):
     """
     An entity's people.
     """
+
     def __init__(self, people_name: str):
         self.name: str = people_name
 
@@ -101,6 +143,7 @@ class Savvy(RegisteredComponent):
     """
     An entity's savvy.
     """
+
     def __init__(self, savvy_name: str):
         self.name: str = savvy_name
 
@@ -110,6 +153,7 @@ class Homeland(RegisteredComponent):
     """
     An entity's homeland.
     """
+
     def __init__(self, homeland_name: str):
         self.name: str = homeland_name
 
@@ -118,22 +162,17 @@ class Behaviour(RegisteredComponent):
     """
     An ai behaviour to control an entity.
     """
+
     # TODO - inherit from AIBehaviour
     def __init__(self, behaviour: AIBehaviour):
         self.behaviour = behaviour
-
-
-class HasCombatStats(RegisteredComponent):
-    """
-    A flag to show if an entity has stats used for combat.
-    """
-    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Knowledge(RegisteredComponent):
     """"
     An entity's knowledge, including skills.
     """
+
     def __init__(self, skills: Dict[str, BaseSkill] = None, skill_order: List[str] = None):
         if skills is None:
             skills = {}
@@ -156,17 +195,11 @@ class Aspect(RegisteredComponent):
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
     """
+
     def __init__(self, aspects: Optional[Dict[str, int]] = None):
         if aspects is None:
             aspects = {}
         self.aspects: Dict[str, int] = aspects
-
-
-class IsGod(RegisteredComponent):
-    """
-    Whether the entity is a god.
-    """
-    __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
 class Opinion(RegisteredComponent):
@@ -174,6 +207,7 @@ class Opinion(RegisteredComponent):
     """
     An entity's views on other entities. {entity, opinion}
     """
+
     def __init__(self):
         self.opinions: Dict[int, int] = {}
 
@@ -182,6 +216,7 @@ class FOV(RegisteredComponent):
     """
     An entities field of view.
     """
+
     def __init__(self, fov_map: tcod.map.Map):
         self.map: tcod.map.Map = fov_map
 
@@ -191,11 +226,3 @@ class Interactions(Dict[InteractionCauseType, List[EffectData]], RegisteredCompo
     The effects triggered when a specific criteria is met.
     """
     pass
-
-
-class IsProjectile(RegisteredComponent):
-    """
-    Whether the entity is a projectile.
-    """
-    def __init__(self, creator: EntityID):
-        self.creator = creator

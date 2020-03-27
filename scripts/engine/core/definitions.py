@@ -11,7 +11,7 @@ from snecs.typedefs import EntityID
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
     AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape, \
-    ResourceType, TargetingMethod, TargetingMethodType
+    ResourceType, TargetingMethod, TargetingMethodType, Direction
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -86,8 +86,8 @@ class EffectData(ABC):
     Base data class for an effect.
     """
     # who am I?
-    originator: Optional[str] = None  # actor's name
-    creator: Optional[str] = None  # skill, projectile, etc.'s name
+    originator: Optional[EntityID] = None  # actor
+    creators_name: Optional[str] = None  # skill, projectile, etc.'s name
     effect_type = None
 
     # who are we targeting?
@@ -102,8 +102,8 @@ class EffectData(ABC):
     shape_size: int = 1
 
     # what next?
-    success_effect: Optional[EffectData] = None
-    fail_effect: Optional[EffectData] = None
+    success_effects: List[Optional[EffectData]] = field(default_factory=list)
+    fail_effects: List[Optional[EffectData]] = field(default_factory=list)
 
 
 @register_dataclass_with_json
@@ -197,8 +197,26 @@ class KillEntityEffectData(EffectData):
     """
     effect_type = Effect.KILL_ENTITY
 
+    # use an init to prevent need to specify default arg
     def __init__(self, target_entity):
         self.target_entity: EntityID = target_entity
+
+
+@register_dataclass_with_json
+@dataclass
+class MoveActorEffectData(EffectData):
+    """
+    Data for the  Activate Skill effect.
+    """
+    effect_type = Effect.MOVE
+
+    # TODO - likley to need different options to get the direction, e.g. absolute, away, towards
+    move_direction: DirectionType = Direction.CENTRE
+    # TODO - this needs to be determined at use, between the two affected entities
+    move_amount: int = 0
+    move_target: EntityID = 0
+    allow_bump_attack: bool = False
+    move_time_cost: int = 0
 
 
 ##################### ACTORS #################################

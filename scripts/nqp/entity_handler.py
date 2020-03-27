@@ -5,12 +5,12 @@ from typing import TYPE_CHECKING
 from scripts.engine import world, chapter, existence, state, act, debug, utility
 from scripts.engine.core.constants import MessageType, TargetTag, GameState, Direction, DEFAULT_SIGHT_RANGE, \
     BASE_MOVE_COST, DEBUG_LOG_EVENT_RECEIPTS, INFINITE, TargetingMethod
+from scripts.engine.core.definitions import MoveActorEffectData
 from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
     EndTurnEvent, ChangeGameStateEvent, ExpireEvent, TerrainCollisionEvent, EntityCollisionEvent, EndRoundEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
 from scripts.engine.component import Position, Knowledge, IsGod, Aesthetic, FOV, Blocking, HasCombatStats, Afflictions
-from scripts.engine.ui.manager import ui
 
 if TYPE_CHECKING:
     pass
@@ -51,73 +51,18 @@ class EntityHandler(Subscriber):
         Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
         target tile has entity) or move.
         """
-        # get info from event
-        dir_x, dir_y = event.direction
-        entity = event.entity
-        name = existence.get_name(entity)
-        old_x, old_y = event.start_pos
-        target_x = old_x + dir_x
-        target_y = old_y + dir_y
-        target_tile = world.get_tile((target_x, target_y))
-        direction_name = utility.value_to_member((dir_x, dir_y), Direction)
 
-        # check a tile was returned
-        if target_tile:
-            is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTag.BLOCKED_MOVEMENT, entity)
-            is_entity_on_tile = world.tile_has_tag(target_tile, TargetTag.NO_ENTITY)
-        else:
-            is_tile_blocking_movement = True
-            is_entity_on_tile = False
-
-        # check for no entity in way but tile is blocked
-        if not is_entity_on_tile and is_tile_blocking_movement:
-            publisher.publish(TerrainCollisionEvent(entity, target_tile, event.direction, event.start_pos))
-            publisher.publish(MessageEvent(MessageType.LOG, f"I can't go that way!"))
-            logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked by "
-                          f"terrain. ")
-
-        # check if entity blocking tile
-        elif is_entity_on_tile:
-            entities = existence.get_entities_and_components_in_area([target_tile], [Blocking])
-            for blocking_entity, (position, blocking, *rest) in entities.items():
-                if blocking.blocks_movement:
-                    publisher.publish(EntityCollisionEvent(entity, blocking_entity, event.direction, event.start_pos))
-                    break
-
-        # if nothing in the way, time to move!
-        elif not is_entity_on_tile and not is_tile_blocking_movement:
-            position = existence.get_entitys_component(entity, Position)
-
-            # update position
-            if position:
-                position.x = target_x
-                position.y = target_y
-
-            # TODO - move to UI handler
-            aesthetic = existence.get_entitys_component(entity, Aesthetic)
-            if aesthetic:
-                aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
-                target_y))
-                aesthetic.current_sprite = aesthetic.sprites.move
-
-            # update fov if needed
-            if existence.has_component(entity, FOV):
-                if existence.has_component(entity, HasCombatStats):
-                    stats = existence.get_combat_stats(entity)
-                    sight_range = max(0, stats.sight_range)
-                else:
-                    sight_range = DEFAULT_SIGHT_RANGE
-                fov_map = existence.get_entitys_component(entity, FOV).map
-                world.recompute_fov(position.x, position.y, sight_range, fov_map)
-
-                # update tiles if it is player
-                if entity == existence.get_player():
-                    # TODO - should probably sit in world handler
-                    world.update_tile_visibility(fov_map)
-
-            # if entity that moved is turn holder then end their turn
-            if entity == chapter.get_turn_holder():
-                publisher.publish(EndTurnEvent(entity, event.base_cost))
+        move_dict = {
+            "originator": event.entity,
+            "move_direction": event.direction,
+            "move_amount": 1,
+            "move_target": event.entity,
+            "allow_bump_attack": True,
+            "move_time_cost": event.base_cost
+        }
+        move_effect = MoveActorEffectData(**move_dict)
+        tile = world.get_tile(event.start_pos)
+        act.process_effect(move_effect, [tile], event.entity)
 
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):

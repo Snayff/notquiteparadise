@@ -4,17 +4,20 @@ import logging
 import random
 from typing import TYPE_CHECKING, Any, Union, Optional
 from snecs.typedefs import EntityID
-from scripts.engine import existence, world, utility
-from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions, Knowledge
+from scripts.engine import existence, world, utility, chapter
+from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions, Knowledge, \
+    Blocking, Aesthetic, FOV
 from scripts.engine.core.constants import MessageType, TravelMethod, TargetTag, Effect, AfflictionCategory, HitType, \
     HitModifier, PrimaryStat, HitValue, SecondaryStatType, PrimaryStatType, HitTypeType, TravelMethodType, Direction, \
-    ResourceType, INFINITE, DirectionType
+    ResourceType, INFINITE, DirectionType, DEFAULT_SIGHT_RANGE
 from scripts.engine.core.definitions import EffectData, UseSkillEffectData, RemoveAspectEffectData, \
     AddAspectEffectData, ApplyAfflictionEffectData, DamageEffectData, AffectStatEffectData, ActivateSkillEffectData, \
-    KillEntityEffectData
+    KillEntityEffectData, MoveActorEffectData
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, WantToUseSkillEvent
+from scripts.engine.event import MessageEvent, DieEvent, UseSkillEvent, WantToUseSkillEvent, TerrainCollisionEvent, \
+    EntityCollisionEvent, EndTurnEvent
 from scripts.engine.library import library
+from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from importlib import import_module
@@ -238,7 +241,7 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
     elif len(effected_tiles) == 0:
         logging.critical(f"Processing effect, caused by '{name}', but no tiles provided.")
     else:
-        logging.debug(f"Processing {effect.effect_type} effect, caused by '{name}'s {effect.creator}.")
+        logging.debug(f"Processing {effect.effect_type} effect, caused by '{name}'s {effect.creators_name}.")
 
     if isinstance(effect, DamageEffectData):
         return _process_damage_effect(effect, effected_tiles, causing_entity)
@@ -254,6 +257,8 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
         return _process_activate_skill_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, KillEntityEffectData):
         return _process_kill_entity_effect(effect, effected_tiles, causing_entity)
+    elif isinstance(effect, MoveActorEffectData):
+        return _process_move_actor_effect(effect, effected_tiles, causing_entity)
     elif isinstance(effect, AffectStatEffectData):
         logging.warning("Trying to process affect stat. This applies passively. What are you doing?")
 
@@ -435,7 +440,7 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
     success = False
     attackers_stats = existence.get_combat_stats(attacker)
     entities = existence.get_entities_and_components_in_area(effected_tiles, [Resources, HasCombatStats])
-    effect_creator = effect.creator
+    effect_creator = effect.creators_name
 
     # loop all relevant entities
     for defender, (position, resources, has_stats) in entities.items():
@@ -504,12 +509,113 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
                 return success
 
 
-def _process_kill_entity_effect(effect: UseSkillEffectData, effected_tiles: List[Tile],
+def _process_kill_entity_effect(effect: KillEntityEffectData, effected_tiles: List[Tile],
         attacker: EntityID) -> bool:
     success = False
     for tile in effected_tiles:
         publisher.publish(DieEvent(effect.target_entity))
         success = True
+    return success
+
+
+def _process_move_actor_effect(effect: MoveActorEffectData, effected_tiles: List[Tile],
+        entity_cause_move: EntityID) -> bool:
+    success = False
+
+    # handle moving self
+    if effect.move_target == entity_cause_move:
+        return _process_moving_self(effect, effected_tiles, entity_cause_move)
+
+    else:
+        for tile in effected_tiles:
+            if world.tile_has_tags(tile, effect.required_tags, entity_cause_move):
+                # TODO - move the other entity
+
+                success = True
+    return success
+
+
+def _process_moving_self(effect: MoveActorEffectData, effected_tiles: List[Tile],
+        attacker: EntityID) -> bool:
+    """
+    Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if target
+    tile has entity) or move. Can only bump attack if specified in effect. 
+    """
+    success = False
+
+    direction = effect.move_direction
+    dir_x, dir_y = direction
+    entity = effect.move_target
+    name = existence.get_name(entity)
+    pos = existence.get_entitys_component(effect.move_target, Position)
+    start_pos = (pos.x, pos.y)
+    target_x = pos.x + dir_x
+    target_y = pos.y + dir_y
+    target_tile = world.get_tile((target_x, target_y))
+    direction_name = utility.value_to_member((dir_x, dir_y), Direction)
+
+    # check a tile was returned
+    if target_tile:
+        is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTag.BLOCKED_MOVEMENT, entity)
+        is_entity_on_tile = world.tile_has_tag(target_tile, TargetTag.NO_ENTITY)
+    else:
+        is_tile_blocking_movement = True
+        is_entity_on_tile = False
+
+    # check for no entity in way but tile is blocked
+    if not is_entity_on_tile and is_tile_blocking_movement:
+        publisher.publish(TerrainCollisionEvent(entity, target_tile, direction, start_pos))
+        publisher.publish(MessageEvent(MessageType.LOG, f"I can't go that way!"))
+        logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked by "
+                      f"terrain. ")
+
+    # check if entity blocking tile
+    elif is_entity_on_tile:
+        entities = existence.get_entities_and_components_in_area([target_tile], [Blocking])
+        for blocking_entity, (position, blocking, *rest) in entities.items():
+            if blocking.blocks_movement:
+                # if we can bump attack allow it, else ignore it and stop
+                if effect.allow_bump_attack:
+                    publisher.publish(EntityCollisionEvent(entity, blocking_entity, direction, start_pos))
+                break
+
+    # if nothing in the way, time to move!
+    elif not is_entity_on_tile and not is_tile_blocking_movement:
+        position = existence.get_entitys_component(entity, Position)
+
+        # update position
+        if position:
+            position.x = target_x
+            position.y = target_y
+            success = True
+
+        # TODO - move to UI handler
+        # animate change
+        aesthetic = existence.get_entitys_component(entity, Aesthetic)
+        if aesthetic:
+            aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
+            target_y))
+            aesthetic.current_sprite = aesthetic.sprites.move
+
+        # update fov if needed
+        if existence.has_component(entity, FOV):
+            if existence.has_component(entity, HasCombatStats):
+                stats = existence.get_combat_stats(entity)
+                sight_range = max(0, stats.sight_range)
+            else:
+                sight_range = DEFAULT_SIGHT_RANGE
+            fov_map = existence.get_entitys_component(entity, FOV).map
+            world.recompute_fov(position.x, position.y, sight_range, fov_map)
+
+            # update tiles if it is player
+            if entity == existence.get_player():
+                # TODO - should probably sit in world handler
+                world.update_tile_visibility(fov_map)
+
+        # if entity that moved is turn holder then end their turn
+        if entity == chapter.get_turn_holder():
+            publisher.publish(EndTurnEvent(entity, effect.move_time_cost))
+
     return success
 
 ############################################### CALCULATE ####################################

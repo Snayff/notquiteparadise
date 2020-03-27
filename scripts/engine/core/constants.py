@@ -198,6 +198,7 @@ class TargetTag(SimpleNamespace):
     BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
     IS_VISIBLE = TargetTagType("is_visible")
     NO_BLOCKING_TILE = TargetTagType("no_blocking_tile")
+    ACTOR = TargetTagType("actor")
 
 
 class DamageType(SimpleNamespace):
@@ -263,7 +264,7 @@ class Effect(SimpleNamespace):
     """
     APPLY_AFFLICTION = EffectType("apply_affliction")
     DAMAGE = EffectType("damage")
-    # MOVE = EffectType("move")  # TODO - Add Move effect
+    MOVE = EffectType("move")
     AFFECT_STAT = EffectType("affect_stat")
     ADD_ASPECT = EffectType("add_aspect")
     REMOVE_ASPECT = EffectType("remove_aspect")

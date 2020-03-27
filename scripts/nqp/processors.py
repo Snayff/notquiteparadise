@@ -119,7 +119,7 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
             skill_name = skills[4]
         else:
             skill_name = None
-    except AttributeError:
+    except AttributeError or IndexError:
         pass
 
     return skill_name
