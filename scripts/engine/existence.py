@@ -24,6 +24,7 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.library import library
+from scripts.nqp.skills import BasicAttack
 
 if TYPE_CHECKING:
     from typing import Union, Type, List, Dict, Tuple, Any, Optional
@@ -280,7 +281,8 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     use_skill = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
     add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill]}))
     # N.B. All actors start with basic attack
-    skill = act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name, owning_entity=entity)
+    #skill = act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name, owning_entity=entity)
+    skill = BasicAttack
     known_skills = {basic_attack_name: skill}
     skill_order = [basic_attack_name]
     afflictions = Afflictions()
@@ -528,3 +530,13 @@ def take_turn(entity: EntityID):
     logging.debug(f"'{get_name(entity)}' is beginning their turn.")
     behaviour = get_entitys_component(entity, Behaviour)
     behaviour.behaviour.act()
+
+
+def apply_damage(entity: EntityID, damage: int):
+    """
+    Remove damage from entity's health. Return remaining health.
+    """
+    resource = get_entitys_component(entity, Resources)
+    resource.health -= damage
+
+    return resource.health

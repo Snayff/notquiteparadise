@@ -10,14 +10,14 @@ if TYPE_CHECKING:
 
 ######################### VALIDATORS ####################################
 
-def _validate_effect_type(s):
-    if s is not None and not hasattr(Effect, s):
-        raise ValidationError(f"{s} is not a valid effect type")
+# def _validate_effect_type(s):
+#     if s is not None and not hasattr(Effect, s):
+#         raise ValidationError(f"{s} is not a valid effect type")
 
 
 ######################### SCHEMA  ####################################
 
-class EffectDataSchema(Schema):
-    effect_type = fields.Str(validate=_validate_effect_type)
+# class EffectDataSchema(Schema):
+#     effect_type = fields.Str(validate=_validate_effect_type)
 
 

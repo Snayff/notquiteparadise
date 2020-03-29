@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 import pytweening
-from scripts.engine import utility, existence
+from scripts.engine import utility, existence, act, world
 from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING, Optional
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
@@ -165,6 +165,10 @@ def _process_player_turn_intents(intent: InputIntentType):
         skill_name = _get_pressed_skills_name(intent)
         if skill_name:
             position = existence.get_entitys_component(player, Position)
+            from scripts.nqp.skills import BasicAttack
+            pos = existence.get_entitys_component(player, Position)
+            tile = world.get_tile((pos.x, pos.y + 1))
+            act.cast_skill(player, BasicAttack, tile)
             publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y),
                                                   (0, 1)))
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, Any, Union, Optional
+from typing import TYPE_CHECKING, Any, Union, Optional, Type
 from snecs.typedefs import EntityID
 from scripts.engine import existence, world, utility, chapter
 from scripts.engine.component import Position, Resources, Aspect, HasCombatStats, Identity, Afflictions, Knowledge, \
@@ -21,6 +21,8 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.tile import Tile
 from importlib import import_module
+
+from scripts.nqp.skills import Skill, BasicAttack
 
 if TYPE_CHECKING:
     from typing import List, Tuple
@@ -134,6 +136,17 @@ def use_skill(using_entity: int, skill_name: str, use_tiles_and_directions: List
     logging.info(f"'{name}' used {skill_name} on {tiles}.")
 
 
+def cast_skill(user: EntityID, skill, target_tile: Tile):
+    # ensure they are the right target type
+    if world.tile_has_tags(target_tile, skill.required_tags, user):
+        skill_cast = skill(user, target_tile)
+        for entity, effects in skill_cast.get_affected_entities():
+            effect_queue = list(effects)
+            while effect_queue:
+                effect = effect_queue.pop()
+                effect_queue.extend(effect.evaluate())
+
+
 def create_skill_instance(skill_class_name: str, **kwargs):
     """
     Create an instance of the skill class
@@ -210,7 +223,7 @@ def _get_furthest_free_position(start_position: Tuple[int, int], target_directio
     return current_x, current_y
 
 
-def _get_hit_type(to_hit_score: int) -> HitTypeType:
+def get_hit_type(to_hit_score: int) -> HitTypeType:
     """
     Get the hit type from the to hit score
     """
@@ -243,24 +256,24 @@ def process_effect(effect: EffectData, effected_tiles: List[Tile], causing_entit
     else:
         logging.debug(f"Processing {effect.effect_type} effect, caused by '{name}'s {effect.creators_name}.")
 
-    if isinstance(effect, DamageEffectData):
-        return _process_damage_effect(effect, effected_tiles, causing_entity)
-    elif isinstance(effect, ApplyAfflictionEffectData):
-        return _process_apply_affliction_effect(effect, effected_tiles, causing_entity)
-    elif isinstance(effect, AddAspectEffectData):
-        return _process_add_aspect_effect(effect, effected_tiles)
-    elif isinstance(effect, RemoveAspectEffectData):
-        return _process_remove_aspect_effect(effect, effected_tiles)
-    elif isinstance(effect, UseSkillEffectData):
-        return _process_use_skill_effect(effect, effected_tiles, causing_entity)
-    elif isinstance(effect, ActivateSkillEffectData):
-        return _process_activate_skill_effect(effect, effected_tiles, causing_entity)
-    elif isinstance(effect, KillEntityEffectData):
-        return _process_kill_entity_effect(effect, effected_tiles, causing_entity)
-    elif isinstance(effect, MoveActorEffectData):
+    # if isinstance(effect, DamageEffectData):
+    #     return _process_damage_effect(effect, effected_tiles, causing_entity)
+    # elif isinstance(effect, ApplyAfflictionEffectData):
+    #     return _process_apply_affliction_effect(effect, effected_tiles, causing_entity)
+    # elif isinstance(effect, AddAspectEffectData):
+    #     return _process_add_aspect_effect(effect, effected_tiles)
+    # elif isinstance(effect, RemoveAspectEffectData):
+    #     return _process_remove_aspect_effect(effect, effected_tiles)
+    # elif isinstance(effect, UseSkillEffectData):
+    #     return _process_use_skill_effect(effect, effected_tiles, causing_entity)
+    # elif isinstance(effect, ActivateSkillEffectData):
+    #     return _process_activate_skill_effect(effect, effected_tiles, causing_entity)
+    # elif isinstance(effect, KillEntityEffectData):
+    #     return _process_kill_entity_effect(effect, effected_tiles, causing_entity)
+    if isinstance(effect, MoveActorEffectData):
         return _process_move_actor_effect(effect, effected_tiles, causing_entity)
-    elif isinstance(effect, AffectStatEffectData):
-        logging.warning("Trying to process affect stat. This applies passively. What are you doing?")
+    # elif isinstance(effect, AffectStatEffectData):
+    #     logging.warning("Trying to process affect stat. This applies passively. What are you doing?")
 
 
 def _process_use_skill_effect(effect: UseSkillEffectData, effected_tiles: List[Tile],
@@ -362,11 +375,11 @@ def _process_apply_affliction_effect(effect: ApplyAfflictionEffectData, effected
                 if affliction_data.category == AfflictionCategory.BANE:
                     # if we havent targeted a stat then default to 0
                     if effect.stat_to_target:
-                        to_hit_score = _calculate_to_hit_score(defender_stats, effect.accuracy,
-                                                               effect.stat_to_target, attackers_stats)
+                        to_hit_score = calculate_to_hit_score(defender_stats, effect.accuracy,
+                                                              effect.stat_to_target, attackers_stats)
                     else:
                         to_hit_score = 0
-                    hit_type = _get_hit_type(to_hit_score)
+                    hit_type = get_hit_type(to_hit_score)
 
                     name = existence.get_name(attacker)
 
@@ -452,13 +465,13 @@ def _process_damage_effect(effect: DamageEffectData, effected_tiles: List[Tile],
 
                 # check we have a stat to target, else default to 0
                 if effect.stat_to_target:
-                    to_hit_score = _calculate_to_hit_score(defenders_stats, effect.accuracy, effect.stat_to_target,
-                                                           attackers_stats)
+                    to_hit_score = calculate_to_hit_score(defenders_stats, effect.accuracy, effect.stat_to_target,
+                                                          attackers_stats)
                 else:
                     to_hit_score = 0
 
-                hit_type = _get_hit_type(to_hit_score)
-                damage = _calculate_damage(defenders_stats, hit_type, effect, attackers_stats)
+                hit_type = get_hit_type(to_hit_score)
+                damage = calculate_damage(defenders_stats, hit_type, effect, attackers_stats)
 
                 # who did the damage? (for informing the player)
                 if attacker:
@@ -539,7 +552,7 @@ def _process_moving_self(effect: MoveActorEffectData, effected_tiles: List[Tile]
         attacker: EntityID) -> bool:
     """
     Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if target
-    tile has entity) or move. Can only bump attack if specified in effect. 
+    tile has entity) or move. Can only bump attack if specified in effect.
     """
     success = False
 
@@ -621,38 +634,14 @@ def _process_moving_self(effect: MoveActorEffectData, effected_tiles: List[Tile]
 ############################################### CALCULATE ####################################
 
 
-def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypeType, effect_data: EffectData,
-        attackers_stats: CombatStats = None) -> int:
+def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int, hit_type: HitTypeType, ) -> int:
     """
-    Work out the damage to be dealt. if attacking entity is None then value used is 0.
+    Work out the damage to be dealt.
     """
     logging.debug(f"Calculate damage...")
-    data = effect_data
-
-    initial_damage = data.damage
-    damage_from_stats = 0
-
-    # get damage from stats of attacker
-    if attackers_stats:
-        stat_amount = 0
-
-        # get the stat
-        all_stats = utility.get_class_members(PrimaryStat)
-        for stat in all_stats:
-            if stat == data.mod_stat:
-                stat_amount = getattr(attackers_stats, stat.lower())
-                break
-
-        damage_from_stats = stat_amount * data.mod_amount
-
-    # get resistance value
-    if data.damage_type:
-        resist_value = getattr(defenders_stats, "resist_" + data.damage_type.lower())
-    else:
-        resist_value = 0
 
     # mitigate damage with defence
-    mitigated_damage = (initial_damage + damage_from_stats) - resist_value
+    mitigated_damage = (base_damage + damage_mod_amount) - resist_value
 
     # apply to hit modifier to damage
     if hit_type == HitType.CRIT:
@@ -666,37 +655,31 @@ def _calculate_damage(defenders_stats: CombatStats, hit_type: HitTypeType, effec
     int_modified_damage = int(modified_damage)
 
     # log the info
-    log_string = f"-> Initial:{initial_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified" \
+    log_string = f"-> Initial:{base_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified" \
                  f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
     logging.debug(log_string)
 
     return int_modified_damage
 
 
-def _calculate_to_hit_score(defenders_stats: CombatStats, skill_accuracy: int, stat_to_target: PrimaryStatType,
-        attackers_stats: CombatStats = None) -> int:
+def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_target_value: int) -> int:
     """
-    Get the to hit score from the stats of both entities. If Attacker is None then 0 is used for attacker values.
+    Get the to hit score based on the stats of both entities and a random roll.
     """
     logging.debug(f"Get to hit scores...")
 
-    roll = random.randint(-3, 3)  # TODO - move hit variance to somewhere more easily configurable
-
-    # if attacker get their accuracy
-    if attackers_stats:
-        attacker_accuracy = attackers_stats.accuracy
-    else:
-        attacker_accuracy = 0
+    roll = random.randint(-3, 3)
+    # TODO - move hit variance to somewhere more easily configurable
+    # TODO - use tcod random (so as to use a seed)
 
     modified_to_hit_score = attacker_accuracy + skill_accuracy + roll
 
-    # mitigate the to hit
-    defender_value = getattr(defenders_stats, stat_to_target.lower())
-
-    mitigated_to_hit_score = modified_to_hit_score - defender_value
+    mitigated_to_hit_score = modified_to_hit_score - stat_to_target_value
 
     # log the info
     log_string = f"-> Roll:{roll}, Modified:{modified_to_hit_score}, Mitigated:{mitigated_to_hit_score}."
     logging.debug(log_string)
 
     return mitigated_to_hit_score
+
+

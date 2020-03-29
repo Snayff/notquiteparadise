@@ -166,6 +166,8 @@ class EntityHandler(Subscriber):
 
         # pay then use the skill
         act.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
+        knowledge = existence.get_entitys_component(entity, Knowledge)
+        act.cast_skill(entity, knowledge.skills[skill_name], event.target_tiles[0])
         act.use_skill(entity, skill_name, event.target_tiles)
 
         # update the cooldown
@@ -215,20 +217,20 @@ class EntityHandler(Subscriber):
         Reduce cooldowns and durations
         """
         # skill cooldowns
-        for entity, (knowledge, ) in existence.get_components([Knowledge]):
-            for skill_name, skill in knowledge.skills.items():
-                if skill.cooldown > 0:
-                    knowledge.skills[skill_name].cooldown = skill.cooldown - 1
-
-        # affliction durations
-        for entity, (afflictions, ) in existence.get_components([Afflictions]):
-            for affliction, duration in afflictions.items():
-                if duration - 1 <= 0:
-                    # expired
-                    # TODO - create expiry event.
-                    del afflictions[affliction]
-
-                elif duration != INFINITE:
-                    # reduce duration if not infinite
-                    afflictions[affliction] = duration - 1
+        # for entity, (knowledge, ) in existence.get_components([Knowledge]):
+        #     for skill_name, skill in knowledge.skills.items():
+        #         if skill.cooldown > 0:
+        #             knowledge.skills[skill_name].cooldown = skill.cooldown - 1
+        #
+        # # affliction durations
+        # for entity, (afflictions, ) in existence.get_components([Afflictions]):
+        #     for affliction, duration in afflictions.items():
+        #         if duration - 1 <= 0:
+        #             # expired
+        #             # TODO - create expiry event.
+        #             del afflictions[affliction]
+        #
+        #         elif duration != INFINITE:
+        #             # reduce duration if not infinite
+        #             afflictions[affliction] = duration - 1
 
