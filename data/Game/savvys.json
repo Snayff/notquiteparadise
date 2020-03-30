@@ -34,10 +34,10 @@
         "name": "irascible dandy",
         "sight_range": 5,
         "known_skills": [
-            "lunge"
+            "none"
         ],
         "permanent_afflictions": [
-            "flaming"
+            "none"
         ],
         "skullduggery": 1,
         "sprite_paths": {

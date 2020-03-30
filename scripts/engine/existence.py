@@ -225,15 +225,15 @@ def create_god(god_name: str) -> EntityID:
     entity = create(god)
 
     # get knowledge info
-    interventions = data.interventions
-    intervention_names = {}
-    skill_order = []
-    for name, intervention in interventions.items():
-        skill_key = intervention.skill_key
-        _skill = act.create_skill_instance(library.get_skill_data(skill_key).class_name, owning_entity=entity)
-        intervention_names[skill_key] = _skill
-        skill_order.append(skill_key)
-    add_component(entity, Knowledge(intervention_names, skill_order))
+    # interventions = data.interventions
+    # intervention_names = {}
+    # skill_order = []
+    # for name, intervention in interventions.items():
+    #     skill_key = intervention.skill_key
+    #     _skill = act.create_skill_instance(library.get_skill_data(skill_key).class_name, owning_entity=entity)
+    #     intervention_names[skill_key] = _skill
+    #     skill_order.append(skill_key)
+    # add_component(entity, Knowledge(intervention_names, skill_order))
 
     logging.debug(f"{data.name} created.")
 
@@ -282,7 +282,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill]}))
     # N.B. All actors start with basic attack
     #skill = act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name, owning_entity=entity)
-    skill = BasicAttack
+    skill = BasicAttack(entity)
     known_skills = {basic_attack_name: skill}
     skill_order = [basic_attack_name]
     afflictions = Afflictions()

@@ -11,17 +11,12 @@ from scripts.engine.core.constants import Direction, BASE_ACCURACY, PrimaryStat,
     DamageType, DirectionType, ProjectileSpeed, TravelMethod, TerrainCollision, ProjectileExpiry, ResourceType, \
     Resource, TargetingMethodType, TargetTagType, TargetingMethod, ShapeType, PrimaryStatType, DamageTypeType
 from scripts.engine.core.definitions import EffectData, DamageEffectData, ProjectileData, MoveActorEffectData
-from scripts.engine.effect import DamageEffect
+from scripts.engine.effect import DamageEffect, Effect
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
-
-
-# TODO - current problem:
-#  wants target_entity on init but we need other values earlier
-#  need to give entity an instance and change the relevant methods to take the entity at the moment we have a target
 
 
 class Skill(ABC):
@@ -35,7 +30,7 @@ class Skill(ABC):
     the user and target.
     """
 
-    def __init__(self, user: EntityID, target_tile: Tile, description: str, icon_path: str,
+    def __init__(self, user: EntityID, description: str, icon_path: str,
             required_tags: List[TargetTagType], resource_type: ResourceType, resource_cost: int, time_cost: int,
             max_cooldown: int, targeting_method: TargetingMethodType, target_directions: List[DirectionType],
             shape: ShapeType, shape_size: int):
@@ -45,7 +40,7 @@ class Skill(ABC):
 
         # to be provided by instance
         self.user = user
-        self.target_tile = target_tile
+        self.target_tile = None
 
         # to be overwritten in subclass
         self.description: str = description
@@ -83,7 +78,7 @@ class Skill(ABC):
 
         return affected_entities
 
-    def apply(self):
+    def apply(self) -> Tuple[EntityID, List[Effect]]:
         """
         An iterator over pairs of (affected entity, [effects])
         """
@@ -97,9 +92,21 @@ class Skill(ABC):
         """
         pass
 
+    def set_target(self, target_tile: Tile):
+        """
+        Set the target for the cast
+        """
+        self.target_tile = target_tile
+
+    def clear_target(self):
+        """
+        Clear the target
+        """
+        self.target_tile = None
+
 
 class BasicAttack(Skill):
-    def __init__(self, user, target_tile):
+    def __init__(self, user: EntityID):
         description = "this is the basic attack."
         icon_path = "assets/skills/placeholder/basic_attack.png"
         required_tags = [TargetTag.OTHER_ENTITY]
@@ -122,10 +129,10 @@ class BasicAttack(Skill):
         shape = Shape.TARGET
         shape_size = 1
 
-        super().__init__(user, target_tile, description, icon_path, required_tags, resource_type, resource_cost,
+        super().__init__(user, description, icon_path, required_tags, resource_type, resource_cost,
                          time_cost, cooldown, targeting_method, target_directions, shape, shape_size)
 
-    def build_effects(self, entity):
+    def build_effects(self, entity) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -186,189 +193,189 @@ class BasicAttack(Skill):
 #         self.activate(tiles)
 #########################################################
 
-
-class BaseSkill(ABC):
-    def __init__(self, name: str, owning_entity: EntityID):
-        self.name = name
-        self.entity = owning_entity
-        self.cooldown = 0
-
-    def get_use_tiles_and_directions(self, start_position: Tuple[int, int],
-            target_position: Tuple[int, int]) -> List[Optional[Tuple[Tile, DirectionType]]]:
-        """
-        Get the target tiles and relative directions
-        """
-        target_tiles = []
-        data = library.get_skill_data(self.name)
-        tags = data.use_required_tags
-
-        # target centre of target pos
-        tiles = world.get_tiles(target_position[0], target_position[1], [(0, 0)])
-
-        for tile in tiles:
-            if world.tile_has_tags(tile, tags, self.entity):
-                direction = world.get_direction(start_position, (tile.x, tile.y))
-                target_tiles.append((tile, direction))
-
-        return target_tiles
-
-    @abstractmethod
-    def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
-        """
-        Trigger any use effects. e.g. create projectile. If no projectile call activate directly.
-        """
-        pass
-
-    @abstractmethod
-    def create_effects(self) -> List[EffectData]:
-        """
-        Create the skills effects.
-        """
-        pass
-
-    @abstractmethod
-    def activate(self, target_tiles: List[Tile]):
-        """
-        Trigger the effects on the given tiles.
-        """
-        pass
-
-    @staticmethod
-    def _process_result(result: bool, effect: EffectData) -> List[Optional[EffectData]]:
-        """
-        Get the success/fail effect, if there is one
-        """
-        if result and effect.success_effects:
-            return effect.success_effects
-        elif not result and effect.fail_effects:
-            return effect.fail_effects
-
-        return []
-
-
-class BasicAttack(BaseSkill):
-    """
-    Purpose: To provide a simple damaging effect as the fall back option for entities. Also for use with bump attacks.
-    """
-    def __init__(self, owning_entity):
-        super().__init__("basic_attack", owning_entity)
-
-    def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
-        # no projectile so call activate directly
-        tiles = []
-        for tile, direction in use_tiles_and_directions:
-            tiles.append(tile)
-        self.activate(tiles)
-
-    def activate(self, target_tiles: List[Tile]):
-        effects = self.create_effects()
-        entity = self.entity
-
-        # process all effects on all tiles
-        while effects:
-            effect = effects.pop()  # FIFO
-            for tile in target_tiles:
-                coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
-                effected_tiles = world.get_tiles(tile.x, tile.y, coords)
-                result = act.process_effect(effect, effected_tiles, entity)
-                result_effect = self._process_result(result, effect)
-                if result_effect:
-                    effects.append(result_effect)
-
-    def create_effects(self) -> List[EffectData]:
-        effects = []
-
-        effect_dict = {
-            "originator": self.entity,
-            "creators_name": self.name,
-            "accuracy": BASE_ACCURACY + 5,
-            "stat_to_target": PrimaryStat.VIGOUR,
-            "shape": Shape.TARGET,
-            "shape_size": 1,
-            "required_tags": [
-                TargetTag.OTHER_ENTITY
-            ],
-            "damage": BASE_DAMAGE + 20,
-            "damage_type": DamageType.MUNDANE,
-            "mod_amount": 0.1,
-            "mod_stat": PrimaryStat.CLOUT,
-        }
-        effects.append(DamageEffectData(**effect_dict))
-
-        return effects
-
-
-class Lunge(BaseSkill):
-    """
-    Purpose: To provide a simple damaging effect as the fall back option for entities. Also for use with bump attacks.
-    """
-    def __init__(self, owning_entity):
-        super().__init__("lunge", owning_entity)
-
-    def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
-        # no projectile so call activate directly
-        tiles = []
-        for tile, direction in use_tiles_and_directions:
-            tiles.append(tile)
-        self.activate(tiles)
-
-    def activate(self, target_tiles: List[Tile]):
-        effects = self.create_effects()
-        entity = self.entity
-
-        # process all effects on all tiles
-        while effects:
-            effect = effects.pop()  # FIFO
-            for tile in target_tiles:
-                coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
-                effected_tiles = world.get_tiles(tile.x, tile.y, coords)
-                result = act.process_effect(effect, effected_tiles, entity)
-                result_effects = self._process_result(result, effect)
-
-                # if we have any success or fail actions add them to the list to activate
-                if result_effects:
-                    for result_effect in result_effects:
-                        effects.append(result_effect)
-
-    def create_effects(self) -> List[EffectData]:
-        effects = []
-
-        damage_dict = {
-            "originator": self.entity,
-            "creators_name": self.name,
-            "accuracy": BASE_ACCURACY + 5,
-            "stat_to_target": PrimaryStat.VIGOUR,
-            "shape": Shape.TARGET,
-            "shape_size": 1,
-            "required_tags": [
-                TargetTag.OTHER_ENTITY
-            ],
-            "damage": BASE_DAMAGE + 20,
-            "damage_type": DamageType.MUNDANE,
-            "mod_amount": 0.1,
-            "mod_stat": PrimaryStat.CLOUT,
-        }
-        damage_effect = DamageEffectData(**damage_dict)
-
-        move_dict = {
-            "originator": self.entity,
-            "creators_name": self.name,
-            "accuracy": BASE_ACCURACY + 5,
-            "stat_to_target": PrimaryStat.VIGOUR,
-            "shape": Shape.TARGET,
-            "shape_size": 1,
-            "required_tags": [
-                TargetTag.SELF
-            ],
-            "move_direction": Direction.DOWN,
-            "move_amount": 1,
-            "move_target": self.entity,
-            "allow_bump_attack": False,
-            "move_time_cost": 0
-        }
-        move_effect = MoveActorEffectData(**move_dict)
-
-        effects.append(move_effect)
-        effects.append(damage_effect)
-
-        return effects
+#
+# class BaseSkill(ABC):
+#     def __init__(self, name: str, owning_entity: EntityID):
+#         self.name = name
+#         self.entity = owning_entity
+#         self.cooldown = 0
+#
+#     def get_use_tiles_and_directions(self, start_position: Tuple[int, int],
+#             target_position: Tuple[int, int]) -> List[Optional[Tuple[Tile, DirectionType]]]:
+#         """
+#         Get the target tiles and relative directions
+#         """
+#         target_tiles = []
+#         data = library.get_skill_data(self.name)
+#         tags = data.use_required_tags
+#
+#         # target centre of target pos
+#         tiles = world.get_tiles(target_position[0], target_position[1], [(0, 0)])
+#
+#         for tile in tiles:
+#             if world.tile_has_tags(tile, tags, self.entity):
+#                 direction = world.get_direction(start_position, (tile.x, tile.y))
+#                 target_tiles.append((tile, direction))
+#
+#         return target_tiles
+#
+#     @abstractmethod
+#     def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
+#         """
+#         Trigger any use effects. e.g. create projectile. If no projectile call activate directly.
+#         """
+#         pass
+#
+#     @abstractmethod
+#     def create_effects(self) -> List[EffectData]:
+#         """
+#         Create the skills effects.
+#         """
+#         pass
+#
+#     @abstractmethod
+#     def activate(self, target_tiles: List[Tile]):
+#         """
+#         Trigger the effects on the given tiles.
+#         """
+#         pass
+#
+#     @staticmethod
+#     def _process_result(result: bool, effect: EffectData) -> List[Optional[EffectData]]:
+#         """
+#         Get the success/fail effect, if there is one
+#         """
+#         if result and effect.success_effects:
+#             return effect.success_effects
+#         elif not result and effect.fail_effects:
+#             return effect.fail_effects
+#
+#         return []
+#
+#
+# class BasicAttack(BaseSkill):
+#     """
+#     Purpose: To provide a simple damaging effect as the fall back option for entities. Also for use with bump attacks.
+#     """
+#     def __init__(self, owning_entity):
+#         super().__init__("basic_attack", owning_entity)
+#
+#     def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
+#         # no projectile so call activate directly
+#         tiles = []
+#         for tile, direction in use_tiles_and_directions:
+#             tiles.append(tile)
+#         self.activate(tiles)
+#
+#     def activate(self, target_tiles: List[Tile]):
+#         effects = self.create_effects()
+#         entity = self.entity
+#
+#         # process all effects on all tiles
+#         while effects:
+#             effect = effects.pop()  # FIFO
+#             for tile in target_tiles:
+#                 coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
+#                 effected_tiles = world.get_tiles(tile.x, tile.y, coords)
+#                 result = act.process_effect(effect, effected_tiles, entity)
+#                 result_effect = self._process_result(result, effect)
+#                 if result_effect:
+#                     effects.append(result_effect)
+#
+#     def create_effects(self) -> List[EffectData]:
+#         effects = []
+#
+#         effect_dict = {
+#             "originator": self.entity,
+#             "creators_name": self.name,
+#             "accuracy": BASE_ACCURACY + 5,
+#             "stat_to_target": PrimaryStat.VIGOUR,
+#             "shape": Shape.TARGET,
+#             "shape_size": 1,
+#             "required_tags": [
+#                 TargetTag.OTHER_ENTITY
+#             ],
+#             "damage": BASE_DAMAGE + 20,
+#             "damage_type": DamageType.MUNDANE,
+#             "mod_amount": 0.1,
+#             "mod_stat": PrimaryStat.CLOUT,
+#         }
+#         effects.append(DamageEffectData(**effect_dict))
+#
+#         return effects
+#
+#
+# class Lunge(BaseSkill):
+#     """
+#     Purpose: To provide a simple damaging effect as the fall back option for entities. Also for use with bump attacks.
+#     """
+#     def __init__(self, owning_entity):
+#         super().__init__("lunge", owning_entity)
+#
+#     def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
+#         # no projectile so call activate directly
+#         tiles = []
+#         for tile, direction in use_tiles_and_directions:
+#             tiles.append(tile)
+#         self.activate(tiles)
+#
+#     def activate(self, target_tiles: List[Tile]):
+#         effects = self.create_effects()
+#         entity = self.entity
+#
+#         # process all effects on all tiles
+#         while effects:
+#             effect = effects.pop()  # FIFO
+#             for tile in target_tiles:
+#                 coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
+#                 effected_tiles = world.get_tiles(tile.x, tile.y, coords)
+#                 result = act.process_effect(effect, effected_tiles, entity)
+#                 result_effects = self._process_result(result, effect)
+#
+#                 # if we have any success or fail actions add them to the list to activate
+#                 if result_effects:
+#                     for result_effect in result_effects:
+#                         effects.append(result_effect)
+#
+#     def create_effects(self) -> List[EffectData]:
+#         effects = []
+#
+#         damage_dict = {
+#             "originator": self.entity,
+#             "creators_name": self.name,
+#             "accuracy": BASE_ACCURACY + 5,
+#             "stat_to_target": PrimaryStat.VIGOUR,
+#             "shape": Shape.TARGET,
+#             "shape_size": 1,
+#             "required_tags": [
+#                 TargetTag.OTHER_ENTITY
+#             ],
+#             "damage": BASE_DAMAGE + 20,
+#             "damage_type": DamageType.MUNDANE,
+#             "mod_amount": 0.1,
+#             "mod_stat": PrimaryStat.CLOUT,
+#         }
+#         damage_effect = DamageEffectData(**damage_dict)
+#
+#         move_dict = {
+#             "originator": self.entity,
+#             "creators_name": self.name,
+#             "accuracy": BASE_ACCURACY + 5,
+#             "stat_to_target": PrimaryStat.VIGOUR,
+#             "shape": Shape.TARGET,
+#             "shape_size": 1,
+#             "required_tags": [
+#                 TargetTag.SELF
+#             ],
+#             "move_direction": Direction.DOWN,
+#             "move_amount": 1,
+#             "move_target": self.entity,
+#             "allow_bump_attack": False,
+#             "move_time_cost": 0
+#         }
+#         move_effect = MoveActorEffectData(**move_dict)
+#
+#         effects.append(move_effect)
+#         effects.append(damage_effect)
+#
+#         return effects

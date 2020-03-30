@@ -139,12 +139,13 @@ def use_skill(using_entity: int, skill_name: str, use_tiles_and_directions: List
 def cast_skill(user: EntityID, skill, target_tile: Tile):
     # ensure they are the right target type
     if world.tile_has_tags(target_tile, skill.required_tags, user):
-        skill_cast = skill(user, target_tile)
-        for entity, effects in skill_cast.get_affected_entities():
+        skill.set_target(target_tile)
+        for entity, effects in skill.apply():
             effect_queue = list(effects)
             while effect_queue:
                 effect = effect_queue.pop()
                 effect_queue.extend(effect.evaluate())
+        skill.clear_target()
 
 
 def create_skill_instance(skill_class_name: str, **kwargs):

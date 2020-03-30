@@ -29,7 +29,7 @@ class DamageEffect(Effect):
                 success_effects: List[Effect], failure_effects: List[Effect],
                 damage: int, damage_type: DamageTypeType, mod_stat: PrimaryStatType, mod_amount: float):
 
-        super().__init__(origin, victim, stat_to_target, accuracy, success_effects)
+        super().__init__(origin, victim, stat_to_target, accuracy, success_effects, failure_effects)
 
         self.damage = damage
         self.damage_type = damage_type
