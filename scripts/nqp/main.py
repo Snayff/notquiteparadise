@@ -11,11 +11,11 @@ import sys
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import state, world, existence, chapter, key, debug
+from scripts.engine import state, world, chapter, key, debug
 from scripts.engine.core.constants import GameState, VERSION, EventTopic
+from scripts.engine.core.event_core import event_hub, publisher
 from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import ui
-from scripts.engine.core.event_core import event_hub, publisher
 from scripts.nqp import processors
 from scripts.nqp.entity_handler import EntityHandler
 from scripts.nqp.game_handler import GameHandler
@@ -107,7 +107,7 @@ def game_loop():
         if current_state == GameState.NPC_TURN:
             # just in case the turn holder has died but not been replaced as expected
             try:
-                existence.take_turn(chapter.get_turn_holder())
+                world.take_turn(chapter.get_turn_holder())
             except AttributeError:
                 chapter.rebuild_turn_queue()
 
@@ -213,7 +213,7 @@ def initialise_game():
     world.create_game_map(map_width, map_height)
 
     # init the player
-    player = existence.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
+    player = world.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
                                  "dandy", True)
 
     # tell places about the player
@@ -221,10 +221,10 @@ def initialise_game():
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    enemy = existence.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops", "dandy")
+    enemy = world.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops", "dandy")
 
     # create a god
-    god = existence.create_god("the_small_gods")
+    god = world.create_god("the_small_gods")
 
     publisher.publish(ChangeGameStateEvent(GameState.GAME_INITIALISING))
 

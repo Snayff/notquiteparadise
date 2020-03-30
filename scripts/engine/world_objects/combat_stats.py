@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from scripts.engine import existence
+from scripts.engine import world
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat
 from scripts.engine.library import library
 from scripts.engine.component import People, Homeland, Savvy
@@ -26,7 +26,7 @@ class CombatStats:
         """
         stat = PrimaryStat.VIGOUR
 
-        return existence.get_primary_stat(self.entity, stat)
+        return world.get_primary_stat(self.entity, stat)
 
     @property
     def clout(self) -> int:
@@ -35,7 +35,7 @@ class CombatStats:
         """
         stat = PrimaryStat.CLOUT
 
-        return existence.get_primary_stat(self.entity, stat)
+        return world.get_primary_stat(self.entity, stat)
 
     @property
     def skullduggery(self) -> int:
@@ -44,7 +44,7 @@ class CombatStats:
         """
         stat = PrimaryStat.SKULLDUGGERY
 
-        return existence.get_primary_stat(self.entity, stat)
+        return world.get_primary_stat(self.entity, stat)
 
     @property
     def bustle(self) -> int:
@@ -53,7 +53,7 @@ class CombatStats:
         """
         stat = PrimaryStat.BUSTLE
 
-        return existence.get_primary_stat(self.entity, stat)
+        return world.get_primary_stat(self.entity, stat)
 
     @property
     def exactitude(self) -> int:
@@ -62,7 +62,7 @@ class CombatStats:
         """
         stat = PrimaryStat.EXACTITUDE
 
-        return existence.get_primary_stat(self.entity, stat)
+        return world.get_primary_stat(self.entity, stat)
 
     @property
     def max_health(self) -> int:
@@ -277,7 +277,7 @@ class CombatStats:
         stat_data = library.get_secondary_stat_data(stat)
 
         # from characteristics
-        components = existence.get_entitys_components(self.entity)
+        components = world.get_entitys_components(self.entity)
         base_value = stat_data.base_value
         for component in components:
             if isinstance(component, Homeland):

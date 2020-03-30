@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import logging
 from abc import ABC
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
-from scripts.engine import act, existence
+from scripts.engine import world
 from scripts.engine.core.constants import PrimaryStatType, DamageTypeType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import DieEvent
@@ -40,23 +40,30 @@ class DamageEffect(Effect):
         Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.
         """
         logging.debug("Evaluating Damage Effect...")
-        defenders_stats = existence.get_combat_stats(self.victim)
-        attackers_stats = existence.get_combat_stats(self.origin)
+        defenders_stats = world.create_combat_stats(self.victim)
+        attackers_stats = world.create_combat_stats(self.origin)
 
         # get hit type
         stat_to_target_value = getattr(defenders_stats, self.stat_to_target.lower())
-        to_hit_score = act.calculate_to_hit_score(attackers_stats.accuracy, self.accuracy, stat_to_target_value)
-        hit_type = act.get_hit_type(to_hit_score)
+        to_hit_score = world.calculate_to_hit_score(attackers_stats.accuracy, self.accuracy, stat_to_target_value)
+        hit_type = world.get_hit_type(to_hit_score)
 
         # calculate damage
         resist_value = getattr(defenders_stats, "resist_" + self.damage_type.lower())
         mod_value = getattr(attackers_stats, self.mod_stat.lower())
-        damage = act.calculate_damage(self.damage, mod_value, resist_value, hit_type)
+        damage = world.calculate_damage(self.damage, mod_value, resist_value, hit_type)
 
-        if existence.apply_damage(self.victim, damage) <= 0:
+        if world.apply_damage(self.victim, damage) <= 0:
             publisher.publish(DieEvent(self.victim))
 
         if damage > 0:
             return self.success_effects
         else:
             return self.failure_effects
+
+
+class MoveActorEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect]):
+        super().__init__(origin, success_effects, failure_effects)
+
+    # TODO - rebuild effect

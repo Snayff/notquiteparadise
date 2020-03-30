@@ -2,12 +2,10 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-
-from scripts.engine import existence
+from scripts.engine import world
 from scripts.engine.core.constants import Effect, Direction
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.library import library
-
 from scripts.engine.component import Position, IsGod
 from scripts.engine.event import UseSkillEvent, WantToUseSkillEvent
 
@@ -21,7 +19,7 @@ class GodHandler(Subscriber):
     """
 
     def __init__(self, event_hub):
-        Subscriber.__init__(self, "god_handler", event_hub)
+        super().__init__("god_handler", event_hub)
 
     def process_event(self, event):
         """
@@ -38,7 +36,7 @@ class GodHandler(Subscriber):
 
         if isinstance(event, UseSkillEvent):
             # if the entity isnt another god then judge it
-            if not existence.has_component(event.entity, IsGod):
+            if not world.has_component(event.entity, IsGod):
                 self.process_judgements(event)
                 self.process_interventions(event)
 
@@ -74,8 +72,8 @@ class GodHandler(Subscriber):
         """
         skill_name = event.skill_name
         entity = event.entity
-        position = existence.get_entitys_component(entity, Position)
-        interventions = existence.consider_intervening(entity, skill_name)
+        position = world.get_entitys_component(entity, Position)
+        interventions = world.choose_interventions(entity, skill_name)
 
         for god_entity_id, intervention_name in interventions:
             # create use skill event with direction of centre

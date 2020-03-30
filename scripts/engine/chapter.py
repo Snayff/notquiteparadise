@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
-from scripts.engine import existence
+from scripts.engine import world
 from scripts.engine.component import Resources, Identity, Tracked
 from scripts.engine.core.constants import TIME_PER_ROUND
 from scripts.engine.core.event_core import publisher
@@ -28,7 +28,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     """
     logging.debug(f"Building a new turn queue...")
 
-    get_component = existence.get_components
+    get_component = world.get_components
 
     # create a turn queue from the entities list
     new_queue = {}
@@ -57,7 +57,7 @@ def next_turn():
     turn_holder = get_turn_holder()
 
     # whats the difference between current time and when they last acted?
-    next_entity_time = existence.get_entitys_component(turn_holder, Tracked).time_spent
+    next_entity_time = world.get_entitys_component(turn_holder, Tracked).time_spent
     time_progressed = next_entity_time - get_time_of_last_turn()
 
     # add the difference to the time
@@ -71,7 +71,7 @@ def next_turn():
         set_time_in_round(get_time_in_round() + time_progressed)
 
     # log new turn holder
-    name = existence.get_name(turn_holder)
+    name = world.get_name(turn_holder)
     logging.debug(f"-> Current time is {get_time()}. We are {get_time_in_round()} TU`s into round {get_round()}.")
     logging.debug(f"-> It is now '{name}'s turn.")
 
@@ -153,7 +153,7 @@ def get_round() -> int:
 def _get_pretty_queue() -> List[Tuple[str, int]]:
     queue = []
     for entity, time in get_turn_queue().items():
-        name = existence.get_name(entity)
+        name = world.get_name(entity)
         queue.append((name, time))
     return queue
 

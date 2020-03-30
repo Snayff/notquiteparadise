@@ -146,7 +146,7 @@ class DataEditor(UIWindow):
 
     def _select_new_category(self, category: str):
         """
-        Select new category, clear existing data fields and create new instance options from category.
+        Select new category, clear existing data fields and create_entity new instance options from category.
         """
         self.current_data_category = category
 
@@ -656,7 +656,7 @@ class DataEditor(UIWindow):
                 # save the data field
                 data_fields[key] = data_field
             except ValueError as e:
-                logging.warning(f"Error ({e}) trying to create data field for {key}:{value}.")
+                logging.warning(f"Error ({e}) trying to create_entity data field for {key}:{value}.")
 
         # update the main record
         if primary_or_secondary == "primary":

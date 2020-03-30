@@ -31,11 +31,12 @@ class UseSkillEvent(Event):
     Event for entity using a skill. Should only be called as a result of WantToUseSkillEvent being processed
     successfully.
     """
-    def __init__(self, entity_using_skill: EntityID, skill_name: str, target_tiles: List[Tuple[Tile, DirectionType]]):
+    def __init__(self, entity_using_skill: EntityID, skill_name: str, target_tile: Tile, direction: DirectionType):
         Event.__init__(self, "USE_SKILL", EventTopic.ENTITY)
         self.entity = entity_using_skill
         self.skill_name = skill_name
-        self.target_tiles = target_tiles
+        self.target_tile = target_tile
+        self.direction = direction
 
 
 class DieEvent(Event):

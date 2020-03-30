@@ -2,13 +2,9 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-
-from scripts.engine import existence, chapter, state, utility
+from scripts.engine import chapter, state, utility, world
 from scripts.engine.core.constants import GameState
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.state import get_current
-
-
 from scripts.engine.event import EndTurnEvent, ExitGameEvent, ChangeGameStateEvent
 
 if TYPE_CHECKING:
@@ -21,7 +17,7 @@ class GameHandler(Subscriber):
     """
 
     def __init__(self, event_hub):
-        Subscriber.__init__(self, "game_handler", event_hub)
+        super().__init__("game_handler", event_hub)
 
     def process_event(self, event):
         """
@@ -47,11 +43,11 @@ class GameHandler(Subscriber):
         if new_game_state == GameState.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
-            publisher.publish(EndTurnEvent(existence.get_player(), 1))  # trigger new turn actions (entity queue)
+            publisher.publish(EndTurnEvent(world.get_player(), 1))  # trigger new turn actions (entity queue)
 
         elif new_game_state == GameState.NEW_TURN:
             # if turn holder is the player then update to player turn
-            if chapter.get_turn_holder() == existence.get_player():
+            if chapter.get_turn_holder() == world.get_player():
                 publisher.publish(ChangeGameStateEvent(GameState.PLAYER_TURN))
             # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
             else:

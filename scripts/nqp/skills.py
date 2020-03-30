@@ -3,11 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Type
 from snecs.typedefs import EntityID
-from scripts.engine import world, utility, act, existence
+from scripts.engine import utility, world
 from scripts.engine.component import Position, Resources, HasCombatStats
-from scripts.engine.core.constants import Direction, BASE_ACCURACY, PrimaryStat, Shape, TargetTag, BASE_DAMAGE, \
-    DamageType, DirectionType, ResourceType, Resource, TargetingMethodType, TargetTagType, TargetingMethod, ShapeType
-from scripts.engine.effect import DamageEffect, Effect
+from scripts.engine.core.constants import ResourceType, Resource, TargetingMethodType, TargetingMethod, DirectionType, \
+    Shape, ShapeType, TargetTagType, TargetTag, Direction, Effect, PrimaryStat, BASE_ACCURACY, BASE_DAMAGE, DamageType
+from scripts.engine.effect import DamageEffect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -57,7 +57,7 @@ class Skill(ABC):
             affected_positions.append((coord[0] + target_x, coord[1] + target_y))
 
         # get relevant entities in target area
-        for entity, (position, *others) in existence.get_components([Position, Resources, HasCombatStats]):
+        for entity, (position, *others) in world.get_components([Position, Resources, HasCombatStats]):
             if (position.x, position.y) in affected_positions:
                 affected_entities.append(entity)
 
@@ -101,10 +101,7 @@ class BasicAttack(Skill):
     shape = Shape.TARGET
     shape_size = 1
 
-    def __init__(self, user: EntityID, target_tile: Tile):
-        super().__init__(user, target_tile)
-
-    def build_effects(self, entity) -> List[Effect]:
+    def build_effects(self, entity) -> List[DamageEffect]:
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -177,7 +174,7 @@ class BasicAttack(Skill):
 #         """
 #         Get the target tiles and relative directions
 #         """
-#         target_tiles = []
+#         target_tile = []
 #         data = library.get_skill_data(self.name)
 #         tags = data.use_required_tags
 #
@@ -187,9 +184,9 @@ class BasicAttack(Skill):
 #         for tile in tiles:
 #             if world.tile_has_tags(tile, tags, self.entity):
 #                 direction = world.get_direction(start_position, (tile.x, tile.y))
-#                 target_tiles.append((tile, direction))
+#                 target_tile.append((tile, direction))
 #
-#         return target_tiles
+#         return target_tile
 #
 #     @abstractmethod
 #     def use(self, use_tiles_and_directions: List[Tuple[Tile, DirectionType]]):
@@ -206,7 +203,7 @@ class BasicAttack(Skill):
 #         pass
 #
 #     @abstractmethod
-#     def activate(self, target_tiles: List[Tile]):
+#     def activate(self, target_tile: List[Tile]):
 #         """
 #         Trigger the effects on the given tiles.
 #         """
@@ -239,14 +236,14 @@ class BasicAttack(Skill):
 #             tiles.append(tile)
 #         self.activate(tiles)
 #
-#     def activate(self, target_tiles: List[Tile]):
+#     def activate(self, target_tile: List[Tile]):
 #         effects = self.create_effects()
 #         entity = self.entity
 #
 #         # process all effects on all tiles
 #         while effects:
 #             effect = effects.pop()  # FIFO
-#             for tile in target_tiles:
+#             for tile in target_tile:
 #                 coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
 #                 effected_tiles = world.get_tiles(tile.x, tile.y, coords)
 #                 result = act.process_effect(effect, effected_tiles, entity)
@@ -291,14 +288,14 @@ class BasicAttack(Skill):
 #             tiles.append(tile)
 #         self.activate(tiles)
 #
-#     def activate(self, target_tiles: List[Tile]):
+#     def activate(self, target_tile: List[Tile]):
 #         effects = self.create_effects()
 #         entity = self.entity
 #
 #         # process all effects on all tiles
 #         while effects:
 #             effect = effects.pop()  # FIFO
-#             for tile in target_tiles:
+#             for tile in target_tile:
 #                 coords = utility.get_coords_from_shape(effect.shape, effect.shape_size)
 #                 effected_tiles = world.get_tiles(tile.x, tile.y, coords)
 #                 result = act.process_effect(effect, effected_tiles, entity)

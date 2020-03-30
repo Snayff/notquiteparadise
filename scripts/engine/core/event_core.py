@@ -1,6 +1,6 @@
 # TODO - clean up module
 import logging
-
+from abc import ABC
 from scripts.engine.core.constants import DEBUG_LOG_EVENT_RECEIPTS
 
 
@@ -33,7 +33,7 @@ class EventHub:
 
 class Publisher:
     """
-    Class to create events and log them with the event hub
+    Class to create_entity events and log them with the event hub
     """
     def __init__(self, event_hub):
         self.event_hub = event_hub
@@ -65,8 +65,7 @@ class Subscriber:
             logging.debug(f"{self.name} received {event.__class__.__name__}.")
 
 
-# TODO - make ABC
-class Event:
+class Event(ABC):
     """
     Events to cause top level actions to take place
     """
