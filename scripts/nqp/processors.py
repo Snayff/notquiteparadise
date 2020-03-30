@@ -164,11 +164,10 @@ def _process_player_turn_intents(intent: InputIntentType):
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)
         if skill_name:
-            position = existence.get_entitys_component(player, Position)
             pos = existence.get_entitys_component(player, Position)
             tile = world.get_tile((pos.x, pos.y + 1))
             knowledge = existence.get_entitys_component(player, Knowledge)
-            act.cast_skill(player, knowledge.skills["basic_attack"], tile)
+            act.cast_skill(player, knowledge.skills["basic_attack"].skill, tile)
             #publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y),
             #                                      (0, 1)))
 

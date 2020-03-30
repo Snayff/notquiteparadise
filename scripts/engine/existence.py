@@ -1,5 +1,6 @@
 from __future__ import annotations as _annotations
 
+import collections
 import dataclasses
 import logging
 import random
@@ -282,8 +283,9 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill]}))
     # N.B. All actors start with basic attack
     #skill = act.create_skill_instance(library.get_skill_data(basic_attack_name).class_name, owning_entity=entity)
-    skill = BasicAttack(entity)
-    known_skills = {basic_attack_name: skill}
+    SkillInfo = collections.namedtuple("SkillInfo", "skill cooldown")
+    basic_attack = SkillInfo(BasicAttack, 0)
+    known_skills = {basic_attack_name: basic_attack}
     skill_order = [basic_attack_name]
     afflictions = Afflictions()
 

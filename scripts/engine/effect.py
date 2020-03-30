@@ -14,23 +14,22 @@ if TYPE_CHECKING:
 
 
 class Effect(ABC):
-    def __init__(self, origin: EntityID, victim: EntityID, stat_to_target: PrimaryStatType, accuracy: int,
-                success_effects: List[Effect], failure_effects: List[Effect]):
+    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect]):
         self.origin = origin
-        self.victim = victim
-        self.stat_to_target: PrimaryStatType = stat_to_target
-        self.accuracy: int = accuracy
         self.success_effects: List[Effect] = success_effects
         self.failure_effects: List[Effect] = failure_effects
 
 
 class DamageEffect(Effect):
-    def __init__(self, origin: EntityID, victim: EntityID, stat_to_target: PrimaryStatType, accuracy: int,
-                success_effects: List[Effect], failure_effects: List[Effect],
+    def __init__(self, origin: EntityID, victim: EntityID, success_effects: List[Effect],
+                failure_effects: List[Effect], stat_to_target: PrimaryStatType, accuracy: int,
                 damage: int, damage_type: DamageTypeType, mod_stat: PrimaryStatType, mod_amount: float):
 
-        super().__init__(origin, victim, stat_to_target, accuracy, success_effects, failure_effects)
+        super().__init__(origin, success_effects, failure_effects)
 
+        self.accuracy = accuracy
+        self.stat_to_target = stat_to_target
+        self.victim = victim
         self.damage = damage
         self.damage_type = damage_type
         self.mod_amount = mod_amount

@@ -2,17 +2,12 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Type
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import world, utility, act, existence
 from scripts.engine.component import Position, Resources, HasCombatStats
 from scripts.engine.core.constants import Direction, BASE_ACCURACY, PrimaryStat, Shape, TargetTag, BASE_DAMAGE, \
-    DamageType, DirectionType, ProjectileSpeed, TravelMethod, TerrainCollision, ProjectileExpiry, ResourceType, \
-    Resource, TargetingMethodType, TargetTagType, TargetingMethod, ShapeType, PrimaryStatType, DamageTypeType
-from scripts.engine.core.definitions import EffectData, DamageEffectData, ProjectileData, MoveActorEffectData
+    DamageType, DirectionType, ResourceType, Resource, TargetingMethodType, TargetTagType, TargetingMethod, ShapeType
 from scripts.engine.effect import DamageEffect, Effect
-from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -30,36 +25,26 @@ class Skill(ABC):
     the user and target.
     """
 
-    def __init__(self, user: EntityID, description: str, icon_path: str,
-            required_tags: List[TargetTagType], resource_type: ResourceType, resource_cost: int, time_cost: int,
-            max_cooldown: int, targeting_method: TargetingMethodType, target_directions: List[DirectionType],
-            shape: ShapeType, shape_size: int):
+    # to be overwritten in subclass
+    description: str = ""
+    icon_path: str = ""
+    resource_type: ResourceType = Resource.STAMINA
+    resource_cost: int = 0
+    time_cost: int = 0
+    max_cooldown: int = 0
+    targeting_method: TargetingMethodType = TargetingMethod.TARGET
+    target_directions: List[DirectionType] = []
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+    required_tags: List[TargetTagType] = [TargetTag.OTHER_ENTITY]
 
-        # state
-        self.cooldown = 0
-
-        # to be provided by instance
+    def __init__(self, user: EntityID, target_tile: Tile):
         self.user = user
-        self.target_tile = None
-
-        # to be overwritten in subclass
-        self.description: str = description
-        self.icon_path: str = icon_path
-        self.required_tags: List[TargetTagType] = required_tags
-        self.resource_type: ResourceType = resource_type
-        self.resource_cost: int = resource_cost
-        self.time_cost: int = time_cost
-        self.max_cooldown: int = max_cooldown
-        self.targeting_method: TargetingMethodType = targeting_method
-        self.target_directions: List[DirectionType] = target_directions
-        self.shape: ShapeType = shape
-        self.shape_size: int = shape_size
+        self.target_tile = target_tile
 
     def get_affected_entities(self):
         """
         Return a list of entities that this particular cast affects.
-
-        Note that these aren't necessarily only entities that got hit - hit calculation should be done in build_effects
         """
         affected_entities = []
         affected_positions = []
@@ -92,45 +77,32 @@ class Skill(ABC):
         """
         pass
 
-    def set_target(self, target_tile: Tile):
-        """
-        Set the target for the cast
-        """
-        self.target_tile = target_tile
-
-    def clear_target(self):
-        """
-        Clear the target
-        """
-        self.target_tile = None
-
 
 class BasicAttack(Skill):
-    def __init__(self, user: EntityID):
-        description = "this is the basic attack."
-        icon_path = "assets/skills/placeholder/basic_attack.png"
-        required_tags = [TargetTag.OTHER_ENTITY]
-        resource_type = Resource.STAMINA
-        resource_cost = 5
-        time_cost = 30
-        cooldown = 1
-        targeting_method = TargetingMethod.TARGET
-        target_directions = [
-            Direction.UP_LEFT,
-            Direction.UP,
-            Direction.UP_RIGHT,
-            Direction.LEFT,
-            Direction.CENTRE,
-            Direction.RIGHT,
-            Direction.DOWN_LEFT,
-            Direction.DOWN,
-            Direction.DOWN_RIGHT
-        ]
-        shape = Shape.TARGET
-        shape_size = 1
+    required_tags = [TargetTag.OTHER_ENTITY]
+    description = "this is the basic attack."
+    icon_path = "assets/skills/placeholder/basic_attack.png"
+    resource_type = Resource.STAMINA
+    resource_cost = 5
+    time_cost = 30
+    max_cooldown = 1
+    targeting_method = TargetingMethod.TARGET
+    target_directions = [
+        Direction.UP_LEFT,
+        Direction.UP,
+        Direction.UP_RIGHT,
+        Direction.LEFT,
+        Direction.CENTRE,
+        Direction.RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.DOWN,
+        Direction.DOWN_RIGHT
+    ]
+    shape = Shape.TARGET
+    shape_size = 1
 
-        super().__init__(user, description, icon_path, required_tags, resource_type, resource_cost,
-                         time_cost, cooldown, targeting_method, target_directions, shape, shape_size)
+    def __init__(self, user: EntityID, target_tile: Tile):
+        super().__init__(user, target_tile)
 
     def build_effects(self, entity) -> List[Effect]:
         """
@@ -139,14 +111,14 @@ class BasicAttack(Skill):
         damage_effect = DamageEffect(
             origin=self.user,
             victim=entity,
+            success_effects=[],
+            failure_effects=[],
             stat_to_target=PrimaryStat.VIGOUR,
             accuracy=BASE_ACCURACY,
             damage=BASE_DAMAGE,
             damage_type=DamageType.MUNDANE,
             mod_stat=PrimaryStat.CLOUT,
-            mod_amount=0.1,
-            success_effects=[],
-            failure_effects=[]
+            mod_amount=0.1
         )
 
         return [damage_effect]
