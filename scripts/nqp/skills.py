@@ -9,6 +9,7 @@ from scripts.engine.core.constants import ResourceType, Resource, TargetingMetho
     Shape, ShapeType, TargetTagType, TargetTag, Direction, Effect, PrimaryStat, BASE_ACCURACY, BASE_DAMAGE, DamageType, \
     BASE_MOVE_COST
 from scripts.engine.effect import DamageEffect, MoveActorEffect
+from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -32,7 +33,7 @@ class Skill(ABC):
     resource_type: ResourceType = Resource.STAMINA
     resource_cost: int = 0
     time_cost: int = 0
-    max_cooldown: int = 0
+    base_cooldown: int = 0
     targeting_method: TargetingMethodType = TargetingMethod.TARGET
     target_directions: List[DirectionType] = []
     shape: ShapeType = Shape.TARGET
@@ -84,13 +85,14 @@ class Move(Skill):
     """
     Basic move for an entity.
     """
+    # These are not defined in the json. They are set here and only here.
     required_tags = [TargetTag.SELF]
     description = "this is the normal movement."
     icon_path = ""
     resource_type = Resource.STAMINA
     resource_cost = 0
     time_cost = BASE_MOVE_COST
-    max_cooldown = 0
+    base_cooldown = 0
     targeting_method = TargetingMethod.TARGET
     target_directions = [
         Direction.UP_LEFT,
@@ -124,27 +126,18 @@ class Move(Skill):
 
 
 class BasicAttack(Skill):
-    required_tags = [TargetTag.OTHER_ENTITY]
-    description = "this is the basic attack."
-    icon_path = "assets/skills/placeholder/basic_attack.png"
-    resource_type = Resource.STAMINA
-    resource_cost = 5
-    time_cost = 30
-    max_cooldown = 1
-    targeting_method = TargetingMethod.TARGET
-    target_directions = [
-        Direction.UP_LEFT,
-        Direction.UP,
-        Direction.UP_RIGHT,
-        Direction.LEFT,
-        Direction.CENTRE,
-        Direction.RIGHT,
-        Direction.DOWN_LEFT,
-        Direction.DOWN,
-        Direction.DOWN_RIGHT
-    ]
-    shape = Shape.TARGET
-    shape_size = 1
+    data = library.get_skill_data("basic_attack")
+    required_tags = data.required_tags
+    description = data.description
+    icon_path = data.icon
+    resource_type = data.resource_type
+    resource_cost = data.resource_cost
+    time_cost = data.time_cost
+    base_cooldown = data.cooldown
+    targeting_method = data.targeting_method
+    target_directions = data.target_directions
+    shape = data.shape
+    shape_size = data.shape_size
 
     def build_effects(self, entity) -> List[DamageEffect]:
         """

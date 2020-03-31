@@ -34,7 +34,7 @@ class SkillData:
     class_name: str = ""
 
     # when do we use it?
-    use_required_tags: List[TargetTagType] = field(default_factory=list)
+    required_tags: List[TargetTagType] = field(default_factory=list)
 
     # what does it cost?
     resource_type: Optional[ResourceType] = None
@@ -45,7 +45,10 @@ class SkillData:
     # how does it travel from the user?
     targeting_method: TargetingMethodType = TargetingMethod.TARGET
     target_directions: List[DirectionType] = field(default_factory=list)
-    projectile: ProjectileData = field(default_factory=dict)
+
+    # what is the area of effect?
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
 
 
 @register_dataclass_with_json

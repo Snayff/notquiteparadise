@@ -47,7 +47,6 @@ class GodHandler(Subscriber):
         """
         skill_name = event.skill_name
         entity = event.entity
-        skill_data = library.get_skill_data(skill_name)
 
         # FIXME - have gods judge actions again (effects caused?)
 

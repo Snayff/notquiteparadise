@@ -16,8 +16,7 @@ from scripts.engine.component import Position, Blocking, Resources, Knowledge, I
 from scripts.engine.core.constants import TargetTag, FOVInfo, TargetTagType, DirectionType, Direction, \
     ResourceType, SecondaryStatType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, HitValue, HitType, \
     HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, InteractionCause
-from scripts.engine.core.definitions import CharacteristicSpritesData, UseSkillEffectData, ProjectileData, \
-    ActivateSkillEffectData, KillEntityEffectData, CharacteristicSpritePathsData
+from scripts.engine.core.definitions import CharacteristicSpritesData, ProjectileData, CharacteristicSpritePathsData
 from scripts.engine.core.store import store
 from scripts.engine.library import library
 from scripts.engine.thought import SkipTurn, ProjectileBehaviour
@@ -133,8 +132,9 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # setup basic attack as a known skill and an interaction  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
-    use_skill_effect = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
-    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill_effect]}))
+    # TODO - revuild interactions
+    # use_skill_effect = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
+    # add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill_effect]}))
     # N.B. All actors start with basic attack and move
     basic_attack = {
         "skill": BasicAttack,
@@ -207,10 +207,12 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     entity = create_entity(projectile)
 
-    activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.required_tags,
-                                             creator=name)
-    kill_entity = KillEntityEffectData(target_entity=entity)
-    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [activate_skill, kill_entity]}))
+
+    # TODO - rebuild interactions
+    # activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.required_tags,
+    #                                          creator=name)
+    # kill_entity = KillEntityEffectData(target_entity=entity)
+    # add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [activate_skill, kill_entity]}))
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
@@ -663,7 +665,7 @@ def get_entities_and_components_in_area(area: List[Tile],
 
 def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]:
     """
-    Get an entity's component.
+    Get an entity's component. Log if component not found.
     """
     if has_component(entity, component):
         return snecs.entity_component(entity, component)
@@ -676,20 +678,13 @@ def get_name(entity: EntityID) -> str:
     """
     Get an entity's Identity component's name.
     """
-    identity = get_identity(entity)
+    identity = get_entitys_component(entity, Identity)
     if identity:
         name = identity.name
     else:
         name = "not found"
 
     return name
-
-
-def get_identity(entity: EntityID) -> Optional[Identity]:
-    """
-    Get an entity's Identity component.
-    """
-    return get_entitys_component(entity, Identity)
 
 
 def get_primary_stat(entity: EntityID, primary_stat: str) -> EntityID:
@@ -731,6 +726,17 @@ def get_player_fov() -> Optional[tcod.map.Map]:
             return fov_c.map
 
     return None
+
+
+def get_known_skill(entity: EntityID, skill_name: str) -> Optional[Type[Skill]]:
+    """
+    Get an entity's known skill from their Knowledge component.
+    """
+    try:
+        knowledge = get_entitys_component(entity, Knowledge)
+        return knowledge.skills[skill_name]["skill"]
+    except AttributeError:
+        return None
 
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
@@ -928,7 +934,7 @@ def update_tile_visibility(fov_map: tcod.map.Map):
             game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
 
-def pay_resource_cost(entity: int, resource: SecondaryStatType, cost: int):
+def pay_resource_cost(entity: int, resource: ResourceType, cost: int):
     """
     Remove the resource cost from the using entity
     """

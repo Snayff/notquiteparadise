@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses
 from scripts.engine.core.constants import SecondaryStatType, EffectType, PrimaryStatType
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData,\
-    InterventionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData, AfflictionData
+    InterventionData, GodData, CharacteristicData, AspectData, AttitudeData, AfflictionData
 
 if TYPE_CHECKING:
     from typing import Dict
@@ -174,19 +174,6 @@ class _LibraryOfAlexandria:
         skill_data = self._skills[skill_name]
 
         return skill_data
-
-    def get_skill_effect_data(self, skill_name: str, effect_type: EffectType) -> EffectData:
-        """
-        Get effect data for a skill from the library
-        """
-        # FIXME - determine if still necessary as effects now held by interactions
-        try:
-            effect_data = self._skills[skill_name].effects[effect_type]
-
-        except KeyError:
-            effect_data = None
-
-        return effect_data
 
     def get_primary_stat_data(self, primary_stat_type: PrimaryStatType) -> BasePrimaryStatData:
         """

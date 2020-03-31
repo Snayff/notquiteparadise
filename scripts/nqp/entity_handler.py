@@ -69,17 +69,17 @@ class EntityHandler(Subscriber):
         start_x, start_y = event.start_pos
         direction = event.direction
         skill_name = event.skill_name
-        skill_data = library.get_skill_data(skill_name)
+        skill = world.get_known_skill(entity, skill_name)
 
         # flags
         got_target = can_afford = not_on_cooldown = False
 
         # complete initial checks
-        targeting = skill_data.targeting_method
+        targeting = skill.targeting_method
         if (targeting == TargetingMethod.TARGET and direction) or targeting == TargetingMethod.AUTO:
             got_target = True
 
-        can_afford = world.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost)
+        can_afford = world.can_afford_cost(player, skill.resource_type, skill.resource_cost)
 
         cooldown = world.get_entitys_component(player, Knowledge).skills[skill_name]["cooldown"]
         if cooldown <= 0:
@@ -119,8 +119,6 @@ class EntityHandler(Subscriber):
                 # we have someone to target, let's go
                 if target_tile:
                     # is it the right target?
-                    knowledge = world.get_entitys_component(entity, Knowledge)
-                    skill = knowledge.skills[skill_name]["skill"]
                     if world.tile_has_tags(target_tile, skill.required_tags, entity):
                         publisher.publish(UseSkillEvent(entity, skill_name, target_tile, direction))
 
@@ -161,21 +159,20 @@ class EntityHandler(Subscriber):
         carry the skill.
         """
         entity = event.entity
-        skill_name = event.skill_name
-        skill_data = library.get_skill_data(skill_name)
+        skill = world.get_known_skill(entity, event.skill_name)
+        if skill:
+            # pay then use the skill
+            world.pay_resource_cost(entity, skill.resource_type, skill.resource_cost)
+            world.use_skill(entity, skill, event.target_tile)
 
-        # pay then use the skill
-        world.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
-        knowledge = world.get_entitys_component(entity, Knowledge)
-        world.use_skill(entity, knowledge.skills[skill_name]["skill"], event.target_tile)
+            # update the cooldown
+            knowledge = world.get_entitys_component(entity, Knowledge)
+            knowledge.skills[event.skill_name]["cooldown"] = skill.base_cooldown
+            # TODO - modify by entity's stats - perhaps move to a func to ensure always uses entities mod
 
-        # update the cooldown
-        knowledge = world.get_entitys_component(entity, Knowledge)
-        knowledge.skills[skill_name]["cooldown"] = skill_data.cooldown  # TODO - modify by entity's stats
-
-        # end the turn if the entity is the turn holder
-        if entity == chapter.get_turn_holder():
-            publisher.publish(EndTurnEvent(entity, skill_data.time_cost))
+            # end the turn if the entity is the turn holder
+            if entity == chapter.get_turn_holder():
+                publisher.publish(EndTurnEvent(entity, skill.time_cost))
 
     @staticmethod
     def _process_die(event: DieEvent):

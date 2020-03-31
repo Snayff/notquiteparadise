@@ -20,9 +20,11 @@
             "up_right"
         ],
         "time_cost": 20,
-        "use_required_tags": [
+        "required_tags": [
             "other_entity"
-        ]
+        ],
+        "shape": "target",
+        "shape_size": 1
     },
     "lunge": {
         "__dataclass__": "SkillData",
@@ -45,8 +47,10 @@
             "up_right"
         ],
         "time_cost": 30,
-        "use_required_tags": [
+        "required_tags": [
             "no_blocking_tile"
-        ]
+        ],
+        "shape": "target",
+        "shape_size": 1
     }
 }

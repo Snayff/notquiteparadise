@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List
 from snecs import RegisteredComponent
-from scripts.engine.core.constants import InteractionCauseType
-from scripts.engine.core.definitions import EffectData
+from scripts.engine.core.constants import InteractionCauseType, Effect
 
 if TYPE_CHECKING:
     import pygame
@@ -12,7 +11,7 @@ if TYPE_CHECKING:
     import tcod.map
     from snecs.typedefs import EntityID
     from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
-    from scripts.nqp.skills import BaseSkill
+    from scripts.nqp.skills import Skill
 
 
 ##########################################################
@@ -173,14 +172,14 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills.
     """
 
-    def __init__(self, skills: Dict[str, BaseSkill] = None, skill_order: List[str] = None):
+    def __init__(self, skills: Dict[str, Skill] = None, skill_order: List[str] = None):
         if skills is None:
             skills = {}
         if skill_order is None:
             skill_order = []
 
         self.skill_order = skill_order  # list of skill names, to allow access by index
-        self.skills: Dict[str, BaseSkill] = skills  # skill_name : Skill
+        self.skills: Dict[str, Skill] = skills  # skill_name : Skill
 
 
 class Afflictions(Dict[str, int], RegisteredComponent):
@@ -221,7 +220,7 @@ class FOV(RegisteredComponent):
         self.map: tcod.map.Map = fov_map
 
 
-class Interactions(Dict[InteractionCauseType, List[EffectData]], RegisteredComponent):
+class Interactions(Dict[InteractionCauseType, List[Effect]], RegisteredComponent):
     """
     The effects triggered when a specific criteria is met.
     """
