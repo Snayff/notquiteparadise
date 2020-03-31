@@ -186,4 +186,4 @@ class InteractionHandler(Subscriber):
             # apply effects
             if effect_creator:
                 effect.creator = effect_creator
-            act.process_effect(effect, effected_tiles, originating_entity)
+            #act.process_effect(effect, effected_tiles, originating_entity)

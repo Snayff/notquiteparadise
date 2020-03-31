@@ -73,7 +73,7 @@ def next_turn():
     # log new turn holder
     name = world.get_name(turn_holder)
     logging.debug(f"-> Current time is {get_time()}. We are {get_time_in_round()} TU`s into round {get_round()}.")
-    logging.debug(f"-> It is now '{name}'s turn.")
+    logging.debug(f"-> '{name}' is now the turn holder.")
 
 
 def next_round(time_progressed: int):

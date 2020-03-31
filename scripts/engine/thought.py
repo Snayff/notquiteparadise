@@ -4,9 +4,7 @@ import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
-
-
-from scripts.engine import utility
+from scripts.engine import world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
 from scripts.engine.core.definitions import ProjectileData

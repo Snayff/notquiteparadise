@@ -9,7 +9,8 @@ from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEven
     EndTurnEvent, ChangeGameStateEvent, EndRoundEvent
 from scripts.engine.library import library
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.component import Knowledge
+from scripts.engine.component import Knowledge, Position
+from scripts.nqp.skills import Move
 
 if TYPE_CHECKING:
     pass
@@ -50,18 +51,13 @@ class EntityHandler(Subscriber):
         Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
         target tile has entity) or move.
         """
+        tile = world.get_tile((event.start_pos[0], event.start_pos[1]))
+        world.use_skill(event.entity, Move, tile, event.direction)
 
-        move_dict = {
-            "originator": event.entity,
-            "move_direction": event.direction,
-            "move_amount": 1,
-            "move_target": event.entity,
-            "allow_bump_attack": True,
-            "move_time_cost": event.base_cost
-        }
-        move_effect = MoveActorEffectData(**move_dict)
-        tile = world.get_tile(event.start_pos)
-        act.process_effect(move_effect, [tile], event.entity)
+        # check entity moved
+        new_position = world.get_entitys_component(event.entity, Position)
+        if (new_position.x, new_position.y) != event.start_pos:
+            publisher.publish(EndTurnEvent(event.entity, event.base_cost))
 
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):
@@ -85,7 +81,7 @@ class EntityHandler(Subscriber):
 
         can_afford = world.can_afford_cost(player, skill_data.resource_type, skill_data.resource_cost)
 
-        cooldown = world.get_entitys_component(player, Knowledge).skills[skill_name].cooldown
+        cooldown = world.get_entitys_component(player, Knowledge).skills[skill_name]["cooldown"]
         if cooldown <= 0:
             not_on_cooldown = True
 
@@ -118,15 +114,22 @@ class EntityHandler(Subscriber):
         elif got_target:
             # we have a direction, let's see if we can use the skill
             if can_afford and not_on_cooldown:
-                target_tile = world.get_tile((start_x, start_y))
+                target_tile = world.get_tile((start_x + direction[0], start_y + direction[1]))
 
                 # we have someone to target, let's go
                 if target_tile:
-                    publisher.publish(UseSkillEvent(entity, skill_name, target_tile, direction))
+                    # is it the right target?
+                    knowledge = world.get_entitys_component(entity, Knowledge)
+                    skill = knowledge.skills[skill_name]["skill"]
+                    if world.tile_has_tags(target_tile, skill.required_tags, entity):
+                        publisher.publish(UseSkillEvent(entity, skill_name, target_tile, direction))
+
+                    else:
+                        # no suitable targets
+                        publisher.publish(MessageEvent(MessageType.LOG, "I can't do that there!"))
+                        # TODO - change to an informational, on screen message.
                 else:
-                    # no suitable targets
-                    publisher.publish(MessageEvent(MessageType.LOG, "I can't do that there!"))
-                    # TODO - change to an informational, on screen message.
+                    logging.warning(f"Targeted ({start_x},{start_y}) which is not a valid tile.")
 
         else:
             # not player and no target
@@ -164,7 +167,7 @@ class EntityHandler(Subscriber):
         # pay then use the skill
         world.pay_resource_cost(entity, skill_data.resource_type, skill_data.resource_cost)
         knowledge = world.get_entitys_component(entity, Knowledge)
-        world.use_skill(entity, knowledge.skills[skill_name], event.target_tile)
+        world.use_skill(entity, knowledge.skills[skill_name]["skill"], event.target_tile)
 
         # update the cooldown
         knowledge = world.get_entitys_component(entity, Knowledge)
@@ -213,11 +216,11 @@ class EntityHandler(Subscriber):
         Reduce cooldowns and durations
         """
         # skill cooldowns
-        # for entity, (knowledge, ) in existence.get_components([Knowledge]):
-        #     for skill_name, skill in knowledge.skills.items():
-        #         if skill.cooldown > 0:
-        #             knowledge.skills[skill_name].cooldown = skill.cooldown - 1
-        #
+        for entity, (knowledge, ) in world.get_components([Knowledge]):
+            for skill_name, skill_dict in knowledge.skills.items():
+                if skill_dict["cooldown"] > 0:
+                    knowledge.skills[skill_name]["cooldown"] = skill_dict["cooldown"] - 1
+
         # # affliction durations
         # for entity, (afflictions, ) in existence.get_components([Afflictions]):
         #     for affliction, duration in afflictions.items():

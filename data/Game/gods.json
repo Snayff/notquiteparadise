@@ -15,10 +15,10 @@
         },
         "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
         "interventions": {
-            "basic_attack": {
+            "BasicAttack": {
                 "__dataclass__": "InterventionData",
                 "required_opinion": -20,
-                "skill_key": "basic_attack"
+                "skill_key": "BasicAttack"
             }
         },
         "name": "the_small_gods",

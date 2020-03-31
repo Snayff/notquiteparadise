@@ -59,7 +59,7 @@ class MoveEvent(Event):
         self.travel_type = travel_type
         self.entity = entity_to_move
         self.direction = direction
-        self.base_cost = cost  # most entities use BASE_MOVE_COST but not all, e.g. projectiles
+        self.base_cost = cost  # N.B. most entities use BASE_MOVE_COST but not all, e.g. projectiles
 
 
 ####################### GAME ############################################

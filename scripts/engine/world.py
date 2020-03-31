@@ -26,7 +26,7 @@ from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import skills
-from scripts.nqp.skills import Skill, BasicAttack
+from scripts.nqp.skills import Skill, BasicAttack, Move
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -78,10 +78,17 @@ def create_god(god_name: str) -> EntityID:
     intervention_names = {}
     skill_order = []
     for name, intervention in interventions.items():
-        skill_key = intervention.skill_key
-        _skill = getattr(skills, skill_key)
-        intervention_names[skill_key] = _skill
-        skill_order.append(skill_key)
+        try:
+            skill_key = intervention.skill_key
+            _skill = getattr(skills, skill_key)
+            skill_dict = {
+                "skill": _skill,
+                "cooldown": 0
+            }
+            intervention_names[skill_key] = skill_dict
+            skill_order.append(skill_key)
+        except AttributeError:
+            logging.warning(f"Trying to create '{god_name}'")
     add_component(entity, Knowledge(intervention_names, skill_order))
 
     logging.debug(f"{data.name} created.")
@@ -126,15 +133,22 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # setup basic attack as a known skill and an interaction  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
-    use_skill = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
-    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill]}))
-    # N.B. All actors start with basic attack
+    use_skill_effect = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
+    add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill_effect]}))
+    # N.B. All actors start with basic attack and move
     basic_attack = {
         "skill": BasicAttack,
         "cooldown": 0
     }
-    known_skills = {basic_attack_name: basic_attack}
-    skill_order = [basic_attack_name]
+    move = {
+        "skill": Move,
+        "cooldown": 0
+    }
+    known_skills = {
+        basic_attack_name: basic_attack,
+        "move": move
+    }
+    skill_order = [basic_attack_name]  # move not added to skill order
     afflictions = Afflictions()
 
     # get skills and perm afflictions from characteristics
@@ -936,18 +950,20 @@ def pay_resource_cost(entity: int, resource: SecondaryStatType, cost: int):
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
 
-def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile):
+def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: Optional[DirectionType] = None):
     """
     Use the specified skill on the target tile, resolving all effects.
     """
     # ensure they are the right target type
     if tile_has_tags(target_tile, skill.required_tags, user):
-        skill_cast = skill(user, target_tile)
+        skill_cast = skill(user, target_tile, direction)
         for entity, effects in skill_cast.apply():
             effect_queue = list(effects)
             while effect_queue:
                 effect = effect_queue.pop()
                 effect_queue.extend(effect.evaluate())
+    else:
+        logging.debug(f"Target tile does not have tags required ({skill.required_tags}).")
 
 
 def delete(entity: EntityID):

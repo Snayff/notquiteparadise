@@ -4,10 +4,7 @@ import logging
 from typing import TYPE_CHECKING, List
 from snecs import Component
 from snecs.typedefs import EntityID
-
-
-from scripts.engine import state
-
+from scripts.engine import state, world
 
 if TYPE_CHECKING:
     from typing import Type

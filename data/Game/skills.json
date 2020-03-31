@@ -2,7 +2,7 @@
     "basic_attack": {
         "__dataclass__": "SkillData",
         "class_name": "BasicAttack",
-        "cooldown": 1,
+        "cooldown": 2,
         "description": "A simple attack.",
         "icon": "placeholder/basic_attack.png",
         "name": "basic attack",
