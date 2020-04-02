@@ -39,45 +39,45 @@ jobs:
     - name: Check typing with mypy
       run: |
         mypy scripts/
-
-    # generate change log
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Generate changelog
-      id: changelog
-      uses: metcalfc/changelog-generator@v0.2.3
-      with:
-        myToken: ${{ secrets.GITHUB_TOKEN }}
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: ${{ steps.changelog.outputs.changelog }}
-        draft: false
-        prerelease: false
-
-    # sphinx
-    - name: Build Sphinx docs
-      run: |
-        git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
-        cp -r docs/_build/html/* gh-pages/
-        cd gh-pages
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add .
-        git commit -m "Update documentation" -a || true
-        # The above command will fail if no changes were present, so we ignore
-        # the return code.
-
-    # update github pages
-    - name: Push changes to GitHub Pages
-      uses: ad-m/github-push-action@master
-      with:
-        branch: gh-pages
-        directory: gh-pages
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+#
+#    # generate change log
+#    - name: Checkout
+#      uses: actions/checkout@v2
+#    - name: Generate changelog
+#      id: changelog
+#      uses: metcalfc/changelog-generator@v0.2.3
+#      with:
+#        myToken: ${{ secrets.GITHUB_TOKEN }}
+#    - name: Create Release
+#      id: create_release
+#      uses: actions/create-release@latest
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ github.ref }}
+#        release_name: Release ${{ github.ref }}
+#        body: ${{ steps.changelog.outputs.changelog }}
+#        draft: false
+#        prerelease: false
+#
+#    # sphinx
+#    - name: Build Sphinx docs
+#      run: |
+#        git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
+#        cp -r docs/_build/html/* gh-pages/
+#        cd gh-pages
+#        git config --local user.email "action@github.com"
+#        git config --local user.name "GitHub Action"
+#        git add .
+#        git commit -m "Update documentation" -a || true
+#        # The above command will fail if no changes were present, so we ignore
+#        # the return code.
+#
+#    # update github pages
+#    - name: Push changes to GitHub Pages
+#      uses: ad-m/github-push-action@master
+#      with:
+#        branch: gh-pages
+#        directory: gh-pages
+#        github_token: ${{ secrets.GITHUB_TOKEN }}
 

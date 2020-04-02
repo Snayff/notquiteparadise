@@ -24,7 +24,7 @@ from scripts.nqp.interaction_handler import InteractionHandler
 from scripts.nqp.ui_handler import UIHandler
 
 
-####################################################################################################
+# =================================================================================================
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
 # FLOW - Periods of impetus to ensure the player is driven forward appropriately. Periods of openness to allow
 # self pacing, reflection and exploration.

@@ -1,19 +1,20 @@
 from __future__ import annotations
 
-import pygame
 from typing import TYPE_CHECKING
+from pygame.rect import Rect
+from pygame_gui import UIManager
 from pygame_gui.elements import UITextBox
 from scripts.engine.core.constants import VisualInfo
 
 if TYPE_CHECKING:
-    import pygame_gui
+    pass
 
 
 class ScreenMessage(UITextBox):
     """
     Show messages on the centre of the screen for a limited time
     """
-    def __init__(self, text, manager: pygame_gui.ui_manager.UIManager,):
+    def __init__(self, text, manager: UIManager,):
 
         # TODO - consider moving to pygame_gui.windows.ui_message_window module
 
@@ -22,7 +23,7 @@ class ScreenMessage(UITextBox):
         y = VisualInfo.BASE_WINDOW_HEIGHT / 4
         width = VisualInfo.BASE_WINDOW_WIDTH / 2  # TODO - get width of text
         height = -1  # force auto size
-        rect = pygame.Rect((x, y), (width, height))
+        rect = Rect((x, y), (width, height))
 
         super().__init__(html_text=text, relative_rect=rect, manager=manager, wrap_to_height=True,
                          layer_starting_height=100, object_id="screen_message")

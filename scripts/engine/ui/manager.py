@@ -2,11 +2,9 @@ from __future__ import annotations
 
 import logging
 import pygame
-import pygame_gui
 from typing import TYPE_CHECKING
-
+from pygame_gui import UIManager
 from snecs.typedefs import EntityID
-
 from scripts.engine import debug
 from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType
 from scripts.engine.ui.basic.fonts import Font
@@ -32,7 +30,7 @@ class _UIManager:
         pygame.init()
 
         # now init the pygame_gui
-        self._gui = pygame_gui.UIManager((VisualInfo.BASE_WINDOW_WIDTH,
+        self._gui = UIManager((VisualInfo.BASE_WINDOW_WIDTH,
             VisualInfo.BASE_WINDOW_HEIGHT), "data/ui/themes.json")
 
         # display info
@@ -135,7 +133,7 @@ class _UIManager:
             return None
 
     @staticmethod
-    def get_gui_manager() -> pygame_gui.UIManager:
+    def get_gui_manager() -> UIManager:
         """
         Return the pygame_gui UI Manager
         """
