@@ -1,9 +1,10 @@
-import logging
-from typing import List, Optional
+from __future__ import annotations
 
+import logging
 import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow
+from typing import List, Optional
 
 
 class SkillBar(UIWindow):
@@ -14,6 +15,9 @@ class SkillBar(UIWindow):
     def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager):
         # state info
         self.skills: List[Optional[str]] = []
+        # TODO - should be a list of individual skill buttons.
+        #  skill"slots" are part of the entity, not this.
+        #  use skill name as the identifier
         self.max_skills = 5
 
         # init skill list
@@ -56,10 +60,6 @@ class SkillBar(UIWindow):
     def set_skill(self, slot_number, skill):
         """
         Set skill in the skill bar slot
-
-        Args:
-            slot_number ():
-            skill ():
         """
         self.skills[slot_number] = skill
 

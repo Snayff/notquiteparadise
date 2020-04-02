@@ -4,7 +4,7 @@ import math
 import scipy
 import pygame
 from typing import TYPE_CHECKING, List, Any, Type, Tuple
-from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, SkillShape, SkillShapeType
+from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, Shape, ShapeType
 
 if TYPE_CHECKING:
     from typing import Tuple
@@ -93,7 +93,7 @@ def recursive_replace(obj, key, value_to_replace, new_value):
 
 def get_class_members(cls: Type[Any]) -> List[str]:
     """
-    Get a class' members, excluding special methods e.g. anything prefixed with '__'
+    Get a class' members, excluding special methods e.g. anything prefixed with '__'. Useful for use with dataclasses.
     """
     members = []
 
@@ -144,16 +144,16 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
-def create_shape(shape: SkillShapeType, size: int) -> List[Tuple[int, int]]:
+def get_coords_from_shape(shape: ShapeType, size: int) -> List[Tuple[int, int]]:
     """
     Get a list of coords from a shape and size.
     """
     list_of_coords = []
 
-    if shape == SkillShape.TARGET:
+    if shape == Shape.TARGET:
         list_of_coords.append((0, 0))  # single target, centred on selection
 
-    elif shape == SkillShape.SQUARE:
+    elif shape == Shape.SQUARE:
         width = size
         height = size
 
@@ -161,7 +161,7 @@ def create_shape(shape: SkillShapeType, size: int) -> List[Tuple[int, int]]:
             for y in range(-height, height + 1):
                 list_of_coords.append((x, y))
 
-    elif shape == SkillShape.CIRCLE:
+    elif shape == Shape.CIRCLE:
         radius = (size + size + 1) / 2
 
         for x in range(-size, size + 1):
@@ -169,7 +169,7 @@ def create_shape(shape: SkillShapeType, size: int) -> List[Tuple[int, int]]:
                 if x * x + y * y < radius * radius:
                     list_of_coords.append((x, y))
 
-    elif shape == SkillShape.CROSS:
+    elif shape == Shape.CROSS:
         x_coords = [-1, 1]
 
         for x in x_coords:
@@ -183,3 +183,16 @@ def create_shape(shape: SkillShapeType, size: int) -> List[Tuple[int, int]]:
         list_of_coords.append((0, 0))  # add selection back in
 
     return list_of_coords
+
+
+def value_to_member(value: Any, cls: Type[Any]) -> str:
+    """
+    Get a member of a class that matches the value given
+    """
+    members = get_class_members(cls)
+
+    for member in members:
+        if getattr(cls, member) == value:
+            return member
+
+    return "No member with value found."

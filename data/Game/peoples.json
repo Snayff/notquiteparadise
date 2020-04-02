@@ -10,6 +10,9 @@
         "known_skills": [
             "none"
         ],
+        "permanent_afflictions": [
+            "none"
+        ],
         "skullduggery": 0,
         "sprite_paths": {
             "__dataclass__": "CharacteristicSpritePathsData",
@@ -31,8 +34,10 @@
         "name": "shoom",
         "sight_range": 4,
         "known_skills": [
-            "eye_watering_mistake",
-            "fractious_fungi"
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
         ],
         "skullduggery": 2,
         "sprite_paths": {

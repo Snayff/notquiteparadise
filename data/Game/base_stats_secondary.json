@@ -10,14 +10,14 @@
         "skullduggery_mod": 0,
         "vigour_mod": 0
     },
-    "max_hp": {
+    "max_health": {
         "__dataclass__": "BaseSecondaryStatData",
         "base_value": 200,
         "bustle_mod": 0,
         "clout_mod": 0,
         "exactitude_mod": 0,
-        "name": "max hp",
-        "secondary_stat_type": "max_hp",
+        "name": "max health",
+        "secondary_stat_type": "max_health",
         "skullduggery_mod": 0,
         "vigour_mod": 2
     },

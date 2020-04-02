@@ -9,8 +9,8 @@ from typing import TYPE_CHECKING
 from pygame_gui.core import UIWindow, UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
 from scripts.engine import utility
-from scripts.engine.core.constants import EffectType, AfflictionTrigger, DamageType, PrimaryStat, SecondaryStat, \
-    TargetTag, AfflictionCategory, SkillExpiry, SkillShape, Direction, SkillTerrainCollision, SkillTravel
+from scripts.engine.core.constants import Effect, InteractionCause, DamageType, PrimaryStat, SecondaryStat, \
+    TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, TerrainCollision, TravelMethod, Resource
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
@@ -146,7 +146,7 @@ class DataEditor(UIWindow):
 
     def _select_new_category(self, category: str):
         """
-        Select new category, clear existing data fields and create new instance options from category.
+        Select new category, clear existing data fields and create_entity new instance options from category.
         """
         self.current_data_category = category
 
@@ -493,46 +493,46 @@ class DataEditor(UIWindow):
     def _load_field_options(self):
         """
         Maps the various data keys to their related (options, dataclass). The dataclass is only provided if the key
-        relates to sub-details that need adding. E.g. effects: (EffectType.__dict__.keys(), EffectData). Loads
+        relates to sub-details that need adding. E.g. effects: (Effect.__dict__.keys(), EffectData). Loads
         details into self.field_options
         """
         get_members = utility.get_class_members
 
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]
-        effect_options = get_members(EffectType)
+        effect_options = get_members(Effect)
         primary_stat_options = get_members(PrimaryStat)
         secondary_stat_options = get_members(SecondaryStat)
+        resource_options = get_members(Resource)
         bool_options = ["True", "False"]
         skill_options = [key for key in self.all_data["skills"].keys()]
 
         field_options = {
             "effects": (effect_options, EffectData()),
-            "trigger_event": (get_members(AfflictionTrigger), None),
+            "trigger_event": (get_members(InteractionCause), None),
             "affliction_name": (affliction_options, None),
             "aspect_name": (aspect_options, None),
             "damage_type": (get_members(DamageType), None),
             "effect_type": (effect_options, None),
             "stat_to_affect": (primary_stat_options + secondary_stat_options, None),
             "stat_to_target": (primary_stat_options, None),
-            "required_tags": (get_members(TargetTag), None),
+            "activate_required_tags": (get_members(TargetTag), None),
             "mod_stat": (primary_stat_options + secondary_stat_options, None),
             "blocks_movement": (bool_options, None),
             "blocks_sight": (bool_options, None),
             "category": (get_members(AfflictionCategory), None),
             "cause": (affliction_options + effect_options + skill_options, None),  # interaction trigger
-            "change_to": (aspect_options, None),
             "primary_stat_type": (primary_stat_options, None),
             "secondary_stat_type": (secondary_stat_options, None),
             "action": (affliction_options + effect_options + skill_options, None),  # gods attitudes on things
             "skill_key": (skill_options, None),
             "known_skills": (skill_options, None),
-            "expiry_type": (get_members(SkillExpiry), None),
-            "resource_type": (secondary_stat_options, None),
-            "shape": (get_members(SkillShape), None),
+            "expiry_type": (get_members(ProjectileExpiry), None),
+            "resource_type": (resource_options, None),
+            "shape": (get_members(Shape), None),
             "target_directions": (get_members(Direction), None),
-            "terrain_collision": (get_members(SkillTerrainCollision), None),
-            "travel_type": (get_members(SkillTravel), None),
+            "terrain_collision": (get_members(TerrainCollision), None),
+            "travel_type": (get_members(TravelMethod), None),
             "interactions": (affliction_options + effect_options + skill_options, InteractionData()),
             "attitudes": (affliction_options + effect_options + skill_options, AttitudeData()),
             "interventions": (skill_options, InterventionData()),
@@ -656,7 +656,7 @@ class DataEditor(UIWindow):
                 # save the data field
                 data_fields[key] = data_field
             except ValueError as e:
-                logging.warning(f"Error ({e}) trying to create data field for {key}:{value}.")
+                logging.warning(f"Error ({e}) trying to create_entity data field for {key}:{value}.")
 
         # update the main record
         if primary_or_secondary == "primary":

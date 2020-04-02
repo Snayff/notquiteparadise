@@ -57,10 +57,18 @@ target/
 
 # Environments
 .env
-
+.idea
+venv/
 
 # Temp files
 ~$*
 
 # mypy
 .mypy_cache/
+
+# radon
+radon
+
+# log files
+profiling/
+game.log

@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import pygame
 from typing import TYPE_CHECKING
+
+from snecs.typedefs import EntityID
+
 from scripts.engine.core.constants import GameState, GameStateType
 
 if TYPE_CHECKING:
@@ -24,7 +27,7 @@ class _Store:
         self.current_game_map = None
 
         # used in chrono
-        self.turn_queue: Dict[int, int] = {}  # (entity, time)
+        self.turn_queue: Dict[EntityID, int] = {}  # (entity, time)
         self.round: int = 1  # count of the round
         self.time: int = 1  # total time of actions taken
         self.time_of_last_turn: int = 1

@@ -8,8 +8,10 @@
         "name": "fungechist",
         "sight_range": 5,
         "known_skills": [
-            "flail",
-            "eye_watering_mistake"
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
         ],
         "skullduggery": 4,
         "sprite_paths": {
@@ -32,7 +34,10 @@
         "name": "irascible dandy",
         "sight_range": 5,
         "known_skills": [
-            "flail"
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
         ],
         "skullduggery": 1,
         "sprite_paths": {

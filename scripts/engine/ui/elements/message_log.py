@@ -12,7 +12,8 @@ if TYPE_CHECKING:
 
 class MessageLog(UIWindow):
     """
-    Hold text relating to the game's events, to display to the player. Does not use UIWindow.
+    Hold text relating to the game's events, to display to the player. This should be a log of all notable things
+    that have happened. It is recommended that all messages are in the past tense.
     """
 
     def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager):

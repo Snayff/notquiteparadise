@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Type
+
+from scripts.engine import utility
 from scripts.engine.core.constants import GameState, VisualInfo, GameStateType
 from scripts.engine.core.store import store
 
@@ -46,8 +48,8 @@ def get_current() -> GameStateType:
     """
     return store.current_game_state
 
-################### SET ##############################
 
+################### SET ##############################
 
 def set_active_skill(skill_name: str):
     """
@@ -55,8 +57,8 @@ def set_active_skill(skill_name: str):
     """
     store.active_skill = skill_name
 
-################### MANAGING STATE ###################
 
+################### MANAGING STATE ###################
 
 def update_clock():
     """
@@ -73,5 +75,8 @@ def set_new(new_game_state: GameStateType):
     store.previous_game_state = store.current_game_state
     store.current_game_state = new_game_state
 
-    log_string = f"Game_state updated from {store.previous_game_state} to {store.current_game_state}"
-    logging.debug(log_string)
+    prev_name = utility.value_to_member(store.previous_game_state, GameState)
+    curr_name = utility.value_to_member(store.current_game_state, GameState)
+
+    log_string = f"game_state updated from {prev_name} to {curr_name}"
+    logging.info(log_string)

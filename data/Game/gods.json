@@ -15,13 +15,13 @@
         },
         "description": "Hordes of small gods banded together to ensure they were finally taken seriously.",
         "interventions": {
-            "slow_the_mighty": {
+            "BasicAttack": {
                 "__dataclass__": "InterventionData",
                 "required_opinion": -20,
-                "skill_key": "slow_the_mighty"
+                "skill_key": "BasicAttack"
             }
         },
-        "name": "the small gods",
+        "name": "the_small_gods",
         "sprite_paths": {
             "__dataclass__": "CharacteristicSpritePathsData",
             "idle": "assets/world/placeholder/Mobs_crow_01.png",

@@ -1,68 +1,66 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Tuple, Union, Type, List
-
-from scripts.engine import entity
-from scripts.engine.core.constants import EventTopic, Direction, GameState, MessageType, GameStateType, MessageTypeType, \
-    DirectionType
+from typing import TYPE_CHECKING, Optional
+from snecs.typedefs import EntityID
+from scripts.engine.core.constants import EventTopic, GameStateType, MessageTypeType, DirectionType, TravelMethodType
 from scripts.engine.core.event_core import Event
-from scripts.engine.component import Position
-from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    pass
+    from typing import Tuple, Union, Type, List
+    from scripts.engine.world_objects.tile import Tile
 
 
 ####################### ENTITY ############################################
 
 class WantToUseSkillEvent(Event):
     """
-    Event for player pressing a skill number
+    Event for entity wanting to use a skill. Should be used for all instances where you want checks to be completed
+    before using the skill.
     """
-    def __init__(self, skill_number: int):
+    def __init__(self, entity_using_skill: EntityID, skill_name: str, start_pos: Tuple[int, int],
+            direction: Optional[DirectionType]):
         Event.__init__(self, "WANT_TO_USE_SKILL", EventTopic.ENTITY)
-        self.skill_number = skill_number
-
-
-class UseSkillEvent(Event):
-    """
-    Event for entity using a skill
-    """
-    def __init__(self, entity_using_skill: int, skill_name: str, start_pos: Tuple[int, int],
-            direction: Union[Tuple[int, int], DirectionType]):
-        Event.__init__(self, "SKILL", EventTopic.ENTITY)
         self.entity = entity_using_skill
         self.direction = direction
         self.skill_name = skill_name
         self.start_pos = start_pos
 
 
+class UseSkillEvent(Event):
+    """
+    Event for entity using a skill. Should only be called as a result of WantToUseSkillEvent being processed
+    successfully.
+    """
+    def __init__(self, entity_using_skill: EntityID, skill_name: str, target_tile: Tile, direction: DirectionType):
+        Event.__init__(self, "USE_SKILL", EventTopic.ENTITY)
+        self.entity = entity_using_skill
+        self.skill_name = skill_name
+        self.target_tile = target_tile
+        self.direction = direction
+
+
 class DieEvent(Event):
     """
     Event for handling the death of an entity.
     """
-    def __init__(self, dying_entity: int):
+    def __init__(self, dying_entity: EntityID):
         Event.__init__(self, "DIE", EventTopic.ENTITY)
-        self.dying_entity = dying_entity
+        self.entity = dying_entity
 
 
 class MoveEvent(Event):
     """
     Event to move an entity as a basic move action
     """
-    def __init__(self, entity_to_move: int, direction: Union[Tuple[int, int], DirectionType], distance: int = 1):
+    def __init__(self, entity_to_move: EntityID, start_pos: Tuple[int, int], direction: DirectionType,
+            travel_type: TravelMethodType, cost: int):
         Event.__init__(self, "MOVE", EventTopic.ENTITY)
+        self.start_pos = start_pos
+        self.travel_type = travel_type
         self.entity = entity_to_move
         self.direction = direction
-        self.distance = distance
+        self.base_cost = cost  # N.B. most entities use BASE_MOVE_COST but not all, e.g. projectiles
 
-        # determine start pos
-        position = entity.get_entitys_component(entity_to_move, Position)
-        if position:
-            pos = (position.x, position.y)
-        else:
-            pos = (-1, -1)
-        self.start_pos: Tuple[int, int] = pos
 
 ####################### GAME ############################################
 
@@ -71,9 +69,9 @@ class EndTurnEvent(Event):
     """
     Event to end an entities ability to act.
     """
-    def __init__(self, ent, time_spent):
+    def __init__(self, entity: EntityID, time_spent):
         Event.__init__(self, "END_TURN", EventTopic.GAME)
-        self.entity = ent
+        self.entity = entity
         self.time_spent = time_spent
 
 
@@ -103,20 +101,43 @@ class EndRoundEvent(Event):
         Event.__init__(self, "END_ROUND", EventTopic.GAME)
 
 
-####################### MAP ############################################
+####################### INTERACTION ############################################
 
-class TileInteractionEvent(Event):
-    """
-    Event for updating a tile in response to actions taken
 
-    Args:
-        tiles(list[Tile]): a list of effected tiles
-        cause (str): name of the effect or affliction that has taken place on the tile
+class ExpireEvent(Event):
     """
-    def __init__(self, tiles: List[Tile], cause: str):
-        Event.__init__(self, "TILE_INTERACTION", EventTopic.MAP)
-        self.tiles = tiles
-        self.cause = cause
+    Event for handling the expiry of an entity, usually a projectile.
+    """
+    def __init__(self, expiring_entity: EntityID):
+        Event.__init__(self, "EXPIRE", EventTopic.INTERACTION)
+        self.entity = expiring_entity
+
+
+class EntityCollisionEvent(Event):
+    """
+    Event for handling two entities colliding.
+    """
+    def __init__(self, active_entity: EntityID, blocking_entity: EntityID, direction: Tuple[int, int],
+            start_pos: Tuple[int, int]):
+        Event.__init__(self, "ENTITY_COLLISION", EventTopic.INTERACTION)
+        self.start_pos = start_pos
+        self.direction = direction
+        self.entity = active_entity
+        self.blocking_entity = blocking_entity
+
+
+class TerrainCollisionEvent(Event):
+    """
+    Event for handling an entity colliding with terrain.
+    """
+    def __init__(self, active_entity: EntityID, blocking_tile: Tile, direction: Tuple[int, int],
+            start_pos: Tuple[int, int]):
+        Event.__init__(self, "TERRAIN_COLLISION", EventTopic.INTERACTION)
+        self.start_pos = start_pos
+        self.direction = direction
+        self.entity = active_entity
+        self.blocking_tile = blocking_tile
+
 
 ####################### UI ############################################
 
@@ -125,10 +146,10 @@ class SelectEntity(Event):
     """
     Event for selecting an entity.
     """
-    def __init__(self, ent: int):
+    def __init__(self, entity: EntityID):
         Event.__init__(self, "SELECT_ENTITY", EventTopic.UI)
 
-        self.selected_entity = ent
+        self.selected_entity = entity
 
 
 class ClickTile(Event):
@@ -146,11 +167,11 @@ class MessageEvent(Event):
     Event to share messages with the player
     """
     def __init__(self, message_type: MessageTypeType,  message: str, colour: str = None, size: int = 4,
-            ent: int = None):
+            entity: EntityID = None):
         Event.__init__(self, "MESSAGE", EventTopic.UI)
         self.message = message
         self.message_type = message_type
-        self.entity = ent
+        self.entity = entity
         self.colour = colour
 
         # max size is 7

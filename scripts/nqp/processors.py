@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import logging
 import pytweening
-from scripts.engine import utility, entity
-from scripts.engine.component import Aesthetic
-from typing import TYPE_CHECKING
-from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType
+
+from scripts.engine import utility, world
+from scripts.engine.component import Aesthetic, Position, Knowledge
+from typing import TYPE_CHECKING, Optional, cast
+from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
+    TravelMethod, BASE_MOVE_COST, DirectionType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
 
@@ -24,7 +27,10 @@ def _process_aesthetic_update(delta_time: float):
     Update real-time timers on entities
     """
     # move entities screen position towards target
-    for ent, aesthetic in entity.get_component(Aesthetic):
+    for entity, (aesthetic, ) in world.get_components([Aesthetic]):
+        # cast for typing
+        aesthetic = cast(Aesthetic, aesthetic)
+
         max_duration = 0.3
 
         # increment time
@@ -67,51 +73,58 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
         _process_dev_mode_intents(intent)
 
 
-def _get_pressed_direction(intent: InputIntentType) -> Tuple[int, int]:
+def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
     """
     Get the value of the directions pressed. Returns as (x, y). Values are ints between -1 and 1.
     """
 
     if intent == InputIntent.UP:
-        dir_x, dir_y = Direction.UP
+        direction = Direction.UP
     elif intent == InputIntent.UP_RIGHT:
-        dir_x, dir_y = Direction.UP_RIGHT
+        direction = Direction.UP_RIGHT
     elif intent == InputIntent.UP_LEFT:
-        dir_x, dir_y = Direction.UP_LEFT
+        direction = Direction.UP_LEFT
     elif intent == InputIntent.RIGHT:
-        dir_x, dir_y = Direction.RIGHT
+        direction = Direction.RIGHT
     elif intent == InputIntent.LEFT:
-        dir_x, dir_y = Direction.LEFT
+        direction = Direction.LEFT
     elif intent == InputIntent.DOWN:
-        dir_x, dir_y = Direction.DOWN
+        direction = Direction.DOWN
     elif intent == InputIntent.DOWN_RIGHT:
-        dir_x, dir_y = Direction.DOWN_RIGHT
+        direction = Direction.DOWN_RIGHT
     elif intent == InputIntent.DOWN_LEFT:
-        dir_x, dir_y = Direction.DOWN_LEFT
+        direction = Direction.DOWN_LEFT
     else:
-        dir_x, dir_y = 0, 0
+        direction = Direction.CENTRE
 
-    return dir_x, dir_y
+    return direction
 
 
-def _get_pressed_skills_number(intent: InputIntentType) -> int:
+def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
     """
-    Get the pressed skill number. Returns value of skill number pressed. Returns -1 if none.
+    Get the pressed skill number. Returns value of skill number pressed. If not found returns None.
     """
-    if intent == InputIntent.SKILL0:
-        skill_number = 0
-    elif intent == InputIntent.SKILL1:
-        skill_number = 1
-    elif intent == InputIntent.SKILL2:
-        skill_number = 2
-    elif intent == InputIntent.SKILL3:
-        skill_number = 3
-    elif intent == InputIntent.SKILL4:
-        skill_number = 4
-    else:
-        skill_number = -1
+    player = world.get_player()
+    skill_name = None
 
-    return skill_number
+    if player:
+        skills = world.get_entitys_component(player, Knowledge)
+
+        if skills:
+            skill_order = skills.skill_order
+
+            if intent == InputIntent.SKILL0:
+                skill_name = skill_order[0]
+            elif intent == InputIntent.SKILL1:
+                skill_name = skill_order[1]
+            elif intent == InputIntent.SKILL2:
+                skill_name = skill_order[2]
+            elif intent == InputIntent.SKILL3:
+                skill_name = skill_order[3]
+            elif intent == InputIntent.SKILL4:
+                skill_name = skill_order[4]
+
+    return skill_name
 
 
 def _process_stateless_intents(intent: InputIntentType):
@@ -138,18 +151,29 @@ def _process_player_turn_intents(intent: InputIntentType):
     """
     Process intents for the player turn game state.
     """
-    player = entity.get_player()
+    player = world.get_player()
 
+    # if player exists, which it should, because we're in PLAYER_TURN game state
     if player:
+        position = world.get_entitys_component(player, Position)
+
         # Player movement
-        dir_x, dir_y = _get_pressed_direction(intent)
-        if dir_x != 0 or dir_y != 0:
-            publisher.publish(MoveEvent(player, (dir_x, dir_y)))
+        direction = _get_pressed_direction(intent)
+        possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+        if direction in possible_moves and position:
+            publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD,
+                                        BASE_MOVE_COST))
 
         # Use a skill
-        skill_number = _get_pressed_skills_number(intent)
-        if skill_number != -1:
-            publisher.publish(WantToUseSkillEvent(skill_number))
+        skill_name = _get_pressed_skills_name(intent)
+        if skill_name and position:
+            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y),
+                                                  Direction.DOWN))  # TODO - remove hard value
+
+            # TODO - uncomment when targeting working again
+            # position = existence.get_entitys_component(player, Position)
+            # # None to trigger targeting mode
+            # publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
 
     # activate the skill editor
     if intent == InputIntent.DEV_TOGGLE:
@@ -160,14 +184,18 @@ def _process_targeting_mode_intents(intent):
     """
     Process intents for the player turn game state.
     """
+    player = world.get_player()
+
     # Cancel use
     if intent == InputIntent.CANCEL:
         publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
 
-    # Consider using the skill, handle if different skill pressed
-    skill_number = _get_pressed_skills_number(intent)
-    if skill_number != -1:
-        publisher.publish(WantToUseSkillEvent(skill_number))
+    # Use a skill
+    skill_name = _get_pressed_skills_name(intent)
+    if skill_name:
+        position = world.get_entitys_component(player, Position)
+        # None to trigger targeting mode
+        publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
 
 
 def _process_dev_mode_intents(intent):

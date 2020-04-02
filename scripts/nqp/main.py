@@ -1,24 +1,28 @@
 from __future__ import annotations
 
-import cProfile  
-import datetime  
-import io  
-import logging  
-import pstats  
-import time  
+import cProfile
+import datetime
+import io
+import logging
+import pstats
+import time
+import traceback
+import sys
 import pygame
-from scripts.engine import state, world, entity, chrono, action
+import snecs
+from snecs.world import default_world
+from scripts.engine import state, world, chapter, key, debug
 from scripts.engine.core.constants import GameState, VERSION, EventTopic
+from scripts.engine.core.event_core import event_hub, publisher
 from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import ui
-from scripts.engine.core.event_core import event_hub, publisher
 from scripts.nqp import processors
 from scripts.nqp.entity_handler import EntityHandler
 from scripts.nqp.game_handler import GameHandler
 from scripts.nqp.god_handler import GodHandler
-from scripts.nqp.map_handler import MapHandler
-from scripts.nqp.processors import process_intent
+from scripts.nqp.interaction_handler import InteractionHandler
 from scripts.nqp.ui_handler import UIHandler
+
 
 ####################################################################################################
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -28,23 +32,21 @@ from scripts.nqp.ui_handler import UIHandler
 # COHERENT - easy to parse data, utilising a mix of art and text. Avoid need for external resource use e.g. a wiki.
 # FLEXIBLE (input)- can use keyboard, mouse or controller interchangeably, with minimal difference in experience
 # CUSTOMISABLE - near-core game settings can be influenced or set by the player allowing for personalisation.
+
+########################### CODE STYLE GUIDE ####################################################
+# If a function returns something, its name describes what it returns. # TODO - review
+# If a function is named after a verb, its return value is of no significance or returns nothing. # TODO - review
+# If checking a bool use IsA or HasA.
+
+
+############################### PRE-MERGE CHECKLIST ######################################
+# mypy no errors
+# sphinx config pointing to correct files
+# manual sphinx docs up to date
+# requirement.txt up to date
+
+
 ####################################################################################################
-
-# Project Wide to do list...
-# FIXME - collision isnt working - can walk through walls
-# FIXME - Direction not working - cant basic attack in any direction.
-# TODO - swap out nose for pytest
-# TODO - remember window position and resume at that place
-# TODO - Review closure
-#  https://en.wikipedia.org/wiki/Closure_(computer_programming)
-# TODO - Review compression example
-#  https://gist.github.com/brianbruggeman/61199d1ddbbf220a4b5cc528da13b5c8
-# TODO - standardise use of xy and tile xy. xy as standard, meaning tiles. otherwise use screen_xy
-# TODO - write tests / checking for json values - use schema
-# TODO - write tests to check data values against expected, e.g. total stat per characteristic should be +5
-# TODO - edit the UI json
-# TODO - use a global for font size so it can be amended in options
-
 
 def main():
     """
@@ -62,12 +64,24 @@ def main():
     initialise_game()
 
     # run the game
-    game_loop()
+    try:
+        game_loop()
+    except Exception:
+        logging.critical(f"Something went wrong and killed the game loop")
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        tb_list = traceback.format_exception(exc_type, exc_value, exc_traceback)
+        for line in tb_list:
+            clean_line = line.replace("\n", "")
+            logging.critical(f"{clean_line}")
+        traceback.print_exc()
 
     # we've left the game loop so now close everything down
     disable_profiling(profiler)
     dump_profiling_data(profiler)
     disable_logging()
+
+    # print debug values
+    debug.dump()
 
     pygame.quit()  # clean up pygame resources
 
@@ -85,17 +99,25 @@ def game_loop():
         delta_time = state.get_delta_time()
         current_state = state.get_current()
 
-        if current_state == GameState.ENEMY_TURN:
-            pass
-            # turn.turn_holder.ai.take_turn()
+        # process any deletions from last frame
+        snecs.process_pending_deletions(default_world)
+
+        # have enemy take turn
+        if current_state == GameState.NPC_TURN:
+            # just in case the turn holder has died but not been replaced as expected
+            try:
+                world.take_turn(chapter.get_turn_holder())
+            except AttributeError:
+                chapter.rebuild_turn_queue()
 
         # update based on input events
         for event in pygame.event.get():
-            process_intent(action.convert_to_intent(event), current_state)
+            processors.process_intent(key.convert_to_intent(event), current_state)
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
         processors.process_all(delta_time)
+        debug.update()
         ui.update(delta_time)
         event_hub.update()
         state.update_clock()
@@ -124,7 +146,7 @@ def initialise_logging():
     """
 
     log_file_name = "logs/" + "game.log"
-    log_level = logging.INFO
+    log_level = logging.DEBUG
     file_mode = "w"
 
     for handler in logging.root.handlers[:]:
@@ -190,18 +212,18 @@ def initialise_game():
     world.create_game_map(map_width, map_height)
 
     # init the player
-    player = entity.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
-                                       "dandy", True)
+    player = world.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
+                                 "dandy", True)
 
     # tell places about the player
-    chrono.set_turn_holder(player)
+    chapter.set_turn_holder(player)
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    enemy = entity.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops", "dandy")
+    enemy = world.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops", "dandy")
 
     # create a god
-    god = entity.create_god("the_small_gods")
+    god = world.create_god("the_small_gods")
 
     publisher.publish(ChangeGameStateEvent(GameState.GAME_INITIALISING))
 
@@ -210,16 +232,13 @@ def initialise_event_handlers():
     """
     Create the various event handlers and subscribe to required events.
     """
-    game_handler = GameHandler(event_hub)
-    game_handler.subscribe(EventTopic.GAME)
-
     entity_handler = EntityHandler(event_hub)
     entity_handler.subscribe(EventTopic.ENTITY)
     entity_handler.subscribe(EventTopic.GAME)
 
-    map_handler = MapHandler(event_hub)
-    map_handler.subscribe(EventTopic.MAP)
-    map_handler.subscribe(EventTopic.GAME)
+    interaction_handler = InteractionHandler(event_hub)
+    interaction_handler.subscribe(EventTopic.INTERACTION)
+    interaction_handler.subscribe(EventTopic.ENTITY)
 
     god_handler = GodHandler(event_hub)
     god_handler.subscribe(EventTopic.ENTITY)
@@ -228,6 +247,10 @@ def initialise_event_handlers():
     ui_handler.subscribe(EventTopic.ENTITY)
     ui_handler.subscribe(EventTopic.GAME)
     ui_handler.subscribe(EventTopic.UI)
+
+    # expected last
+    game_handler = GameHandler(event_hub)
+    game_handler.subscribe(EventTopic.GAME)
 
 
 if __name__ == "__main__":  # prevents being run from other modules
