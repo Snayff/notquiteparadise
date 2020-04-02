@@ -2,9 +2,8 @@ import logging
 from typing import Optional
 
 import pygame
-import pygame_gui
-from pygame_gui.core import UIWindow
-from pygame_gui.elements import UIImage, UITextBox
+from pygame_gui import UIManager
+from pygame_gui.elements import UIImage, UITextBox, UIWindow
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
@@ -18,7 +17,7 @@ class EntityInfo(UIWindow):
     Hold text relating to the game's events, to display to the player.
     """
 
-    def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager):
+    def __init__(self, rect: pygame.Rect, manager: UIManager):
         self.gui_manager = manager
 
         # FIXME - entity info  doesn't update when entity info changes.
@@ -36,7 +35,7 @@ class EntityInfo(UIWindow):
         self.core_info_height = 300
 
         # complete base class init
-        super().__init__(rect, manager, ["entity_info"])
+        super().__init__(rect, manager, "entity_info")
 
         # confirm init complete
         logging.debug(f"Entity Info initialised.")

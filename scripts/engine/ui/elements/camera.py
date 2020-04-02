@@ -1,14 +1,13 @@
 import logging
-import pygame
-import pygame_gui
 from typing import List, Tuple
 
+from pygame.constants import SRCALPHA
+from pygame.rect import Rect
+from pygame.surface import Surface
 from pygame_gui import UIManager
-from pygame_gui.core import UIWindow, UIContainer
-from pygame_gui.elements import UIButton, UIImage
-
-
-from scripts.engine import world
+from pygame_gui.core import UIContainer
+from pygame_gui.elements import UIButton, UIImage, UIWindow
+from scripts.engine import world, utility
 from scripts.engine.core.constants import TILE_SIZE, DirectionType, Direction
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp
@@ -22,7 +21,7 @@ class Camera(UIWindow):
     Hold the visual info for the game Map
     """
 
-    def __init__(self, rect: pygame.Rect, manager: UIManager, rows: int, cols: int):
+    def __init__(self, rect: Rect, manager: UIManager, rows: int, cols: int):
         # general info
         self.rows = rows
         self.columns = cols
@@ -42,10 +41,10 @@ class Camera(UIWindow):
         self.selected_tile = None  # the tile in the grid currently being selected
 
         # complete base class init
-        super().__init__(rect, manager, ["camera"])
+        super().__init__(rect, manager, "camera")
 
         # create game map
-        blank_surf = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+        blank_surf = Surface((rect.width, rect.height), SRCALPHA)
         self.game_map = UIImage(relative_rect=rect, image_surface=blank_surf, manager=manager,
                                 container=self.get_container(), object_id="#game_map")
 
@@ -84,7 +83,7 @@ class Camera(UIWindow):
         # create new surface for the game map
         map_width = self.game_map.rect.width
         map_height = self.game_map.rect.height
-        map_surf = pygame.Surface((map_width, map_height), pygame.SRCALPHA)
+        map_surf = Surface((map_width, map_height), SRCALPHA)
 
         # draw tiles
         for tile in self.tiles:
@@ -125,10 +124,10 @@ class Camera(UIWindow):
 
             # draw the overlay
             for direction in directions:
-                offset_tile_x, offset_tile_y = getattr(Direction, direction.upper())
+                offset_tile_x, offset_tile_y = direction
                 x = ((player_tile_x + offset_tile_x) - start_col) * TILE_SIZE
                 y = ((player_tile_y + offset_tile_y) - start_row) * TILE_SIZE
-                tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+                tile_rect = Rect(x, y, TILE_SIZE, TILE_SIZE)
 
                 # get current row and col
                 if x == 0:
@@ -149,7 +148,7 @@ class Camera(UIWindow):
             for tile in tiles:
                 x = (tile.x - start_col) * TILE_SIZE
                 y = (tile.y - start_row) * TILE_SIZE
-                tile_rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+                tile_rect = Rect(x, y, TILE_SIZE, TILE_SIZE)
 
                 # get current row and col
                 if x == 0:

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
-import pygame
-import pygame_gui
-from pygame_gui.core import UIWindow
 from typing import List, Optional
+
+from pygame.rect import Rect
+from pygame_gui import UIManager
+from pygame_gui.elements import UIWindow, UIButton
 
 
 class SkillBar(UIWindow):
@@ -12,7 +13,7 @@ class SkillBar(UIWindow):
     Display and hold the info for the skills in the skill bar.
     """
 
-    def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager):
+    def __init__(self, rect: Rect, manager: UIManager):
         # state info
         self.skills: List[Optional[str]] = []
         # TODO - should be a list of individual skill buttons.
@@ -25,7 +26,7 @@ class SkillBar(UIWindow):
             self.skills += [None]
 
         # complete base class init
-        super().__init__(rect, manager, ["skill_bar"])
+        super().__init__(rect, manager, "skill_bar")
 
         # create skill primary_buttons
         start_x = 5
@@ -37,10 +38,8 @@ class SkillBar(UIWindow):
         for skill_slot in range(0, self.max_skills):
             x = start_x
             y = start_y + (height * skill_slot) + (gap * skill_slot)
-            skill = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((x, y), (width, height)),
-                                                 text=f"{skill_slot}",  manager=manager,
-                                                 container=self.get_container(),
-                                                 object_id=f"#skill_button{skill_slot}")
+            skill = UIButton(relative_rect=Rect((x, y), (width, height)), text=f"{skill_slot}",  manager=manager,
+                             container=self.get_container(), object_id=f"#skill_button{skill_slot}")
 
         # confirm init complete
         logging.debug(f"SkillBar initialised.")

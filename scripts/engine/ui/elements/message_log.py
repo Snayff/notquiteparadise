@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
-import pygame
 from typing import TYPE_CHECKING
-from pygame_gui.core import UIWindow
-from pygame_gui.elements import UITextBox
+
+from pygame.math import Vector2
+from pygame.rect import Rect
+from pygame_gui.elements import UITextBox, UIWindow
 
 if TYPE_CHECKING:
     import pygame_gui
@@ -16,14 +17,14 @@ class MessageLog(UIWindow):
     that have happened. It is recommended that all messages are in the past tense.
     """
 
-    def __init__(self, rect: pygame.Rect, manager: pygame_gui.ui_manager.UIManager):
+    def __init__(self, rect: Rect, manager: pygame_gui.ui_manager.UIManager):
         # create empty attributes to hold state info
         self.text = ""
         self.rect = rect
         self.text_box = None
         self.gui_manager = manager
 
-        super().__init__(rect, manager, ["message_log"])
+        super().__init__(rect, manager, "message_log")
 
         # complete base class init
         self.text_box = UITextBox(html_text=self.text, relative_rect=rect, manager=self.gui_manager,
@@ -68,7 +69,7 @@ class MessageLog(UIWindow):
 
         if self.text_box:
             self.text_box.kill()
-        rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
+        rect = Rect((0, 0), (self.rect.width, self.rect.height))
         self.text_box = UITextBox(html_text=self.text, relative_rect=rect, manager=self.gui_manager,
                                   wrap_to_height=False, layer_starting_height=1, object_id="#text_box",
                                   container=self.get_container())
@@ -84,7 +85,7 @@ class MessageLog(UIWindow):
             x_pos = scroll_bar.rect.x + scroll_bar.shadow_width + scroll_bar.border_width
             y_pos = scroll_bar.scroll_position + scroll_bar.rect.y + scroll_bar.shadow_width + \
                     scroll_bar.border_width + scroll_bar.button_height
-            scroll_bar.sliding_button.set_position(pygame.math.Vector2(x_pos, y_pos))
+            scroll_bar.sliding_button.set_position(Vector2(x_pos, y_pos))
 
             scroll_bar.start_percentage = scroll_bar.scroll_position / scroll_bar.scrollable_height
             if not scroll_bar.has_moved_recently:

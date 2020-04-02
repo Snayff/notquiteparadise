@@ -6,8 +6,8 @@ import logging
 import pygame
 import pygame_gui
 from typing import TYPE_CHECKING
-from pygame_gui.core import UIWindow, UIContainer
-from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton
+from pygame_gui.core import UIContainer
+from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton, UIWindow
 from scripts.engine import utility
 from scripts.engine.core.constants import Effect, InteractionCause, DamageType, PrimaryStat, SecondaryStat, \
     TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, TerrainCollision, TravelMethod, Resource
@@ -29,9 +29,7 @@ class DataEditor(UIWindow):
     """
 
     def __init__(self, rect, manager):
-        element_ids = ["data_editor"]
-
-        super().__init__(rect, manager, element_ids=element_ids)
+        super().__init__(rect, manager, "data_editor")
 
         # data holders
         self.all_data: Dict[str, Dict[str, dataclass()]] = {}
