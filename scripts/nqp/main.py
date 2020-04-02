@@ -44,7 +44,6 @@ from scripts.nqp.ui_handler import UIHandler
 # sphinx config pointing to correct files
 # manual sphinx docs up to date
 # requirement.txt up to date
-# runs at consistent FPS
 
 
 ####################################################################################################
