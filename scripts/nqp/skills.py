@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Type, Iterator
 from snecs.typedefs import EntityID
 from scripts.engine import utility, world
 from scripts.engine.component import Position, Resources, HasCombatStats
@@ -66,7 +66,7 @@ class Skill(ABC):
 
         return affected_entities
 
-    def apply(self) -> Tuple[EntityID, List[Effect]]:
+    def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
         An iterator over pairs of (affected entity, [effects])
         """
@@ -112,17 +112,22 @@ class Move(Skill):
         """
         Build the effects of this skill applying to a single entity.
         """
+        # handle optional
+        if self.direction:
+            direction = self.direction
+        else:
+            direction = Direction.CENTRE
+
         move_effect = MoveActorEffect(
             origin=self.user,
             target=entity,
             success_effects=[],
             failure_effects=[],
-            direction=self.direction,
+            direction=direction,
             move_amount=1
         )
 
         return [move_effect]
-
 
 
 class BasicAttack(Skill):

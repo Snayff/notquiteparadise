@@ -5,6 +5,8 @@ import pygame
 import pygame_gui
 from typing import TYPE_CHECKING
 
+from snecs.typedefs import EntityID
+
 from scripts.engine import debug
 from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType
 from scripts.engine.ui.basic.fonts import Font
@@ -423,7 +425,7 @@ class _UIManager:
 
         ############## ENTITY INFO ###################
 
-    def set_selected_entity(self, entity: int):
+    def set_selected_entity(self, entity: EntityID):
         """
         Set the selected entity and show it.
         """

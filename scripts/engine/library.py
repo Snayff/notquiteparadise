@@ -6,8 +6,8 @@ import os
 from typing import TYPE_CHECKING
 from scripts.engine.core.extend_json import deserialise_dataclasses
 from scripts.engine.core.constants import SecondaryStatType, EffectType, PrimaryStatType
-from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData,\
-    InterventionData, GodData, CharacteristicData, AspectData, AttitudeData, AfflictionData
+from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
+    InterventionData, GodData, CharacteristicData, AspectData, AttitudeData, AfflictionData, EffectData
 
 if TYPE_CHECKING:
     from typing import Dict

@@ -11,7 +11,7 @@ from snecs.typedefs import EntityID
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
     AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape, \
-    ResourceType, TargetingMethod, TargetingMethodType, Direction
+    ResourceType, TargetingMethod, TargetingMethodType, Direction, Resource
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ class SkillData:
     required_tags: List[TargetTagType] = field(default_factory=list)
 
     # what does it cost?
-    resource_type: Optional[ResourceType] = None
+    resource_type: ResourceType = Resource.STAMINA
     resource_cost: int = 0
     time_cost: int = 0
     cooldown: int = 0
@@ -91,7 +91,7 @@ class EffectData(ABC):
     # who am I?
     originator: Optional[EntityID] = None  # actor
     creators_name: Optional[str] = None  # skill, projectile, etc.'s name
-    effect_type = None
+    effect_type = Effect.MOVE
 
     # who are we targeting?
     required_tags: List[TargetTagType] = field(default_factory=list)
@@ -178,7 +178,7 @@ class UseSkillEffectData(EffectData):
     effect_type = Effect.TRIGGER_SKILL
 
     skill_name: str = field(default="none")  # TODO - confirm if we want skill name or key
-    required_tags = None  # use use the tags of the skill referenced
+    required_tags: List = field(default_factory=list)
 
 
 @register_dataclass_with_json
@@ -217,7 +217,7 @@ class MoveActorEffectData(EffectData):
     move_direction: DirectionType = Direction.CENTRE
     # TODO - this needs to be determined at use, between the two affected entities
     move_amount: int = 0
-    move_target: EntityID = 0
+    move_target: EntityID = 1  # type: ignore
     allow_bump_attack: bool = False
     move_time_cost: int = 0
 

@@ -18,7 +18,7 @@ class WantToUseSkillEvent(Event):
     before using the skill.
     """
     def __init__(self, entity_using_skill: EntityID, skill_name: str, start_pos: Tuple[int, int],
-            direction: Optional[Union[Tuple[int, int], DirectionType]]):
+            direction: Optional[DirectionType]):
         Event.__init__(self, "WANT_TO_USE_SKILL", EventTopic.ENTITY)
         self.entity = entity_using_skill
         self.direction = direction
@@ -52,7 +52,7 @@ class MoveEvent(Event):
     """
     Event to move an entity as a basic move action
     """
-    def __init__(self, entity_to_move: int, start_pos: Tuple[int, int], direction: Tuple[int, int],
+    def __init__(self, entity_to_move: EntityID, start_pos: Tuple[int, int], direction: DirectionType,
             travel_type: TravelMethodType, cost: int):
         Event.__init__(self, "MOVE", EventTopic.ENTITY)
         self.start_pos = start_pos
@@ -167,7 +167,7 @@ class MessageEvent(Event):
     Event to share messages with the player
     """
     def __init__(self, message_type: MessageTypeType,  message: str, colour: str = None, size: int = 4,
-            entity: int = None):
+            entity: EntityID = None):
         Event.__init__(self, "MESSAGE", EventTopic.UI)
         self.message = message
         self.message_type = message_type

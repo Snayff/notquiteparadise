@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 from scripts.engine import world, chapter,  state
 from scripts.engine.core.constants import MessageType, GameState, TargetingMethod
 from scripts.engine.core.definitions import MoveActorEffectData
@@ -52,12 +52,14 @@ class EntityHandler(Subscriber):
         target tile has entity) or move.
         """
         tile = world.get_tile((event.start_pos[0], event.start_pos[1]))
-        world.use_skill(event.entity, Move, tile, event.direction)
+        if tile:
+            world.use_skill(event.entity, Move, tile, event.direction)
 
         # check entity moved
         new_position = world.get_entitys_component(event.entity, Position)
-        if (new_position.x, new_position.y) != event.start_pos:
-            publisher.publish(EndTurnEvent(event.entity, event.base_cost))
+        if new_position:
+            if (new_position.x, new_position.y) != event.start_pos:
+                publisher.publish(EndTurnEvent(event.entity, event.base_cost))
 
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):
@@ -74,16 +76,23 @@ class EntityHandler(Subscriber):
         # flags
         got_target = can_afford = not_on_cooldown = False
 
+        # if we dont have skill we cant do anything
+        if not skill:
+            logging.warning(f"'{world.get_name(entity)}' tried to use {skill_name} but doesnt know it.")
+            return None
+
         # complete initial checks
         targeting = skill.targeting_method
-        if (targeting == TargetingMethod.TARGET and direction) or targeting == TargetingMethod.AUTO:
+        if targeting == TargetingMethod.AUTO or (targeting == TargetingMethod.TARGET and direction):
             got_target = True
 
-        can_afford = world.can_afford_cost(player, skill.resource_type, skill.resource_cost)
+        can_afford = world.can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
-        cooldown = world.get_entitys_component(player, Knowledge).skills[skill_name]["cooldown"]
-        if cooldown <= 0:
-            not_on_cooldown = True
+        knowledge = world.get_entitys_component(entity, Knowledge)
+        if knowledge:
+            cooldown = knowledge.skills[skill_name]["cooldown"]
+            if cooldown <= 0:
+                not_on_cooldown = True
 
         # if its the player wanting to use their skill but we dont have a target direction
         if player and player == entity and not got_target:
@@ -111,7 +120,7 @@ class EntityHandler(Subscriber):
                 if can_afford and not_on_cooldown:
                     publisher.publish(ChangeGameStateEvent(GameState.TARGETING_MODE, skill_name))
 
-        elif got_target:
+        elif got_target and direction:
             # we have a direction, let's see if we can use the skill
             if can_afford and not_on_cooldown:
                 target_tile = world.get_tile((start_x + direction[0], start_y + direction[1]))
@@ -167,7 +176,8 @@ class EntityHandler(Subscriber):
 
             # update the cooldown
             knowledge = world.get_entitys_component(entity, Knowledge)
-            knowledge.skills[event.skill_name]["cooldown"] = skill.base_cooldown
+            if knowledge:
+                knowledge.skills[event.skill_name]["cooldown"] = skill.base_cooldown
             # TODO - modify by entity's stats - perhaps move to a func to ensure always uses entities mod
 
             # end the turn if the entity is the turn holder
@@ -214,6 +224,7 @@ class EntityHandler(Subscriber):
         """
         # skill cooldowns
         for entity, (knowledge, ) in world.get_components([Knowledge]):
+            knowledge = cast(Knowledge, knowledge)
             for skill_name, skill_dict in knowledge.skills.items():
                 if skill_dict["cooldown"] > 0:
                     knowledge.skills[skill_name]["cooldown"] = skill_dict["cooldown"] - 1

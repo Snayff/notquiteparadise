@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import world
 from scripts.engine.component import Resources, Identity, Tracked
@@ -28,12 +28,11 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     """
     logging.debug(f"Building a new turn queue...")
 
-    get_component = world.get_components
-
     # create a turn queue from the entities list
     new_queue = {}
-    for entity, (tracked, ) in get_component([Tracked]):
+    for entity, (tracked, ) in world.get_components([Tracked]):
         if entity != entity_to_exclude:
+            tracked = cast(Tracked, tracked)
             new_queue[entity] = tracked.time_spent
     set_turn_queue(new_queue)
 
@@ -115,7 +114,7 @@ def get_turn_holder() -> int:
     return store.turn_holder
 
 
-def get_turn_queue() -> Dict[int, int]:
+def get_turn_queue() -> Dict[EntityID, int]:
     """
     Get the turn queue
     """
@@ -180,7 +179,7 @@ def set_time_in_round(time: int):
     store.round_time = time
 
 
-def set_turn_queue(queue: Dict[int, int]):
+def set_turn_queue(queue: Dict[EntityID, int]):
     """
     Set the turn queue
     """

@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Tuple
+
+from snecs.typedefs import EntityID
+
 from scripts.engine import world, state
 from scripts.engine.library import library
 from scripts.engine.core.event_core import Subscriber, publisher
@@ -149,16 +152,11 @@ class UIHandler(Subscriber):
                 # Select an entity
                 tile = world.get_tile(event.tile_pos_string)
 
-                # ensure there is a tile
-                if tile:
-                    entities = world.get_entities_and_components_in_area([tile], [])
-                else:
-                    entities = []
-
                 # there should only be one entity, but just in case...
-                for entity in entities:
-                    self._select_entity(entity)
-                    break
+                for entity, (pos, ) in world.get_components([Position]):
+                    if pos.x == tile.x and pos.y == tile.y:
+                        self._select_entity(entity)
+                        break
 
             elif game_state == GameState.TARGETING_MODE:
                 # use the skill on the clicked tile
@@ -213,7 +211,7 @@ class UIHandler(Subscriber):
         ui.update_camera_grid()
 
     @staticmethod
-    def _select_entity(entity: int):
+    def _select_entity(entity: EntityID):
         """
         Set the selected entity
         """

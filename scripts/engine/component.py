@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, Union, Any
 from snecs import RegisteredComponent
 from scripts.engine.core.constants import InteractionCauseType, Effect
 
@@ -172,14 +172,14 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills.
     """
 
-    def __init__(self, skills: Dict[str, Skill] = None, skill_order: List[str] = None):
+    def __init__(self, skills: Dict[str, Dict[str, Any]] = None, skill_order: List[str] = None):
         if skills is None:
             skills = {}
         if skill_order is None:
             skill_order = []
 
         self.skill_order = skill_order  # list of skill names, to allow access by index
-        self.skills: Dict[str, Skill] = skills  # skill_name : Skill
+        self.skills: Dict[str, Dict[str, Any]] = skills  # skill_name : {Skill, cooldown}
 
 
 class Afflictions(Dict[str, int], RegisteredComponent):

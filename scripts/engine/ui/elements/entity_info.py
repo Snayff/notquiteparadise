@@ -5,9 +5,9 @@ import pygame
 import pygame_gui
 from pygame_gui.core import UIWindow
 from pygame_gui.elements import UIImage, UITextBox
+from snecs.typedefs import EntityID
 
-
-from scripts.engine import utility
+from scripts.engine import utility, world
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, INFINITE
 from scripts.engine.utility import get_class_members
 from scripts.engine.component import Aesthetic, Identity, Resources, Afflictions
@@ -24,7 +24,7 @@ class EntityInfo(UIWindow):
         # FIXME - entity info  doesn't update when entity info changes.
 
         # sections
-        self.selected_entity: Optional[int] = None
+        self.selected_entity: Optional[EntityID] = None
         self.entity_image: Optional[pygame.Surface] = None
         self.info_section: Optional[UITextBox] = None
 
@@ -53,7 +53,7 @@ class EntityInfo(UIWindow):
         """
         pass
 
-    def set_entity(self, entity: int):
+    def set_entity(self, entity: EntityID):
         """
         Set the selected entity to show the info for that entity.
         """
@@ -83,26 +83,30 @@ class EntityInfo(UIWindow):
             self.info_section.kill()
             self.info_section = None
 
-    def create_entity_image_section(self):
+    def create_entity_image_section(self) -> UIImage:
         """
         Create the image section.
-
-        Returns:
-            UIImage:
         """
         image_width = self.entity_image_width
         image_height = self.entity_image_height
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
         rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
+        entity = self.selected_entity
 
-        aesthetic = world.get_entitys_component(self.selected_entity, Aesthetic)
-        if aesthetic:
-            image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
+        # get the image for the entity
+        if entity:
+            aesthetic = world.get_entitys_component(entity, Aesthetic)
+            if aesthetic:
+                image = pygame.transform.scale(aesthetic.sprites.icon, (image_width, image_height))
+            else:
+                image = utility.get_image(IMAGE_NOT_FOUND_PATH)
+
         else:
             image = utility.get_image(IMAGE_NOT_FOUND_PATH)
 
         entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
                                container=self.get_container(), object_id="#entity_image")
+
         return entity_image
 
     def create_info_section(self) -> UITextBox:
@@ -131,15 +135,18 @@ class EntityInfo(UIWindow):
             afflictions = world.get_entitys_component(entity, Afflictions)
             if afflictions:
                 for affliction, duration in afflictions.items():
+                    # overwrite duration with infinity string if needed
                     if duration == INFINITE:
-                        duration = "∞"
+                        duration = "∞"  # type: ignore
                     text += f"{affliction} : {duration}" + "<br>"
+            else:
+                text += "Not afflicted." + "<br>"
 
             # add gap
             text += gap
 
             # stats info
-            stats = world.create_combat_stats(self.selected_entity)
+            stats = world.create_combat_stats(entity)
             primary_stats = utility.get_class_members(PrimaryStat)
             for name in primary_stats:
                 try:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import world, utility
 from scripts.engine.component import Blocking, Aesthetic, FOV, HasCombatStats, Position
@@ -17,15 +17,16 @@ if TYPE_CHECKING:
 
 
 class Effect(ABC):
-    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect]):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]]):
         self.origin = origin
-        self.success_effects: List[Effect] = success_effects
-        self.failure_effects: List[Effect] = failure_effects
+        self.success_effects: List[Optional[Effect]] = success_effects
+        self.failure_effects: List[Optional[Effect]] = failure_effects
 
 
 class DamageEffect(Effect):
-    def __init__(self, origin: EntityID, target: EntityID, success_effects: List[Effect],
-                failure_effects: List[Effect], stat_to_target: PrimaryStatType, accuracy: int,
+    def __init__(self, origin: EntityID, target: EntityID, success_effects: List[Optional[Effect]],
+                failure_effects: List[Optional[Effect]], stat_to_target: PrimaryStatType, accuracy: int,
                 damage: int, damage_type: DamageTypeType, mod_stat: PrimaryStatType, mod_amount: float):
 
         super().__init__(origin, success_effects, failure_effects)
@@ -66,8 +67,8 @@ class DamageEffect(Effect):
 
 
 class MoveActorEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-                target: EntityID, direction: DirectionType, move_amount: int):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]], target: EntityID, direction: DirectionType, move_amount: int):
 
         super().__init__(origin, success_effects, failure_effects)
 
@@ -83,6 +84,9 @@ class MoveActorEffect(Effect):
 
         success = False
         pos = world.get_entitys_component(self.target, Position)
+        if not pos:
+            return self.failure_effects
+
         start_pos = (pos.x, pos.y)
         dir_x, dir_y = self.direction
         entity = self.target
@@ -90,7 +94,7 @@ class MoveActorEffect(Effect):
         direction_name = utility.value_to_member((dir_x, dir_y), Direction)
 
         # loop each target tile in turn
-        for x in range(0, self.move_amount):
+        for _ in range(0, self.move_amount):
     
             target_x = pos.x + dir_x
             target_y = pos.y + dir_y
@@ -105,34 +109,39 @@ class MoveActorEffect(Effect):
                 is_entity_on_tile = False
                 
             # check for no entity in way but tile is blocked
-            if not is_entity_on_tile and is_tile_blocking_movement:
+            if not is_entity_on_tile and is_tile_blocking_movement and target_tile:
                 publisher.publish(TerrainCollisionEvent(entity, target_tile, self.direction, start_pos))
-                logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked "
-                              f"by terrain. ")
+                logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
+                              f" blocked by terrain. ")
                 success = False
 
             # check if entity blocking tile
-            elif is_entity_on_tile:
-                entities = world.get_entities_and_components_in_area([target_tile], [Blocking])
-                for blocking_entity, (position, blocking, *rest) in entities.items():
-                    if blocking.blocks_movement:
+            elif is_entity_on_tile and target_tile:
+                for blocking_entity, (position, blocking) in world.get_components([Position, Blocking]):
+                    # cast for typing
+                    position = cast(Position, position)
+                    blocking = cast(Blocking, blocking)
+
+                    if blocking.blocks_movement and (position.x == target_tile.x and position.y == target_tile.y):
                         # blocked by entity
-                        publisher.publish(EntityCollisionEvent(entity,blocking_entity, self.direction, start_pos))
+                        publisher.publish(EntityCollisionEvent(entity, blocking_entity, self.direction, start_pos))
                         blockers_name = world.get_name(blocking_entity)
                         logging.debug(
-                            f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked "
-                            f"by '{blockers_name}'. ")
+                            f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
+                            f" by '{blockers_name}'. ")
                         success = False
                         break
 
             # if nothing in the way, time to move!
-            elif not is_entity_on_tile and not is_tile_blocking_movement:
-                position = world.get_entitys_component(entity, Position)
+            # not is_entity_on_tile and not is_tile_blocking_movement
+            else:
+                # named _position as typing was inferring from position above
+                _position = world.get_entitys_component(entity, Position)
 
                 # update position
-                if position:
-                    position.x = target_x
-                    position.y = target_y
+                if _position:
+                    _position.x = target_x
+                    _position.y = target_y
                     success = True
 
                 # TODO - move to UI handler
@@ -140,7 +149,7 @@ class MoveActorEffect(Effect):
                 aesthetic = world.get_entitys_component(entity, Aesthetic)
                 if aesthetic:
                     aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
-                    target_y))
+                                                                            target_y))
                     aesthetic.current_sprite = aesthetic.sprites.move
 
                 # update fov if needed
@@ -150,13 +159,15 @@ class MoveActorEffect(Effect):
                         sight_range = stats.sight_range
                     else:
                         sight_range = DEFAULT_SIGHT_RANGE
-                    fov_map = world.get_entitys_component(entity, FOV).map
-                    world.recompute_fov(position.x, position.y, sight_range, fov_map)
+                    fov = world.get_entitys_component(entity, FOV)
+                    if fov and _position:
+                        fov_map = fov.map
+                        world.recompute_fov(_position.x, _position.y, sight_range, fov_map)
 
-                    # update tiles if it is player
-                    if entity == world.get_player():
-                        # TODO - should probably sit in world handler
-                        world.update_tile_visibility(fov_map)
+                        # update tiles if it is player
+                        if entity == world.get_player():
+                            # TODO - should probably sit in world handler
+                            world.update_tile_visibility(fov_map)
 
         if success:
             return self.success_effects

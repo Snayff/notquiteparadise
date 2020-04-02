@@ -5,9 +5,9 @@ import pytweening
 
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Position, Knowledge
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, cast
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
-    TravelMethod, BASE_MOVE_COST
+    TravelMethod, BASE_MOVE_COST, DirectionType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
 
@@ -28,6 +28,9 @@ def _process_aesthetic_update(delta_time: float):
     """
     # move entities screen position towards target
     for entity, (aesthetic, ) in world.get_components([Aesthetic]):
+        # cast for typing
+        aesthetic = cast(Aesthetic, aesthetic)
+
         max_duration = 0.3
 
         # increment time
@@ -70,31 +73,31 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
         _process_dev_mode_intents(intent)
 
 
-def _get_pressed_direction(intent: InputIntentType) -> Tuple[int, int]:
+def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
     """
     Get the value of the directions pressed. Returns as (x, y). Values are ints between -1 and 1.
     """
 
     if intent == InputIntent.UP:
-        dir_x, dir_y = Direction.UP
+        direction = Direction.UP
     elif intent == InputIntent.UP_RIGHT:
-        dir_x, dir_y = Direction.UP_RIGHT
+        direction = Direction.UP_RIGHT
     elif intent == InputIntent.UP_LEFT:
-        dir_x, dir_y = Direction.UP_LEFT
+        direction = Direction.UP_LEFT
     elif intent == InputIntent.RIGHT:
-        dir_x, dir_y = Direction.RIGHT
+        direction = Direction.RIGHT
     elif intent == InputIntent.LEFT:
-        dir_x, dir_y = Direction.LEFT
+        direction = Direction.LEFT
     elif intent == InputIntent.DOWN:
-        dir_x, dir_y = Direction.DOWN
+        direction = Direction.DOWN
     elif intent == InputIntent.DOWN_RIGHT:
-        dir_x, dir_y = Direction.DOWN_RIGHT
+        direction = Direction.DOWN_RIGHT
     elif intent == InputIntent.DOWN_LEFT:
-        dir_x, dir_y = Direction.DOWN_LEFT
+        direction = Direction.DOWN_LEFT
     else:
-        dir_x, dir_y = 0, 0
+        direction = Direction.CENTRE
 
-    return dir_x, dir_y
+    return direction
 
 
 def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
@@ -104,23 +107,22 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
     player = world.get_player()
     skill_name = None
 
-    try:
-        skills = world.get_entitys_component(player, Knowledge).skill_order
+    if player:
+        skills = world.get_entitys_component(player, Knowledge)
 
-        if intent == InputIntent.SKILL0:
-            skill_name = skills[0]
-        elif intent == InputIntent.SKILL1:
-            skill_name = skills[1]
-        elif intent == InputIntent.SKILL2:
-            skill_name = skills[2]
-        elif intent == InputIntent.SKILL3:
-            skill_name = skills[3]
-        elif intent == InputIntent.SKILL4:
-            skill_name = skills[4]
-        else:
-            skill_name = None
-    except AttributeError or IndexError:
-        pass
+        if skills:
+            skill_order = skills.skill_order
+
+            if intent == InputIntent.SKILL0:
+                skill_name = skill_order[0]
+            elif intent == InputIntent.SKILL1:
+                skill_name = skill_order[1]
+            elif intent == InputIntent.SKILL2:
+                skill_name = skill_order[2]
+            elif intent == InputIntent.SKILL3:
+                skill_name = skill_order[3]
+            elif intent == InputIntent.SKILL4:
+                skill_name = skill_order[4]
 
     return skill_name
 
@@ -153,19 +155,20 @@ def _process_player_turn_intents(intent: InputIntentType):
 
     # if player exists, which it should, because we're in PLAYER_TURN game state
     if player:
+        position = world.get_entitys_component(player, Position)
+
         # Player movement
         direction = _get_pressed_direction(intent)
         possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
-        if direction in possible_moves:
-            position = world.get_entitys_component(player, Position)
+        if direction in possible_moves and position:
             publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD,
                                         BASE_MOVE_COST))
 
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)
-        if skill_name:
-            pos = world.get_entitys_component(player, Position)
-            publisher.publish(WantToUseSkillEvent(player, skill_name, (pos.x, pos.y), (0, 1)))
+        if skill_name and position:
+            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y),
+                                                  Direction.DOWN))  # TODO - remove hard value
 
             # TODO - uncomment when targeting working again
             # position = existence.get_entitys_component(player, Position)
