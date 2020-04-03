@@ -4,7 +4,6 @@ import dataclasses
 import json
 from typing import TYPE_CHECKING, Dict, Type
 
-
 if TYPE_CHECKING:
     pass
 

@@ -5,8 +5,9 @@ import pygame
 from typing import TYPE_CHECKING
 from pygame_gui import UIManager
 from snecs.typedefs import EntityID
-from scripts.engine import debug
-from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType
+from scripts.engine import debug, world
+from scripts.engine.component import Position
+from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType, DirectionType
 from scripts.engine.ui.basic.fonts import Font
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
@@ -26,14 +27,12 @@ class _UIManager:
     """
 
     def __init__(self):
+        self.debug_font = None
+
         # first action needs to be to init pygame.
         pygame.init()
 
-        # now init the pygame_gui
-        self._gui = UIManager((VisualInfo.BASE_WINDOW_WIDTH,
-            VisualInfo.BASE_WINDOW_HEIGHT), "data/ui/themes.json")
-
-        # display info
+        #  set the display
         # TODO - allow for selection by player but only multiples of base (16:9)
         self._desired_width = VisualInfo.BASE_WINDOW_WIDTH
         self._desired_height = VisualInfo.BASE_WINDOW_HEIGHT
@@ -41,7 +40,10 @@ class _UIManager:
         self._screen_scaling_mod_y = self._desired_height // VisualInfo.BASE_WINDOW_HEIGHT
         self._window: pygame.display = pygame.display.set_mode((self._desired_width, self._desired_height))
         self._main_surface: pygame.Surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH,
-            VisualInfo.BASE_WINDOW_HEIGHT), pygame.SRCALPHA)
+                                                            VisualInfo.BASE_WINDOW_HEIGHT), pygame.SRCALPHA)
+
+        # now that the display is configured  init the pygame_gui
+        self._gui = UIManager((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT), "data/ui/themes.json")
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
@@ -96,9 +98,10 @@ class _UIManager:
     def _draw_debug(self):
         values = debug.get_visible_values()
         y = 10
+        debug_font = self.debug_font
 
         for value in values:
-            text, rect = Font().debug.render(value, (255,255,255))
+            text, rect = debug_font.render(value, (255, 255, 255))
             self._main_surface.blit(text, (0, y))
             y += 10
 
@@ -166,6 +169,7 @@ class _UIManager:
 
     def _load_fonts(self):
         self._gui.add_font_paths("barlow", "assets/fonts/Barlow-Light.otf")
+        self.debug_font = Font().debug
 
     def init_message_log(self):
         """
@@ -218,7 +222,10 @@ class _UIManager:
         x = 5
         y = 5
         rect = pygame.Rect((x, y), (width, height))
-        camera = Camera(rect, self.get_gui_manager(), rows, cols)
+        pos = world.get_entitys_component(world.get_player(), Position)
+        tile = world.get_tile((pos.x, pos.y))
+
+        camera = Camera(rect, self.get_gui_manager(), rows, cols, tile)
         self.add_ui_element(UIElement.CAMERA, camera)
 
     def init_skill_editor(self):
@@ -341,12 +348,9 @@ class _UIManager:
         else:
             logging.warning(f"Tried to set Camera overlay but key not found. Is it init'd?")
 
-    def set_overlay_directions(self, directions: List):
+    def set_overlay_directions(self, directions: List[DirectionType]):
         """
         Set the overlay with possible targeting directions.
-
-        Args:
-            directions (): List of Direction
         """
         camera = self.get_ui_element(UIElement.CAMERA)
         if camera:

@@ -167,8 +167,7 @@ def _process_player_turn_intents(intent: InputIntentType):
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)
         if skill_name and position:
-            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y),
-                                                  Direction.DOWN))  # TODO - remove hard value
+            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y)))
 
             # TODO - uncomment when targeting working again
             # position = existence.get_entitys_component(player, Position)

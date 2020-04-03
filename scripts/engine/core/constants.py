@@ -5,7 +5,7 @@ from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
-VERSION = "0.98.0"
+VERSION = "0.99.0"
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32

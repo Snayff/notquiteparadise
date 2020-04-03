@@ -196,3 +196,13 @@ def value_to_member(value: Any, cls: Type[Any]) -> str:
             return member
 
     return "No member with value found."
+
+
+def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
+    """
+    Convert a tile position string to (x, y)
+    """
+    _x, _y = tile_pos_string.split(",")
+    x = int(_x)  # str to int
+    y = int(_y)
+    return x, y

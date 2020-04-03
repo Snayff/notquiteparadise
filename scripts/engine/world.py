@@ -285,33 +285,23 @@ def get_game_map() -> GameMap:
     return store.current_game_map
 
 
-def get_tile(tile_pos: Union[Tuple[int, int], str]) -> Optional[Tile]:
+def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     """
-    Get the tile at the specified location. Use tile_x and tile_y OR tile_pos_string "x,y".
-    Returns None if tile is out of bounds.
+    Get the tile at the specified location. Use tile_x and tile_y. Raises exception if out of bounds or doesnt exist.
     """
+    # TODO - clean up to only accept tuple
     game_map = get_game_map()
-
-    # clean up tile pos
-    if isinstance(tile_pos, str):
-        _x, _y = tile_pos.split(",")
-        x = int(_x)  # str to int
-        y = int(_y)
-    else:
-        x = tile_pos[0]
-        y = tile_pos[1]
+    x = tile_pos[0]
+    y = tile_pos[1]
 
     try:
-        _tile: Optional[Tile]
         _tile = game_map.tiles[x][y]
-        if not _is_tile_in_bounds(_tile):
-            _tile = None
+        if _is_tile_in_bounds(_tile):
+            return _tile
 
     except KeyError:
         logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
-        _tile = None
 
-    return _tile
 
 
 def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List[Tile]:
@@ -335,8 +325,7 @@ def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List
     return tiles
 
 
-def get_direction(start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int],
-    str]) -> Union[DirectionType, Tuple[int, int]]:
+def get_direction(start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int], str]) -> DirectionType:
     """
     Get the direction between two locations. Positions expect either "x,y", or handles tuples (x, y)
     """
@@ -587,16 +576,16 @@ def get_hit_type(to_hit_score: int) -> HitTypeType:
         return HitType.GRAZE
 
 
-def get_player() -> Optional[EntityID]:
+def get_player() -> EntityID:
     """
     Get the player.
     """
     for entity, (flag,) in get_components([IsPlayer]):
         return entity
-    return None
+    raise ValueError
 
 
-def get_entity(unique_component: Type[Component]) -> Optional[int]:
+def get_entity(unique_component: Type[Component]) -> Optional[EntityID]:
     """
     Get a single entity that has a component. If multiple entities have the given component only the
     first found is returned.
@@ -617,7 +606,7 @@ def get_entity(unique_component: Type[Component]) -> Optional[int]:
     return entities[0]
 
 
-def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]:
+def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
     """
     Get an entity's component. Log if component not found.
     """
@@ -625,7 +614,7 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]
         return snecs.entity_component(entity, component)
     else:
         debug.log_component_not_found(entity, component)
-        return None
+        raise Exception
 
 
 def get_name(entity: EntityID) -> str:
@@ -672,7 +661,7 @@ def get_primary_stat(entity: EntityID, primary_stat: str) -> int:
     return value
 
 
-def get_player_fov() -> Optional[tcod.map.Map]:
+def get_player_fov() -> tcod.map.Map:
     """
     Get's the player's FOV component
     """
@@ -682,10 +671,10 @@ def get_player_fov() -> Optional[tcod.map.Map]:
         if fov_c:
             return fov_c.map
 
-    return None
+    raise Exception
 
 
-def get_known_skill(entity: EntityID, skill_name: str) -> Optional[Type[Skill]]:
+def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     """
     Get an entity's known skill from their Knowledge component.
     """
@@ -693,7 +682,7 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Optional[Type[Skill]]:
     if knowledge:
         return knowledge.skills[skill_name]["skill"]
 
-    return None
+    raise Exception
 
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
@@ -1038,7 +1027,7 @@ def judge_action(entity: EntityID, action: Any):
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################
 
-def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int, hit_type: HitTypeType, ) -> int:
+def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int, hit_type: HitTypeType) -> int:
     """
     Work out the damage to be dealt.
     """

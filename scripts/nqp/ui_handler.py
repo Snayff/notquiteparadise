@@ -8,7 +8,7 @@ from snecs.typedefs import EntityID
 from scripts.engine import world, state
 from scripts.engine.library import library
 from scripts.engine.core.event_core import Subscriber, publisher
-from scripts.engine.core.constants import EventTopic, GameState, MessageType, UIElement
+from scripts.engine.core.constants import EventTopic, GameState, MessageType, UIElement, Direction
 from scripts.engine.component import Position, Aesthetic
 from scripts.engine.event import MessageEvent, ClickTile, UseSkillEvent, DieEvent, MoveEvent, ChangeGameStateEvent, \
     WantToUseSkillEvent
@@ -45,14 +45,14 @@ class UIHandler(Subscriber):
         """
         if isinstance(event, DieEvent):
             # remove the entity from the camera
-            self._update_camera()
+            self._update_camera(entity=event.entity)
 
         elif isinstance(event, MoveEvent):
             # show the entity in the new tile
             player = world.get_player()
             if event.entity == player:
                 position = world.get_entitys_component(player, Position)
-                self._update_camera(event.start_pos, (position.x, position.y))
+                self._update_camera(event.start_pos, (position.x, position.y), entity=event.entity)
             else:
                 self._update_camera()
 
@@ -147,11 +147,8 @@ class UIHandler(Subscriber):
         """
         if isinstance(event, ClickTile):
             game_state = state.get_current()
+            tile = event.tile
             if game_state == GameState.PLAYER_TURN:
-
-                # Select an entity
-                tile = world.get_tile(event.tile_pos_string)
-
                 # there should only be one entity, but just in case...
                 for entity, (pos, ) in world.get_components([Position]):
                     if pos.x == tile.x and pos.y == tile.y:
@@ -162,7 +159,7 @@ class UIHandler(Subscriber):
                 # use the skill on the clicked tile
                 player = world.get_player()
                 position = world.get_entitys_component(player, Position)
-                direction = world.get_direction((position.x, position.y), event.tile_pos_string)
+                direction = world.get_direction((position.x, position.y), tile)
                 skill_name = state.get_active_skill()
                 publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y), direction))
 
@@ -178,16 +175,24 @@ class UIHandler(Subscriber):
         # update directions to either clear or use info from skill
         if is_visible and skill_name:
             data = library.get_skill_data(skill_name)
-            directions = data.target_directions
+            _directions = data.target_directions
         else:
-            directions = []
+            _directions = []
+
+        # ensure all directions are of type Direction
+        directions = []
+        for direction in _directions:
+            if not isinstance(direction, Direction):
+                directions.append(getattr(Direction, direction.upper()))
+            else:
+                directions.append(direction)
 
         ui.set_overlay_directions(directions)
         ui.set_overlay_visibility(is_visible)
         ui.update_camera_grid()
 
     @staticmethod
-    def _update_camera(start_pos: Tuple = None, target_pos: Tuple = None):
+    def _update_camera(start_pos: Tuple = None, target_pos: Tuple = None, entity: EntityID = None):
         """
         Update tiles shown in camera.
         """
@@ -202,9 +207,9 @@ class UIHandler(Subscriber):
                 ui.move_camera(move_x, move_y)
 
             # update player's pos in camera
-            tile = world.get_tile((target_x, target_y))
-            if tile:
-                ui.set_player_tile(tile)
+            if entity == world.get_player():
+                target_tile = world.get_tile((target_x, target_y))
+                ui.set_player_tile(target_tile)
 
         ui.update_cameras_tiles()
         ui.update_camera_game_map()

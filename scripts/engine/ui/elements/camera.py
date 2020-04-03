@@ -21,7 +21,7 @@ class Camera(UIWindow):
     Hold the visual info for the game Map
     """
 
-    def __init__(self, rect: Rect, manager: UIManager, rows: int, cols: int):
+    def __init__(self, rect: Rect, manager: UIManager, rows: int, cols: int, player_tile: Tile):
         # general info
         self.rows = rows
         self.columns = cols
@@ -30,7 +30,7 @@ class Camera(UIWindow):
         self.edge_size = 3  # # of tiles to control camera movement
 
         # game map info
-        self.player_tile = None  # the tile in which the player resides
+        self.player_tile = player_tile  # the tile in which the player resides
         self.tiles: List[Tile] = []
 
         # overlay info
@@ -45,11 +45,11 @@ class Camera(UIWindow):
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
-        self.game_map = UIImage(relative_rect=rect, image_surface=blank_surf, manager=manager,
+        self.game_map = UIImage(relative_rect=Rect((0, 0), rect.size), image_surface=blank_surf, manager=manager,
                                 container=self.get_container(), object_id="#game_map")
 
         # create grid
-        self.grid = UIContainer(relative_rect=rect, manager=manager,  container=self.get_container(),
+        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager,  container=self.get_container(),
                                 object_id="#grid")
 
         # confirm init complete
@@ -63,9 +63,12 @@ class Camera(UIWindow):
 
         # clicking a tile
         tile_prefix = "#tile"
+        full = ui_object_id
+        t = ui_object_id[:len(tile_prefix)]
         if ui_object_id[:len(tile_prefix)] == tile_prefix:
             tile_pos = ui_object_id[len('#tile'):]
-            publisher.publish(ClickTile(tile_pos_string=tile_pos))
+            tile = world.get_tile(utility.convert_tile_string(tile_pos))
+            publisher.publish(ClickTile(tile))
 
     ############### UPDATE ###########################
 
@@ -99,7 +102,7 @@ class Camera(UIWindow):
                 if self.start_tile_row <= pos.y < self.start_tile_row + self.rows:
                     map_surf.blit(aesthetic.current_sprite, (aesthetic.screen_x, aesthetic.screen_y))
 
-        self.game_map.image = map_surf
+        self.game_map.set_image(map_surf)
 
     def update_grid(self):
         """
@@ -193,9 +196,6 @@ class Camera(UIWindow):
     def set_player_tile(self, tile):
         """
         Set the player tile
-
-        Args:
-            tile ():
         """
         self.player_tile = tile
 

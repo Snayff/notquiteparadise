@@ -18,7 +18,7 @@ class WantToUseSkillEvent(Event):
     before using the skill.
     """
     def __init__(self, entity_using_skill: EntityID, skill_name: str, start_pos: Tuple[int, int],
-            direction: Optional[DirectionType]):
+            direction: Optional[DirectionType] = None):
         Event.__init__(self, "WANT_TO_USE_SKILL", EventTopic.ENTITY)
         self.entity = entity_using_skill
         self.direction = direction
@@ -156,10 +156,10 @@ class ClickTile(Event):
     """
     Event for clicking a tile
     """
-    def __init__(self, tile_pos_string: str):
+    def __init__(self, tile: Tile):
         Event.__init__(self, "CLICK_TILE", EventTopic.UI)
 
-        self.tile_pos_string = tile_pos_string
+        self.tile = tile
 
 
 class MessageEvent(Event):
