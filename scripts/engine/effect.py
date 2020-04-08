@@ -148,8 +148,7 @@ class MoveActorEffect(Effect):
                 # animate change
                 aesthetic = world.get_entitys_component(entity, Aesthetic)
                 if aesthetic:
-                    aesthetic.target_screen_x, aesthetic.target_screen_y = ui.world_to_screen_position((target_x,
-                                                                            target_y))
+                    aesthetic.target_screen_x, aesthetic.target_screen_y = (target_x, target_y)
                     aesthetic.current_sprite = aesthetic.sprites.move
 
                 # update fov if needed

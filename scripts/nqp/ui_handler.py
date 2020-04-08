@@ -108,7 +108,7 @@ class UIHandler(Subscriber):
 
         # Loop all entities with Position and Aesthetic and update their screen position
         for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
-            aesthetic.screen_x, aesthetic.screen_y = ui.world_to_screen_position((position.x, position.y))
+            aesthetic.screen_x, aesthetic.screen_y = (position.x, position.y)
             aesthetic.target_screen_x = aesthetic.screen_x
             aesthetic.target_screen_y = aesthetic.screen_y
 
@@ -211,7 +211,6 @@ class UIHandler(Subscriber):
                 target_tile = world.get_tile((target_x, target_y))
                 ui.set_player_tile(target_tile)
 
-        ui.update_cameras_tiles()
         ui.update_camera_game_map()
         ui.update_camera_grid()
 

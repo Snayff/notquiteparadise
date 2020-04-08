@@ -115,7 +115,7 @@ def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> flo
     if amount >= 0.99:
         return target_value
     else:
-        return (lerp_fraction * initial_value) + ((1 - amount) * target_value)
+        return ((1 - amount) * initial_value) + (amount * target_value)
 
 
 def clamp(value, min_value, max_value):
@@ -206,3 +206,20 @@ def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
     x = int(_x)  # str to int
     y = int(_y)
     return x, y
+
+
+def is_close(current_pos: tuple[float, float], target_pos: tuple[float, float], delta=0.05) -> bool:
+    """
+    returns true if the absolute distance between both coordinates is less than delta
+    """
+    return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
+
+
+def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge=0) -> bool:
+    """
+    check if a coordinate is inside a bound for a given edge
+    """
+    start_coordinate = bounds[0] + edge
+    end_coordinate = bounds[1] - edge - 1
+    within_bounds = start_coordinate <= coordinate < end_coordinate
+    return within_bounds

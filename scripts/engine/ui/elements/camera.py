@@ -1,6 +1,7 @@
 import logging
-from typing import List, Tuple
+from typing import List, Tuple, cast, Iterable
 
+import pygame_gui
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
@@ -10,7 +11,7 @@ from pygame_gui.elements import UIButton, UIImage, UIWindow
 from scripts.engine import world, utility
 from scripts.engine.core.constants import TILE_SIZE, DirectionType, Direction
 from scripts.engine.core.event_core import publisher
-from scripts.engine.utility import clamp
+from scripts.engine.utility import clamp, convert_tile_string
 from scripts.engine.event import ClickTile
 from scripts.engine.component import Position, Aesthetic
 from scripts.engine.world_objects.tile import Tile
@@ -25,8 +26,24 @@ class Camera(UIWindow):
         # general info
         self.rows = rows
         self.columns = cols
-        self.start_tile_col = 0
-        self.start_tile_row = 0
+
+        # duration of the animation - only used when animating the camera move
+        self.current_sprite_duration = 0.0
+
+        # start col, row are floats - the decimal representing the proportion of offset
+        self.start_tile_col = 0.0
+        self.start_tile_row = 0.0
+
+        # target same as the start
+        self.target_tile_col = 0.0
+        self.target_tile_row = 0.0
+
+        # initialize these variables from self.update_tile_properties()
+        self.tile_height = 0
+        self.tile_width = 0
+        self.x_bounds = None
+        self.y_bounds = None
+
         self.edge_size = 3  # # of tiles to control camera movement
 
         # game map info
@@ -49,8 +66,10 @@ class Camera(UIWindow):
                                 container=self.get_container(), object_id="#game_map")
 
         # create grid
-        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager,  container=self.get_container(),
+        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager, container=self.get_container(),
                                 object_id="#grid")
+
+        self.update_tile_properties()
 
         # confirm init complete
         logging.debug(f"Camera initialised.")
@@ -61,14 +80,26 @@ class Camera(UIWindow):
         """
         ui_object_id = event.ui_object_id
 
-        # clicking a tile
-        tile_prefix = "#tile"
-        full = ui_object_id
-        t = ui_object_id[:len(tile_prefix)]
-        if ui_object_id[:len(tile_prefix)] == tile_prefix:
-            tile_pos = ui_object_id[len('#tile'):]
-            tile = world.get_tile(utility.convert_tile_string(tile_pos))
-            publisher.publish(ClickTile(tile))
+        # For tiles
+        if '#tile' in ui_object_id:
+
+            # get the row, col of the UI element
+            x, y = self.get_tile_col_row(ui_object_id)
+
+            # convert x,y to tile position
+            x = x + int(self.start_tile_col)
+            y = y + int(self.start_tile_row)
+            tile_pos = (x, y)
+
+            # clicking a tile
+            if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                # get the required tile and publish click event
+                tile = world.get_tile(tile_pos)
+                publisher.publish(ClickTile(tile))
+
+            # hovering a tile
+            elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
+                self.selected_tile = world.get_tile(tile_pos)
 
     ############### UPDATE ###########################
 
@@ -77,7 +108,17 @@ class Camera(UIWindow):
         Update based on current state and data. Run every frame.
         """
         super().update(time_delta)
+        self.update_tile_properties()
         self.update_game_map()
+        self._update_ui_element_pos()
+
+    def update_tile_properties(self):
+        """
+        refreshes tile dimensions and the bounds of the map
+        """
+        self.tile_width = self.game_map.rect.width // self.columns
+        self.tile_height = self.game_map.rect.height // self.rows
+        self.x_bounds, self.y_bounds = self.get_tile_bounds()
 
     def update_game_map(self):
         """
@@ -89,109 +130,134 @@ class Camera(UIWindow):
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
         # draw tiles
-        for tile in self.tiles:
+        for tile in self._current_tiles():
             # TODO - determine where this is using FOV
-            screen_x, screen_y = self.world_to_screen_position((tile.x, tile.y))
-            map_surf.blit(tile.sprite, (screen_x, screen_y))
+            self.draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
         # draw entities
         for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
             # TODO - use FOV
             # if in camera view
-            if self.start_tile_col <= pos.x < self.start_tile_col + self.columns:
-                if self.start_tile_row <= pos.y < self.start_tile_row + self.rows:
-                    map_surf.blit(aesthetic.current_sprite, (aesthetic.screen_x, aesthetic.screen_y))
+            if self.is_in_camera_view((pos.x, pos.y)):
+                self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.screen_x, aesthetic.screen_y))
 
         self.game_map.set_image(map_surf)
 
     def update_grid(self):
         """
-        Update the tile grid to only have  options in line with the tiles set OR the overlay
+        Update the tile grid to only have options in line with the tiles set OR the overlay
         """
-        # clear existing grid tiles
+        if self.is_overlay_visible:
+
+            # player column and row
+            p_col = self.player_tile.x
+            p_row = self.player_tile.y
+
+            # off-setted center column and center row
+            cx = p_col - int(self.start_tile_col)
+            cy = p_row - int(self.start_tile_row)
+
+            # set containing all the tile positions in the overlay_directions
+            tile_positions = {(cx + dir_x, cy + dir_y) for dir_x, dir_y in self.overlay_directions}
+
+            # set containing all the tile positions in the current grid
+            current_positions = {self.get_tile_col_row(element.object_ids[-1]) for element in self.grid.elements}
+
+            # have to redraw only if the tile positions are different
+            should_update = tile_positions != current_positions
+
+        else:
+            # tile positions generator - contains 1 layer of padding to ensure smooth rollover
+            tile_positions = ((x, y) for x in range(-1, self.columns + 1) for y in range(-1, self.rows + 1))
+
+            # number of tiles
+            no_of_tiles = (self.columns + 2) * (self.rows + 2)
+
+            # redraw necessary if the amount of tiles don't match
+            should_update = no_of_tiles != len(self.grid.elements)
+
+        if should_update:
+            self._draw_grid(tile_positions)
+
+    def _update_ui_element_pos(self):
+        """
+        updates the ui element positions of the grid - useful when moving the grid
+        """
+        if len(self.grid.elements) == 0:
+            return
+
+        # get the decimal offsets of start tile
+        dx = int(self.start_tile_col) - self.start_tile_col
+        dy = int(self.start_tile_row) - self.start_tile_row
+
+        # Checking whether an update is necessary
+        # get the first element
+        element0 = self.grid.elements[0]
+
+        # cast for typing
+        element0 = cast(UIButton, element0)
+
+        # get the (x,y) position of the element
+        x, y, _, _ = element0.get_relative_rect()
+
+        # get the updated position of the tile
+        col, row = self.get_tile_col_row(element0.object_ids[-1])
+        updated_pos = self._grid_to_screen_position((col + dx, row + dy))
+
+        # update only if the current and updated position don't match
+        should_update = updated_pos != (x, y)
+
+        if should_update:
+            for element in self.grid.elements:
+
+                # cast for typing
+                element = cast(UIButton, element)
+
+                # get the updated position
+                col, row = self.get_tile_col_row(element.object_ids[-1])
+                updated_pos = self._grid_to_screen_position((col + dx, row + dy))
+
+                # set updated position
+                element.set_relative_position(updated_pos)
+
+
+    def _draw_grid(self, tile_positions: Iterable):
+        """
+        Clears and redraws a grid of the tiles provided
+        """
+        # clear the current grid
         self.grid.clear()
 
         manager = self.ui_manager
-        start_col = self.start_tile_col
-        start_row = self.start_tile_row
+        grid = self.grid
 
-        if self.is_overlay_visible:
-            if self.player_tile:
-                player_tile_x = self.player_tile.x
-                player_tile_y = self.player_tile.y
-            else:
-                player_tile_x = 0
-                player_tile_y = 0
+        # for all the tile positions provided
+        for col, row in tile_positions:
 
-            directions = self.overlay_directions
+            # find the screen position
+            x, y = self._grid_to_screen_position((col, row))
 
-            # draw the overlay
-            for direction in directions:
-                offset_tile_x, offset_tile_y = direction
-                x = ((player_tile_x + offset_tile_x) - start_col) * TILE_SIZE
-                y = ((player_tile_y + offset_tile_y) - start_row) * TILE_SIZE
-                tile_rect = Rect(x, y, TILE_SIZE, TILE_SIZE)
+            # create a rect
+            tile_rect = Rect(x, y, self.tile_width, self.tile_height)
 
-                # get current row and col
-                if x == 0:
-                    tile_x = 0
-                else:
-                    tile_x = max(0, int(x / TILE_SIZE))
-                if y == 0:
-                    tile_y = 0
-                else:
-                    tile_y = max(0, int(y / TILE_SIZE))
-
-                tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
-                                parent_element=self.grid, object_id=f"#tile{tile_x},{tile_y}")
-        else:
-            tiles = self.tiles
-
-            # create a grid for the tiles needed
-            for tile in tiles:
-                x = (tile.x - start_col) * TILE_SIZE
-                y = (tile.y - start_row) * TILE_SIZE
-                tile_rect = Rect(x, y, TILE_SIZE, TILE_SIZE)
-
-                # get current row and col
-                if x == 0:
-                    tile_x = 0
-                else:
-                    tile_x = max(0, int(x / TILE_SIZE))
-                if y == 0:
-                    tile_y = 0
-                else:
-                    tile_y = max(0, int(y / TILE_SIZE))
-
-                tile = UIButton(relative_rect=tile_rect, manager=manager, text="", container=self.grid,
-                                parent_element=self.grid, object_id=f"#tile{tile_x},{tile_y}")
-                
-    def update_camera_tiles(self):
-        """
-        Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.
-        """
-        if self:
-            tiles = []
-
-            for x in range(self.start_tile_col, self.start_tile_col + self.columns):
-                for y in range(self.start_tile_row, self.start_tile_row + self.rows):
-                    # TODO - readd FOV
-                    tile = world.get_tile((x, y))
-                    if tile:
-                        tiles.append(tile)
-    
-            self.set_tiles(tiles)
+            # draw a button
+            UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
+                     object_id=f"#tile{col},{row}")
 
     ############## SET #########################
 
-    def set_tiles(self, tiles: List):
+    def set_start_col_row(self, offset: Tuple[float, float]):
         """
-        Set the tiles in the camera.
+        Set the Start column and row
+        """
+        self.start_tile_col, self.start_tile_row = offset
 
-        Args:
-            tiles (): List of Tiles
+    def set_start_to_target(self):
         """
-        self.tiles = tiles
+        Set the current start tile to the target tile
+        """
+        self.start_tile_col = self.target_tile_col
+        self.start_tile_row = self.target_tile_row
 
     def set_player_tile(self, tile):
         """
@@ -216,24 +282,82 @@ class Camera(UIWindow):
 
     ############# UTILITY #########################
 
+    def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float]):
+        """
+        Draw a surface on the surface map. The function handles coordinate transformation to the screen
+        """
+        pos = self.world_to_screen_position(col_row)
+        map_surface.blit(sprite, pos)
+
     def move_camera(self, num_cols: int, num_rows: int):
         """
         Adjust the camera position by the number of columns and rows
         """
-        new_start_col = clamp(self.start_tile_col + num_cols, 0, self.columns)
-        new_start_row = clamp(self.start_tile_row + num_rows, 0, self.rows)
+        # calculate new start col, rows
+        new_start_col = round(clamp(self.target_tile_col + num_cols, 0.0, self.columns))
+        new_start_row = round(clamp(self.target_tile_row + num_rows, 0.0, self.rows))
 
-        self.start_tile_col = new_start_col
-        self.start_tile_row = new_start_row
-        
-    def world_to_screen_position(self, pos: Tuple[int, int]):
+        # set them as target
+        self.target_tile_col = new_start_col
+        self.target_tile_row = new_start_row
+
+        # reset animation time
+        self.current_sprite_duration = 0
+
+    def world_to_screen_position(self, pos: Tuple[float, float]):
         """
         Convert from the world_objects position to the screen position
         """
-        tile_width = int(self.game_map.rect.width / self.columns)
-        tile_height = int(self.game_map.rect.height / self.rows)
-        screen_x = (pos[0] - self.start_tile_col) * tile_width
-        screen_y = (pos[1] - self.start_tile_row) * tile_height
+        screen_x = int((pos[0] - self.start_tile_col) * self.tile_width)
+        screen_y = int((pos[1] - self.start_tile_row) * self.tile_height)
 
         return screen_x, screen_y
 
+    def get_tile_bounds(self):
+        """
+        Get the (col, row) bounds
+        """
+        return [(int(self.start_tile_col), round(self.start_tile_col + self.columns)),
+                (int(self.start_tile_row), round(self.start_tile_row + self.rows))]
+
+    @staticmethod
+    def get_tile_col_row(id_string: str):
+        """
+        Get the (col, row) from the object_id string
+        """
+        prefix = '#tile'
+        index = id_string.index(prefix)
+        tile_string = id_string[index + len(prefix):]
+        return convert_tile_string(tile_string)
+
+    def has_reached_target(self) -> bool:
+        """
+        returns True if target equals start tile
+        """
+        return self.target_tile_col == self.start_tile_col and self.target_tile_row == self.start_tile_row
+
+    def is_in_camera_view(self, pos: Tuple[float, float]) -> bool:
+        """
+        is the position inside the current camera view
+        """
+        x, y = pos
+        x_start, x_max = self.x_bounds
+        y_start, y_max = self.y_bounds
+
+        return x_start <= x < x_max and y_start <= y < y_max
+
+    def _grid_to_screen_position(self, pos: Tuple[float, float]) -> Tuple[int, int]:
+        """
+        Converts grid positions to screen positions
+        """
+        x, y = pos
+        screen_x = int(x * self.tile_width)
+        screen_y = int(y * self.tile_height)
+        return screen_x, screen_y
+
+    def _current_tiles(self):
+        """
+        Current tiles as a generator
+        """
+        tile_generator = (world.get_tile((x, y)) for x in range(*self.x_bounds) for y in range(*self.y_bounds))
+        return tile_generator

@@ -15,6 +15,7 @@ from scripts.engine.ui.elements.entity_info import EntityInfo
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.screen_message import ScreenMessage
 from scripts.engine.ui.elements.skill_bar import SkillBar
+from scripts.engine.utility import is_coordinate_in_bounds
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -132,7 +133,7 @@ class _UIManager:
         try:
             return self._elements[element_type]
         except KeyError:
-            logging.warning(f"Tried to get {element_type} but key not found, is it init'd?")
+            logging.warning(f"Tried to get {element_type} ui element but key not found, is it init`d?")
             return None
 
     @staticmethod
@@ -228,6 +229,9 @@ class _UIManager:
         camera = Camera(rect, self.get_gui_manager(), rows, cols, tile)
         self.add_ui_element(UIElement.CAMERA, camera)
 
+        # initialize grid
+        camera.update_grid()
+
     def init_skill_editor(self):
         """
         Initialise the skill editor ui_manager element.
@@ -260,24 +264,15 @@ class _UIManager:
 
         if camera:
             player_x, player_y = target_pos
+            x_bounds, y_bounds = camera.get_tile_bounds()
 
-            edge_start_x = camera.start_tile_col
-            edge_end_x = camera.start_tile_col + camera.columns
-            edge_start_y = camera.start_tile_row
-            edge_end_y = camera.start_tile_row + camera.rows
+            x_in_camera_edge = is_coordinate_in_bounds(coordinate=player_x, bounds=x_bounds, edge=camera.edge_size)
+            y_in_camera_edge = is_coordinate_in_bounds(coordinate=player_y, bounds=y_bounds, edge=camera.edge_size)
 
-            if edge_start_x <= player_x < edge_start_x + camera.edge_size:
-                return True
-            elif edge_end_x >= player_x > edge_end_x - camera.edge_size:
-                return True
-            elif edge_start_y <= player_y < edge_start_y + camera.edge_size:
-                return True
-            elif edge_end_y >= player_y > edge_end_y - camera.edge_size:
-                return True
-            else:
-                return False
+            return not x_in_camera_edge or not y_in_camera_edge
+
         else:
-            logging.warning(f"Tried to check target pos in Camera but key not found. Is it init'd?")
+            logging.warning(f"Tried to check target pos in Camera but key not found. Is it init`d?")
             return False
 
     def move_camera(self, num_cols: int, num_rows: int):
@@ -289,7 +284,7 @@ class _UIManager:
         if camera:
             camera.move_camera(num_cols, num_rows)
         else:
-            logging.warning(f"Tried to move Camera but key not found. Is it init'd?")
+            logging.warning(f"Tried to move Camera but key not found. Is it init`d?")
 
     def update_cameras_tiles(self):
         """
@@ -298,9 +293,10 @@ class _UIManager:
         camera = self.get_ui_element(UIElement.CAMERA)
 
         if camera:
-            camera.update_camera_tiles()
+            pass
+            # camera.update_camera_tiles(num_cols, num_rows)
         else:
-            logging.warning(f"Tried to set camera tiles in Camera but key not found. Is it init'd?")
+            logging.warning(f"Tried to set camera tiles in Camera but key not found. Is it init`d?")
 
     def update_camera_game_map(self):
         """
@@ -319,7 +315,7 @@ class _UIManager:
         if camera:
             camera.update_grid()
         else:
-            logging.warning(f"Tried to update camera grid in Camera move but key not found. Is it init'd?")
+            logging.warning(f"Tried to update camera grid in Camera move but key not found. Is it init`d?")
 
     def set_player_tile(self, tile: Tile):
         """
@@ -333,7 +329,7 @@ class _UIManager:
         if camera:
             camera.set_player_tile(tile)
         else:
-            logging.warning(f"Tried to set player tile in Camera but key not found. Is it init'd?")
+            logging.warning(f"Tried to set player tile in Camera but key not found. Is it init`d?")
 
     def set_overlay_visibility(self, is_visible: bool):
         """
@@ -346,7 +342,7 @@ class _UIManager:
         if camera:
             camera.set_overlay_visibility(is_visible)
         else:
-            logging.warning(f"Tried to set Camera overlay but key not found. Is it init'd?")
+            logging.warning(f"Tried to set Camera overlay but key not found. Is it init`d?")
 
     def set_overlay_directions(self, directions: List[DirectionType]):
         """
@@ -356,7 +352,7 @@ class _UIManager:
         if camera:
             camera.set_overlay_directions(directions)
         else:
-            logging.warning(f"Tried to set Camera overlay directions but key not found. Is it init'd?")
+            logging.warning(f"Tried to set Camera overlay directions but key not found. Is it init`d?")
 
     def should_camera_move(self, start_pos: Tuple, target_pos: Tuple) -> bool:
         """
@@ -386,19 +382,19 @@ class _UIManager:
                     dir_y = target_y - start_y
 
                     # are we moving to a worse position?
-                    if edge_start_x <= start_x < edge_start_x + camera.edge_size:
+                    if edge_start_x <= start_x < edge_start_x + camera.edge_size + 1:
                         # player is on the left side, are we moving left?
                         if dir_x < 0:
                             return True
-                    if edge_end_x > start_x >= edge_end_x - camera.edge_size:
+                    if edge_end_x > start_x >= edge_end_x - camera.edge_size - 2:
                         # player is on the right side, are we moving right?
                         if 0 < dir_x:
                             return True
-                    if edge_start_y <= start_y < edge_start_y + camera.edge_size:
+                    if edge_start_y <= start_y < edge_start_y + camera.edge_size + 1:
                         # player is on the up side, are we moving up?
                         if dir_y < 0:
                             return True
-                    if edge_end_y > start_y >= edge_end_y - camera.edge_size:
+                    if edge_end_y > start_y >= edge_end_y - camera.edge_size - 2:
                         # player is on the down side, are we moving down?
                         if 0 < dir_y:
                             return True
@@ -407,7 +403,7 @@ class _UIManager:
                 # we are moving into the edge
                 return True
         else:
-            logging.warning(f"Tried to check if Camera should move but key not found. Is it init'd?")
+            logging.warning(f"Tried to check if Camera should move but key not found. Is it init`d?")
 
         return False
 
@@ -440,7 +436,7 @@ class _UIManager:
             else:
                 entity_info.cleanse()
         else:
-            logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init'd?")
+            logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init`d?")
 
     ################## ENTITY INFO ####################################
 
@@ -453,7 +449,7 @@ class _UIManager:
         if entity_info:
             entity_info.cleanse()
         else:
-            logging.warning(f"Tried to kill EntityInfo but key not found. Is it init'd?")
+            logging.warning(f"Tried to kill EntityInfo but key not found. Is it init`d?")
 
     ######################## MESSAGES #################################
 
@@ -466,7 +462,7 @@ class _UIManager:
             message_log.add_message(message)
 
         except AttributeError:
-            logging.warning(f"Tried to add text to MessageLog but key not found. Is it init'd?")
+            logging.warning(f"Tried to add text to MessageLog but key not found. Is it init`d?")
 
 
 ui = _UIManager()

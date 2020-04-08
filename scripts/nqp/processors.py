@@ -7,9 +7,10 @@ from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING, Optional, cast
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
-    TravelMethod, BASE_MOVE_COST, DirectionType
+    TravelMethod, BASE_MOVE_COST, DirectionType, UIElement
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
+from scripts.engine.utility import is_close
 
 if TYPE_CHECKING:
     from typing import Type, Tuple
@@ -19,7 +20,51 @@ def process_all(delta_time: float):
     """
     Process all processors. N.B. does not include processing intent.
     """
+    _process_camera_update(delta_time)
     _process_aesthetic_update(delta_time)
+
+
+def _process_camera_update(delta_time: float):
+    """
+
+    """
+    camera = world.ui.get_element(UIElement.CAMERA)
+
+    if not camera:
+        return
+
+    max_duration = 1
+
+    # increment time
+    camera.current_sprite_duration += delta_time
+
+    if not camera.has_reached_target():
+
+        # time for animation exceeded
+        time_exceeded = camera.current_sprite_duration > max_duration
+
+        # time for animation exceeded or animation very close to end
+        if time_exceeded or is_close((camera.start_tile_col, camera.start_tile_row),
+                                     (camera.target_tile_col, camera.target_tile_row)):
+
+            # set start_tile to target
+            camera.set_start_to_target()
+
+        # keep moving:
+        else:
+
+            lerp_amount = pytweening.easeOutCubic(min(1.0, camera.current_sprite_duration / max_duration))
+            col_ = utility.lerp(camera.start_tile_col, camera.target_tile_col, lerp_amount)
+            row_ = utility.lerp(camera.start_tile_row, camera.target_tile_row, lerp_amount)
+
+            camera.set_start_col_row((col_, row_))
+
+        # update grid to reflect any changes if any
+        camera.update_grid()
+
+    # not moving
+    else:
+        camera.current_sprite_duration = 0
 
 
 def _process_aesthetic_update(delta_time: float):
@@ -36,21 +81,31 @@ def _process_aesthetic_update(delta_time: float):
         # increment time
         aesthetic.current_sprite_duration += delta_time
 
-        # do we need to show moving to a new position? Have we exceeded animation duration?
-        if (aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y) \
-                and aesthetic.current_sprite_duration <= max_duration:
-            # are we close?
-            if (aesthetic.screen_x - 1 < aesthetic.target_screen_x < aesthetic.screen_x + 1) and \
-                    (aesthetic.screen_y - 1 < aesthetic.target_screen_y < aesthetic.screen_y + 1):
-                # jump to target
+        # do we need to show moving to a new position?
+        if aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y:
+
+            # Have we exceeded animation duration?
+            time_exceeded = aesthetic.current_sprite_duration > max_duration
+
+            # time for animation exceeded or animation very close to end
+            if time_exceeded or is_close((aesthetic.screen_x, aesthetic.screen_y),
+                                         (aesthetic.target_screen_x, aesthetic.target_screen_y)):
+
+                # set to target
                 aesthetic.screen_x = aesthetic.target_screen_x
                 aesthetic.screen_y = aesthetic.target_screen_y
+
 
             # keep moving:
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
                 aesthetic.screen_x = utility.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
                 aesthetic.screen_y = utility.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
+
+            camera = world.ui.get_element(UIElement.CAMERA)
+
+            # update camera grid to reflect any changes based on player's movement
+            camera.update_grid()
         # not moving so reset to idle
         else:
             aesthetic.current_sprite = aesthetic.sprites.idle
