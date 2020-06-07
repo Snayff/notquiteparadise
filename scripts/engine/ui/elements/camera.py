@@ -39,8 +39,6 @@ class Camera(UIPanel):
         self.target_tile_row = 0.0
 
         # initialize these variables from self.update_tile_properties()
-        self.tile_height = 0
-        self.tile_width = 0
         self.x_bounds = None
         self.y_bounds = None
 
@@ -75,6 +73,7 @@ class Camera(UIPanel):
 
         # confirm init complete
         logging.debug(f"Camera initialised.")
+
 
     def handle_events(self, event):
         """
@@ -118,8 +117,6 @@ class Camera(UIPanel):
         """
         Refresh tile dimensions and the map bounds.
         """
-        self.tile_width = self.rect.width // self.columns
-        self.tile_height = self.rect.height // self.rows
         self.x_bounds, self.y_bounds = self.get_tile_bounds()
 
     def update_game_map(self):
@@ -151,6 +148,8 @@ class Camera(UIPanel):
         """
         Update the tile grid to only have options in line with the tiles set OR the overlay
         """
+        should_update = False
+
         if self.is_overlay_visible:
 
             # player column and row
@@ -236,16 +235,20 @@ class Camera(UIPanel):
 
         # for all the tile positions provided
         for col, row in tile_positions:
+            # FIXME - this tanks FPS - why?
+            # check in fov
+            # tile = world.get_tile((col, row))
+            # if tile.is_visible:
 
-            # find the screen position
-            x, y = self._grid_to_screen_position((col, row))
+                # find the screen position
+                screen_x, screen_y = self._grid_to_screen_position((col, row))
 
-            # create a rect
-            tile_rect = Rect(x, y, self.tile_width, self.tile_height)
+                # create a rect
+                tile_rect = Rect(screen_x, screen_y, TILE_SIZE, TILE_SIZE)
 
-            # draw a button
-            UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
-                     object_id=f"#tile{col},{row}")
+                # draw a button
+                UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
+                         object_id=f"#tile{col},{row}")
 
     ############## SET #########################
 
@@ -327,8 +330,8 @@ class Camera(UIPanel):
         """
         Convert from the world_objects position to the screen position
         """
-        screen_x = int((pos[0] - self.start_tile_col) * self.tile_width)
-        screen_y = int((pos[1] - self.start_tile_row) * self.tile_height)
+        screen_x = int((pos[0] - self.start_tile_col) * TILE_SIZE)
+        screen_y = int((pos[1] - self.start_tile_row) * TILE_SIZE)
 
         return screen_x, screen_y
 
@@ -353,8 +356,8 @@ class Camera(UIPanel):
         Converts grid positions to screen positions
         """
         x, y = pos
-        screen_x = int(x * self.tile_width)
-        screen_y = int(y * self.tile_height)
+        screen_x = int(x * TILE_SIZE)
+        screen_y = int(y * TILE_SIZE)
         return screen_x, screen_y
 
     def _current_tiles(self):

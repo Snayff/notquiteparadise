@@ -220,7 +220,7 @@ class _UIManager:
         """
         Initialise the skill editor ui_manager element.
         """
-        # TODO - convert to create and move details to nqp
+        # TODO - convert to create
         width = 1200
         height = 600
         x = 5
@@ -304,9 +304,6 @@ class _UIManager:
     def set_player_tile(self, tile: Tile):
         """
         Set the player tile in the Camera ui_manager element.
-
-        Args:
-            tile ():
         """
         camera = self.get_element(UIElement.CAMERA)
 

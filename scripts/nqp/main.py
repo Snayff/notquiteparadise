@@ -12,7 +12,7 @@ import pygame
 import snecs
 from snecs.world import default_world
 from scripts.engine import state, world, chapter, key, debug
-from scripts.engine.core.constants import GameState, VERSION, EventTopic
+from scripts.engine.core.constants import GameState, UIElement, VERSION, EventTopic
 from scripts.engine.core.event_core import event_hub, publisher
 from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import ui
@@ -214,6 +214,7 @@ def initialise_game():
     # init the player
     player = world.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
                                  "dandy", True)
+    world.recompute_fov(player)
 
     # tell places about the player
     chapter.set_turn_holder(player)

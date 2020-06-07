@@ -43,9 +43,11 @@ class GameHandler(Subscriber):
         if new_game_state == GameState.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
+            # trigger new turn actions (entity queue)
             player = world.get_player()
             if player:
-                publisher.publish(EndTurnEvent(player, 1))  # trigger new turn actions (entity queue)
+
+                publisher.publish(EndTurnEvent(player, 1))
 
         elif new_game_state == GameState.NEW_TURN:
             # if turn holder is the player then update to player turn

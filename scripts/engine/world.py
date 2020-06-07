@@ -13,7 +13,8 @@ from scripts.engine import utility, debug, chapter
 from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
     Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Interactions, Afflictions, Behaviour, \
     IsProjectile
-from scripts.engine.core.constants import TargetTag, FOVInfo, TargetTagType, DirectionType, Direction, \
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, TargetTag, FOVInfo, TargetTagType, DirectionType, \
+    Direction, \
     ResourceType, SecondaryStatType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, HitValue, HitType, \
     HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, InteractionCause
 from scripts.engine.core.definitions import CharacteristicSpritesData, ProjectileData, CharacteristicSpritePathsData
@@ -867,16 +868,33 @@ def can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool
 
 ################################ ACTIONS - CHANGE STATE - RETURN NOTHING ###############################
 
-def recompute_fov(x: int, y: int, radius: int, fov_map: tcod.map.Map):
+def recompute_fov(entity: EntityID):
     """
-    Recalc the  fov
+    Recalculate an entity's FOV
     """
-    tcod.map_compute_fov(fov_map, x, y, radius, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
+    if has_component(entity, FOV) and has_component(entity, Position):
+        # get sight range
+        if has_component(entity, HasCombatStats):
+            stats = create_combat_stats(entity)
+            sight_range = stats.sight_range
+        else:
+            sight_range = DEFAULT_SIGHT_RANGE
+
+        # get the needed components
+        fov = get_entitys_component(entity, FOV)
+        pos = get_entitys_component(entity, Position)
+
+        # compute the fov
+        tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
+
+        # update tiles if it is player
+        if entity == get_player():
+            update_tile_visibility(fov.map)
 
 
 def update_tile_visibility(fov_map: tcod.map.Map):
     """
-    Update the target fov
+    Update the the visibility of the tiles on the came map
     """
     game_map = get_game_map()
 

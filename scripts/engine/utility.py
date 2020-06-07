@@ -208,7 +208,7 @@ def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
     return x, y
 
 
-def is_close(current_pos: tuple[float, float], target_pos: tuple[float, float], delta=0.05) -> bool:
+def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
     """
     returns true if the absolute distance between both coordinates is less than delta
     """

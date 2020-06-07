@@ -152,21 +152,7 @@ class MoveActorEffect(Effect):
                     aesthetic.current_sprite = aesthetic.sprites.move
 
                 # update fov if needed
-                if world.has_component(entity, FOV):
-                    if world.has_component(entity, HasCombatStats):
-                        stats = world.create_combat_stats(entity)
-                        sight_range = stats.sight_range
-                    else:
-                        sight_range = DEFAULT_SIGHT_RANGE
-                    fov = world.get_entitys_component(entity, FOV)
-                    if fov and _position:
-                        fov_map = fov.map
-                        world.recompute_fov(_position.x, _position.y, sight_range, fov_map)
-
-                        # update tiles if it is player
-                        if entity == world.get_player():
-                            # TODO - should probably sit in world handler
-                            world.update_tile_visibility(fov_map)
+                world.recompute_fov(entity)
 
         if success:
             return self.success_effects
