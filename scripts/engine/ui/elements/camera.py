@@ -44,7 +44,7 @@ class Camera(UIPanel):
         self.x_bounds = None
         self.y_bounds = None
 
-        self.edge_size = 3  # # of tiles to control camera movement
+        self.edge_size = 5  # number of tiles to control camera movement
 
         # game map info
         pos = world.get_entitys_component(world.get_player(), Position)
@@ -118,8 +118,8 @@ class Camera(UIPanel):
         """
         Refresh tile dimensions and the map bounds.
         """
-        self.tile_width = self.game_map.rect.width // self.columns
-        self.tile_height = self.game_map.rect.height // self.rows
+        self.tile_width = self.rect.width // self.columns
+        self.tile_height = self.rect.height // self.rows
         self.x_bounds, self.y_bounds = self.get_tile_bounds()
 
     def update_game_map(self):
@@ -133,15 +133,17 @@ class Camera(UIPanel):
 
         # draw tiles
         for tile in self._current_tiles():
-            # TODO - determine where this is using FOV
-            self.draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
+            # if in player fov
+            if tile.is_visible:
+                self.draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
         # draw entities
         for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
-            # TODO - use FOV
             # if in camera view
             if self.is_in_camera_view((pos.x, pos.y)):
-                self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.screen_x, aesthetic.screen_y))
+                tile = world.get_tile((pos.x, pos.y))
+                if tile.is_visible:
+                    self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.screen_x, aesthetic.screen_y))
 
         self.game_map.set_image(map_surf)
 
@@ -269,9 +271,6 @@ class Camera(UIPanel):
     def set_overlay_visibility(self, is_visible: bool):
         """
         Set whether the targeting overlay is visible or now.
-
-        Args:
-            is_visible ():
         """
         self.is_overlay_visible = is_visible
 
