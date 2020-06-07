@@ -9,7 +9,7 @@ from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIPanel, UIWindow
 from scripts.engine import world
-from scripts.engine.core.constants import LAYER_CAMERA, DirectionType
+from scripts.engine.core.constants import LAYER_CAMERA, DirectionType, TILE_SIZE
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp, convert_tile_string
 from scripts.engine.event import ClickTile
@@ -22,10 +22,10 @@ class Camera(UIPanel):
     Hold the visual info for the game Map
     """
 
-    def __init__(self, rect: Rect, manager: UIManager, rows: int, cols: int, player_tile: Tile):
+    def __init__(self, rect: Rect, manager: UIManager):
         # general info
-        self.rows = rows
-        self.columns = cols
+        self.rows = rect.height // TILE_SIZE
+        self.columns = rect.width // TILE_SIZE
 
         # duration of the animation - only used when animating the camera move
         self.current_sprite_duration = 0.0
@@ -47,7 +47,9 @@ class Camera(UIPanel):
         self.edge_size = 3  # # of tiles to control camera movement
 
         # game map info
-        self.player_tile = player_tile  # the tile in which the player resides
+        pos = world.get_entitys_component(world.get_player(), Position)
+        tile = world.get_tile((pos.x, pos.y))
+        self.player_tile = tile  # the tile in which the player resides
         self.tiles: List[Tile] = []
 
         # overlay info
@@ -279,7 +281,26 @@ class Camera(UIPanel):
         """
         self.overlay_directions = directions
 
-    ############# UTILITY #########################
+    ################## GET ######################
+
+    def get_tile_bounds(self):
+        """
+        Get the (col, row) bounds
+        """
+        return [(int(self.start_tile_col), round(self.start_tile_col + self.columns)),
+                (int(self.start_tile_row), round(self.start_tile_row + self.rows))]
+
+    @staticmethod
+    def get_tile_col_row(id_string: str):
+        """
+        Get the (col, row) from the object_id string
+        """
+        prefix = '#tile'
+        index = id_string.index(prefix)
+        tile_string = id_string[index + len(prefix):]
+        return convert_tile_string(tile_string)
+
+    ############# ACTIONS #########################
 
     def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float]):
         """
@@ -311,23 +332,6 @@ class Camera(UIPanel):
         screen_y = int((pos[1] - self.start_tile_row) * self.tile_height)
 
         return screen_x, screen_y
-
-    def get_tile_bounds(self):
-        """
-        Get the (col, row) bounds
-        """
-        return [(int(self.start_tile_col), round(self.start_tile_col + self.columns)),
-                (int(self.start_tile_row), round(self.start_tile_row + self.rows))]
-
-    @staticmethod
-    def get_tile_col_row(id_string: str):
-        """
-        Get the (col, row) from the object_id string
-        """
-        prefix = '#tile'
-        index = id_string.index(prefix)
-        tile_string = id_string[index + len(prefix):]
-        return convert_tile_string(tile_string)
 
     def has_reached_target(self) -> bool:
         """

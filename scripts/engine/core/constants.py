@@ -20,7 +20,8 @@ TIME_PER_ROUND = 20  # amount of time in a round.
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
 BASE_MOVE_COST = 20  # amount of time spent to move.
 BASE_ACCURACY = 100
-BASE_DAMAGE = 5
+BASE_DAMAGE = 5  # base amount of damage a skill should do. used as a starting point.
+MAX_SKILLS = 5
 
 DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log event_handlers receiving events or not
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"

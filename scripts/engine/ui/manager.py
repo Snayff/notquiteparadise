@@ -7,7 +7,7 @@ from pygame_gui import UIManager
 from snecs.typedefs import EntityID
 from scripts.engine import debug, world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, SKILL_SIZE, VisualInfo, UIElement, TILE_SIZE, \
+from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, MAX_SKILLS, SKILL_SIZE, VisualInfo, UIElement, TILE_SIZE, \
     UIElementType, \
     DirectionType
 from scripts.engine.ui.basic.fonts import Font
@@ -50,10 +50,12 @@ class _UIManager:
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
+        self._element_layout: Dict[UIElementType, Tuple[object, pygame.Rect]] = {}
 
         # process config
         self._load_display_config()
         self._load_fonts()
+        self._load_element_layout()
 
         logging.info(f"UIManager initialised.")
 
@@ -108,7 +110,7 @@ class _UIManager:
             self._main_surface.blit(text, (0, y))
             y += 10
 
-    def add_ui_element(self, element_type: UIElementType, element: object):
+    def add_element(self, element_type: UIElementType, element: object):
         """
         Add ui_manager element to the list of all elements.
         """
@@ -118,13 +120,29 @@ class _UIManager:
         """
         Remove any reference to the element
         """
-        element = self.get_ui_element(element_type)
+        element = self.get_element(element_type)
 
         if element:
             del self._elements[element_type]
             element.kill()
         else:
             logging.warning(f"Tried to remove {element_type} element but key not found.")
+
+    def create_element(self, element_type: UIElementType) -> object:
+        """
+        Create the specified UI element. Object is returned for convenience, it is already held and can be returned
+        with get_element at a later date.
+        """
+        # if it already exists, kill it
+        if self.get_element(element_type):
+            self.kill_element(element_type)
+
+        # create the element from the details held in element layout
+        element_class, rect = self._element_layout.get(element_type)
+        element = element_class(rect, self.get_gui_manager())
+        self.add_element(element_type, element)
+
+        return element
 
     ##################### GET ############################
 
@@ -138,23 +156,13 @@ class _UIManager:
             logging.warning(f"Tried to get {element_type} ui element but key not found, is it init`d?")
             return None
 
-    @staticmethod
-    def get_gui_manager() -> UIManager:
+    def get_gui_manager(self) -> UIManager:
         """
         Return the pygame_gui UI Manager
         """
-        return ui._gui
+        return self._gui
 
-    def get_ui_element(self, element_type: UIElementType):
-        """
-        Get UI element. Returns nothing if not found. Won't be found if not init'd.
-        """
-        try:
-            return self._elements[element_type]
-        except KeyError:
-            return None
-
-    def get_ui_elements(self) -> Dict:
+    def get_elements(self) -> Dict:
         """
         Get all the ui_manager elements
         """
@@ -174,67 +182,39 @@ class _UIManager:
         self._gui.add_font_paths("barlow", "assets/fonts/Barlow-Light.otf")
         self.debug_font = Font().debug
 
-    def init_message_log(self):
-        """
-        Initialise the text log ui_manager element.
-        """
-        # TODO - convert to create
-        width = 400
-        height = 100
-        x = -width
-        y = 0
-        rect = pygame.Rect((x, y), (width, height))
-        message_log = MessageLog(rect, self.get_gui_manager())
-        self.add_ui_element(UIElement.MESSAGE_LOG, message_log)
+    def _load_element_layout(self):
+        # Message Log
+        message_width = 400
+        message_height = 200
+        message_x = 0
+        message_y = -message_height
 
-    def init_entity_info(self):
-        """
-        Initialise the selected entity info ui_manager element.
-        """
-        # TODO - convert to create
-        width = 240
-        height = 200
-        x = -width
-        y = -height
-        rect = pygame.Rect((x, y), (width, height))
-        info = EntityInfo(rect, self.get_gui_manager())
-        self.add_ui_element(UIElement.ENTITY_INFO, info)
+        # Skill Bar
+        skill_width = MAX_SKILLS * (SKILL_SIZE + GAP_SIZE)
+        skill_height = SKILL_SIZE
+        skill_x = (VisualInfo.BASE_WINDOW_WIDTH // 2) - (skill_width // 2)
+        skill_y = -SKILL_SIZE
 
-    def init_skill_bar(self):
-        """
-        Initialise the skill bar.
-        """
-        # TODO - convert to create
-        max_skills = 5
-        width = max_skills * (SKILL_SIZE + GAP_SIZE)
-        height = SKILL_SIZE
-        x = (VisualInfo.BASE_WINDOW_WIDTH // 2) - (width // 2)
-        y = -height
-        rect = pygame.Rect((x, y), (width, height))
-        skill_bar = SkillBar(rect, self.get_gui_manager(), max_skills)
-        self.add_ui_element(UIElement.SKILL_BAR, skill_bar)
+        # Camera
+        camera_width = VisualInfo.BASE_WINDOW_WIDTH
+        camera_height = VisualInfo.BASE_WINDOW_HEIGHT
+        camera_x = 0
+        camera_y = 0
 
-    def init_camera(self):
-        """
-        Initialise the camera.
-        """
-        # TODO - convert to create
+        # Entity Info
+        entity_info_width = 240
+        entity_info_height = 200
+        entity_info_x = -entity_info_width
+        entity_info_y = -entity_info_height
 
-        width = VisualInfo.BASE_WINDOW_WIDTH  # cols * TILE_SIZE
-        height = VisualInfo.BASE_WINDOW_HEIGHT  # rows * TILE_SIZE
-        x = 0
-        y = 0
-        rows = height // TILE_SIZE
-        cols = width // TILE_SIZE
-        rect = pygame.Rect((x, y), (width, height))
-        pos = world.get_entitys_component(world.get_player(), Position)
-        tile = world.get_tile((pos.x, pos.y))
-
-        camera = Camera(rect, self.get_gui_manager(), rows, cols, tile)
-        self.add_ui_element(UIElement.CAMERA, camera)
-
-        # initialize grid
-        camera.update_grid()
+        layout = {
+            UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
+            UIElement.ENTITY_INFO: (EntityInfo, pygame.Rect((entity_info_x, entity_info_y),
+                                                            (entity_info_width, entity_info_height))),
+            UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
+            UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
+        }
+        self._element_layout = layout
 
     def init_skill_editor(self):
         """
@@ -247,7 +227,7 @@ class _UIManager:
         y = 10
         rect = pygame.Rect((x, y), (width, height))
         editor = DataEditor(rect, self.get_gui_manager())
-        self.add_ui_element(UIElement.DATA_EDITOR, editor)
+        self.add_element(UIElement.DATA_EDITOR, editor)
 
     def create_screen_message(self, message: str, colour, size: int):
         """
@@ -264,7 +244,7 @@ class _UIManager:
         """
         Determine if target position is within the edge of the camera
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
 
         if camera:
             player_x, player_y = target_pos
@@ -283,7 +263,7 @@ class _UIManager:
         """
         Increment camera's drawn tiles in the given direction. N.B. Physical position on screen does not change.
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
 
         if camera:
             camera.move_camera(num_cols, num_rows)
@@ -294,7 +274,7 @@ class _UIManager:
         """
         Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
 
         if camera:
             pass
@@ -306,7 +286,7 @@ class _UIManager:
         """
         Update the camera game map to show what is in the tiles held by the camera.
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
 
         if camera:
             camera.update_game_map()
@@ -315,7 +295,7 @@ class _UIManager:
         """
         Update the camera's grid. Controls tile hover highlighting.
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
         if camera:
             camera.update_grid()
         else:
@@ -328,7 +308,7 @@ class _UIManager:
         Args:
             tile ():
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
 
         if camera:
             camera.set_player_tile(tile)
@@ -342,7 +322,7 @@ class _UIManager:
         Args:
             is_visible ():
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
         if camera:
             camera.set_overlay_visibility(is_visible)
         else:
@@ -352,7 +332,7 @@ class _UIManager:
         """
         Set the overlay with possible targeting directions.
         """
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
         if camera:
             camera.set_overlay_directions(directions)
         else:
@@ -365,7 +345,7 @@ class _UIManager:
         """
         start_x, start_y = start_pos
         target_x, target_y = target_pos
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
 
         # if camera has been init'd
         if camera:
@@ -416,7 +396,7 @@ class _UIManager:
         Convert from the world_objects position to the screen position. -1, -1 if camera not init'd.
         """
         # TODO - this shouldnt rely on UI, if possible.
-        camera = self.get_ui_element(UIElement.CAMERA)
+        camera = self.get_element(UIElement.CAMERA)
 
         # if camera has been init'd
         if camera:
@@ -431,7 +411,7 @@ class _UIManager:
         """
         Set the selected entity and show it.
         """
-        entity_info = self.get_ui_element(UIElement.ENTITY_INFO)
+        entity_info = self.get_element(UIElement.ENTITY_INFO)
 
         if entity_info:
             if entity:
@@ -442,19 +422,6 @@ class _UIManager:
         else:
             logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init`d?")
 
-    ################## ENTITY INFO ####################################
-
-    def hide_entity_info(self):
-        """
-        Hide the entity info ui_manager element.
-        """
-        entity_info = self.get_ui_element(UIElement.ENTITY_INFO)
-
-        if entity_info:
-            entity_info.cleanse()
-        else:
-            logging.warning(f"Tried to kill EntityInfo but key not found. Is it init`d?")
-
     ######################## MESSAGES #################################
 
     def add_to_message_log(self, message: str):
@@ -462,7 +429,7 @@ class _UIManager:
         Add a text to the message log. Includes processing of the text.
         """
         try:
-            message_log = self.get_ui_element(UIElement.MESSAGE_LOG)
+            message_log = self.get_element(UIElement.MESSAGE_LOG)
             message_log.add_message(message)
 
         except AttributeError:

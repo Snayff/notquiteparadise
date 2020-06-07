@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
-
 import pygame
 from pygame.math import Vector2
 from pygame.rect import Rect
@@ -29,10 +28,10 @@ class MessageLog(UIPanel):
 
         # complete base class init
         super().__init__(rect, LAYER_BASE_UI, manager, element_id="message_log",
-                         anchors={"left": "right",
+                         anchors={"left": "left",
                              "right": "right",
-                             "top": "top",
-                             "bottom": "top"})
+                             "top": "bottom",
+                             "bottom": "bottom"})
 
         self.text_box = self._create_text_box()
         self.add_message("Welcome to Not Quite Paradise!")

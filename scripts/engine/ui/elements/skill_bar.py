@@ -6,7 +6,7 @@ from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIPanel, UIWindow, UIButton
 
-from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, LAYER_BASE_UI, SKILL_SIZE
+from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, LAYER_BASE_UI, MAX_SKILLS, SKILL_SIZE
 
 
 class SkillBar(UIPanel):
@@ -14,18 +14,17 @@ class SkillBar(UIPanel):
     Display and hold the info for the skills in the skill bar.
     """
 
-    def __init__(self, rect: Rect, manager: UIManager, max_skills: int):
+    def __init__(self, rect: Rect, manager: UIManager):
         # state info
         self.skills: List[Optional[str]] = []
         # TODO - should be a list of individual skill buttons.
         #  skill"slots" are part of the entity, not this.
         #  use skill name as the identifier
-        self.max_skills = max_skills
         self.start_x = 0
         self.start_y = 0
 
         # init skill list
-        for skill_slot in range(0, self.max_skills):
+        for skill_slot in range(0, MAX_SKILLS):
             self.skills += [None]
 
         # complete base class init
@@ -65,10 +64,9 @@ class SkillBar(UIPanel):
 
     def show(self):
         y = self.start_y
-        max_skills = self.max_skills
         manager = self.ui_manager
 
-        for skill_slot in range(0, max_skills):
+        for skill_slot in range(0, MAX_SKILLS):
             x = self.start_x + ((SKILL_SIZE + GAP_SIZE) * skill_slot)
             skill = UIButton(relative_rect=Rect((x, y), (SKILL_SIZE, SKILL_SIZE)), text=f"{skill_slot + 1}",
                              manager=manager, container=self.get_container(), object_id=f"#skill_button{skill_slot}")

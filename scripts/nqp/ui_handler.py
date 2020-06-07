@@ -101,10 +101,10 @@ class UIHandler(Subscriber):
         """
         Initialise the UI elements
         """
-        ui.init_camera()
-        ui.init_skill_bar()
-        ui.init_message_log()
-        ui.init_entity_info()
+        ui.create_element(UIElement.CAMERA)
+        ui.create_element(UIElement.SKILL_BAR)
+        ui.create_element(UIElement.MESSAGE_LOG)
+        ui.create_element(UIElement.ENTITY_INFO)
 
         # Loop all entities with Position and Aesthetic and update their screen position
         for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
