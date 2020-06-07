@@ -6,17 +6,22 @@ from typing import NewType, Tuple
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
 VERSION = "0.99.0"
+
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
-ENTITY_BLOCKS_SIGHT = False
-IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
+LAYER_CAMERA = 1
+LAYER_BASE_UI = 2
+
+ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
 TIME_PER_ROUND = 20  # amount of time in a round.
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
 BASE_MOVE_COST = 20  # amount of time spent to move.
 BASE_ACCURACY = 100
 BASE_DAMAGE = 5
+
 DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log event_handlers receiving events or not
+IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
 
 ######################## NEW TYPES ######################################

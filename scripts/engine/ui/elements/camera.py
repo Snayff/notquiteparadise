@@ -7,9 +7,9 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
-from pygame_gui.elements import UIButton, UIImage, UIWindow
-from scripts.engine import world, utility
-from scripts.engine.core.constants import TILE_SIZE, DirectionType, Direction
+from pygame_gui.elements import UIButton, UIImage, UIPanel, UIWindow
+from scripts.engine import world
+from scripts.engine.core.constants import LAYER_CAMERA, DirectionType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp, convert_tile_string
 from scripts.engine.event import ClickTile
@@ -17,7 +17,7 @@ from scripts.engine.component import Position, Aesthetic
 from scripts.engine.world_objects.tile import Tile
 
 
-class Camera(UIWindow):
+class Camera(UIPanel):
     """
     Hold the visual info for the game Map
     """
@@ -58,7 +58,7 @@ class Camera(UIWindow):
         self.selected_tile = None  # the tile in the grid currently being selected
 
         # complete base class init
-        super().__init__(rect, manager, "camera")
+        super().__init__(rect, LAYER_CAMERA, manager, element_id="camera")
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
@@ -114,7 +114,7 @@ class Camera(UIWindow):
 
     def update_tile_properties(self):
         """
-        refreshes tile dimensions and the bounds of the map
+        Refresh tile dimensions and the map bounds.
         """
         self.tile_width = self.game_map.rect.width // self.columns
         self.tile_height = self.game_map.rect.height // self.rows
@@ -153,14 +153,14 @@ class Camera(UIWindow):
             p_col = self.player_tile.x
             p_row = self.player_tile.y
 
-            # off-setted center column and center row
+            # offset center column and center row
             cx = p_col - int(self.start_tile_col)
             cy = p_row - int(self.start_tile_row)
 
-            # set containing all the tile positions in the overlay_directions
+            # set to contain all the tile positions in the overlay_directions
             tile_positions = {(cx + dir_x, cy + dir_y) for dir_x, dir_y in self.overlay_directions}
 
-            # set containing all the tile positions in the current grid
+            # set to contain all the tile positions in the current grid
             current_positions = {self.get_tile_col_row(element.object_ids[-1]) for element in self.grid.elements}
 
             # have to redraw only if the tile positions are different
@@ -173,7 +173,7 @@ class Camera(UIWindow):
             # number of tiles
             no_of_tiles = (self.columns + 2) * (self.rows + 2)
 
-            # redraw necessary if the amount of tiles don't match
+            # redraw necessary if the amount of tiles doesn't match
             should_update = no_of_tiles != len(self.grid.elements)
 
         if should_update:
@@ -181,7 +181,7 @@ class Camera(UIWindow):
 
     def _update_ui_element_pos(self):
         """
-        updates the ui element positions of the grid - useful when moving the grid
+        Updates the ui element positions of the grid. Useful when moving the grid.
         """
         if len(self.grid.elements) == 0:
             return
@@ -190,7 +190,7 @@ class Camera(UIWindow):
         dx = int(self.start_tile_col) - self.start_tile_col
         dy = int(self.start_tile_row) - self.start_tile_row
 
-        # Checking whether an update is necessary
+        ## Checking whether an update is necessary
         # get the first element
         element0 = self.grid.elements[0]
 
@@ -224,11 +224,11 @@ class Camera(UIWindow):
         """
         Clears and redraws a grid of the tiles provided
         """
-        # clear the current grid
-        self.grid.clear()
-
         manager = self.ui_manager
         grid = self.grid
+
+        # clear the current grid
+        grid.clear()
 
         # for all the tile positions provided
         for col, row in tile_positions:

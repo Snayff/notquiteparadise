@@ -43,7 +43,7 @@ from scripts.nqp.ui_handler import UIHandler
 # mypy no errors
 # sphinx config pointing to correct files
 # manual sphinx docs up to date
-# requirement.txt up to date
+# isort cleaned up imports
 
 
 ####################################################################################################

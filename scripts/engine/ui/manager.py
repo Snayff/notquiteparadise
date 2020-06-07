@@ -216,12 +216,13 @@ class _UIManager:
         Initialise the camera.
         """
         # TODO - convert to create and move details to nqp
-        rows = 10
-        cols = 15
-        width = cols * TILE_SIZE
-        height = rows * TILE_SIZE
-        x = 5
-        y = 5
+
+        width = VisualInfo.BASE_WINDOW_WIDTH  # cols * TILE_SIZE
+        height = VisualInfo.BASE_WINDOW_HEIGHT  # rows * TILE_SIZE
+        x = 0
+        y = 0
+        rows = height // TILE_SIZE
+        cols = width // TILE_SIZE
         rect = pygame.Rect((x, y), (width, height))
         pos = world.get_entitys_component(world.get_player(), Position)
         tile = world.get_tile((pos.x, pos.y))
