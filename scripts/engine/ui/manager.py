@@ -7,7 +7,9 @@ from pygame_gui import UIManager
 from snecs.typedefs import EntityID
 from scripts.engine import debug, world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import VisualInfo, UIElement, TILE_SIZE, UIElementType, DirectionType
+from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, SKILL_SIZE, VisualInfo, UIElement, TILE_SIZE, \
+    UIElementType, \
+    DirectionType
 from scripts.engine.ui.basic.fonts import Font
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
@@ -203,12 +205,13 @@ class _UIManager:
         Initialise the skill bar.
         """
         # TODO - convert to create and move details to nqp
-        width = 80
-        height = int(VisualInfo.BASE_WINDOW_HEIGHT / 2)
-        x = VisualInfo.BASE_WINDOW_WIDTH - width
-        y = 2
+        max_skills = 5
+        width = max_skills * (SKILL_SIZE + GAP_SIZE)
+        height = SKILL_SIZE
+        x = (VisualInfo.BASE_WINDOW_WIDTH // 2) - (width // 2)
+        y = -height
         rect = pygame.Rect((x, y), (width, height))
-        skill_bar = SkillBar(rect, self.get_gui_manager())
+        skill_bar = SkillBar(rect, self.get_gui_manager(), max_skills)
         self.add_ui_element(UIElement.SKILL_BAR, skill_bar)
 
     def init_camera(self):

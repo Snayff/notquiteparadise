@@ -2,44 +2,41 @@ from __future__ import annotations
 
 import logging
 from typing import List, Optional
-
 from pygame.rect import Rect
 from pygame_gui import UIManager
-from pygame_gui.elements import UIWindow, UIButton
+from pygame_gui.elements import UIPanel, UIWindow, UIButton
+
+from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, LAYER_BASE_UI, SKILL_SIZE
 
 
-class SkillBar(UIWindow):
+class SkillBar(UIPanel):
     """
     Display and hold the info for the skills in the skill bar.
     """
 
-    def __init__(self, rect: Rect, manager: UIManager):
+    def __init__(self, rect: Rect, manager: UIManager, max_skills: int):
         # state info
         self.skills: List[Optional[str]] = []
         # TODO - should be a list of individual skill buttons.
         #  skill"slots" are part of the entity, not this.
         #  use skill name as the identifier
-        self.max_skills = 5
+        self.max_skills = max_skills
+        self.start_x = 0
+        self.start_y = 0
 
         # init skill list
         for skill_slot in range(0, self.max_skills):
             self.skills += [None]
 
         # complete base class init
-        super().__init__(rect, manager, "skill_bar")
+        super().__init__(rect, LAYER_BASE_UI, manager, element_id="skill_bar",
+                         anchors={'left': 'left',
+                             'right': 'right',
+                             'top': 'bottom',
+                             'bottom': 'bottom'})
 
-        # create skill primary_buttons
-        start_x = 5
-        start_y = 5
-        width = 64
-        height = 64
-        gap = 2
-
-        for skill_slot in range(0, self.max_skills):
-            x = start_x
-            y = start_y + (height * skill_slot) + (gap * skill_slot)
-            skill = UIButton(relative_rect=Rect((x, y), (width, height)), text=f"{skill_slot}",  manager=manager,
-                             container=self.get_container(), object_id=f"#skill_button{skill_slot}")
+        # show self
+        self.show()
 
         # confirm init complete
         logging.debug(f"SkillBar initialised.")
@@ -56,11 +53,24 @@ class SkillBar(UIWindow):
         """
         pass
 
+    ############### GET / SET ################
+
     def set_skill(self, slot_number, skill):
         """
         Set skill in the skill bar slot
         """
         self.skills[slot_number] = skill
 
+    ############### ACTIONS #################
+
+    def show(self):
+        y = self.start_y
+        max_skills = self.max_skills
+        manager = self.ui_manager
+
+        for skill_slot in range(0, max_skills):
+            x = self.start_x + ((SKILL_SIZE + GAP_SIZE) * skill_slot)
+            skill = UIButton(relative_rect=Rect((x, y), (SKILL_SIZE, SKILL_SIZE)), text=f"{skill_slot + 1}",
+                             manager=manager, container=self.get_container(), object_id=f"#skill_button{skill_slot}")
 
 

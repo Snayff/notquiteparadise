@@ -7,7 +7,8 @@ from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIWindow
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.core.constants import LAYER_BASE_UI, PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, INFINITE
+from scripts.engine.core.constants import GAP_SIZE, LAYER_BASE_UI, PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, \
+    INFINITE
 from scripts.engine.utility import get_class_members
 from scripts.engine.component import Aesthetic, Identity, Resources, Afflictions
 
@@ -18,8 +19,6 @@ class EntityInfo(UIPanel):
     """
 
     def __init__(self, rect: pygame.Rect, manager: UIManager):
-        self.gui_manager = manager
-
         # FIXME - entity info  doesn't update when entity info changes.
 
         # sections
@@ -28,7 +27,6 @@ class EntityInfo(UIPanel):
         self.info_section: Optional[UITextBox] = None
 
         # data
-        self.gap_between_sections = 2
         self.indent = 3
         self.entity_image_height = 32
         self.entity_image_width = 32
@@ -40,6 +38,9 @@ class EntityInfo(UIPanel):
                              'right': 'right',
                              'top': 'bottom',
                              'bottom': 'bottom'})
+
+        # show self
+        self.show()
 
         # confirm init complete
         logging.debug(f"Entity Info initialised.")
@@ -113,7 +114,7 @@ class EntityInfo(UIPanel):
         else:
             image = utility.get_image(IMAGE_NOT_FOUND_PATH)
 
-        entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
+        entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.ui_manager,
                                container=self.get_container(), object_id="#entity_image")
 
         return entity_image
@@ -123,7 +124,7 @@ class EntityInfo(UIPanel):
         Create the core info section.
         """
         entity = self.selected_entity
-        gap = "|-------------------| <br>"
+        section_break = "|-------------------| <br>"
 
         if entity:
             text = ""
@@ -137,8 +138,8 @@ class EntityInfo(UIPanel):
                 text += f"Current Health: {resources.health}" + "<br>"
                 text += f"Current Stamina: {resources.stamina}" + "<br>"
 
-            # add gap
-            text += gap
+            # add section_break
+            text += section_break
 
             # afflictions
             afflictions = world.get_entitys_component(entity, Afflictions)
@@ -151,8 +152,8 @@ class EntityInfo(UIPanel):
             else:
                 text += "Not afflicted." + "<br>"
 
-            # add gap
-            text += gap
+            # add section_break
+            text += section_break
 
             # stats info
             stats = world.create_combat_stats(entity)
@@ -169,8 +170,8 @@ class EntityInfo(UIPanel):
                 except AttributeError:
                     logging.warning(f"Attribute {name} not found for EntityInfo.")
 
-            # add gap
-            text += gap
+            # add section_break
+            text += section_break
 
             secondary_stats = get_class_members(SecondaryStat)
             for name in secondary_stats:
@@ -189,12 +190,12 @@ class EntityInfo(UIPanel):
             text = ""
 
         x = 0
-        y = (self.gap_between_sections * 2) + self.indent + self.entity_image_height
+        y = (GAP_SIZE * 2) + self.indent + self.entity_image_height
         width = self.rect.width - (self.indent * 2)
         height = self.core_info_height
 
         rect = pygame.Rect((x, y), (width, height))
-        core_info = UITextBox(html_text=text, relative_rect=rect, manager=self.gui_manager,
+        core_info = UITextBox(html_text=text, relative_rect=rect, manager=self.ui_manager,
                               wrap_to_height=False, layer_starting_height=1, object_id="#info_section",
                               container=self.get_container())
         return core_info
