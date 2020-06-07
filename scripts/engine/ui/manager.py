@@ -178,11 +178,11 @@ class _UIManager:
         """
         Initialise the text log ui_manager element.
         """
-        # TODO - convert to create and move details to nqp
+        # TODO - convert to create
         width = 400
         height = 100
-        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
-        y = VisualInfo.BASE_WINDOW_HEIGHT - height - 5
+        x = -width
+        y = 0
         rect = pygame.Rect((x, y), (width, height))
         message_log = MessageLog(rect, self.get_gui_manager())
         self.add_ui_element(UIElement.MESSAGE_LOG, message_log)
@@ -191,7 +191,7 @@ class _UIManager:
         """
         Initialise the selected entity info ui_manager element.
         """
-        # TODO - convert to create and move details to nqp
+        # TODO - convert to create
         width = 240
         height = 200
         x = -width
@@ -204,7 +204,7 @@ class _UIManager:
         """
         Initialise the skill bar.
         """
-        # TODO - convert to create and move details to nqp
+        # TODO - convert to create
         max_skills = 5
         width = max_skills * (SKILL_SIZE + GAP_SIZE)
         height = SKILL_SIZE
@@ -218,7 +218,7 @@ class _UIManager:
         """
         Initialise the camera.
         """
-        # TODO - convert to create and move details to nqp
+        # TODO - convert to create
 
         width = VisualInfo.BASE_WINDOW_WIDTH  # cols * TILE_SIZE
         height = VisualInfo.BASE_WINDOW_HEIGHT  # rows * TILE_SIZE

@@ -34,10 +34,10 @@ class EntityInfo(UIPanel):
 
         # complete base class init
         super().__init__(rect, LAYER_BASE_UI, manager, element_id="entity_info",
-                         anchors={'left': 'right',
-                             'right': 'right',
-                             'top': 'bottom',
-                             'bottom': 'bottom'})
+                         anchors={"left": "right",
+                             "right": "right",
+                             "top": "bottom",
+                             "bottom": "bottom"})
 
         # show self
         self.show()
@@ -76,8 +76,8 @@ class EntityInfo(UIPanel):
             self.cleanse()
 
             # create the various boxes for the info
-            self.entity_image = self.create_entity_image_section()
-            self.info_section = self.create_info_section()
+            self.entity_image = self._create_entity_image_section()
+            self.info_section = self._create_info_section()
 
     def cleanse(self):
         """
@@ -93,7 +93,7 @@ class EntityInfo(UIPanel):
 
     ############## CREATE ########################
 
-    def create_entity_image_section(self) -> UIImage:
+    def _create_entity_image_section(self) -> UIImage:
         """
         Create the image section.
         """
@@ -119,7 +119,7 @@ class EntityInfo(UIPanel):
 
         return entity_image
 
-    def create_info_section(self) -> UITextBox:
+    def _create_info_section(self) -> UITextBox:
         """
         Create the core info section.
         """

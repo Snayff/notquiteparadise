@@ -30,10 +30,10 @@ class SkillBar(UIPanel):
 
         # complete base class init
         super().__init__(rect, LAYER_BASE_UI, manager, element_id="skill_bar",
-                         anchors={'left': 'left',
-                             'right': 'right',
-                             'top': 'bottom',
-                             'bottom': 'bottom'})
+                         anchors={"left": "left",
+                             "right": "right",
+                             "top": "bottom",
+                             "bottom": "bottom"})
 
         # show self
         self.show()
