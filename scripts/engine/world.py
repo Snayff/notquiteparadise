@@ -303,7 +303,6 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
         logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
 
 
-
 def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List[Tile]:
     """
     Get multiple tiles based on starting position and coordinates given. Coords are relative  to start

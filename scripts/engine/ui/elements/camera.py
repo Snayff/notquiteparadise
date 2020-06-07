@@ -220,7 +220,6 @@ class Camera(UIWindow):
                 # set updated position
                 element.set_relative_position(updated_pos)
 
-
     def _draw_grid(self, tile_positions: Iterable):
         """
         Clears and redraws a grid of the tiles provided
