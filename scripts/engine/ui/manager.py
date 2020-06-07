@@ -190,10 +190,10 @@ class _UIManager:
         Initialise the selected entity info ui_manager element.
         """
         # TODO - convert to create and move details to nqp
-        width = 280
-        height = 500
-        x = VisualInfo.BASE_WINDOW_WIDTH - width - 5
-        y = (VisualInfo.BASE_WINDOW_HEIGHT / 2) - 50
+        width = 240
+        height = 200
+        x = -width
+        y = -height
         rect = pygame.Rect((x, y), (width, height))
         info = EntityInfo(rect, self.get_gui_manager())
         self.add_ui_element(UIElement.ENTITY_INFO, info)

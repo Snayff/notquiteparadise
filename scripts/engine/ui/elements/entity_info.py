@@ -3,16 +3,16 @@ from typing import Optional
 
 import pygame
 from pygame_gui import UIManager
-from pygame_gui.elements import UIImage, UITextBox, UIWindow
+from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIWindow
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.core.constants import PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, INFINITE
+from scripts.engine.core.constants import LAYER_BASE_UI, PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, INFINITE
 from scripts.engine.utility import get_class_members
 from scripts.engine.component import Aesthetic, Identity, Resources, Afflictions
 
 
-class EntityInfo(UIWindow):
+class EntityInfo(UIPanel):
     """
     Hold text relating to the game's events, to display to the player.
     """
@@ -32,10 +32,14 @@ class EntityInfo(UIWindow):
         self.indent = 3
         self.entity_image_height = 32
         self.entity_image_width = 32
-        self.core_info_height = 300
+        self.core_info_height = rect.height - self.entity_image_height
 
         # complete base class init
-        super().__init__(rect, manager, "entity_info")
+        super().__init__(rect, LAYER_BASE_UI, manager, element_id="entity_info",
+                         anchors={'left': 'right',
+                             'right': 'right',
+                             'top': 'bottom',
+                             'bottom': 'bottom'})
 
         # confirm init complete
         logging.debug(f"Entity Info initialised.")
@@ -52,11 +56,15 @@ class EntityInfo(UIWindow):
         """
         pass
 
+    ############## GET / SET ########################
+
     def set_entity(self, entity: EntityID):
         """
         Set the selected entity to show the info for that entity.
         """
         self.selected_entity = entity
+
+    ############### ACTIONS #########################
 
     def show(self):
         """
@@ -82,6 +90,8 @@ class EntityInfo(UIWindow):
             self.info_section.kill()
             self.info_section = None
 
+    ############## CREATE ########################
+
     def create_entity_image_section(self) -> UIImage:
         """
         Create the image section.
@@ -89,7 +99,7 @@ class EntityInfo(UIWindow):
         image_width = self.entity_image_width
         image_height = self.entity_image_height
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
-        rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
+        rect = pygame.Rect((centre_draw_x, 0), (image_width, image_height))
         entity = self.selected_entity
 
         # get the image for the entity
@@ -113,7 +123,7 @@ class EntityInfo(UIWindow):
         Create the core info section.
         """
         entity = self.selected_entity
-        gap = "|-----------------------| <br>"
+        gap = "|-------------------| <br>"
 
         if entity:
             text = ""
@@ -178,7 +188,7 @@ class EntityInfo(UIWindow):
         else:
             text = ""
 
-        x = self.indent
+        x = 0
         y = (self.gap_between_sections * 2) + self.indent + self.entity_image_height
         width = self.rect.width - (self.indent * 2)
         height = self.core_info_height

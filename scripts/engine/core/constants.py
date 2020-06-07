@@ -11,7 +11,7 @@ TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
 LAYER_CAMERA = 1
-LAYER_BASE_UI = 2
+LAYER_BASE_UI = 4
 
 ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
 TIME_PER_ROUND = 20  # amount of time in a round.
