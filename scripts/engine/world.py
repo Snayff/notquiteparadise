@@ -850,7 +850,7 @@ def is_tile_in_fov(x: int, y: int, fov_map) -> bool:
     return tcod.map_is_in_fov(fov_map, x, y)
 
 
-def can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
+def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
     """
     Check if entity can afford the resource cost
     """
@@ -865,6 +865,49 @@ def can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool
     else:
         logging.info(f"'{name}' cannot afford cost.")
         return False
+
+
+def can_use_skill(entity: EntityID, skill_name: str) -> bool:
+    """
+    Check if entity can use skill. Checks cooldown and resource affordability.
+    """
+    player = get_player()
+    skill = get_known_skill(entity, skill_name)
+
+    # if we dont have skill we cant do anything
+    if not skill:
+        logging.warning(f"'{get_name(entity)}' tried to use {skill_name} but doesnt know it.")
+        return False
+
+    # flags
+    can_afford = not_on_cooldown = False
+
+    can_afford = _can_afford_cost(entity, skill.resource_type, skill.resource_cost)
+
+    knowledge = get_entitys_component(entity, Knowledge)
+    cooldown = knowledge.skills[skill_name]["cooldown"]
+    if cooldown <= 0:
+        not_on_cooldown = True
+
+    if can_afford and not_on_cooldown:
+        return True
+
+    # log/inform lack of affordability
+    if not can_afford:
+        # is it the player that can't afford it?
+        if entity == player:
+            publisher.publish(MessageEvent(MessageType.LOG, "I cannot afford to do that."))
+        else:
+            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, which they can`t afford.")
+
+    # log/inform on cooldown
+    if not not_on_cooldown:
+        # is it the player that's can't afford it?
+        if entity == player:
+            publisher.publish(MessageEvent(MessageType.LOG, "I'm not ready to do that, yet."))
+        else:
+            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait {cooldown} more "
+                            f"rounds.")
 
 
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############

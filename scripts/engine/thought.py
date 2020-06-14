@@ -47,7 +47,7 @@ class ProjectileBehaviour(AIBehaviour):
             if tile:
                 if world.use_skill(entity, Move, tile, self.data.direction):
                     self.distance_travelled += 1
-                    end turn
+                    world.end_turn(entity, self.data.speed)
         else:
             # we have reached the limit, process expiry and then die
             if self.data.expiry_type == ProjectileExpiry.ACTIVATE:

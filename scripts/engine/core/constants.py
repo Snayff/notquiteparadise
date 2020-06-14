@@ -355,8 +355,8 @@ class ProjectileExpiry(SimpleNamespace):
 
 class ProjectileSpeed(SimpleNamespace):
     """
-    The speed at which a projectile travels. How much time to move a tile.
+    The speed at which a projectile travels; how much time to move a tile.
     """
     # TODO - externalise the values
-    SLOW = ProjectileSpeedType(10)
-    FAST = ProjectileSpeedType(30)
+    SLOW = ProjectileSpeedType(int(BASE_MOVE_COST / 2))
+    FAST = ProjectileSpeedType(int(SLOW / 3))

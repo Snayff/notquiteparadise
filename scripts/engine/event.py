@@ -12,19 +12,6 @@ if TYPE_CHECKING:
 
 ####################### ENTITY ############################################
 
-class WantToUseSkillEvent(Event):
-    """
-    Event for entity wanting to use a skill. Should be used for all instances where you want checks to be completed
-    before using the skill.
-    """
-    def __init__(self, entity_using_skill: EntityID, skill_name: str, start_pos: Tuple[int, int],
-            direction: Optional[DirectionType] = None):
-        Event.__init__(self, "WANT_TO_USE_SKILL", EventTopic.ENTITY)
-        self.entity = entity_using_skill
-        self.direction = direction
-        self.skill_name = skill_name
-        self.start_pos = start_pos
-
 
 class UseSkillEvent(Event):
     """
@@ -59,15 +46,6 @@ class ExitGameEvent(Event):
     def __init__(self):
         Event.__init__(self, "EXIT", EventTopic.GAME)
 
-
-class ChangeGameStateEvent(Event):
-    """
-    Event to change the current game state
-    """
-    def __init__(self, new_game_state: GameStateType, skill_to_be_used: str = None):
-        Event.__init__(self, "CHANGE_GAME_STATE", EventTopic.GAME)
-        self.new_game_state = new_game_state
-        self.skill_to_be_used = skill_to_be_used
 
 
 class EndRoundEvent(Event):

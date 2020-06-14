@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import logging
+
 import pytweening
 from scripts.engine import state, utility, world
 from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING, Optional, cast
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
-    TravelMethod, BASE_MOVE_COST, DirectionType, UIElement
+    TargetingMethod, TravelMethod, BASE_MOVE_COST, DirectionType, UIElement
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import ExitGameEvent, WantToUseSkillEvent, ChangeGameStateEvent
+from scripts.engine.event import ExitGameEvent, ChangeGameStateEvent
 from scripts.engine.utility import is_close
 from scripts.nqp.skills import Move
 
@@ -200,30 +202,34 @@ def _process_player_turn_intents(intent: InputIntentType):
     """
     player = world.get_player()
 
-    # if player exists, which it should, because we're in PLAYER_TURN game state
-    if player:
-        position = world.get_entitys_component(player, Position)
-
-        # Player movement
-        direction = _get_pressed_direction(intent)
-        possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
-        if direction in possible_moves and position:
-            tile = world.get_tile((position.x, position.y))
-            if tile:
+    position = world.get_entitys_component(player, Position)
+    if position:
+        tile = world.get_tile((position.x, position.y))
+        if tile:
+            ## Player movement
+            direction = _get_pressed_direction(intent)
+            possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+            if direction in possible_moves:
                 if world.use_skill(player, Move, tile, direction):
-                    end turn
+                    world.end_turn(player, Move.time_cost)
 
-        # Use a skill
-        skill_name = _get_pressed_skills_name(intent)
-        if skill_name and position:
-            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y)))
+            ## Use a skill
+            skill_name = _get_pressed_skills_name(intent)
 
-            # TODO - uncomment when targeting working again
-            # position = existence.get_entitys_component(player, Position)
-            # # None to trigger targeting mode
-            # publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
+            # is skill ready to use
+            if world.can_use_skill(player, skill_name):
+                skill = world.get_known_skill(player, skill_name)
 
-    # activate the skill editor
+                if skill:
+                    # if auto targeting use the skill
+                    if skill.targeting_method == TargetingMethod.AUTO:
+                        if world.use_skill(player, Move, tile, direction):
+                            world.end_turn(player, Move.time_cost)
+                    else:
+                        state.set_new(GameState.TARGETING_MODE)
+                        state.set_active_skill(skill_name)
+
+    ## activate the skill editor
     if intent == InputIntent.DEV_TOGGLE:
         publisher.publish(ChangeGameStateEvent(GameState.DEV_MODE))
 
@@ -233,17 +239,32 @@ def _process_targeting_mode_intents(intent):
     Process intents for the player turn game state.
     """
     player = world.get_player()
+    position = world.get_entitys_component(player, Position)
+    active_skill_name = state.get_active_skill()
 
-    # Cancel use
+    ## Cancel use
     if intent == InputIntent.CANCEL:
         publisher.publish(ChangeGameStateEvent(state.get_previous()))
 
-    # Use a skill
-    skill_name = _get_pressed_skills_name(intent)
-    if skill_name:
-        position = world.get_entitys_component(player, Position)
-        # None to trigger targeting mode
-        publisher.publish(WantToUseSkillEvent(player, skill_name, (position.y, position.x), None))
+    ## Select new skill
+    pressed_skill_name = _get_pressed_skills_name(intent)
+    if pressed_skill_name:
+
+        # if skill pressed doesn't match skill already being targeted
+        if pressed_skill_name != active_skill_name:
+            # reactivate targeting mode with the new skill
+            if world.can_use_skill(player, pressed_skill_name):
+                state.set_active_skill(pressed_skill_name)
+
+    ## Use skill
+    direction = _get_pressed_direction(intent)
+    skill = world.get_known_skill(player, active_skill_name)
+    possible_moves = skill.target_directions
+    if direction in possible_moves and position and skill:
+        tile = world.get_tile((position.x, position.y))
+        if tile:
+            if world.use_skill(player, Move, tile, direction):
+                world.end_turn(player, Move.time_cost)
 
 
 def _process_dev_mode_intents(intent):

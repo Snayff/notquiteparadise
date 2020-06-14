@@ -7,7 +7,7 @@ from scripts.engine.core.constants import Effect, Direction
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.library import library
 from scripts.engine.component import Position, IsGod
-from scripts.engine.event import UseSkillEvent, WantToUseSkillEvent
+from scripts.engine.event import UseSkillEvent
 
 if TYPE_CHECKING:
     pass
@@ -76,7 +76,10 @@ class GodHandler(Subscriber):
 
         for god_entity_id, intervention_name in interventions:
             # create use skill event with direction of centre
-            publisher.publish(WantToUseSkillEvent(god_entity_id, intervention_name, (position.x, position.y),
-                                            Direction.CENTRE))
+            if world.can_use_skill(god_entity_id, intervention_name):
+                skill = world.get_known_skill(god_entity_id, intervention_name)
+                tile = world.get_tile((position.x, position.y))
+                world.use_skill(god_entity_id, skill, tile, Direction.CENTRE)
+
 
 

@@ -14,7 +14,6 @@ from snecs.world import default_world
 from scripts.engine import state, world, chapter, key, debug
 from scripts.engine.core.constants import GameState, UIElement, VERSION, EventTopic
 from scripts.engine.core.event_core import event_hub, publisher
-from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import ui
 from scripts.nqp import processors
 from scripts.nqp.entity_handler import EntityHandler
@@ -230,7 +229,8 @@ def initialise_game():
     # create a god
     god = world.create_god("the_small_gods")
 
-    publisher.publish(ChangeGameStateEvent(GameState.GAME_INITIALISING))
+    # prompt turn actions
+    world.end_turn(player, 0)
 
 
 def initialise_event_handlers():
