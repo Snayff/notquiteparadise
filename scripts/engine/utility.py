@@ -108,14 +108,12 @@ def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> flo
     """
     Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1.
     """
-    amount = clamp(lerp_fraction, 0, 1)
+    clamped_lerp_fraction = clamp(lerp_fraction, 0, 1)
 
-    # print(f"Initial:{initial_value}, Target:{target_value}, Lerp Amount:{amount}")
-
-    if amount >= 0.99:
+    if clamped_lerp_fraction >= 0.99:
         return target_value
     else:
-        return ((1 - amount) * initial_value) + (amount * target_value)
+        return initial_value * (1 - clamped_lerp_fraction) + target_value * clamped_lerp_fraction
 
 
 def clamp(value, min_value, max_value):

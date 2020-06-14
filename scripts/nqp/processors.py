@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import logging
 import pytweening
-
-from scripts.engine import utility, world
+from scripts.engine import state, utility, world
 from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING, Optional, cast
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
@@ -16,9 +14,9 @@ if TYPE_CHECKING:
     from typing import Type, Tuple
 
 
-def process_all(delta_time: float):
+def process_realtime_updates(delta_time: float):
     """
-    Process all processors. N.B. does not include processing intent.
+    Fire realtime processors.
     """
     _process_camera_update(delta_time)
     _process_aesthetic_update(delta_time)
@@ -26,7 +24,7 @@ def process_all(delta_time: float):
 
 def _process_camera_update(delta_time: float):
     """
-
+    Update realtime camera timers, such as the camera scrolling to reveal new tiles.
     """
     camera = world.ui.get_element(UIElement.CAMERA)
 
@@ -59,9 +57,6 @@ def _process_camera_update(delta_time: float):
 
             camera.set_start_col_row((col_, row_))
 
-        # update grid to reflect any changes if any
-        camera.update_grid()
-
     # not moving
     else:
         camera.current_sprite_duration = 0
@@ -69,7 +64,7 @@ def _process_camera_update(delta_time: float):
 
 def _process_aesthetic_update(delta_time: float):
     """
-    Update real-time timers on entities
+    Update real-time timers on entities, such as entity animations.
     """
     # move entities screen position towards target
     for entity, (aesthetic, ) in world.get_components([Aesthetic]):
@@ -102,10 +97,6 @@ def _process_aesthetic_update(delta_time: float):
                 aesthetic.screen_x = utility.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
                 aesthetic.screen_y = utility.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
 
-            camera = world.ui.get_element(UIElement.CAMERA)
-
-            # update camera grid to reflect any changes based on player's movement
-            camera.update_grid()
         # not moving so reset to idle
         else:
             aesthetic.current_sprite = aesthetic.sprites.idle
@@ -242,7 +233,7 @@ def _process_targeting_mode_intents(intent):
 
     # Cancel use
     if intent == InputIntent.CANCEL:
-        publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
+        publisher.publish(ChangeGameStateEvent(state.get_previous()))
 
     # Use a skill
     skill_name = _get_pressed_skills_name(intent)
@@ -257,4 +248,4 @@ def _process_dev_mode_intents(intent):
     Process intents for the dev mode game state.
     """
     if intent == InputIntent.DEV_TOGGLE:
-        publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
+        publisher.publish(ChangeGameStateEvent(state.get_previous()))

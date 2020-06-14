@@ -148,8 +148,6 @@ class Camera(UIPanel):
         """
         Update the tile grid to only have options in line with the tiles set OR the overlay
         """
-        should_update = False
-
         if self.is_overlay_visible:
 
             # player column and row
@@ -163,24 +161,18 @@ class Camera(UIPanel):
             # set to contain all the tile positions in the overlay_directions
             tile_positions = {(cx + dir_x, cy + dir_y) for dir_x, dir_y in self.overlay_directions}
 
-            # set to contain all the tile positions in the current grid
-            current_positions = {self.get_tile_col_row(element.object_ids[-1]) for element in self.grid.elements}
-
-            # have to redraw only if the tile positions are different
-            should_update = tile_positions != current_positions
-
         else:
+            tile_positions = []
+
             # tile positions generator - contains 1 layer of padding to ensure smooth rollover
-            tile_positions = ((x, y) for x in range(-1, self.columns + 1) for y in range(-1, self.rows + 1))
+            for x in range(-1, self.columns + 1):
+                for y in range(-1, self.rows + 1):
+                    # check is in fov
+                    tile = world.get_tile((x, y))
+                    if tile.is_visible:
+                        tile_positions.append((x, y))
 
-            # number of tiles
-            no_of_tiles = (self.columns + 2) * (self.rows + 2)
-
-            # redraw necessary if the amount of tiles doesn't match
-            should_update = no_of_tiles != len(self.grid.elements)
-
-        if should_update:
-            self._draw_grid(tile_positions)
+        self._draw_grid(tile_positions)
 
     def _update_ui_element_pos(self):
         """
@@ -235,20 +227,15 @@ class Camera(UIPanel):
 
         # for all the tile positions provided
         for col, row in tile_positions:
-            # FIXME - this tanks FPS - why?
-            # check in fov
-            # tile = world.get_tile((col, row))
-            # if tile.is_visible:
+            # find the screen position
+            screen_x, screen_y = self._grid_to_screen_position((col, row))
 
-                # find the screen position
-                screen_x, screen_y = self._grid_to_screen_position((col, row))
+            # create a rect
+            tile_rect = Rect(screen_x, screen_y, TILE_SIZE, TILE_SIZE)
 
-                # create a rect
-                tile_rect = Rect(screen_x, screen_y, TILE_SIZE, TILE_SIZE)
-
-                # draw a button
-                UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
-                         object_id=f"#tile{col},{row}")
+            # draw a button
+            UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
+                     object_id=f"#tile{col},{row}")
 
     ############## SET #########################
 

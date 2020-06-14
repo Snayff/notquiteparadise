@@ -116,7 +116,7 @@ def game_loop():
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        processors.process_all(delta_time)
+        processors.process_realtime_updates(delta_time)
         debug.update()
         ui.update(delta_time)
         event_hub.update()

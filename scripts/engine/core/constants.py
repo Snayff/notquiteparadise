@@ -87,7 +87,7 @@ class GameState(SimpleNamespace):
     TARGETING_MODE = GameStateType(4)
     EXIT_GAME = GameStateType(5)
     GAME_INITIALISING = GameStateType(6)
-    NEW_TURN = GameStateType(7)
+    NEW_TURN = GameStateType(7)  # interim stage to handle  changes between stages
     DEV_MODE = GameStateType(8)
     PREVIOUS = GameStateType(9)
 

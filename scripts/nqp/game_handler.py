@@ -63,10 +63,6 @@ class GameHandler(Subscriber):
             else:
                 logging.warning("Entered targeting mode with no active skill.")
 
-        # PREVIOUS must be last as it overwrites new_game_state
-        elif new_game_state == GameState.PREVIOUS:
-            new_game_state = state.get_previous()
-
         # update the game state to the intended state
         if new_game_state != current_game_state:
             state.set_new(new_game_state)
