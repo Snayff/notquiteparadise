@@ -9,7 +9,7 @@ from scripts.engine.component import Blocking, Aesthetic, FOV, HasCombatStats, P
 from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, PrimaryStatType, DamageTypeType, Direction, TargetTag, \
     DirectionType
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import EntityCollisionEvent, TerrainCollisionEvent, DieEvent
+from scripts.engine.event import EntityCollisionEvent, TerrainCollisionEvent
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -60,7 +60,7 @@ class DamageEffect(Effect):
         if world.apply_damage(self.target, damage):
             defenders_resources = world.get_entitys_component(self.target, Resources)
             if damage >= defenders_resources.health:
-                publisher.publish(DieEvent(self.target))
+                world.kill_entity(self.target)
 
             return self.success_effects
         else:

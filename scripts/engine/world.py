@@ -1047,18 +1047,37 @@ def learn_skill(entity: EntityID, skill_name: str) -> bool:
 
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
 
+def kill_entity(entity: EntityID):
+    turn_queue = chapter.get_turn_queue()
+
+    # if  not player
+    if entity != get_player():
+        # if turn holder create new queue without them
+        if entity == chapter.get_turn_holder():
+            chapter.rebuild_turn_queue(entity)
+
+            # ensure the game state reflects the new queue
+            chapter.next_turn()
+
+        elif entity in turn_queue:
+            # remove from turn queue
+            turn_queue.pop(entity)
+
+        # delete from world
+        delete(entity)
+    else:
+        # TODO add player death
+        # placeholder for player death
+        publisher.publish(MessageEvent(MessageType.LOG, "I should have died just then."))
+
+
 def end_turn(entity: EntityID, time_spent: int):
+    """
+    Spend an entities time, progress time, move to next acting entity in queue.
+    """
     if entity == chapter.get_turn_holder():
         spend_time(entity, time_spent)
         chapter.next_turn()
-
-        # if turn holder is the player then update to player turn
-        if chapter.get_turn_holder() == get_player():
-            state.set_new(GameState.PLAYER_TURN)
-        # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
-        else:
-            state.set_new(GameState.NPC_TURN)
-
     else:
         name = get_name(entity)
         logging.warning(f"Tried to end {name}'s turn but they're not turn holder.")

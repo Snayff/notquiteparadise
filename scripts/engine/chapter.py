@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
-from scripts.engine import world
+from scripts.engine import state, world
 from scripts.engine.component import Resources, Identity, Tracked
-from scripts.engine.core.constants import TIME_PER_ROUND
+from scripts.engine.core.constants import GameState, TIME_PER_ROUND
 from scripts.engine.core.event_core import publisher
 from scripts.engine.core.store import store
 from scripts.engine.event import EndRoundEvent
@@ -46,6 +46,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
 def next_turn():
     """
     Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.
+    Update game state to reflect turn holder.
     """
     logging.info(f"Moving to the next turn...")
 
@@ -68,6 +69,14 @@ def next_turn():
         next_round(time_progressed)
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
+
+    # if turn holder is the player then update to player turn
+    if turn_holder == world.get_player():
+        state.set_new(GameState.PLAYER_TURN)
+    else:
+        #  update to enemy turn
+        state.set_new(GameState.NPC_TURN)
+
 
     # log new turn holder
     name = world.get_name(turn_holder)

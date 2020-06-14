@@ -10,32 +10,6 @@ if TYPE_CHECKING:
     from scripts.engine.world_objects.tile import Tile
 
 
-####################### ENTITY ############################################
-
-
-class UseSkillEvent(Event):
-    """
-    Event for entity using a skill. Should only be called as a result of WantToUseSkillEvent being processed
-    successfully.
-    """
-    def __init__(self, entity_using_skill: EntityID, skill_name: str, target_tile: Tile, direction: DirectionType):
-        Event.__init__(self, "USE_SKILL", EventTopic.ENTITY)
-        self.entity = entity_using_skill
-        self.skill_name = skill_name
-        self.target_tile = target_tile
-        self.direction = direction
-
-
-class DieEvent(Event):
-    """
-    Event for handling the death of an entity.
-    """
-    def __init__(self, dying_entity: EntityID):
-        Event.__init__(self, "DIE", EventTopic.ENTITY)
-        self.entity = dying_entity
-
-
-
 ####################### GAME ############################################
 
 

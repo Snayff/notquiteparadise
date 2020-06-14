@@ -210,8 +210,9 @@ def _process_player_turn_intents(intent: InputIntentType):
             direction = _get_pressed_direction(intent)
             possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
             if direction in possible_moves:
-                if world.use_skill(player, Move, tile, direction):
-                    world.end_turn(player, Move.time_cost)
+                if world.pay_resource_cost(player, Move.resource_type, Move.resource_cost):
+                    if world.use_skill(player, Move, tile, direction):
+                        world.end_turn(player, Move.time_cost)
 
             ## Use a skill
             skill_name = _get_pressed_skills_name(intent)
@@ -223,8 +224,9 @@ def _process_player_turn_intents(intent: InputIntentType):
                 if skill:
                     # if auto targeting use the skill
                     if skill.targeting_method == TargetingMethod.AUTO:
-                        if world.use_skill(player, Move, tile, direction):
-                            world.end_turn(player, Move.time_cost)
+                        if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
+                            if world.use_skill(player, skill, tile, direction):
+                                world.end_turn(player, skill.time_cost)
                     else:
                         state.set_new(GameState.TARGETING_MODE)
                         state.set_active_skill(skill_name)
@@ -263,8 +265,9 @@ def _process_targeting_mode_intents(intent):
     if direction in possible_moves and position and skill:
         tile = world.get_tile((position.x, position.y))
         if tile:
-            if world.use_skill(player, Move, tile, direction):
-                world.end_turn(player, Move.time_cost)
+            if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
+                if world.use_skill(player, skill, tile, direction):
+                    world.end_turn(player, skill.time_cost)
 
 
 def _process_dev_mode_intents(intent):
