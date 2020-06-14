@@ -9,15 +9,6 @@ if TYPE_CHECKING:
     from typing import Tuple, Union, Type, List
     from scripts.engine.world_objects.tile import Tile
 
-
-class EndRoundEvent(Event):
-    """
-    Event to process the end of a round
-    """
-    def __init__(self):
-        Event.__init__(self, "END_ROUND", EventTopic.GAME)
-
-
 ####################### INTERACTION ############################################
 
 

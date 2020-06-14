@@ -168,7 +168,7 @@ class Behaviour(RegisteredComponent):
 
 
 class Knowledge(RegisteredComponent):
-    """"
+    """
     An entity's knowledge, including skills.
     """
 

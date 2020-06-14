@@ -4,11 +4,9 @@ import logging
 from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import state, world
-from scripts.engine.component import Resources, Identity, Tracked
+from scripts.engine.component import Knowledge, Resources, Identity, Tracked
 from scripts.engine.core.constants import GameState, TIME_PER_ROUND
-from scripts.engine.core.event_core import publisher
 from scripts.engine.core.store import store
-from scripts.engine.event import EndRoundEvent
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
@@ -61,7 +59,7 @@ def next_turn():
     time_progressed = next_entity_time - get_time_of_last_turn()
 
     # add the difference to the time
-    add_time(time_progressed)
+    _add_time(time_progressed)
     set_time_of_last_turn(get_time())
 
     # check if we need to set new round
@@ -86,28 +84,45 @@ def next_turn():
 
 def next_round(time_progressed: int):
     """
-    Move to the next round and trigger end of round events
+    Move to the next round and trigger end of round events, like cooldown and affliction reduction.
     """
-    # trigger end of round actions
-    publisher.publish(EndRoundEvent())
+    ## skill cooldowns
+    for entity, (knowledge,) in world.get_components([Knowledge]):
+        knowledge = cast(Knowledge, knowledge)
+        for skill_name, skill_dict in knowledge.skills.items():
+            if skill_dict["cooldown"] > 0:
+                knowledge.skills[skill_name]["cooldown"] = skill_dict["cooldown"] - 1
 
+    # # affliction durations
+    # FIXME - repair affliction duration reduction
+    # for entity, (afflictions, ) in existence.get_components([Afflictions]):
+    #     for affliction, duration in afflictions.items():
+    #         if duration - 1 <= 0:
+    #             # expired
+    #             del afflictions[affliction]
+    #
+    #         elif duration != INFINITE:
+    #             # reduce duration if not infinite
+    #             afflictions[affliction] = duration - 1
+
+    ## time management
     # add progressed time and minus time_in_round to keep the remaining time
     set_time_in_round((get_time_in_round() + time_progressed) - TIME_PER_ROUND)
 
     # increment rounds
-    increment_round()
+    _increment_round_number()
 
-    logging.info(f"It is now _round {get_round()}.")
+    logging.info(f"It is now round {get_round()}.")
 
 
-def increment_round():
+def _increment_round_number():
     """
     Increment the round by 1
     """
     store.round += 1
 
 
-def add_time(time_to_add: int):
+def _add_time(time_to_add: int):
     """
     Add to the current time
     """
