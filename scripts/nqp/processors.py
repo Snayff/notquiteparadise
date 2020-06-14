@@ -1,30 +1,70 @@
 from __future__ import annotations
 
-import logging
 import pytweening
-
-from scripts.engine import utility, world
+from scripts.engine import state, utility, world
 from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING, Optional, cast
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
-    TravelMethod, BASE_MOVE_COST, DirectionType
+    TravelMethod, BASE_MOVE_COST, DirectionType, UIElement
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
+from scripts.engine.utility import is_close
 
 if TYPE_CHECKING:
     from typing import Type, Tuple
 
 
-def process_all(delta_time: float):
+def process_realtime_updates(delta_time: float):
     """
-    Process all processors. N.B. does not include processing intent.
+    Fire realtime processors.
     """
+    _process_camera_update(delta_time)
     _process_aesthetic_update(delta_time)
+
+
+def _process_camera_update(delta_time: float):
+    """
+    Update realtime camera timers, such as the camera scrolling to reveal new tiles.
+    """
+    camera = world.ui.get_element(UIElement.CAMERA)
+
+    if not camera:
+        return
+
+    max_duration = 1
+
+    # increment time
+    camera.current_sprite_duration += delta_time
+
+    if not camera.has_reached_target():
+
+        # time for animation exceeded
+        time_exceeded = camera.current_sprite_duration > max_duration
+
+        # time for animation exceeded or animation very close to end
+        if time_exceeded or is_close((camera.start_tile_col, camera.start_tile_row),
+                                     (camera.target_tile_col, camera.target_tile_row)):
+
+            # set start_tile to target
+            camera.set_start_to_target()
+
+        # keep moving:
+        else:
+
+            lerp_amount = pytweening.easeOutCubic(min(1.0, camera.current_sprite_duration / max_duration))
+            col_ = utility.lerp(camera.start_tile_col, camera.target_tile_col, lerp_amount)
+            row_ = utility.lerp(camera.start_tile_row, camera.target_tile_row, lerp_amount)
+
+            camera.set_start_col_row((col_, row_))
+
+    # not moving
+    else:
+        camera.current_sprite_duration = 0
 
 
 def _process_aesthetic_update(delta_time: float):
     """
-    Update real-time timers on entities
+    Update real-time timers on entities, such as entity animations.
     """
     # move entities screen position towards target
     for entity, (aesthetic, ) in world.get_components([Aesthetic]):
@@ -36,21 +76,27 @@ def _process_aesthetic_update(delta_time: float):
         # increment time
         aesthetic.current_sprite_duration += delta_time
 
-        # do we need to show moving to a new position? Have we exceeded animation duration?
-        if (aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y) \
-                and aesthetic.current_sprite_duration <= max_duration:
-            # are we close?
-            if (aesthetic.screen_x - 1 < aesthetic.target_screen_x < aesthetic.screen_x + 1) and \
-                    (aesthetic.screen_y - 1 < aesthetic.target_screen_y < aesthetic.screen_y + 1):
-                # jump to target
+        # do we need to show moving to a new position?
+        if aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y:
+
+            # Have we exceeded animation duration?
+            time_exceeded = aesthetic.current_sprite_duration > max_duration
+
+            # time for animation exceeded or animation very close to end
+            if time_exceeded or is_close((aesthetic.screen_x, aesthetic.screen_y),
+                                         (aesthetic.target_screen_x, aesthetic.target_screen_y)):
+
+                # set to target
                 aesthetic.screen_x = aesthetic.target_screen_x
                 aesthetic.screen_y = aesthetic.target_screen_y
+
 
             # keep moving:
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
                 aesthetic.screen_x = utility.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
                 aesthetic.screen_y = utility.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
+
         # not moving so reset to idle
         else:
             aesthetic.current_sprite = aesthetic.sprites.idle
@@ -167,8 +213,7 @@ def _process_player_turn_intents(intent: InputIntentType):
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)
         if skill_name and position:
-            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y),
-                                                  Direction.DOWN))  # TODO - remove hard value
+            publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y)))
 
             # TODO - uncomment when targeting working again
             # position = existence.get_entitys_component(player, Position)
@@ -188,7 +233,7 @@ def _process_targeting_mode_intents(intent):
 
     # Cancel use
     if intent == InputIntent.CANCEL:
-        publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
+        publisher.publish(ChangeGameStateEvent(state.get_previous()))
 
     # Use a skill
     skill_name = _get_pressed_skills_name(intent)
@@ -203,4 +248,4 @@ def _process_dev_mode_intents(intent):
     Process intents for the dev mode game state.
     """
     if intent == InputIntent.DEV_TOGGLE:
-        publisher.publish(ChangeGameStateEvent(GameState.PREVIOUS))
+        publisher.publish(ChangeGameStateEvent(state.get_previous()))

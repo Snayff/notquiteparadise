@@ -3,23 +3,22 @@ from typing import Optional
 
 import pygame
 from pygame_gui import UIManager
-from pygame_gui.elements import UIImage, UITextBox, UIWindow
+from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIWindow
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.core.constants import PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, INFINITE
+from scripts.engine.core.constants import GAP_SIZE, LAYER_BASE_UI, PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, \
+    INFINITE
 from scripts.engine.utility import get_class_members
 from scripts.engine.component import Aesthetic, Identity, Resources, Afflictions
 
 
-class EntityInfo(UIWindow):
+class EntityInfo(UIPanel):
     """
     Hold text relating to the game's events, to display to the player.
     """
 
     def __init__(self, rect: pygame.Rect, manager: UIManager):
-        self.gui_manager = manager
-
         # FIXME - entity info  doesn't update when entity info changes.
 
         # sections
@@ -28,14 +27,20 @@ class EntityInfo(UIWindow):
         self.info_section: Optional[UITextBox] = None
 
         # data
-        self.gap_between_sections = 2
         self.indent = 3
         self.entity_image_height = 32
         self.entity_image_width = 32
-        self.core_info_height = 300
+        self.core_info_height = rect.height - self.entity_image_height
 
         # complete base class init
-        super().__init__(rect, manager, "entity_info")
+        super().__init__(rect, LAYER_BASE_UI, manager, element_id="entity_info",
+                         anchors={"left": "right",
+                             "right": "right",
+                             "top": "bottom",
+                             "bottom": "bottom"})
+
+        # show self
+        self.show()
 
         # confirm init complete
         logging.debug(f"Entity Info initialised.")
@@ -52,11 +57,15 @@ class EntityInfo(UIWindow):
         """
         pass
 
+    ############## GET / SET ########################
+
     def set_entity(self, entity: EntityID):
         """
         Set the selected entity to show the info for that entity.
         """
         self.selected_entity = entity
+
+    ############### ACTIONS #########################
 
     def show(self):
         """
@@ -67,8 +76,8 @@ class EntityInfo(UIWindow):
             self.cleanse()
 
             # create the various boxes for the info
-            self.entity_image = self.create_entity_image_section()
-            self.info_section = self.create_info_section()
+            self.entity_image = self._create_entity_image_section()
+            self.info_section = self._create_info_section()
 
     def cleanse(self):
         """
@@ -82,14 +91,16 @@ class EntityInfo(UIWindow):
             self.info_section.kill()
             self.info_section = None
 
-    def create_entity_image_section(self) -> UIImage:
+    ############## CREATE ########################
+
+    def _create_entity_image_section(self) -> UIImage:
         """
         Create the image section.
         """
         image_width = self.entity_image_width
         image_height = self.entity_image_height
         centre_draw_x = int((self.rect.width / 2) - (image_width / 2))
-        rect = pygame.Rect((centre_draw_x, self.indent), (image_width, image_height))
+        rect = pygame.Rect((centre_draw_x, 0), (image_width, image_height))
         entity = self.selected_entity
 
         # get the image for the entity
@@ -103,17 +114,17 @@ class EntityInfo(UIWindow):
         else:
             image = utility.get_image(IMAGE_NOT_FOUND_PATH)
 
-        entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.gui_manager,
+        entity_image = UIImage(relative_rect=rect, image_surface=image, manager=self.ui_manager,
                                container=self.get_container(), object_id="#entity_image")
 
         return entity_image
 
-    def create_info_section(self) -> UITextBox:
+    def _create_info_section(self) -> UITextBox:
         """
         Create the core info section.
         """
         entity = self.selected_entity
-        gap = "|-----------------------| <br>"
+        section_break = "|-------------------| <br>"
 
         if entity:
             text = ""
@@ -127,8 +138,8 @@ class EntityInfo(UIWindow):
                 text += f"Current Health: {resources.health}" + "<br>"
                 text += f"Current Stamina: {resources.stamina}" + "<br>"
 
-            # add gap
-            text += gap
+            # add section_break
+            text += section_break
 
             # afflictions
             afflictions = world.get_entitys_component(entity, Afflictions)
@@ -141,8 +152,8 @@ class EntityInfo(UIWindow):
             else:
                 text += "Not afflicted." + "<br>"
 
-            # add gap
-            text += gap
+            # add section_break
+            text += section_break
 
             # stats info
             stats = world.create_combat_stats(entity)
@@ -159,8 +170,8 @@ class EntityInfo(UIWindow):
                 except AttributeError:
                     logging.warning(f"Attribute {name} not found for EntityInfo.")
 
-            # add gap
-            text += gap
+            # add section_break
+            text += section_break
 
             secondary_stats = get_class_members(SecondaryStat)
             for name in secondary_stats:
@@ -178,13 +189,13 @@ class EntityInfo(UIWindow):
         else:
             text = ""
 
-        x = self.indent
-        y = (self.gap_between_sections * 2) + self.indent + self.entity_image_height
+        x = 0
+        y = (GAP_SIZE * 2) + self.indent + self.entity_image_height
         width = self.rect.width - (self.indent * 2)
         height = self.core_info_height
 
         rect = pygame.Rect((x, y), (width, height))
-        core_info = UITextBox(html_text=text, relative_rect=rect, manager=self.gui_manager,
+        core_info = UITextBox(html_text=text, relative_rect=rect, manager=self.ui_manager,
                               wrap_to_height=False, layer_starting_height=1, object_id="#info_section",
                               container=self.get_container())
         return core_info

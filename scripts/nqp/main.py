@@ -12,7 +12,7 @@ import pygame
 import snecs
 from snecs.world import default_world
 from scripts.engine import state, world, chapter, key, debug
-from scripts.engine.core.constants import GameState, VERSION, EventTopic
+from scripts.engine.core.constants import GameState, UIElement, VERSION, EventTopic
 from scripts.engine.core.event_core import event_hub, publisher
 from scripts.engine.event import ChangeGameStateEvent
 from scripts.engine.ui.manager import ui
@@ -33,20 +33,20 @@ from scripts.nqp.ui_handler import UIHandler
 # FLEXIBLE (input)- can use keyboard, mouse or controller interchangeably, with minimal difference in experience
 # CUSTOMISABLE - near-core game settings can be influenced or set by the player allowing for personalisation.
 
-########################### CODE STYLE GUIDE ####################################################
+########################### CODE STYLE & NAMING GUIDE ################################################
 # If a function returns something, its name describes what it returns. # TODO - review
 # If a function is named after a verb, its return value is of no significance or returns nothing. # TODO - review
 # If checking a bool use IsA or HasA.
+# If setting a variable from statically held data prefix with "load"
 
 
 ############################### PRE-MERGE CHECKLIST ######################################
 # mypy no errors
 # sphinx config pointing to correct files
 # manual sphinx docs up to date
-# requirement.txt up to date
+# isort cleaned up imports
 
-
-####################################################################################################
+# ===============================================================================================
 
 def main():
     """
@@ -116,7 +116,7 @@ def game_loop():
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        processors.process_all(delta_time)
+        processors.process_realtime_updates(delta_time)
         debug.update()
         ui.update(delta_time)
         event_hub.update()
@@ -196,7 +196,7 @@ def dump_profiling_data(profiler):
 
     # convert profiling to human readable format
     date_and_time = datetime.datetime.utcnow()
-    out_stream = open("logs/profiling/" + date_and_time.strftime("%y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
+    out_stream = open("logs/profiling/" + date_and_time.strftime("%Y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
     ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
@@ -214,6 +214,7 @@ def initialise_game():
     # init the player
     player = world.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
                                  "dandy", True)
+    world.recompute_fov(player)
 
     # tell places about the player
     chapter.set_turn_holder(player)

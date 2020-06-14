@@ -17,8 +17,8 @@ class Tile:
         sprite(pygame.Surface): the sprite of the floor.
     """
 
-    def __init__(self, x: int, y: int, sprite: pygame.Surface, blocks_sight: bool = False, blocks_movement: bool =
-    False):
+    def __init__(self, x: int, y: int, sprite: pygame.Surface, blocks_sight: bool = False,
+            blocks_movement: bool = False):
         self.x = x
         self.y = y
         self.sprite = sprite

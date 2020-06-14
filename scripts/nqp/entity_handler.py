@@ -89,10 +89,9 @@ class EntityHandler(Subscriber):
         can_afford = world.can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
         knowledge = world.get_entitys_component(entity, Knowledge)
-        if knowledge:
-            cooldown = knowledge.skills[skill_name]["cooldown"]
-            if cooldown <= 0:
-                not_on_cooldown = True
+        cooldown = knowledge.skills[skill_name]["cooldown"]
+        if cooldown <= 0:
+            not_on_cooldown = True
 
         # if its the player wanting to use their skill but we dont have a target direction
         if player and player == entity and not got_target:

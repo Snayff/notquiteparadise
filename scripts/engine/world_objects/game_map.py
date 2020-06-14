@@ -32,3 +32,13 @@ class GameMap:
         wall1.blocks_sight = True
         wall1.blocks_movement = True
         wall1.sprite = wall_sprite
+
+        wall2 = self.tiles[6][7]
+        wall2.blocks_sight = True
+        wall2.blocks_movement = True
+        wall2.sprite = wall_sprite
+
+        wall3 = self.tiles[6][4]
+        wall3.blocks_sight = True
+        wall3.blocks_movement = True
+        wall3.sprite = wall_sprite

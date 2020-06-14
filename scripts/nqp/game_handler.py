@@ -43,9 +43,11 @@ class GameHandler(Subscriber):
         if new_game_state == GameState.GAME_INITIALISING:
             # transition to post-initialisation game state
             # TODO - set default post-init game state
+            # trigger new turn actions (entity queue)
             player = world.get_player()
             if player:
-                publisher.publish(EndTurnEvent(player, 1))  # trigger new turn actions (entity queue)
+
+                publisher.publish(EndTurnEvent(player, 1))
 
         elif new_game_state == GameState.NEW_TURN:
             # if turn holder is the player then update to player turn
@@ -60,10 +62,6 @@ class GameHandler(Subscriber):
                 state.set_active_skill(event.skill_to_be_used)
             else:
                 logging.warning("Entered targeting mode with no active skill.")
-
-        # PREVIOUS must be last as it overwrites new_game_state
-        elif new_game_state == GameState.PREVIOUS:
-            new_game_state = state.get_previous()
 
         # update the game state to the intended state
         if new_game_state != current_game_state:

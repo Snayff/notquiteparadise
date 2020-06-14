@@ -5,18 +5,26 @@ from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
-VERSION = "0.98.0"
+VERSION = "0.99.0"
+
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
-ENTITY_BLOCKS_SIGHT = False
-IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
+GAP_SIZE = 2
+SKILL_SIZE = 64
+LAYER_CAMERA = 1
+LAYER_BASE_UI = 4
+
+ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
 TIME_PER_ROUND = 20  # amount of time in a round.
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
 BASE_MOVE_COST = 20  # amount of time spent to move.
 BASE_ACCURACY = 100
-BASE_DAMAGE = 5
+BASE_DAMAGE = 5  # base amount of damage a skill should do. used as a starting point.
+MAX_SKILLS = 5
+
 DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log event_handlers receiving events or not
+IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
 
 ######################## NEW TYPES ######################################
@@ -79,7 +87,7 @@ class GameState(SimpleNamespace):
     TARGETING_MODE = GameStateType(4)
     EXIT_GAME = GameStateType(5)
     GAME_INITIALISING = GameStateType(6)
-    NEW_TURN = GameStateType(7)
+    NEW_TURN = GameStateType(7)  # interim stage to handle  changes between stages
     DEV_MODE = GameStateType(8)
     PREVIOUS = GameStateType(9)
 

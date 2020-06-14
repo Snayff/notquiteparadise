@@ -108,14 +108,12 @@ def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> flo
     """
     Linear interpolation between initial and target by amount. Fraction clamped between 0 and 1.
     """
-    amount = clamp(lerp_fraction, 0, 1)
+    clamped_lerp_fraction = clamp(lerp_fraction, 0, 1)
 
-    # print(f"Initial:{initial_value}, Target:{target_value}, Lerp Amount:{amount}")
-
-    if amount >= 0.99:
+    if clamped_lerp_fraction >= 0.99:
         return target_value
     else:
-        return (lerp_fraction * initial_value) + ((1 - amount) * target_value)
+        return initial_value * (1 - clamped_lerp_fraction) + target_value * clamped_lerp_fraction
 
 
 def clamp(value, min_value, max_value):
@@ -196,3 +194,30 @@ def value_to_member(value: Any, cls: Type[Any]) -> str:
             return member
 
     return "No member with value found."
+
+
+def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
+    """
+    Convert a tile position string to (x, y)
+    """
+    _x, _y = tile_pos_string.split(",")
+    x = int(_x)  # str to int
+    y = int(_y)
+    return x, y
+
+
+def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
+    """
+    returns true if the absolute distance between both coordinates is less than delta
+    """
+    return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
+
+
+def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge=0) -> bool:
+    """
+    check if a coordinate is inside a bound for a given edge
+    """
+    start_coordinate = bounds[0] + edge
+    end_coordinate = bounds[1] - edge - 1
+    within_bounds = start_coordinate <= coordinate < end_coordinate
+    return within_bounds
