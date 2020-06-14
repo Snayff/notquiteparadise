@@ -10,18 +10,6 @@ if TYPE_CHECKING:
     from scripts.engine.world_objects.tile import Tile
 
 
-####################### GAME ############################################
-
-
-class ExitGameEvent(Event):
-    """
-    Event to exit the game
-    """
-    def __init__(self):
-        Event.__init__(self, "EXIT", EventTopic.GAME)
-
-
-
 class EndRoundEvent(Event):
     """
     Event to process the end of a round

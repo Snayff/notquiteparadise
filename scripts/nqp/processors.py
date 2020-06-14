@@ -7,9 +7,8 @@ from scripts.engine import state, utility, world
 from scripts.engine.component import Aesthetic, Position, Knowledge
 from typing import TYPE_CHECKING, Optional, cast
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
-    TargetingMethod, TravelMethod, BASE_MOVE_COST, DirectionType, UIElement
+    TargetingMethod, DirectionType, UIElement
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import ExitGameEvent, ChangeGameStateEvent
 from scripts.engine.utility import is_close
 from scripts.nqp.skills import Move
 
@@ -193,7 +192,7 @@ def _process_stateless_intents(intent: InputIntentType):
 
     # Exit game
     if intent == InputIntent.EXIT_GAME:
-        publisher.publish(ExitGameEvent())
+        state.set_new(GameState.EXIT_GAME)
 
 
 def _process_player_turn_intents(intent: InputIntentType):
