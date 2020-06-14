@@ -5,11 +5,9 @@ import pygame
 from typing import TYPE_CHECKING
 from pygame_gui import UIManager
 from snecs.typedefs import EntityID
-from scripts.engine import debug, world
-from scripts.engine.component import Position
-from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, MAX_SKILLS, SKILL_SIZE, VisualInfo, UIElement, TILE_SIZE, \
-    UIElementType, \
-    DirectionType
+from scripts.engine import debug
+from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, MAX_SKILLS, MessageType, MessageTypeType, SKILL_SIZE, \
+    VisualInfo, UIElement, UIElementType, DirectionType
 from scripts.engine.ui.basic.fonts import Font
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
@@ -421,7 +419,7 @@ class _UIManager:
 
     ######################## MESSAGES #################################
 
-    def add_to_message_log(self, message: str):
+    def _add_to_message_log(self, message: str):
         """
         Add a text to the message log. Includes processing of the text.
         """
@@ -431,6 +429,19 @@ class _UIManager:
 
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init`d?")
+
+    def log_message(self, message_type: MessageTypeType,  message: str, colour: str = None, size: int = 4,
+            entity: EntityID = None ):
+        if message_type == MessageType.LOG:
+            self._add_to_message_log(message)
+
+        elif message_type == MessageType.SCREEN:
+            self.create_screen_message(message, colour, size)
+
+        elif message_type == MessageType.ENTITY:
+            # TODO - create message over entity
+            #  can we reuse screen message but provide xy?
+            pass
 
 
 ui = _UIManager()

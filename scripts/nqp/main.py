@@ -11,7 +11,7 @@ import sys
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import state, world, chapter, key, debug
+from scripts.engine import state, world, chronicle, key, debug
 from scripts.engine.core.constants import GameState, UIElement, VERSION, EventTopic
 from scripts.engine.core.event_core import event_hub, publisher
 from scripts.engine.ui.manager import ui
@@ -105,9 +105,9 @@ def game_loop():
         if current_state == GameState.NPC_TURN:
             # just in case the turn holder has died but not been replaced as expected
             try:
-                world.take_turn(chapter.get_turn_holder())
+                world.take_turn(chronicle.get_turn_holder())
             except AttributeError:
-                chapter.rebuild_turn_queue()
+                chronicle.rebuild_turn_queue()
 
         # update based on input events
         for event in pygame.event.get():
@@ -220,7 +220,7 @@ def initialise_game():
     world.recompute_fov(player)
 
     # tell places about the player
-    chapter.set_turn_holder(player)
+    chronicle.set_turn_holder(player)
 
     # create an enemy
     # TODO - remove when enemy gen is in

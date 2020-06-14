@@ -12,7 +12,6 @@ from scripts.engine import world
 from scripts.engine.core.constants import LAYER_CAMERA, DirectionType, TILE_SIZE
 from scripts.engine.core.event_core import publisher
 from scripts.engine.utility import clamp, convert_tile_string
-from scripts.engine.event import ClickTile
 from scripts.engine.component import Position, Aesthetic
 from scripts.engine.world_objects.tile import Tile
 

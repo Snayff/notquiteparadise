@@ -10,7 +10,6 @@ from scripts.engine.library import library
 from scripts.engine.core.event_core import Subscriber, publisher
 from scripts.engine.core.constants import EventTopic, GameState, MessageType, UIElement, Direction
 from scripts.engine.component import Position, Aesthetic
-from scripts.engine.event import MessageEvent, ClickTile
 from scripts.engine.ui.manager import ui
 
 if TYPE_CHECKING:
@@ -157,10 +156,6 @@ class UIHandler(Subscriber):
                 skill_name = state.get_active_skill()
                 publisher.publish(WantToUseSkillEvent(player, skill_name, (position.x, position.y), direction))
 
-        elif isinstance(event, MessageEvent):
-            # process a message
-            self._process_message(event)
-
     @staticmethod
     def _set_targeting_overlay(is_visible: bool, skill_name: str = None):
         """
@@ -208,30 +203,6 @@ class UIHandler(Subscriber):
         ui.update_camera_game_map()
         ui.update_camera_grid()
 
-    @staticmethod
-    def _select_entity(entity: EntityID):
-        """
-        Set the selected entity
-        """
-        ui.set_selected_entity(entity)
 
-    @staticmethod
-    def _process_message(event: MessageEvent):
-        """
-        Process a message event
-        """
-        # TODO - grab all other message events in the current stack and join the messages for each type.
-        #  TODO - Process message event last. Ensures they are as accurate as possible.
-
-        if event.message_type == MessageType.LOG:
-            ui.add_to_message_log(event.message)
-
-        elif event.message_type == MessageType.SCREEN:
-            ui.create_screen_message(event.message, event.colour, event.size)
-
-        elif event.message_type == MessageType.ENTITY:
-            # TODO - create message over entity
-            #  can we reuse screen message but provide xy?
-            pass
 
 

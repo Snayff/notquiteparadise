@@ -9,11 +9,12 @@ import tcod.map
 from typing import TYPE_CHECKING, Optional, Tuple, Type, List, TypeVar, Dict, Any, cast
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-from scripts.engine import state, utility, debug, chapter
+from scripts.engine import state, utility, debug, chronicle
 from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
     Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Interactions, Afflictions, Behaviour, \
     IsProjectile
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, GameState, TargetTag, FOVInfo, TargetTagType, \
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, GameState, MessageType, TargetTag, FOVInfo, \
+    TargetTagType, \
     DirectionType, \
     Direction, \
     ResourceType, SecondaryStatType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, HitValue, HitType, \
@@ -105,7 +106,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     actor.append(Homeland(homeland_name))
     actor.append(Savvy(savvy_name))
     actor.append(FOV(create_fov_map()))
-    actor.append(Tracked(chapter.get_time()))
+    actor.append(Tracked(chronicle.get_time()))
 
     # add aesthetic
     characteristics_paths = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
@@ -189,7 +190,7 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     screen_x, screen_y = ui.world_to_screen_position((x, y))
     projectile.append(Aesthetic(sprites.move, sprites, screen_x, screen_y))
     projectile.append(IsProjectile(creating_entity))
-    projectile.append(Tracked(chapter.get_time()))
+    projectile.append(Tracked(chronicle.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     entity = create_entity(projectile)
 
@@ -896,7 +897,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not can_afford:
         # is it the player that can't afford it?
         if entity == player:
-            publisher.publish(MessageEvent(MessageType.LOG, "I cannot afford to do that."))
+            ui.log_message(MessageType.LOG, "I cannot afford to do that.")
         else:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, which they can`t afford.")
 
@@ -904,7 +905,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not not_on_cooldown:
         # is it the player that's can't afford it?
         if entity == player:
-            publisher.publish(MessageEvent(MessageType.LOG, "I'm not ready to do that, yet."))
+            ui.log_message(MessageType.LOG, "I'm not ready to do that, yet.")
         else:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait {cooldown} more "
                             f"rounds.")
@@ -1048,16 +1049,16 @@ def learn_skill(entity: EntityID, skill_name: str) -> bool:
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
 
 def kill_entity(entity: EntityID):
-    turn_queue = chapter.get_turn_queue()
+    turn_queue = chronicle.get_turn_queue()
 
     # if  not player
     if entity != get_player():
         # if turn holder create new queue without them
-        if entity == chapter.get_turn_holder():
-            chapter.rebuild_turn_queue(entity)
+        if entity == chronicle.get_turn_holder():
+            chronicle.rebuild_turn_queue(entity)
 
             # ensure the game state reflects the new queue
-            chapter.next_turn()
+            chronicle.next_turn()
 
         elif entity in turn_queue:
             # remove from turn queue
@@ -1068,16 +1069,16 @@ def kill_entity(entity: EntityID):
     else:
         # TODO add player death
         # placeholder for player death
-        publisher.publish(MessageEvent(MessageType.LOG, "I should have died just then."))
+        ui.log_message(MessageType.LOG, "I should have died just then.")
 
 
 def end_turn(entity: EntityID, time_spent: int):
     """
     Spend an entities time, progress time, move to next acting entity in queue.
     """
-    if entity == chapter.get_turn_holder():
+    if entity == chronicle.get_turn_holder():
         spend_time(entity, time_spent)
-        chapter.next_turn()
+        chronicle.next_turn()
     else:
         name = get_name(entity)
         logging.warning(f"Tried to end {name}'s turn but they're not turn holder.")
