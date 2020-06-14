@@ -6,10 +6,8 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 from scripts.engine import world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
+from scripts.engine.core.constants import ProjectileExpiry, BASE_MOVE_COST
 from scripts.engine.core.definitions import ProjectileData
-from scripts.engine.core.event_core import publisher
-from scripts.engine.event import ExpireEvent, MessageEvent
 from scripts.nqp.skills import Move
 
 if TYPE_CHECKING:
@@ -52,7 +50,8 @@ class ProjectileBehaviour(AIBehaviour):
         else:
             # we have reached the limit, process expiry and then die
             if self.data.expiry_type == ProjectileExpiry.ACTIVATE:
-                publisher.publish(ExpireEvent(entity))
+                hit other
+            # at max range, kill regardless
             world.kill_entity(entity)
 
 

@@ -10,8 +10,7 @@ from scripts.engine.core.constants import InteractionCause, InteractionCauseType
 from scripts.engine.core.definitions import InteractionData
 from scripts.engine.core.event_core import Subscriber
 from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile, Afflictions
-from scripts.engine.event import ExpireEvent, \
-    EntityCollisionEvent, TerrainCollisionEvent
+from scripts.engine.event import EntityCollisionEvent, TerrainCollisionEvent
 from scripts.engine.library import library
 
 if TYPE_CHECKING:

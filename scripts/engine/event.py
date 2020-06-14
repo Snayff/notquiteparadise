@@ -9,17 +9,6 @@ if TYPE_CHECKING:
     from typing import Tuple, Union, Type, List
     from scripts.engine.world_objects.tile import Tile
 
-####################### INTERACTION ############################################
-
-
-class ExpireEvent(Event):
-    """
-    Event for handling the expiry of an entity, usually a projectile.
-    """
-    def __init__(self, expiring_entity: EntityID):
-        Event.__init__(self, "EXPIRE", EventTopic.INTERACTION)
-        self.entity = expiring_entity
-
 
 class EntityCollisionEvent(Event):
     """
