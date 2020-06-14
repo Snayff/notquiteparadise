@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from scripts.engine import chapter, state, utility, world
 from scripts.engine.core.constants import GameState
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.event import EndTurnEvent, ExitGameEvent, ChangeGameStateEvent
+from scripts.engine.event import ExitGameEvent, ChangeGameStateEvent
 
 if TYPE_CHECKING:
     pass
@@ -26,9 +26,6 @@ class GameHandler(Subscriber):
         if isinstance(event, ExitGameEvent):
             publisher.publish(ChangeGameStateEvent(GameState.EXIT_GAME))
 
-        elif isinstance(event, EndTurnEvent):
-            self._process_end_turn(event)
-
         elif isinstance(event, ChangeGameStateEvent):
             self._process_change_game_state(event)
 
@@ -47,15 +44,7 @@ class GameHandler(Subscriber):
             player = world.get_player()
             if player:
 
-                publisher.publish(EndTurnEvent(player, 1))
-
-        elif new_game_state == GameState.NEW_TURN:
-            # if turn holder is the player then update to player turn
-            if chapter.get_turn_holder() == world.get_player():
-                publisher.publish(ChangeGameStateEvent(GameState.PLAYER_TURN))
-            # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
-            else:
-                publisher.publish(ChangeGameStateEvent(GameState.NPC_TURN))
+                world.end_turn(player, 1)
 
         elif new_game_state == GameState.TARGETING_MODE:
             if event.skill_to_be_used:
@@ -74,10 +63,3 @@ class GameHandler(Subscriber):
                          f" updated. However, lower level details may still have changed."
             logging.debug(log_string)
 
-    @staticmethod
-    def _process_end_turn(event: EndTurnEvent):
-        """
-        Move to next turn, change game state to new turn.
-        """
-        chapter.next_turn()
-        publisher.publish(ChangeGameStateEvent(GameState.NEW_TURN))

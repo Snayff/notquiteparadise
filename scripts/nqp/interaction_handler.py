@@ -10,8 +10,8 @@ from scripts.engine.core.constants import InteractionCause, InteractionCauseType
 from scripts.engine.core.definitions import InteractionData
 from scripts.engine.core.event_core import Subscriber
 from scripts.engine.component import Position, Interactions, Behaviour, IsProjectile, Afflictions
-from scripts.engine.event import EndTurnEvent, EndRoundEvent, ExpireEvent, \
-    EntityCollisionEvent, TerrainCollisionEvent, MoveEvent
+from scripts.engine.event import EndRoundEvent, ExpireEvent, \
+    EntityCollisionEvent, TerrainCollisionEvent
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
@@ -29,10 +29,7 @@ class InteractionHandler(Subscriber):
         """
         Control interaction events. Looks for InteractionCause associated events.
         """
-        if isinstance(event, EndTurnEvent):
-            self._process_end_turn(event)
-
-        elif isinstance(event, EndRoundEvent):
+        if isinstance(event, EndRoundEvent):
             self._process_end_round()
 
         elif isinstance(event, ExpireEvent):
@@ -40,9 +37,6 @@ class InteractionHandler(Subscriber):
 
         elif isinstance(event, EntityCollisionEvent):
             self._process_entity_collision(event)
-
-        elif isinstance(event, MoveEvent):
-            self._process_move(event)
 
     def _process_move(self, event: MoveEvent):
         target_pos = (event.start_pos[0] + event.direction[0], event.start_pos[1] + event.direction[1])

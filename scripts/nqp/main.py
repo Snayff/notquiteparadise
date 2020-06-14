@@ -119,7 +119,11 @@ def game_loop():
         processors.process_realtime_updates(delta_time)
         debug.update()
         ui.update(delta_time)
+
+        # track achievements and stats
         event_hub.update()
+
+        # progress frame
         state.update_clock()
 
         # show the new state

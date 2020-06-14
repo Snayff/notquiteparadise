@@ -9,7 +9,8 @@ from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
 from scripts.engine.core.definitions import ProjectileData
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MoveEvent, DieEvent, ExpireEvent, MessageEvent, EndTurnEvent
+from scripts.engine.event import DieEvent, ExpireEvent, MessageEvent
+from scripts.nqp.skills import Move
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -42,10 +43,11 @@ class ProjectileBehaviour(AIBehaviour):
         # if we havent travelled max distance then move
         if self.distance_travelled < self.data.range:
             position = world.get_entitys_component(entity, Position)
-            publisher.publish(MoveEvent(entity, (position.x, position.y),
-                                        (self.data.direction[0], self.data.direction[1]),
-                                        self.data.travel_type, self.data.speed))
-            self.distance_travelled += 1
+            tile = world.get_tile((position.x, position.y))
+            if tile:
+                if world.use_skill(entity, Move, tile, self.data.direction):
+                    self.distance_travelled += 1
+                    end turn
         else:
             # we have reached the limit, process expiry and then die
             if self.data.expiry_type == ProjectileExpiry.ACTIVATE:
@@ -63,4 +65,4 @@ class SkipTurn(AIBehaviour):
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
-        publisher.publish((EndTurnEvent(self.entity, BASE_MOVE_COST)))
+        world.end_turn(self.entity, BASE_MOVE_COST)

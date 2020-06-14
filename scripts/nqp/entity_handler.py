@@ -4,13 +4,10 @@ import logging
 from typing import TYPE_CHECKING, cast
 from scripts.engine import world, chapter,  state
 from scripts.engine.core.constants import MessageType, GameState, TargetingMethod
-from scripts.engine.core.definitions import MoveActorEffectData
-from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, MoveEvent, \
-    EndTurnEvent, ChangeGameStateEvent, EndRoundEvent
-from scripts.engine.library import library
+from scripts.engine.event import MessageEvent, WantToUseSkillEvent, UseSkillEvent, DieEvent, \
+    ChangeGameStateEvent, EndRoundEvent
 from scripts.engine.core.event_core import publisher, Subscriber
-from scripts.engine.component import Knowledge, Position
-from scripts.nqp.skills import Move
+from scripts.engine.component import Knowledge
 
 if TYPE_CHECKING:
     pass
@@ -27,10 +24,7 @@ class EntityHandler(Subscriber):
         """
         Control entity events
         """
-        if isinstance(event, MoveEvent):
-            self._process_move(event)
-
-        elif isinstance(event, UseSkillEvent):
+        if isinstance(event, UseSkillEvent):
             self._process_use_skill(event)
 
         elif isinstance(event, DieEvent):
@@ -39,27 +33,8 @@ class EntityHandler(Subscriber):
         elif isinstance(event, WantToUseSkillEvent):
             self._process_want_to_use_skill(event)
 
-        elif isinstance(event, EndTurnEvent):
-            self._process_end_turn(event)
-
         elif isinstance(event, EndRoundEvent):
             self._process_end_round(event)
-
-    @staticmethod
-    def _process_move(event: MoveEvent):
-        """
-        Check if entity can move to the target tile, then either cancel the move (if blocked), bump attack (if
-        target tile has entity) or move.
-        """
-        tile = world.get_tile((event.start_pos[0], event.start_pos[1]))
-        if tile:
-            world.use_skill(event.entity, Move, tile, event.direction)
-
-        # check entity moved
-        new_position = world.get_entitys_component(event.entity, Position)
-        if new_position:
-            if (new_position.x, new_position.y) != event.start_pos:
-                publisher.publish(EndTurnEvent(event.entity, event.base_cost))
 
     @staticmethod
     def _process_want_to_use_skill(event: WantToUseSkillEvent):
@@ -181,7 +156,7 @@ class EntityHandler(Subscriber):
 
             # end the turn if the entity is the turn holder
             if entity == chapter.get_turn_holder():
-                publisher.publish(EndTurnEvent(entity, skill.time_cost))
+                world.end_turn(entity, skill.time_cost)
 
     @staticmethod
     def _process_die(event: DieEvent):
@@ -208,13 +183,6 @@ class EntityHandler(Subscriber):
         else:
             publisher.publish(MessageEvent(MessageType.LOG, "I should have died just then."))
 
-    @staticmethod
-    def _process_end_turn(event: EndTurnEvent):
-        """
-        Have entity spend their time
-        """
-        #  update turn holder`s time spent
-        world.spend_time(event.entity, event.time_spent)
 
     @staticmethod
     def _process_end_round(event: EndRoundEvent):

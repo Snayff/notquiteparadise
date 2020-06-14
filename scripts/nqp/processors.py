@@ -7,8 +7,9 @@ from typing import TYPE_CHECKING, Optional, cast
 from scripts.engine.core.constants import GameState, InputIntent, Direction, InputIntentType, GameStateType, \
     TravelMethod, BASE_MOVE_COST, DirectionType, UIElement
 from scripts.engine.core.event_core import publisher
-from scripts.engine.event import ExitGameEvent, MoveEvent, WantToUseSkillEvent, ChangeGameStateEvent
+from scripts.engine.event import ExitGameEvent, WantToUseSkillEvent, ChangeGameStateEvent
 from scripts.engine.utility import is_close
+from scripts.nqp.skills import Move
 
 if TYPE_CHECKING:
     from typing import Type, Tuple
@@ -207,8 +208,10 @@ def _process_player_turn_intents(intent: InputIntentType):
         direction = _get_pressed_direction(intent)
         possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
         if direction in possible_moves and position:
-            publisher.publish(MoveEvent(player, (position.x, position.y), direction, TravelMethod.STANDARD,
-                                        BASE_MOVE_COST))
+            tile = world.get_tile((position.x, position.y))
+            if tile:
+                if world.use_skill(player, Move, tile, direction):
+                    end turn
 
         # Use a skill
         skill_name = _get_pressed_skills_name(intent)

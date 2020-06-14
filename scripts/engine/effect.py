@@ -5,12 +5,11 @@ from abc import ABC
 from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import world, utility
-from scripts.engine.component import Blocking, Aesthetic, FOV, HasCombatStats, Position
+from scripts.engine.component import Blocking, Aesthetic, FOV, HasCombatStats, Position, Resources
 from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, PrimaryStatType, DamageTypeType, Direction, TargetTag, \
     DirectionType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import EntityCollisionEvent, TerrainCollisionEvent, DieEvent
-from scripts.engine.ui.manager import ui
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -57,10 +56,12 @@ class DamageEffect(Effect):
         mod_value = getattr(attackers_stats, self.mod_stat.lower())
         damage = world.calculate_damage(self.damage, mod_value, resist_value, hit_type)
 
-        if world.apply_damage(self.target, damage) <= 0:
-            publisher.publish(DieEvent(self.target))
+        # apply the damage
+        if world.apply_damage(self.target, damage):
+            defenders_resources = world.get_entitys_component(self.target, Resources)
+            if damage >= defenders_resources.health:
+                publisher.publish(DieEvent(self.target))
 
-        if damage > 0:
             return self.success_effects
         else:
             return self.failure_effects

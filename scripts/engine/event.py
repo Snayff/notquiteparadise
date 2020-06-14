@@ -48,31 +48,8 @@ class DieEvent(Event):
         self.entity = dying_entity
 
 
-class MoveEvent(Event):
-    """
-    Event to move an entity as a basic move action
-    """
-    def __init__(self, entity_to_move: EntityID, start_pos: Tuple[int, int], direction: DirectionType,
-            travel_type: TravelMethodType, cost: int):
-        Event.__init__(self, "MOVE", EventTopic.ENTITY)
-        self.start_pos = start_pos
-        self.travel_type = travel_type
-        self.entity = entity_to_move
-        self.direction = direction
-        self.base_cost = cost  # N.B. most entities use BASE_MOVE_COST but not all, e.g. projectiles
-
 
 ####################### GAME ############################################
-
-
-class EndTurnEvent(Event):
-    """
-    Event to end an entities ability to act.
-    """
-    def __init__(self, entity: EntityID, time_spent):
-        Event.__init__(self, "END_TURN", EventTopic.GAME)
-        self.entity = entity
-        self.time_spent = time_spent
 
 
 class ExitGameEvent(Event):

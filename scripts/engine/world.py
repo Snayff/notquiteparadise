@@ -9,11 +9,12 @@ import tcod.map
 from typing import TYPE_CHECKING, Optional, Tuple, Type, List, TypeVar, Dict, Any, cast
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-from scripts.engine import utility, debug, chapter
+from scripts.engine import state, utility, debug, chapter
 from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
     Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Interactions, Afflictions, Behaviour, \
     IsProjectile
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, TargetTag, FOVInfo, TargetTagType, DirectionType, \
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, GameState, TargetTag, FOVInfo, TargetTagType, \
+    DirectionType, \
     Direction, \
     ResourceType, SecondaryStatType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, HitValue, HitType, \
     HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, InteractionCause
@@ -866,9 +867,9 @@ def can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool
         return False
 
 
-################################ ACTIONS - CHANGE STATE - RETURN NOTHING ###############################
+################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
-def recompute_fov(entity: EntityID):
+def recompute_fov(entity: EntityID) -> bool:
     """
     Recalculate an entity's FOV
     """
@@ -891,19 +892,11 @@ def recompute_fov(entity: EntityID):
         if entity == get_player():
             update_tile_visibility(fov.map)
 
-
-def update_tile_visibility(fov_map: tcod.map.Map):
-    """
-    Update the the visibility of the tiles on the came map
-    """
-    game_map = get_game_map()
-
-    for x in range(0, game_map.width):
-        for y in range(0, game_map.height):
-            game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
+        return True
+    return False
 
 
-def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int):
+def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
     """
     Remove the resource cost from the using entity
     """
@@ -915,17 +908,20 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int):
 
         if resource_value != INFINITE:
             resource_left = resource_value - cost
-
             setattr(resources, resource.lower(), resource_left)
 
             logging.info(f"'{name}' paid {cost} {resource} and has {resource_left} left.")
+            return True
         else:
             logging.info(f"'{name}' paid nothing as they have infinite {resource}.")
     else:
         logging.warning(f"'{name}' tried to pay {cost} {resource} but Resources component not found.")
 
+    return False
 
-def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: Optional[DirectionType] = None):
+
+def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: Optional[DirectionType] = None)\
+        -> bool:
     """
     Use the specified skill on the target tile, resolving all effects.
     """
@@ -937,8 +933,92 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
             while effect_queue:
                 effect = effect_queue.pop()
                 effect_queue.extend(effect.evaluate())
+        return True
     else:
         logging.debug(f"Target tile does not have tags required ({skill.required_tags}).")
+
+    return False
+
+
+def take_turn(entity: EntityID) -> bool:
+    """
+    Process the entity's Behaviour component. If no component found then EndTurn event is fired.
+    """
+    logging.debug(f"'{get_name(entity)}' is beginning their turn.")
+    behaviour = get_entitys_component(entity, Behaviour)
+    if behaviour:
+        behaviour.behaviour.act()
+        return True
+    else:
+        logging.critical(f"'{get_name(entity)}' has no behaviour to use.")
+
+    return False
+
+
+def apply_damage(entity: EntityID, damage: int) -> bool:
+    """
+    Remove damage from entity's health. Return remaining health.
+    """
+    resource = get_entitys_component(entity, Resources)
+    if resource:
+        resource.health -= damage
+        return True
+    else:
+        logging.warning(f"'{get_name(entity)}' has no resource so couldnt apply damage.")
+
+    return False
+
+
+def spend_time(entity: EntityID, time_spent: int) -> bool:
+    """
+    Add time_spent to the entity's total time spent.
+    """
+    # TODO - modify by time modifier stat
+    tracked = get_entitys_component(entity, Tracked)
+    if tracked:
+        tracked.time_spent += time_spent
+        return True
+    else:
+        logging.warning(f"'{get_name(entity)}' has no tracked to spend time.")
+
+    return False
+
+
+def learn_skill(entity: EntityID, skill_name: str) -> bool:
+    """
+    Add the skill name to the entity's knowledge component.
+    """
+    if not has_component(entity, Knowledge):
+        add_component(entity, Knowledge())
+    knowledge = get_entitys_component(entity, Knowledge)
+
+    if knowledge:
+        knowledge.skills[skill_name]["cooldown"] = library.get_skill_data(skill_name).cooldown
+        knowledge.skill_order.append(skill_name)
+        return True
+    else:
+        logging.warning(f"'{get_name(entity)}' has no knowledge to learn skill.")
+
+    return False
+
+
+################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
+
+def end_turn(entity: EntityID, time_spent: int):
+    if entity == chapter.get_turn_holder():
+        spend_time(entity, time_spent)
+        chapter.next_turn()
+
+        # if turn holder is the player then update to player turn
+        if chapter.get_turn_holder() == get_player():
+            state.set_new(GameState.PLAYER_TURN)
+        # if turn holder is not player and we aren't already in enemy turn then update to enemy turn
+        else:
+            state.set_new(GameState.NPC_TURN)
+
+    else:
+        name = get_name(entity)
+        logging.warning(f"Tried to end {name}'s turn but they're not turn holder.")
 
 
 def delete(entity: EntityID):
@@ -963,57 +1043,15 @@ def add_component(entity: EntityID, component: Component):
     snecs.add_component(entity, component)
 
 
-def take_turn(entity: EntityID):
+def update_tile_visibility(fov_map: tcod.map.Map):
     """
-    Process the entity's Behaviour component. If no component found then EndTurn event is fired.
+    Update the the visibility of the tiles on the came map
     """
-    logging.debug(f"'{get_name(entity)}' is beginning their turn.")
-    behaviour = get_entitys_component(entity, Behaviour)
-    if behaviour:
-        behaviour.behaviour.act()
-    else:
-        logging.critical(f"'{get_name(entity)}' has no behaviour to use.")
+    game_map = get_game_map()
 
-
-def apply_damage(entity: EntityID, damage: int) -> int:
-    """
-    Remove damage from entity's health. Return remaining health.
-    """
-    resource = get_entitys_component(entity, Resources)
-    if resource:
-        resource.health -= damage
-        return resource.health
-    else:
-        logging.warning(f"'{get_name(entity)}' has no resource so couldnt apply damage.")
-
-    return 0
-
-
-def spend_time(entity: EntityID, time_spent: int):
-    """
-    Add time_spent to the entity's total time spent.
-    """
-    # TODO - modify by time modifier stat
-    tracked = get_entitys_component(entity, Tracked)
-    if tracked:
-        tracked.time_spent += time_spent
-    else:
-        logging.warning(f"'{get_name(entity)}' has no tracked to spend time.")
-
-
-def learn_skill(entity: EntityID, skill_name: str):
-    """
-    Add the skill name to the entity's knowledge component.
-    """
-    if not has_component(entity, Knowledge):
-        add_component(entity, Knowledge())
-    knowledge = get_entitys_component(entity, Knowledge)
-
-    if knowledge:
-        knowledge.skills[skill_name]["cooldown"] = library.get_skill_data(skill_name).cooldown
-        knowledge.skill_order.append(skill_name)
-    else:
-        logging.warning(f"'{get_name(entity)}' has no knowledge to learn skill.")
+    for x in range(0, game_map.width):
+        for y in range(0, game_map.height):
+            game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
 
 def judge_action(entity: EntityID, action: Any):
