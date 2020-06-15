@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import logging
 import pygame
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 from pygame_gui import UIManager
 from snecs.typedefs import EntityID
 from scripts.engine import debug
-from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, MAX_SKILLS, MessageType, MessageTypeType, SKILL_SIZE, \
+from scripts.engine.core.constants import Direction, GAP_SIZE, ICON_SIZE, MAX_SKILLS, MessageType, MessageTypeType, \
+    SKILL_SIZE, \
     VisualInfo, UIElement, UIElementType, DirectionType
+from scripts.engine.library import library
 from scripts.engine.ui.basic.fonts import Font
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
@@ -15,7 +17,6 @@ from scripts.engine.ui.elements.entity_info import EntityInfo
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.screen_message import ScreenMessage
 from scripts.engine.ui.elements.skill_bar import SkillBar
-from scripts.engine.utility import is_coordinate_in_bounds
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -114,34 +115,6 @@ class _UIManager:
         """
         self._elements[element_type] = element
 
-    def kill_element(self, element_type: UIElementType):
-        """
-        Remove any reference to the element
-        """
-        element = self.get_element(element_type)
-
-        if element:
-            del self._elements[element_type]
-            element.kill()
-        else:
-            logging.warning(f"Tried to remove {element_type} element but key not found.")
-
-    def create_element(self, element_type: UIElementType) -> object:
-        """
-        Create the specified UI element. Object is returned for convenience, it is already held and can be returned
-        with get_element at a later date.
-        """
-        # if it already exists, kill it
-        if self.get_element(element_type):
-            self.kill_element(element_type)
-
-        # create the element from the details held in element layout
-        element_class, rect = self._element_layout.get(element_type)
-        element = element_class(rect, self.get_gui_manager())
-        self.add_element(element_type, element)
-
-        return element
-
     ##################### GET ############################
 
     def get_element(self, element_type: UIElementType):
@@ -205,27 +178,46 @@ class _UIManager:
         entity_info_x = -entity_info_width
         entity_info_y = -entity_info_height
 
+        # Data Editor
+        data_width = 1200
+        data_height = 600
+        data_x = 5
+        data_y = 10
+
         layout = {
             UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
             UIElement.ENTITY_INFO: (EntityInfo, pygame.Rect((entity_info_x, entity_info_y),
                                                             (entity_info_width, entity_info_height))),
             UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
             UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
+            UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height)))
         }
         self._element_layout = layout
 
-    def init_skill_editor(self):
+    def init_game_ui(self):
         """
-        Initialise the skill editor ui_manager element.
+        Initialise the game's UI elements. Helper function to run kill_element on relevant elements.
         """
-        # TODO - convert to create
-        width = 1200
-        height = 600
-        x = 5
-        y = 10
-        rect = pygame.Rect((x, y), (width, height))
-        editor = DataEditor(rect, self.get_gui_manager())
-        self.add_element(UIElement.DATA_EDITOR, editor)
+        self.create_element(UIElement.CAMERA)
+        self.create_element(UIElement.SKILL_BAR)
+        self.create_element(UIElement.MESSAGE_LOG)
+        self.create_element(UIElement.ENTITY_INFO)
+
+    def create_element(self, element_type: UIElementType) -> object:
+        """
+        Create the specified UI element. Object is returned for convenience, it is already held and can be returned
+        with get_element at a later date.
+        """
+        # if it already exists, kill it
+        if self.get_element(element_type):
+            self.kill_element(element_type)
+
+        # create the element from the details held in element layout
+        element_class, rect = self._element_layout.get(element_type)
+        element = element_class(rect, self.get_gui_manager())
+        self.add_element(element_type, element)
+
+        return element
 
     def create_screen_message(self, message: str, colour, size: int):
         """
@@ -236,68 +228,30 @@ class _UIManager:
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
         screen_message = ScreenMessage(text, self.get_gui_manager())
 
+    ######################## KILL ###############################################
+
+    def kill_game_ui(self):
+        """
+        Close and kill the game's UI elements. Helper function to run kill_element on relevant elements.
+        """
+        self.kill_element(UIElement.CAMERA)
+        self.kill_element(UIElement.SKILL_BAR)
+        self.kill_element(UIElement.MESSAGE_LOG)
+        self.kill_element(UIElement.ENTITY_INFO)
+
+    def kill_element(self, element_type: UIElementType):
+        """
+        Remove any reference to the element
+        """
+        element = self.get_element(element_type)
+
+        if element:
+            del self._elements[element_type]
+            element.kill()
+        else:
+            logging.warning(f"Tried to remove {element_type} element but key not found.")
+
     ######################## CAMERA ###############################################
-
-    def is_target_pos_in_camera_edge(self, target_pos: Tuple) -> bool:
-        """
-        Determine if target position is within the edge of the camera
-        """
-        camera = self.get_element(UIElement.CAMERA)
-
-        if camera:
-            player_x, player_y = target_pos
-            x_bounds, y_bounds = camera.get_tile_bounds()
-
-            x_in_camera_edge = is_coordinate_in_bounds(coordinate=player_x, bounds=x_bounds, edge=camera.edge_size)
-            y_in_camera_edge = is_coordinate_in_bounds(coordinate=player_y, bounds=y_bounds, edge=camera.edge_size)
-
-            return not x_in_camera_edge or not y_in_camera_edge
-
-        else:
-            logging.warning(f"Tried to check target pos in Camera but key not found. Is it init`d?")
-            return False
-
-    def move_camera(self, num_cols: int, num_rows: int):
-        """
-        Increment camera's drawn tiles in the given direction. N.B. Physical position on screen does not change.
-        """
-        camera = self.get_element(UIElement.CAMERA)
-
-        if camera:
-            camera.move_camera(num_cols, num_rows)
-        else:
-            logging.warning(f"Tried to move Camera but key not found. Is it init`d?")
-
-    def update_cameras_tiles(self):
-        """
-        Retrieve the tiles to draw within view of the camera and provide them to the camera. Checks FOV.
-        """
-        camera = self.get_element(UIElement.CAMERA)
-
-        if camera:
-            pass
-            # camera.update_camera_tiles(num_cols, num_rows)
-        else:
-            logging.warning(f"Tried to set camera tiles in Camera but key not found. Is it init`d?")
-
-    def update_camera_game_map(self):
-        """
-        Update the camera game map to show what is in the tiles held by the camera.
-        """
-        camera = self.get_element(UIElement.CAMERA)
-
-        if camera:
-            camera.update_game_map()
-
-    def update_camera_grid(self):
-        """
-        Update the camera's grid. Controls tile hover highlighting.
-        """
-        camera = self.get_element(UIElement.CAMERA)
-        if camera:
-            camera.update_grid()
-        else:
-            logging.warning(f"Tried to update camera grid in Camera move but key not found. Is it init`d?")
 
     def set_player_tile(self, tile: Tile):
         """
@@ -310,19 +264,6 @@ class _UIManager:
         else:
             logging.warning(f"Tried to set player tile in Camera but key not found. Is it init`d?")
 
-    def set_overlay_visibility(self, is_visible: bool):
-        """
-        Set the visibility of the targeting overlay in the Camera.
-
-        Args:
-            is_visible ():
-        """
-        camera = self.get_element(UIElement.CAMERA)
-        if camera:
-            camera.set_overlay_visibility(is_visible)
-        else:
-            logging.warning(f"Tried to set Camera overlay but key not found. Is it init`d?")
-
     def set_overlay_directions(self, directions: List[DirectionType]):
         """
         Set the overlay with possible targeting directions.
@@ -333,62 +274,9 @@ class _UIManager:
         else:
             logging.warning(f"Tried to set Camera overlay directions but key not found. Is it init`d?")
 
-    def should_camera_move(self, start_pos: Tuple, target_pos: Tuple) -> bool:
-        """
-        Determine if camera should move based on start and target pos and intersecting the edge of the screen.
-        pos is x, y.
-        """
-        start_x, start_y = start_pos
-        target_x, target_y = target_pos
-        camera = self.get_element(UIElement.CAMERA)
-
-        # if camera has been init'd
-        if camera:
-            edge_start_x = camera.start_tile_col
-            edge_end_x = camera.start_tile_col + camera.columns
-            edge_start_y = camera.start_tile_row
-            edge_end_y = camera.start_tile_row + camera.rows
-
-            start_pos_in_edge = self.is_target_pos_in_camera_edge(start_pos)
-            target_pos_in_edge = self.is_target_pos_in_camera_edge(target_pos)
-
-            # are we currently in the edge (e.g. edge of world)
-            if start_pos_in_edge:
-
-                # will we still be in the edge after we move?
-                if target_pos_in_edge:
-                    dir_x = target_x - start_x
-                    dir_y = target_y - start_y
-
-                    # are we moving to a worse position?
-                    if edge_start_x <= start_x < edge_start_x + camera.edge_size + 1:
-                        # player is on the left side, are we moving left?
-                        if dir_x < 0:
-                            return True
-                    if edge_end_x > start_x >= edge_end_x - camera.edge_size - 2:
-                        # player is on the right side, are we moving right?
-                        if 0 < dir_x:
-                            return True
-                    if edge_start_y <= start_y < edge_start_y + camera.edge_size + 1:
-                        # player is on the up side, are we moving up?
-                        if dir_y < 0:
-                            return True
-                    if edge_end_y > start_y >= edge_end_y - camera.edge_size - 2:
-                        # player is on the down side, are we moving down?
-                        if 0 < dir_y:
-                            return True
-
-            elif target_pos_in_edge:
-                # we are moving into the edge
-                return True
-        else:
-            logging.warning(f"Tried to check if Camera should move but key not found. Is it init`d?")
-
-        return False
-
     def world_to_screen_position(self, pos: Tuple[int, int]):
         """
-        Convert from the world_objects position to the screen position. -1, -1 if camera not init'd.
+        Convert from the world_objects position to the screen position. 0, 0 if camera not init'd.
         """
         # TODO - this shouldnt rely on UI, if possible.
         camera = self.get_element(UIElement.CAMERA)
@@ -400,7 +288,32 @@ class _UIManager:
                         "if it draws at all.")
         return 0, 0
 
-        ############## ENTITY INFO ###################
+    def update_targeting_overlay(self, is_visible: bool, skill_name: str = None):
+        """
+        Show or hide targeting overlay, using Direction possible in the skill.
+        """
+        camera = self.get_element(UIElement.CAMERA)
+        if camera:
+            # update directions to either clear or use info from skill
+            if is_visible and skill_name:
+                data = library.get_skill_data(skill_name)
+                _directions = data.target_directions
+            else:
+                _directions = []
+
+            # ensure all directions are of type Direction
+            directions = []
+            for direction in _directions:
+                if not isinstance(direction, Direction):
+                    directions.append(getattr(Direction, direction.upper()))
+                else:
+                    directions.append(direction)
+
+            camera.set_overlay_directions(directions)
+            camera.set_overlay_visibility(is_visible)
+            camera.update_camera_grid()
+
+    ######################## ENTITY INFO ###############################################
 
     def set_selected_entity(self, entity: EntityID):
         """
@@ -431,7 +344,7 @@ class _UIManager:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init`d?")
 
     def log_message(self, message_type: MessageTypeType,  message: str, colour: str = None, size: int = 4,
-            entity: EntityID = None ):
+            entity: EntityID = None):
         if message_type == MessageType.LOG:
             self._add_to_message_log(message)
 

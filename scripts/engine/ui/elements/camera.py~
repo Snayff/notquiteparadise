@@ -252,7 +252,7 @@ class Camera(UIPanel):
         """
         Draw a surface on the surface map. The function handles coordinate transformation to the screen
         """
-        pos = self.world_to_screen_position(col_row)
+        pos = self._world_to_screen_position(col_row)
         map_surface.blit(sprite, pos)
 
     ############## SET #########################
@@ -332,9 +332,9 @@ class Camera(UIPanel):
         # reset animation time
         self.current_sprite_duration = 0
 
-    def world_to_screen_position(self, pos: Tuple[float, float]):
+    def _world_to_screen_position(self, pos: Tuple[float, float]):
         """
-        Convert from the world_objects position to the screen position
+        Convert from the world_objects position to the screen position. Camera local version.
         """
         screen_x = int((pos[0] - self.start_tile_col) * TILE_SIZE)
         screen_y = int((pos[1] - self.start_tile_row) * TILE_SIZE)

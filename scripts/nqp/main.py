@@ -12,16 +12,12 @@ import pygame
 import snecs
 from snecs.world import default_world
 from scripts.engine import state, world, chronicle, key, debug
-from scripts.engine.core.constants import GameState, UIElement, VERSION, EventTopic
-from scripts.engine.core.event_core import event_hub, publisher
+from scripts.engine.core.constants import GameState, VERSION, EventTopic
+from scripts.engine.core.event_core import event_hub
 from scripts.engine.ui.manager import ui
-from scripts.nqp import processors
-from scripts.nqp.entity_handler import EntityHandler
-from scripts.nqp.game_handler import GameHandler
+from scripts.nqp import display_processors, input_processors
 from scripts.nqp.god_handler import GodHandler
 from scripts.nqp.interaction_handler import InteractionHandler
-from scripts.nqp.ui_handler import UIHandler
-
 
 # =================================================================================================
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -33,6 +29,8 @@ from scripts.nqp.ui_handler import UIHandler
 # CUSTOMISABLE - near-core game settings can be influenced or set by the player allowing for personalisation.
 
 ########################### CODE STYLE & NAMING GUIDE ################################################
+# If only one of an object should exist the creation function is called "init_[object]", otherwise "create_[object]".
+#   Where the object is taken as an argument the function will default to ""create_[object_type]".
 # If a function returns something, its name describes what it returns. # TODO - review
 # If a function is named after a verb, its return value is of no significance or returns nothing. # TODO - review
 # If checking a bool use IsA or HasA.
@@ -97,36 +95,36 @@ def game_loop():
         # get info to support UI updates and handling events
         delta_time = state.get_delta_time()
         current_state = state.get_current()
+        turn_holder = chronicle.get_turn_holder()
 
         # process any deletions from last frame
         snecs.process_pending_deletions(default_world)
 
         # have enemy take turn
-        if current_state == GameState.NPC_TURN:
+        if current_state == GameState.GAMEMAP and turn_holder != world.get_player():
             # just in case the turn holder has died but not been replaced as expected
             try:
-                world.take_turn(chronicle.get_turn_holder())
+                world.take_turn(turn_holder)
             except AttributeError:
                 chronicle.rebuild_turn_queue()
 
         # update based on input events
         for event in pygame.event.get():
-            processors.process_intent(key.convert_to_intent(event), current_state)
+            intent = key.convert_to_intent(event)
+            if intent:
+                input_processors.process_intent(intent, current_state)
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        processors.process_realtime_updates(delta_time)
+        display_processors.process_display_updates(delta_time)
         debug.update()
         ui.update(delta_time)
 
-        # track achievements and stats
-        event_hub.update()
+        # show the new state
+        ui.draw()
 
         # progress frame
         state.update_clock()
-
-        # show the new state
-        ui.draw()
 
 
 def initialise_logging():
@@ -208,11 +206,9 @@ def initialise_game():
     """
     Init the game`s required info
     """
-    # TODO - move to event handlers
-
     map_width = 50
     map_height = 30
-    world.create_game_map(map_width, map_height)
+    world.create_gamemap(map_width, map_height)
 
     # init the player
     player = world.create_actor("player", "a desc", 1, 2, "shoom", "soft_tops",
@@ -232,14 +228,28 @@ def initialise_game():
     # prompt turn actions
     world.end_turn(player, 0)
 
+    # loading finished, give player control
+    state.set_new(GameState.GAMEMAP)
+
+    # turn on the ui
+    ui.init_game_ui()
+
+    # welcome message
+    ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
+
+    # FIXME - entities load before camera so they cant get their screen position. If ui loads before entities then it
+    #  fails due to player not existing. Below is a hacky fix.
+    from scripts.engine.component import Aesthetic, Position
+    for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
+        aesthetic.screen_x, aesthetic.screen_y = (position.x, position.y)
+        aesthetic.target_screen_x = aesthetic.screen_x
+        aesthetic.target_screen_y = aesthetic.screen_y
+
 
 def initialise_event_handlers():
     """
     Create the various event handlers and subscribe to required events.
     """
-    entity_handler = EntityHandler(event_hub)
-    entity_handler.subscribe(EventTopic.ENTITY)
-    entity_handler.subscribe(EventTopic.GAME)
 
     interaction_handler = InteractionHandler(event_hub)
     interaction_handler.subscribe(EventTopic.INTERACTION)
@@ -248,14 +258,6 @@ def initialise_event_handlers():
     god_handler = GodHandler(event_hub)
     god_handler.subscribe(EventTopic.ENTITY)
 
-    ui_handler = UIHandler(event_hub)
-    ui_handler.subscribe(EventTopic.ENTITY)
-    ui_handler.subscribe(EventTopic.GAME)
-    ui_handler.subscribe(EventTopic.UI)
-
-    # expected last
-    game_handler = GameHandler(event_hub)
-    game_handler.subscribe(EventTopic.GAME)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

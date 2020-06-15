@@ -3,11 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 from scripts.engine import world
-from scripts.engine.core.constants import Effect, Direction
-from scripts.engine.core.event_core import Subscriber, publisher
-from scripts.engine.library import library
+from scripts.engine.core.constants import Direction
+from scripts.engine.core.event_core import Event, Subscriber
 from scripts.engine.component import Position, IsGod
-from scripts.engine.event import UseSkillEvent
 
 if TYPE_CHECKING:
     pass
@@ -34,7 +32,7 @@ class GodHandler(Subscriber):
         #  create events for causing and receiving hit type
         #  create events for being the cause of death
 
-        if isinstance(event, UseSkillEvent):
+        if isinstance(event, Event):#UseSkillEvent):
             # if the entity isnt another god then judge it
             if not world.has_component(event.entity, IsGod):
                 self.process_judgements(event)

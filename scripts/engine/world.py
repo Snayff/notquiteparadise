@@ -6,26 +6,23 @@ import random
 import pygame
 import snecs
 import tcod.map
-from typing import TYPE_CHECKING, Optional, Tuple, Type, List, TypeVar, Dict, Any, cast
+from typing import TYPE_CHECKING, Optional, Tuple, Type, List, TypeVar, Any, cast
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-from scripts.engine import state, utility, debug, chronicle
+from scripts.engine import utility, debug, chronicle
 from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
-    Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Interactions, Afflictions, Behaviour, \
+    Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Afflictions, Behaviour, \
     IsProjectile
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, GameState, MessageType, TargetTag, FOVInfo, \
-    TargetTagType, \
-    DirectionType, \
-    Direction, \
-    ResourceType, SecondaryStatType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, HitValue, HitType, \
-    HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT, InteractionCause
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, MessageType, TargetTag, FOVInfo, \
+    TargetTagType, DirectionType, Direction, ResourceType, INFINITE, TravelMethodType, TravelMethod, HitTypeType,\
+    HitValue, HitType, HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT
 from scripts.engine.core.definitions import CharacteristicSpritesData, ProjectileData, CharacteristicSpritePathsData
 from scripts.engine.core.store import store
 from scripts.engine.library import library
 from scripts.engine.thought import SkipTurn, ProjectileBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
-from scripts.engine.world_objects.game_map import GameMap
+from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp import skills
 from scripts.nqp.skills import Skill, BasicAttack, Move
@@ -246,20 +243,20 @@ def _create_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsD
     return converted
 
 
-def create_game_map(width, height):
+def create_gamemap(width, height):
     """
     Create new GameMap
     """
-    store.current_game_map = GameMap(width, height)
+    store.current_gamemap = GameMap(width, height)
 
 
 def create_fov_map() -> tcod.map.Map:
     """
     Create an fov map
     """
-    game_map = get_game_map()
-    width = game_map.width
-    height = game_map.height
+    gamemap = get_gamemap()
+    width = gamemap.width
+    height = gamemap.height
 
     fov_map = tcod.map_new(width, height)
 
@@ -281,11 +278,11 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
-def get_game_map() -> GameMap:
+def get_gamemap() -> GameMap:
     """
-    Get current game_map
+    Get current gamemap
     """
-    return store.current_game_map
+    return store.current_gamemap
 
 
 def get_tile(tile_pos: Tuple[int, int]) -> Tile:
@@ -293,12 +290,12 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     Get the tile at the specified location. Use tile_x and tile_y. Raises exception if out of bounds or doesnt exist.
     """
     # TODO - clean up to only accept tuple
-    game_map = get_game_map()
+    gamemap = get_gamemap()
     x = tile_pos[0]
     y = tile_pos[1]
 
     try:
-        _tile = game_map.tiles[x][y]
+        _tile = gamemap.tiles[x][y]
         if _is_tile_in_bounds(_tile):
             return _tile
 
@@ -311,7 +308,7 @@ def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List
     Get multiple tiles based on starting position and coordinates given. Coords are relative  to start
     position given.
     """
-    game_map = get_game_map()
+    gamemap = get_gamemap()
     tiles = []
 
     for coord in coords:
@@ -322,7 +319,7 @@ def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List
         tile = get_tile((tile_x, tile_y))
         if tile:
             if _is_tile_in_bounds(tile):
-                tiles.append(game_map.tiles[tile_x][tile_y])
+                tiles.append(gamemap.tiles[tile_x][tile_y])
 
     return tiles
 
@@ -402,7 +399,7 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     pass
     #
     # max_path_length = 25
-    # game_map = _manager.game_map
+    # gamemap = _manager.gamemap
     # entities = []
     # # TODO - update to use ECS
     # for entity, (pos, blocking) in _manager.get_entitys_components(Position, Blocking):
@@ -414,13 +411,13 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     # logging.debug(log_string)
     #
     # # Create a FOV map that has the dimensions of the map
-    # fov = tcod.map_new(game_map.width, game_map.height)
+    # fov = tcod.map_new(gamemap.width, gamemap.height)
     #
     # # Scan the current map each turn and set all the walls as unwalkable
-    # for y1 in range(game_map.height):
-    #     for x1 in range(game_map.width):
-    #         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,
-    #                                 not game_map.tiles[x1][y1].blocks_movement)
+    # for y1 in range(gamemap.height):
+    #     for x1 in range(gamemap.width):
+    #         tcod.map_set_properties(fov, x1, y1, not gamemap.tiles[x1][y1].blocks_sight,
+    #                                 not gamemap.tiles[x1][y1].blocks_movement)
     #
     # # Scan all the objects to see if there are objects that must be navigated around
     # # Check also that the object isn't  or the target (so that the start and the end points are free)
@@ -682,9 +679,10 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     """
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
-        return knowledge.skills[skill_name]["skill"]
-
-    raise Exception
+        try:
+            return knowledge.skills[skill_name]["skill"]
+        except KeyError:
+            logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
 
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
@@ -772,9 +770,9 @@ def _is_tile_in_bounds(tile: Tile) -> bool:
     """
     Check if specified tile is in the map.
     """
-    game_map = get_game_map()
+    gamemap = get_gamemap()
 
-    if (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height):
+    if (0 <= tile.x < gamemap.width) and (0 <= tile.y < gamemap.height):
         return True
     else:
         return False
@@ -1110,11 +1108,11 @@ def update_tile_visibility(fov_map: tcod.map.Map):
     """
     Update the the visibility of the tiles on the came map
     """
-    game_map = get_game_map()
+    gamemap = get_gamemap()
 
-    for x in range(0, game_map.width):
-        for y in range(0, game_map.height):
-            game_map.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
+    for x in range(0, gamemap.width):
+        for y in range(0, gamemap.height):
+            gamemap.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
 
 def judge_action(entity: EntityID, action: Any):

@@ -69,11 +69,11 @@ class InteractionHandler(Subscriber):
         """
         Update aspect durations
         """
-        game_map = world.get_game_map()
+        gamemap = world.get_gamemap()
 
         # TODO - set to only apply to activated entities
         #  TODO - update to EC approach
-        # for row in game_map.tiles:
+        # for row in gamemap.tiles:
         #     for tile in row:
         #         if tile.aspects:
         #             # update durations

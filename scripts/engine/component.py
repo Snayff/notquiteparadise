@@ -59,7 +59,6 @@ class HasCombatStats(RegisteredComponent):
 
 #################### OTHERS #########################
 
-
 class Position(RegisteredComponent):
     """
     An entity's position on the map.

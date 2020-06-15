@@ -68,14 +68,6 @@ def next_turn():
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
 
-    # if turn holder is the player then update to player turn
-    if turn_holder == world.get_player():
-        state.set_new(GameState.PLAYER_TURN)
-    else:
-        #  update to enemy turn
-        state.set_new(GameState.NPC_TURN)
-
-
     # log new turn holder
     name = world.get_name(turn_holder)
     logging.debug(f"-> Current time is {get_time()}. We are {get_time_in_round()} TU`s into round {get_round()}.")

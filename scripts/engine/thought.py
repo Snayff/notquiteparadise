@@ -37,20 +37,28 @@ class ProjectileBehaviour(AIBehaviour):
 
     def act(self):
         entity = self.entity
+        position = world.get_entitys_component(entity, Position)
+        tile = world.get_tile((position.x, position.y))
 
         # if we havent travelled max distance then move
         if self.distance_travelled < self.data.range:
-            position = world.get_entitys_component(entity, Position)
-            tile = world.get_tile((position.x, position.y))
             if tile:
                 if world.pay_resource_cost(entity, Move.resource_type, Move.resource_cost):
                     if world.use_skill(entity, Move, tile, self.data.direction):
                         self.distance_travelled += 1
                         world.end_turn(entity, self.data.speed)
+
+                    # movement blocked
+                    # FIXME - handle Terrain collisions
+
         else:
             # we have reached the limit, process expiry and then die
             if self.data.expiry_type == ProjectileExpiry.ACTIVATE:
-                hit other
+                if tile:
+                    if world.pay_resource_cost(entity, Move.resource_type, Move.resource_cost):
+                        skill = world.get_known_skill(entity, self.data.skill_name)
+                        world.use_skill(entity, skill, tile, self.data.direction)
+
             # at max range, kill regardless
             world.kill_entity(entity)
 

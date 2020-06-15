@@ -81,15 +81,12 @@ class GameState(SimpleNamespace):
     """
     States the game can be in.
     """
-    PLAYER_TURN = GameStateType(1)
-    NPC_TURN = GameStateType(2)
-    PLAYER_DEAD = GameStateType(3)
-    TARGETING_MODE = GameStateType(4)
-    EXIT_GAME = GameStateType(5)
-    GAME_INITIALISING = GameStateType(6)
-    NEW_TURN = GameStateType(7)  # interim stage to handle  changes between stages
-    DEV_MODE = GameStateType(8)
-    PREVIOUS = GameStateType(9)
+    LOADING = GameStateType(1)  # while loading, to prevent key press.
+    GAMEMAP = GameStateType(2)  # while player moving around the gamemap
+    PLAYER_DEAD = GameStateType(3)  # while player is dead
+    TARGETING = GameStateType(4)  # while player is targeting
+    EXIT_GAME = GameStateType(5)  # while exiting
+    DEVELOPER = GameStateType(6)  # while using dev mode
 
 
 class EventTopic(SimpleNamespace):
