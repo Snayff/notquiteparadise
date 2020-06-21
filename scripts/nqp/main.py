@@ -16,7 +16,6 @@ from scripts.engine.core.constants import GameState, VERSION, EventTopic
 from scripts.engine.core.event_core import event_hub
 from scripts.engine.ui.manager import ui
 from scripts.nqp import display_processors, input_processors
-from scripts.nqp.god_handler import GodHandler
 from scripts.nqp.interaction_handler import InteractionHandler
 
 # =================================================================================================
@@ -254,9 +253,6 @@ def initialise_event_handlers():
     interaction_handler = InteractionHandler(event_hub)
     interaction_handler.subscribe(EventTopic.INTERACTION)
     interaction_handler.subscribe(EventTopic.ENTITY)
-
-    god_handler = GodHandler(event_hub)
-    god_handler.subscribe(EventTopic.ENTITY)
 
 
 

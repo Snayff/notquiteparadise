@@ -311,7 +311,7 @@ class _UIManager:
 
             camera.set_overlay_directions(directions)
             camera.set_overlay_visibility(is_visible)
-            camera.update_camera_grid()
+            camera.update_grid()
 
     ######################## ENTITY INFO ###############################################
 

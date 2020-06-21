@@ -2,13 +2,18 @@ from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING, Type
 
-from scripts.engine import state, world
+from snecs.typedefs import EntityID
+
+from scripts.engine import debug, state, world
 from scripts.engine.component import Knowledge, Position
 from scripts.engine.core.constants import Direction, DirectionType, GameState, GameStateType, InputIntent, \
     InputIntentType, TargetingMethod, UIElement
 from scripts.engine.core.event_core import publisher
+from scripts.engine.library import library
 from scripts.engine.ui.manager import ui
-from scripts.nqp.skills import Move
+from scripts.engine.world_objects.tile import Tile
+from scripts.nqp import ai_processors
+from scripts.nqp.skills import Move, Skill
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -87,13 +92,14 @@ def _process_stateless_intents(intent: InputIntentType):
 
     ## Activate Debug
     if intent == InputIntent.DEBUG_TOGGLE:
-        # TODO - create event to toggle debug
-        pass
+        if debug.is_fps_visible():
+            debug.set_fps_visibility(False)
+        else:
+            debug.set_fps_visibility(True)
 
     ## Refresh Library Data
     elif intent == InputIntent.REFRESH_DATA:
-        # TODO - create event to refresh data
-        pass
+        library.refresh_library_data()
 
     ## Exit game
     elif intent == InputIntent.EXIT_GAME:
@@ -125,9 +131,7 @@ def _process_player_turn_intents(intent: InputIntentType):
             direction = _get_pressed_direction(intent)
             possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
             if direction in possible_moves:
-                if world.pay_resource_cost(player, Move.resource_type, Move.resource_cost):
-                    if world.use_skill(player, Move, tile, direction):
-                        world.end_turn(player, Move.time_cost)
+                _process_skill_use(player, Move, tile, direction)
 
             ## Use a skill
             skill_name = _get_pressed_skills_name(intent)
@@ -139,9 +143,7 @@ def _process_player_turn_intents(intent: InputIntentType):
                 if skill:
                     # if auto targeting use the skill
                     if skill.targeting_method == TargetingMethod.AUTO:
-                        if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
-                            if world.use_skill(player, skill, tile, direction):
-                                world.end_turn(player, skill.time_cost)
+                        _process_skill_use(player, skill, tile, direction)
                     else:
                         state.set_new(GameState.TARGETING)
                         state.set_active_skill(skill_name)
@@ -180,3 +182,15 @@ def _process_targeting_mode_intents(intent):
             if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
                 if world.use_skill(player, skill, tile, direction):
                     world.end_turn(player, skill.time_cost)
+
+
+def _process_skill_use(player: EntityID, skill: Type[Skill], tile: Tile, direction: DirectionType):
+
+    if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
+        if world.use_skill(player, skill, tile, direction):
+            world.judge_action(player, skill.name)
+            ai_processors.process_interventions()
+            world.end_turn(player, skill.time_cost)
+            new_tile = world.get_tile((tile.x + direction[0], tile.y + direction[1]))
+            ui.set_player_tile(new_tile)
+

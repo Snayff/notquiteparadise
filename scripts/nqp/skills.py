@@ -28,6 +28,7 @@ class Skill(ABC):
     """
 
     # to be overwritten in subclass
+    name: str = ""
     description: str = ""
     icon_path: str = ""
     resource_type: ResourceType = Resource.STAMINA
@@ -85,7 +86,8 @@ class Move(Skill):
     """
     Basic move for an entity.
     """
-    # These are not defined in the json. They are set here and only here.
+    # Move's definitions are not defined in the json. They are set here and only here.
+    name = "move"
     required_tags = [TargetTag.SELF]
     description = "this is the normal movement."
     icon_path = ""
@@ -132,6 +134,7 @@ class Move(Skill):
 
 class BasicAttack(Skill):
     data = library.get_skill_data("basic_attack")
+    name = "basic_attack"
     required_tags = data.required_tags
     description = data.description
     icon_path = data.icon

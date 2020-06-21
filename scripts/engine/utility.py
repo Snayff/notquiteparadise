@@ -138,7 +138,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
     This returns an int indicating the number of tile moves between the two points.
     """
-
+    # TODO - take chebyshev code from scipy and remove scipy
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 

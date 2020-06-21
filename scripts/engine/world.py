@@ -339,15 +339,8 @@ def get_direction(start_pos: Union[Tuple[int, int], str], target_pos: Union[Tupl
         return Direction.CENTRE
 
     # handle any mistaken values coming in
-    if dir_x > 1:
-        dir_x = 1
-    elif dir_x < -1:
-        dir_x = -1
-
-    if dir_y > 1:
-        dir_y = 1
-    elif dir_y < -1:
-        dir_y = -1
+    dir_x = utility.clamp(dir_x, -1, 1)
+    dir_y = utility.clamp(dir_y, -1, 1)
 
     return dir_x, dir_y
 
@@ -965,7 +958,8 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
 def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: Optional[DirectionType] = None)\
         -> bool:
     """
-    Use the specified skill on the target tile, resolving all effects.
+    Use the specified skill on the target tile, resolving all effects. Returns True is successful if criteria to use
+    skill was met, False if not.
     """
     # ensure they are the right target type
     if tile_has_tags(target_tile, skill.required_tags, user):
@@ -1115,18 +1109,20 @@ def update_tile_visibility(fov_map: tcod.map.Map):
             gamemap.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
 
 
-def judge_action(entity: EntityID, action: Any):
+def judge_action(entity: EntityID, action_name: str):
     """
-    Have all entities alter opinions of the entity based on the action taken, if they have an attitude towards
-    that  action. Action can be str if matching name, e.g. affliction name, or class, e.g. Hit Type name.
+    Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
+    the tags in that skill.
     """
-    for entity, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
+    # TODO - assign tags to replace actions previously used
+    # TODO - loop through tags on the skill and see if the god cares about the tags
+
+    for god, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
         # cast for typing
         opinion = cast(Opinion, opinion)
         identity = cast(Identity, identity)
 
         attitudes = library.get_god_attitudes_data(identity.name)
-        action_name = action
 
         # check if the god has an attitude towards the action and apply the opinion change,
         # adding the entity to the dict if necessary

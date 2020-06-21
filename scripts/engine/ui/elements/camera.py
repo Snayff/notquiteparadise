@@ -69,7 +69,11 @@ class Camera(UIPanel):
         self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager, container=self.get_container(),
                                 object_id="#grid")
 
+        # update everything
         self.update_tile_properties()
+        self.update_gamemap()
+        self.update_grid()
+
 
         # confirm init complete
         logging.debug(f"Camera initialised.")
@@ -90,7 +94,6 @@ class Camera(UIPanel):
             # convert x,y to tile position
             x = x + int(self.start_tile_col)
             y = y + int(self.start_tile_row)
-            tile_pos = (x, y)
 
             # clicking a tile
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
@@ -100,7 +103,11 @@ class Camera(UIPanel):
 
             # hovering a tile
             elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
-                self.selected_tile = world.get_tile(tile_pos)
+                for entity, (position, ) in world.get_components([Position]):
+                    position: Position
+                    if position.x == x and position.y == y:
+                        from scripts.engine.ui.manager import ui
+                        ui.set_selected_entity(entity)
 
     ############### UPDATE ###########################
 
@@ -117,8 +124,12 @@ class Camera(UIPanel):
                 move_x = target_pos[0] - start_pos[0]
                 move_y = target_pos[1] - start_pos[1]
                 self.move_camera(move_x, move_y)
+                self.update_tile_properties()  # update if camera moved as it used start row and col
 
-            self.update_tile_properties()
+            self.update_grid()
+
+            # set last updated to current
+            self.last_updated_player_tile = self.player_tile
 
         # update entities in game map every frame
         self.update_gamemap()
@@ -178,6 +189,7 @@ class Camera(UIPanel):
             # tile positions generator - contains 1 layer of padding to ensure smooth rollover
             for x in range(-1, self.columns + 1):
                 for y in range(-1, self.rows + 1):
+                    # FIXME - this falls out of line with FOV being drawn by
                     # check is in fov
                     tile = world.get_tile((x, y))
                     if tile.is_visible:
@@ -276,6 +288,7 @@ class Camera(UIPanel):
         """
         self.last_updated_player_tile = self.player_tile
         self.player_tile = tile
+
 
     def set_overlay_visibility(self, is_visible: bool):
         """
