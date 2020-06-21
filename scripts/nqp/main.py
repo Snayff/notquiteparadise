@@ -12,9 +12,10 @@ import pygame
 import snecs
 from snecs.world import default_world
 from scripts.engine import state, world, chronicle, key, debug
-from scripts.engine.core.constants import GameState, VERSION, EventTopic
+from scripts.engine.core.constants import GameState, VERSION
 from scripts.engine.ui.manager import ui
-from scripts.nqp import display_processors, input_processors
+from scripts.nqp.processors import display_processors, input_processors
+
 
 # =================================================================================================
 ########################## CORE DESIGN PHILOSOPHIES ##############################################

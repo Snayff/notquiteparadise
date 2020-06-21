@@ -5,11 +5,11 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import world, utility
-from scripts.engine.component import Blocking, Aesthetic, Position, Resources
+from scripts.engine.component import Afflictions, Blocking, Aesthetic, Position, Resources
 from scripts.engine.core.constants import PrimaryStatType, DamageTypeType, Direction, TargetTag, DirectionType
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional, List
 
 
 class Effect(ABC):
@@ -163,20 +163,36 @@ class MoveActorEffect(Effect):
 
 class AffectStatEffect(Effect):
     def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]], stat_to_target: PrimaryStatType, affect_amount: int):
+            failure_effects: List[Optional[Effect]], cause_name: str,  target: EntityID,
+            stat_to_target: PrimaryStatType, affect_amount: int):
 
         super().__init__(origin, success_effects, failure_effects)
 
         self.stat_to_target = stat_to_target
         self.affect_amount = affect_amount
+        self.target = target
+        self.cause_name = cause_name
 
     def evaluate(self) -> List[Optional[Effect]]:
         """
         TBC - not implemented
         """
         logging.debug("Evaluating Affect Stat Effect...")
+        success = False
 
-        world.
+        afflictions = world.get_entitys_component(self.target, Afflictions)
+
+        # if not already applied
+        if self.cause_name not in afflictions.stat_modifiers:
+            afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+            success = True
+
+        if success:
+            return self.success_effects
+        else:
+            return self.failure_effects
+
+
 
 
 class ApplyAfflictionEffect(Effect):

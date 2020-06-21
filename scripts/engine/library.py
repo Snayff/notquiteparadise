@@ -270,9 +270,6 @@ class _LibraryOfAlexandria:
     ####################### LOAD ##############################
 
     def _load_affliction_json(self):
-        self._afflictions = {}  # FIXME - unstub when json updated inline with skills
-        return
-
         with open('data/game/afflictions.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
         self._afflictions = data

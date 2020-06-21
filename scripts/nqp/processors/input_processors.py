@@ -9,11 +9,11 @@ from scripts.engine.core.constants import Direction, DirectionType, GameState, G
 from scripts.engine.library import library
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp import ai_processors
-from scripts.nqp.skills import Move, Skill
+from scripts.nqp.processors import ai_processors
+from scripts.nqp.actions.skills import Move, Skill
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):

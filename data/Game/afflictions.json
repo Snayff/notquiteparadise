@@ -6,8 +6,14 @@
         "description": "It weakens mundane defence and makes you a little bit slower.",
         "icon": "placeholder/icon_00.png",
         "name": "bogged down",
-        "shape": "square",
-        "shape_size": 1
+        "shape": "target",
+        "shape_size": 1,
+        "required_tags": [
+            "other_entity"
+        ],
+        "identity_tags": [
+            "affect_stat"
+        ]
     },
     "flaming": {
         "__dataclass__": "AfflictionData",
@@ -16,7 +22,13 @@
         "description": "It does damage.",
         "icon": "placeholder/icon_00.png",
         "name": "flaming",
-        "shape": "square",
-        "shape_size": 1
+        "shape": "target",
+        "shape_size": 1,
+        "required_tags": [
+            "other_entity"
+        ],
+        "identity_tags": [
+            "damage"
+        ]
     }
 }

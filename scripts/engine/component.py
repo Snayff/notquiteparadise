@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Union, Any
+from typing import TYPE_CHECKING, Any, Tuple
 from snecs import RegisteredComponent
-from scripts.engine.core.constants import EffectType
+
+from scripts.engine.core.constants import PrimaryStatType
+from scripts.nqp.actions.afflictions import Affliction
 
 if TYPE_CHECKING:
     import pygame
@@ -11,7 +13,6 @@ if TYPE_CHECKING:
     import tcod.map
     from snecs.typedefs import EntityID
     from scripts.engine.core.definitions import CharacteristicSpritesData
-    from scripts.nqp.skills import Skill
 
 
 ##########################################################
@@ -179,13 +180,16 @@ class Knowledge(RegisteredComponent):
 
         self.skill_order = skill_order  # list of skill names, to allow access by index
         self.skills: Dict[str, Dict[str, Any]] = skills  # skill_name : {Skill, cooldown}
+            # FIXME - how is it str and Skill? Can't be both
 
 
-class Afflictions(Dict[str, int], RegisteredComponent):
+class Afflictions(RegisteredComponent):
     """
-    An entity's Boons and Banes. held in dict as {affliction_name: duration}
+    An entity's Boons and Banes. held in .active as {affliction_name: duration}.
     """
-    pass
+    def __init__(self):
+        self.active: Dict[str, Affliction] = {}
+        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
 
 
 class Aspect(RegisteredComponent):
@@ -212,7 +216,7 @@ class Opinion(RegisteredComponent):
 
 class FOV(RegisteredComponent):
     """
-    An entities field of view.
+    An entity's field of view.
     """
 
     def __init__(self, fov_map: tcod.map.Map):

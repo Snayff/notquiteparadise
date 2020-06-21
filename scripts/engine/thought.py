@@ -8,10 +8,10 @@ from scripts.engine import world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import ProjectileExpiry, BASE_MOVE_COST
 from scripts.engine.core.definitions import ProjectileData
-from scripts.nqp.skills import Move
+from scripts.nqp.actions.skills import Move
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    pass
 
 
 class AIBehaviour(ABC):

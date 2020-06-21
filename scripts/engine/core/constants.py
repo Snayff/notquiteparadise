@@ -87,16 +87,6 @@ class GameState(SimpleNamespace):
     DEVELOPER = GameStateType(6)  # while using dev mode
 
 
-class EventTopic(SimpleNamespace):
-    """
-    Topics that Events can be associated with.
-    """
-    GAME = EventTopicType(1)
-    ENTITY = EventTopicType(2)
-    UI = EventTopicType(3)
-    INTERACTION = EventTopicType(4)
-
-
 class MessageType(SimpleNamespace):
     """Types of Message Events"""
     LOG = MessageTypeType(1)

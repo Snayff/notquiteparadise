@@ -4,8 +4,8 @@ import logging
 from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import state, world
-from scripts.engine.component import Knowledge, Resources, Identity, Tracked
-from scripts.engine.core.constants import GameState, TIME_PER_ROUND
+from scripts.engine.component import Afflictions, Knowledge, Resources, Identity, Tracked
+from scripts.engine.core.constants import GameState, INFINITE, TIME_PER_ROUND
 from scripts.engine.core.store import store
 
 if TYPE_CHECKING:
@@ -85,17 +85,16 @@ def next_round(time_progressed: int):
             if skill_dict["cooldown"] > 0:
                 knowledge.skills[skill_name]["cooldown"] = skill_dict["cooldown"] - 1
 
-    # # affliction durations
-    # FIXME - repair affliction duration reduction
-    # for entity, (afflictions, ) in existence.get_components([Afflictions]):
-    #     for affliction, duration in afflictions.items():
-    #         if duration - 1 <= 0:
-    #             # expired
-    #             del afflictions[affliction]
-    #
-    #         elif duration != INFINITE:
-    #             # reduce duration if not infinite
-    #             afflictions[affliction] = duration - 1
+    ## affliction durations
+    for entity, (afflictions, ) in world.get_components([Afflictions]):
+        for affliction, duration in afflictions.active.items():
+            if affliction.duration - 1 <= 0:
+                # expired
+                world.remove_affliction(entity, affliction.name)
+
+            elif duration != INFINITE:
+                # reduce duration if not infinite
+                afflictions[affliction] = duration - 1
 
     ## time management
     # add progressed time and minus time_in_round to keep the remaining time

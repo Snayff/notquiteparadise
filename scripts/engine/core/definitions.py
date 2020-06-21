@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.core.constants import PrimaryStatType, TargetTagType, DamageTypeType, \
+from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, TargetTag, TargetTagType, DamageTypeType, \
     AfflictionCategoryType, ShapeType, TerrainCollisionType, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, EffectType, Shape, \
     ResourceType, TargetingMethod, TargetingMethodType, Direction, Resource
@@ -318,6 +318,10 @@ class AfflictionData:
     description: str = field(default="none")
     icon: str = field(default="none")
     category: Optional[AfflictionCategoryType] = None
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+    required_tags: List[TargetTagType] = [TargetTag.OTHER_ENTITY]
+    identity_tags: List[EffectTypeType] = [EffectType.DAMAGE]
 
 
 ########################## WORLD #########################################
