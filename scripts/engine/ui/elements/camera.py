@@ -99,15 +99,19 @@ class Camera(UIPanel):
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 # get the required tile and publish click event
                 pass
-                # FIXME - how to handle click
+                # FIXME - how to handle click?
 
             # hovering a tile
             elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
+                updated_entity_info = False
+                from scripts.engine.ui.manager import ui
                 for entity, (position, ) in world.get_components([Position]):
                     position: Position
                     if position.x == x and position.y == y:
-                        from scripts.engine.ui.manager import ui
                         ui.set_selected_entity(entity)
+                        updated_entity_info = True
+                if not updated_entity_info:
+                    ui.set_selected_entity()
 
     ############### UPDATE ###########################
 

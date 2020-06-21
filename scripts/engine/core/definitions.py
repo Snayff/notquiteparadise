@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from snecs.typedefs import EntityID
 
-from scripts.engine.core.constants import PrimaryStatType, TargetTagType, EffectType, DamageTypeType, \
-    AfflictionCategoryType, InteractionCauseType, ShapeType, TerrainCollisionType, TravelMethodType, \
+from scripts.engine.core.constants import PrimaryStatType, TargetTagType, DamageTypeType, \
+    AfflictionCategoryType, ShapeType, TerrainCollisionType, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape, \
     ResourceType, TargetingMethod, TargetingMethodType, Direction, Resource
 from scripts.engine.core.extend_json import register_dataclass_with_json
@@ -291,16 +291,6 @@ class CharacteristicSpritePathsData:
 
 @register_dataclass_with_json
 @dataclass
-class InteractionData:
-    """
-    Data class for an interaction
-    """
-    cause: Optional[InteractionCauseType] = None
-    effects: List[EffectData] = field(default_factory=list)
-
-
-@register_dataclass_with_json
-@dataclass
 class CharacteristicData:
     """
     Data class for an aspects
@@ -328,7 +318,6 @@ class AfflictionData:
     description: str = field(default="none")
     icon: str = field(default="none")
     category: Optional[AfflictionCategoryType] = None
-    interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
 
 
 ########################## WORLD #########################################
@@ -345,11 +334,9 @@ class AspectData:
     sprite: str = field(default="none")
     blocks_sight: bool = False
     blocks_movement: bool = False
-    interactions: Dict[InteractionCauseType, InteractionData] = field(default_factory=dict)
 
 
 #################### GODS ###################################################
-
 
 @register_dataclass_with_json
 @dataclass
@@ -382,9 +369,3 @@ class GodData:
     sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
     attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
     interventions: Dict[int, InterventionData] = field(default_factory=dict)
-
-######################### VALIDATORS ####################################
-#
-# def _validate_effect_type(s):
-#     if s is not None and not hasattr(Effect, s):
-#         raise ValidationError(f"{s} is not a valid effect type")

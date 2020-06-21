@@ -1,19 +1,21 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Type, Iterator
+from typing import Iterator, TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import utility, world
-from scripts.engine.component import Position, Resources, HasCombatStats
-from scripts.engine.core.constants import ResourceType, Resource, TargetingMethodType, TargetingMethod, DirectionType, \
-    Shape, ShapeType, TargetTagType, TargetTag, Direction, Effect, PrimaryStat, BASE_ACCURACY, BASE_DAMAGE, DamageType, \
-    BASE_MOVE_COST
+from scripts.engine.component import HasCombatStats, Position, Resources
+from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
+    DirectionType, Effect, PrimaryStat, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
+    TargetingMethod, TargetingMethodType
 from scripts.engine.effect import DamageEffect, MoveActorEffect
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional, Tuple, List
 
 
 class Skill(ABC):

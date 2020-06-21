@@ -23,7 +23,6 @@ BASE_ACCURACY = 100
 BASE_DAMAGE = 5  # base amount of damage a skill should do. used as a starting point.
 MAX_SKILLS = 5
 
-DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log event_handlers receiving events or not
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
 
@@ -45,7 +44,6 @@ HitValueType = NewType("HitValueType", int)
 HitModifierType = NewType("HitModifierType", float)
 EffectType = NewType("EffectType", str)
 AfflictionCategoryType = NewType("AfflictionCategoryType", str)
-InteractionCauseType = NewType("InteractionCauseType", str)
 ShapeType = NewType("ShapeType", str)
 TerrainCollisionType = NewType("TerrainCollisionType", str)
 TravelMethodType = NewType("TravelMethodType", str)
@@ -292,25 +290,6 @@ class TargetingMethod(SimpleNamespace):
     """
     AUTO = TargetingMethodType("auto")
     TARGET = TargetingMethodType("target")
-
-
-class InteractionCause(SimpleNamespace):
-    """
-    When to trigger the afflictions
-    """
-    EXPIRE = InteractionCauseType("expire")  # when the entity expires
-    ENTITY_COLLISION = InteractionCauseType("entity_collision")
-    TERRAIN_COLLISION = InteractionCauseType("terrain_collision")
-    END_TURN = InteractionCauseType("end_turn")  # when entity ends their turn
-    MOVE = InteractionCauseType("move")  # when entity moves
-    PASSIVE = InteractionCauseType("passive")  # passively affects entity at all times. usually modifiers.
-    BURNED = InteractionCauseType("burned")  # when an entity is affected by burn damage
-
-    # Other triggers to consider
-    # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
-    # TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage
-    # USE_BURN = auto()  # apply if afflicted entity uses a burn type - etc.
-    # DEATH = auto()  # apply if afflicted entity dies
 
 
 class Shape(SimpleNamespace):

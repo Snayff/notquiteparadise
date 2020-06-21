@@ -7,8 +7,6 @@ from snecs.typedefs import EntityID
 from scripts.engine import world, utility
 from scripts.engine.component import Blocking, Aesthetic, Position, Resources
 from scripts.engine.core.constants import PrimaryStatType, DamageTypeType, Direction, TargetTag, DirectionType
-from scripts.engine.core.event_core import publisher
-from scripts.engine.event import EntityCollisionEvent, TerrainCollisionEvent
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -87,7 +85,6 @@ class MoveActorEffect(Effect):
         if not pos:
             return self.failure_effects
 
-        start_pos = (pos.x, pos.y)
         dir_x, dir_y = self.direction
         entity = self.target
         name = world.get_name(entity)
@@ -110,7 +107,6 @@ class MoveActorEffect(Effect):
                 
             # check for no entity in way but tile is blocked
             if not is_entity_on_tile and is_tile_blocking_movement and target_tile:
-                publisher.publish(TerrainCollisionEvent(entity, target_tile, self.direction, start_pos))
                 logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
                               f" blocked by terrain. ")
                 success = False
@@ -124,7 +120,6 @@ class MoveActorEffect(Effect):
 
                     if blocking.blocks_movement and (position.x == target_tile.x and position.y == target_tile.y):
                         # blocked by entity
-                        publisher.publish(EntityCollisionEvent(entity, blocking_entity, self.direction, start_pos))
                         blockers_name = world.get_name(blocking_entity)
                         logging.debug(
                             f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
@@ -144,14 +139,13 @@ class MoveActorEffect(Effect):
                     _position.y = target_y
                     success = True
 
-                # TODO - move to UI handler
                 # animate change
                 aesthetic = world.get_entitys_component(entity, Aesthetic)
                 if aesthetic:
                     aesthetic.target_screen_x, aesthetic.target_screen_y = (target_x, target_y)
                     aesthetic.current_sprite = aesthetic.sprites.move
 
-                # update fov if needed
+                # update fov
                 world.recompute_fov(entity)
 
         if success:

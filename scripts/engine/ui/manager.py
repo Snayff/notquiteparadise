@@ -315,7 +315,7 @@ class _UIManager:
 
     ######################## ENTITY INFO ###############################################
 
-    def set_selected_entity(self, entity: EntityID):
+    def set_selected_entity(self, entity: EntityID = 0):
         """
         Set the selected entity and show it.
         """

@@ -9,12 +9,12 @@ from typing import TYPE_CHECKING
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton, UIWindow
 from scripts.engine import utility
-from scripts.engine.core.constants import Effect, InteractionCause, DamageType, PrimaryStat, SecondaryStat, \
+from scripts.engine.core.constants import Effect, DamageType, PrimaryStat, SecondaryStat, \
     TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, TerrainCollision, TravelMethod, Resource
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
-    InterventionData, InteractionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData,\
+    InterventionData, GodData, EffectData, CharacteristicData, AspectData, AttitudeData,\
     AfflictionData
 
 if TYPE_CHECKING:
@@ -507,7 +507,6 @@ class DataEditor(UIWindow):
 
         field_options = {
             "effects": (effect_options, EffectData()),
-            "trigger_event": (get_members(InteractionCause), None),
             "affliction_name": (affliction_options, None),
             "aspect_name": (aspect_options, None),
             "damage_type": (get_members(DamageType), None),
@@ -531,7 +530,6 @@ class DataEditor(UIWindow):
             "target_directions": (get_members(Direction), None),
             "terrain_collision": (get_members(TerrainCollision), None),
             "travel_type": (get_members(TravelMethod), None),
-            "interactions": (affliction_options + effect_options + skill_options, InteractionData()),
             "attitudes": (affliction_options + effect_options + skill_options, AttitudeData()),
             "interventions": (skill_options, InterventionData()),
             "skills": ("", SkillData()),

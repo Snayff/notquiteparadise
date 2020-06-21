@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Union, Any
 from snecs import RegisteredComponent
-from scripts.engine.core.constants import InteractionCauseType, Effect
+from scripts.engine.core.constants import Effect
 
 if TYPE_CHECKING:
     import pygame
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from scripts.engine.thought import AIBehaviour
     import tcod.map
     from snecs.typedefs import EntityID
-    from scripts.engine.core.definitions import CharacteristicSpritesData, InteractionData
+    from scripts.engine.core.definitions import CharacteristicSpritesData
     from scripts.nqp.skills import Skill
 
 
@@ -217,10 +217,3 @@ class FOV(RegisteredComponent):
 
     def __init__(self, fov_map: tcod.map.Map):
         self.map: tcod.map.Map = fov_map
-
-
-class Interactions(Dict[InteractionCauseType, List[Effect]], RegisteredComponent):
-    """
-    The effects triggered when a specific criteria is met.
-    """
-    pass

@@ -13,10 +13,8 @@ import snecs
 from snecs.world import default_world
 from scripts.engine import state, world, chronicle, key, debug
 from scripts.engine.core.constants import GameState, VERSION, EventTopic
-from scripts.engine.core.event_core import event_hub
 from scripts.engine.ui.manager import ui
 from scripts.nqp import display_processors, input_processors
-from scripts.nqp.interaction_handler import InteractionHandler
 
 # =================================================================================================
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -56,7 +54,6 @@ def main():
     profiler = create_profiler()
 
     # initialise the game
-    initialise_event_handlers()
     initialise_game()
 
     # run the game
@@ -243,17 +240,6 @@ def initialise_game():
         aesthetic.screen_x, aesthetic.screen_y = (position.x, position.y)
         aesthetic.target_screen_x = aesthetic.screen_x
         aesthetic.target_screen_y = aesthetic.screen_y
-
-
-def initialise_event_handlers():
-    """
-    Create the various event handlers and subscribe to required events.
-    """
-
-    interaction_handler = InteractionHandler(event_hub)
-    interaction_handler.subscribe(EventTopic.INTERACTION)
-    interaction_handler.subscribe(EventTopic.ENTITY)
-
 
 
 if __name__ == "__main__":  # prevents being run from other modules
