@@ -1,19 +1,21 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Type, Iterator
+from typing import Iterator, TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import utility, world
-from scripts.engine.component import Position, Resources, HasCombatStats
-from scripts.engine.core.constants import ResourceType, Resource, TargetingMethodType, TargetingMethod, DirectionType, \
-    Shape, ShapeType, TargetTagType, TargetTag, Direction, Effect, PrimaryStat, BASE_ACCURACY, BASE_DAMAGE, DamageType, \
-    BASE_MOVE_COST
+from scripts.engine.component import HasCombatStats, Position, Resources
+from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
+    DirectionType, Effect, PrimaryStat, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
+    TargetingMethod, TargetingMethodType
 from scripts.engine.effect import DamageEffect, MoveActorEffect
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional, Tuple, List
 
 
 class Skill(ABC):
@@ -28,6 +30,7 @@ class Skill(ABC):
     """
 
     # to be overwritten in subclass
+    name: str = ""
     description: str = ""
     icon_path: str = ""
     resource_type: ResourceType = Resource.STAMINA
@@ -85,7 +88,8 @@ class Move(Skill):
     """
     Basic move for an entity.
     """
-    # These are not defined in the json. They are set here and only here.
+    # Move's definitions are not defined in the json. They are set here and only here.
+    name = "move"
     required_tags = [TargetTag.SELF]
     description = "this is the normal movement."
     icon_path = ""
@@ -132,6 +136,7 @@ class Move(Skill):
 
 class BasicAttack(Skill):
     data = library.get_skill_data("basic_attack")
+    name = "basic_attack"
     required_tags = data.required_tags
     description = data.description
     icon_path = data.icon

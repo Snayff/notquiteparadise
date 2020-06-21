@@ -19,6 +19,8 @@ class EntityInfo(UIPanel):
     """
 
     def __init__(self, rect: pygame.Rect, manager: UIManager):
+        # TODO - create highlevel entity summary for info while on gamemap
+        # TODO - create full summary as new window
         # FIXME - entity info  doesn't update when entity info changes.
 
         # sections

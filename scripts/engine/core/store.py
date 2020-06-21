@@ -18,13 +18,13 @@ class _Store:
     """
     def __init__(self):
         # used in state
-        self.current_game_state: GameStateType = GameState.GAME_INITIALISING
-        self.previous_game_state: GameStateType = GameState.GAME_INITIALISING
+        self.current_game_state: GameStateType = GameState.LOADING
+        self.previous_game_state: GameStateType = GameState.LOADING
         self.internal_clock = pygame.time.Clock()
         self.active_skill = None
 
         # used in world
-        self.current_game_map = None
+        self.current_gamemap = None
 
         # used in chrono
         self.turn_queue: Dict[EntityID, int] = {}  # (entity, time)

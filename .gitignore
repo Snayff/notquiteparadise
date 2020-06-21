@@ -58,7 +58,6 @@ target/
 # Environments
 .env
 .idea
-venv/
 
 # Temp files
 ~$*

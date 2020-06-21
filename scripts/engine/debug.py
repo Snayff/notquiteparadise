@@ -59,6 +59,13 @@ def set_fps_visibility(is_visible: bool):
     _debugger.fps_visible = is_visible
 
 
+def is_fps_visible() -> bool:
+    if _debugger.fps_visible:
+        return True
+    else:
+        return False
+
+
 def get_visible_values() -> List[str]:
     """"
     Get all visible values from the debugger

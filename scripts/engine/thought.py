@@ -6,10 +6,9 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 from scripts.engine import world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import ProjectileExpiry, MessageType, BASE_MOVE_COST
+from scripts.engine.core.constants import ProjectileExpiry, BASE_MOVE_COST
 from scripts.engine.core.definitions import ProjectileData
-from scripts.engine.core.event_core import publisher
-from scripts.engine.event import MoveEvent, DieEvent, ExpireEvent, MessageEvent, EndTurnEvent
+from scripts.nqp.skills import Move
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -38,19 +37,30 @@ class ProjectileBehaviour(AIBehaviour):
 
     def act(self):
         entity = self.entity
+        position = world.get_entitys_component(entity, Position)
+        tile = world.get_tile((position.x, position.y))
 
         # if we havent travelled max distance then move
         if self.distance_travelled < self.data.range:
-            position = world.get_entitys_component(entity, Position)
-            publisher.publish(MoveEvent(entity, (position.x, position.y),
-                                        (self.data.direction[0], self.data.direction[1]),
-                                        self.data.travel_type, self.data.speed))
-            self.distance_travelled += 1
+            if tile:
+                if world.pay_resource_cost(entity, Move.resource_type, Move.resource_cost):
+                    if world.use_skill(entity, Move, tile, self.data.direction):
+                        self.distance_travelled += 1
+                        world.end_turn(entity, self.data.speed)
+
+                    # movement blocked
+                    # FIXME - handle Terrain collisions
+
         else:
             # we have reached the limit, process expiry and then die
             if self.data.expiry_type == ProjectileExpiry.ACTIVATE:
-                publisher.publish(ExpireEvent(entity))
-            publisher.publish(DieEvent(entity))
+                if tile:
+                    if world.pay_resource_cost(entity, Move.resource_type, Move.resource_cost):
+                        skill = world.get_known_skill(entity, self.data.skill_name)
+                        world.use_skill(entity, skill, tile, self.data.direction)
+
+            # at max range, kill regardless
+            world.kill_entity(entity)
 
 
 class SkipTurn(AIBehaviour):
@@ -63,4 +73,4 @@ class SkipTurn(AIBehaviour):
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
-        publisher.publish((EndTurnEvent(self.entity, BASE_MOVE_COST)))
+        world.end_turn(self.entity, BASE_MOVE_COST)

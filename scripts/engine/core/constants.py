@@ -5,7 +5,7 @@ from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
-VERSION = "0.99.0"
+VERSION = "0.100.0"
 
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
@@ -23,7 +23,6 @@ BASE_ACCURACY = 100
 BASE_DAMAGE = 5  # base amount of damage a skill should do. used as a starting point.
 MAX_SKILLS = 5
 
-DEBUG_LOG_EVENT_RECEIPTS = False  # whether to log event_handlers receiving events or not
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
 
@@ -45,7 +44,6 @@ HitValueType = NewType("HitValueType", int)
 HitModifierType = NewType("HitModifierType", float)
 EffectType = NewType("EffectType", str)
 AfflictionCategoryType = NewType("AfflictionCategoryType", str)
-InteractionCauseType = NewType("InteractionCauseType", str)
 ShapeType = NewType("ShapeType", str)
 TerrainCollisionType = NewType("TerrainCollisionType", str)
 TravelMethodType = NewType("TravelMethodType", str)
@@ -81,15 +79,12 @@ class GameState(SimpleNamespace):
     """
     States the game can be in.
     """
-    PLAYER_TURN = GameStateType(1)
-    NPC_TURN = GameStateType(2)
-    PLAYER_DEAD = GameStateType(3)
-    TARGETING_MODE = GameStateType(4)
-    EXIT_GAME = GameStateType(5)
-    GAME_INITIALISING = GameStateType(6)
-    NEW_TURN = GameStateType(7)  # interim stage to handle  changes between stages
-    DEV_MODE = GameStateType(8)
-    PREVIOUS = GameStateType(9)
+    LOADING = GameStateType(1)  # while loading, to prevent key press.
+    GAMEMAP = GameStateType(2)  # while player moving around the gamemap
+    PLAYER_DEAD = GameStateType(3)  # while player is dead
+    TARGETING = GameStateType(4)  # while player is targeting
+    EXIT_GAME = GameStateType(5)  # while exiting
+    DEVELOPER = GameStateType(6)  # while using dev mode
 
 
 class EventTopic(SimpleNamespace):
@@ -297,25 +292,6 @@ class TargetingMethod(SimpleNamespace):
     TARGET = TargetingMethodType("target")
 
 
-class InteractionCause(SimpleNamespace):
-    """
-    When to trigger the afflictions
-    """
-    EXPIRE = InteractionCauseType("expire")  # when the entity expires
-    ENTITY_COLLISION = InteractionCauseType("entity_collision")
-    TERRAIN_COLLISION = InteractionCauseType("terrain_collision")
-    END_TURN = InteractionCauseType("end_turn")  # when entity ends their turn
-    MOVE = InteractionCauseType("move")  # when entity moves
-    PASSIVE = InteractionCauseType("passive")  # passively affects entity at all times. usually modifiers.
-    BURNED = InteractionCauseType("burned")  # when an entity is affected by burn damage
-
-    # Other triggers to consider
-    # DEAL_DAMAGE = auto()  # apply if afflicted entity deals damage
-    # TAKE_DAMAGE = auto()  # apply if afflicted entity receives damage
-    # USE_BURN = auto()  # apply if afflicted entity uses a burn type - etc.
-    # DEATH = auto()  # apply if afflicted entity dies
-
-
 class Shape(SimpleNamespace):
     """
     When to trigger the afflictions
@@ -355,8 +331,8 @@ class ProjectileExpiry(SimpleNamespace):
 
 class ProjectileSpeed(SimpleNamespace):
     """
-    The speed at which a projectile travels. How much time to move a tile.
+    The speed at which a projectile travels; how much time to move a tile.
     """
     # TODO - externalise the values
-    SLOW = ProjectileSpeedType(10)
-    FAST = ProjectileSpeedType(30)
+    SLOW = ProjectileSpeedType(int(BASE_MOVE_COST / 2))
+    FAST = ProjectileSpeedType(int(SLOW / 3))
