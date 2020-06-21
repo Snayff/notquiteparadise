@@ -10,7 +10,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine.core.constants import PrimaryStatType, TargetTagType, DamageTypeType, \
     AfflictionCategoryType, ShapeType, TerrainCollisionType, TravelMethodType, \
-    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, Effect, Shape, \
+    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, EffectType, Shape, \
     ResourceType, TargetingMethod, TargetingMethodType, Direction, Resource
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
@@ -91,7 +91,7 @@ class EffectData(ABC):
     # who am I?
     originator: Optional[EntityID] = None  # actor
     creators_name: Optional[str] = None  # skill, projectile, etc.'s name
-    effect_type = Effect.MOVE
+    effect_type = EffectType.MOVE
 
     # who are we targeting?
     required_tags: List[TargetTagType] = field(default_factory=list)
@@ -115,7 +115,7 @@ class ApplyAfflictionEffectData(EffectData):
     """
     Data for the Apply Afflictions effect.
     """
-    effect_type = Effect.APPLY_AFFLICTION
+    effect_type = EffectType.APPLY_AFFLICTION
 
     duration: int = 0
     affliction_name: str = field(default="none")
@@ -127,7 +127,7 @@ class DamageEffectData(EffectData):
     """
     Data for the Damage effect.
     """
-    effect_type = Effect.DAMAGE
+    effect_type = EffectType.DAMAGE
 
     damage: int = 0
     damage_type: Optional[DamageTypeType] = None
@@ -141,7 +141,7 @@ class AffectStatEffectData(EffectData):
     """
     Data for the Affect Stat effect.
     """
-    effect_type = Effect.AFFECT_STAT
+    effect_type = EffectType.AFFECT_STAT
 
     stat_to_affect: Optional[PrimaryStatType] = None
     affect_stat_amount: int = 0
@@ -153,7 +153,7 @@ class AddAspectEffectData(EffectData):
     """
     Data for the Add Aspect effect.
     """
-    effect_type = Effect.ADD_ASPECT
+    effect_type = EffectType.ADD_ASPECT
 
     aspect_name: str = field(default="none")  # TODO - confirm if we want aspect name or key
 
@@ -164,7 +164,7 @@ class RemoveAspectEffectData(EffectData):
     """
     Data for the Remove Aspect effect.
     """
-    effect_type = Effect.REMOVE_ASPECT
+    effect_type = EffectType.REMOVE_ASPECT
 
     aspect_name: str = field(default="none")  # TODO - confirm if we want aspect name or key
 
@@ -175,7 +175,7 @@ class UseSkillEffectData(EffectData):
     """
     Data for the  Trigger Skill effect.
     """
-    effect_type = Effect.TRIGGER_SKILL
+    effect_type = EffectType.TRIGGER_SKILL
 
     skill_name: str = field(default="none")  # TODO - confirm if we want skill name or key
     required_tags: List = field(default_factory=list)
@@ -187,7 +187,7 @@ class ActivateSkillEffectData(EffectData):
     """
     Data for the  Activate Skill effect.
     """
-    effect_type = Effect.TRIGGER_SKILL
+    effect_type = EffectType.TRIGGER_SKILL
 
     skill_name: str = field(default="none")  # TODO - confirm if we want skill name or key
 
@@ -198,7 +198,7 @@ class KillEntityEffectData(EffectData):
     """
     Data for the  Kill Entity effect.
     """
-    effect_type = Effect.KILL_ENTITY
+    effect_type = EffectType.KILL_ENTITY
 
     # use an init to prevent need to specify default arg
     def __init__(self, target_entity):
@@ -211,7 +211,7 @@ class MoveActorEffectData(EffectData):
     """
     Data for the  Activate Skill effect.
     """
-    effect_type = Effect.MOVE
+    effect_type = EffectType.MOVE
 
     # TODO - likley to need different options to get the direction, e.g. absolute, away, towards
     move_direction: DirectionType = Direction.CENTRE

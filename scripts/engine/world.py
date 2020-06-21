@@ -13,8 +13,8 @@ from scripts.engine import utility, debug, chronicle
 from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
     Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Afflictions, Behaviour, \
     IsProjectile
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, MessageType, TargetTag, FOVInfo, \
-    TargetTagType, DirectionType, Direction, ResourceType, INFINITE, TravelMethodType, TravelMethod, HitTypeType,\
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, MessageType, ShapeType, TargetTag, FOVInfo, \
+    TargetTagType, DirectionType, Direction, ResourceType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, \
     HitValue, HitType, HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT
 from scripts.engine.core.definitions import CharacteristicSpritesData, ProjectileData, CharacteristicSpritePathsData
 from scripts.engine.core.store import store
@@ -676,6 +676,29 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
             return knowledge.skills[skill_name]["skill"]
         except KeyError:
             logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
+
+
+def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int):
+    """
+    Return a list of entities that are within the shape given, using target position as a centre point. Entity must
+    have Position, Resources and Combat Stats to be eligible.
+    """
+    affected_entities = []
+    affected_positions = []
+    target_x = target_pos[0]
+    target_y = target_pos[1]
+
+    # get affected tiles
+    coords = utility.get_coords_from_shape(shape, shape_size)
+    for coord in coords:
+        affected_positions.append((coord[0] + target_x, coord[1] + target_y))
+
+    # get relevant entities in target area
+    for entity, (position, *others) in get_components([Position, Resources, HasCombatStats]):
+        if (position.x, position.y) in affected_positions:
+            affected_entities.append(entity)
+
+    return affected_entities
 
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################

@@ -2,51 +2,21 @@
     "bogged_down": {
         "__dataclass__": "AfflictionData",
         "category": "bane",
+        "class_name": "BoggedDown",
         "description": "It weakens mundane defence and makes you a little bit slower.",
-        "interactions": {
-            "passive": {
-                "__dataclass__": "InteractionData",
-                "cause": "passive",
-                "effects": [
-                    {
-                        "__dataclass__": "AffectStatEffectData",
-                        "accuracy": 0,
-                        "affect_stat_amount": -10,
-                        "required_tags": [
-                            "other_entity"
-                        ],
-                        "stat_to_affect": "bustle"
-                    }
-                ]
-            }
-        },
         "icon": "placeholder/icon_00.png",
-        "name": "bogged down"
+        "name": "bogged down",
+        "shape": "square",
+        "shape_size": 1
     },
     "flaming": {
         "__dataclass__": "AfflictionData",
         "category": "bane",
+        "class_name": "Flaming",
         "description": "It does damage.",
-        "interactions": {
-            "move": {
-                "__dataclass__": "InteractionData",
-                "cause": "move",
-                "effects": [
-                    {
-                        "__dataclass__": "DamageEffectData",
-                        "damage": 15,
-                        "damage_type": "burn",
-                        "required_tags": [
-                            "self"
-                        ],
-                        "stat_to_target": "bustle",
-                        "mod_amount": 0.1,
-                        "mod_stat": "skullduggery"
-                    }
-                ]
-            }
-        },
         "icon": "placeholder/icon_00.png",
-        "name": "flaming"
+        "name": "flaming",
+        "shape": "square",
+        "shape_size": 1
     }
 }

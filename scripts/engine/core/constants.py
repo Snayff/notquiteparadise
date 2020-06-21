@@ -5,7 +5,7 @@ from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
-VERSION = "0.100.0"
+VERSION = "0.101.0"
 
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
@@ -42,7 +42,7 @@ DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
 HitValueType = NewType("HitValueType", int)
 HitModifierType = NewType("HitModifierType", float)
-EffectType = NewType("EffectType", str)
+EffectTypeType = NewType("EffectTypeType", str)
 AfflictionCategoryType = NewType("AfflictionCategoryType", str)
 ShapeType = NewType("ShapeType", str)
 TerrainCollisionType = NewType("TerrainCollisionType", str)
@@ -261,19 +261,17 @@ class HitType(SimpleNamespace):
     CRIT = HitTypeType("crit")
 
 
-class Effect(SimpleNamespace):
+class EffectType(SimpleNamespace):
     """
     Types of effects
     """
-    APPLY_AFFLICTION = EffectType("apply_affliction")
-    DAMAGE = EffectType("damage")
-    MOVE = EffectType("move")
-    AFFECT_STAT = EffectType("affect_stat")
-    ADD_ASPECT = EffectType("add_aspect")
-    REMOVE_ASPECT = EffectType("remove_aspect")
-    TRIGGER_SKILL = EffectType("trigger_skill")
-    ACTIVATE_SKILL = EffectType("activate_skill")
-    KILL_ENTITY = EffectType("kill_entity")
+    APPLY_AFFLICTION = EffectTypeType("apply_affliction")
+    DAMAGE = EffectTypeType("damage")
+    MOVE = EffectTypeType("move")
+    AFFECT_STAT = EffectTypeType("affect_stat")
+    ADD_ASPECT = EffectTypeType("add_aspect")
+    REMOVE_ASPECT = EffectTypeType("remove_aspect")
+    TRIGGER_SKILL = EffectTypeType("trigger_skill")
 
 
 class AfflictionCategory(SimpleNamespace):

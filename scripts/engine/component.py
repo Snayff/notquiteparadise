@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Union, Any
 from snecs import RegisteredComponent
-from scripts.engine.core.constants import Effect
+from scripts.engine.core.constants import EffectType
 
 if TYPE_CHECKING:
     import pygame
@@ -168,7 +168,7 @@ class Behaviour(RegisteredComponent):
 
 class Knowledge(RegisteredComponent):
     """
-    An entity's knowledge, including skills.
+    An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
     def __init__(self, skills: Dict[str, Dict[str, Any]] = None, skill_order: List[str] = None):
