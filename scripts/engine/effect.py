@@ -5,9 +5,8 @@ from abc import ABC
 from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import world, utility
-from scripts.engine.component import Blocking, Aesthetic, FOV, HasCombatStats, Position, Resources
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, PrimaryStatType, DamageTypeType, Direction, TargetTag, \
-    DirectionType
+from scripts.engine.component import Blocking, Aesthetic, Position, Resources
+from scripts.engine.core.constants import PrimaryStatType, DamageTypeType, Direction, TargetTag, DirectionType
 from scripts.engine.core.event_core import publisher
 from scripts.engine.event import EntityCollisionEvent, TerrainCollisionEvent
 
