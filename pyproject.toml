@@ -7,7 +7,7 @@ authors = ["Snayff"]
 [tool.poetry.dependencies]
 python = "^3.8"
 snecs = "^1.2.1"
-pygame = "2.0.0dev6"
+pygame = "2.0.0dev10"
 pygame-gui = "^0.5.6"
 pytweening = "^1.0.3"
 tcod = "^11.13.1"

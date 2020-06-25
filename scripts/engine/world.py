@@ -13,8 +13,8 @@ from scripts.engine import utility, debug, chronicle
 from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
     Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Afflictions, Behaviour, \
     IsProjectile
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, MessageType, TargetTag, FOVInfo, \
-    TargetTagType, DirectionType, Direction, ResourceType, INFINITE, TravelMethodType, TravelMethod, HitTypeType,\
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, EffectType, MessageType, ShapeType, TargetTag, FOVInfo, \
+    TargetTagType, DirectionType, Direction, ResourceType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, \
     HitValue, HitType, HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT
 from scripts.engine.core.definitions import CharacteristicSpritesData, ProjectileData, CharacteristicSpritePathsData
 from scripts.engine.core.store import store
@@ -24,8 +24,8 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp import skills
-from scripts.nqp.skills import Skill, BasicAttack, Move
+from scripts.nqp.actions import skills
+from scripts.nqp.actions.skills import Skill, BasicAttack, Move
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 _C = TypeVar("_C", bound=Component)  # to represent components where we don't know which is being used
 get_entitys_components = snecs.all_components
 get_components = Query
-has_component = snecs.has_component
+entity_has_component = snecs.has_component
 
 
 ################################ CREATE - INIT OBJECT - RETURN NEW OBJECT ###############################
@@ -114,12 +114,9 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     # create the entity
     entity = create_entity(actor)
 
-    # setup basic attack as a known skill and an interaction  # N.B. must be after entity creation
+    # setup basic attack as a known skill  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
-    # TODO - rebuild interactions
-    # use_skill_effect = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
-    # add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill_effect]}))
-    # N.B. All actors start with basic attack and move
+
     basic_attack = {
         "skill": BasicAttack,
         "cooldown": 0
@@ -190,13 +187,6 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     projectile.append(Tracked(chronicle.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     entity = create_entity(projectile)
-
-
-    # TODO - rebuild interactions
-    # activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.required_tags,
-    #                                          creator=name)
-    # kill_entity = KillEntityEffectData(target_entity=entity)
-    # add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [activate_skill, kill_entity]}))
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
@@ -602,7 +592,7 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
     """
     Get an entity's component. Log if component not found.
     """
-    if has_component(entity, component):
+    if entity_has_component(entity, component):
         return snecs.entity_component(entity, component)
     else:
         debug.log_component_not_found(entity, component)
@@ -644,8 +634,10 @@ def get_primary_stat(entity: EntityID, primary_stat: str) -> int:
         homeland_data = library.get_homeland_data(homeland.name)
         value += getattr(homeland_data, stat)
 
-    # TODO - re add afflicitons
-    # value += _manager.Afflictions.get_stat_change_from_afflictions_on_entity(entity, primary_stat)
+    afflictions = get_entitys_component(entity, Afflictions)
+    for modifier in afflictions.stat_modifiers.values():
+        if modifier[0] == stat:
+            value += modifier[1]
 
     # ensure no dodgy numbers, like floats or negative
     value = max(1, int(value))
@@ -676,6 +668,29 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
             return knowledge.skills[skill_name]["skill"]
         except KeyError:
             logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
+
+
+def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int):
+    """
+    Return a list of entities that are within the shape given, using target position as a centre point. Entity must
+    have Position, Resources and Combat Stats to be eligible.
+    """
+    affected_entities = []
+    affected_positions = []
+    target_x = target_pos[0]
+    target_y = target_pos[1]
+
+    # get affected tiles
+    coords = utility.get_coords_from_shape(shape, shape_size)
+    for coord in coords:
+        affected_positions.append((coord[0] + target_x, coord[1] + target_y))
+
+    # get relevant entities in target area
+    for entity, (position, *others) in get_components([Position, Resources, HasCombatStats]):
+        if (position.x, position.y) in affected_positions:
+            affected_entities.append(entity)
+
+    return affected_entities
 
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
@@ -868,7 +883,6 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
     # if we dont have skill we cant do anything
     if not skill:
-        logging.warning(f"'{get_name(entity)}' tried to use {skill_name} but doesnt know it.")
         return False
 
     # flags
@@ -908,9 +922,9 @@ def recompute_fov(entity: EntityID) -> bool:
     """
     Recalculate an entity's FOV
     """
-    if has_component(entity, FOV) and has_component(entity, Position):
+    if entity_has_component(entity, FOV) and entity_has_component(entity, Position):
         # get sight range
-        if has_component(entity, HasCombatStats):
+        if entity_has_component(entity, HasCombatStats):
             stats = create_combat_stats(entity)
             sight_range = stats.sight_range
         else:
@@ -1024,7 +1038,7 @@ def learn_skill(entity: EntityID, skill_name: str) -> bool:
     """
     Add the skill name to the entity's knowledge component.
     """
-    if not has_component(entity, Knowledge):
+    if not entity_has_component(entity, Knowledge):
         add_component(entity, Knowledge())
     knowledge = get_entitys_component(entity, Knowledge)
 
@@ -1135,6 +1149,22 @@ def judge_action(entity: EntityID, action_name: str):
             name = get_name(entity)
             logging.info(f"'{identity.name}' reacted to '{name}' using {action_name}.  New "
                          f"opinion = {opinion.opinions[entity]}")
+
+
+def remove_affliction(entity: EntityID, affliction_name: str):
+    """
+    Remove affliction from active list and undo any stat modification.
+    """
+    afflictions = get_entitys_component(entity, Afflictions)
+
+    if affliction_name in afflictions.active:
+        # if it  is affect_stat remove the affect
+        affliction = afflictions.active[affliction_name]
+        if EffectType.AFFECT_STAT in affliction.identity_tags:
+            afflictions.stat_modifiers.pop(affliction_name)
+
+        # remove from active list
+        afflictions.active.pop(affliction_name)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

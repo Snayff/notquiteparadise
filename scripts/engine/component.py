@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Union, Any
+from typing import TYPE_CHECKING, Any, Tuple
 from snecs import RegisteredComponent
-from scripts.engine.core.constants import Effect
+from scripts.engine.core.constants import PrimaryStatType
 
 if TYPE_CHECKING:
     import pygame
+    import tcod.map
     from typing import List, Dict, Optional
     from scripts.engine.thought import AIBehaviour
-    import tcod.map
     from snecs.typedefs import EntityID
     from scripts.engine.core.definitions import CharacteristicSpritesData
-    from scripts.nqp.skills import Skill
+    from scripts.nqp.actions.afflictions import Affliction
 
 
 ##########################################################
@@ -55,6 +55,7 @@ class HasCombatStats(RegisteredComponent):
     A flag to show if an entity has stats used for combat.
     """
     __slots__ = ()
+    # TODO - move stats to here, set base stats on init then hold modification value
 
 
 #################### OTHERS #########################
@@ -127,7 +128,7 @@ class Identity(RegisteredComponent):
 
 
 class People(RegisteredComponent):
-    # TODO - inherit from str and add name directly
+    # TODO - combine with savvy and homeland and create characteristic compnonent
     """
     An entity's people.
     """
@@ -137,7 +138,6 @@ class People(RegisteredComponent):
 
 
 class Savvy(RegisteredComponent):
-    # TODO - inherit from str and add name directly
     """
     An entity's savvy.
     """
@@ -147,7 +147,6 @@ class Savvy(RegisteredComponent):
 
 
 class Homeland(RegisteredComponent):
-    # TODO - inherit from str and add name directly
     """
     An entity's homeland.
     """
@@ -168,7 +167,7 @@ class Behaviour(RegisteredComponent):
 
 class Knowledge(RegisteredComponent):
     """
-    An entity's knowledge, including skills.
+    An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
     def __init__(self, skills: Dict[str, Dict[str, Any]] = None, skill_order: List[str] = None):
@@ -179,13 +178,16 @@ class Knowledge(RegisteredComponent):
 
         self.skill_order = skill_order  # list of skill names, to allow access by index
         self.skills: Dict[str, Dict[str, Any]] = skills  # skill_name : {Skill, cooldown}
+            # FIXME - how is it str and Skill? Can't be both
 
 
-class Afflictions(Dict[str, int], RegisteredComponent):
+class Afflictions(RegisteredComponent):
     """
-    An entity's Boons and Banes. held in dict as {affliction_name: duration}
+    An entity's Boons and Banes. held in .active as {affliction_name: duration}.
     """
-    pass
+    def __init__(self):
+        self.active: Dict[str, Affliction] = {}
+        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
 
 
 class Aspect(RegisteredComponent):
@@ -212,7 +214,7 @@ class Opinion(RegisteredComponent):
 
 class FOV(RegisteredComponent):
     """
-    An entities field of view.
+    An entity's field of view.
     """
 
     def __init__(self, fov_map: tcod.map.Map):

@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import world, utility
-from scripts.engine.component import Blocking, Aesthetic, Position, Resources
+from scripts.engine.component import Afflictions, Blocking, Aesthetic, Position, Resources
 from scripts.engine.core.constants import PrimaryStatType, DamageTypeType, Direction, TargetTag, DirectionType
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional, List
 
 
 class Effect(ABC):
@@ -18,6 +18,13 @@ class Effect(ABC):
         self.origin = origin
         self.success_effects: List[Optional[Effect]] = success_effects
         self.failure_effects: List[Optional[Effect]] = failure_effects
+
+    @abstractmethod
+    def evaluate(self):
+        """
+        Evaluate the effect, triggering more if needed. Must be overridden by subclass
+        """
+        pass
 
 
 class DamageEffect(Effect):
@@ -152,3 +159,101 @@ class MoveActorEffect(Effect):
             return self.success_effects
         else:
             return self.failure_effects
+
+
+class AffectStatEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]], cause_name: str,  target: EntityID,
+            stat_to_target: PrimaryStatType, affect_amount: int):
+
+        super().__init__(origin, success_effects, failure_effects)
+
+        self.stat_to_target = stat_to_target
+        self.affect_amount = affect_amount
+        self.target = target
+        self.cause_name = cause_name
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        TBC - not implemented
+        """
+        logging.debug("Evaluating Affect Stat Effect...")
+        success = False
+
+        afflictions = world.get_entitys_component(self.target, Afflictions)
+
+        # if not already applied
+        if self.cause_name not in afflictions.stat_modifiers:
+            afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+            success = True
+
+        if success:
+            return self.success_effects
+        else:
+            return self.failure_effects
+
+
+class ApplyAfflictionEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]],):
+        super().__init__(origin, success_effects, failure_effects)
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        TBC - not implemented
+        """
+        logging.debug("Evaluating Apply Affliction Effect...")
+        logging.warning("-> effect not implemented.")
+
+
+class AddAspectEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]], ):
+        super().__init__(origin, success_effects, failure_effects)
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        TBC - not implemented
+        """
+        logging.debug("Evaluating Add Aspect Effect...")
+        logging.warning("-> effect not implemented.")
+
+
+class RemoveAspectEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]], ):
+        super().__init__(origin, success_effects, failure_effects)
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        TBC - not implemented
+        """
+        logging.debug("Evaluating Remove Aspect Effect...")
+        logging.warning("-> effect not implemented.")
+
+
+class TriggerSkillEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]], ):
+        super().__init__(origin, success_effects, failure_effects)
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        TBC - not implemented
+        """
+        logging.debug("Evaluating Trigger Skill Effect...")
+        logging.warning("-> effect not implemented.")
+
+
+class KillEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]],):
+        super().__init__(origin, success_effects, failure_effects)
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        TBC - not implemented
+        """
+        logging.debug("Evaluating Kill Effect...")
+        logging.warning("-> effect not implemented.")
+

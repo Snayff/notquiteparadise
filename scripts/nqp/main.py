@@ -12,9 +12,10 @@ import pygame
 import snecs
 from snecs.world import default_world
 from scripts.engine import state, world, chronicle, key, debug
-from scripts.engine.core.constants import GameState, VERSION, EventTopic
+from scripts.engine.core.constants import GameState, VERSION
 from scripts.engine.ui.manager import ui
-from scripts.nqp import display_processors, input_processors
+from scripts.nqp.processors import display_processors, input_processors
+
 
 # =================================================================================================
 ########################## CORE DESIGN PHILOSOPHIES ##############################################
@@ -32,6 +33,8 @@ from scripts.nqp import display_processors, input_processors
 # If a function is named after a verb, its return value is of no significance or returns nothing. # TODO - review
 # If checking a bool use IsA or HasA.
 # If setting a variable from statically held data prefix with "load"
+# Any variable with "name" may include spaces and other special characters. Any variable with "key" is alphanumeric
+#    only.
 
 
 ############################### PRE-MERGE CHECKLIST ######################################

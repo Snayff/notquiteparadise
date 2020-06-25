@@ -5,7 +5,7 @@ import pygame
 from typing import TYPE_CHECKING, cast
 from pygame_gui import UIManager
 from snecs.typedefs import EntityID
-from scripts.engine import debug
+from scripts.engine import debug, utility
 from scripts.engine.core.constants import Direction, GAP_SIZE, ICON_SIZE, MAX_SKILLS, MessageType, MessageTypeType, \
     SKILL_SIZE, \
     VisualInfo, UIElement, UIElementType, DirectionType
@@ -124,7 +124,8 @@ class _UIManager:
         try:
             return self._elements[element_type]
         except KeyError:
-            logging.warning(f"Tried to get {element_type} ui element but key not found, is it init`d?")
+            element_name = utility.value_to_member(element_type, UIElement)
+            logging.warning(f"Tried to get {element_name} ui element but key not found, is it init`d?")
             return None
 
     def get_gui_manager(self) -> UIManager:
@@ -198,6 +199,7 @@ class _UIManager:
         """
         Initialise the game's UI elements. Helper function to run kill_element on relevant elements.
         """
+        # FIXME - elements being referenced before being init'd
         self.create_element(UIElement.CAMERA)
         self.create_element(UIElement.SKILL_BAR)
         self.create_element(UIElement.MESSAGE_LOG)

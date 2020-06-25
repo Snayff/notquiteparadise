@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIDropDownMenu, UILabel, UITextEntryLine, UIButton, UIWindow
 from scripts.engine import utility
-from scripts.engine.core.constants import Effect, DamageType, PrimaryStat, SecondaryStat, \
+from scripts.engine.core.constants import EffectType, DamageType, PrimaryStat, SecondaryStat, \
     TargetTag, AfflictionCategory, ProjectileExpiry, Shape, Direction, TerrainCollision, TravelMethod, Resource
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
@@ -491,14 +491,14 @@ class DataEditor(UIWindow):
     def _load_field_options(self):
         """
         Maps the various data keys to their related (options, dataclass). The dataclass is only provided if the key
-        relates to sub-details that need adding. E.g. effects: (Effect.__dict__.keys(), EffectData). Loads
+        relates to sub-details that need adding. E.g. effects: (EffectType.__dict__.keys(), EffectData). Loads
         details into self.field_options
         """
         get_members = utility.get_class_members
 
         affliction_options = [key for key in self.all_data["afflictions"].keys()]
         aspect_options = [key for key in self.all_data["aspects"].keys()]
-        effect_options = get_members(Effect)
+        effect_options = get_members(EffectType)
         primary_stat_options = get_members(PrimaryStat)
         secondary_stat_options = get_members(SecondaryStat)
         resource_options = get_members(Resource)

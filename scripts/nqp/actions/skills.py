@@ -2,15 +2,12 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import Iterator, TYPE_CHECKING
-
 from snecs.typedefs import EntityID
-
-from scripts.engine import utility, world
-from scripts.engine.component import HasCombatStats, Position, Resources
+from scripts.engine import world
 from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
-    DirectionType, Effect, PrimaryStat, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
+    DirectionType, PrimaryStat, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
     TargetingMethod, TargetingMethodType
-from scripts.engine.effect import DamageEffect, MoveActorEffect
+from scripts.engine.effect import DamageEffect, Effect, MoveActorEffect
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
@@ -21,8 +18,7 @@ if TYPE_CHECKING:
 class Skill(ABC):
     """
     A subclass of Skill represents a skill and holds all the data that is
-    not dependent on the individual cast - stuff like shape, base accuracy,
-    etc etc.
+    not dependent on the individual cast - stuff like shape, base accuracy, etc.
 
     An instance of Skill represents an individual use of that skill,
     and holds only the data that is tied to the individual use - stuff like
@@ -48,38 +44,18 @@ class Skill(ABC):
         self.target_tile = target_tile
         self.direction = direction
 
-    def get_affected_entities(self):
-        """
-        Return a list of entities that this particular cast affects.
-        """
-        affected_entities = []
-        affected_positions = []
-        target_x = self.target_tile.x
-        target_y = self.target_tile.y
-
-        # get affected tiles
-        coords = utility.get_coords_from_shape(self.shape, self.shape_size)
-        for coord in coords:
-            affected_positions.append((coord[0] + target_x, coord[1] + target_y))
-
-        # get relevant entities in target area
-        for entity, (position, *others) in world.get_components([Position, Resources, HasCombatStats]):
-            if (position.x, position.y) in affected_positions:
-                affected_entities.append(entity)
-
-        return affected_entities
-
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
         An iterator over pairs of (affected entity, [effects])
         """
-        for entity in self.get_affected_entities():
+        for entity in world.get_affected_entities((self.target_tile.x, self.target_tile.y), self.shape,
+                                                  self.shape_size):
             yield entity, self.build_effects(entity)
 
     @abstractmethod
     def build_effects(self, entity):
         """
-        Build the effects of this skill applying to a single entity.
+        Build the effects of this skill applying to a single entity. Must be overridden by subclass.
         """
         pass
 
@@ -112,7 +88,7 @@ class Move(Skill):
     shape = Shape.TARGET
     shape_size = 1
 
-    def build_effects(self, entity) -> List[MoveActorEffect]:
+    def build_effects(self, entity: EntityID) -> List[MoveActorEffect]:
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -136,7 +112,7 @@ class Move(Skill):
 
 class BasicAttack(Skill):
     data = library.get_skill_data("basic_attack")
-    name = "basic_attack"
+    name = data.name
     required_tags = data.required_tags
     description = data.description
     icon_path = data.icon
@@ -149,10 +125,11 @@ class BasicAttack(Skill):
     shape = data.shape
     shape_size = data.shape_size
 
-    def build_effects(self, entity) -> List[DamageEffect]:
+    def build_effects(self, entity: EntityID) -> List[DamageEffect]:
         """
         Build the effects of this skill applying to a single entity.
         """
+        # TODO - externalise effect data to allow specifying in json
         damage_effect = DamageEffect(
             origin=self.user,
             success_effects=[],

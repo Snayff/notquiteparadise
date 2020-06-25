@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Union
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import world
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat
 from scripts.engine.core.definitions import CharacteristicData
@@ -287,7 +285,7 @@ class CombatStats:
             3: (Savvy, library.get_savvy_data)
         }
         for characteristic in checks.values():
-            if world.has_component(self.entity, characteristic[0]):
+            if world.entity_has_component(self.entity, characteristic[0]):
                 component = world.get_entitys_component(entity, characteristic[0])
                 if component:
                     data: CharacteristicData = characteristic[1](component.name)  # type: ignore

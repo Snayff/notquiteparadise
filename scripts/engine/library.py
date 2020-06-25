@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 from scripts.engine import utility
 from scripts.engine.core.extend_json import deserialise_dataclasses
-from scripts.engine.core.constants import SecondaryStatType, EffectType, PrimaryStatType, Direction
+from scripts.engine.core.constants import SecondaryStatType, EffectTypeType, PrimaryStatType, Direction
 from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
     InterventionData, GodData, CharacteristicData, AspectData, AttitudeData, AfflictionData, EffectData
 
@@ -75,7 +75,7 @@ class _LibraryOfAlexandria:
         data = self._aspects[aspect_name]
         return data
 
-    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectType) -> EffectData:
+    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectTypeType) -> EffectData:
         """
         Get effect data for an aspects from the library
         """
@@ -250,7 +250,7 @@ class _LibraryOfAlexandria:
 
         return effects_data
 
-    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectType) \
+    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectTypeType) \
             -> EffectData:
         """
         Get data for a specified effect in a god's intervention from the library
@@ -270,9 +270,6 @@ class _LibraryOfAlexandria:
     ####################### LOAD ##############################
 
     def _load_affliction_json(self):
-        self._afflictions = {}  # FIXME - unstub when json updated inline with skills
-        return
-
         with open('data/game/afflictions.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
         self._afflictions = data

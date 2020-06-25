@@ -9,11 +9,11 @@ from scripts.engine.core.constants import Direction, DirectionType, GameState, G
 from scripts.engine.library import library
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp import ai_processors
-from scripts.nqp.skills import Move, Skill
+from scripts.nqp.processors import ai_processors
+from scripts.nqp.actions.skills import Move, Skill
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
@@ -125,25 +125,29 @@ def _process_player_turn_intents(intent: InputIntentType):
         if tile:
 
             ## Player movement
-            direction = _get_pressed_direction(intent)
-            possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
-            if direction in possible_moves:
-                _process_skill_use(player, Move, tile, direction)
+            if intent == InputIntent.DOWN or intent == InputIntent.UP or intent == InputIntent.LEFT or intent == \
+                    InputIntent.RIGHT:
+                direction = _get_pressed_direction(intent)
+                possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+                if direction in possible_moves:
+                    _process_skill_use(player, Move, tile, direction)
 
             ## Use a skill
-            skill_name = _get_pressed_skills_name(intent)
+            if intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent\
+                    == InputIntent.SKILL3 or intent == InputIntent.SKILL4 or intent == InputIntent.SKILL5:
+                skill_name = _get_pressed_skills_name(intent)
 
-            # is skill ready to use
-            if world.can_use_skill(player, skill_name):
-                skill = world.get_known_skill(player, skill_name)
+                # is skill ready to use
+                if world.can_use_skill(player, skill_name):
+                    skill = world.get_known_skill(player, skill_name)
 
-                if skill:
-                    # if auto targeting use the skill
-                    if skill.targeting_method == TargetingMethod.AUTO:
-                        _process_skill_use(player, skill, tile, direction)
-                    else:
-                        state.set_new(GameState.TARGETING)
-                        state.set_active_skill(skill_name)
+                    if skill:
+                        # if auto targeting use the skill
+                        if skill.targeting_method == TargetingMethod.AUTO:
+                            _process_skill_use(player, skill, tile, Direction.CENTRE)  # pass centre as it doesnt matter
+                        else:
+                            state.set_new(GameState.TARGETING)
+                            state.set_active_skill(skill_name)
 
 
 def _process_targeting_mode_intents(intent):
@@ -181,13 +185,16 @@ def _process_targeting_mode_intents(intent):
                     world.end_turn(player, skill.time_cost)
 
 
-def _process_skill_use(player: EntityID, skill: Type[Skill], tile: Tile, direction: DirectionType):
-
-    if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
-        if world.use_skill(player, skill, tile, direction):
-            world.judge_action(player, skill.name)
-            ai_processors.process_interventions()
-            world.end_turn(player, skill.time_cost)
-            new_tile = world.get_tile((tile.x + direction[0], tile.y + direction[1]))
-            ui.set_player_tile(new_tile)
+def _process_skill_use(player: EntityID, skill: Type[Skill], current_tile: Tile, direction: DirectionType):
+    """
+    Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
+    'can_use_skill' already completed.
+     """
+    if world.use_skill(player, skill, current_tile, direction):
+        world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
+        world.judge_action(player, skill.name)
+        ai_processors.process_interventions()
+        world.end_turn(player, skill.time_cost)
+        new_tile = world.get_tile((current_tile.x + direction[0], current_tile.y + direction[1]))
+        ui.set_player_tile(new_tile)
 
