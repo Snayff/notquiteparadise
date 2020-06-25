@@ -181,13 +181,16 @@ def _process_targeting_mode_intents(intent):
                     world.end_turn(player, skill.time_cost)
 
 
-def _process_skill_use(player: EntityID, skill: Type[Skill], tile: Tile, direction: DirectionType):
-
-    if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
-        if world.use_skill(player, skill, tile, direction):
-            world.judge_action(player, skill.name)
-            ai_processors.process_interventions()
-            world.end_turn(player, skill.time_cost)
-            new_tile = world.get_tile((tile.x + direction[0], tile.y + direction[1]))
-            ui.set_player_tile(new_tile)
+def _process_skill_use(player: EntityID, skill: Type[Skill], current_tile: Tile, direction: DirectionType):
+    """
+    Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
+    'can_use_skill' already completed.
+     """
+    if world.use_skill(player, skill, current_tile, direction):
+        world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
+        world.judge_action(player, skill.name)
+        ai_processors.process_interventions()
+        world.end_turn(player, skill.time_cost)
+        new_tile = world.get_tile((current_tile.x + direction[0], current_tile.y + direction[1]))
+        ui.set_player_tile(new_tile)
 

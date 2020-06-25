@@ -114,12 +114,9 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
     # create the entity
     entity = create_entity(actor)
 
-    # setup basic attack as a known skill and an interaction  # N.B. must be after entity creation
+    # setup basic attack as a known skill  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
-    # TODO - rebuild interactions
-    # use_skill_effect = UseSkillEffectData(skill_name=basic_attack_name, creators_name=name)
-    # add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [use_skill_effect]}))
-    # N.B. All actors start with basic attack and move
+    
     basic_attack = {
         "skill": BasicAttack,
         "cooldown": 0
@@ -190,13 +187,6 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     projectile.append(Tracked(chronicle.get_time()))
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     entity = create_entity(projectile)
-
-
-    # TODO - rebuild interactions
-    # activate_skill = ActivateSkillEffectData(skill_name=skill_name, required_tags=data.required_tags,
-    #                                          creator=name)
-    # kill_entity = KillEntityEffectData(target_entity=entity)
-    # add_component(entity, Interactions({InteractionCause.ENTITY_COLLISION: [activate_skill, kill_entity]}))
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
@@ -1176,6 +1166,7 @@ def remove_affliction(entity: EntityID, affliction_name: str):
 
         # remove from active list
         afflictions.active.pop(affliction_name)
+
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################
 

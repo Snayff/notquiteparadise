@@ -56,6 +56,7 @@ class HasCombatStats(RegisteredComponent):
     A flag to show if an entity has stats used for combat.
     """
     __slots__ = ()
+    # TODO - move stats to here, set base stats on init then hold modification value
 
 
 #################### OTHERS #########################
@@ -128,7 +129,7 @@ class Identity(RegisteredComponent):
 
 
 class People(RegisteredComponent):
-    # TODO - inherit from str and add name directly
+    # TODO - combine with savvy and homeland and create characteristic compnonent
     """
     An entity's people.
     """
@@ -138,7 +139,6 @@ class People(RegisteredComponent):
 
 
 class Savvy(RegisteredComponent):
-    # TODO - inherit from str and add name directly
     """
     An entity's savvy.
     """
@@ -148,7 +148,6 @@ class Savvy(RegisteredComponent):
 
 
 class Homeland(RegisteredComponent):
-    # TODO - inherit from str and add name directly
     """
     An entity's homeland.
     """
