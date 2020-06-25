@@ -125,25 +125,29 @@ def _process_player_turn_intents(intent: InputIntentType):
         if tile:
 
             ## Player movement
-            direction = _get_pressed_direction(intent)
-            possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
-            if direction in possible_moves:
-                _process_skill_use(player, Move, tile, direction)
+            if intent == InputIntent.DOWN or intent == InputIntent.UP or intent == InputIntent.LEFT or intent == \
+                    InputIntent.RIGHT:
+                direction = _get_pressed_direction(intent)
+                possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+                if direction in possible_moves:
+                    _process_skill_use(player, Move, tile, direction)
 
             ## Use a skill
-            skill_name = _get_pressed_skills_name(intent)
+            if intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent\
+                    == InputIntent.SKILL3 or intent == InputIntent.SKILL4 or intent == InputIntent.SKILL5:
+                skill_name = _get_pressed_skills_name(intent)
 
-            # is skill ready to use
-            if world.can_use_skill(player, skill_name):
-                skill = world.get_known_skill(player, skill_name)
+                # is skill ready to use
+                if world.can_use_skill(player, skill_name):
+                    skill = world.get_known_skill(player, skill_name)
 
-                if skill:
-                    # if auto targeting use the skill
-                    if skill.targeting_method == TargetingMethod.AUTO:
-                        _process_skill_use(player, skill, tile, direction)
-                    else:
-                        state.set_new(GameState.TARGETING)
-                        state.set_active_skill(skill_name)
+                    if skill:
+                        # if auto targeting use the skill
+                        if skill.targeting_method == TargetingMethod.AUTO:
+                            _process_skill_use(player, skill, tile, Direction.CENTRE)  # pass centre as it doesnt matter
+                        else:
+                            state.set_new(GameState.TARGETING)
+                            state.set_active_skill(skill_name)
 
 
 def _process_targeting_mode_intents(intent):

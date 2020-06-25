@@ -2,17 +2,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Tuple
 from snecs import RegisteredComponent
-
 from scripts.engine.core.constants import PrimaryStatType
-from scripts.nqp.actions.afflictions import Affliction
 
 if TYPE_CHECKING:
     import pygame
+    import tcod.map
     from typing import List, Dict, Optional
     from scripts.engine.thought import AIBehaviour
-    import tcod.map
     from snecs.typedefs import EntityID
     from scripts.engine.core.definitions import CharacteristicSpritesData
+    from scripts.nqp.actions.afflictions import Affliction
 
 
 ##########################################################

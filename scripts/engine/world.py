@@ -116,7 +116,7 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
 
     # setup basic attack as a known skill  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
-    
+
     basic_attack = {
         "skill": BasicAttack,
         "cooldown": 0
@@ -883,7 +883,6 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
     # if we dont have skill we cant do anything
     if not skill:
-        logging.warning(f"'{get_name(entity)}' tried to use {skill_name} but doesnt know it.")
         return False
 
     # flags

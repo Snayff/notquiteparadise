@@ -146,7 +146,7 @@ class EntityInfo(UIPanel):
             # afflictions
             afflictions = world.get_entitys_component(entity, Afflictions)
             if afflictions:
-                for affliction, duration in afflictions.items():
+                for affliction, duration in afflictions.active.items():
                     # overwrite duration with infinity string if needed
                     if duration == INFINITE:
                         duration = "∞"  # type: ignore
@@ -170,13 +170,14 @@ class EntityInfo(UIPanel):
 
                 # in case it fails to pull expected attribute
                 except AttributeError:
-                    logging.warning(f"Attribute {name} not found for EntityInfo.")
+                    logging.warning(f"EntityInfo: attribute {name} not found in primary stats.")
 
             # add section_break
             text += section_break
 
             secondary_stats = get_class_members(SecondaryStat)
             for name in secondary_stats:
+                # FIXME - HEALTH and STAMINA not found
                 try:
                     stat_value = getattr(stats, name.lower())
 
@@ -186,7 +187,7 @@ class EntityInfo(UIPanel):
 
                 # in case it fails to pull expected attribute
                 except AttributeError:
-                    logging.warning(f"Attribute {name} not found for EntityInfo.")
+                    logging.warning(f"EntityInfo: attribute {name} not found in secondary stats.")
 
         else:
             text = ""

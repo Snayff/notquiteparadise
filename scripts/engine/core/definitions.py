@@ -198,7 +198,7 @@ class KillEntityEffectData(EffectData):
     """
     Data for the  Kill Entity effect.
     """
-    effect_type = EffectType.KILL_ENTITY
+    effect_type = EffectType.KILL
 
     # use an init to prevent need to specify default arg
     def __init__(self, target_entity):
@@ -315,13 +315,14 @@ class AfflictionData:
     Data class for an Afflictions
     """
     name: str = field(default="none")
+    class_name: str = field(default="none")
     description: str = field(default="none")
     icon: str = field(default="none")
     category: Optional[AfflictionCategoryType] = None
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    required_tags: List[TargetTagType] = [TargetTag.OTHER_ENTITY]
-    identity_tags: List[EffectTypeType] = [EffectType.DAMAGE]
+    required_tags: List[TargetTagType] = field(default_factory=list(TargetTag.OTHER_ENTITY))
+    identity_tags: List[EffectTypeType] = field(default_factory=list(EffectType.DAMAGE))
 
 
 ########################## WORLD #########################################

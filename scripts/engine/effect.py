@@ -193,8 +193,6 @@ class AffectStatEffect(Effect):
             return self.failure_effects
 
 
-
-
 class ApplyAfflictionEffect(Effect):
     def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
             failure_effects: List[Optional[Effect]],):
@@ -244,5 +242,18 @@ class TriggerSkillEffect(Effect):
         TBC - not implemented
         """
         logging.debug("Evaluating Trigger Skill Effect...")
+        logging.warning("-> effect not implemented.")
+
+
+class KillEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]],):
+        super().__init__(origin, success_effects, failure_effects)
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        TBC - not implemented
+        """
+        logging.debug("Evaluating Kill Effect...")
         logging.warning("-> effect not implemented.")
 

@@ -390,6 +390,7 @@ class Camera(UIPanel):
         Determine if camera should move based on start and target pos and intersecting the edge of the screen.
         pos is x, y.
         """
+        # FIXME - camera moves when player walks into a wall and does not move
         start_x, start_y = start_pos
         target_x, target_y = target_pos
 
