@@ -87,7 +87,7 @@ class Skill(ABC):
             yield entity, self.build_effects(entity)
             entity_names.append(world.get_name(entity))
 
-        logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to [{entity_names}].")
+        logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entity_names}.")
 
     @abstractmethod
     def build_effects(self, entity):

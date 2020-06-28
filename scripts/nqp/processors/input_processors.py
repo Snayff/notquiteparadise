@@ -121,36 +121,36 @@ def _process_player_turn_intents(intent: InputIntentType):
 
     position = world.get_entitys_component(player, Position)
     if position:
-        current_tile = world.get_tile((position.x, position.y))
-        if current_tile:
+        possible_move_intents = [InputIntent.DOWN, InputIntent.UP, InputIntent.LEFT, InputIntent.RIGHT]
+        possible_skill_intents = [InputIntent.SKILL0, InputIntent.SKILL1, InputIntent.SKILL2, InputIntent.SKILL3,
+        InputIntent.SKILL4, InputIntent.SKILL5]
 
-            ## Player movement
-            if intent == InputIntent.DOWN or intent == InputIntent.UP or intent == InputIntent.LEFT or intent == \
-                    InputIntent.RIGHT:
-                direction = _get_pressed_direction(intent)
-                target_tile = world.get_tile((position.x + direction[0], position.y + direction[1]))
-                possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
-                if direction in possible_moves:
-                    _process_skill_use(player, Move, target_tile, direction)
+        ## Player movement
+        if intent in possible_move_intents:
+            direction = _get_pressed_direction(intent)
+            target_tile = world.get_tile((position.x, position.y))
+            possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+            if direction in possible_moves:
+                _process_skill_use(player, Move, target_tile, direction)
 
-            ## Use a skill
-            elif intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent\
-                    == InputIntent.SKILL3 or intent == InputIntent.SKILL4 or intent == InputIntent.SKILL5:
-                skill_name = _get_pressed_skills_name(intent)
+        ## Use a skill
+        elif intent in possible_skill_intents:
+            skill_name = _get_pressed_skills_name(intent)
+            current_tile = world.get_tile((position.x, position.y))
 
-                # is skill ready to use
-                if world.can_use_skill(player, skill_name):
-                    skill = world.get_known_skill(player, skill_name)
+            # is skill ready to use
+            if world.can_use_skill(player, skill_name):
+                skill = world.get_known_skill(player, skill_name)
 
-                    if skill:
-                        # if auto targeting use the skill
-                        if skill.targeting_method == TargetingMethod.AUTO:
-                            # pass centre as it doesnt matter, the skill will pick the right direction
-                            _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                        else:
-                            state.set_new(GameState.TARGETING)
-                            state.set_active_skill(skill_name)
-                            ui.update_targeting_overlay(True, skill_name)
+                if skill:
+                    # if auto targeting use the skill
+                    if skill.targeting_method == TargetingMethod.AUTO:
+                        # pass centre as it doesnt matter, the skill will pick the right direction
+                        _process_skill_use(player, skill, current_tile, Direction.CENTRE)
+                    else:
+                        state.set_new(GameState.TARGETING)
+                        state.set_active_skill(skill_name)
+                        ui.update_targeting_overlay(True, skill_name)
 
 
 def _process_targeting_mode_intents(intent):
@@ -160,6 +160,10 @@ def _process_targeting_mode_intents(intent):
     player = world.get_player()
     position = world.get_entitys_component(player, Position)
     active_skill_name = state.get_active_skill()
+    skill = world.get_known_skill(player, active_skill_name)
+
+    possible_skill_intents = [InputIntent.SKILL0, InputIntent.SKILL1, InputIntent.SKILL2, InputIntent.SKILL3,
+        InputIntent.SKILL4, InputIntent.SKILL5]
 
     ## Cancel use
     if intent == InputIntent.CANCEL:
@@ -167,9 +171,9 @@ def _process_targeting_mode_intents(intent):
         state.set_new(state.get_previous())
 
     ## Select new skill
-    if intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent \
-            == InputIntent.SKILL3 or intent == InputIntent.SKILL4 or intent == InputIntent.SKILL5:
+    elif intent in possible_skill_intents:
         pressed_skill_name = _get_pressed_skills_name(intent)
+
         if pressed_skill_name:
 
             # if skill pressed doesn't match skill already being targeted
@@ -179,20 +183,17 @@ def _process_targeting_mode_intents(intent):
                     state.set_active_skill(pressed_skill_name)
 
     ## Use skill
-    elif intent == InputIntent.DOWN or intent == InputIntent.UP or intent == InputIntent.LEFT or intent == \
-            InputIntent.RIGHT:
-        skill = world.get_known_skill(player, active_skill_name)
-        possible_moves = skill.target_directions
-        if intent in possible_moves and position and skill:
-            direction = _get_pressed_direction(intent)
+    elif intent in skill.target_directions:
+        direction = _get_pressed_direction(intent)
+        if position and skill and direction:
             tile = world.get_tile((position.x + direction[0], position.y + direction[1]))
-            if tile and direction:
-                if world.can_use_skill(player, active_skill_name):
-                    _process_skill_use(player, skill, tile, direction)
+            if tile:
+                # we already checked if we could use the skill before activating the targeting mode
+                _process_skill_use(player, skill, tile, direction)
 
-                    # resume previous state
-                    state.set_new(state.get_previous())
-                    ui.update_targeting_overlay(False)
+                # resume previous state
+                state.set_new(state.get_previous())
+                ui.update_targeting_overlay(False)
 
 
 def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, direction: DirectionType):
