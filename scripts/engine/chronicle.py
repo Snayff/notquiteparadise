@@ -41,7 +41,7 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     logging.debug(f"-> New queue built: {_get_pretty_queue()}")
 
 
-def next_turn():
+def next_turn(entity_to_exclude: Optional[EntityID] = None):
     """
     Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.
     Update game state to reflect turn holder.
@@ -49,7 +49,7 @@ def next_turn():
     logging.info(f"Moving to the next turn...")
 
     # update the queue
-    rebuild_turn_queue()
+    rebuild_turn_queue(entity_to_exclude)
 
     # get next entity in queue
     turn_holder = get_turn_holder()

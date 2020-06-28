@@ -266,16 +266,6 @@ class _UIManager:
         else:
             logging.warning(f"Tried to set player tile in Camera but key not found. Is it init`d?")
 
-    def set_overlay_directions(self, directions: List[DirectionType]):
-        """
-        Set the overlay with possible targeting directions.
-        """
-        camera = self.get_element(UIElement.CAMERA)
-        if camera:
-            camera.set_overlay_directions(directions)
-        else:
-            logging.warning(f"Tried to set Camera overlay directions but key not found. Is it init`d?")
-
     def world_to_screen_position(self, pos: Tuple[int, int]):
         """
         Convert from the world_objects position to the screen position. 0, 0 if camera not init'd.

@@ -5,17 +5,17 @@ from abc import ABC
 import pygame
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
-
 from snecs.typedefs import EntityID
-
-from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, TargetTag, TargetTagType, DamageTypeType, \
-    AfflictionCategoryType, ShapeType, TerrainCollisionType, TravelMethodType, \
+from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, ProjectileExpiry, TargetTag, TargetTagType, \
+    DamageTypeType, \
+    AfflictionCategoryType, ShapeType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType, \
     ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, EffectType, Shape, \
     ResourceType, TargetingMethod, TargetingMethodType, Direction, Resource
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
+
 if TYPE_CHECKING:
-    pass
+    from scripts.nqp.actions.skills import Skill
 
 
 ######################### SKILLS ##################################
@@ -50,6 +50,14 @@ class SkillData:
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
 
+    # projectile info
+    uses_projectile: bool = True
+    projectile_speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    travel_method: TravelMethodType = TravelMethod.STANDARD
+    range: int = 1
+    terrain_collision: TerrainCollisionType = TerrainCollision.FIZZLE
+    expiry_type: ProjectileExpiryType = ProjectileExpiry.FIZZLE
+
 
 @register_dataclass_with_json
 @dataclass
@@ -60,6 +68,7 @@ class ProjectileData:
     # what created it?
     creator: EntityID
     skill_name: str = field(default="none")
+    skill_instance: Skill = False
     name: str = ""
     description: str = ""
 
@@ -72,7 +81,7 @@ class ProjectileData:
     # how does it travel?
     direction: Optional[DirectionType] = None
     speed: ProjectileSpeedType = ProjectileSpeed.SLOW
-    travel_type: Optional[TravelMethodType] = None
+    travel_method: Optional[TravelMethodType] = None
     range: int = 1
 
     # how does it interact?

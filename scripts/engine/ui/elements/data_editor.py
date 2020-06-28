@@ -529,7 +529,7 @@ class DataEditor(UIWindow):
             "shape": (get_members(Shape), None),
             "target_directions": (get_members(Direction), None),
             "terrain_collision": (get_members(TerrainCollision), None),
-            "travel_type": (get_members(TravelMethod), None),
+            "travel_method": (get_members(TravelMethod), None),
             "attitudes": (affliction_options + effect_options + skill_options, AttitudeData()),
             "interventions": (skill_options, InterventionData()),
             "skills": ("", SkillData()),

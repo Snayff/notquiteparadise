@@ -5,7 +5,7 @@ from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
-VERSION = "0.101.0"
+VERSION = "0.102.0"
 
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
@@ -305,9 +305,8 @@ class TravelMethod(SimpleNamespace):
     How the skill travels
     """
     STANDARD = TravelMethodType("standard")  # travels tile by tile
-    # TODO - extend to allow throw shorter than total length and implement bounces
     ARC = TravelMethodType("arc")  # only impacts last tile in range, can reflect if hits terrain early.
-    INSTANT = TravelMethodType("instant")  # doesn't travel, doesn't interact with terrain except for blocking
+    # TODO - extend to allow throw shorter than total length and implement bounces
 
 
 class ProjectileExpiry(SimpleNamespace):
@@ -322,6 +321,7 @@ class ProjectileSpeed(SimpleNamespace):
     """
     The speed at which a projectile travels; how much time to move a tile.
     """
-    # TODO - externalise the values
     SLOW = ProjectileSpeedType(int(BASE_MOVE_COST / 2))
-    FAST = ProjectileSpeedType(int(SLOW / 3))
+    AVERAGE = ProjectileSpeedType(int(SLOW / 2))
+    FAST = ProjectileSpeedType(int(AVERAGE / 2))
+    INSTANT = ProjectileSpeedType(0)

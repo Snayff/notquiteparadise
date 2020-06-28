@@ -21,10 +21,16 @@
         ],
         "time_cost": 20,
         "required_tags": [
-            "other_entity"
+            "no_blocking_tile"
         ],
         "shape": "target",
-        "shape_size": 1
+        "shape_size": 1,
+        "uses_projectile": true,
+        "projectile_speed": "average",
+        "travel_method": "standard",
+        "range": 2,
+        "terrain_collision": "fizzle",
+        "expiry_type": "fizzle"
     },
     "lunge": {
         "__dataclass__": "SkillData",

@@ -133,7 +133,7 @@ def _process_player_turn_intents(intent: InputIntentType):
                     _process_skill_use(player, Move, tile, direction)
 
             ## Use a skill
-            if intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent\
+            elif intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent\
                     == InputIntent.SKILL3 or intent == InputIntent.SKILL4 or intent == InputIntent.SKILL5:
                 skill_name = _get_pressed_skills_name(intent)
 
@@ -148,6 +148,7 @@ def _process_player_turn_intents(intent: InputIntentType):
                         else:
                             state.set_new(GameState.TARGETING)
                             state.set_active_skill(skill_name)
+                            ui.update_targeting_overlay(True, skill_name)
 
 
 def _process_targeting_mode_intents(intent):
@@ -164,37 +165,44 @@ def _process_targeting_mode_intents(intent):
         state.set_new(state.get_previous())
 
     ## Select new skill
-    pressed_skill_name = _get_pressed_skills_name(intent)
-    if pressed_skill_name:
+    if intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent \
+            == InputIntent.SKILL3 or intent == InputIntent.SKILL4 or intent == InputIntent.SKILL5:
+        pressed_skill_name = _get_pressed_skills_name(intent)
+        if pressed_skill_name:
 
-        # if skill pressed doesn't match skill already being targeted
-        if pressed_skill_name != active_skill_name:
-            # reactivate targeting mode with the new skill
-            if world.can_use_skill(player, pressed_skill_name):
-                state.set_active_skill(pressed_skill_name)
+            # if skill pressed doesn't match skill already being targeted
+            if pressed_skill_name != active_skill_name:
+                # reactivate targeting mode with the new skill
+                if world.can_use_skill(player, pressed_skill_name):
+                    state.set_active_skill(pressed_skill_name)
 
     ## Use skill
-    direction = _get_pressed_direction(intent)
-    skill = world.get_known_skill(player, active_skill_name)
-    possible_moves = skill.target_directions
-    if direction in possible_moves and position and skill:
-        tile = world.get_tile((position.x, position.y))
-        if tile:
-            if world.pay_resource_cost(player, skill.resource_type, skill.resource_cost):
-                if world.use_skill(player, skill, tile, direction):
-                    world.end_turn(player, skill.time_cost)
+    elif intent == InputIntent.DOWN or intent == InputIntent.UP or intent == InputIntent.LEFT or intent == \
+            InputIntent.RIGHT:
+        skill = world.get_known_skill(player, active_skill_name)
+        possible_moves = skill.target_directions
+        if intent in possible_moves and position and skill:
+            direction = _get_pressed_direction(intent)
+            tile = world.get_tile((position.x + direction[0], position.y + direction[1]))
+            if tile and direction:
+                if world.can_use_skill(player, active_skill_name):
+                    _process_skill_use(player, skill, tile, direction)
+
+                    # resume previous state
+                    state.set_new(state.get_previous())
+                    ui.update_targeting_overlay(False)
 
 
-def _process_skill_use(player: EntityID, skill: Type[Skill], current_tile: Tile, direction: DirectionType):
+def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, direction: DirectionType):
     """
     Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
     'can_use_skill' already completed.
      """
-    if world.use_skill(player, skill, current_tile, direction):
+    if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.name)
         ai_processors.process_interventions()
         world.end_turn(player, skill.time_cost)
-        new_tile = world.get_tile((current_tile.x + direction[0], current_tile.y + direction[1]))
-        ui.set_player_tile(new_tile)
+        if skill.name == "move":
+            ui.set_player_tile(target_tile)
 
