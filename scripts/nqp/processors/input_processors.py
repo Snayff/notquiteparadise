@@ -121,16 +121,17 @@ def _process_player_turn_intents(intent: InputIntentType):
 
     position = world.get_entitys_component(player, Position)
     if position:
-        tile = world.get_tile((position.x, position.y))
-        if tile:
+        current_tile = world.get_tile((position.x, position.y))
+        if current_tile:
 
             ## Player movement
             if intent == InputIntent.DOWN or intent == InputIntent.UP or intent == InputIntent.LEFT or intent == \
                     InputIntent.RIGHT:
                 direction = _get_pressed_direction(intent)
+                target_tile = world.get_tile((position.x + direction[0], position.y + direction[1]))
                 possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
                 if direction in possible_moves:
-                    _process_skill_use(player, Move, tile, direction)
+                    _process_skill_use(player, Move, target_tile, direction)
 
             ## Use a skill
             elif intent == InputIntent.SKILL0 or intent == InputIntent.SKILL1 or intent == InputIntent.SKILL2 or intent\
@@ -144,7 +145,8 @@ def _process_player_turn_intents(intent: InputIntentType):
                     if skill:
                         # if auto targeting use the skill
                         if skill.targeting_method == TargetingMethod.AUTO:
-                            _process_skill_use(player, skill, tile, Direction.CENTRE)  # pass centre as it doesnt matter
+                            # pass centre as it doesnt matter, the skill will pick the right direction
+                            _process_skill_use(player, skill, current_tile, Direction.CENTRE)
                         else:
                             state.set_new(GameState.TARGETING)
                             state.set_active_skill(skill_name)

@@ -45,24 +45,21 @@ class ProjectileBehaviour(AIBehaviour):
         current_tile = world.get_tile((position.x, position.y))
         dir_x, dir_y = self.data.direction[0], self.data.direction[1]
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
-        skill_instance = Move(self.entity, current_tile, self.data.direction)
+        skill_instance = Move(self.entity, target_tile, self.data.direction)
 
         # if we havent moved check for collision in next tile (it might be cast on top of enemy)
-        if self.distance_travelled == 0 and current_tile:
+        if self.distance_travelled == 0 and target_tile:
             if world.tile_has_tag(target_tile, TargetTag.OTHER_ENTITY, entity):
                 activate = True
                 skill_instance = self.data.skill_instance
 
-                # update target tile to point at enemy colliding with
-                skill_instance.target_tile = target_tile
-
         # if we havent travelled max distance then move
         # N.b. not an elif because we want the precheck above to happen in isolation
-        if self.distance_travelled < self.data.range and current_tile and not activate:
+        if self.distance_travelled < self.data.range and target_tile and not activate:
             # can move
             if world.can_use_skill(entity, "move"):
                 activate = True
-                skill_instance = Move(self.entity, current_tile, self.data.direction)
+                skill_instance = Move(self.entity, target_tile, self.data.direction)
 
             # cant move
             else:
@@ -86,15 +83,12 @@ class ProjectileBehaviour(AIBehaviour):
                                                                 (target_tile.x, target_tile.y))
                         self.data.direction = new_dir
                         activate = True
-                        skill_instance = Move(self.entity, current_tile, new_dir)
+                        skill_instance = Move(self.entity, target_tile, new_dir)
 
                 # blocked by entity
                 elif world.tile_has_tag(target_tile, TargetTag.OTHER_ENTITY, entity):
                     activate = True
                     skill_instance = self.data.skill_instance
-
-                    # update target tile to point at enemy colliding with
-                    skill_instance.target_tile = target_tile
 
         elif self.distance_travelled >= self.data.range:
             # we have reached the limit, process expiry and then die
@@ -102,13 +96,13 @@ class ProjectileBehaviour(AIBehaviour):
                 activate = True
                 skill_instance = self.data.skill_instance
 
-                # update target tile to point at current tile (where we expired)
-                skill_instance.target_tile = current_tile
             else:
                 # at max range so kill
                 world.kill_entity(entity)
 
         if activate and skill_instance:
+            # update skill instance to use  target tile
+            skill_instance.target_tile = target_tile
 
             # use the skill_instance
             world.apply_skill(skill_instance)

@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Iterator, TYPE_CHECKING
 from snecs.typedefs import EntityID
 from scripts.engine import world
+from scripts.engine.component import Position
 from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
     DirectionType, PrimaryStat, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, \
     ProjectileSpeedType, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
@@ -47,7 +48,7 @@ class Skill(ABC):
     terrain_collision: TerrainCollisionType = TerrainCollision.FIZZLE
     expiry_type: ProjectileExpiryType = ProjectileExpiry.FIZZLE
 
-    def __init__(self, user: EntityID, target_tile: Tile, direction: Optional[DirectionType] = None):
+    def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user = user
         self.target_tile = target_tile
         self.direction = direction
@@ -73,7 +74,7 @@ class Skill(ABC):
             )
             world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
         else:
-            self.apply()
+            world.apply_skill(self)
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
@@ -98,7 +99,7 @@ class Skill(ABC):
 
 class Move(Skill):
     """
-    Basic move for an entity. Target tile needs to be where the entity exists and direction will move them.
+    Basic move for an entity.
     """
     # Move's definitions are not defined in the json. They are set here and only here.
     name = "move"
@@ -123,23 +124,29 @@ class Move(Skill):
     ]
     shape = Shape.TARGET
     shape_size = 1
+    uses_projectile = False
+
+    def __init__(self, user: EntityID, target_tile: Tile, direction):
+        """
+        Only Move needs an init as it overrides the target tile
+        """
+        # override target
+        position = world.get_entitys_component(user, Position)
+        tile = world.get_tile((position.x, position.y))
+
+        super().__init__(user, tile, direction)
 
     def build_effects(self, entity: EntityID) -> List[MoveActorEffect]:
         """
         Build the effects of this skill applying to a single entity.
         """
-        # handle optional
-        if self.direction:
-            direction = self.direction
-        else:
-            direction = Direction.CENTRE
 
         move_effect = MoveActorEffect(
             origin=self.user,
             target=entity,
             success_effects=[],
             failure_effects=[],
-            direction=direction,
+            direction=self.direction,
             move_amount=1
         )
 

@@ -987,13 +987,15 @@ def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: 
     Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if
     criteria to use skill was met, False if not.
     """
+    # N.B. we init so that any overrides of the Skill.init are applied
+    skill_cast = skill(user, target_tile, direction)
+
     # ensure they are the right target type
-    if tile_has_tags(target_tile, skill.required_tags, user):
-        skill_cast = skill(user, target_tile, direction)
+    if tile_has_tags(skill_cast.target_tile, skill_cast.required_tags, user):
         skill_cast.use()
         return True
     else:
-        logging.debug(f"Could not use skill, target tile does not have required tags ({skill.required_tags}).")
+        logging.info(f"Could not use skill, target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
@@ -1012,7 +1014,7 @@ def apply_skill(skill_instance: Skill) -> bool:
                 effect_queue.extend(effect.evaluate())
         return True
     else:
-        logging.debug(f"Could not apply skill, target tile does not have required tags ({skill.required_tags}).")
+        logging.info(f"Could not apply skill, target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
