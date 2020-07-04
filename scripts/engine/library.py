@@ -5,11 +5,9 @@ import logging
 import os
 from typing import TYPE_CHECKING
 
-from scripts.engine import utility
+from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, SecondaryStatType
+from scripts.engine.core.definitions import CharacteristicData, EffectData, SkillData
 from scripts.engine.core.extend_json import deserialise_dataclasses
-from scripts.engine.core.constants import SecondaryStatType, EffectTypeType, PrimaryStatType, Direction
-from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
-    InterventionData, GodData, CharacteristicData, AspectData, AttitudeData, AfflictionData, EffectData
 
 if TYPE_CHECKING:
     from typing import Dict
@@ -59,7 +57,7 @@ class _LibraryOfAlexandria:
 
     ####################### GET ##############################
 
-    def get_aspects_data(self) -> Dict[str, AspectData]:
+    def get_aspects_data(self) -> Dict[str, Dict]:
         """
         Get all aspects from the library
         """
@@ -67,7 +65,7 @@ class _LibraryOfAlexandria:
         data = self._aspects
         return data
 
-    def get_aspect_data(self, aspect_name: str) -> AspectData:
+    def get_aspect_data(self, aspect_name: str) -> Dict:
         """
         Get data for an aspects from the library
         """
@@ -86,7 +84,7 @@ class _LibraryOfAlexandria:
 
         return data
 
-    def get_afflictions_data(self) -> Dict[str, AfflictionData]:
+    def get_afflictions_data(self) -> Dict[str, Dict]:
         """
         Get all afflictions from the library
         """
@@ -94,7 +92,7 @@ class _LibraryOfAlexandria:
         data = self._afflictions
         return data
 
-    def get_affliction_data(self, affliction_name: str) -> AfflictionData:
+    def get_affliction_data(self, affliction_name: str) -> Dict:
         """
         Get data for an affliction from the library
         """
@@ -177,7 +175,7 @@ class _LibraryOfAlexandria:
 
         return skill_data
 
-    def get_primary_stat_data(self, primary_stat_type: PrimaryStatType) -> BasePrimaryStatData:
+    def get_primary_stat_data(self, primary_stat_type: PrimaryStatType) -> Dict:
         """
         Get data for a primary stat from the library
 
@@ -185,14 +183,14 @@ class _LibraryOfAlexandria:
         stat_data = self._base_stats_primary[primary_stat_type]
         return stat_data
 
-    def get_primary_stats_data(self) -> Dict[str, BasePrimaryStatData]:
+    def get_primary_stats_data(self) -> Dict[str, Dict]:
         """
         Get all data for primary stats from the library
         """
         stat_data = self._base_stats_primary
         return stat_data
 
-    def get_secondary_stat_data(self, secondary_stat_type: SecondaryStatType) -> BaseSecondaryStatData:
+    def get_secondary_stat_data(self, secondary_stat_type: SecondaryStatType) -> Dict:
         """
         Get data for a secondary stat from the library
         """
@@ -201,14 +199,14 @@ class _LibraryOfAlexandria:
 
         return stat_data
 
-    def get_secondary_stats_data(self) -> Dict[str, BaseSecondaryStatData]:
+    def get_secondary_stats_data(self) -> Dict[str, Dict]:
         """
         Get all data for secondary stats from the library
         """
         stat_data = self._base_stats_secondary
         return stat_data
 
-    def get_gods_data(self) -> Dict[str, GodData]:
+    def get_gods_data(self) -> Dict[str, Dict]:
         """
         Get all gods data from the library
 
@@ -217,7 +215,7 @@ class _LibraryOfAlexandria:
 
         return god_data
 
-    def get_god_data(self, god_name: str) -> GodData:
+    def get_god_data(self, god_name: str) -> Dict:
         """
         Get data for a god from the library
         """
@@ -226,7 +224,7 @@ class _LibraryOfAlexandria:
 
         return god_data
 
-    def get_god_interventions_data(self, god_name: str) -> Dict[str, InterventionData]:
+    def get_god_interventions_data(self, god_name: str) -> Dict[str, Dict]:
         """
         Get data for a god's interventions from the library
         """
@@ -234,7 +232,7 @@ class _LibraryOfAlexandria:
 
         return interventions_data
 
-    def get_god_intervention_data(self, god_name: str, intervention_name: str) -> InterventionData:
+    def get_god_intervention_data(self, god_name: str, intervention_name: str) -> Dict:
         """
         Get data for a god's specified intervention from the library
         """
@@ -242,24 +240,7 @@ class _LibraryOfAlexandria:
 
         return interventions_data
 
-    def get_god_intervention_effects_data(self, god_name: str, intervention_name: str) -> Dict[str, EffectData]:
-        """
-        Get data for the effects in a god's intervention from the library
-        """
-        effects_data = self._gods[god_name].interventions[intervention_name].effects
-
-        return effects_data
-
-    def get_god_intervention_effect_data(self, god_name: str, intervention_name: str, effect_type: EffectTypeType) \
-            -> EffectData:
-        """
-        Get data for a specified effect in a god's intervention from the library
-        """
-        effects_data = self._gods[god_name].interventions[intervention_name].effects[effect_type]
-
-        return effects_data
-
-    def get_god_attitudes_data(self, god_name: str) -> Dict[int, AttitudeData]:
+    def get_god_attitudes_data(self, god_name: str) -> Dict[int, Dict]:
         """
         Get data for a god's attitudes from the library
         """

@@ -4,12 +4,22 @@ Core
 
 Constants
 ------------------
-.. automodule:: scripts.core.constants
+.. automodule:: scripts.engine.core.constants
     :show-inheritance:
 
-Library of Alexandria
+Definitions
 --------------------------
-.. automodule:: scripts.core.library
+.. automodule:: scripts.engine.core.definitions
+    :show-inheritance:
+
+Extend Json
+--------------------------
+.. automodule:: scripts.engine.core.extend_json
+    :show-inheritance:
+
+Store
+--------------------------
+.. automodule:: scripts.engine.core.definitions
     :show-inheritance:
 
 

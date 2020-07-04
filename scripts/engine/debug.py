@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, List
+from typing import List, TYPE_CHECKING
+
 from snecs import Component
 from snecs.typedefs import EntityID
+
 from scripts.engine import state, world
 
 if TYPE_CHECKING:

@@ -28,9 +28,9 @@ copyright = '2020, Snayff'
 author = 'Snayff'
 
 # The short X.Y version
-version = '0.96.0'
+version = '0.103.0'
 # The full version, including alpha/beta/rc tags
-release = '0.96.0'
+release = '0.103.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -92,10 +92,7 @@ today_fmt = '%d %b %y at %H:%M'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-import sphinx_pdj_theme
-html_theme = 'sphinx_pdj_theme'
-htm_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
-
+html_theme = 'classic'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.

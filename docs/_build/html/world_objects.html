@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Objects &#8212; NotQuiteParadise 0.103.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="World" href="world.html" />
+    <link rel="prev" title="Utility" href="utility.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="world.html" title="World"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="utility.html" title="Utility"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">World Objects</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="world-objects">
+<h1>World Objects<a class="headerlink" href="#world-objects" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="combat-stats">
+<h2>Combat Stats<a class="headerlink" href="#combat-stats" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-scripts.engine.world_objects.gamemap">
+<span id="gamemap"></span><h2>Gamemap<a class="headerlink" href="#module-scripts.engine.world_objects.gamemap" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.world_objects.gamemap.GameMap">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.world_objects.gamemap.</code><code class="sig-name descname">GameMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width</span></em>, <em class="sig-param"><span class="n">height</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/gamemap.html#GameMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.gamemap.GameMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>object to hold tile and fov</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.engine.world_objects.tile">
+<span id="tile"></span><h2>Tile<a class="headerlink" href="#module-scripts.engine.world_objects.tile" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.world_objects.tile.Tile">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.world_objects.tile.</code><code class="sig-name descname">Tile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">sprite</span></em>, <em class="sig-param"><span class="n">blocks_sight</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">blocks_movement</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A Tile on the GameMap.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.world_objects.tile.Tile.x">
+<code class="sig-name descname">x</code><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>tile_x</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.world_objects.tile.Tile.y">
+<code class="sig-name descname">y</code><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>tile_y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.world_objects.tile.Tile.is_visible">
+<code class="sig-name descname">is_visible</code><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile.is_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>if tile is visible to player</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.world_objects.tile.Tile.sprite">
+<code class="sig-name descname">sprite</code><a class="headerlink" href="#scripts.engine.world_objects.tile.Tile.sprite" title="Permalink to this definition">¶</a></dt>
+<dd><p>the sprite of the floor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pygame.Surface</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – </p></li>
+<li><p><strong>sprite</strong> (<em>pygame.Surface</em>) – </p></li>
+<li><p><strong>blocks_sight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – </p></li>
+<li><p><strong>blocks_movement</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">World Objects</a><ul>
+<li><a class="reference internal" href="#combat-stats">Combat Stats</a></li>
+<li><a class="reference internal" href="#module-scripts.engine.world_objects.gamemap">Gamemap</a></li>
+<li><a class="reference internal" href="#module-scripts.engine.world_objects.tile">Tile</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="utility.html"
+                        title="previous chapter">Utility</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="world.html"
+                        title="next chapter">World</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/world_objects.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="world.html" title="World"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="utility.html" title="Utility"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">World Objects</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Snayff.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+    </div>
+  </body>
+</html>

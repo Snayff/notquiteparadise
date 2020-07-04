@@ -1,6 +1,6 @@
-from typing import List, Tuple, cast, Iterable
-
 import logging
+from typing import Iterable, List, Tuple, cast
+
 import pygame_gui
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
@@ -8,10 +8,11 @@ from pygame.surface import Surface
 from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIPanel
+
 from scripts.engine import world
-from scripts.engine.core.constants import LAYER_CAMERA, DirectionType, TILE_SIZE
+from scripts.engine.component import Aesthetic, Position
+from scripts.engine.core.constants import DirectionType, LAYER_CAMERA, TILE_SIZE
 from scripts.engine.utility import clamp, convert_tile_string, is_coordinate_in_bounds
-from scripts.engine.component import Position, Aesthetic
 from scripts.engine.world_objects.tile import Tile
 
 

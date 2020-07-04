@@ -3,7 +3,9 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import Iterator, TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
@@ -15,7 +17,7 @@ from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Optional, Tuple, List
+    from typing import Tuple, List
 
 
 class Skill(ABC):

@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, cast
+
 from snecs.typedefs import EntityID
-from scripts.engine import state, world
-from scripts.engine.component import Afflictions, Knowledge, Resources, Identity, Tracked
-from scripts.engine.core.constants import GameState, INFINITE, TIME_PER_ROUND
+
+from scripts.engine import world
+from scripts.engine.component import Afflictions, Knowledge, Tracked
+from scripts.engine.core.constants import INFINITE, TIME_PER_ROUND
 from scripts.engine.core.store import store
 
 if TYPE_CHECKING:

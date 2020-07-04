@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from typing import Optional, TYPE_CHECKING, Type
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import debug, state, world
 from scripts.engine.component import Knowledge, Position
 from scripts.engine.core.constants import Direction, DirectionType, GameState, GameStateType, InputIntent, \
@@ -9,8 +11,8 @@ from scripts.engine.core.constants import Direction, DirectionType, GameState, G
 from scripts.engine.library import library
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.processors import ai_processors
 from scripts.nqp.actions.skills import Move, Skill
+from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
     from typing import Optional

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import pygame
 from typing import TYPE_CHECKING
+
+import pygame
 
 from scripts.engine.core.constants import InputIntent, InputIntentType
 
 if TYPE_CHECKING:
-    from typing import Type, Union, Optional
+    from typing import Optional
 
 
 def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:

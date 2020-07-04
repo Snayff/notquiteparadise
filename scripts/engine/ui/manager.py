@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
+
 import pygame
-from typing import TYPE_CHECKING, cast
 from pygame_gui import UIManager
 from snecs.typedefs import EntityID
+
 from scripts.engine import debug, utility
-from scripts.engine.core.constants import Direction, GAP_SIZE, ICON_SIZE, MAX_SKILLS, MessageType, MessageTypeType, \
-    SKILL_SIZE, \
-    VisualInfo, UIElement, UIElementType, DirectionType
+from scripts.engine.core.constants import Direction, GAP_SIZE, MAX_SKILLS, MessageType, MessageTypeType, SKILL_SIZE, \
+    UIElement, UIElementType, VisualInfo
 from scripts.engine.library import library
 from scripts.engine.ui.basic.fonts import Font
 from scripts.engine.ui.elements.camera import Camera
@@ -20,7 +21,7 @@ from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Type, Dict, Tuple, List
+    from typing import TYPE_CHECKING, Dict, Tuple
 
 
 class _UIManager:
@@ -133,12 +134,6 @@ class _UIManager:
         Return the pygame_gui UI Manager
         """
         return self._gui
-
-    def get_elements(self) -> Dict:
-        """
-        Get all the ui_manager elements
-        """
-        return self._elements
 
     ##################### INIT, LOAD AND CREATE ############################
 

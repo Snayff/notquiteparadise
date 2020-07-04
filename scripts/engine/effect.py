@@ -3,10 +3,12 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
+
 from snecs.typedefs import EntityID
-from scripts.engine import world, utility
-from scripts.engine.component import Afflictions, Blocking, Aesthetic, Position, Resources
-from scripts.engine.core.constants import PrimaryStatType, DamageTypeType, Direction, TargetTag, DirectionType
+
+from scripts.engine import utility, world
+from scripts.engine.component import Aesthetic, Afflictions, Blocking, Position, Resources
+from scripts.engine.core.constants import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag
 
 if TYPE_CHECKING:
     from typing import Optional, List

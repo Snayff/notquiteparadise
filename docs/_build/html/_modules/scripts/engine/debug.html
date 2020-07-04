@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scripts.engine.debug &#8212; NotQuiteParadise 0.103.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scripts.engine.debug</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.engine.debug</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">snecs</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">state</span><span class="p">,</span> <span class="n">world</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
+
+
+<span class="c1"># TODO - approach to type commands to trigger actions e.g. spawn creature</span>
+
+<span class="c1">########################  ###########################</span>
+
+<div class="viewcode-block" id="_Debugger"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug._Debugger">[docs]</a><span class="k">class</span> <span class="nc">_Debugger</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recent_average_fps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fps_visible</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="_Debugger.update"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug._Debugger.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_internal_clock</span><span class="p">()</span><span class="o">.</span><span class="n">get_fps</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span>
+
+        <span class="c1"># get recent fps</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">&gt;=</span> <span class="mi">600</span><span class="p">:</span>
+            <span class="n">frames_to_count</span> <span class="o">=</span> <span class="mi">600</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">frames_to_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recent_average_fps</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span><span class="p">)</span> <span class="o">/</span> <span class="n">frames_to_count</span></div></div>
+
+
+<div class="viewcode-block" id="update"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug.update">[docs]</a><span class="k">def</span> <span class="nf">update</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update all values held in the debugger.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="dump"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug.dump">[docs]</a><span class="k">def</span> <span class="nf">dump</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print the debuggers stats.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Avg FPS: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;R_Avg: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="set_fps_visibility"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug.set_fps_visibility">[docs]</a><span class="k">def</span> <span class="nf">set_fps_visibility</span><span class="p">(</span><span class="n">is_visible</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set whether the FPS is visible</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO - this needs to be called from somewhere</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">fps_visible</span> <span class="o">=</span> <span class="n">is_visible</span></div>
+
+
+<div class="viewcode-block" id="is_fps_visible"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug.is_fps_visible">[docs]</a><span class="k">def</span> <span class="nf">is_fps_visible</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">fps_visible</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_visible_values"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug.get_visible_values">[docs]</a><span class="k">def</span> <span class="nf">get_visible_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">    Get all visible values from the debugger</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">fps_visible</span><span class="p">:</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FPS: C=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">current_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+                      <span class="sa">f</span><span class="s2">&quot;R_Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+                      <span class="sa">f</span><span class="s2">&quot;Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">values</span></div>
+
+
+<div class="viewcode-block" id="log_component_not_found"><a class="viewcode-back" href="../../../debug.html#scripts.engine.debug.log_component_not_found">[docs]</a><span class="k">def</span> <span class="nf">log_component_not_found</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Component</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Use if component not found. Log the error as a warning in the format &#39;{entity} tried to get {component} but it was</span>
+<span class="sd">    not found.&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;(</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">) tried to get </span><span class="si">{</span><span class="n">component</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, but it was not found.&quot;</span><span class="p">)</span></div>
+
+
+<span class="n">_debugger</span> <span class="o">=</span> <span class="n">_Debugger</span><span class="p">()</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scripts.engine.debug</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Snayff.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+    </div>
+  </body>
+</html>

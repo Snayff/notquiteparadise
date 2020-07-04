@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Iterator, TYPE_CHECKING, Type
+from typing import Iterator, TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import AfflictionCategory, AfflictionCategoryType, BASE_ACCURACY, BASE_DAMAGE, \
@@ -11,7 +13,7 @@ from scripts.engine.effect import AffectStatEffect, DamageEffect, Effect
 from scripts.engine.library import library
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Tuple, List
 
 
 class Affliction(ABC):

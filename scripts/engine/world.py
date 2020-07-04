@@ -3,29 +3,28 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
+from typing import Any, List, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, cast
 import pygame
 import snecs
 import tcod.map
-from typing import TYPE_CHECKING, Optional, Tuple, Type, List, TypeVar, Any, cast
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-from scripts.engine import utility, debug, chronicle
-from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
-    Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Afflictions, Behaviour, \
-    IsProjectile
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, EffectType, MessageType, ShapeType, TargetTag, FOVInfo, \
-    TargetTagType, DirectionType, Direction, ResourceType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, \
-    HitValue, HitType, HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT
-from scripts.engine.core.definitions import CharacteristicSpritesData, ProjectileData, CharacteristicSpritePathsData
+from scripts.engine import chronicle, debug, utility
+from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, FOV, HasCombatStats, Homeland, \
+    Identity, IsActor, IsGod, IsPlayer, IsProjectile, Knowledge, Opinion, People, Position, Resources, Savvy, Tracked
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, ENTITY_BLOCKS_SIGHT, \
+    EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, ResourceType, \
+    ShapeType, TILE_SIZE, TargetTag, TargetTagType, TravelMethod, TravelMethodType
+from scripts.engine.core.definitions import CharacteristicSpritePathsData, CharacteristicSpritesData, ProjectileData
 from scripts.engine.core.store import store
 from scripts.engine.library import library
-from scripts.engine.thought import SkipTurn, ProjectileBehaviour
+from scripts.engine.thought import ProjectileBehaviour, SkipTurn
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions import skills
-from scripts.nqp.actions.skills import Skill, BasicAttack, Move
+from scripts.nqp.actions.skills import BasicAttack, Move, Skill
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -291,7 +290,6 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     """
     Get the tile at the specified location. Use tile_x and tile_y. Raises exception if out of bounds or doesnt exist.
     """
-    # TODO - clean up to only accept tuple
     gamemap = get_gamemap()
     x = tile_pos[0]
     y = tile_pos[1]
@@ -579,27 +577,6 @@ def get_player() -> EntityID:
     raise ValueError
 
 
-def get_entity(unique_component: Type[Component]) -> Optional[EntityID]:
-    """
-    Get a single entity that has a component. If multiple entities have the given component only the
-    first found is returned.
-    """
-    entities = []
-    for entity, (flag,) in get_components([unique_component]):
-        entities.append(entity)
-
-    num_entities = len(entities)
-
-    if num_entities > 1:
-        logging.warning(f"Tried to get an entity with {unique_component} component but found {len(entities)} "
-                        f"entities with that component.")
-    elif num_entities == 0:
-        logging.warning(f"Tried to get an entity with {unique_component} component but found none.")
-        return None
-
-    return entities[0]
-
-
 def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
     """
     Get an entity's component. Log if component not found.
@@ -655,19 +632,6 @@ def get_primary_stat(entity: EntityID, primary_stat: str) -> int:
     value = max(1, int(value))
 
     return value
-
-
-def get_player_fov() -> tcod.map.Map:
-    """
-    Get's the player's FOV component
-    """
-    player = get_player()
-    if player:
-        fov_c = get_entitys_component(player, FOV)
-        if fov_c:
-            return fov_c.map
-
-    raise Exception
 
 
 def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
