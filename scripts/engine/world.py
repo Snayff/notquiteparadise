@@ -290,7 +290,6 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     """
     Get the tile at the specified location. Use tile_x and tile_y. Raises exception if out of bounds or doesnt exist.
     """
-    # TODO - clean up to only accept tuple
     gamemap = get_gamemap()
     x = tile_pos[0]
     y = tile_pos[1]
@@ -578,27 +577,6 @@ def get_player() -> EntityID:
     raise ValueError
 
 
-def get_entity(unique_component: Type[Component]) -> Optional[EntityID]:
-    """
-    Get a single entity that has a component. If multiple entities have the given component only the
-    first found is returned.
-    """
-    entities = []
-    for entity, (flag,) in get_components([unique_component]):
-        entities.append(entity)
-
-    num_entities = len(entities)
-
-    if num_entities > 1:
-        logging.warning(f"Tried to get an entity with {unique_component} component but found {len(entities)} "
-                        f"entities with that component.")
-    elif num_entities == 0:
-        logging.warning(f"Tried to get an entity with {unique_component} component but found none.")
-        return None
-
-    return entities[0]
-
-
 def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
     """
     Get an entity's component. Log if component not found.
@@ -654,19 +632,6 @@ def get_primary_stat(entity: EntityID, primary_stat: str) -> int:
     value = max(1, int(value))
 
     return value
-
-
-def get_player_fov() -> tcod.map.Map:
-    """
-    Get's the player's FOV component
-    """
-    player = get_player()
-    if player:
-        fov_c = get_entitys_component(player, FOV)
-        if fov_c:
-            return fov_c.map
-
-    raise Exception
 
 
 def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:

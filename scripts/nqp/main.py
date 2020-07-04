@@ -8,11 +8,9 @@ import pstats
 import sys
 import time
 import traceback
-
 import pygame
 import snecs
 from snecs.world import default_world
-
 from scripts.engine import chronicle, debug, key, state, world
 from scripts.engine.core.constants import GameState, VERSION
 from scripts.engine.ui.manager import ui
@@ -193,10 +191,10 @@ def initialise_game():
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    enemy = world.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops", "dandy")
+    world.create_actor("steve", "steve's desc", 1, 4, "goblynn", "soft_tops", "dandy")
 
     # create a god
-    god = world.create_god("the_small_gods")
+    world.create_god("the_small_gods")
 
     # prompt turn actions
     world.end_turn(player, 0)

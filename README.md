@@ -42,23 +42,23 @@ This update focuses on getting the project setup in a clean manner to allow for 
 * [ ] Organize code base
 * [ ] Make code installable
 * [ ] Setup github workflows
-* [ ] Add Quick Start installation instructions
-* [ ] Add Contribution instructions
+* [x] Add Quick Start installation instructions
+* [x] Add Contribution instructions
 * [ ] Setup test infrastructure
 
 #### Engine
-* [ ] Add renderer
-* [ ] Add simple data structures for game level objects (e.g. maps, entities)
+* [x] Add renderer
+* [x] Add simple data structures for game level objects (e.g. maps, entities)
 * [ ] Add algorithm for simple map generation
 * [ ] Add basic configuration
 * [ ] Build cli
 
 #### Game
 * [ ] Add debug/wizard mode
-* [ ] Add an entity for the main player
-* [ ] Generate an arena map (single "room")
-* [ ] Display map
-* [ ] Add a single enemy
+* [x] Add an entity for the main player
+* [x] Generate an arena map (single "room")
+* [x] Display map
+* [x] Add a single enemy
 
 ### 0.2 Provide Simple Gameplay
 This update aims to add the basic foundations of gameplay, such as movement, combat and simple serialisation.

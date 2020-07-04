@@ -135,12 +135,6 @@ class _UIManager:
         """
         return self._gui
 
-    def get_elements(self) -> Dict:
-        """
-        Get all the ui_manager elements
-        """
-        return self._elements
-
     ##################### INIT, LOAD AND CREATE ############################
 
     @staticmethod
