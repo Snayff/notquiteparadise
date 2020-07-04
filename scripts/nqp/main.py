@@ -17,34 +17,6 @@ from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors
 
 
-# =================================================================================================
-########################## CORE DESIGN PHILOSOPHIES ##############################################
-# FLOW - Periods of impetus to ensure the player is driven forward appropriately. Periods of openness to allow
-# self pacing, reflection and exploration.
-# TRANSPARENT - information pertinent to the player is always made available.
-# COHERENT - easy to parse data, utilising a mix of art and text. Avoid need for external resource use e.g. a wiki.
-# FLEXIBLE (input)- can use keyboard, mouse or controller interchangeably, with minimal difference in experience
-# CUSTOMISABLE - near-core game settings can be influenced or set by the player allowing for personalisation.
-
-########################### CODE STYLE & NAMING GUIDE ################################################
-# If only one of an object should exist the creation function is called "init_[object]", otherwise "create_[object]".
-#   Where the object is taken as an argument the function will default to ""create_[object_type]".
-# If a function returns something, its name describes what it returns. # TODO - review
-# If a function is named after a verb, its return value is of no significance or returns nothing. # TODO - review
-# If checking a bool use IsA or HasA.
-# If setting a variable from statically held data prefix with "load"
-# Any variable with "name" may include spaces and other special characters. Any variable with "key" is alphanumeric
-#    only.
-
-
-############################### PRE-MERGE CHECKLIST ######################################
-# mypy no errors
-# sphinx config pointing to correct files
-# manual sphinx docs up to date
-# isort cleaned up imports
-
-# ===============================================================================================
-
 def main():
     """
     The entry for the game initialisation and game loop
