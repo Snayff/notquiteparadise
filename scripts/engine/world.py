@@ -4,13 +4,11 @@ import dataclasses
 import logging
 import random
 from typing import Any, List, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, cast
-
 import pygame
 import snecs
 import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-
 from scripts.engine import chronicle, debug, utility
 from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, FOV, HasCombatStats, Homeland, \
     Identity, IsActor, IsGod, IsPlayer, IsProjectile, Knowledge, Opinion, People, Position, Resources, Savvy, Tracked

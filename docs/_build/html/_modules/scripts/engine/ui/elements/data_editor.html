@@ -44,22 +44,23 @@
 <span class="kn">import</span> <span class="nn">dataclasses</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">pygame_gui</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIContainer</span>
-<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIDropDownMenu</span><span class="p">,</span> <span class="n">UILabel</span><span class="p">,</span> <span class="n">UITextEntryLine</span><span class="p">,</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIWindow</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIButton</span><span class="p">,</span> <span class="n">UIDropDownMenu</span><span class="p">,</span> <span class="n">UILabel</span><span class="p">,</span> <span class="n">UITextEntryLine</span><span class="p">,</span> <span class="n">UIWindow</span>
+
 <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">PrimaryStat</span><span class="p">,</span> <span class="n">SecondaryStat</span><span class="p">,</span> \
-    <span class="n">TargetTag</span><span class="p">,</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">ProjectileExpiry</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">TerrainCollision</span><span class="p">,</span> <span class="n">TravelMethod</span><span class="p">,</span> <span class="n">Resource</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">AfflictionCategory</span><span class="p">,</span> <span class="n">DamageType</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">EffectType</span><span class="p">,</span> <span class="n">PrimaryStat</span><span class="p">,</span> \
+    <span class="n">ProjectileExpiry</span><span class="p">,</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">SecondaryStat</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">TargetTag</span><span class="p">,</span> <span class="n">TerrainCollision</span><span class="p">,</span> <span class="n">TravelMethod</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">AfflictionData</span><span class="p">,</span> <span class="n">AspectData</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">,</span> \
+    <span class="n">BaseSecondaryStatData</span><span class="p">,</span> <span class="n">CharacteristicData</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">GodData</span><span class="p">,</span> <span class="n">InterventionData</span><span class="p">,</span> <span class="n">SkillData</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.extend_json</span> <span class="kn">import</span> <span class="n">ExtendedJsonEncoder</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.library</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.core.definitions</span> <span class="kn">import</span> <span class="n">BasePrimaryStatData</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">,</span> <span class="n">SkillData</span><span class="p">,</span> \
-    <span class="n">InterventionData</span><span class="p">,</span> <span class="n">GodData</span><span class="p">,</span> <span class="n">EffectData</span><span class="p">,</span> <span class="n">CharacteristicData</span><span class="p">,</span> <span class="n">AspectData</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">,</span>\
-    <span class="n">AfflictionData</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
     <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UIManager</span>
     <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
