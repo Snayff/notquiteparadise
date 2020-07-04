@@ -184,13 +184,25 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     screen_x, screen_y = ui.world_to_screen_position((x, y))
     projectile.append(Aesthetic(sprites.move, sprites, screen_x, screen_y))
     projectile.append(IsProjectile(creating_entity))
-    projectile.append(Tracked(chronicle.get_time()))
+    projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
+    projectile.append(Resources(999, 999))
+
     entity = create_entity(projectile)
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
-    logging.debug(f"{name}`s projectile created.")
+    # add move
+    move = {
+        "skill": Move,
+        "cooldown": 0
+    }
+    known_skills = {
+        "move": move
+    }
+    add_component(entity, Knowledge(known_skills))
+
+    logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
 
     return entity
 
@@ -686,7 +698,7 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
         affected_positions.append((coord[0] + target_x, coord[1] + target_y))
 
     # get relevant entities in target area
-    for entity, (position, *others) in get_components([Position, Resources, HasCombatStats]):
+    for entity, (position, *others) in get_components([Position, Resources]):
         if (position.x, position.y) in affected_positions:
             affected_entities.append(entity)
 
@@ -726,7 +738,7 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
             logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
     elif tag == TargetTag.NO_ENTITY:
         # if the tile has no entity
-        return _tile_has_any_entity(tile)
+        return not _tile_has_any_entity(tile)
     elif tag == TargetTag.ANY:
         # if the tile is anything at all
         return True
@@ -972,20 +984,37 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
 def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: Optional[DirectionType] = None)\
         -> bool:
     """
-    Use the specified skill on the target tile, resolving all effects. Returns True is successful if criteria to use
-    skill was met, False if not.
+    Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if
+    criteria to use skill was met, False if not.
     """
+    # N.B. we init so that any overrides of the Skill.init are applied
+    skill_cast = skill(user, target_tile, direction)
+
     # ensure they are the right target type
-    if tile_has_tags(target_tile, skill.required_tags, user):
-        skill_cast = skill(user, target_tile, direction)
-        for entity, effects in skill_cast.apply():
+    if tile_has_tags(skill_cast.target_tile, skill_cast.required_tags, user):
+        skill_cast.use()
+        return True
+    else:
+        logging.info(f"Could not use skill, target tile does not have required tags ({skill.required_tags}).")
+
+    return False
+
+
+def apply_skill(skill_instance: Skill) -> bool:
+    """
+     Resolve the skill's effects. Returns True is successful if criteria to apply skill was met, False if not.
+    """
+    skill = skill_instance
+    # ensure they are the right target type
+    if tile_has_tags(skill.target_tile, skill.required_tags, skill.user):
+        for entity, effects in skill_instance.apply():
             effect_queue = list(effects)
             while effect_queue:
                 effect = effect_queue.pop()
                 effect_queue.extend(effect.evaluate())
         return True
     else:
-        logging.debug(f"Target tile does not have tags required ({skill.required_tags}).")
+        logging.info(f"Could not apply skill, target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
@@ -1055,23 +1084,24 @@ def learn_skill(entity: EntityID, skill_name: str) -> bool:
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
 
 def kill_entity(entity: EntityID):
-    turn_queue = chronicle.get_turn_queue()
 
-    # if  not player
+    # if not player
     if entity != get_player():
+        # delete from world
+        delete(entity)
+
+        turn_queue = chronicle.get_turn_queue()
+
         # if turn holder create new queue without them
         if entity == chronicle.get_turn_holder():
-            chronicle.rebuild_turn_queue(entity)
 
             # ensure the game state reflects the new queue
-            chronicle.next_turn()
+            chronicle.next_turn(entity)
 
         elif entity in turn_queue:
             # remove from turn queue
             turn_queue.pop(entity)
 
-        # delete from world
-        delete(entity)
     else:
         # TODO add player death
         # placeholder for player death
@@ -1086,8 +1116,7 @@ def end_turn(entity: EntityID, time_spent: int):
         spend_time(entity, time_spent)
         chronicle.next_turn()
     else:
-        name = get_name(entity)
-        logging.warning(f"Tried to end {name}'s turn but they're not turn holder.")
+        logging.warning(f"Tried to end {get_name(entity)}'s turn but they're not turn holder.")
 
 
 def delete(entity: EntityID):
