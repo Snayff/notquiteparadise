@@ -126,7 +126,7 @@ description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "2.9"
+version = "2.10"
 
 [[package]]
 category = "dev"
@@ -427,6 +427,21 @@ test = ["pytest", "pytest-cov", "html5lib", "typed-ast", "cython"]
 
 [[package]]
 category = "dev"
+description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
+name = "sphinx-autodoc-typehints"
+optional = false
+python-versions = ">=3.5.2"
+version = "1.11.0"
+
+[package.dependencies]
+Sphinx = ">=3.0"
+
+[package.extras]
+test = ["pytest (>=3.1.0)", "typing-extensions (>=3.5)", "sphobjinv (>=2.0)", "dataclasses"]
+type_comments = ["typed-ast (>=1.4.0)"]
+
+[[package]]
+category = "dev"
 description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books"
 name = "sphinxcontrib-applehelp"
 optional = false
@@ -502,7 +517,7 @@ description = "Pythonic cffi port of libtcod."
 name = "tcod"
 optional = false
 python-versions = ">=3.5"
-version = "11.14.0"
+version = "11.15.0"
 
 [package.dependencies]
 cffi = ">=1.13,<2.0"
@@ -562,7 +577,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "70d6737547d84cc794859fe24ccfa30975d888cb57e486337bd35f3302d10aab"
+content-hash = "335be47d9a1bccd18135383d13e441be1ac9086b7d409570b21a0d2d6c7de173"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -641,8 +656,8 @@ docutils = [
     {file = "docutils-0.16.tar.gz", hash = "sha256:c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc"},
 ]
 idna = [
-    {file = "idna-2.9-py2.py3-none-any.whl", hash = "sha256:a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa"},
-    {file = "idna-2.9.tar.gz", hash = "sha256:7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb"},
+    {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
+    {file = "idna-2.10.tar.gz", hash = "sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"},
 ]
 imagesize = [
     {file = "imagesize-1.2.0-py2.py3-none-any.whl", hash = "sha256:6965f19a6a2039c7d48bca7dba2473069ff854c36ae6f19d2cde309d998228a1"},
@@ -876,6 +891,10 @@ sphinx = [
     {file = "Sphinx-3.1.1-py3-none-any.whl", hash = "sha256:97c9e3bcce2f61d9f5edf131299ee9d1219630598d9f9a8791459a4d9e815be5"},
     {file = "Sphinx-3.1.1.tar.gz", hash = "sha256:74fbead182a611ce1444f50218a1c5fc70b6cc547f64948f5182fb30a2a20258"},
 ]
+sphinx-autodoc-typehints = [
+    {file = "sphinx-autodoc-typehints-1.11.0.tar.gz", hash = "sha256:bbf0b203f1019b0f9843ee8eef0cff856dc04b341f6dbe1113e37f2ebf243e11"},
+    {file = "sphinx_autodoc_typehints-1.11.0-py3-none-any.whl", hash = "sha256:89e19370a55db4aef1be2094d8fb1fb500ca455c55b3fcc8d2600ff805227e04"},
+]
 sphinxcontrib-applehelp = [
     {file = "sphinxcontrib-applehelp-1.0.2.tar.gz", hash = "sha256:a072735ec80e7675e3f432fcae8610ecf509c5f1869d17e2eecff44389cdbc58"},
     {file = "sphinxcontrib_applehelp-1.0.2-py2.py3-none-any.whl", hash = "sha256:806111e5e962be97c29ec4c1e7fe277bfd19e9652fb1a4392105b43e01af885a"},
@@ -901,19 +920,19 @@ sphinxcontrib-serializinghtml = [
     {file = "sphinxcontrib_serializinghtml-1.1.4-py2.py3-none-any.whl", hash = "sha256:f242a81d423f59617a8e5cf16f5d4d74e28ee9a66f9e5b637a18082991db5a9a"},
 ]
 tcod = [
-    {file = "tcod-11.14.0-cp35-abi3-macosx_10_9_x86_64.whl", hash = "sha256:0558425643e492cf00089fa4f7a770d771c78716a5a806732ec92cdc8f933a47"},
-    {file = "tcod-11.14.0-cp35-abi3-win32.whl", hash = "sha256:b488bef851fdab6ce0f7b2772f0f9492a5f9b690fdf3a2f60cb76beb263a0383"},
-    {file = "tcod-11.14.0-cp35-abi3-win_amd64.whl", hash = "sha256:43ac3effee57eca46f3db6d16be68c54a1b1b35d550ca61686a6ac9045a7bb03"},
-    {file = "tcod-11.14.0-cp36-cp36m-win32.whl", hash = "sha256:48f6e0a210db56c6d1155cb9f7d8aacf777ec315ee14abe5f4772b72e4e4bd34"},
-    {file = "tcod-11.14.0-cp36-cp36m-win_amd64.whl", hash = "sha256:75cbac7b1b7b5bf47f8fdca88a58ddbb0dcd5d37c70faaef56873fee895a36bb"},
-    {file = "tcod-11.14.0-cp37-cp37m-win32.whl", hash = "sha256:28baff68c11a43e816e5de747eeece7215225d3c930fc5283a7f71e3c262154f"},
-    {file = "tcod-11.14.0-cp37-cp37m-win_amd64.whl", hash = "sha256:ab6c3fc63e82035db9a6744fdc0487622896a20f8a26c5c708465c96e9006af7"},
-    {file = "tcod-11.14.0-cp38-cp38-win32.whl", hash = "sha256:d3bb58035d0fbc53971a69a5b428d9f88c2b9526cbb02540e5fb73cc267900d7"},
-    {file = "tcod-11.14.0-cp38-cp38-win_amd64.whl", hash = "sha256:99b4688fa697bcced366ff15a23bdd92978668c4e6fbe2662280efbb61b810ee"},
-    {file = "tcod-11.14.0-pp36-pp36-win32.whl", hash = "sha256:04f0582ed685908abd7d6a28c5adb903ad7656c2581d8b0f10e5b80d0b13ba09"},
-    {file = "tcod-11.14.0-pp36-pypy36_pp73-macosx_10_13_x86_64.whl", hash = "sha256:55b8a8a39a8f136058845a5792f7ddd003b03d75d73d3cf095667238f8e28d52"},
-    {file = "tcod-11.14.0-pp36-pypy36_pp73-win32.whl", hash = "sha256:3d22a0b78e66b746aa0209a42b8415c3798a7ca0a6d5e5a4a327e1906a4961e9"},
-    {file = "tcod-11.14.0.tar.gz", hash = "sha256:fd6ca9a7eda095766221a5a7aeccf0d4b988cd0fc3b813f67d1ad6528d172326"},
+    {file = "tcod-11.15.0-cp35-abi3-macosx_10_9_x86_64.whl", hash = "sha256:d3910bb31ac95443837405d9686bf25607fca7826050a992571a3a3a974ff39d"},
+    {file = "tcod-11.15.0-cp35-abi3-win32.whl", hash = "sha256:610f6829e4d8baafb432e46c7d8afd528b6e99012866d5929d508990e7457d98"},
+    {file = "tcod-11.15.0-cp35-abi3-win_amd64.whl", hash = "sha256:97f3ef2edc655945245e147bcb28d1c592cfd57e79b81891d7428217882e650e"},
+    {file = "tcod-11.15.0-cp36-cp36m-win32.whl", hash = "sha256:3dd56e149500931f2d351401c7d7c61689bc3709221efc0b03a839473f16ebdd"},
+    {file = "tcod-11.15.0-cp36-cp36m-win_amd64.whl", hash = "sha256:1c5cd0a90c418c293e5e8d7e3391e3ca60b0e8d714d953426a45452832f97828"},
+    {file = "tcod-11.15.0-cp37-cp37m-win32.whl", hash = "sha256:8afdbbe2e1da4af874a5bc571ce2c659232250b06df908bff8562183f4665256"},
+    {file = "tcod-11.15.0-cp37-cp37m-win_amd64.whl", hash = "sha256:2bb43d0eb1d24a3ce9db28c6b0c18bc353b5339d3f4fd428c1ec0d4e31d995c6"},
+    {file = "tcod-11.15.0-cp38-cp38-win32.whl", hash = "sha256:5d3f110664b4c9f1286a8c3648d3036c47465ee764b87611b4ae3d336fac6465"},
+    {file = "tcod-11.15.0-cp38-cp38-win_amd64.whl", hash = "sha256:a78ffe944d64bdbab0b0049da48bc6bb599a8f5ca946c63f20566bfbfbcd1d6f"},
+    {file = "tcod-11.15.0-pp36-pp36-win32.whl", hash = "sha256:fde1512c00c80f0fb3ca129d3d868f2be0927ac46a76507ac0cbd5aa2234d1be"},
+    {file = "tcod-11.15.0-pp36-pypy36_pp73-macosx_10_13_x86_64.whl", hash = "sha256:c43bc609244dd5407bd0ba16b6c36b0f9059be0b2604ec08b7204e4801121c5e"},
+    {file = "tcod-11.15.0-pp36-pypy36_pp73-win32.whl", hash = "sha256:d1f624e736eecdd67b88e38f2b7c32b6210c5939857cb94adeec275218113599"},
+    {file = "tcod-11.15.0.tar.gz", hash = "sha256:27e1ac292b53d14629878925bb7661e1a5cbfd2f866d0b57c0e6f4e9d61381ec"},
 ]
 toml = [
     {file = "toml-0.10.1-py2.py3-none-any.whl", hash = "sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88"},

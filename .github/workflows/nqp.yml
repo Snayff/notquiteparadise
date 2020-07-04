@@ -48,9 +48,9 @@ jobs:
   lint:
     needs: build
     - name: Run static linter
+      # stop the build if there are Python syntax errors or undefined names
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        mypy
+        mypy scripts/
 
   test:
     needs: build

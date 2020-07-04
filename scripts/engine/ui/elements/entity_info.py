@@ -3,14 +3,14 @@ from typing import Optional
 
 import pygame
 from pygame_gui import UIManager
-from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIWindow
+from pygame_gui.elements import UIImage, UIPanel, UITextBox
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.core.constants import GAP_SIZE, LAYER_BASE_UI, PrimaryStat, SecondaryStat, IMAGE_NOT_FOUND_PATH, \
-    INFINITE
+from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources
+from scripts.engine.core.constants import GAP_SIZE, IMAGE_NOT_FOUND_PATH, INFINITE, LAYER_BASE_UI, PrimaryStat, \
+    SecondaryStat
 from scripts.engine.utility import get_class_members
-from scripts.engine.component import Aesthetic, Identity, Resources, Afflictions
 
 
 class EntityInfo(UIPanel):

@@ -5,13 +5,15 @@ import datetime
 import io
 import logging
 import pstats
+import sys
 import time
 import traceback
-import sys
+
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import state, world, chronicle, key, debug
+
+from scripts.engine import chronicle, debug, key, state, world
 from scripts.engine.core.constants import GameState, VERSION
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors

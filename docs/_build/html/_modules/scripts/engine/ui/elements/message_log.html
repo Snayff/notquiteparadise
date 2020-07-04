@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scripts.engine.ui.elements.message_log &#8212; NotQuiteParadise 0.103.0 documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scripts.engine.ui.elements.message_log</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.engine.ui.elements.message_log</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">pygame.math</span> <span class="kn">import</span> <span class="n">Vector2</span>
+<span class="kn">from</span> <span class="nn">pygame.rect</span> <span class="kn">import</span> <span class="n">Rect</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIPanel</span><span class="p">,</span> <span class="n">UITextBox</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">LAYER_BASE_UI</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pygame_gui</span>
+
+
+<div class="viewcode-block" id="MessageLog"><a class="viewcode-back" href="../../../../../ui.html#scripts.engine.ui.elements.message_log.MessageLog">[docs]</a><span class="k">class</span> <span class="nc">MessageLog</span><span class="p">(</span><span class="n">UIPanel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hold text relating to the game&#39;s events, to display to the player. This should be a log of all notable things</span>
+<span class="sd">    that have happened. It is recommended that all messages are in the past tense.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">ui_manager</span><span class="o">.</span><span class="n">UIManager</span><span class="p">):</span>
+        <span class="c1"># hold state info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># TODO - show on new message, fade out after set time</span>
+
+        <span class="c1"># complete base class init</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">LAYER_BASE_UI</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;message_log&quot;</span><span class="p">,</span>
+                         <span class="n">anchors</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_text_box</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="s2">&quot;Welcome to Not Quite Paradise!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># confirm init complete</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MessageLog initialised.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MessageLog.update"><a class="viewcode-back" href="../../../../../ui.html#scripts.engine.ui.elements.message_log.MessageLog.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update based on current state and data. Run every frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MessageLog.handle_events"><a class="viewcode-back" href="../../../../../ui.html#scripts.engine.ui.elements.message_log.MessageLog.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle events created by this UI widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="c1">########### CREATE ################</span>
+
+<div class="viewcode-block" id="MessageLog._create_text_box"><a class="viewcode-back" href="../../../../../ui.html#scripts.engine.ui.elements.message_log.MessageLog._create_text_box">[docs]</a>    <span class="k">def</span> <span class="nf">_create_text_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UITextBox</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the text box to show the messages</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+        <span class="n">textbox</span> <span class="o">=</span> <span class="n">UITextBox</span><span class="p">(</span><span class="n">html_text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">relative_rect</span><span class="o">=</span><span class="n">rect</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_manager</span><span class="p">,</span>
+                  <span class="n">wrap_to_height</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">layer_starting_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#text_box&quot;</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">textbox</span></div>
+
+    <span class="c1">########## ACTIONS ##############</span>
+
+    <span class="c1"># noinspection PyArgumentList,PyArgumentList</span>
+<div class="viewcode-block" id="MessageLog.add_message"><a class="viewcode-back" href="../../../../../ui.html#scripts.engine.ui.elements.message_log.MessageLog.add_message">[docs]</a>    <span class="k">def</span> <span class="nf">add_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add message to the message log. Formatting the text is done via a subset of HTML tags. Currently supported</span>
+<span class="sd">        tags are:</span>
+<span class="sd">        &lt;b&gt;&lt;/b&gt; or &lt;strong&gt;&lt;/strong&gt; - to encase bold styled text.</span>
+<span class="sd">        &lt;i&gt;&lt;/i&gt;, &lt;em&gt;&lt;/em&gt; or &lt;var&gt;&lt;/var&gt; - to encase italic styled text.</span>
+<span class="sd">        &lt;u&gt;&lt;/u&gt; - to encase underlined text.</span>
+<span class="sd">        &lt;a href=’id’&gt;&lt;/a&gt; - to encase ‘link’ text that can be clicked on to generate events with the id given in href.</span>
+<span class="sd">        &lt;body bgcolor=’#FFFFFF’&gt;&lt;/body&gt; - to change the background colour of encased text.</span>
+<span class="sd">        &lt;br&gt; - to start a new line.</span>
+<span class="sd">        &lt;font face=’verdana’ color=’#000000’ size=3.5&gt;&lt;/font&gt; - To set the font, colour and size of encased text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">message</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_text_box</span><span class="p">()</span>
+
+        <span class="c1"># update the position of the text in the text box</span>
+        <span class="c1"># N.B. this is taken from the UIVerticalScrollBar update method</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="o">.</span><span class="n">scroll_bar</span><span class="p">:</span>
+            <span class="n">scroll_bar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_box</span><span class="o">.</span><span class="n">scroll_bar</span>
+            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_wheel_down</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">250.0</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span><span class="p">,</span>
+                                             <span class="n">scroll_bar</span><span class="o">.</span><span class="n">bottom_limit</span> <span class="o">-</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">sliding_button</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+            <span class="n">x_pos</span> <span class="o">=</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">shadow_width</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">border_width</span>
+            <span class="n">y_pos</span> <span class="o">=</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">shadow_width</span> <span class="o">+</span> \
+                    <span class="n">scroll_bar</span><span class="o">.</span><span class="n">border_width</span> <span class="o">+</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">button_height</span>
+            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">sliding_button</span><span class="o">.</span><span class="n">set_position</span><span class="p">(</span><span class="n">Vector2</span><span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">))</span>
+
+            <span class="n">scroll_bar</span><span class="o">.</span><span class="n">start_percentage</span> <span class="o">=</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scroll_position</span> <span class="o">/</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">scrollable_height</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scroll_bar</span><span class="o">.</span><span class="n">has_moved_recently</span><span class="p">:</span>
+                <span class="n">scroll_bar</span><span class="o">.</span><span class="n">has_moved_recently</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scripts.engine.ui.elements.message_log</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Snayff.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+    </div>
+  </body>
+</html>

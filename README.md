@@ -100,7 +100,7 @@ This update will allow the player to win or lose and will provide some basic too
 * [ ] Create 2 different skills 
 
     
-### 0.4 Packaging/Distribution update
+### 0.4 Sharing the Results
 This update will allow someone to play the game.
 
 #### Project

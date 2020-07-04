@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Tuple
+from typing import Any, TYPE_CHECKING, Tuple
+
 from snecs import RegisteredComponent
+
 from scripts.engine.core.constants import PrimaryStatType
 
 if TYPE_CHECKING:

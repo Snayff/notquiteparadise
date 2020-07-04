@@ -5,11 +5,10 @@ import logging
 import os
 from typing import TYPE_CHECKING
 
-from scripts.engine import utility
+from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, SecondaryStatType
+from scripts.engine.core.definitions import AfflictionData, AspectData, AttitudeData, BasePrimaryStatData, \
+    BaseSecondaryStatData, CharacteristicData, EffectData, GodData, InterventionData, SkillData
 from scripts.engine.core.extend_json import deserialise_dataclasses
-from scripts.engine.core.constants import SecondaryStatType, EffectTypeType, PrimaryStatType, Direction
-from scripts.engine.core.definitions import BasePrimaryStatData, BaseSecondaryStatData, SkillData, \
-    InterventionData, GodData, CharacteristicData, AspectData, AttitudeData, AfflictionData, EffectData
 
 if TYPE_CHECKING:
     from typing import Dict

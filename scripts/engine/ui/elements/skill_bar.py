@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import logging
 from typing import List, Optional
+
 from pygame.rect import Rect
 from pygame_gui import UIManager
-from pygame_gui.elements import UIPanel, UIWindow, UIButton
+from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import GAP_SIZE, ICON_SIZE, LAYER_BASE_UI, MAX_SKILLS, SKILL_SIZE
+from scripts.engine.core.constants import GAP_SIZE, LAYER_BASE_UI, MAX_SKILLS, SKILL_SIZE
 
 
 class SkillBar(UIPanel):

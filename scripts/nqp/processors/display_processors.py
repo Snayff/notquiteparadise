@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, cast
+
 import pytweening
+
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic
-from typing import TYPE_CHECKING, cast
 from scripts.engine.core.constants import UIElement
 from scripts.engine.utility import is_close
 

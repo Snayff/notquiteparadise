@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scripts.engine.ui.basic.fonts &#8212; NotQuiteParadise 0.103.0 documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scripts.engine.ui.basic.fonts</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for scripts.engine.ui.basic.fonts</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pygame.freetype</span>
+
+
+<div class="viewcode-block" id="Font"><a class="viewcode-back" href="../../../../../ui.html#scripts.engine.ui.basic.fonts.Font">[docs]</a><span class="k">class</span> <span class="nc">Font</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renderable font.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+        <span class="n">font_dir</span> <span class="o">=</span> <span class="s2">&quot;assets/fonts/&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="n">font_dir</span> <span class="o">+</span> <span class="s2">&quot;Barlow-Regular.otf&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="n">font_dir</span> <span class="o">+</span> <span class="s2">&quot;Kenney Future Narrow.ttf&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># have font rect be consistent</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_log</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span>  <span class="mi">14</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_log</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_info</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_info</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">targeting_overlay</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="n">font_dir</span> <span class="o">+</span> <span class="s2">&quot;Barlow-Regular.otf&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targeting_overlay</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_bar</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="n">font_dir</span> <span class="o">+</span> <span class="s2">&quot;Barlow-Regular.otf&quot;</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_bar</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_queue</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="n">font_dir</span> <span class="o">+</span> <span class="s2">&quot;Barlow-Regular.otf&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_queue</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">freetype</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="n">font_dir</span> <span class="o">+</span> <span class="s2">&quot;Barlow-Regular.otf&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">pad</span> <span class="o">=</span> <span class="kc">True</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">scripts.engine.ui.basic.fonts</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Snayff.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+    </div>
+  </body>
+</html>

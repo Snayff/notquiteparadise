@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import json
-from typing import TYPE_CHECKING, Dict, Type
+from typing import Dict, TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
     pass

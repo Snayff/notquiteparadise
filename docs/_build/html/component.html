@@ -1,0 +1,540 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component &#8212; NotQuiteParadise 0.103.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core" href="core.html" />
+    <link rel="prev" title="Chronicle" href="chronicle.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="Core"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="chronicle.html" title="Chronicle"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Component</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-scripts.engine.component">
+<span id="component"></span><h1>Component<a class="headerlink" href="#module-scripts.engine.component" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="scripts.engine.component.IsPlayer">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">IsPlayer</code><a class="reference internal" href="_modules/scripts/engine/component.html#IsPlayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.IsPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>Whether the entity is the player.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsPlayer._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.IsPlayer._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsPlayer._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 1</em><a class="headerlink" href="#scripts.engine.component.IsPlayer._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.IsGod">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">IsGod</code><a class="reference internal" href="_modules/scripts/engine/component.html#IsGod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.IsGod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>Whether the entity is a god.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsGod._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.IsGod._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsGod._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 2</em><a class="headerlink" href="#scripts.engine.component.IsGod._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.IsProjectile">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">IsProjectile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">creator</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#IsProjectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.IsProjectile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>Whether the entity is a projectile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>creator</strong> (<em>EntityID</em>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsProjectile._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.IsProjectile._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsProjectile._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 4</em><a class="headerlink" href="#scripts.engine.component.IsProjectile._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.IsActor">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">IsActor</code><a class="reference internal" href="_modules/scripts/engine/component.html#IsActor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.IsActor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>Whether the entity is an actor.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsActor._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.IsActor._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.IsActor._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 8</em><a class="headerlink" href="#scripts.engine.component.IsActor._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.HasCombatStats">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">HasCombatStats</code><a class="reference internal" href="_modules/scripts/engine/component.html#HasCombatStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.HasCombatStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>A flag to show if an entity has stats used for combat.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.component.HasCombatStats._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.HasCombatStats._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.HasCombatStats._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 16</em><a class="headerlink" href="#scripts.engine.component.HasCombatStats._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Position">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Position</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s position on the map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Position._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Position._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Position._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 32</em><a class="headerlink" href="#scripts.engine.component.Position._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Aesthetic">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Aesthetic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_sprite</span></em>, <em class="sig-param"><span class="n">sprites</span></em>, <em class="sig-param"><span class="n">screen_x</span></em>, <em class="sig-param"><span class="n">screen_y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Aesthetic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Aesthetic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s sprite.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>current_sprite</strong> (<em>pygame.Surface</em>) – </p></li>
+<li><p><strong>sprites</strong> (<a class="reference internal" href="core.html#id110" title="scripts.engine.core.definitions.CharacteristicSpritesData"><em>CharacteristicSpritesData</em></a>) – </p></li>
+<li><p><strong>screen_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </p></li>
+<li><p><strong>screen_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Aesthetic._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Aesthetic._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Aesthetic._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 64</em><a class="headerlink" href="#scripts.engine.component.Aesthetic._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Tracked">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Tracked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_spent</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Tracked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Tracked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>A component to hold info on activities of an entity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_spent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Tracked._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Tracked._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Tracked._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 128</em><a class="headerlink" href="#scripts.engine.component.Tracked._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Resources">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Resources</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">health</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">stamina</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Resources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Resources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s resources. Members align to Resource constants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>health</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+<li><p><strong>stamina</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Resources._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Resources._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Resources._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 256</em><a class="headerlink" href="#scripts.engine.component.Resources._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Blocking">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Blocking</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocks_movement</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">blocks_sight</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Blocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Blocking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s blocking of other objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>blocks_movement</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+<li><p><strong>blocks_sight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Blocking._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Blocking._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Blocking._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 512</em><a class="headerlink" href="#scripts.engine.component.Blocking._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Identity">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Identity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s identity, such as name and description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Identity._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Identity._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Identity._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 1024</em><a class="headerlink" href="#scripts.engine.component.Identity._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.People">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">People</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">people_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#People"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.People" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s people.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>people_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.People._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.People._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.People._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 2048</em><a class="headerlink" href="#scripts.engine.component.People._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Savvy">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Savvy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">savvy_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Savvy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Savvy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s savvy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>savvy_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Savvy._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Savvy._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Savvy._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 4096</em><a class="headerlink" href="#scripts.engine.component.Savvy._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Homeland">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Homeland</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">homeland_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Homeland"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Homeland" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s homeland.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>homeland_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Homeland._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Homeland._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Homeland._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 8192</em><a class="headerlink" href="#scripts.engine.component.Homeland._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Behaviour">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Behaviour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">behaviour</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Behaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Behaviour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An ai behaviour to control an entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>behaviour</strong> (<em>AIBehaviour</em>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Behaviour._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Behaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Behaviour._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 16384</em><a class="headerlink" href="#scripts.engine.component.Behaviour._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Knowledge">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Knowledge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skills</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">skill_order</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Knowledge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Knowledge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>skills</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>Any</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>skill_order</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Knowledge._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Knowledge._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Knowledge._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 32768</em><a class="headerlink" href="#scripts.engine.component.Knowledge._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Afflictions">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Afflictions</code><a class="reference internal" href="_modules/scripts/engine/component.html#Afflictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Afflictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s Boons and Banes. held in .active as {affliction_name: duration}.</p>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Afflictions._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Afflictions._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Afflictions._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 65536</em><a class="headerlink" href="#scripts.engine.component.Afflictions._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Aspect">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Aspect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aspects</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#Aspect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Aspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s aspects. A static tile modifier. Held in a dict as {aspect_name: duration}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>aspects</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em><em>]</em>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Aspect._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Aspect._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Aspect._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 131072</em><a class="headerlink" href="#scripts.engine.component.Aspect._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.Opinion">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">Opinion</code><a class="reference internal" href="_modules/scripts/engine/component.html#Opinion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.Opinion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s views on other entities. {entity, opinion}</p>
+<dl class="py attribute">
+<dt id="scripts.engine.component.Opinion._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.Opinion._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.Opinion._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 262144</em><a class="headerlink" href="#scripts.engine.component.Opinion._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.component.FOV">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.component.</code><code class="sig-name descname">FOV</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fov_map</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/component.html#FOV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.component.FOV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">snecs.component.RegisteredComponent</span></code></p>
+<p>An entity’s field of view.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fov_map</strong> (<em>tcod.map.Map</em>) – </p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="scripts.engine.component.FOV._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.component.FOV._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.component.FOV._bitmask">
+<code class="sig-name descname">_bitmask</code><em class="property">: Bitmask</em><em class="property"> = 524288</em><a class="headerlink" href="#scripts.engine.component.FOV._bitmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="chronicle.html"
+                        title="previous chapter">Chronicle</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="core.html"
+                        title="next chapter">Core</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/component.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="Core"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="chronicle.html" title="Chronicle"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Component</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Snayff.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+    </div>
+  </body>
+</html>

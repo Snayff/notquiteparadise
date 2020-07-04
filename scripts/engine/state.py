@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 from scripts.engine import utility
-from scripts.engine.core.constants import GameState, VisualInfo, GameStateType
+from scripts.engine.core.constants import GameState, GameStateType, VisualInfo
 from scripts.engine.core.store import store
 
 if TYPE_CHECKING:

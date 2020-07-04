@@ -5,19 +5,26 @@
 
 Welcome to Not Quite Paradise's documentation!
 ==================================================
-Last updated on |today| for v|version|.
+Last updated on |today| for version |version|.
 
 ..  toctree::
     :maxdepth: 1
 
+    chronicle
+    component
     core
-    dev_tools
-    event_handlers
-    events
-    managers
-    skills
+    debug
+    effect
+    key
+    library
+    state
+    thought
     ui
+    utility
+    world_objects
     world
+
+
 
 
 

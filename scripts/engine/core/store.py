@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import pygame
 from typing import TYPE_CHECKING
 
+import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.core.constants import GameState, GameStateType
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Dict, Tuple
+    from typing import TYPE_CHECKING, Dict
 
 
 class _Store:

@@ -3,29 +3,30 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
+from typing import Any, List, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, cast
+
 import pygame
 import snecs
 import tcod.map
-from typing import TYPE_CHECKING, Optional, Tuple, Type, List, TypeVar, Any, cast
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-from scripts.engine import utility, debug, chronicle
-from scripts.engine.component import Position, Blocking, Resources, Knowledge, IsPlayer, Identity, People, Savvy, \
-    Homeland, FOV, Aesthetic, IsGod, Opinion, IsActor, HasCombatStats, Tracked, Afflictions, Behaviour, \
-    IsProjectile
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, EffectType, MessageType, ShapeType, TargetTag, FOVInfo, \
-    TargetTagType, DirectionType, Direction, ResourceType, INFINITE, TravelMethodType, TravelMethod, HitTypeType, \
-    HitValue, HitType, HitModifier, TILE_SIZE, ICON_SIZE, ENTITY_BLOCKS_SIGHT
-from scripts.engine.core.definitions import CharacteristicSpritesData, ProjectileData, CharacteristicSpritePathsData
+
+from scripts.engine import chronicle, debug, utility
+from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, FOV, HasCombatStats, Homeland, \
+    Identity, IsActor, IsGod, IsPlayer, IsProjectile, Knowledge, Opinion, People, Position, Resources, Savvy, Tracked
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, ENTITY_BLOCKS_SIGHT, \
+    EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, ResourceType, \
+    ShapeType, TILE_SIZE, TargetTag, TargetTagType, TravelMethod, TravelMethodType
+from scripts.engine.core.definitions import CharacteristicSpritePathsData, CharacteristicSpritesData, ProjectileData
 from scripts.engine.core.store import store
 from scripts.engine.library import library
-from scripts.engine.thought import SkipTurn, ProjectileBehaviour
+from scripts.engine.thought import ProjectileBehaviour, SkipTurn
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions import skills
-from scripts.nqp.actions.skills import Skill, BasicAttack, Move
+from scripts.nqp.actions.skills import BasicAttack, Move, Skill
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List

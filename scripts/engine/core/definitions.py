@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 from abc import ABC
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, TYPE_CHECKING
 
 import pygame
-from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from snecs.typedefs import EntityID
-from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, ProjectileExpiry, TargetTag, TargetTagType, \
-    DamageTypeType, \
-    AfflictionCategoryType, ShapeType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType, \
-    ProjectileExpiryType, DirectionType, SecondaryStatType, ProjectileSpeedType, ProjectileSpeed, EffectType, Shape, \
-    ResourceType, TargetingMethod, TargetingMethodType, Direction, Resource
-from scripts.engine.core.extend_json import register_dataclass_with_json
 
+from scripts.engine.core.constants import AfflictionCategoryType, DamageTypeType, Direction, DirectionType, \
+    EffectType, \
+    EffectTypeType, PrimaryStatType, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, ProjectileSpeedType, \
+    Resource, ResourceType, SecondaryStatType, Shape, ShapeType, TargetTag, TargetTagType, TargetingMethod, \
+    TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType
+from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
     from scripts.nqp.actions.skills import Skill

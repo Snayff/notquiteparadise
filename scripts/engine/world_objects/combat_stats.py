@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import world
+from scripts.engine.component import Homeland, People, Savvy
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat
 from scripts.engine.core.definitions import CharacteristicData
 from scripts.engine.library import library
-from scripts.engine.component import People, Homeland, Savvy
 
 if TYPE_CHECKING:
     pass
