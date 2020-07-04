@@ -201,6 +201,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
     Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
     'can_use_skill' already completed.
      """
+    # FIXME - skill not hitting in diagonals
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.name)

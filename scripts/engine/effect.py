@@ -175,7 +175,7 @@ class AffectStatEffect(Effect):
 
     def evaluate(self) -> List[Optional[Effect]]:
         """
-        TBC - not implemented
+        Log the affliction and the stat modification in the Affliction component.
         """
         logging.debug("Evaluating Affect Stat Effect...")
         success = False
