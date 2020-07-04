@@ -10,15 +10,17 @@ import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, utility
-from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, FOV, HasCombatStats, Homeland, \
-    Identity, IsActor, IsGod, IsPlayer, IsProjectile, Knowledge, Opinion, People, Position, Resources, Savvy, Tracked
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, ENTITY_BLOCKS_SIGHT, \
-    EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, ResourceType, \
-    ShapeType, TILE_SIZE, TargetTag, TargetTagType, TravelMethod, TravelMethodType
-from scripts.engine.core.definitions import CharacteristicSpritePathsData, CharacteristicSpritesData, ProjectileData
+from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, Trait, FOV, HasCombatStats, \
+    Identity, IsGod, IsPlayer, Knowledge, Opinion, Position, Resources, Tracked
+from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, DEFAULT_ENTITY_BLOCKS_SIGHT, \
+    EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, PrimaryStat, \
+    PrimaryStatType, \
+    ResourceType, \
+    SecondaryStatType, ShapeType, TILE_SIZE, TargetTag, TargetTagType, TraitGroup, TravelMethod, TravelMethodType
+from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData, ProjectileData
 from scripts.engine.core.store import store
 from scripts.engine.library import library
-from scripts.engine.thought import ProjectileBehaviour, SkipTurn
+from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
@@ -59,13 +61,7 @@ def create_god(god_name: str) -> EntityID:
     data = library.get_god_data(god_name)
     god: List[Component] = []
 
-    # get aesthetic info
-    idle = utility.get_image(data.sprite_paths.idle, (TILE_SIZE, TILE_SIZE))
-    icon = utility.get_image(data.sprite_paths.icon, (ICON_SIZE, ICON_SIZE))
-    sprites = CharacteristicSpritesData(icon=icon, idle=idle)
-
     god.append(Identity(data.name, data.description))
-    god.append(Aesthetic(sprites.idle, sprites, 0, 0))
     god.append(IsGod())
     god.append(Opinion())
     god.append((Resources(INFINITE, INFINITE)))
@@ -73,46 +69,59 @@ def create_god(god_name: str) -> EntityID:
 
     # TODO - readd interventions
 
-    logging.debug(f"{data.name} created.")
+    logging.debug(f"God, '{data.name}', created.")
 
     return entity
 
 
-def create_actor(name: str, description: str, x: int, y: int, people_name: str, homeland_name: str,
-        savvy_name: str, is_player: bool = False) -> EntityID:
+def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_names: List[str],
+        is_player: bool = False) -> EntityID:
     """
-    Create an entity with all of the components to be an actor. is_player is Optional and defaults to false.
-    Returns entity ID.
+    Create an entity with all of the components to be an actor. Returns entity ID.
     """
-    # TODO - rename create player. add new method for create actor that uses actor/npc characteristic
-
-    people_data = library.get_people_data(people_name)
-    homeland_data = library.get_homeland_data(homeland_name)
-    savvy_data = library.get_savvy_data(savvy_name)
-
-    actor: List[Component] = []
+    components: List[Component] = []
 
     # actor components
-    actor.append(IsActor())
-    actor.append(Identity(name, description))
-    actor.append(Position(x, y))  # TODO - check position not blocked before spawning
-    actor.append(HasCombatStats())
-    actor.append(Blocking(True, ENTITY_BLOCKS_SIGHT))
-    actor.append(People(people_name))
-    actor.append(Homeland(homeland_name))
-    actor.append(Savvy(savvy_name))
-    actor.append(FOV(create_fov_map()))
-    actor.append(Tracked(chronicle.get_time()))
+    if is_player:
+        components.append(IsPlayer())
+    components.append(Identity(name, description))
+    components.append(Position(x, y))  # TODO - check position not blocked before spawning
+    components.append(HasCombatStats())
+    components.append(Blocking(True, DEFAULT_ENTITY_BLOCKS_SIGHT))
+    components.append(Trait(trait_names))
+    components.append(FOV(create_fov_map()))
+    components.append(Tracked(chronicle.get_time()))
+
+    # get info from traits
+    traits_paths = []  # for aesthetic
+    known_skills = {}  # for knowledge
+    skill_order = []  # for knowledge
+    perm_afflictions = {}  # for affliction
+    behaviour = None
+
+    for name in trait_names:
+        data = library.get_trait_data(name)
+        traits_paths.append(data.sprite_paths)
+        if data.known_skills != ["none"]:
+            for skill_name in data.known_skills:
+                skill = getattr(skills, skill_name)
+                known_skills[skill_name] = skill
+                skill_order.append(skill_name)
+        if data.permanent_afflictions != ["none"]:
+            for affliction in data.permanent_afflictions:
+                perm_afflictions[affliction] = INFINITE
+        if data.group == TraitGroup.NPC:
+            # TODO - get behaviour
+            behaviour = SkipTurnBehaviour
 
     # add aesthetic
-    characteristics_paths = [homeland_data.sprite_paths, people_data.sprite_paths, savvy_data.sprite_paths]
-    sprites = _create_characteristic_sprites(characteristics_paths)
+    #traits_paths.sort(key=lambda x: x=getattr() traits_paths.render_order)
+    # FIXME - work out how to sort on render_order attribute
+    sprites = _create_trait_sprites(traits_paths)
     screen_x, screen_y = ui.world_to_screen_position((x, y))
-    actor.append(Aesthetic(sprites.idle, sprites, screen_x, screen_y))
+    components.append(Aesthetic(sprites.idle, sprites, screen_x, screen_y))
 
-    # create the entity
-    entity = create_entity(actor)
-
+    ## add skills to entity
     # setup basic attack as a known skill  # N.B. must be after entity creation
     basic_attack_name = "basic_attack"
 
@@ -124,45 +133,25 @@ def create_actor(name: str, description: str, x: int, y: int, people_name: str, 
         "skill": Move,
         "cooldown": 0
     }
-    known_skills = {
-        basic_attack_name: basic_attack,
-        "move": move
-    }
-    skill_order = [basic_attack_name]  # move not added to skill order
-    afflictions = Afflictions()
+    known_skills[basic_attack_name] = basic_attack
+    known_skills["move"] = move
+    skill_order.insert(0, basic_attack_name)  # move not added to skill order
+    components.append(Knowledge(known_skills, skill_order))
 
-    # get skills and perm afflictions from characteristics
-    characteristics = {
-        1: people_data,
-        2: homeland_data,
-        3: savvy_data
-    }
-    for characteristic in characteristics.values():
-        if characteristic.known_skills != ["none"]:
-            for skill_name in characteristic.known_skills:
-                skill = getattr(skills, skill_name)
-                known_skills[skill_name] = skill
-                skill_order.append(skill_name)
-        if characteristic.permanent_afflictions != ["none"]:
-            for affliction in characteristic.permanent_afflictions:
-                afflictions[affliction] = INFINITE
+    # add permanent afflictions
+    components.append(Afflictions(perm_afflictions))
 
-    # add skills to entity
-    add_component(entity, Knowledge(known_skills, skill_order))
-    add_component(entity, afflictions)
+    # create the entity
+    entity = create_entity(components)
 
+    # add behaviour  N.B. Can only be added once entity is created
+    if behaviour:
+        add_component(entity, Behaviour(behaviour(entity)))
     # give full resources N.B. Can only be added once entity is created
     stats = create_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
 
-    # player components
-    if is_player:
-        add_component(entity, IsPlayer())
-    # TODO - alter in line with change to separating player and actor
-    else:
-        add_component(entity, Behaviour(SkipTurn(entity)))
-
-    logging.debug(f"{name} created.")
+    logging.debug(f"Entity, '{name}', created.")
 
     return entity
 
@@ -179,10 +168,9 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     desc = f"{name}s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
 
-    sprites = CharacteristicSpritesData(move=utility.get_image(data.sprite), idle=utility.get_image(data.sprite))
+    sprites = TraitSpritesData(move=utility.get_image(data.sprite), idle=utility.get_image(data.sprite))
     screen_x, screen_y = ui.world_to_screen_position((x, y))
     projectile.append(Aesthetic(sprites.move, sprites, screen_x, screen_y))
-    projectile.append(IsProjectile(creating_entity))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     projectile.append(Resources(999, 999))
@@ -206,24 +194,25 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     return entity
 
 
-def _create_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsData]) -> CharacteristicSpritesData:
+def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpritesData:
     """
-    Build a CharacteristicSpritesData class from a list of sprite paths
+    Build a TraitSpritesData class from a list of sprite paths
     """
     paths: Dict[str, List[str]] = {}
     sprites: Dict[str, List[pygame.Surface]] = {}
     flattened_sprites: Dict[str, pygame.Surface] = {}
 
-    # bundle into cross-characteristic sprite path lists
-    for characteristic in sprite_paths:
-        char_dict = dataclasses.asdict(characteristic)
+    # bundle into cross-trait sprite path lists
+    for trait in sprite_paths:
+        char_dict = dataclasses.asdict(trait)
         for name, path in char_dict.items():
-            # check if key exists
-            if name in paths:
-                paths[name].append(path)
-            # if not init the dict
-            else:
-                paths[name] = [path]
+            if name != "render_order":
+                # check if key exists
+                if name in paths:
+                    paths[name].append(path)
+                # if not init the dict
+                else:
+                    paths[name] = [path]
 
     # convert to sprites
     for name, path_list in paths.items():
@@ -240,7 +229,7 @@ def _create_characteristic_sprites(sprite_paths: List[CharacteristicSpritePathsD
         flattened_sprites[name] = utility.flatten_images(surface_list)
 
     # convert to dataclass
-    converted = CharacteristicSpritesData(**flattened_sprites)
+    converted = TraitSpritesData(**flattened_sprites)
     return converted
 
 
@@ -601,28 +590,51 @@ def get_name(entity: EntityID) -> str:
     return name
 
 
-def get_primary_stat(entity: EntityID, primary_stat: str) -> int:
+def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     """
     Get an entity's primary stat.
     """
     stat = primary_stat
     value = 0
 
-    people = get_entitys_component(entity, People)
-    if people:
-        people_data = library.get_people_data(people.name)
-        value += getattr(people_data, stat)
+    stat_data = library.get_primary_stat_data(stat)
+    value += stat_data.base_value
 
-    savvy = get_entitys_component(entity, Savvy)
-    if savvy:
-        savvy_data = library.get_savvy_data(savvy.name)
-        value += getattr(savvy_data, stat)
+    trait = get_entitys_component(entity, Trait)
+    for name in trait.names:
+        data = library.get_trait_data(name)
+        value += getattr(data, stat)
 
-    homeland = get_entitys_component(entity, Homeland)
-    if homeland:
-        homeland_data = library.get_homeland_data(homeland.name)
-        value += getattr(homeland_data, stat)
+    afflictions = get_entitys_component(entity, Afflictions)
+    for modifier in afflictions.stat_modifiers.values():
+        if modifier[0] == stat:
+            value += modifier[1]
 
+    # ensure no dodgy numbers, like floats or negative
+    value = max(1, int(value))
+
+    return value
+
+
+def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> int:
+    """
+    Get an entity's secondary stat.
+    """
+    stat = secondary_stat
+    value = 0
+
+    # base values
+    stat_data = library.get_secondary_stat_data(stat)
+    value += stat_data.base_value
+
+    # values from primary stats
+    value += get_primary_stat(entity, PrimaryStat.VIGOUR) * stat_data.vigour_mod
+    value += get_primary_stat(entity, PrimaryStat.CLOUT) * stat_data.clout_mod
+    value += get_primary_stat(entity, PrimaryStat.SKULLDUGGERY) * stat_data.skullduggery_mod
+    value += get_primary_stat(entity, PrimaryStat.BUSTLE) * stat_data.bustle_mod
+    value += get_primary_stat(entity, PrimaryStat.EXACTITUDE) * stat_data.exactitude_mod
+
+    # afflictions
     afflictions = get_entitys_component(entity, Afflictions)
     for modifier in afflictions.stat_modifiers.values():
         if modifier[0] == stat:
@@ -1129,7 +1141,7 @@ def judge_action(entity: EntityID, action_name: str):
         opinion = cast(Opinion, opinion)
         identity = cast(Identity, identity)
 
-        attitudes = library.get_god_attitudes_data(identity.name)
+        attitudes = library.get_god_attitude_data(identity.name)
 
         # check if the god has an attitude towards the action and apply the opinion change,
         # adding the entity to the dict if necessary
@@ -1226,7 +1238,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         identity = cast(Identity, identity)
         knowledge = cast(Knowledge, knowledge)
 
-        attitudes = library.get_god_attitudes_data(identity.name)
+        attitudes = library.get_god_attitude_data(identity.name)
         action_name = action
 
         # check if the god has an attitude towards the action and increase likelihood of intervening

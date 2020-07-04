@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from typing import List, Dict, Optional
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
-    from scripts.engine.core.definitions import CharacteristicSpritesData
+    from scripts.engine.core.definitions import TraitSpritesData
     from scripts.nqp.actions.afflictions import Affliction
 
 
@@ -33,22 +33,7 @@ class IsGod(RegisteredComponent):
     """
     Whether the entity is a god.
     """
-    __slots__ = ()
-
-
-class IsProjectile(RegisteredComponent):
-    """
-    Whether the entity is a projectile.
-    """
-
-    def __init__(self, creator: EntityID):
-        self.creator = creator
-
-
-class IsActor(RegisteredComponent):
-    """
-    Whether the entity is an actor.
-    """
+    # TODO - replace need for this with the appropriate AI
     __slots__ = ()
 
 
@@ -77,7 +62,7 @@ class Aesthetic(RegisteredComponent):
     An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: CharacteristicSpritesData, screen_x: float,
+    def __init__(self, current_sprite: pygame.Surface, sprites: TraitSpritesData, screen_x: float,
             screen_y: float):
         # TODO - add render layer/order
         self.current_sprite = current_sprite
@@ -129,32 +114,13 @@ class Identity(RegisteredComponent):
         self.description: str = description
 
 
-class People(RegisteredComponent):
-    # TODO - combine with savvy and homeland and create characteristic compnonent
+class Trait(RegisteredComponent):
     """
-    An entity's people.
-    """
-
-    def __init__(self, people_name: str):
-        self.name: str = people_name
-
-
-class Savvy(RegisteredComponent):
-    """
-    An entity's savvy.
+    An entity's traits. Class, archetype, skill set or otherwise defining group.
     """
 
-    def __init__(self, savvy_name: str):
-        self.name: str = savvy_name
-
-
-class Homeland(RegisteredComponent):
-    """
-    An entity's homeland.
-    """
-
-    def __init__(self, homeland_name: str):
-        self.name: str = homeland_name
+    def __init__(self, trait_names: List[str]):
+        self.names: List[str] = trait_names
 
 
 class Behaviour(RegisteredComponent):
@@ -187,13 +153,16 @@ class Afflictions(RegisteredComponent):
     """
     An entity's Boons and Banes. held in .active as {affliction_name: duration}.
     """
-    def __init__(self):
-        self.active: Dict[str, Affliction] = {}
+    def __init__(self, active: Dict[str, Affliction] = None):
+        if active is None:
+            active = {}
+        self.active: Dict[str, Affliction] = active
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
 
 
 class Aspect(RegisteredComponent):
     # TODO - inherit from dict and add to that
+    # TODO - combine aspect and terrain
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
     """

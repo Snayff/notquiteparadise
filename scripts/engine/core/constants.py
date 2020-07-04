@@ -14,8 +14,14 @@ GAP_SIZE = 2
 SKILL_SIZE = 64
 LAYER_CAMERA = 1
 LAYER_BASE_UI = 4
+TRAIT_RENDER_ORDER = {
+    "npc": 0,
+    "people": 1,
+    "homeland": 2,
+    "savvy": 3
+}
 
-ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
+DEFAULT_ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
 TIME_PER_ROUND = 20  # amount of time in a round.
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
 BASE_MOVE_COST = 20  # amount of time spent to move.
@@ -53,6 +59,7 @@ InputModeType = NewType("InputModeType", int)
 UIElementType = NewType("UIElementType", int)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
+TraitGroupType = NewType("TraitGroupType", str)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
@@ -176,7 +183,8 @@ class InputIntent(SimpleNamespace):
     DEV_TOGGLE = InputIntentType("dev_toggle")
 
 
-#################### EXTERNAL, SERIALISED ###########################################
+#################### EXTERNAL, SERIALISED  ###########################################
+# i.e used externally
 
 class TargetTag(SimpleNamespace):
     """
@@ -192,6 +200,16 @@ class TargetTag(SimpleNamespace):
     IS_VISIBLE = TargetTagType("is_visible")
     NO_BLOCKING_TILE = TargetTagType("no_blocking_tile")
     ACTOR = TargetTagType("actor")
+
+
+class TraitGroup(SimpleNamespace):
+    """
+    The types of player traits
+    """
+    PEOPLE = TraitGroupType("people")
+    SAVVY = TraitGroupType("savvy")
+    HOMELAND = TraitGroupType("homeland")
+    NPC = TraitGroupType("npc")
 
 
 class DamageType(SimpleNamespace):

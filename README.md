@@ -73,7 +73,8 @@ This update aims to add the basic foundations of gameplay, such as movement, com
 
 
 ### Game
-* [ ] Add enemy types and create two distinct enemy types
+* [x] Add enemy types
+* [ ] Create two distinct enemy types
 * [ ] Add "chase" mechanism for all enemies in a room
 * [ ] Add simple damage mechanics
 * [ ] Add npc spawning capabilities (using wizard mode)
@@ -81,7 +82,7 @@ This update aims to add the basic foundations of gameplay, such as movement, com
 * [ ] Add movement controls for the player
     * [ ] Add VIM controls preset
     * [ ] Add WASD controls preset
-    * [ ] Add ARROW controls preset
+    * [x] Add ARROW controls preset
 
 ### 0.3 Offer an End
 This update will allow the player to win or lose and will provide some basic tools to support balancing combat. This

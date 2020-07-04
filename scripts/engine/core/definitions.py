@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from abc import ABC
+import pygame
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, TYPE_CHECKING
-
-import pygame
 from snecs.typedefs import EntityID
-
-from scripts.engine.core.constants import AfflictionCategoryType, DamageTypeType, Direction, DirectionType, \
+from scripts.engine.core.constants import AfflictionCategoryType, TRAIT_RENDER_ORDER, TraitGroup, DamageTypeType, \
+    Direction, \
+    DirectionType, \
     EffectType, \
     EffectTypeType, PrimaryStatType, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, ProjectileSpeedType, \
     Resource, ResourceType, SecondaryStatType, Shape, ShapeType, TargetTag, TargetTagType, TargetingMethod, \
@@ -18,7 +17,7 @@ if TYPE_CHECKING:
     from scripts.nqp.actions.skills import Skill
 
 
-######################### SKILLS ##################################
+######################### ACTIONS ##################################
 
 @register_dataclass_with_json
 @dataclass
@@ -89,11 +88,26 @@ class ProjectileData:
     expiry_type: Optional[ProjectileExpiryType] = None
 
 
-####################### EFFECTS ######################################
+@register_dataclass_with_json
+@dataclass()
+class AfflictionData:
+    """
+    Data class for an Afflictions
+    """
+    name: str = field(default="none")
+    class_name: str = field(default="none")
+    description: str = field(default="none")
+    icon: str = field(default="none")
+    category: Optional[AfflictionCategoryType] = None
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+    required_tags: List[TargetTagType] = field(default_factory=list(TargetTag.OTHER_ENTITY))
+    identity_tags: List[EffectTypeType] = field(default_factory=list(EffectType.DAMAGE))
+
 
 @register_dataclass_with_json
 @dataclass
-class EffectData(ABC):
+class EffectData:
     """
     Base data class for an effect.
     """
@@ -122,9 +136,9 @@ class EffectData(ABC):
 
 @register_dataclass_with_json
 @dataclass
-class CharacteristicSpritesData:
+class TraitSpritesData:
     """
-    Possible sprites for a characteristic
+    Possible sprites for a trait
     """
     icon: Optional[pygame.Surface] = None
     idle: Optional[pygame.Surface] = None
@@ -136,10 +150,11 @@ class CharacteristicSpritesData:
 
 @register_dataclass_with_json
 @dataclass
-class CharacteristicSpritePathsData:
+class TraitSpritePathsData:
     """
-    Possible sprites paths for a characteristic
+    Possible sprites paths for a trait
     """
+    render_order: int = field(default=0)
     icon: str = field(default="none")
     idle: str = field(default="none")
     attack: str = field(default="none")
@@ -150,13 +165,15 @@ class CharacteristicSpritePathsData:
 
 @register_dataclass_with_json
 @dataclass
-class CharacteristicData:
+class TraitData:
     """
     Data class for an aspects
     """
     name: str = field(default="none")
+    group: TraitGroup = field(default="none")
+    behaviour_name: str = field(default="none")
     description: str = field(default="none")
-    sprite_paths: CharacteristicSpritePathsData = field(default_factory=CharacteristicSpritePathsData)
+    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
     sight_range: int = 0
     vigour: int = 0
     clout: int = 0
@@ -165,3 +182,95 @@ class CharacteristicData:
     exactitude: int = 0
     known_skills: List[str] = field(default_factory=list)
     permanent_afflictions: List[str] = field(default_factory=list)
+
+    def __post_init__(self):
+        # update sprite path render order
+        self.sprite_paths.render_order = TRAIT_RENDER_ORDER.get(self.group)
+
+
+@register_dataclass_with_json
+@dataclass
+class BaseStatData:
+    """
+    Data class to contain primary and secondary stats
+    """
+    primary: Dict[str, BasePrimaryStatData] = field(default_factory=dict)
+    secondary: Dict[str, BaseSecondaryStatData] = field(default_factory=dict)
+
+
+@register_dataclass_with_json
+@dataclass
+class BasePrimaryStatData:
+    """
+    Data class for primary  stats
+    """
+    name: str = field(default="none")
+    primary_stat_type: Optional[PrimaryStatType] = None
+    base_value: int = 0
+
+
+@register_dataclass_with_json
+@dataclass
+class BaseSecondaryStatData:
+    """
+    Data class for secondary stats
+    """
+    name: str = field(default="none")
+    secondary_stat_type: Optional[SecondaryStatType] = None
+    base_value: int = 0
+    vigour_mod: int = 0
+    clout_mod: int = 0
+    skullduggery_mod: int = 0
+    bustle_mod: int = 0
+    exactitude_mod: int = 0
+
+
+####################### WORLD ######################
+
+@register_dataclass_with_json
+@dataclass
+class AspectData:
+    """
+    Data class for an aspects
+    """
+    name: str = field(default="none")
+    description: str = field(default="none")
+    duration: int = 0
+    sprite: str = field(default="none")
+    blocks_sight: bool = False
+    blocks_movement: bool = False
+
+
+################### GODS ###################################################
+
+@register_dataclass_with_json
+@dataclass
+class AttitudeData:
+    """
+    Data class for  a god's attitude
+    """
+    action: str = field(default="none")  # TODO - standardise what this can be
+    opinion_change: int = 0
+
+
+@register_dataclass_with_json
+@dataclass
+class InterventionData:
+    """
+    Data class for a god's intervention
+    """
+    skill_key: str = field(default="none")  # TODO - confirm if we want skill key or name
+    required_opinion: int = 0
+
+
+@register_dataclass_with_json
+@dataclass
+class GodData:
+    """
+    Data class for a god
+    """
+    # TODO - add gods own sprite collection
+    name: str = field(default="none")
+    description: str = field(default="none")
+    attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
+    interventions: Dict[int, InterventionData] = field(default_factory=dict)
