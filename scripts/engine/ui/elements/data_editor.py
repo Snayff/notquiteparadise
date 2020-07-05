@@ -13,7 +13,7 @@ from pygame_gui.elements import UIButton, UIDropDownMenu, UILabel, UITextEntryLi
 from scripts.engine import utility
 from scripts.engine.core.constants import AfflictionCategory, DamageType, Direction, EffectType, PrimaryStat, \
     ProjectileExpiry, Resource, SecondaryStat, Shape, TargetTag, TerrainCollision, TravelMethod
-from scripts.engine.core.definitions import CharacteristicData, EffectData, SkillData
+from scripts.engine.core.definitions import TraitData, EffectData, SkillData
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
 from scripts.engine.library import library
 
@@ -538,9 +538,9 @@ class DataEditor(UIWindow):
 #             "aspects": ("", AspectData()),
 #             "base_stats_primary": ("", BasePrimaryStatData()),
 #             "base_stats_secondary": ("", BaseSecondaryStatData()),
-#             "homelands": ("", CharacteristicData()),
-#             "peoples": ("", CharacteristicData()),
-#             "savvys": ("", CharacteristicData()),
+#             "homelands": ("", TraitData()),
+#             "peoples": ("", TraitData()),
+#             "savvys": ("", TraitData()),
 #             "gods": ("", GodData())
 #         }
 #

@@ -1,0 +1,170 @@
+{
+    "soft_tops": {
+        "__dataclass__": "TraitData",
+        "group":"homeland",
+        "behaviour_name": "none",
+        "bustle": 1,
+        "clout": 3,
+        "description": "Home to beautiful wildlife, towering, majestic fauna and the air of constant, never-ending warfare.",
+        "exactitude": -1,
+        "name": "the soft tops",
+        "sight_range": 5,
+        "known_skills": [
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "skullduggery": 0,
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "assets/actor/homeland/soft_tops_idle.png",
+            "attack": "assets/actor/homeland/soft_tops_attack.png",
+            "hit": "assets/actor/homeland/soft_tops_hit.png",
+            "dead": "assets/actor/homeland/soft_tops_dead.png",
+            "icon": "assets/actor/homeland/soft_tops_idle.png",
+            "move": "assets/actor/homeland/soft_tops_move.png"
+        },
+        "vigour": 1
+    },
+    "goblynn": {
+        "__dataclass__": "TraitData",
+        "group":"people",
+        "behaviour_name": "none",
+        "bustle": 0,
+        "clout": 0,
+        "description": "A goblinn description",
+        "exactitude": 0,
+        "name": "goblynn",
+        "sight_range": 3,
+        "known_skills": [
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "skullduggery": 0,
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "assets/actor/people/goblynn_idle.png",
+            "attack": "assets/actor/people/goblynn_attack.png",
+            "hit": "assets/actor/people/goblynn_hit.png",
+            "dead": "assets/actor/people/goblynn_dead.png",
+            "icon": "assets/actor/people/goblynn_icon.png",
+            "move": "assets/actor/homeland/goblynn_move.png"
+        },
+        "vigour": 0
+    },
+	"shoom": {
+        "__dataclass__": "TraitData",
+        "group":"people",
+        "behaviour_name": "none",
+        "bustle": 0,
+        "clout": -1,
+        "description": "Often found in their ancestral home of the Soft Tops they have spent most of the last century being drafted into a war over which of the causes it the right one. Not that anyone can quite remember which cause they're fighting for.",
+        "exactitude": 2,
+        "name": "shoom",
+        "sight_range": 4,
+        "known_skills": [
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "skullduggery": 2,
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "assets/actor/people/shoom_idle.png",
+            "attack": "assets/actor/people/shoom_attack.png",
+            "hit": "assets/actor/people/shoom_hit.png",
+            "dead": "assets/actor/people/shoom_dead.png",
+            "icon": "assets/actor/people/shoom_icon.png",
+            "move": "assets/actor/people/shoom_move.png"
+        },
+        "vigour": 0
+    },
+    "fungechist": {
+        "__dataclass__": "TraitData",
+        "group":"savvy",
+        "behaviour_name": "none",
+        "bustle": 1,
+        "clout": -1,
+        "description": "Drafted into service as a chemist to the Mushroom Barons of the Soft Tops the fungechists always keep Ou in their minds.",
+        "exactitude": 1,
+        "name": "fungechist",
+        "sight_range": 5,
+        "known_skills": [
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "skullduggery": 4,
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "assets/actor/savvy/fungechist_idle.png",
+            "attack": "assets/actor/savvy/fungechist_attack.png",
+            "hit": "assets/actor/savvy/fungechist_hit.png",
+            "dead": "assets/actor/savvy/fungechist_dead.png",
+            "icon": "assets/actor/savvy/fungechist_idle.png",
+            "move": "assets/actor/savvy/fungechist_move.png"
+        },
+        "vigour": -1
+    },
+	"dandy": {
+        "__dataclass__": "TraitData",
+        "group":"savvy",
+        "behaviour_name": "none",
+        "bustle": 2,
+        "clout": 2,
+        "description": "Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword.",
+        "exactitude": -1,
+        "name": "irascible dandy",
+        "sight_range": 5,
+        "known_skills": [
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "skullduggery": 1,
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "assets/actor/savvy/dandy_idle.png",
+            "attack": "assets/actor/savvy/dandy_attack.png",
+            "hit": "assets/actor/savvy/dandy_hit.png",
+            "dead": "assets/actor/savvy/dandy_dead.png",
+            "icon": "assets/actor/savvy/dandy_idle.png",
+            "move": "assets/actor/savvy/dandy_move.png"
+        },
+        "vigour": -1
+    },
+    	"training_dummy": {
+        "__dataclass__": "TraitData",
+        "group":"npc",
+        "behaviour_name": "skip",
+        "bustle": 1,
+        "clout": 1,
+        "description": "",
+        "exactitude": 1,
+        "name": "training dummy",
+        "sight_range": 1,
+        "known_skills": [
+            "none"
+        ],
+        "permanent_afflictions": [
+            "none"
+        ],
+        "skullduggery": 1,
+        "sprite_paths": {
+            "__dataclass__": "TraitSpritePathsData",
+            "idle": "assets/actor/npc/training_dummy_idle.png",
+            "attack": "assets/actor/npc/training_dummy_idle.png",
+            "hit": "assets/actor/npc/training_dummy_idle.png",
+            "dead": "assets/actor/npc/training_dummy_idle.png",
+            "icon": "assets/actor/npc/training_dummy_idle.png",
+            "move": "assets/actor/npc/training_dummy_idle.png"
+        },
+        "vigour": 1
+    }
+}

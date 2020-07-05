@@ -21,15 +21,6 @@
                 "skill_key": "BasicAttack"
             }
         },
-        "name": "the_small_gods",
-        "sprite_paths": {
-            "__dataclass__": "CharacteristicSpritePathsData",
-            "idle": "assets/world/placeholder/Mobs_crow_01.png",
-            "attack": "none",
-            "hit": "none",
-            "dead": "none",
-            "icon": "none",
-            "move": "none"
-        }
+        "name": "the_small_gods"
     }
 }

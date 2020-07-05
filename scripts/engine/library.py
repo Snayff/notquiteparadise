@@ -6,7 +6,9 @@ import os
 from typing import TYPE_CHECKING
 
 from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, SecondaryStatType
-from scripts.engine.core.definitions import CharacteristicData, EffectData, SkillData
+from scripts.engine.core.definitions import AfflictionData, AspectData, BasePrimaryStatData, BaseSecondaryStatData, \
+    TraitData, \
+    EffectData, SkillData
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
@@ -19,12 +21,9 @@ class _LibraryOfAlexandria:
     """
 
     def __init__(self):
-        self._homelands = {}
-        self._peoples = {}
-        self._savvys = {}
+        self._traits = {}
         self._afflictions = {}
         self._aspects = {}
-        self._terrain = {}
         self._base_stats_primary = {}
         self._base_stats_secondary = {}
         self._gods = {}
@@ -42,12 +41,9 @@ class _LibraryOfAlexandria:
         """
         # N.B. this is set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
-            self._load_homeland_json()
-            self._load_people_json()
-            self._load_savvy_json()
+            self._load_traits_json()
             self._load_affliction_json()
             self._load_aspects_json()
-            self._load_terrain_json()
             self._load_base_stat_primary_json()
             self._load_base_stat_secondary_json()
             self._load_gods_json()
@@ -57,15 +53,7 @@ class _LibraryOfAlexandria:
 
     ####################### GET ##############################
 
-    def get_aspects_data(self) -> Dict[str, Dict]:
-        """
-        Get all aspects from the library
-        """
-
-        data = self._aspects
-        return data
-
-    def get_aspect_data(self, aspect_name: str) -> Dict:
+    def get_aspect_data(self, aspect_name: str) -> AspectData:
         """
         Get data for an aspects from the library
         """
@@ -73,26 +61,7 @@ class _LibraryOfAlexandria:
         data = self._aspects[aspect_name]
         return data
 
-    def get_aspect_effect_data(self, aspect_name: str, effect_type: EffectTypeType) -> EffectData:
-        """
-        Get effect data for an aspects from the library
-        """
-        try:
-            data = self._aspects[aspect_name].effects[effect_type]
-        except KeyError:
-            data = None
-
-        return data
-
-    def get_afflictions_data(self) -> Dict[str, Dict]:
-        """
-        Get all afflictions from the library
-        """
-
-        data = self._afflictions
-        return data
-
-    def get_affliction_data(self, affliction_name: str) -> Dict:
+    def get_affliction_data(self, affliction_name: str) -> AfflictionData:
         """
         Get data for an affliction from the library
         """
@@ -100,71 +69,13 @@ class _LibraryOfAlexandria:
         data = self._afflictions[affliction_name]
         return data
 
-    def get_affliction_effect_data(self, affliction_name: str, effect_type: EffectData) -> EffectData:
+    def get_trait_data(self, trait_name: str) -> TraitData:
         """
-        Get data for an affliction from the library
-
+        Get data for a trait from the library
         """
-        try:
-            data = self._afflictions[affliction_name].effects[effect_type]
-        except KeyError:
-            data = None
 
+        data = self._traits[trait_name]
         return data
-
-    def get_savvys_data(self) -> Dict[str, CharacteristicData]:
-        """
-        Get all savvys from the library
-        """
-
-        data = self._savvys
-        return data
-
-    def get_savvy_data(self, savvy_name: str) -> CharacteristicData:
-        """
-        Get data for a savvys from the library
-        """
-
-        data = self._savvys[savvy_name]
-        return data
-
-    def get_peoples_data(self) -> Dict[str, CharacteristicData]:
-        """
-        Get all peoples from the library
-        """
-
-        data = self._peoples
-        return data
-
-    def get_people_data(self, people_name: str) -> CharacteristicData:
-        """
-        Get data for a peoples from the library
-        """
-
-        data = self._peoples[people_name]
-        return data
-
-    def get_homelands_data(self) -> Dict[str, CharacteristicData]:
-        """
-        Get all homelands from the library
-        """
-
-        data = self._homelands
-        return data
-
-    def get_homeland_data(self, homeland_name: str) -> CharacteristicData:
-        """
-        Get data for a homelands from the library
-        """
-
-        data = self._homelands[homeland_name]
-        return data
-
-    def get_skills_data(self) -> Dict[str, SkillData]:
-        """
-        Get all skill data from the library
-        """
-        return self._skills
 
     def get_skill_data(self, skill_name: str) -> SkillData:
         """
@@ -175,7 +86,7 @@ class _LibraryOfAlexandria:
 
         return skill_data
 
-    def get_primary_stat_data(self, primary_stat_type: PrimaryStatType) -> Dict:
+    def get_primary_stat_data(self, primary_stat_type: PrimaryStatType) -> BasePrimaryStatData:
         """
         Get data for a primary stat from the library
 
@@ -183,14 +94,7 @@ class _LibraryOfAlexandria:
         stat_data = self._base_stats_primary[primary_stat_type]
         return stat_data
 
-    def get_primary_stats_data(self) -> Dict[str, Dict]:
-        """
-        Get all data for primary stats from the library
-        """
-        stat_data = self._base_stats_primary
-        return stat_data
-
-    def get_secondary_stat_data(self, secondary_stat_type: SecondaryStatType) -> Dict:
+    def get_secondary_stat_data(self, secondary_stat_type: SecondaryStatType) -> BaseSecondaryStatData:
         """
         Get data for a secondary stat from the library
         """
@@ -198,22 +102,6 @@ class _LibraryOfAlexandria:
         stat_data = self._base_stats_secondary[secondary_stat_type]
 
         return stat_data
-
-    def get_secondary_stats_data(self) -> Dict[str, Dict]:
-        """
-        Get all data for secondary stats from the library
-        """
-        stat_data = self._base_stats_secondary
-        return stat_data
-
-    def get_gods_data(self) -> Dict[str, Dict]:
-        """
-        Get all gods data from the library
-
-        """
-        god_data = self._gods
-
-        return god_data
 
     def get_god_data(self, god_name: str) -> Dict:
         """
@@ -224,14 +112,6 @@ class _LibraryOfAlexandria:
 
         return god_data
 
-    def get_god_interventions_data(self, god_name: str) -> Dict[str, Dict]:
-        """
-        Get data for a god's interventions from the library
-        """
-        interventions_data = self._gods[god_name].interventions
-
-        return interventions_data
-
     def get_god_intervention_data(self, god_name: str, intervention_name: str) -> Dict:
         """
         Get data for a god's specified intervention from the library
@@ -240,7 +120,7 @@ class _LibraryOfAlexandria:
 
         return interventions_data
 
-    def get_god_attitudes_data(self, god_name: str) -> Dict[int, Dict]:
+    def get_god_attitude_data(self, god_name: str) -> Dict[int, Dict]:
         """
         Get data for a god's attitudes from the library
         """
@@ -262,29 +142,10 @@ class _LibraryOfAlexandria:
             data = json.load(file, object_hook=deserialise_dataclasses)
         self._aspects = data
 
-    def _load_terrain_json(self):
-        with open('data/game/terrain.json') as file:
+    def _load_traits_json(self):
+        with open('data/game/traits.json') as file:
             data = json.load(file, object_hook=deserialise_dataclasses)
-
-        self._terrain = data
-
-    def _load_homeland_json(self):
-        with open('data/game/homelands.json') as file:
-            data = json.load(file, object_hook=deserialise_dataclasses)
-
-        self._homelands = data
-
-    def _load_savvy_json(self):
-        with open('data/game/savvys.json') as file:
-            data = json.load(file, object_hook=deserialise_dataclasses)
-
-        self._savvys = data
-
-    def _load_people_json(self):
-        with open('data/game/peoples.json') as file:
-            data = json.load(file, object_hook=deserialise_dataclasses)
-
-        self._peoples = data
+        self._traits = data
 
     def _load_base_stat_primary_json(self):
         with open('data/game/base_stats_primary.json') as file:

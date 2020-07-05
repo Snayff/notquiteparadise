@@ -128,7 +128,7 @@ class ProjectileBehaviour(AIBehaviour):
                 world.kill_entity(entity)
 
 
-class SkipTurn(AIBehaviour):
+class SkipTurnBehaviour(AIBehaviour):
     """
     Just skips turn
     """
