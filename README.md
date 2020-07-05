@@ -39,7 +39,7 @@ This update focuses on getting the project setup in a clean manner to allow for 
  will provide the basic structure and building blocks needed to move forward.
 
 #### Project
-* [ ] Organize code base
+* [x] Organize code base
 * [ ] Make code installable
 * [ ] Setup github workflows
 * [x] Add Quick Start installation instructions
@@ -74,11 +74,10 @@ This update aims to add the basic foundations of gameplay, such as movement, com
 
 ### Game
 * [x] Add enemy types
-* [ ] Create two distinct enemy types
 * [ ] Add "chase" mechanism for all enemies in a room
-* [ ] Add simple damage mechanics
+* [x] Add simple damage mechanics
 * [ ] Add npc spawning capabilities (using wizard mode)
-* [ ] Add tiles that block movement, e.g. walls
+* [x] Add tiles that block movement, e.g. walls
 * [ ] Add movement controls for the player
     * [ ] Add VIM controls preset
     * [ ] Add WASD controls preset

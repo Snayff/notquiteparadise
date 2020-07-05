@@ -190,7 +190,7 @@ def initialise_game():
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    world.create_entity_with_trait("steve", "steve's desc", 1, 4, ["training_dummy"])
+    world.create_entity_with_trait("dummy steve", "steve's desc", 1, 4, ["training_dummy"])
 
     # create a god
     world.create_god("the_small_gods")

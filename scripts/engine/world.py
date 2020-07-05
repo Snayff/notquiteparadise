@@ -103,6 +103,7 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
         data = library.get_trait_data(name)
         traits_paths.append(data.sprite_paths)
         if data.known_skills != ["none"]:
+
             for skill_name in data.known_skills:
                 skill = getattr(skills, skill_name)
                 known_skills[skill_name] = skill
@@ -115,8 +116,8 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
             behaviour = SkipTurnBehaviour
 
     # add aesthetic
-    #traits_paths.sort(key=lambda x: x=getattr() traits_paths.render_order)
-    # FIXME - work out how to sort on render_order attribute
+    traits_paths.sort(key=lambda path: path.render_order, reverse=True)
+
     sprites = _create_trait_sprites(traits_paths)
     screen_x, screen_y = ui.world_to_screen_position((x, y))
     components.append(Aesthetic(sprites.idle, sprites, screen_x, screen_y))
