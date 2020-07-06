@@ -173,6 +173,16 @@ def dump_profiling_data(profiler):
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
 
+def _get_skill_bar_actions():
+    return {
+        0: lambda: input_processors.process_intent(key.InputIntent.SKILL0, state.get_current()),
+        1: lambda: input_processors.process_intent(key.InputIntent.SKILL1, state.get_current()),
+        2: lambda: input_processors.process_intent(key.InputIntent.SKILL2, state.get_current()),
+        3: lambda: input_processors.process_intent(key.InputIntent.SKILL3, state.get_current()),
+        4: lambda: input_processors.process_intent(key.InputIntent.SKILL4, state.get_current())
+    }
+
+
 def initialise_game():
     """
     Init the game`s required info
@@ -203,6 +213,7 @@ def initialise_game():
 
     # turn on the ui
     ui.init_game_ui()
+    ui.set_skill_bar_actions(_get_skill_bar_actions())
 
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
