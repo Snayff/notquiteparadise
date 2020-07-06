@@ -21,7 +21,7 @@ from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Dict, Tuple
+    from typing import TYPE_CHECKING, Dict, Tuple, Callable
 
 
 class _UIManager:
@@ -299,6 +299,12 @@ class _UIManager:
             camera.set_overlay_directions(directions)
             camera.set_overlay_visibility(is_visible)
             camera.update_grid()
+
+    ######################## ENTITY INFO ###############################################
+
+    def set_skill_bar_actions(self, actions: Dict[int, Callable]):
+        skill_bar = self.get_element(UIElement.SKILL_BAR)
+        skill_bar.set_actions(actions)
 
     ######################## ENTITY INFO ###############################################
 

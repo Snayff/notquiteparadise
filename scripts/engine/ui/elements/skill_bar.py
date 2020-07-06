@@ -51,7 +51,15 @@ class SkillBar(UIPanel):
         """
         Handle events created by this UI widget
         """
-        pass
+        if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+            # Find out which button we are clicking
+            button = event.ui_element
+            if button in self.skill_buttons:
+                slot_number = self.skill_buttons.index(button)
+                # Execute the set action for this slot
+                self.actions[slot_number]()
+
+                logging.debug(f"SkillBar button '{slot_number}' was pressed.")
 
     ############### GET / SET ################
 
