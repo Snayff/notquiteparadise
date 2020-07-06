@@ -75,11 +75,11 @@ def _process_aesthetic_update(delta_time: float):
         # increment time
         aesthetic.current_sprite_duration += delta_time
 
+        # Have we exceeded animation duration?
+        time_exceeded = aesthetic.current_sprite_duration > max_duration
+
         # do we need to show moving to a new position?
         if aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y:
-
-            # Have we exceeded animation duration?
-            time_exceeded = aesthetic.current_sprite_duration > max_duration
 
             # time for animation exceeded or animation very close to end
             if time_exceeded or is_close((aesthetic.screen_x, aesthetic.screen_y),
@@ -96,10 +96,11 @@ def _process_aesthetic_update(delta_time: float):
                 aesthetic.screen_x = utility.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
                 aesthetic.screen_y = utility.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
 
-        # not moving so reset to idle
-        else:
+        # if not moving and the animation ended then reset to idle
+        elif (aesthetic.current_sprite == aesthetic.sprites.move) or time_exceeded:
             aesthetic.current_sprite = aesthetic.sprites.idle
             aesthetic.current_sprite_duration = 0
+
 
 
 
