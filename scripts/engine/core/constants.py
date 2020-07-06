@@ -70,6 +70,7 @@ class EventType(SimpleNamespace):
     Constant info about the different custom event names that we can pass to pygame
     """
     TILE_CLICK = pygame.USEREVENT + 1
+    SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 class VisualInfo(SimpleNamespace):
     """

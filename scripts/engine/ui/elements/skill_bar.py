@@ -12,7 +12,7 @@ from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import GAP_SIZE, LAYER_BASE_UI, MAX_SKILLS, SKILL_SIZE
+from scripts.engine.core.constants import GAP_SIZE, LAYER_BASE_UI, MAX_SKILLS, SKILL_SIZE, EventType, InputIntent, InputIntentType
 
 
 class SkillBar(UIPanel):
@@ -22,7 +22,13 @@ class SkillBar(UIPanel):
 
     def __init__(self, rect: Rect, manager: UIManager):
         # state info
-        self.actions: Dict[int, Callable] = {}
+        self.intents: List[InputIntentType] = [
+            InputIntent.SKILL0,
+            InputIntent.SKILL1,
+            InputIntent.SKILL2,
+            InputIntent.SKILL3,
+            InputIntent.SKILL4
+        ]
         self.skill_buttons: List[UIButton] = []
 
         self.start_x = 0
@@ -56,18 +62,11 @@ class SkillBar(UIPanel):
             button = event.ui_element
             if button in self.skill_buttons:
                 slot_number = self.skill_buttons.index(button)
-                # Execute the set action for this slot
-                self.actions[slot_number]()
+                # execute a skill clicked event
+                event = pygame.event.Event(EventType.SKILL_BAR_CLICK, skill_intent=self.intents[slot_number])
+                pygame.event.post(event)
 
                 logging.debug(f"SkillBar button '{slot_number}' was pressed.")
-
-    ############### GET / SET ################
-
-    def set_actions(self, actions: Dict[int, Callable]):
-        """
-        Set a list of actions to get executed for each button in the skill bar slot
-        """
-        self.actions = actions
 
     ############### ACTIONS #################
 
@@ -75,7 +74,7 @@ class SkillBar(UIPanel):
         y = self.start_y
         manager = self.ui_manager
 
-        for skill_slot in range(0, MAX_SKILLS):
+        for skill_slot in range(0, len(self.intents)):
             x = self.start_x + ((SKILL_SIZE + GAP_SIZE) * skill_slot)
             skill_button = UIButton(relative_rect=Rect((x, y), (SKILL_SIZE, SKILL_SIZE)), text=f"{skill_slot + 1}",
                              manager=manager, container=self.get_container(), object_id=f"#skill_button{skill_slot}")

@@ -31,6 +31,8 @@ def process_event(event: pygame.event, game_state: GameStateType):
             position = world.get_entitys_component(player, Position)
             direction = (max(-1, min(1, event.tile.x - position.x)), max(-1, min(1, position.y - event.tile.y)))
             intent = key.convert_vector_to_intent(direction)
+    elif event.type == EventType.SKILL_BAR_CLICK:
+        intent = event.skill_intent
     else:
         intent = key.convert_to_intent(event)
 
