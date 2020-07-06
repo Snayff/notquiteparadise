@@ -81,9 +81,7 @@ def game_loop():
 
         # update based on input events
         for event in pygame.event.get():
-            intent = key.convert_to_intent(event)
-            if intent:
-                input_processors.process_intent(intent, current_state)
+            input_processors.process_event(event, current_state)
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state

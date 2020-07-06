@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Type
 
 from snecs.typedefs import EntityID
-
-from scripts.engine import debug, state, world
+import pygame
+from scripts.engine import debug, state, world, key
 from scripts.engine.component import Knowledge, Position
 from scripts.engine.core.constants import Direction, DirectionType, GameState, GameStateType, InputIntent, \
-    InputIntentType, TargetingMethod, UIElement
+    InputIntentType, TargetingMethod, UIElement, EventType
 from scripts.engine.library import library
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
@@ -16,6 +16,26 @@ from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
     from typing import Optional
+
+
+def process_event(event: pygame.event, game_state: GameStateType):
+    """
+        Extract the intent from the event and process them in the context of the game state
+    """
+    intent = None
+    # some events only apply to certain GameStates, we need to process them and separate them
+    if event.type == EventType.TILE_CLICK:
+        # this event should only take effect when targeting
+        if game_state == GameState.TARGETING:
+            player = world.get_player()
+            position = world.get_entitys_component(player, Position)
+            direction = (max(-1, min(1, event.tile.x - position.x)), max(-1, min(1, position.y - event.tile.y)))
+            intent = key.convert_vector_to_intent(direction)
+    else:
+        intent = key.convert_to_intent(event)
+
+    if intent:
+        process_intent(intent, game_state)
 
 
 def process_intent(intent: InputIntentType, game_state: GameStateType):
