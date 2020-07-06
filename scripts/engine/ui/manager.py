@@ -303,6 +303,9 @@ class _UIManager:
     ######################## ENTITY INFO ###############################################
 
     def set_skill_bar_actions(self, actions: Dict[int, Callable]):
+        """
+        Sets the actions for the skill bar
+        """
         skill_bar = self.get_element(UIElement.SKILL_BAR)
         skill_bar.set_actions(actions)
 
