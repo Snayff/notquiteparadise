@@ -7,7 +7,7 @@ from typing import Iterator, TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine import world
-from scripts.engine.component import Position
+from scripts.engine.component import Position, Aesthetic
 from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
     DirectionType, PrimaryStat, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, \
     ProjectileSpeedType, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
@@ -60,6 +60,14 @@ class Skill(ABC):
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
         logging.debug(f"'{world.get_name(self.user)}' used '{self.name}'.")
+
+        # animate the skill user
+        aesthetic = world.get_entitys_component(self.user, Aesthetic)
+        animation = self.get_animation(aesthetic)
+        if aesthetic and animation:
+            aesthetic.current_sprite = animation
+            aesthetic.current_sprite_duration = 0
+
         if self.uses_projectile:
             from scripts.engine.core.definitions import ProjectileData
             projectile_data = ProjectileData(
@@ -77,6 +85,13 @@ class Skill(ABC):
             world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
         else:
             world.apply_skill(self)
+
+    @abstractmethod
+    def get_animation(self, aesthetic: Aesthetic):
+        """
+        Return the animation to play when executing the skill
+        """
+        pass
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
@@ -154,6 +169,10 @@ class Move(Skill):
 
         return [move_effect]
 
+    def get_animation(self, aesthetic: Aesthetic):
+        # this special case is handled in the MoveActorEffect
+        return None
+
 
 class BasicAttack(Skill):
     data = library.get_skill_data("basic_attack")
@@ -195,3 +214,7 @@ class BasicAttack(Skill):
         )
 
         return [damage_effect]
+
+    def get_animation(self, aesthetic: Aesthetic):
+        # we can show animations depeding on the direction with self.direction
+        return aesthetic.sprites.attack
