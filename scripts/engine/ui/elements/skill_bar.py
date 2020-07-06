@@ -1,8 +1,13 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Optional
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from typing import List, Optional, Dict, Callable
+
+import pygame_gui
+import pygame
 from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel
@@ -17,16 +22,11 @@ class SkillBar(UIPanel):
 
     def __init__(self, rect: Rect, manager: UIManager):
         # state info
-        self.skills: List[Optional[str]] = []
-        # TODO - should be a list of individual skill buttons.
-        #  skill"slots" are part of the entity, not this.
-        #  use skill name as the identifier
+        self.actions: Dict[int, Callable] = {}
+        self.skill_buttons: List[UIButton] = []
+
         self.start_x = 0
         self.start_y = 0
-
-        # init skill list
-        for skill_slot in range(0, MAX_SKILLS):
-            self.skills += [None]
 
         # complete base class init
         super().__init__(rect, LAYER_BASE_UI, manager, element_id="skill_bar",
@@ -55,11 +55,11 @@ class SkillBar(UIPanel):
 
     ############### GET / SET ################
 
-    def set_skill(self, slot_number, skill):
+    def set_actions(self, actions: Dict[int, Callable]):
         """
-        Set skill in the skill bar slot
+        Set a list of actions to get executed for each button in the skill bar slot
         """
-        self.skills[slot_number] = skill
+        self.actions = actions
 
     ############### ACTIONS #################
 
@@ -69,7 +69,8 @@ class SkillBar(UIPanel):
 
         for skill_slot in range(0, MAX_SKILLS):
             x = self.start_x + ((SKILL_SIZE + GAP_SIZE) * skill_slot)
-            skill = UIButton(relative_rect=Rect((x, y), (SKILL_SIZE, SKILL_SIZE)), text=f"{skill_slot + 1}",
+            skill_button = UIButton(relative_rect=Rect((x, y), (SKILL_SIZE, SKILL_SIZE)), text=f"{skill_slot + 1}",
                              manager=manager, container=self.get_container(), object_id=f"#skill_button{skill_slot}")
+            self.skill_buttons.append(skill_button)
 
 
