@@ -169,7 +169,7 @@ class Camera(UIPanel):
             if self.is_in_camera_view((pos.x, pos.y)):
                 tile = world.get_tile((pos.x, pos.y))
                 if tile.is_visible:
-                    self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.screen_x, aesthetic.screen_y))
+                    self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.draw_x, aesthetic.draw_y))
 
         self.gamemap.set_image(map_surf)
 
