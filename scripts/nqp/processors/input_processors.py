@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 def process_event(event: pygame.event, game_state: GameStateType):
     """
-        Extract the intent from the event and process them in the context of the game state
+    Extract the intent from the event and process them in the context of the game state
     """
     intent = None
     # some events only apply to certain GameStates, we need to process them and separate them
