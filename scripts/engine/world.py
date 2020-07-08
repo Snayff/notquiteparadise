@@ -10,7 +10,7 @@ import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, utility
-from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, Trait, FOV, HasCombatStats, \
+from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, Traits, FOV, HasCombatStats, \
     Identity, IsGod, IsPlayer, Knowledge, Opinion, Position, Resources, Tracked
 from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, DEFAULT_ENTITY_BLOCKS_SIGHT, \
     EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, PrimaryStat, \
@@ -88,7 +88,7 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     components.append(Position(x, y))  # TODO - check position not blocked before spawning
     components.append(HasCombatStats())
     components.append(Blocking(True, DEFAULT_ENTITY_BLOCKS_SIGHT))
-    components.append(Trait(trait_names))
+    components.append(Traits(trait_names))
     components.append(FOV(create_fov_map()))
     components.append(Tracked(chronicle.get_time()))
 
@@ -575,7 +575,6 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
         return snecs.entity_component(entity, component)
     else:
         debug.log_component_not_found(entity, component)
-        raise Exception
 
 
 def get_name(entity: EntityID) -> str:
@@ -601,7 +600,7 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     stat_data = library.get_primary_stat_data(stat)
     value += stat_data.base_value
 
-    trait = get_entitys_component(entity, Trait)
+    trait = get_entitys_component(entity, Traits)
     for name in trait.names:
         data = library.get_trait_data(name)
         value += getattr(data, stat)

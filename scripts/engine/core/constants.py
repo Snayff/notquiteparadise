@@ -6,7 +6,7 @@ from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
-VERSION = "0.103.0"
+VERSION = "0.106.0"
 
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
@@ -72,6 +72,7 @@ class EventType(SimpleNamespace):
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
+
 class VisualInfo(SimpleNamespace):
     """
     Constant info about visual aspects such as resolution and frame rate
@@ -128,6 +129,7 @@ class UIElement(SimpleNamespace):
     ENTITY_QUEUE = UIElementType(5)
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
+    TILE_INFO = UIElementType(8)
 
 
 class HitValue(SimpleNamespace):

@@ -1,11 +1,11 @@
-import logging
-from typing import Optional
+from __future__ import annotations
 
+import logging
 import pygame
+from typing import Optional
 from pygame_gui import UIManager
 from pygame_gui.elements import UIImage, UIPanel, UITextBox
 from snecs.typedefs import EntityID
-
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources
 from scripts.engine.core.constants import GAP_SIZE, IMAGE_NOT_FOUND_PATH, INFINITE, LAYER_BASE_UI, PrimaryStat, \
@@ -15,13 +15,12 @@ from scripts.engine.utility import get_class_members
 
 class EntityInfo(UIPanel):
     """
-    Hold text relating to the game's events, to display to the player.
+    Full detail about an entity.
     """
+    # TODO - change to window
+    # TODO  - change state when selected
 
     def __init__(self, rect: pygame.Rect, manager: UIManager):
-        # TODO - create highlevel entity summary for info while on gamemap
-        # TODO - create full summary as new window
-        # FIXME - entity info  doesn't update when entity info changes.
 
         # sections
         self.selected_entity: Optional[EntityID] = None
@@ -55,7 +54,7 @@ class EntityInfo(UIPanel):
 
     def handle_events(self, event):
         """
-        Handle events created by this UI widget
+        Handle events created by this UI element. Method must exist, even if stubbed.
         """
         pass
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 import pygame
 from pygame_gui import UIManager
@@ -18,6 +18,7 @@ from scripts.engine.ui.elements.entity_info import EntityInfo
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.screen_message import ScreenMessage
 from scripts.engine.ui.elements.skill_bar import SkillBar
+from scripts.engine.ui.elements.tile_info import TileInfo
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -168,11 +169,11 @@ class _UIManager:
         camera_x = 0
         camera_y = 0
 
-        # Entity Info
-        entity_info_width = 240
-        entity_info_height = 200
-        entity_info_x = -entity_info_width
-        entity_info_y = -entity_info_height
+        # Tile Info
+        tile_info_width = 240
+        tile_info_height = 160
+        tile_info_x = -tile_info_width
+        tile_info_y = -tile_info_height
 
         # Data Editor
         data_width = 1200
@@ -182,8 +183,8 @@ class _UIManager:
 
         layout = {
             UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
-            UIElement.ENTITY_INFO: (EntityInfo, pygame.Rect((entity_info_x, entity_info_y),
-                                                            (entity_info_width, entity_info_height))),
+            UIElement.TILE_INFO: (TileInfo, pygame.Rect((tile_info_x, tile_info_y),
+                                                            (tile_info_width, tile_info_height))),
             UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
             UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
             UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height)))
@@ -198,7 +199,7 @@ class _UIManager:
         self.create_element(UIElement.CAMERA)
         self.create_element(UIElement.SKILL_BAR)
         self.create_element(UIElement.MESSAGE_LOG)
-        self.create_element(UIElement.ENTITY_INFO)
+        self.create_element(UIElement.TILE_INFO)
 
     def create_element(self, element_type: UIElementType) -> object:
         """
@@ -302,20 +303,20 @@ class _UIManager:
 
     ######################## ENTITY INFO ###############################################
 
-    def set_selected_entity(self, entity: EntityID = 0):
+    def update_tile_info(self, tile_pos: Optional[Tuple[int, int]] = None):
         """
         Set the selected entity and show it.
         """
-        entity_info = self.get_element(UIElement.ENTITY_INFO)
+        tile_info = self.get_element(UIElement.TILE_INFO)
 
-        if entity_info:
-            if entity:
-                entity_info.set_entity(entity)
-                entity_info.show()
+        if tile_info:
+            if tile_pos:
+                tile_info.set_selected_tile_pos(tile_pos)
+                tile_info.show()
             else:
-                entity_info.cleanse()
+                tile_info.cleanse()
         else:
-            logging.warning(f"Tried to set selected entity in EntityInfo but key not found. Is it init`d?")
+            logging.warning(f"Tried to update TileInfo but key not found. Is it init`d?")
 
     ######################## MESSAGES #################################
 

@@ -113,7 +113,7 @@ class Identity(RegisteredComponent):
         self.description: str = description
 
 
-class Trait(RegisteredComponent):
+class Traits(RegisteredComponent):
     """
     An entity's traits. Class, archetype, skill set or otherwise defining group.
     """
