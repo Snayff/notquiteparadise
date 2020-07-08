@@ -4,11 +4,26 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.engine.core.constants import InputIntent, InputIntentType
+from scripts.engine.core.constants import InputIntent, InputIntentType, EventType
 
 if TYPE_CHECKING:
-    from typing import Optional
+    from typing import Optional, Tuple
 
+
+def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntentType]:
+    direction_map = {
+        (0, 1): InputIntent.UP,
+        (0, -1): InputIntent.DOWN,
+        (1, 0): InputIntent.RIGHT,
+        (-1, 0): InputIntent.LEFT,
+        (1, 1): InputIntent.UP_RIGHT,
+        (-1, 1): InputIntent.UP_LEFT,
+        (1, -1): InputIntent.DOWN_RIGHT,
+        (-1, -1): InputIntent.DOWN_LEFT
+    }
+    if direction in direction_map:
+        return direction_map[direction]
+    return None
 
 def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:
     """

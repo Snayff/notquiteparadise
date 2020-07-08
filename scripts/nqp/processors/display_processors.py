@@ -75,31 +75,32 @@ def _process_aesthetic_update(delta_time: float):
         # increment time
         aesthetic.current_sprite_duration += delta_time
 
-        # do we need to show moving to a new position?
-        if aesthetic.screen_x != aesthetic.target_screen_x or aesthetic.screen_y != aesthetic.target_screen_y:
+        # Have we exceeded animation duration?
+        time_exceeded = aesthetic.current_sprite_duration > max_duration
 
-            # Have we exceeded animation duration?
-            time_exceeded = aesthetic.current_sprite_duration > max_duration
+        # do we need to show moving to a new position?
+        if aesthetic.draw_x != aesthetic.target_draw_x or aesthetic.draw_y != aesthetic.target_draw_y:
 
             # time for animation exceeded or animation very close to end
-            if time_exceeded or is_close((aesthetic.screen_x, aesthetic.screen_y),
-                                         (aesthetic.target_screen_x, aesthetic.target_screen_y)):
+            if time_exceeded or is_close((aesthetic.draw_x, aesthetic.draw_y),
+                                         (aesthetic.target_draw_x, aesthetic.target_draw_y)):
 
                 # set to target
-                aesthetic.screen_x = aesthetic.target_screen_x
-                aesthetic.screen_y = aesthetic.target_screen_y
+                aesthetic.draw_x = aesthetic.target_draw_x
+                aesthetic.draw_y = aesthetic.target_draw_y
 
 
             # keep moving:
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
-                aesthetic.screen_x = utility.lerp(aesthetic.screen_x, aesthetic.target_screen_x, lerp_amount)
-                aesthetic.screen_y = utility.lerp(aesthetic.screen_y, aesthetic.target_screen_y, lerp_amount)
+                aesthetic.draw_x = utility.lerp(aesthetic.draw_x, aesthetic.target_draw_x, lerp_amount)
+                aesthetic.draw_y = utility.lerp(aesthetic.draw_y, aesthetic.target_draw_y, lerp_amount)
 
-        # not moving so reset to idle
-        else:
+        # if not moving and the animation ended then reset to idle
+        elif (aesthetic.current_sprite == aesthetic.sprites.move) or time_exceeded:
             aesthetic.current_sprite = aesthetic.sprites.idle
             aesthetic.current_sprite_duration = 0
+
 
 
 
