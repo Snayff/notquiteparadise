@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pygame
 from types import SimpleNamespace
 from typing import NewType, Tuple
 
@@ -63,6 +64,13 @@ TraitGroupType = NewType("TraitGroupType", str)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
+
+class EventType(SimpleNamespace):
+    """
+    Constant info about the different custom event names that we can pass to pygame
+    """
+    TILE_CLICK = pygame.USEREVENT + 1
+    SKILL_BAR_CLICK = pygame.USEREVENT + 2
 
 class VisualInfo(SimpleNamespace):
     """

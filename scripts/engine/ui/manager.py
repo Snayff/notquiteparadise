@@ -21,7 +21,7 @@ from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Dict, Tuple
+    from typing import TYPE_CHECKING, Dict, Tuple, Callable
 
 
 class _UIManager:

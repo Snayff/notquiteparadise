@@ -119,8 +119,8 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
 
     sprites = _create_trait_sprites(traits_paths)
-    screen_x, screen_y = ui.world_to_screen_position((x, y))
-    components.append(Aesthetic(sprites.idle, sprites, screen_x, screen_y))
+    # translation to screen coordinates is handled by the camera
+    components.append(Aesthetic(sprites.idle, sprites, x, y))
 
     ## add skills to entity
     # setup basic attack as a known skill  # N.B. must be after entity creation
@@ -170,8 +170,8 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     projectile.append(Identity(projectile_name, desc))
 
     sprites = TraitSpritesData(move=utility.get_image(data.sprite), idle=utility.get_image(data.sprite))
-    screen_x, screen_y = ui.world_to_screen_position((x, y))
-    projectile.append(Aesthetic(sprites.move, sprites, screen_x, screen_y))
+    # translation to screen coordinates is handled by the camera
+    projectile.append(Aesthetic(sprites.move, sprites, x, y))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     projectile.append(Resources(999, 999))

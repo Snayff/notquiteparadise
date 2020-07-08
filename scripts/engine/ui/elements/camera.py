@@ -2,6 +2,7 @@ import logging
 from typing import Iterable, List, Tuple, cast
 
 import pygame_gui
+import pygame
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
@@ -11,7 +12,7 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import DirectionType, LAYER_CAMERA, TILE_SIZE
+from scripts.engine.core.constants import DirectionType, LAYER_CAMERA, TILE_SIZE, EventType
 from scripts.engine.utility import clamp, convert_tile_string, is_coordinate_in_bounds
 from scripts.engine.world_objects.tile import Tile
 
@@ -98,9 +99,10 @@ class Camera(UIPanel):
 
             # clicking a tile
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                # get the required tile and publish click event
-                pass
-                # FIXME - how to handle click?
+                tile = world.get_tile((x, y))
+                # launch a custom 'tile_click' event.
+                event = pygame.event.Event(EventType.TILE_CLICK, tile=tile)
+                pygame.event.post(event)
 
             # hovering a tile
             elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
@@ -167,7 +169,7 @@ class Camera(UIPanel):
             if self.is_in_camera_view((pos.x, pos.y)):
                 tile = world.get_tile((pos.x, pos.y))
                 if tile.is_visible:
-                    self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.screen_x, aesthetic.screen_y))
+                    self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.draw_x, aesthetic.draw_y))
 
         self.gamemap.set_image(map_surf)
 

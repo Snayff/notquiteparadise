@@ -81,9 +81,7 @@ def game_loop():
 
         # update based on input events
         for event in pygame.event.get():
-            intent = key.convert_to_intent(event)
-            if intent:
-                input_processors.process_intent(intent, current_state)
+            input_processors.process_event(event, current_state)
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
@@ -211,9 +209,9 @@ def initialise_game():
     #  fails due to player not existing. Below is a hacky fix.
     from scripts.engine.component import Aesthetic, Position
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
-        aesthetic.screen_x, aesthetic.screen_y = (position.x, position.y)
-        aesthetic.target_screen_x = aesthetic.screen_x
-        aesthetic.target_screen_y = aesthetic.screen_y
+        aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
+        aesthetic.target_draw_x = aesthetic.draw_x
+        aesthetic.target_draw_y = aesthetic.draw_y
 
 
 if __name__ == "__main__":  # prevents being run from other modules
