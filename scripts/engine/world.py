@@ -709,8 +709,8 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
     elif tag == TargetTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
-            # checks isnt self
-            return not _tile_has_specific_entity(tile, active_entity)
+            # check both possibilities. either the tile containing the active entity or not
+            return _tile_has_other_entities(tile, active_entity)
         else:
             logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
     elif tag == TargetTag.NO_ENTITY:
