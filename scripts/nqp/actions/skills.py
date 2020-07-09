@@ -49,6 +49,7 @@ class Skill(ABC):
     range: int = 1
     terrain_collision: TerrainCollisionType = TerrainCollision.FIZZLE
     expiry_type: ProjectileExpiryType = ProjectileExpiry.FIZZLE
+    ignore_entities: List[int] = []
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         self.user = user
