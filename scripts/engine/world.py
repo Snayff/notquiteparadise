@@ -985,10 +985,11 @@ def apply_skill(skill_instance: Skill) -> bool:
     # ensure they are the right target type
     if tile_has_tags(skill.target_tile, skill.required_tags, skill.user):
         for entity, effects in skill_instance.apply():
-            effect_queue = list(effects)
-            while effect_queue:
-                effect = effect_queue.pop()
-                effect_queue.extend(effect.evaluate())
+            if entity not in skill.ignore_entities:
+                effect_queue = list(effects)
+                while effect_queue:
+                    effect = effect_queue.pop()
+                    effect_queue.extend(effect.evaluate())
         return True
     else:
         logging.info(f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
