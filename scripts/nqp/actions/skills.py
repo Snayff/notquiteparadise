@@ -217,5 +217,5 @@ class BasicAttack(Skill):
         return [damage_effect]
 
     def get_animation(self, aesthetic: Aesthetic):
-        # we can show animations depending on the direction with self.direction
+        # we can show animations depeding on the direction with self.direction
         return aesthetic.sprites.attack
