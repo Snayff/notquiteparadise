@@ -991,7 +991,7 @@ def apply_skill(skill_instance: Skill) -> bool:
                 effect_queue.extend(effect.evaluate())
         return True
     else:
-        logging.info(f"Could not apply skill, target tile does not have required tags ({skill.required_tags}).")
+        logging.info(f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
