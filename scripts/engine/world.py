@@ -175,6 +175,7 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     projectile.append(Resources(999, 999))
+    projectile.append(Afflictions())
 
     entity = create_entity(projectile)
 
