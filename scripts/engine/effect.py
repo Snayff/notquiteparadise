@@ -185,6 +185,7 @@ class TriggerAfflictionsEffect(Effect):
         """
         Trigger all the afflictions on the self.target entity that match the trigger type. Fail if nothing matches
         """
+        logging.debug(f"Evaluating Trigger Affliction Effect of type '{self.trigger_type}'...")
         afflictions = world.get_entitys_component(self.target, Afflictions)
         # iterate over each affliction and trigger it if necessary
         success = True
