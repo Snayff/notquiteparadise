@@ -13,6 +13,9 @@
         ],
         "identity_tags": [
             "affect_stat"
+        ],
+        "triggers": [
+            "movement"
         ]
     },
     "flaming": {
@@ -29,6 +32,9 @@
         ],
         "identity_tags": [
             "damage"
+        ],
+        "triggers": [
+            "movement"
         ]
     }
 }
