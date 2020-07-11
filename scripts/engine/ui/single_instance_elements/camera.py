@@ -113,7 +113,8 @@ class Camera(UIPanel):
                         updated_tile_info = True
                 # entity not found at location so hide
                 if not updated_tile_info:
-                    ui.set_element_visibility(UIElement.TILE_INFO, False)
+                    if ui.element_is_visible(UIElement.TILE_INFO):
+                        ui.set_element_visibility(UIElement.TILE_INFO, False)
 
     ############### UPDATE ###########################
 

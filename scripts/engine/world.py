@@ -10,7 +10,7 @@ import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, utility
-from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, Traits, FOV, HasCombatStats, \
+from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, IsActor, Traits, FOV, HasCombatStats, \
     Identity, IsGod, IsPlayer, Knowledge, Opinion, Position, Resources, Tracked
 from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, DEFAULT_ENTITY_BLOCKS_SIGHT, \
     EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, PrimaryStat, \
@@ -74,7 +74,7 @@ def create_god(god_name: str) -> EntityID:
     return entity
 
 
-def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_names: List[str],
+def create_actor(name: str, description: str, x: int, y: int, trait_names: List[str],
         is_player: bool = False) -> EntityID:
     """
     Create an entity with all of the components to be an actor. Returns entity ID.
@@ -84,6 +84,7 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     # actor components
     if is_player:
         components.append(IsPlayer())
+    components.append(IsActor())
     components.append(Identity(name, description))
     components.append(Position(x, y))  # TODO - check position not blocked before spawning
     components.append(HasCombatStats())

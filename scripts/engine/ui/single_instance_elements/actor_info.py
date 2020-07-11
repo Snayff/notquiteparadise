@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import pygame
-from typing import List, Optional
+from typing import List, Optional, Tuple, Union
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement
 from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIWindow
@@ -29,7 +29,10 @@ class ActorInfo(UIWindow):
         self.sections: List[UIElement] = []
 
         # complete base class init
-        super().__init__(rect, manager, element_id="entity_info")
+        super().__init__(rect, manager, element_id="actor_info")
+
+        # block mouse clicks outside of menu
+        self.set_blocking(True)
 
         # show self
         self.show()
@@ -68,29 +71,29 @@ class ActorInfo(UIWindow):
         self.visible = True
         entity = self.selected_entity
 
-        if entity:
-            # clear to refresh first
-            self.cleanse()
+        # clear to refresh first
+        self.cleanse()
 
-            images = []
-            info = []
+        if entity:
+
+            info: List[Tuple[str, Union[str, pygame.Surface]]] = []
             # TODO - replace with non-placeholder image
-            section_break_image = utility.get_image("assets/ui/menu_window_n_repeat.png", (13, self.rect.width))
+            section_break_image = utility.get_image("assets/ui/menu_window_n_repeat.png", (self.rect.width, 13))
 
             # get aesthetic
             aesthetic = world.get_entitys_component(entity, Aesthetic)
-            images.append(aesthetic.sprites.icon)
+            info.append(("image", aesthetic.sprites.icon))
 
             # get identity
             identity = world.get_entitys_component(entity, Identity)
-            info.append(identity.name)
+            info.append(("text", identity.name))
 
             # get resources
             resources = world.get_entitys_component(entity, Resources)
             if resources:
-                info.append(f"Health: {resources.health}")
-                info.append(f"Stamina: {resources.stamina}")
-                images.append(section_break_image)
+                info.append(("text", f"Health: {resources.health}"))
+                info.append(("text", f"Stamina: {resources.stamina}"))
+                info.append(("image", section_break_image))
 
             # get stats
             stats = world.create_combat_stats(entity)
@@ -102,11 +105,11 @@ class ActorInfo(UIWindow):
 
                         name = name.title()
                         name = name.replace("_", " ")
-                        info.append(f"{name}: {stat_value}")
+                        info.append(("text", f"{name}: {stat_value}"))
 
                     # in case it fails to pull expected attribute
                     except AttributeError:
-                        logging.warning(f"NpcEntityInfo: attribute {name} not found in primary stats.")
+                        logging.warning(f"ActorInfo: attribute {name} not found in primary stats.")
 
 
                 secondary_stats = get_class_members(SecondaryStat)
@@ -117,13 +120,13 @@ class ActorInfo(UIWindow):
 
                         name = name.title()
                         name = name.replace("_", " ")
-                        info.append(f"{name}: {stat_value}")
+                        info.append(("text", f"{name}: {stat_value}"))
 
                     # in case it fails to pull expected attribute
                     except AttributeError:
-                        logging.warning(f"NpcEntityInfo: attribute {name} not found in secondary stats.")
+                        logging.warning(f"ActorInfo: attribute {name} not found in secondary stats.")
 
-                images.append(section_break_image)
+                info.append(("image", section_break_image))
 
             #  get traits
             traits = world.get_entitys_component(entity, Traits)
@@ -134,8 +137,8 @@ class ActorInfo(UIWindow):
                     if len(names) > 1:
                         names += ", "
                     names += f"{name}"
-                info.append(names)
-                images.append(section_break_image)
+                info.append(("text", names))
+                info.append(("image", section_break_image))
 
             # get afflictions
             afflictions = world.get_entitys_component(entity, Afflictions)
@@ -152,13 +155,14 @@ class ActorInfo(UIWindow):
                         duration = affliction.duration
                     # add value
                     names += f"{name}: {duration}"
+
                 # if no afflictions, say so
-                if names:
+                if not names:
                     names = "Not afflicted."
-                info.append(names)
+                info.append(("text", names))
 
             # create the box for the info
-            self._create_sections(images, info)
+            self._create_sections(info)
 
     def cleanse(self):
         """
@@ -171,48 +175,77 @@ class ActorInfo(UIWindow):
 
     ############## CREATE ########################
 
-    def _create_sections(self, images: List[pygame.surface], info: List[str]):
+    def _create_sections(self, info: List[Tuple[str, Union[str, pygame.Surface]]]):
         """
         Create sections for the information about the tile
         """
         sections = []
         current_y = 0
-        section_number = 0
+        current_text_block = ""
 
         # draw info
-        centre_draw_x = int((self.rect.width / 2) - (ICON_SIZE / 2))
-        image_rect = pygame.Rect((centre_draw_x, 0), (ICON_SIZE, ICON_SIZE))
         x = 0
         width = self.rect.width
         text_height = 0  # box will resize height anyway
 
         # loop each image provided and use as header for each group of info
-        for image in images:
-            #  create image
-            _image = pygame.transform.scale(image, (ICON_SIZE, ICON_SIZE))
-            ui_image = UIImage(relative_rect=image_rect, image_surface=image, manager=self.ui_manager,
-                               container=self.get_container())
-            sections.append(ui_image)
-            ui_image = None  # clear to prevent any carry over
+        for type_str, text_or_image in info:
+            # build current text block
+            if type_str == "text":
+                current_text_block += text_or_image + "<br>"
 
-            # update position
-            current_y += ICON_SIZE + GAP_SIZE
+            elif type_str == "image":
 
-            # collect text for the section
-            text = ""
-            for line in info[section_number]:
-                text += line + "<br>"
+                # if we have text in the previous block, show it
+                if current_text_block:
+                    ## Display text
+                    rect = pygame.Rect((x, current_y), (width, text_height))
+                    ui_text = UITextBox(html_text=current_text_block, relative_rect=rect, manager=self.ui_manager,
+                                        wrap_to_height=True, layer_starting_height=1,
+                                        container=self.get_container())
+                    sections.append(ui_text)
 
-            # create textbox
+                    # update position
+                    current_y += ui_text.rect.height + GAP_SIZE
+
+                    # clear to prevent any carry over
+                    ui_text = None
+                    current_text_block = ""
+
+
+                ##  Display image
+                # draw info
+                image_width = text_or_image.get_width()
+                image_height = text_or_image.get_height()
+
+                # if image covers the window draw from left side, otherwise centre
+                if image_width == width:
+                    draw_x = int((self.rect.width / 2) - (image_width / 2))
+                else:
+                    draw_x = 0
+
+                # create rect and image element
+                image_rect = pygame.Rect((draw_x, current_y), (image_width, image_height))
+                ui_image = UIImage(relative_rect=image_rect, image_surface=text_or_image, manager=self.ui_manager,
+                                   container=self.get_container())
+                sections.append(ui_image)
+
+                # update position
+                current_y += image_height + GAP_SIZE
+
+                # clear to prevent any carry over
+                ui_image = None
+
+        # we've left the loop, clean up left over text
+        if current_text_block:
+            ## Display text
             rect = pygame.Rect((x, current_y), (width, text_height))
-            ui_text = UITextBox(html_text=text, relative_rect=rect, manager=self.ui_manager,
-                              wrap_to_height=True, layer_starting_height=1,
-                              container=self.get_container())
+            ui_text = UITextBox(html_text=current_text_block, relative_rect=rect, manager=self.ui_manager,
+                                wrap_to_height=True, layer_starting_height=1,
+                                container=self.get_container())
             sections.append(ui_text)
-            ui_text = None  # clear to prevent any carry over
 
-            # increment section
-            section_number += 1
+
 
         # update main sections list
         self.sections = sections

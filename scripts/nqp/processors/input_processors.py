@@ -33,7 +33,8 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## activate skill on mouse click while in targeting mode
             player = world.get_player()
             position = world.get_entitys_component(player, Position)
-            direction = (max(-1, min(1, event.tile_pos.x - position.x)), max(-1, min(1, position.y - event.tile_pos.y)))
+            event_x, event_y = event.tile_pos
+            direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
             intent = key.convert_vector_to_intent(direction)
 
         elif game_state == GameState.GAMEMAP:
