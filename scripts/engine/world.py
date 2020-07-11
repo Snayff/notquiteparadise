@@ -1018,6 +1018,29 @@ def apply_skill(skill_instance: Skill) -> bool:
     return False
 
 
+def apply_affliction(affliction_instance: Affliction) -> bool:
+    """
+    Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met, False if not.
+    """
+    affliction = affliction_instance
+    target = affliction_instance.affected_entity
+    position = get_entitys_component(target, Position)
+    target_tile = get_tile((position.x, position.y))
+
+    # ensure they are the right target type
+    if tile_has_tags(target_tile, affliction.required_tags, affliction.creator):
+        for entity, effects in affliction.apply():
+            effect_queue = list(effects)
+            while effect_queue:
+                effect = effect_queue.pop()
+                effect_queue.extend(effect.evaluate())
+        return True
+    else:
+        logging.info(f"Could not apply affliction \"{affliction.name}\", target tile does not have required tags ({affliction.required_tags}).")
+
+    return False
+
+
 def take_turn(entity: EntityID) -> bool:
     """
     Process the entity's Behaviour component. If no component found then EndTurn event is fired.
