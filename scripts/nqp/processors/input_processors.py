@@ -149,6 +149,7 @@ def _process_gamemap_intents(intent: InputIntentType):
             ui.set_element_visibility(UIElement.ACTOR_INFO, False)
 
         else:
+            # FIXME - once closed doesnt trigger again
             # show
             state.set_new(GameState.MENU)
             ui.set_element_visibility(UIElement.ACTOR_INFO, True)

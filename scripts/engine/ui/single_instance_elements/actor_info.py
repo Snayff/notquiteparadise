@@ -5,7 +5,7 @@ import pygame
 from typing import List, Optional, Tuple, Union
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement
-from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIWindow
+from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIVerticalScrollBar, UIWindow
 from snecs.typedefs import EntityID
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources, Traits
@@ -30,6 +30,12 @@ class ActorInfo(UIWindow):
 
         # complete base class init
         super().__init__(rect, manager, element_id="actor_info")
+
+        # setup scroll bar
+        self.scrollbar_width = 50
+        self.scrollbar = UIVerticalScrollBar(pygame.Rect((rect.width - self.scrollbar_width, 0),
+                                                         (self.scrollbar_width, rect.height)), 0.5, manager,
+                                             self.get_container(), self, "#scrollbar")
 
         # block mouse clicks outside of menu
         self.set_blocking(True)
@@ -78,7 +84,8 @@ class ActorInfo(UIWindow):
 
             info: List[Tuple[str, Union[str, pygame.Surface]]] = []
             # TODO - replace with non-placeholder image
-            section_break_image = utility.get_image("assets/ui/menu_window_n_repeat.png", (self.rect.width, 13))
+            section_break_image = utility.get_image("assets/ui/menu_window_n_repeat.png",
+                                                    (self.rect.width - self.scrollbar_width, 13))
 
             # get aesthetic
             aesthetic = world.get_entitys_component(entity, Aesthetic)
@@ -164,6 +171,9 @@ class ActorInfo(UIWindow):
             # create the box for the info
             self._create_sections(info)
 
+            # refresh scrollbar
+            self.scrollbar.redraw_scrollbar()
+
     def cleanse(self):
         """
         Cleanse existing section info.
@@ -185,7 +195,7 @@ class ActorInfo(UIWindow):
 
         # draw info
         x = 0
-        width = self.rect.width
+        width = self.rect.width - self.scrollbar_width
         text_height = 0  # box will resize height anyway
 
         # loop each image provided and use as header for each group of info
@@ -218,8 +228,8 @@ class ActorInfo(UIWindow):
                 image_width = text_or_image.get_width()
                 image_height = text_or_image.get_height()
 
-                # if image covers the window draw from left side, otherwise centre
-                if image_width == width:
+                # if image is the icon then draw centre, otherwise draw left
+                if image_width == ICON_SIZE:
                     draw_x = int((self.rect.width / 2) - (image_width / 2))
                 else:
                     draw_x = 0
