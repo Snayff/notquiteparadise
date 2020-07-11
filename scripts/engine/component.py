@@ -155,9 +155,7 @@ class Afflictions(RegisteredComponent):
     def __init__(self, active: List[Affliction] = None):
         if active is None:
             active = []
-        for a in active:
-            if type(a) == int:
-                raise Exception('asda')
+
         self.active: List[Affliction] = active
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
 
