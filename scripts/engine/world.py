@@ -148,6 +148,7 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     # add behaviour  N.B. Can only be added once entity is created
     if behaviour:
         add_component(entity, Behaviour(behaviour(entity)))
+
     # give full resources N.B. Can only be added once entity is created
     stats = create_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
@@ -169,7 +170,8 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     desc = f"{name}s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
 
-    sprites = TraitSpritesData(move=utility.get_image(data.sprite), idle=utility.get_image(data.sprite))
+    sprites = TraitSpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
+                               idle=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)))
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, x, y))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next

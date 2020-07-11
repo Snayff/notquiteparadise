@@ -56,6 +56,7 @@ class SkillData:
     range: int = 1
     terrain_collision: TerrainCollisionType = TerrainCollision.FIZZLE
     expiry_type: ProjectileExpiryType = ProjectileExpiry.FIZZLE
+    projectile_sprite: str = field(default="none")
 
 
 @register_dataclass_with_json

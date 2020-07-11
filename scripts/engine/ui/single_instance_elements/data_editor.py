@@ -77,13 +77,15 @@ class DataEditor(UIWindow):
 #         # display the initial selector
 #         self.category_selector = self._create_data_category_selector()
 #
-#     def update(self, time_delta: float):
+    def update(self, time_delta: float):
+        pass
 #         """
 #         Update based on current state and data. Run every frame.
 #         """
 #         super().update(time_delta)
 #
-#     def handle_events(self, event):
+    def handle_events(self, event):
+         pass
 #         """
 #         Handle events created by this UI widget
 #         """

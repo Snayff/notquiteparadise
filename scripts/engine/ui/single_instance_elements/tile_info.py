@@ -1,18 +1,13 @@
 from __future__ import annotations
-
 import logging
 import pygame
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement
 from pygame_gui.elements import UIImage, UIPanel, UITextBox
-from snecs.typedefs import EntityID
-from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Aspect, Identity, Position, Resources, Traits
-from scripts.engine.core.constants import GAP_SIZE, ICON_IN_TEXT_SIZE, IMAGE_NOT_FOUND_PATH, INFINITE, LAYER_BASE_UI, \
-    PrimaryStat, \
-    SecondaryStat
-from scripts.engine.utility import get_class_members
+from scripts.engine import  world
+from scripts.engine.component import Aesthetic, Aspect, Identity, Position, Resources, Traits
+from scripts.engine.core.constants import GAP_SIZE, ICON_IN_TEXT_SIZE, LAYER_BASE_UI
 
 
 
@@ -25,12 +20,6 @@ class TileInfo(UIPanel):
 
         self.selected_tile_pos: Tuple[int, int] = (0, 0)
         self.sections: List[UIElement] = []
-
-        # data
-        self.indent = 3
-        self.entity_image_height = 32
-        self.entity_image_width = 32
-        self.core_info_height = rect.height - self.entity_image_height
 
         # complete base class init
         super().__init__(rect, LAYER_BASE_UI, manager, element_id="tile_info",
@@ -69,8 +58,11 @@ class TileInfo(UIPanel):
 
     def show(self):
         """
-        Show the tile info. Builds the sections required, after clearing any existing.
+        Show the tile info. Builds the sections required, after clearing any existing. Also triggers base class show
+        method.
         """
+        super().show()
+
         if self.selected_tile_pos:
             # clear to refresh first
             self.cleanse()

@@ -29,11 +29,18 @@ class IsPlayer(RegisteredComponent):
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
 
+class IsActor(RegisteredComponent):
+    """
+    Whether the entity is an actor.
+    """
+    __slots__ = ()
+
+
 class IsGod(RegisteredComponent):
     """
     Whether the entity is a god.
     """
-    # TODO - replace need for this with the appropriate AI
+
     __slots__ = ()
 
 
@@ -161,7 +168,7 @@ class Afflictions(RegisteredComponent):
 
 class Aspect(RegisteredComponent):
     # TODO - inherit from dict and add to that
-    # TODO - combine aspect and terrain
+    # TODO - combine aspect and terrain - combine with tile too as only tile can have?
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
     """

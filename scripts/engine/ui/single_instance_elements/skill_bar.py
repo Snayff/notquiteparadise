@@ -71,6 +71,8 @@ class SkillBar(UIPanel):
     ############### ACTIONS #################
 
     def show(self):
+        super().show()
+
         y = self.start_y
         manager = self.ui_manager
 

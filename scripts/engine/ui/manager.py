@@ -1,28 +1,28 @@
 from __future__ import annotations
 
 import logging
-from typing import Optional, TYPE_CHECKING
-
+from typing import TYPE_CHECKING
 import pygame
 from pygame_gui import UIManager
 from snecs.typedefs import EntityID
-
 from scripts.engine import debug, utility
 from scripts.engine.core.constants import Direction, GAP_SIZE, MAX_SKILLS, MessageType, MessageTypeType, SKILL_SIZE, \
     UIElement, UIElementType, VisualInfo
 from scripts.engine.library import library
 from scripts.engine.ui.basic.fonts import Font
-from scripts.engine.ui.elements.camera import Camera
-from scripts.engine.ui.elements.data_editor import DataEditor
-from scripts.engine.ui.elements.entity_info import EntityInfo
-from scripts.engine.ui.elements.message_log import MessageLog
-from scripts.engine.ui.elements.screen_message import ScreenMessage
-from scripts.engine.ui.elements.skill_bar import SkillBar
-from scripts.engine.ui.elements.tile_info import TileInfo
+from scripts.engine.ui.single_instance_elements.camera import Camera
+from scripts.engine.ui.single_instance_elements.data_editor import DataEditor
+from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
+from scripts.engine.ui.single_instance_elements.message_log import MessageLog
+from scripts.engine.ui.multi_instance_elements.screen_message import ScreenMessage
+from scripts.engine.ui.single_instance_elements.skill_bar import SkillBar
+from scripts.engine.ui.single_instance_elements.tile_info import TileInfo
 from scripts.engine.world_objects.tile import Tile
+from pygame_gui.core import UIElement as pygame_gui_element
+
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Dict, Tuple, Callable
+    from typing import TYPE_CHECKING, Dict, Tuple
 
 
 class _UIManager:
@@ -51,7 +51,7 @@ class _UIManager:
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
-        self._element_layout: Dict[UIElementType, Tuple[object, pygame.Rect]] = {}
+        self._element_details: Dict[UIElementType, Tuple[pygame_gui_element, pygame.Rect]] = {}
 
         # process config
         self._load_display_config()
@@ -70,7 +70,7 @@ class _UIManager:
 
     def process_ui_events(self, event):
         """
-        Process input events
+        Pass event to the gui manager and, if event type is USEREVENT, to all ui elements.
         """
         self._gui.process_events(event)
 
@@ -102,6 +102,9 @@ class _UIManager:
         pygame.display.flip()  # make sure to do this as the last drawing element in a frame
 
     def _draw_debug(self):
+        """
+        Draw debug information, based on visible values in debug.
+        """
         values = debug.get_visible_values()
         y = 10
         debug_font = self.debug_font
@@ -111,24 +114,18 @@ class _UIManager:
             self._main_surface.blit(text, (0, y))
             y += 10
 
-    def add_element(self, element_type: UIElementType, element: object):
-        """
-        Add ui_manager element to the list of all elements.
-        """
-        self._elements[element_type] = element
-
     ##################### GET ############################
 
-    def get_element(self, element_type: UIElementType):
+    def get_element(self, element_type: UIElementType) -> pygame_gui_element:
         """
-        Get UI element. Returns nothing if not found. Won't be found if not init'd.
+        Get UI element. Creates instance if not found.
         """
-        try:
+        if element_type in self._elements:
             return self._elements[element_type]
-        except KeyError:
+        else:
             element_name = utility.value_to_member(element_type, UIElement)
-            logging.warning(f"Tried to get {element_name} ui element but key not found, is it init`d?")
-            return None
+            logging.info(f"Tried to get {element_name} ui element but key not found; new one created.")
+            return self.create_element(element_type)
 
     def get_gui_manager(self) -> UIManager:
         """
@@ -176,44 +173,55 @@ class _UIManager:
         tile_info_y = -tile_info_height
 
         # Data Editor
-        data_width = 1200
-        data_height = 600
+        data_width = VisualInfo.BASE_WINDOW_WIDTH
+        data_height = VisualInfo.BASE_WINDOW_HEIGHT
         data_x = 5
         data_y = 10
+
+        # Npc info
+        npc_info_width = VisualInfo.BASE_WINDOW_WIDTH / 2
+        npc_info_height = VisualInfo.BASE_WINDOW_HEIGHT - (VisualInfo.BASE_WINDOW_HEIGHT / 4)
+        npc_info_x = 5
+        npc_info_y = 10
 
         layout = {
             UIElement.MESSAGE_LOG: (MessageLog, pygame.Rect((message_x, message_y), (message_width, message_height))),
             UIElement.TILE_INFO: (TileInfo, pygame.Rect((tile_info_x, tile_info_y),
-                                                            (tile_info_width, tile_info_height))),
+                                                        (tile_info_width, tile_info_height))),
             UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
             UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
-            UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height)))
+            UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
+            UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height)))
         }
-        self._element_layout = layout
+        self._element_details = layout
 
-    def init_game_ui(self):
+    def init_all_ui_elements(self, visible: bool = False):
         """
-        Initialise the game's UI elements. Helper function to run kill_element on relevant elements.
+        Initialise the game's UI elements with specified visibility.
         """
-        # FIXME - elements being referenced before being init'd
-        self.create_element(UIElement.CAMERA)
-        self.create_element(UIElement.SKILL_BAR)
-        self.create_element(UIElement.MESSAGE_LOG)
-        self.create_element(UIElement.TILE_INFO)
+        for element_type in utility.get_class_members(UIElement):
+            _element_type = getattr(UIElement, element_type)
 
-    def create_element(self, element_type: UIElementType) -> object:
+            # in case we add an element to the UIElement class before creating the object and adding to load
+            if _element_type in self._element_details:
+                self.create_element(_element_type)
+                self.set_element_visibility(_element_type, visible)
+
+    def create_element(self, element_type: UIElementType) -> pygame_gui_element:
         """
         Create the specified UI element. Object is returned for convenience, it is already held and can be returned
-        with get_element at a later date.
+        with get_element at a later date. If it already exists current instance will be overwritten.
         """
-        # if it already exists, kill it
-        if self.get_element(element_type):
-            self.kill_element(element_type)
+        # if it already exists, log is being overwritten
+        # N.B. do not use get_element to check as it will create a circular reference
+        if element_type in self._elements:
+            element_name = utility.value_to_member(element_type, UIElement)
+            logging.warning(f"Created new {element_name} ui element, overwriting previous instance.")
 
         # create the element from the details held in element layout
-        element_class, rect = self._element_layout.get(element_type)
+        element_class, rect = self._element_details.get(element_type)
         element = element_class(rect, self.get_gui_manager())
-        self.add_element(element_type, element)
+        self._elements[element_type] = element
 
         return element
 
@@ -232,24 +240,31 @@ class _UIManager:
         """
         Close and kill the game's UI elements. Helper function to run kill_element on relevant elements.
         """
-        self.kill_element(UIElement.CAMERA)
-        self.kill_element(UIElement.SKILL_BAR)
-        self.kill_element(UIElement.MESSAGE_LOG)
-        self.kill_element(UIElement.ENTITY_INFO)
+        for element_type in utility.get_class_members(UIElement):
+            _element_type = getattr(UIElement, element_type)
+
+            # in case we add an element to  the UIElement class before creating the object and adding to load
+            if _element_type in self._element_details:
+                self.kill_element(_element_type)
 
     def kill_element(self, element_type: UIElementType):
         """
-        Remove any reference to the element
+        Remove any reference to the element.
         """
         element = self.get_element(element_type)
+        del self._elements[element_type]
+        element.kill()
 
-        if element:
-            del self._elements[element_type]
-            element.kill()
-        else:
-            logging.warning(f"Tried to remove {element_type} element but key not found.")
+    ################################ QUERIES #################################################################
 
-    ######################## CAMERA ###############################################
+    def element_is_visible(self, element_type: UIElementType):
+        """
+        Check if an element is visible.
+        """
+        element = self.get_element(element_type)
+        return element.visible
+
+    ######################## WRAPPED, FREQUENTLY-USED ELEMENT METHODS ############################################
 
     def set_player_tile(self, tile: Tile):
         """
@@ -301,24 +316,17 @@ class _UIManager:
             camera.set_overlay_visibility(is_visible)
             camera.update_grid()
 
-    ######################## ENTITY INFO ###############################################
-
-    def update_tile_info(self, tile_pos: Optional[Tuple[int, int]] = None):
+    def set_selected_tile_pos(self, tile_pos: Tuple[int, int]):
         """
         Set the selected entity and show it.
         """
         tile_info = self.get_element(UIElement.TILE_INFO)
 
         if tile_info:
-            if tile_pos:
-                tile_info.set_selected_tile_pos(tile_pos)
-                tile_info.show()
-            else:
-                tile_info.cleanse()
+            tile_info.set_selected_tile_pos(tile_pos)
+            tile_info.show()
         else:
             logging.warning(f"Tried to update TileInfo but key not found. Is it init`d?")
-
-    ######################## MESSAGES #################################
 
     def _add_to_message_log(self, message: str):
         """
@@ -343,6 +351,21 @@ class _UIManager:
             # TODO - create message over entity
             #  can we reuse screen message but provide xy?
             pass
+
+    def set_element_visibility(self, element_type: UIElementType, visible: bool):
+        """
+        Set whether the element is visible or not.
+        """
+        element = self.get_element(element_type)
+        element.visible = visible
+        element_name = utility.value_to_member(element_type, UIElement)
+
+        if visible:
+            element.show()
+            logging.debug(f"Showed {element_name} ui element.")
+        else:
+            element.hide()
+            logging.debug(f"Hid {element_name} ui element.")
 
 
 ui = _UIManager()

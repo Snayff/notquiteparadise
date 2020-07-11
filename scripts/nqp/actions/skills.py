@@ -9,7 +9,7 @@ from snecs.typedefs import EntityID
 from scripts.engine import world
 from scripts.engine.component import Position, Aesthetic
 from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
-    DirectionType, PrimaryStat, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, \
+    DirectionType, IMAGE_NOT_FOUND_PATH, PrimaryStat, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, \
     ProjectileSpeedType, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
     TargetingMethod, TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType
 from scripts.engine.effect import DamageEffect, Effect, MoveActorEffect
@@ -45,6 +45,7 @@ class Skill(ABC):
     required_tags: List[TargetTagType] = [TargetTag.OTHER_ENTITY]
     uses_projectile: bool = False
     projectile_speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    projectile_sprite: str = ""
     travel_method: TravelMethodType = TravelMethod.STANDARD
     range: int = 1
     terrain_collision: TerrainCollisionType = TerrainCollision.FIZZLE
@@ -68,6 +69,7 @@ class Skill(ABC):
             aesthetic.current_sprite = animation
             aesthetic.current_sprite_duration = 0
 
+        # create the projectile
         if self.uses_projectile:
             from scripts.engine.core.definitions import ProjectileData
             projectile_data = ProjectileData(
@@ -80,7 +82,8 @@ class Skill(ABC):
                 travel_method=self.travel_method,
                 range=self.range,
                 terrain_collision=self.terrain_collision,
-                expiry_type=self.expiry_type
+                expiry_type=self.expiry_type,
+                sprite=self.projectile_sprite
             )
             world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
         else:
@@ -190,6 +193,7 @@ class BasicAttack(Skill):
     shape_size = data.shape_size
     uses_projectile = data.uses_projectile
     projectile_speed = getattr(ProjectileSpeed, data.projectile_speed.upper())
+    projectile_sprite = data.projectile_sprite
     travel_method = data.travel_method
     range = data.range
     terrain_collision = data.terrain_collision
