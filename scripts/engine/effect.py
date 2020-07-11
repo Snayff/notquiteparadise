@@ -29,7 +29,7 @@ class Effect(ABC):
         pass
 
     def _create_affliction_trigger(self, trigger_type, target):
-        return TriggerAfflictionsEffect(self.origin, [], [], trigger_type, target)
+        return TriggerAfflictionsEffect(self.origin, target, trigger_type, [], [])
 
 
 class DamageEffect(Effect):
@@ -173,8 +173,8 @@ class MoveActorEffect(Effect):
 
 
 class TriggerAfflictionsEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]], trigger_type: AfflictionTriggerType, target: EntityID):
+    def __init__(self, origin: EntityID, target: EntityID, trigger_type: AfflictionTriggerType, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]]):
 
         super().__init__(origin, success_effects, failure_effects)
 
