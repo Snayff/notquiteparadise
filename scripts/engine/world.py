@@ -1185,14 +1185,13 @@ def remove_affliction(entity: EntityID, affliction_name: str):
     """
     afflictions = get_entitys_component(entity, Afflictions)
 
-    if affliction_name in afflictions.active:
-        # if it  is affect_stat remove the affect
-        affliction = afflictions.active[affliction_name]
+    if affliction in afflictions.active:
+        # if it is affect_stat remove the affect
         if EffectType.AFFECT_STAT in affliction.identity_tags:
-            afflictions.stat_modifiers.pop(affliction_name)
+            afflictions.stat_modifiers.pop(affliction.name)
 
         # remove from active list
-        afflictions.active.pop(affliction_name)
+        afflictions.active.remove(affliction)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################
