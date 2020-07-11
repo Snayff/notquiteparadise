@@ -8,7 +8,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Blocking, Position, Resources
-from scripts.engine.core.constants import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag
+from scripts.engine.core.constants import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag, AfflictionTriggerType, AfflictionTrigger
 
 if TYPE_CHECKING:
     from typing import Optional, List
@@ -28,6 +28,9 @@ class Effect(ABC):
         """
         pass
 
+    def _create_affliction_trigger(self, trigger_type, target):
+        return TriggerAfflictionsEffect(self.origin, [], [], trigger_type, target)
+
 
 class DamageEffect(Effect):
     def __init__(self, origin: EntityID, target: EntityID, success_effects: List[Optional[Effect]],
@@ -43,6 +46,9 @@ class DamageEffect(Effect):
         self.damage_type = damage_type
         self.mod_amount = mod_amount
         self.mod_stat = mod_stat
+        self.success_triggers = [
+            self._create_affliction_trigger(AfflictionTrigger.TAKE_DAMAGE, self.target)
+        ]
 
     def evaluate(self) -> List[Optional[Effect]]:
         """
@@ -68,7 +74,7 @@ class DamageEffect(Effect):
             if damage >= defenders_resources.health:
                 world.kill_entity(self.target)
 
-            return self.success_effects
+            return self.success_effects + self.success_triggers
         else:
             return self.failure_effects
 
@@ -82,6 +88,9 @@ class MoveActorEffect(Effect):
         self.target = target
         self.direction = direction
         self.move_amount = move_amount
+        self.success_triggers = [
+            self._create_affliction_trigger(AfflictionTrigger.MOVEMENT, self.target)
+        ]
 
     def evaluate(self) -> List[Optional[Effect]]:
         """
@@ -158,9 +167,35 @@ class MoveActorEffect(Effect):
                 world.recompute_fov(entity)
 
         if success:
-            return self.success_effects
+            return self.success_effects + self.success_triggers
         else:
             return self.failure_effects
+
+
+class TriggerAfflictionsEffect(Effect):
+    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
+            failure_effects: List[Optional[Effect]], trigger_type: AfflictionTriggerType, target: EntityID):
+
+        super().__init__(origin, success_effects, failure_effects)
+
+        self.trigger_type = trigger_type
+        self.target = target
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        Trigger all the afflictions on the self.target entity that match the trigger type. Fail if nothing matches
+        """
+        afflictions = world.get_entitys_component(self.target, Afflictions)
+        # iterate over each affliction and trigger it if necessary
+        success = True
+        for affliction in afflictions.active:
+            if self.trigger_type in affliction.triggers:
+                success = success and world.apply_affliction(affliction)
+
+        if success:
+            return self.success_effects
+        return self.failure_effects
+
 
 
 class AffectStatEffect(Effect):
