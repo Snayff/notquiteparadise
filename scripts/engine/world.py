@@ -27,6 +27,7 @@ from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions import skills
 from scripts.nqp.actions.skills import BasicAttack, Move, Skill
+from scripts.nqp.actions.afflictions import *
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -194,6 +195,14 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
 
     return entity
+
+
+def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, duration: int) -> Affliction:
+    """
+    Creates an instance of an Affliction provided the name
+    """
+    affliction_data = library.get_affliction_data(name)
+    return globals()[affliction_data.class_name](creator, target, duration)
 
 
 def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpritesData:
