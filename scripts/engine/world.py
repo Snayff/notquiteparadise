@@ -97,7 +97,7 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     traits_paths = []  # for aesthetic
     known_skills = {}  # for knowledge
     skill_order = []  # for knowledge
-    perm_afflictions = {}  # for affliction
+    perm_afflictions_names = []  # for affliction
     behaviour = None
 
     for name in trait_names:
@@ -110,8 +110,8 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
                 known_skills[skill_name] = skill
                 skill_order.append(skill_name)
         if data.permanent_afflictions != ["none"]:
-            for affliction in data.permanent_afflictions:
-                perm_afflictions[affliction] = INFINITE
+            for name in data.permanent_afflictions:
+                perm_afflictions_names.append(name)
         if data.group == TraitGroup.NPC:
             # TODO - get behaviour
             behaviour = SkipTurnBehaviour
@@ -140,11 +140,17 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     skill_order.insert(0, basic_attack_name)  # move not added to skill order
     components.append(Knowledge(known_skills, skill_order))
 
-    # add permanent afflictions
-    components.append(Afflictions(perm_afflictions))
-
     # create the entity
     entity = create_entity(components)
+
+    # add permanent afflictions, since we can only add them once an entity is created
+    perm_afflictions = []
+    for name in perm_afflictions_names:
+        # create the affliction with no specific source
+        perm_afflictions.append(
+            create_affliction(name, None, entity, INFINITE)
+        )
+    add_component(entity, Afflictions(perm_afflictions))
 
     # add behaviour  N.B. Can only be added once entity is created
     if behaviour:
