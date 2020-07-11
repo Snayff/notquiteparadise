@@ -150,12 +150,15 @@ class Knowledge(RegisteredComponent):
 
 class Afflictions(RegisteredComponent):
     """
-    An entity's Boons and Banes. held in .active as {affliction_name: duration}.
+    An entity's Boons and Banes. held in .active as {affliction_name: affliction_instance}.
     """
-    def __init__(self, active: Dict[str, Affliction] = None):
+    def __init__(self, active: List[Affliction] = None):
         if active is None:
-            active = {}
-        self.active: Dict[str, Affliction] = active
+            active = []
+        for a in active:
+            if type(a) == int:
+                raise Exception('asda')
+        self.active: List[Affliction] = active
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
 
 
