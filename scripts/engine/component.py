@@ -159,6 +159,9 @@ class Afflictions(RegisteredComponent):
         self.active: List[Affliction] = active
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
 
+    def add(self, affliction: Affliction):
+        self.active.append(affliction)
+
 
 class Aspect(RegisteredComponent):
     # TODO - inherit from dict and add to that
