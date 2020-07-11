@@ -198,7 +198,6 @@ class TriggerAfflictionsEffect(Effect):
         return self.failure_effects
 
 
-
 class AffectStatEffect(Effect):
     def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
             failure_effects: List[Optional[Effect]], cause_name: str,  target: EntityID,
@@ -232,16 +231,28 @@ class AffectStatEffect(Effect):
 
 
 class ApplyAfflictionEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]],):
+    def __init__(self, origin: EntityID, target: EntityID, affliction_name: str, duration: int,
+                 success_effects: List[Optional[Effect]], failure_effects: List[Optional[Effect]]):
         super().__init__(origin, success_effects, failure_effects)
+
+        self.affliction_name = affliction_name
+        self.target = target
+        self.duration = duration
 
     def evaluate(self) -> List[Optional[Effect]]:
         """
-        TBC - not implemented
+        Applies an affliction to an entity
         """
         logging.debug("Evaluating Apply Affliction Effect...")
-        logging.warning("-> effect not implemented.")
+
+        affliction_instance = world.create_affliction(self.affliction_name, self.origin, self.target, self.duration)
+        afflictions = world.get_entitys_component(self.target, Afflictions)
+        # add the affliction to the afflictions component
+        if afflictions:
+            afflictions.add(affliction_instance)
+            return self.success_effects
+        # didn't have the component, fail
+        return self.failure_effects
 
 
 class AddAspectEffect(Effect):
