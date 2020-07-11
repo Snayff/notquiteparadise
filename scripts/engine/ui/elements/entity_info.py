@@ -146,11 +146,11 @@ class EntityInfo(UIPanel):
             # afflictions
             afflictions = world.get_entitys_component(entity, Afflictions)
             if afflictions:
-                for affliction, duration in afflictions.active.items():
+                for affliction in afflictions.active:
                     # overwrite duration with infinity string if needed
-                    if duration == INFINITE:
+                    if affliction.duration == INFINITE:
                         duration = "∞"  # type: ignore
-                    text += f"{affliction} : {duration}" + "<br>"
+                    text += f"{affliction.name.title()} : {duration}" + "<br>"
             else:
                 text += "Not afflicted." + "<br>"
 
