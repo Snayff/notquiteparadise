@@ -10,7 +10,7 @@ import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, utility
-from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, Trait, FOV, HasCombatStats, \
+from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, IsActor, Traits, FOV, HasCombatStats, \
     Identity, IsGod, IsPlayer, Knowledge, Opinion, Position, Resources, Tracked
 from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, DEFAULT_ENTITY_BLOCKS_SIGHT, \
     EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, PrimaryStat, \
@@ -75,7 +75,7 @@ def create_god(god_name: str) -> EntityID:
     return entity
 
 
-def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_names: List[str],
+def create_actor(name: str, description: str, x: int, y: int, trait_names: List[str],
         is_player: bool = False) -> EntityID:
     """
     Create an entity with all of the components to be an actor. Returns entity ID.
@@ -85,11 +85,12 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     # actor components
     if is_player:
         components.append(IsPlayer())
+    components.append(IsActor())
     components.append(Identity(name, description))
     components.append(Position(x, y))  # TODO - check position not blocked before spawning
     components.append(HasCombatStats())
     components.append(Blocking(True, DEFAULT_ENTITY_BLOCKS_SIGHT))
-    components.append(Trait(trait_names))
+    components.append(Traits(trait_names))
     components.append(FOV(create_fov_map()))
     components.append(Tracked(chronicle.get_time()))
 
@@ -155,6 +156,7 @@ def create_entity_with_trait(name: str, description: str, x: int, y: int, trait_
     # add behaviour  N.B. Can only be added once entity is created
     if behaviour:
         add_component(entity, Behaviour(behaviour(entity)))
+
     # give full resources N.B. Can only be added once entity is created
     stats = create_combat_stats(entity)
     add_component(entity, Resources(stats.max_health, stats.max_stamina))
@@ -176,7 +178,8 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     desc = f"{name}s {skill_name} projectile"
     projectile.append(Identity(projectile_name, desc))
 
-    sprites = TraitSpritesData(move=utility.get_image(data.sprite), idle=utility.get_image(data.sprite))
+    sprites = TraitSpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
+                               idle=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)))
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, x, y))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
@@ -591,7 +594,6 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
         return snecs.entity_component(entity, component)
     else:
         debug.log_component_not_found(entity, component)
-        raise Exception
 
 
 def get_name(entity: EntityID) -> str:
@@ -617,7 +619,7 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     stat_data = library.get_primary_stat_data(stat)
     value += stat_data.base_value
 
-    trait = get_entitys_component(entity, Trait)
+    trait = get_entitys_component(entity, Traits)
     for name in trait.names:
         data = library.get_trait_data(name)
         value += getattr(data, stat)

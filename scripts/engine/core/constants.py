@@ -6,15 +6,16 @@ from typing import NewType, Tuple
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules
-VERSION = "0.103.0"
+VERSION = "0.106.0"
 
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
 GAP_SIZE = 2
 SKILL_SIZE = 64
-LAYER_CAMERA = 1
-LAYER_BASE_UI = 4
+LAYER_CAMERA = 1  # lowest level
+LAYER_BASE_UI = 3
+LAYER_WINDOW = 5
 TRAIT_RENDER_ORDER = {
     "npc": 0,
     "people": 1,
@@ -72,6 +73,8 @@ class EventType(SimpleNamespace):
     """
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
+    EXIT_MENU = pygame.USEREVENT + 3
+
 
 class VisualInfo(SimpleNamespace):
     """
@@ -101,6 +104,7 @@ class GameState(SimpleNamespace):
     TARGETING = GameStateType(4)  # while player is targeting
     EXIT_GAME = GameStateType(5)  # while exiting
     DEVELOPER = GameStateType(6)  # while using dev mode
+    MENU = GameStateType(7)  # while using a menu
 
 
 class MessageType(SimpleNamespace):
@@ -123,12 +127,12 @@ class UIElement(SimpleNamespace):
     The different UI elements
     """
     MESSAGE_LOG = UIElementType(1)
-    ENTITY_INFO = UIElementType(2)
-    TARGETING_OVERLAY = UIElementType(3)
+    ACTOR_INFO = UIElementType(2)
     SKILL_BAR = UIElementType(4)
     ENTITY_QUEUE = UIElementType(5)
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
+    TILE_INFO = UIElementType(8)
 
 
 class HitValue(SimpleNamespace):
@@ -180,16 +184,17 @@ class InputIntent(SimpleNamespace):
     DOWN_LEFT = InputIntentType("down_left")
     CONFIRM = InputIntentType("confirm")
     CANCEL = InputIntentType("cancel")
-    EXIT_GAME = InputIntentType("exit_game")
-    DEBUG_TOGGLE = InputIntentType("debug_toggle")
+    EXIT = InputIntentType("exit")
+    DEBUG_TOGGLE = InputIntentType("debug_toggle")  # TODO - move to dev console
     SKILL0 = InputIntentType("skill0")
     SKILL1 = InputIntentType("skill1")
     SKILL2 = InputIntentType("skill2")
     SKILL3 = InputIntentType("skill3")
     SKILL4 = InputIntentType("skill4")
     SKILL5 = InputIntentType("skill5")
-    REFRESH_DATA = InputIntentType("refresh_data")
+    REFRESH_DATA = InputIntentType("refresh_data")  # TODO - move to dev console
     DEV_TOGGLE = InputIntentType("dev_toggle")
+    ACTOR_INFO_TOGGLE = InputIntentType("npc_info_toggle")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################

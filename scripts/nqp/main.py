@@ -12,7 +12,7 @@ import pygame
 import snecs
 from snecs.world import default_world
 from scripts.engine import chronicle, debug, key, state, world
-from scripts.engine.core.constants import GameState, VERSION
+from scripts.engine.core.constants import GameState, UIElement, VERSION
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors
 
@@ -180,7 +180,7 @@ def initialise_game():
     world.create_gamemap(map_width, map_height)
 
     # init the player
-    player = world.create_entity_with_trait("player", "a desc", 1, 2, ["shoom", "soft_tops", "dandy"], True)
+    player = world.create_actor("player", "a desc", 1, 2, ["shoom", "soft_tops", "dandy"], True)
     world.recompute_fov(player)
 
     # tell places about the player
@@ -188,19 +188,18 @@ def initialise_game():
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    world.create_entity_with_trait("dummy steve", "steve's desc", 1, 4, ["training_dummy"])
+    world.create_actor("dummy steve", "steve's desc", 1, 4, ["training_dummy"])
 
     # create a god
     world.create_god("the_small_gods")
 
-    # prompt turn actions
-    world.end_turn(player, 0)
-
-    # loading finished, give player control
-    state.set_new(GameState.GAMEMAP)
-
     # turn on the ui
-    ui.init_game_ui()
+    ui.init_all_ui_elements()
+
+    # show the ui
+    ui.set_element_visibility(UIElement.CAMERA, True)
+    ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
+    ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
@@ -212,6 +211,12 @@ def initialise_game():
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
         aesthetic.target_draw_x = aesthetic.draw_x
         aesthetic.target_draw_y = aesthetic.draw_y
+
+    # loading finished, give player control
+    state.set_new(GameState.GAMEMAP)
+
+    # prompt turn actions
+    world.end_turn(player, 0)
 
 
 if __name__ == "__main__":  # prevents being run from other modules

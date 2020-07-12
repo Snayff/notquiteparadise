@@ -40,6 +40,7 @@ This update focuses on getting the project setup in a clean manner to allow for 
 
 #### Project
 * [x] Organize code base
+* [ ] Reduce size of large functions & methods 
 * [ ] Make code installable
 * [ ] Setup github workflows
 * [x] Add Quick Start installation instructions
