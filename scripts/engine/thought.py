@@ -54,7 +54,8 @@ class ProjectileBehaviour(AIBehaviour):
             if world.tile_has_tag(current_tile, TargetTag.OTHER_ENTITY, entity):
                 activate = True
                 skill_instance = self.data.skill_instance
-
+                # if we are in the same tile we don't want to apply the effect to ourselves
+                skill_instance.ignore_entities.append(entity)
                 # update skill instance to new target
                 skill_instance.target_tile = current_tile
 

@@ -711,8 +711,8 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
     elif tag == TargetTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
-            # checks isnt self
-            return not _tile_has_specific_entity(tile, active_entity)
+            # check both possibilities. either the tile containing the active entity or not
+            return _tile_has_other_entities(tile, active_entity)
         else:
             logging.warning("Tried to get TargetTag.OTHER_ENTITY but gave no active_entity.")
     elif tag == TargetTag.NO_ENTITY:
@@ -788,33 +788,38 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     """
     Check if the specified tile  has an entity on it
     """
+    return len(_get_entities_on_tile(tile)) > 0
+
+
+def _get_entities_on_tile(tile: Tile) -> List[int]:
+    """
+    Return a list of all the entities in that tile
+    """
     x = tile.x
     y = tile.y
-    # Any entities on the tile?
+    entities = []
     for entity, (position,) in get_components([Position]):
         position = cast(Position, position)
         if position.x == x and position.y == y:
-            return True
+            entities.append(entity)
+    return entities
 
-    # We found no entities on the tile
-    return False
+
+def _tile_has_other_entities(tile: Tile, active_entity: int) -> bool:
+    """
+    Check if the specified tile has other entities apart from the provided active entity
+    """
+    entities_on_tile = _get_entities_on_tile(tile)
+    active_entity_is_on_tile = active_entity in entities_on_tile
+    return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or\
+           (len(entities_on_tile) > 1 and active_entity_is_on_tile)
 
 
 def _tile_has_specific_entity(tile: Tile, active_entity: int) -> bool:
     """
     Check if the specified tile  has the specified entity on it
     """
-    x = tile.x
-    y = tile.y
-    # ensure active entity is the same as the returned one
-    for entity, (position,) in get_components([Position]):
-        position = cast(Position, position)
-        if position.x == x and position.y == y:
-            if active_entity == entity:
-                return True
-
-    # no matching entity found
-    return False
+    return active_entity in _get_entities_on_tile(tile)
 
 
 def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
@@ -987,13 +992,14 @@ def apply_skill(skill_instance: Skill) -> bool:
     # ensure they are the right target type
     if tile_has_tags(skill.target_tile, skill.required_tags, skill.user):
         for entity, effects in skill_instance.apply():
-            effect_queue = list(effects)
-            while effect_queue:
-                effect = effect_queue.pop()
-                effect_queue.extend(effect.evaluate())
+            if entity not in skill.ignore_entities:
+                effect_queue = list(effects)
+                while effect_queue:
+                    effect = effect_queue.pop()
+                    effect_queue.extend(effect.evaluate())
         return True
     else:
-        logging.info(f"Could not apply skill, target tile does not have required tags ({skill.required_tags}).")
+        logging.info(f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
