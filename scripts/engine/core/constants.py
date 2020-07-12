@@ -72,6 +72,7 @@ class EventType(SimpleNamespace):
     """
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
+    EXIT_MENU = pygame.USEREVENT + 3
 
 
 class VisualInfo(SimpleNamespace):
@@ -182,7 +183,7 @@ class InputIntent(SimpleNamespace):
     DOWN_LEFT = InputIntentType("down_left")
     CONFIRM = InputIntentType("confirm")
     CANCEL = InputIntentType("cancel")
-    EXIT_GAME = InputIntentType("exit_game")
+    EXIT = InputIntentType("exit")
     DEBUG_TOGGLE = InputIntentType("debug_toggle")  # TODO - move to dev console
     SKILL0 = InputIntentType("skill0")
     SKILL1 = InputIntentType("skill1")
