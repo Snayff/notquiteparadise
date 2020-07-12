@@ -11,8 +11,8 @@ from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIPanel
 
 from scripts.engine import world
-from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import DirectionType, LAYER_CAMERA, TILE_SIZE, EventType
+from scripts.engine.component import Aesthetic, IsActor, Position
+from scripts.engine.core.constants import DirectionType, LAYER_CAMERA, TILE_SIZE, EventType, UIElement
 from scripts.engine.utility import clamp, convert_tile_string, is_coordinate_in_bounds
 from scripts.engine.world_objects.tile import Tile
 
@@ -80,7 +80,6 @@ class Camera(UIPanel):
         # confirm init complete
         logging.debug(f"Camera initialised.")
 
-
     def handle_events(self, event):
         """
         Handle events created by this UI widget
@@ -99,22 +98,23 @@ class Camera(UIPanel):
 
             # clicking a tile
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                tile = world.get_tile((x, y))
-                # launch a custom 'tile_click' event.
-                event = pygame.event.Event(EventType.TILE_CLICK, tile=tile)
+                event = pygame.event.Event(EventType.TILE_CLICK, tile_pos=(x, y))
                 pygame.event.post(event)
 
             # hovering a tile
             elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
-                updated_entity_info = False
+                updated_tile_info = False
                 from scripts.engine.ui.manager import ui
                 for entity, (position, ) in world.get_components([Position]):
                     position: Position
                     if position.x == x and position.y == y:
-                        ui.set_selected_entity(entity)
-                        updated_entity_info = True
-                if not updated_entity_info:
-                    ui.set_selected_entity()
+                        ui.set_selected_tile_pos((x, y))
+                        ui.set_element_visibility(UIElement.TILE_INFO, True)
+                        updated_tile_info = True
+                # entity not found at location so hide
+                if not updated_tile_info:
+                    if ui.element_is_visible(UIElement.TILE_INFO):
+                        ui.set_element_visibility(UIElement.TILE_INFO, False)
 
     ############### UPDATE ###########################
 
@@ -295,7 +295,6 @@ class Camera(UIPanel):
         """
         self.last_updated_player_tile = self.player_tile
         self.player_tile = tile
-
 
     def set_overlay_visibility(self, is_visible: bool):
         """

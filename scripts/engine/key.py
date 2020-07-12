@@ -25,6 +25,7 @@ def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntent
         return direction_map[direction]
     return None
 
+
 def convert_to_intent(event: pygame.event) -> Optional[InputIntentType]:
     """
     Convert input to an intent.
@@ -93,7 +94,7 @@ def _check_actions(event: pygame.event):
         elif event.key == pygame.K_RETURN:
             return InputIntent.CONFIRM
         elif event.key == pygame.K_ESCAPE:
-            return InputIntent.EXIT_GAME
+            return InputIntent.EXIT
 
 
 def _check_dev_actions(event: pygame.event):

@@ -24,7 +24,7 @@ There are a number of conventions followed, including using the following tools:
 * [mypy] - python's static linte
 
 Below are the naming conventions followed in this project:
-* If only one of an object should exist the creation function is called "init_[object]", otherwise "create_[object]".
+* If only one of a class should exist the creation function is called "init_[object]", otherwise "create_[object]".
 * Where the object is taken as an argument the function name should default to "create_[object_type]".
 * If checking a bool use IsA or HasA.
 * If setting a variable from statically held data prefix with "load_[data]"
