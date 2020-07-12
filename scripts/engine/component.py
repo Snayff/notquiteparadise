@@ -157,7 +157,7 @@ class Knowledge(RegisteredComponent):
 
 class Afflictions(RegisteredComponent):
     """
-    An entity's Boons and Banes. held in .active as {affliction_name: affliction_instance}.
+    An entity's Boons and Banes. held in .active as a list of Affliction.
     """
     def __init__(self, active: List[Affliction] = None):
         if active is None:
