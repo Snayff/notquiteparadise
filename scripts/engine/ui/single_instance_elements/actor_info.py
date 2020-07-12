@@ -189,23 +189,19 @@ class ActorInfo(UIWindow):
             # get afflictions
             afflictions = world.get_entitys_component(entity, Afflictions)
             if afflictions:
-                names = ""
-                for name, affliction in afflictions.active.items():
-                    # if more than one affliction add a separator
-                    if len(names) > 1:
-                        names += ", "
+                for affliction in afflictions.active:
                     # get duration
                     if affliction.duration == INFINITE:
                         duration = "∞"
                     else:
                         duration = affliction.duration
-                    # add value
-                    names += f"{name}: {duration}"
+                    affliction_icon = utility.get_image(affliction.icon_path, (32, 32))
+                    info.append(("image", affliction_icon))
+                    info.append(("text", f"{affliction.name.title()}: {duration}"))
 
                 # if no afflictions, say so
-                if not names:
-                    names = "Not afflicted."
-                info.append(("text", names))
+            if not afflictions:
+                info.append(("text", "Not afflicted."))
 
             # create the box for the info
             self._create_sections(info)

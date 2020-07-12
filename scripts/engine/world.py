@@ -27,6 +27,7 @@ from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions import skills
 from scripts.nqp.actions.skills import BasicAttack, Move, Skill
+from scripts.nqp.actions.afflictions import *
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -97,7 +98,7 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
     traits_paths = []  # for aesthetic
     known_skills = {}  # for knowledge
     skill_order = []  # for knowledge
-    perm_afflictions = {}  # for affliction
+    perm_afflictions_names = []  # for affliction
     behaviour = None
 
     for name in trait_names:
@@ -110,8 +111,8 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
                 known_skills[skill_name] = skill
                 skill_order.append(skill_name)
         if data.permanent_afflictions != ["none"]:
-            for affliction in data.permanent_afflictions:
-                perm_afflictions[affliction] = INFINITE
+            for name in data.permanent_afflictions:
+                perm_afflictions_names.append(name)
         if data.group == TraitGroup.NPC:
             # TODO - get behaviour
             behaviour = SkipTurnBehaviour
@@ -140,11 +141,17 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
     skill_order.insert(0, basic_attack_name)  # move not added to skill order
     components.append(Knowledge(known_skills, skill_order))
 
-    # add permanent afflictions
-    components.append(Afflictions(perm_afflictions))
-
     # create the entity
     entity = create_entity(components)
+
+    # add permanent afflictions, since we can only add them once an entity is created
+    perm_afflictions = []
+    for name in perm_afflictions_names:
+        # create the affliction with no specific source
+        perm_afflictions.append(
+            create_affliction(name, None, entity, INFINITE)
+        )
+    add_component(entity, Afflictions(perm_afflictions))
 
     # add behaviour  N.B. Can only be added once entity is created
     if behaviour:
@@ -178,6 +185,7 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     projectile.append(Resources(999, 999))
+    projectile.append(Afflictions())
 
     entity = create_entity(projectile)
 
@@ -196,6 +204,14 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
     logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
 
     return entity
+
+
+def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, duration: int) -> Affliction:
+    """
+    Creates an instance of an Affliction provided the name
+    """
+    affliction_data = library.get_affliction_data(name)
+    return globals()[affliction_data.class_name](creator, target, duration)
 
 
 def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpritesData:
@@ -1004,6 +1020,29 @@ def apply_skill(skill_instance: Skill) -> bool:
     return False
 
 
+def apply_affliction(affliction_instance: Affliction) -> bool:
+    """
+    Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met, False if not.
+    """
+    affliction = affliction_instance
+    target = affliction_instance.affected_entity
+    position = get_entitys_component(target, Position)
+    target_tile = get_tile((position.x, position.y))
+
+    # ensure they are the right target type
+    if tile_has_tags(target_tile, affliction.required_tags, affliction.creator):
+        for entity, effects in affliction.apply():
+            effect_queue = list(effects)
+            while effect_queue:
+                effect = effect_queue.pop()
+                effect_queue.extend(effect.evaluate())
+        return True
+    else:
+        logging.info(f"Could not apply affliction \"{affliction.name}\", target tile does not have required tags ({affliction.required_tags}).")
+
+    return False
+
+
 def take_turn(entity: EntityID) -> bool:
     """
     Process the entity's Behaviour component. If no component found then EndTurn event is fired.
@@ -1171,14 +1210,13 @@ def remove_affliction(entity: EntityID, affliction_name: str):
     """
     afflictions = get_entitys_component(entity, Afflictions)
 
-    if affliction_name in afflictions.active:
-        # if it  is affect_stat remove the affect
-        affliction = afflictions.active[affliction_name]
+    if affliction in afflictions.active:
+        # if it is affect_stat remove the affect
         if EffectType.AFFECT_STAT in affliction.identity_tags:
-            afflictions.stat_modifiers.pop(affliction_name)
+            afflictions.stat_modifiers.pop(affliction.name)
 
         # remove from active list
-        afflictions.active.pop(affliction_name)
+        afflictions.active.remove(affliction)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

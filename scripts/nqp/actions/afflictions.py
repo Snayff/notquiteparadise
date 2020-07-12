@@ -7,7 +7,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import AfflictionCategory, AfflictionCategoryType, BASE_ACCURACY, BASE_DAMAGE, \
+from scripts.engine.core.constants import AfflictionCategory, AfflictionCategoryType, AfflictionTriggerType, BASE_ACCURACY, BASE_DAMAGE, \
     DamageType, EffectType, EffectTypeType, PrimaryStat, Shape, ShapeType, TargetTag, TargetTagType
 from scripts.engine.effect import AffectStatEffect, DamageEffect, Effect
 from scripts.engine.library import library
@@ -32,6 +32,7 @@ class Affliction(ABC):
     icon_path: str = ""
     required_tags: List[TargetTagType] = [TargetTag.OTHER_ENTITY]
     identity_tags: List[EffectTypeType] = [EffectType.DAMAGE]
+    triggers: List[AfflictionTriggerType] = []
     category: AfflictionCategoryType = AfflictionCategory.BANE
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
@@ -65,7 +66,7 @@ class BoggedDown(Affliction):
     description = data.description
     icon_path = data.icon
     category = data.category
-
+    triggers = data.triggers
 
     def build_effects(self, entity: EntityID) -> List[AffectStatEffect]:
         # TODO - externalise effect data to allow specifying in json
@@ -91,7 +92,7 @@ class Flaming(Affliction):
     description = data.description
     icon_path = data.icon
     category = data.category
-
+    triggers = data.triggers
 
     def build_effects(self, entity: EntityID) -> List[DamageEffect]:
         """

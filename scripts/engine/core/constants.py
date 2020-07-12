@@ -62,6 +62,7 @@ UIElementType = NewType("UIElementType", int)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
+AfflictionTriggerType = NewType("AfflictionTriggerType", str)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
@@ -294,6 +295,14 @@ class EffectType(SimpleNamespace):
     REMOVE_ASPECT = EffectTypeType("remove_aspect")
     TRIGGER_SKILL = EffectTypeType("trigger_skill")
     KILL = EffectTypeType("kill")
+
+
+class AfflictionTrigger(SimpleNamespace):
+    """
+    Type of trigger for the affliction
+    """
+    MOVEMENT = AfflictionTriggerType("movement")
+    TAKE_DAMAGE = AfflictionTriggerType("take_damage")
 
 
 class AfflictionCategory(SimpleNamespace):

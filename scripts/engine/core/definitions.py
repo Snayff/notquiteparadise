@@ -10,7 +10,7 @@ from scripts.engine.core.constants import AfflictionCategoryType, TRAIT_RENDER_O
     EffectType, \
     EffectTypeType, PrimaryStatType, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, ProjectileSpeedType, \
     Resource, ResourceType, SecondaryStatType, Shape, ShapeType, TargetTag, TargetTagType, TargetingMethod, \
-    TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType
+    TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType, AfflictionTriggerType
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -104,6 +104,7 @@ class AfflictionData:
     shape_size: int = 1
     required_tags: List[TargetTagType] = field(default_factory=list(TargetTag.OTHER_ENTITY))
     identity_tags: List[EffectTypeType] = field(default_factory=list(EffectType.DAMAGE))
+    triggers: List[AfflictionTriggerType] = field(default_factory=list())
 
 
 @register_dataclass_with_json

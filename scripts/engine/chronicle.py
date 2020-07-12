@@ -89,14 +89,14 @@ def next_round(time_progressed: int):
 
     ## affliction durations
     for entity, (afflictions, ) in world.get_components([Afflictions]):
-        for affliction, duration in afflictions.active.items():
-            if affliction.duration - 1 <= 0:
+        for affliction in afflictions.active:
+            if affliction.duration == 0:
                 # expired
-                world.remove_affliction(entity, affliction.name)
+                world.remove_affliction(entity, affliction)
 
-            elif duration != INFINITE:
+            elif affliction.duration != INFINITE:
                 # reduce duration if not infinite
-                afflictions[affliction] = duration - 1
+                affliction.duration -= 1
 
     ## time management
     # add progressed time and minus time_in_round to keep the remaining time
