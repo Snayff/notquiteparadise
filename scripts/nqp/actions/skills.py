@@ -12,7 +12,7 @@ from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_
     DirectionType, IMAGE_NOT_FOUND_PATH, PrimaryStat, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, \
     ProjectileSpeedType, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
     TargetingMethod, TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType
-from scripts.engine.effect import DamageEffect, Effect, MoveActorEffect
+from scripts.engine.effect import DamageEffect, Effect, MoveActorEffect, ReduceSkillCooldownEffect
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
