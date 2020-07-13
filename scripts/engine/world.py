@@ -785,10 +785,10 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     """
     Check if the specified tile  has an entity on it
     """
-    return len(_get_entities_on_tile(tile)) > 0
+    return len(get_entities_on_tile(tile)) > 0
 
 
-def _get_entities_on_tile(tile: Tile) -> List[int]:
+def get_entities_on_tile(tile: Tile) -> List[int]:
     """
     Return a list of all the entities in that tile
     """
@@ -806,7 +806,7 @@ def _tile_has_other_entities(tile: Tile, active_entity: int) -> bool:
     """
     Check if the specified tile has other entities apart from the provided active entity
     """
-    entities_on_tile = _get_entities_on_tile(tile)
+    entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
     return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or\
            (len(entities_on_tile) > 1 and active_entity_is_on_tile)
@@ -816,7 +816,7 @@ def _tile_has_specific_entity(tile: Tile, active_entity: int) -> bool:
     """
     Check if the specified tile  has the specified entity on it
     """
-    return active_entity in _get_entities_on_tile(tile)
+    return active_entity in get_entities_on_tile(tile)
 
 
 def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
