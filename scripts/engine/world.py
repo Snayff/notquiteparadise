@@ -26,6 +26,7 @@ from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions import skills, afflictions
+from scripts.nqp.actions.afflictions import Affliction
 from scripts.nqp.actions.skills import BasicAttack, Move, Skill
 
 if TYPE_CHECKING:
@@ -998,6 +999,19 @@ def apply_skill(skill_instance: Skill) -> bool:
     else:
         logging.info(f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
 
+    return False
+
+
+def set_skill_on_cooldown(skill_instance: Skill) -> bool:
+    """
+    Sets a skill on cooldown
+    """
+    user = skill_instance.user
+    name = skill_instance.name
+    knowledge = get_entitys_component(user, Knowledge)
+    if knowledge:
+        knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)
+        return True
     return False
 
 
