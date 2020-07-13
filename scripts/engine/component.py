@@ -149,10 +149,13 @@ class Knowledge(RegisteredComponent):
         skills = skills or {}
         skill_order = skill_order or []
 
-        self.skill_order = skill_order
-        self.skill_names = [skill.name for skill in skills]
-        self.skills: Dict[str, Skill] = {skill.name: skill for skill in skills}
-        self.cooldowns: Dict[str, int] = {skill.name: 0 for skill in skills}
+        self.skill_order: List[str] = skill_order
+        self.cooldowns: Dict[str, int] = {}
+        self.skill_names: List[str] = []
+        self.skills: Dict[str, Skill] = {}
+
+        for skill_class in skills:
+            self.learn_skill(skill_class, add_to_order=False)
 
     def get_skill(self, name: str):
         """
@@ -177,6 +180,16 @@ class Knowledge(RegisteredComponent):
         Sets the cooldown of a skill
         """
         self.cooldowns[name] = value
+
+    def learn_skill(self, skill_class, add_to_order=True):
+        """
+        Learn a new skill
+        """
+        self.cooldowns[skill_class.name] = 0
+        self.skill_names.append(skill_class.name)
+        if add_to_order:
+            self.skill_order.append(skill_class.name)
+        self.skills[skill_class.name] = skill_class
 
 
 class Afflictions(RegisteredComponent):
