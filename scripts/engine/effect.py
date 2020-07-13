@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, Position, Resources
+from scripts.engine.component import Aesthetic, Afflictions, Blocking, Position, Resources, Knowledge
 from scripts.engine.core.constants import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag, AfflictionTriggerType, AfflictionTrigger
 
 if TYPE_CHECKING:
@@ -252,6 +252,32 @@ class ApplyAfflictionEffect(Effect):
             afflictions.add(affliction_instance)
             return self.success_effects
         # didn't have the component, fail
+        return self.failure_effects
+
+
+class ReduceSkillCooldownEffect(Effect):
+
+    def __init__(self, origin: EntityID, target: EntityID, skill_name: str, amount: int,
+                 success_effects: List[Optional[Effect]], failure_effects: List[Optional[Effect]]):
+        super().__init__(origin, success_effects, failure_effects)
+
+        self.target = target
+        self.skill_name = skill_name
+        self.amount = amount
+
+    def evaluate(self) -> List[Optional[Effect]]:
+        """
+        Reduces the cooldown of a skill of an entity
+        """
+        logging.debug("Evaluating Reduce Skill Cooldown Effect...")
+
+        knowledge = world.get_entitys_component(self.target, Knowledge)
+
+        if knowledge:
+            current_cooldown = knowledge.get_skill_cooldown(self.skill_name)
+            knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.amount)
+            return self.success_effects
+
         return self.failure_effects
 
 
