@@ -198,7 +198,7 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     Creates an instance of an Affliction provided the name
     """
     affliction_data = library.get_affliction_data(name)
-    return globals()[affliction_data.class_name](creator, target, duration)
+    return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
 def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpritesData:
