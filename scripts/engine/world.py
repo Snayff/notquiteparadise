@@ -106,7 +106,8 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill_class = getattr(skills, skill_name)
+                skill_data = library.get_skill_data(skill_name)
+                skill_class = getattr(skills, skill_data.class_name)
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -178,14 +179,7 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
-    # add move
-    move = {
-        "skill": Move,
-        "cooldown": 0
-    }
-    known_skills = {
-        "move": move
-    }
+    known_skills = [Move]
     add_component(entity, Knowledge(known_skills))
 
     logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
@@ -1081,15 +1075,8 @@ def learn_skill(entity: EntityID, skill_name: str) -> bool:
     if not entity_has_component(entity, Knowledge):
         add_component(entity, Knowledge())
     knowledge = get_entitys_component(entity, Knowledge)
-
-    if knowledge:
-        knowledge.skills[skill_name]["cooldown"] = library.get_skill_data(skill_name).cooldown
-        knowledge.skill_order.append(skill_name)
-        return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no knowledge to learn skill.")
-
-    return False
+    skill_class = getattr(skills, skill_name)
+    knowledge.learn_skill(skill_class)
 
 
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
