@@ -74,6 +74,9 @@ class Skill(ABC):
         # animate the skill user
         self._play_animation()
 
+        # set the skill on cooldown
+        world.set_skill_on_cooldown(self)
+
         # create the projectile
         if self.uses_projectile:
             from scripts.engine.core.definitions import ProjectileData
