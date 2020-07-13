@@ -64,11 +64,7 @@ class Skill(ABC):
         logging.debug(f"'{world.get_name(self.user)}' used '{self.name}'.")
 
         # animate the skill user
-        aesthetic = world.get_entitys_component(self.user, Aesthetic)
-        animation = self.get_animation(aesthetic)
-        if aesthetic and animation:
-            aesthetic.current_sprite = animation
-            aesthetic.current_sprite_duration = 0
+        self._play_animation()
 
         # create the projectile
         if self.uses_projectile:
@@ -89,6 +85,13 @@ class Skill(ABC):
             world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
         else:
             world.apply_skill(self)
+
+    def _play_animation(self):
+        aesthetic = world.get_entitys_component(self.user, Aesthetic)
+        animation = self.get_animation(aesthetic)
+        if aesthetic and animation:
+            aesthetic.current_sprite = animation
+            aesthetic.current_sprite_duration = 0
 
     @abstractmethod
     def get_animation(self, aesthetic: Aesthetic):
