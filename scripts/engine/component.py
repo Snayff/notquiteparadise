@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from typing import List, Dict, Optional
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
+    from scripts.nqp.actions.skills import Skill
     from scripts.engine.core.definitions import TraitSpritesData
     from scripts.nqp.actions.afflictions import Affliction
 
@@ -144,20 +145,56 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
-    def __init__(self, skills: Dict[str, Dict[str, Any]] = None, skill_order: List[str] = None):
-        if skills is None:
-            skills = {}
-        if skill_order is None:
-            skill_order = []
+    def __init__(self, skills: List[Skill] = None, skill_order: List[str] = None):
+        skills = skills or {}
+        skill_order = skill_order or []
 
-        self.skill_order = skill_order  # list of skill names, to allow access by index
-        self.skills: Dict[str, Dict[str, Any]] = skills  # skill_name : {Skill, cooldown}
-            # FIXME - how is it str and Skill? Can't be both
+        self.skill_order: List[str] = skill_order
+        self.cooldowns: Dict[str, int] = {}
+        self.skill_names: List[str] = []
+        self.skills: Dict[str, Skill] = {}
+
+        for skill_class in skills:
+            self.learn_skill(skill_class, add_to_order=False)
+
+    def get_skill(self, name: str):
+        """
+        Returns a skill
+        """
+        return self.skills[name]
+
+    def get_skill_names(self):
+        """
+        Return a list of all the skill names
+        """
+        return self.skill_names
+
+    def get_skill_cooldown(self, name: str):
+        """
+        Returns the cooldown of a skill
+        """
+        return self.cooldowns[name]
+
+    def set_skill_cooldown(self, name: str, value: int):
+        """
+        Sets the cooldown of a skill
+        """
+        self.cooldowns[name] = max(0, value)
+
+    def learn_skill(self, skill_class, add_to_order=True):
+        """
+        Learn a new skill
+        """
+        self.cooldowns[skill_class.name] = 0
+        self.skill_names.append(skill_class.name)
+        if add_to_order:
+            self.skill_order.append(skill_class.name)
+        self.skills[skill_class.name] = skill_class
 
 
 class Afflictions(RegisteredComponent):
     """
-    An entity's Boons and Banes. held in .active as {affliction_name: affliction_instance}.
+    An entity's Boons and Banes. held in .active as a list of Affliction.
     """
     def __init__(self, active: List[Affliction] = None):
         if active is None:

@@ -36,13 +36,14 @@
     "lunge": {
         "__dataclass__": "SkillData",
         "class_name": "Lunge",
-        "cooldown": 1,
+        "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
         "icon": "placeholder/lunge.png",
         "name": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
+        "uses_projectile": false,
         "target_directions": [
             "down",
             "down_left",

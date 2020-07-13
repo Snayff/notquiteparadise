@@ -25,9 +25,9 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions import skills
+from scripts.nqp.actions import skills, afflictions
+from scripts.nqp.actions.afflictions import Affliction
 from scripts.nqp.actions.skills import BasicAttack, Move, Skill
-from scripts.nqp.actions.afflictions import *
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -96,8 +96,8 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
 
     # get info from traits
     traits_paths = []  # for aesthetic
-    known_skills = {}  # for knowledge
-    skill_order = []  # for knowledge
+    known_skills = [BasicAttack, Move]  # for knowledge
+    skill_order = ['basic_attack']  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
@@ -107,12 +107,15 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill = getattr(skills, skill_name)
-                known_skills[skill_name] = skill
+                skill_data = library.get_skill_data(skill_name)
+                skill_class = getattr(skills, skill_data.class_name)
+                known_skills.append(skill_class)
                 skill_order.append(skill_name)
+
         if data.permanent_afflictions != ["none"]:
             for name in data.permanent_afflictions:
                 perm_afflictions_names.append(name)
+
         if data.group == TraitGroup.NPC:
             # TODO - get behaviour
             behaviour = SkipTurnBehaviour
@@ -124,21 +127,7 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
     # translation to screen coordinates is handled by the camera
     components.append(Aesthetic(sprites.idle, sprites, x, y))
 
-    ## add skills to entity
-    # setup basic attack as a known skill  # N.B. must be after entity creation
-    basic_attack_name = "basic_attack"
-
-    basic_attack = {
-        "skill": BasicAttack,
-        "cooldown": 0
-    }
-    move = {
-        "skill": Move,
-        "cooldown": 0
-    }
-    known_skills[basic_attack_name] = basic_attack
-    known_skills["move"] = move
-    skill_order.insert(0, basic_attack_name)  # move not added to skill order
+    # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
 
     # create the entity
@@ -191,14 +180,7 @@ def create_projectile(creating_entity: EntityID, x: int, y: int, data: Projectil
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
-    # add move
-    move = {
-        "skill": Move,
-        "cooldown": 0
-    }
-    known_skills = {
-        "move": move
-    }
+    known_skills = [Move]
     add_component(entity, Knowledge(known_skills))
 
     logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
@@ -211,7 +193,7 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     Creates an instance of an Affliction provided the name
     """
     affliction_data = library.get_affliction_data(name)
-    return globals()[affliction_data.class_name](creator, target, duration)
+    return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
 def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpritesData:
@@ -672,7 +654,7 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
         try:
-            return knowledge.skills[skill_name]["skill"]
+            return knowledge.get_skill(skill_name)
         except KeyError:
             logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
 
@@ -804,10 +786,10 @@ def _tile_has_any_entity(tile: Tile) -> bool:
     """
     Check if the specified tile  has an entity on it
     """
-    return len(_get_entities_on_tile(tile)) > 0
+    return len(get_entities_on_tile(tile)) > 0
 
 
-def _get_entities_on_tile(tile: Tile) -> List[int]:
+def get_entities_on_tile(tile: Tile) -> List[int]:
     """
     Return a list of all the entities in that tile
     """
@@ -825,7 +807,7 @@ def _tile_has_other_entities(tile: Tile, active_entity: int) -> bool:
     """
     Check if the specified tile has other entities apart from the provided active entity
     """
-    entities_on_tile = _get_entities_on_tile(tile)
+    entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
     return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or\
            (len(entities_on_tile) > 1 and active_entity_is_on_tile)
@@ -835,7 +817,7 @@ def _tile_has_specific_entity(tile: Tile, active_entity: int) -> bool:
     """
     Check if the specified tile  has the specified entity on it
     """
-    return active_entity in _get_entities_on_tile(tile)
+    return active_entity in get_entities_on_tile(tile)
 
 
 def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
@@ -903,7 +885,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     can_afford = _can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
     knowledge = get_entitys_component(entity, Knowledge)
-    cooldown = knowledge.skills[skill_name]["cooldown"]
+    cooldown = knowledge.get_skill_cooldown(skill_name)
     if cooldown <= 0:
         not_on_cooldown = True
 
@@ -1020,6 +1002,19 @@ def apply_skill(skill_instance: Skill) -> bool:
     return False
 
 
+def set_skill_on_cooldown(skill_instance: Skill) -> bool:
+    """
+    Sets a skill on cooldown
+    """
+    user = skill_instance.user
+    name = skill_instance.name
+    knowledge = get_entitys_component(user, Knowledge)
+    if knowledge:
+        knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)
+        return True
+    return False
+
+
 def apply_affliction(affliction_instance: Affliction) -> bool:
     """
     Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met, False if not.
@@ -1094,15 +1089,8 @@ def learn_skill(entity: EntityID, skill_name: str) -> bool:
     if not entity_has_component(entity, Knowledge):
         add_component(entity, Knowledge())
     knowledge = get_entitys_component(entity, Knowledge)
-
-    if knowledge:
-        knowledge.skills[skill_name]["cooldown"] = library.get_skill_data(skill_name).cooldown
-        knowledge.skill_order.append(skill_name)
-        return True
-    else:
-        logging.warning(f"'{get_name(entity)}' has no knowledge to learn skill.")
-
-    return False
+    skill_class = getattr(skills, skill_name)
+    knowledge.learn_skill(skill_class)
 
 
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
@@ -1295,7 +1283,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         # get eligible interventions and their weightings. Need separate lists for random.choices
         eligible_interventions = []
         intervention_weightings = []
-        for intervention_name in knowledge.skills.keys():
+        for intervention_name in knowledge.get_skill_names():
             intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
