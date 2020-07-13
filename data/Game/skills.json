@@ -36,7 +36,7 @@
     "lunge": {
         "__dataclass__": "SkillData",
         "class_name": "Lunge",
-        "cooldown": 1,
+        "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
         "icon": "placeholder/lunge.png",
         "name": "lunge",
