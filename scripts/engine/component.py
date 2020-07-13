@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from typing import List, Dict, Optional
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
+    from scripts.nqp.actions.skills import Skill
     from scripts.engine.core.definitions import TraitSpritesData
     from scripts.nqp.actions.afflictions import Affliction
 
@@ -144,15 +145,40 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
-    def __init__(self, skills: Dict[str, Dict[str, Any]] = None, skill_order: List[str] = None):
+    def __init__(self, skills: List[Skill] = None, skill_order: List[str] = None):
         if skills is None:
             skills = {}
         if skill_order is None:
             skill_order = []
 
-        self.skill_order = skill_order  # list of skill names, to allow access by index
-        self.skills: Dict[str, Dict[str, Any]] = skills  # skill_name : {Skill, cooldown}
-            # FIXME - how is it str and Skill? Can't be both
+        self.skill_order = skill_order
+        self.skill_names = [skill.name for skill in skills]
+        self.skills: Dict[str, Skill] = {skill.name: skill for skill in skills}
+        self.cooldowns: Dict[str, int] = {skill.name: 0 for skill in skills}
+
+    def get_skill(self, name: str):
+        """
+        Returns a skill
+        """
+        return self.skills[name]
+
+    def get_skill_names(self):
+        """
+        Return a list of all the skill names
+        """
+        return self.skill_names
+
+    def get_skill_cooldown(self, name: str):
+        """
+        Returns the cooldown of a skill
+        """
+        return self.cooldowns[name]
+
+    def set_skill_cooldown(self, name: str, value: int):
+        """
+        Sets the cooldown of a skill
+        """
+        self.cooldowns[name] = value
 
 
 class Afflictions(RegisteredComponent):
