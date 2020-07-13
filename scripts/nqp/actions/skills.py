@@ -226,3 +226,74 @@ class BasicAttack(Skill):
     def get_animation(self, aesthetic: Aesthetic):
         # we can show animations depending on the direction with self.direction
         return aesthetic.sprites.attack
+
+
+@data_defined_skill
+class Lunge(Skill):
+    """
+    Lunge skill for an entity
+    """
+    name = "lunge"
+
+    def __init__(self, user: EntityID, _: Tile, direction):
+        """
+        Set the target tile as the current tile since we need to move
+        """
+        position = world.get_entitys_component(user, Position)
+        tile = world.get_tile((position.x, position.y))
+        super().__init__(user, tile, direction)
+
+    def build_effects(self, entity: EntityID) -> List[Effect]:
+        """
+        Build the skill effects
+        """
+
+        # chain the effects conditionally
+
+        cooldown_effect = self._build_cooldown_reduction_effect(entity=entity)
+        damage_effect = self._build_damage_effect(entity=entity, success_effects=[cooldown_effect])
+        move_effect = self._build_move_effect(entity=entity, success_effects=[damage_effect])
+
+        return [move_effect]
+
+    def _build_move_effect(self, entity: EntityID, success_effects: List[Effect]):
+        move_effect = MoveActorEffect(
+            origin=self.user,
+            target=entity,
+            success_effects=success_effects,
+            failure_effects=[],
+            direction=self.direction,
+            move_amount=2
+        )
+        return move_effect
+
+    def _build_damage_effect(self, entity: EntityID, success_effects: List[Effect]):
+        # todo: apply dmg to the correct entity
+        # todo: fix cooldowns
+        damage_effect = DamageEffect(
+            origin=self.user,
+            success_effects=success_effects,
+            failure_effects=[],
+            target=entity,
+            stat_to_target=PrimaryStat.VIGOUR,
+            accuracy=BASE_ACCURACY,
+            damage=BASE_DAMAGE,
+            damage_type=DamageType.MUNDANE,
+            mod_stat=PrimaryStat.CLOUT,
+            mod_amount=0.1
+        )
+        return damage_effect
+
+    def _build_cooldown_reduction_effect(self, entity: EntityID):
+        cooldown_effect = ReduceSkillCooldownEffect(
+            origin=self.user,
+            target=entity,
+            skill_name=self.name,
+            amount=2,
+            success_effects=[],
+            failure_effects=[]
+        )
+        return cooldown_effect
+
+    def get_animation(self, aesthetic: Aesthetic):
+        return aesthetic.sprites.attack
