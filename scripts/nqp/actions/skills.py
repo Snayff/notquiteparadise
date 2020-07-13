@@ -17,7 +17,7 @@ from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Tuple, List
+    from typing import Tuple, List, Optional
 
 
 def data_defined_skill(cls):
@@ -267,6 +267,7 @@ class Lunge(Skill):
         position = world.get_entitys_component(user, Position)
         tile = world.get_tile((position.x, position.y))
         super().__init__(user, tile, direction)
+        self.move_amount = 2
 
     def build_effects(self, entity: EntityID) -> List[Effect]:
         """
@@ -275,41 +276,70 @@ class Lunge(Skill):
 
         # chain the effects conditionally
 
-        cooldown_effect = self._build_cooldown_reduction_effect(entity=entity)
-        damage_effect = self._build_damage_effect(entity=entity, success_effects=[cooldown_effect])
-        move_effect = self._build_move_effect(entity=entity, success_effects=[damage_effect])
+        cooldown_effect = self._build_cooldown_reduction_effect(
+            entity=entity
+        )
+        damage_effect = self._build_damage_effect(
+            success_effects=[cooldown_effect]
+        )
+        move_effect = self._build_move_effect(
+            entity=entity,
+            success_effects=([damage_effect] if damage_effect else [])
+        )
 
         return [move_effect]
 
-    def _build_move_effect(self, entity: EntityID, success_effects: List[Effect]):
+    def _build_move_effect(self, entity: EntityID, success_effects: List[Effect]) -> MoveActorEffect:
+        """
+        Return the move effect for the lunge
+        """
         move_effect = MoveActorEffect(
             origin=self.user,
             target=entity,
             success_effects=success_effects,
             failure_effects=[],
             direction=self.direction,
-            move_amount=2
+            move_amount=self.move_amount
         )
         return move_effect
 
-    def _build_damage_effect(self, entity: EntityID, success_effects: List[Effect]):
-        # todo: apply dmg to the correct entity
-        # todo: fix cooldowns
-        damage_effect = DamageEffect(
-            origin=self.user,
-            success_effects=success_effects,
-            failure_effects=[],
-            target=entity,
-            stat_to_target=PrimaryStat.VIGOUR,
-            accuracy=BASE_ACCURACY,
-            damage=BASE_DAMAGE,
-            damage_type=DamageType.MUNDANE,
-            mod_stat=PrimaryStat.CLOUT,
-            mod_amount=0.1
-        )
+    def _build_damage_effect(self, success_effects: List[Effect]) -> Optional[DamageEffect]:
+        """
+        Return the damage effect for the lunge
+        """
+        target = self._find_target()
+        damage_effect = None
+        if target:
+            damage_effect = DamageEffect(
+                origin=self.user,
+                success_effects=success_effects,
+                failure_effects=[],
+                target=target,
+                stat_to_target=PrimaryStat.VIGOUR,
+                accuracy=BASE_ACCURACY,
+                damage=BASE_DAMAGE,
+                damage_type=DamageType.MUNDANE,
+                mod_stat=PrimaryStat.CLOUT,
+                mod_amount=0.1
+            )
         return damage_effect
 
-    def _build_cooldown_reduction_effect(self, entity: EntityID):
+    def _find_target(self) -> Optional[EntityID]:
+        """
+        Find the first entity that will be affected by the lunge
+        """
+        increment = (self.direction[0] * (self.move_amount + 1), self.direction[1] * (self.move_amount + 1))
+        target_tile_pos = (self.target_tile.x + increment[0], self.target_tile.y + increment[1])
+        entities = world.get_entities_on_tile(world.get_tile(target_tile_pos))
+
+        if not entities:
+            return None
+        return entities[0]
+
+    def _build_cooldown_reduction_effect(self, entity: EntityID) -> ReduceSkillCooldownEffect:
+        """
+        Returns an effect that executes the cooldown effect for the lunge
+        """
         cooldown_effect = ReduceSkillCooldownEffect(
             origin=self.user,
             target=entity,
