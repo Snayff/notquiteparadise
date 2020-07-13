@@ -86,7 +86,7 @@ def next_round(time_progressed: int):
         for skill_name in knowledge.get_skill_names():
             skill_cooldown = knowledge.get_skill_cooldown(skill_name)
             if skill_cooldown > 0:
-                knowledge.set_skill_cooldown(skill_cooldown - 1)
+                knowledge.set_skill_cooldown(skill_name, skill_cooldown - 1)
 
     ## affliction durations
     for entity, (afflictions, ) in world.get_components([Afflictions]):
