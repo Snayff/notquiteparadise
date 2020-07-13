@@ -43,6 +43,7 @@
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
+        "uses_projectile": false,
         "target_directions": [
             "down",
             "down_left",
