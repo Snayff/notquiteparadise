@@ -25,9 +25,8 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions import skills
+from scripts.nqp.actions import skills, afflictions
 from scripts.nqp.actions.skills import BasicAttack, Move, Skill
-from scripts.nqp.actions.afflictions import *
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -96,8 +95,8 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
 
     # get info from traits
     traits_paths = []  # for aesthetic
-    known_skills = {}  # for knowledge
-    skill_order = []  # for knowledge
+    known_skills = [BasicAttack, Move]  # for knowledge
+    skill_order = ['basic_attack']  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
@@ -107,12 +106,14 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill = getattr(skills, skill_name)
-                known_skills[skill_name] = skill
+                skill_class = getattr(skills, skill_name)
+                known_skills.append(skill_class)
                 skill_order.append(skill_name)
+
         if data.permanent_afflictions != ["none"]:
             for name in data.permanent_afflictions:
                 perm_afflictions_names.append(name)
+
         if data.group == TraitGroup.NPC:
             # TODO - get behaviour
             behaviour = SkipTurnBehaviour
@@ -124,21 +125,7 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
     # translation to screen coordinates is handled by the camera
     components.append(Aesthetic(sprites.idle, sprites, x, y))
 
-    ## add skills to entity
-    # setup basic attack as a known skill  # N.B. must be after entity creation
-    basic_attack_name = "basic_attack"
-
-    basic_attack = {
-        "skill": BasicAttack,
-        "cooldown": 0
-    }
-    move = {
-        "skill": Move,
-        "cooldown": 0
-    }
-    known_skills[basic_attack_name] = basic_attack
-    known_skills["move"] = move
-    skill_order.insert(0, basic_attack_name)  # move not added to skill order
+    # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
 
     # create the entity
@@ -672,7 +659,7 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
         try:
-            return knowledge.skills[skill_name]["skill"]
+            return knowledge.get_skill(skill_name)
         except KeyError:
             logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
 
@@ -903,7 +890,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     can_afford = _can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
     knowledge = get_entitys_component(entity, Knowledge)
-    cooldown = knowledge.skills[skill_name]["cooldown"]
+    cooldown = knowledge.get_skill_cooldown(skill_name)
     if cooldown <= 0:
         not_on_cooldown = True
 
@@ -1295,7 +1282,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         # get eligible interventions and their weightings. Need separate lists for random.choices
         eligible_interventions = []
         intervention_weightings = []
-        for intervention_name in knowledge.skills.keys():
+        for intervention_name in knowledge.get_skill_names():
             intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
