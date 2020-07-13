@@ -20,6 +20,14 @@ if TYPE_CHECKING:
     from typing import Tuple, List
 
 
+def data_defined_skill(cls):
+    """
+    Class decorator used for initializing skills so as to avoid repeating code.
+    """
+    cls.set_properties()
+    return cls
+
+
 class Skill(ABC):
     """
     A subclass of Skill represents a skill and holds all the data that is
@@ -87,6 +95,9 @@ class Skill(ABC):
             world.apply_skill(self)
 
     def _play_animation(self):
+        """
+        Play the provided animation on the entity's aesthetic component
+        """
         aesthetic = world.get_entitys_component(self.user, Aesthetic)
         animation = self.get_animation(aesthetic)
         if aesthetic and animation:
@@ -119,6 +130,32 @@ class Skill(ABC):
         Build the effects of this skill applying to a single entity. Must be overridden by subclass.
         """
         pass
+
+    @classmethod
+    def set_properties(cls):
+        """
+        Sets the class properties of the skill from a skill name
+        """
+        cls.data = library.get_skill_data(cls.name)
+        cls.required_tags = cls.data.required_tags
+        cls.description = cls.data.description
+        cls.icon_path = cls.data.icon
+        cls.resource_type = cls.data.resource_type
+        cls.resource_cost = cls.data.resource_cost
+        cls.time_cost = cls.data.time_cost
+        cls.base_cooldown = cls.data.cooldown
+        cls.targeting_method = cls.data.targeting_method
+        cls.target_directions = cls.data.target_directions
+        cls.shape = cls.data.shape
+        cls.shape_size = cls.data.shape_size
+        cls.uses_projectile = cls.data.uses_projectile
+        if cls.uses_projectile:
+            cls.projectile_speed = getattr(ProjectileSpeed, cls.data.projectile_speed.upper())
+        cls.projectile_sprite = cls.data.projectile_sprite
+        cls.travel_method = cls.data.travel_method
+        cls.range = cls.data.range
+        cls.terrain_collision = cls.data.terrain_collision
+        cls.expiry_type = cls.data.expiry_type
 
 
 class Move(Skill):
@@ -181,27 +218,12 @@ class Move(Skill):
         return None
 
 
+@data_defined_skill
 class BasicAttack(Skill):
-    data = library.get_skill_data("basic_attack")
-    name = data.name
-    required_tags = data.required_tags
-    description = data.description
-    icon_path = data.icon
-    resource_type = data.resource_type
-    resource_cost = data.resource_cost
-    time_cost = data.time_cost
-    base_cooldown = data.cooldown
-    targeting_method = data.targeting_method
-    target_directions = data.target_directions
-    shape = data.shape
-    shape_size = data.shape_size
-    uses_projectile = data.uses_projectile
-    projectile_speed = getattr(ProjectileSpeed, data.projectile_speed.upper())
-    projectile_sprite = data.projectile_sprite
-    travel_method = data.travel_method
-    range = data.range
-    terrain_collision = data.terrain_collision
-    expiry_type = data.expiry_type
+    """
+    Basic attack for an entity
+    """
+    name = "basic_attack"
 
     def build_effects(self, entity: EntityID) -> List[DamageEffect]:
         """
