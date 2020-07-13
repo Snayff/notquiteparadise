@@ -179,7 +179,7 @@ class Knowledge(RegisteredComponent):
         """
         Sets the cooldown of a skill
         """
-        self.cooldowns[name] = value
+        self.cooldowns[name] = max(0, value)
 
     def learn_skill(self, skill_class, add_to_order=True):
         """
