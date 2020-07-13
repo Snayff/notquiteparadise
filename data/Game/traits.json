@@ -122,7 +122,7 @@
         "name": "irascible dandy",
         "sight_range": 5,
         "known_skills": [
-            "none"
+            "lunge"
         ],
         "permanent_afflictions": [
             "none"
@@ -139,7 +139,7 @@
         },
         "vigour": -1
     },
-    	"training_dummy": {
+    "training_dummy": {
         "__dataclass__": "TraitData",
         "group":"npc",
         "behaviour_name": "skip",
