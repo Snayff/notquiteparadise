@@ -352,3 +352,29 @@ class Lunge(Skill):
 
     def get_animation(self, aesthetic: Aesthetic):
         return aesthetic.sprites.attack
+
+
+@data_defined_skill
+class TarAndFeather(Skill):
+    """
+    Lunge skill for an entity
+    """
+    name = "tar_and_feather"
+
+    def __init__(self, user: EntityID, _: Tile, direction):
+        """
+        Set the target tile as the current tile since we need to move
+        """
+        position = world.get_entitys_component(user, Position)
+        tile = world.get_tile((position.x, position.y))
+        super().__init__(user, tile, direction)
+        self.move_amount = 2
+
+    def build_effects(self, entity: EntityID) -> List[Effect]:
+        """
+        Build the skill effects
+        """
+        return []
+
+    def get_animation(self, aesthetic: Aesthetic):
+        return aesthetic.sprites.attack
