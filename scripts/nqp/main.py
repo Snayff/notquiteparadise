@@ -189,6 +189,7 @@ def initialise_game():
     # create an enemy
     # TODO - remove when enemy gen is in
     world.create_actor("dummy steve", "steve's desc", 1, 4, ["training_dummy"])
+    world.create_actor("dummy steve", "steve's desc", 1, 5, ["training_dummy"])
 
     # create a god
     world.create_god("the_small_gods")
