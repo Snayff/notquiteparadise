@@ -328,7 +328,8 @@ class Shape(SimpleNamespace):
     TARGET = ShapeType("target")  # single target
     SQUARE = ShapeType("square")
     CIRCLE = ShapeType("circle")
-    CROSS = ShapeType("cross")
+    CROSS = ShapeType("cross"),
+    CONE = ShapeType("cone")
 
 
 class TerrainCollision(SimpleNamespace):
