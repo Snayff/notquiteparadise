@@ -5,6 +5,7 @@ from typing import Any, List, TYPE_CHECKING, Tuple, Type
 
 import pygame
 import scipy
+import logging
 
 from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, Shape, ShapeType, TILE_SIZE
 
@@ -144,45 +145,74 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
-def get_coords_from_shape(shape: ShapeType, size: int) -> List[Tuple[int, int]]:
+def _calculate_square_shape(size: int) -> List[Tuple[int, int]]:
     """
-    Get a list of coords from a shape and size.
+    Calculate all the tiles in the range of a square
     """
-    list_of_coords = []
+    coord_list = []
+    width = size
+    height = size
 
+    for x in range(-width, width + 1):
+        for y in range(-height, height + 1):
+            coord_list.append((x, y))
+    return coord_list
+
+
+def _calculate_circle_shape(size: int) -> List[Tuple[int, int]]:
+    """
+    Calculate all the tiles in the range of a circle
+    """
+    coord_list = []
+    radius = (size + size + 1) / 2
+
+    for x in range(-size, size + 1):
+        for y in range(-size, size + 1):
+            if x * x + y * y < radius * radius:
+                coord_list.append((x, y))
+
+    return coord_list
+
+
+def _calculate_cross_shape(size: int) -> List[Tuple[int, int]]:
+    """
+    Calculate all the tiles in the range of a cross
+    """
+    coord_list = [(0, 0)]
+    x_coords = [-1, 1]
+
+    for x in x_coords:
+        for y in range(-size, size + 1):
+
+            # ignore 0's to ensure no duplication when running through the range
+            # the multiplication of x by y means they are always both 0 if y is
+            if y != 0:
+                coord_list.append((x * y, y))
+
+    return coord_list
+
+
+def get_coords_from_shape(shape: ShapeType, size: int, direction: Tuple[int, int]) -> List[Tuple[int, int]]:
+    """
+    Get a list of coordinates from a shape, size and direction.
+    """
     if shape == Shape.TARGET:
-        list_of_coords.append((0, 0))  # single target, centred on selection
+        return [(0, 0)]  # single target, centred on selection
 
     elif shape == Shape.SQUARE:
-        width = size
-        height = size
-
-        for x in range(-width, width + 1):
-            for y in range(-height, height + 1):
-                list_of_coords.append((x, y))
+        return _calculate_square_shape(size)
 
     elif shape == Shape.CIRCLE:
-        radius = (size + size + 1) / 2
-
-        for x in range(-size, size + 1):
-            for y in range(-size, size + 1):
-                if x * x + y * y < radius * radius:
-                    list_of_coords.append((x, y))
+        return _calculate_circle_shape(size)
 
     elif shape == Shape.CROSS:
-        x_coords = [-1, 1]
+        return _calculate_cross_shape(size)
 
-        for x in x_coords:
-            for y in range(-size, size + 1):
+    elif shape == Shape.CONE:
+        return _calculate_cone_shape(size, direction)
 
-                # ignore 0's to ensure no duplication when running through the range
-                # the multiplication of x by y means they are always both 0 if y is
-                if y != 0:
-                    list_of_coords.append((x * y, y))
-
-        list_of_coords.append((0, 0))  # add selection back in
-
-    return list_of_coords
+    logging.error(f'Unknown shape "{shape}" passed to get_coords_from_shape')
+    raise KeyError(f'Unknown shape "{shape}"')
 
 
 def value_to_member(value: Any, cls: Type[Any]) -> str:
