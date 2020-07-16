@@ -659,7 +659,11 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
             logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
 
 
-def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int):
+def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
+    position = get_entitys_component(entity, Position)
+    return position.x, position.y
+
+
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
     have Position, Resources and Combat Stats to be eligible.
