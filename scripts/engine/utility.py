@@ -192,6 +192,28 @@ def _calculate_cross_shape(size: int) -> List[Tuple[int, int]]:
     return coord_list
 
 
+def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[int, int]]:
+    # we need a direction since cones are not symmetric
+    coord_list = []
+    last_row = [(0, 0)]
+    # each size means 1 expansion of the cone
+    for iteration in range(size):
+        # use a set so we don't add the same coord multiple times
+        new_row = set()
+        for coord in last_row:
+            new_coord = (coord[0] + direction[0], coord[1] + direction[1])
+            new_row.add(new_coord)
+            # calculate the perpendiculars in both directions
+            perpendiculars = [(direction[1], direction[0]), (-direction[1], -direction[0])]
+            for perpendicular_direction in perpendiculars:
+                perpendicular = (coord[0] + perpendicular_direction[0], coord[1] + perpendicular_direction[1])
+                new_row.add(perpendicular)
+
+        coord_list += list(last_row)
+        last_row = new_row
+    return coord_list + list(last_row)
+
+
 def get_coords_from_shape(shape: ShapeType, size: int, direction: Tuple[int, int]) -> List[Tuple[int, int]]:
     """
     Get a list of coordinates from a shape, size and direction.
