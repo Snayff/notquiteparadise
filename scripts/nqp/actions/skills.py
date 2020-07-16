@@ -64,6 +64,7 @@ class Skill(ABC):
         self.user = user
         self.target_tile = target_tile
         self.direction = direction
+        self.projectile = None
 
     def use(self):
         """
@@ -93,7 +94,8 @@ class Skill(ABC):
                 expiry_type=self.expiry_type,
                 sprite=self.projectile_sprite
             )
-            world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
+            projectile = world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
+            self.projectile = projectile
         else:
             world.apply_skill(self)
 
