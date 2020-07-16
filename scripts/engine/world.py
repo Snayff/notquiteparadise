@@ -1192,19 +1192,12 @@ def judge_action(entity: EntityID, action_name: str):
                          f"opinion = {opinion.opinions[entity]}")
 
 
-def remove_affliction(entity: EntityID, affliction_name: str):
+def remove_affliction(entity: EntityID, affliction: Affliction):
     """
     Remove affliction from active list and undo any stat modification.
     """
     afflictions = get_entitys_component(entity, Afflictions)
-
-    if affliction in afflictions.active:
-        # if it is affect_stat remove the affect
-        if EffectType.AFFECT_STAT in affliction.identity_tags:
-            afflictions.stat_modifiers.pop(affliction.name)
-
-        # remove from active list
-        afflictions.active.remove(affliction)
+    afflictions.remove(affliction)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################
