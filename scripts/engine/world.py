@@ -664,6 +664,7 @@ def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
     return position.x, position.y
 
 
+def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int, shape_direction: Optional[Tuple[int, int]] = None):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
     have Position, Resources and Combat Stats to be eligible.
@@ -674,7 +675,7 @@ def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
     target_y = target_pos[1]
 
     # get affected tiles
-    coords = utility.get_coords_from_shape(shape, shape_size)
+    coords = utility.get_coords_from_shape(shape, shape_size, shape_direction)
     for coord in coords:
         affected_positions.append((coord[0] + target_x, coord[1] + target_y))
 
