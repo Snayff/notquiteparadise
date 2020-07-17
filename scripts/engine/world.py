@@ -659,7 +659,12 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
             logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
 
 
-def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int):
+def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
+    position = get_entitys_component(entity, Position)
+    return position.x, position.y
+
+
+def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int, shape_direction: Optional[Tuple[int, int]] = None):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
     have Position, Resources and Combat Stats to be eligible.
@@ -670,7 +675,7 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
     target_y = target_pos[1]
 
     # get affected tiles
-    coords = utility.get_coords_from_shape(shape, shape_size)
+    coords = utility.get_coords_from_shape(shape, shape_size, shape_direction)
     for coord in coords:
         affected_positions.append((coord[0] + target_x, coord[1] + target_y))
 
@@ -1192,19 +1197,12 @@ def judge_action(entity: EntityID, action_name: str):
                          f"opinion = {opinion.opinions[entity]}")
 
 
-def remove_affliction(entity: EntityID, affliction_name: str):
+def remove_affliction(entity: EntityID, affliction: Affliction):
     """
     Remove affliction from active list and undo any stat modification.
     """
     afflictions = get_entitys_component(entity, Afflictions)
-
-    if affliction in afflictions.active:
-        # if it is affect_stat remove the affect
-        if EffectType.AFFECT_STAT in affliction.identity_tags:
-            afflictions.stat_modifiers.pop(affliction.name)
-
-        # remove from active list
-        afflictions.active.remove(affliction)
+    afflictions.remove(affliction)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

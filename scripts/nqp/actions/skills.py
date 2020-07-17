@@ -12,7 +12,7 @@ from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_
     DirectionType, IMAGE_NOT_FOUND_PATH, PrimaryStat, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, \
     ProjectileSpeedType, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
     TargetingMethod, TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType
-from scripts.engine.effect import DamageEffect, Effect, MoveActorEffect, ReduceSkillCooldownEffect
+from scripts.engine.effect import DamageEffect, Effect, MoveActorEffect, ReduceSkillCooldownEffect, ApplyAfflictionEffect
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
@@ -64,6 +64,7 @@ class Skill(ABC):
         self.user = user
         self.target_tile = target_tile
         self.direction = direction
+        self.projectile = None
 
     def use(self):
         """
@@ -93,7 +94,8 @@ class Skill(ABC):
                 expiry_type=self.expiry_type,
                 sprite=self.projectile_sprite
             )
-            world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
+            projectile = world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
+            self.projectile = projectile
         else:
             world.apply_skill(self)
 
@@ -121,7 +123,7 @@ class Skill(ABC):
         entity_names = []
 
         for entity in world.get_affected_entities((self.target_tile.x, self.target_tile.y), self.shape,
-                                                  self.shape_size):
+                                                  self.shape_size, self.direction):
             yield entity, self.build_effects(entity)
             entity_names.append(world.get_name(entity))
 
@@ -349,6 +351,75 @@ class Lunge(Skill):
             failure_effects=[]
         )
         return cooldown_effect
+
+    def get_animation(self, aesthetic: Aesthetic):
+        return aesthetic.sprites.attack
+
+
+@data_defined_skill
+class TarAndFeather(Skill):
+    """
+    TarAndFeather skill for an entity
+    """
+    name = "tar_and_feather"
+
+    def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
+        super().__init__(user, target_tile, direction)
+        self.affliction_name = 'flaming'
+        self.affliction_duration = 5
+        self.reduced_modifier = 0.5
+        self.cone_size = 1
+
+    def build_effects(self, hit_entity: EntityID) -> List[Effect]:
+        """
+        Build the skill effects
+        """
+
+        # the cone should start where the hit occurred and in the direction of the projectile.
+        entity_position = world.get_entitys_position(hit_entity)
+        entities_in_cone = world.get_affected_entities(entity_position, Shape.CONE, self.cone_size, self.direction)
+        # we should also ignore the hit entity and the projectile from the extra effects
+        entities_in_cone = [x for x in entities_in_cone if x is not hit_entity and x is not self.projectile]
+
+        reduced_effects = []
+        for entity_in_cone in entities_in_cone:
+            reduced_effects += self._create_effects(target=entity_in_cone, modifier=self.reduced_modifier)
+            logging.warning(f"creating effects for {entity_in_cone}")
+
+        first_hit_effects = self._create_effects(target=hit_entity, success_effects=reduced_effects)
+
+        return first_hit_effects
+
+    def _create_effects(self, target: EntityID, success_effects: List[Effect] = None, modifier: float = 1.0):
+        damage_effect = self._build_damage_effect(target, success_effects or [], modifier)
+        flaming_effect = self._build_flaming_effect(target, modifier)
+        return [damage_effect, flaming_effect]
+
+    def _build_flaming_effect(self, entity: EntityID, modifier: float):
+        flaming_effect = ApplyAfflictionEffect(
+            origin=self.user,
+            target=entity,
+            affliction_name=self.affliction_name,
+            duration=int(self.affliction_duration * modifier),
+            success_effects=[],
+            failure_effects=[]
+        )
+        return flaming_effect
+
+    def _build_damage_effect(self, entity: EntityID, success_effects: List[Effect], modifier: float):
+        damage_effect = DamageEffect(
+            origin=self.user,
+            success_effects=success_effects,
+            failure_effects=[],
+            target=entity,
+            stat_to_target=PrimaryStat.VIGOUR,
+            accuracy=BASE_ACCURACY,
+            damage=int(BASE_DAMAGE * modifier),
+            damage_type=DamageType.MUNDANE,
+            mod_stat=PrimaryStat.CLOUT,
+            mod_amount=0.1
+        )
+        return damage_effect
 
     def get_animation(self, aesthetic: Aesthetic):
         return aesthetic.sprites.attack

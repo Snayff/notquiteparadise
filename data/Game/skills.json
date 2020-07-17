@@ -46,13 +46,9 @@
         "uses_projectile": false,
         "target_directions": [
             "down",
-            "down_left",
-            "down_right",
             "left",
             "right",
-            "up",
-            "up_left",
-            "up_right"
+            "up"
         ],
         "time_cost": 30,
         "required_tags": [
@@ -60,5 +56,35 @@
         ],
         "shape": "target",
         "shape_size": 1
+    },
+    "tar_and_feather": {
+        "__dataclass__": "SkillData",
+        "class_name": "TarAndFeather",
+        "cooldown": 1,
+        "description": "Launch a projectile that deals damage to enemies in the specified direction.",
+        "icon": "placeholder/lunge.png",
+        "name": "tar_and_feather",
+        "resource_cost": 15,
+        "resource_type": "stamina",
+        "targeting_method": "target",
+        "target_directions": [
+            "down",
+            "left",
+            "right",
+            "up"
+        ],
+        "time_cost": 30,
+        "required_tags": [
+            "no_blocking_tile"
+        ],
+        "shape": "target",
+        "shape_size": 1,
+        "uses_projectile": true,
+        "projectile_speed": "average",
+        "projectile_sprite": "assets/skills/placeholder/projectile.png",
+        "travel_method": "standard",
+        "range": 5,
+        "terrain_collision": "fizzle",
+        "expiry_type": "fizzle"
     }
 }

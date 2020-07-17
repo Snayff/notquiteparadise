@@ -4,7 +4,7 @@ from typing import Any, TYPE_CHECKING, Tuple
 
 from snecs import RegisteredComponent
 
-from scripts.engine.core.constants import PrimaryStatType
+from scripts.engine.core.constants import PrimaryStatType, EffectType
 
 if TYPE_CHECKING:
     import pygame
@@ -205,6 +205,15 @@ class Afflictions(RegisteredComponent):
 
     def add(self, affliction: Affliction):
         self.active.append(affliction)
+
+    def remove(self, affliction: Affliction):
+        if affliction in self.active:
+            # if it is affect_stat remove the affect
+            if EffectType.AFFECT_STAT in affliction.identity_tags:
+                self.stat_modifiers.pop(affliction.name)
+
+            # remove from active list
+            self.active.remove(affliction)
 
 
 class Aspect(RegisteredComponent):
