@@ -206,7 +206,7 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
             # calculate the perpendiculars in both directions
             perpendiculars = [(direction[1], direction[0]), (-direction[1], -direction[0])]
             for perpendicular_direction in perpendiculars:
-                perpendicular = (coord[0] + perpendicular_direction[0], coord[1] + perpendicular_direction[1])
+                perpendicular = (new_coord[0] + perpendicular_direction[0], new_coord[1] + perpendicular_direction[1])
                 new_row.add(perpendicular)
 
         coord_list += list(last_row)
