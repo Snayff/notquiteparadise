@@ -9,7 +9,7 @@ from scripts.engine.core.constants import PrimaryStatType, EffectType
 if TYPE_CHECKING:
     import pygame
     import tcod.map
-    from typing import List, Dict, Optional
+    from typing import List, Dict, Optional, Type
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
     from scripts.nqp.actions.skills import Skill
@@ -145,7 +145,7 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
-    def __init__(self, skills: List[Skill] = None, skill_order: List[str] = None):
+    def __init__(self, skills: List[Type[Skill]] = None, skill_order: List[str] = None):
         skills = skills or {}
         skill_order = skill_order or []
 
