@@ -1,9 +1,11 @@
 import pytest
-from scripts.engine.effect import TriggerAfflictionsEffect, ReduceSkillCooldownEffect, MoveActorEffect
+from tests.mocks import world_mock
 from scripts.engine import world
 from scripts.engine.core.constants import AfflictionTrigger
 from scripts.nqp.actions.afflictions import Affliction
-from scripts.engine.component import Afflictions
+from scripts.engine.component import Afflictions, Identity, Position, Knowledge
+from scripts.engine.effect import TriggerAfflictionsEffect, ReduceSkillCooldownEffect
+from scripts.nqp.actions.skills import Move
 
 
 class MockAffliction(Affliction):
@@ -69,15 +71,20 @@ class TestEffects:
         effect.evaluate()
 
         assert affliction_called == mock_affliction_movement
+
     def test_reduce_skill_cooldown_effect(self):
         """
         Test for the reduce skill cooldown effect
         """
-        pass
+        knowledge = Knowledge([Move])
+        knowledge.set_skill_cooldown('move', 15)
 
-    def test_move_effect(self):
-        """
-        Test for the reduce skill cooldown effect
-        """
-        pass
+        entity = TestEffects._create_default_entity()
+        world.add_component(entity, knowledge)
+
+        effect = ReduceSkillCooldownEffect(entity, entity, 'move', 5, [], [])
+        effect.evaluate()
+
+        assert knowledge.get_skill_cooldown('move') == 10
+
 
