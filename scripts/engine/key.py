@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import logging
 from typing import TYPE_CHECKING
 
 import pygame
@@ -8,6 +10,38 @@ from scripts.engine.core.constants import InputIntent, InputIntentType, EventTyp
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple
+
+_input_list = {}  # holds values from input config
+
+
+def load_input_list_from_config():
+    """
+    Load input.json and map values to pygame constants before storing in _input_list dict
+    """
+    with open('data/config/input.json') as file:
+        data = json.load(file)
+
+    # unpack input config
+    for key, values in data.items():
+        inputs = []
+        for value in values:
+            try:
+                # try to map the string to a pygame constant
+                pygame_constant = getattr(pygame, value)
+
+                # is the input already mapped to another intent?
+                if not any(pygame_constant in sublist for sublist in _input_list.values()):
+                    inputs.append(pygame_constant)
+                else:
+                    logging.warning(f"{value} already mapped to another intent in input.json. Not added to {key}")
+            except AttributeError:
+                logging.warning(f"{value} specified in input.json not found in pygame constants.")
+
+
+        _input_list[key] = inputs
+
+
+    logging.debug("Input config loaded.")
 
 
 def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntentType]:
@@ -52,25 +86,24 @@ def _check_directions(event: pygame.event):
     """
     Get directional input from the keyboard
     """
-    # TODO - refer to key mapping to enable key rebinding
 
     # handle key press events
     if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_UP or event.key == pygame.K_KP8 or event.key == pygame.K_k:
+        if event.key in _input_list["up"]:
             return InputIntent.UP
-        elif event.key == pygame.K_DOWN or event.key == pygame.K_KP2 or event.key == pygame.K_j:
+        elif event.key in _input_list["down"]:
             return InputIntent.DOWN
-        elif event.key == pygame.K_LEFT or event.key == pygame.K_KP4 or event.key == pygame.K_h:
+        elif event.key in _input_list["left"]:
             return InputIntent.LEFT
-        elif event.key == pygame.K_RIGHT or event.key == pygame.K_KP6 or event.key == pygame.K_l:
+        elif event.key in _input_list["right"]:
             return InputIntent.RIGHT
-        elif event.key == pygame.K_KP7 or event.key == pygame.K_y:
+        elif event.key in _input_list["up_left"]:
             return InputIntent.UP_LEFT
-        elif event.key == pygame.K_KP9 or event.key == pygame.K_u:
+        elif event.key in _input_list["up_right"]:
             return InputIntent.UP_RIGHT
-        elif event.key == pygame.K_KP1 or event.key == pygame.K_b:
+        elif event.key in _input_list["down_left"]:
             return InputIntent.DOWN_LEFT
-        elif event.key == pygame.K_KP3 or event.key == pygame.K_n:
+        elif event.key in _input_list["down_right"]:
             return InputIntent.DOWN_RIGHT
 
 
@@ -78,22 +111,24 @@ def _check_actions(event: pygame.event):
     """
     Get actions such as confirm or cancel, or skill usage.
     """
-    # TODO - refer to key mapping to enable key rebinding
+
     # handle key press events
     if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_1:
+        if event.key in _input_list["skill0"]:
             return InputIntent.SKILL0
-        elif event.key == pygame.K_2:
+        elif event.key in _input_list["skill1"]:
             return InputIntent.SKILL1
-        elif event.key == pygame.K_3:
+        elif event.key in _input_list["skill2"]:
             return InputIntent.SKILL2
-        elif event.key == pygame.K_4:
+        elif event.key in _input_list["skill3"]:
             return InputIntent.SKILL3
-        elif event.key == pygame.K_5:
+        elif event.key in _input_list["skill4"]:
             return InputIntent.SKILL4
-        elif event.key == pygame.K_RETURN:
+        elif event.key in _input_list["skill5"]:
+            return InputIntent.SKILL5
+        elif event.key in _input_list["confirm"]:
             return InputIntent.CONFIRM
-        elif event.key == pygame.K_ESCAPE:
+        elif event.key in _input_list["exit"]:
             return InputIntent.EXIT
 
 

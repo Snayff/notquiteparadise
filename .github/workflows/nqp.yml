@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.8]
 
     steps:
     # set up python
@@ -38,14 +38,6 @@ jobs:
         python -m pip install --upgrade poetry
         poetry install
     
-  style:
-    needs: build
-    runs-on: windows-latest
-    steps:
-    - name: Run style checker
-      run: |
-        black
-
   lint:
     needs: build
     runs-on: windows-latest
