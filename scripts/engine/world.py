@@ -10,7 +10,7 @@ import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, utility
-from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, IsActor, Traits, FOV, HasCombatStats, \
+from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, IsActor, Traits, FOV, HasCombatStats,\
     Identity, IsGod, IsPlayer, Knowledge, Opinion, Position, Resources, Tracked
 from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, DEFAULT_ENTITY_BLOCKS_SIGHT, \
     EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, PrimaryStat, \

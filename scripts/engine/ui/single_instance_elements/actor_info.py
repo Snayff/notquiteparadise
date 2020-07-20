@@ -18,8 +18,6 @@ class ActorInfo(UIWindow):
     """
     Full detail about an npc entity.
     """
-    # TODO - change to window
-    # TODO  - change state when selected
 
     def __init__(self, rect: pygame.Rect, manager: UIManager):
 
@@ -57,7 +55,7 @@ class ActorInfo(UIWindow):
         """
         pass
 
-    def process_event(self, event: pygame.event.Event) -> bool:
+    def process_event(self, event: pygame.event.Event):
         """
         Handles resizing & closing windows. Gives UI Windows access to pygame events. Derived
         windows should super() call this class if they implement their own process_event method.
@@ -223,6 +221,7 @@ class ActorInfo(UIWindow):
         """
         Create sections for the information about the tile
         """
+        # TODO - create a UIScrollingContainer to enclose the below elements
         sections = []
         current_y = 0
         current_text_block = ""
