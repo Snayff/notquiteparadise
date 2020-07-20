@@ -18,9 +18,8 @@ Provide a way for people to contribute updates, fix bugs, try out ideas, etc.
  personalisation.
 
 ## Coding Style Guide
-There are a number of conventions followed, including using the following tools:
+There are a number of conventions followed, including using the following tool:
 
-* [black] - a style formatter
 * [mypy] - python's static linte
 
 Below are the naming conventions followed in this project:
@@ -32,7 +31,6 @@ Below are the naming conventions followed in this project:
  includes "key" it may contain
  alphanumeric values only.
 
-[black]: https://github.com/psf/black
 [mypy]: http://mypy-lang.org/
 
 

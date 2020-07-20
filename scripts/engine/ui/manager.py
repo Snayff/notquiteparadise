@@ -141,11 +141,17 @@ class _UIManager:
         Initialise display settings.
         """
         pygame.display.set_caption("Not Quite Paradise")
-        # pygame.display.set_icon() # TODO - add window icon
+        pygame.display.set_icon(utility.get_image("assets/ui/nqp_icon.png"))
 
     def _load_fonts(self):
         self._gui.add_font_paths("barlow", "assets/fonts/Barlow-Light.otf")
         self.debug_font = Font().debug
+
+        fonts = [
+            {'name': 'barlow', 'point_size': 24, 'style': 'regular'}
+            ]
+
+        self._gui.preload_fonts(fonts)
 
     def _load_element_layout(self):
         # Message Log

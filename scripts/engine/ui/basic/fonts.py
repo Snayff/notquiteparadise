@@ -2,6 +2,7 @@ import pygame.freetype
 
 
 class Font:
+    # TODO - rebuild to be useful and to work with pg_gui.
     """
     Renderable font.
     """

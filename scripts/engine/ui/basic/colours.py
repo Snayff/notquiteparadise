@@ -1,5 +1,6 @@
 
 class Colour:
+    # TODO - entirely rebuild to be useful.
     """
     A Colour value; a tuple containing RGB values.
 

@@ -56,9 +56,6 @@ class Camera(UIPanel):
         self.is_overlay_visible = False
         self.overlay_directions: List[DirectionType] = []  # list of tuples
 
-        # grid info
-        self.selected_tile = None  # the tile in the grid currently being selected
-
         # complete base class init
         super().__init__(rect, LAYER_CAMERA, manager, element_id="camera")
 

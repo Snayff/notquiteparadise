@@ -2,6 +2,7 @@ from scripts.engine.ui.basic.colours import Colour
 
 
 class Palette:
+    # TODO - rebuild to be useful
     """
     A collection of Colours defined for specific purposes.
 

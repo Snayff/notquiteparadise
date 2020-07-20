@@ -65,11 +65,6 @@ class ActorInfo(UIWindow):
         NOTE: Copied from pygame_gui UIWindow to allow overwriting use of close button.
 
         """
-        consumed_event = False
-
-        if self.is_blocking and event.type == pygame.MOUSEBUTTONDOWN:
-            consumed_event = True
-
         if (self is not None and
                 event.type == pygame.MOUSEBUTTONDOWN and
                 event.button in [pygame.BUTTON_LEFT,
@@ -85,9 +80,6 @@ class ActorInfo(UIWindow):
                 self.resizing_mode_active = True
                 self.start_resize_point = scaled_mouse_pos
                 self.start_resize_rect = self.rect.copy()
-                consumed_event = True
-            elif self.hover_point(scaled_mouse_pos[0], scaled_mouse_pos[1]):
-                consumed_event = True
 
         if (self is not None and event.type == pygame.MOUSEBUTTONUP and
                 event.button == pygame.BUTTON_LEFT and self.resizing_mode_active):
