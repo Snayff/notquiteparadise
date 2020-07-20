@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.engine.core.constants import InputIntent, InputIntentType, EventType
+from scripts.engine.core.constants import (EventType, InputIntent,
+                                           InputIntentType)
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple
@@ -144,4 +145,3 @@ def _check_dev_actions(event: pygame.event):
             return InputIntent.REFRESH_DATA
         elif event.key == pygame.K_F2:
             return InputIntent.DEV_TOGGLE
-

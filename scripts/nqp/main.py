@@ -8,11 +8,13 @@ import pstats
 import sys
 import time
 import traceback
+
 import pygame
 import snecs
 from snecs.world import default_world
+
 from scripts.engine import chronicle, debug, key, state, world
-from scripts.engine.core.constants import GameState, UIElement, VERSION
+from scripts.engine.core.constants import VERSION, GameState, UIElement
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors
 

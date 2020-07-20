@@ -1,5 +1,7 @@
 import sys
+
 from tests.mocks import ui_mock
+
 
 def mock_methods(methods):
     module = sys.modules['scripts.engine.world']

@@ -3,21 +3,35 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-from typing import Any, List, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, cast
+from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
+                    cast)
+
 import pygame
 import snecs
 import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
+
 from scripts.engine import chronicle, debug, utility
-from scripts.engine.component import Aesthetic, Afflictions, Behaviour, Blocking, IsActor, Traits, FOV, HasCombatStats,\
-    Identity, IsGod, IsPlayer, Knowledge, Opinion, Position, Resources, Tracked
-from scripts.engine.core.constants import DEFAULT_SIGHT_RANGE, Direction, DirectionType, DEFAULT_ENTITY_BLOCKS_SIGHT, \
-    EffectType, FOVInfo, HitModifier, HitType, HitTypeType, HitValue, ICON_SIZE, INFINITE, MessageType, PrimaryStat, \
-    PrimaryStatType, \
-    ResourceType, \
-    SecondaryStatType, ShapeType, TILE_SIZE, TargetTag, TargetTagType, TraitGroup, TravelMethod, TravelMethodType
-from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData, ProjectileData
+from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
+                                      Blocking, HasCombatStats, Identity,
+                                      IsActor, IsGod, IsPlayer, Knowledge,
+                                      Opinion, Position, Resources, Tracked,
+                                      Traits)
+from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
+                                           DEFAULT_SIGHT_RANGE, ICON_SIZE,
+                                           INFINITE, TILE_SIZE, Direction,
+                                           DirectionType, EffectType, FOVInfo,
+                                           HitModifier, HitType, HitTypeType,
+                                           HitValue, MessageType, PrimaryStat,
+                                           PrimaryStatType, ResourceType,
+                                           SecondaryStatType, ShapeType,
+                                           TargetTag, TargetTagType,
+                                           TraitGroup, TravelMethod,
+                                           TravelMethodType)
+from scripts.engine.core.definitions import (ProjectileData,
+                                             TraitSpritePathsData,
+                                             TraitSpritesData)
 from scripts.engine.core.store import store
 from scripts.engine.library import library
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
@@ -25,7 +39,7 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions import skills, afflictions
+from scripts.nqp.actions import afflictions, skills
 from scripts.nqp.actions.afflictions import Affliction
 from scripts.nqp.actions.skills import BasicAttack, Move, Skill
 

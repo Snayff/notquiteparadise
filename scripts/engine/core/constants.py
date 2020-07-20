@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import pygame
 from types import SimpleNamespace
 from typing import NewType, Tuple
+
+import pygame
 
 ######################## GENERAL CONSTANTS ######################################
 # TODO - segregate to relevant sections and modules

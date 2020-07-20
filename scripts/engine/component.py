@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Any, Tuple
 
 from snecs import RegisteredComponent
 
-from scripts.engine.core.constants import PrimaryStatType, EffectType
+from scripts.engine.core.constants import EffectType, PrimaryStatType
 
 if TYPE_CHECKING:
     import pygame

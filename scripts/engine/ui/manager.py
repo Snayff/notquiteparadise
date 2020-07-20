@@ -2,24 +2,28 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+
 import pygame
 from pygame_gui import UIManager
+from pygame_gui.core import UIElement as pygame_gui_element
 from snecs.typedefs import EntityID
+
 from scripts.engine import debug, utility
-from scripts.engine.core.constants import Direction, GAP_SIZE, MAX_SKILLS, MessageType, MessageTypeType, SKILL_SIZE, \
-    UIElement, UIElementType, VisualInfo
+from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_SIZE,
+                                           Direction, MessageType,
+                                           MessageTypeType, UIElement,
+                                           UIElementType, VisualInfo)
 from scripts.engine.library import library
 from scripts.engine.ui.basic.fonts import Font
+from scripts.engine.ui.multi_instance_elements.screen_message import \
+    ScreenMessage
+from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
 from scripts.engine.ui.single_instance_elements.camera import Camera
 from scripts.engine.ui.single_instance_elements.data_editor import DataEditor
-from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
 from scripts.engine.ui.single_instance_elements.message_log import MessageLog
-from scripts.engine.ui.multi_instance_elements.screen_message import ScreenMessage
 from scripts.engine.ui.single_instance_elements.skill_bar import SkillBar
 from scripts.engine.ui.single_instance_elements.tile_info import TileInfo
 from scripts.engine.world_objects.tile import Tile
-from pygame_gui.core import UIElement as pygame_gui_element
-
 
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple

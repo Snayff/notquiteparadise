@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import world
 from scripts.engine.core.constants import PrimaryStat, SecondaryStat
-
 
 if TYPE_CHECKING:
     pass

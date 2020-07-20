@@ -1,17 +1,19 @@
 from __future__ import annotations
 
-from typing import Optional, TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Optional, Type
 
+import pygame
 from pygame_gui import UI_WINDOW_CLOSE
 from snecs.typedefs import EntityID
-import pygame
-from scripts.engine import debug, state, world, key
+
+from scripts.engine import debug, key, state, world
 from scripts.engine.component import IsActor, Knowledge, Position
-from scripts.engine.core.constants import Direction, DirectionType, GameState, GameStateType, InputIntent, \
-    InputIntentType, TargetingMethod, UIElement, EventType
+from scripts.engine.core.constants import (
+    Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
+    InputIntentType, TargetingMethod, UIElement)
 from scripts.engine.library import library
-from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
+from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions.skills import Move, Skill
 from scripts.nqp.processors import ai_processors

@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import logging
 import math
-from typing import Any, List, TYPE_CHECKING, Tuple, Type
+from typing import TYPE_CHECKING, Any, List, Tuple, Type
 
 import pygame
 import scipy
-import logging
 
-from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, Shape, ShapeType, TILE_SIZE
+from scripts.engine.core.constants import (IMAGE_NOT_FOUND_PATH, TILE_SIZE,
+                                           Shape, ShapeType)
 
 if TYPE_CHECKING:
     from typing import Tuple

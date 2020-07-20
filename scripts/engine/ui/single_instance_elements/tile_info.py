@@ -1,14 +1,18 @@
 from __future__ import annotations
+
 import logging
-import pygame
 from typing import List, Tuple
+
+import pygame
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement
 from pygame_gui.elements import UIImage, UIPanel, UITextBox
-from scripts.engine import  world
-from scripts.engine.component import Aesthetic, Aspect, Identity, Position, Resources, Traits
-from scripts.engine.core.constants import GAP_SIZE, ICON_IN_TEXT_SIZE, LAYER_BASE_UI
 
+from scripts.engine import world
+from scripts.engine.component import (Aesthetic, Aspect, Identity, Position,
+                                      Resources, Traits)
+from scripts.engine.core.constants import (GAP_SIZE, ICON_IN_TEXT_SIZE,
+                                           LAYER_BASE_UI)
 
 
 class TileInfo(UIPanel):

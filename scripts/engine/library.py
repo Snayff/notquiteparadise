@@ -5,10 +5,11 @@ import logging
 import os
 from typing import TYPE_CHECKING
 
-from scripts.engine.core.constants import EffectTypeType, PrimaryStatType, SecondaryStatType
-from scripts.engine.core.definitions import AfflictionData, AspectData, BasePrimaryStatData, BaseSecondaryStatData, \
-    TraitData, \
-    EffectData, SkillData
+from scripts.engine.core.constants import (EffectTypeType, PrimaryStatType,
+                                           SecondaryStatType)
+from scripts.engine.core.definitions import (
+    AfflictionData, AspectData, BasePrimaryStatData, BaseSecondaryStatData,
+    EffectData, SkillData, TraitData)
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:

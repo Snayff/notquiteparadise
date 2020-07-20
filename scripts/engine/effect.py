@@ -7,8 +7,13 @@ from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, Position, Resources, Knowledge
-from scripts.engine.core.constants import DamageTypeType, Direction, DirectionType, PrimaryStatType, TargetTag, AfflictionTriggerType, AfflictionTrigger
+from scripts.engine.component import (Aesthetic, Afflictions, Blocking,
+                                      Knowledge, Position, Resources)
+from scripts.engine.core.constants import (AfflictionTrigger,
+                                           AfflictionTriggerType,
+                                           DamageTypeType, Direction,
+                                           DirectionType, PrimaryStatType,
+                                           TargetTag)
 
 if TYPE_CHECKING:
     from typing import Optional, List
@@ -332,4 +337,3 @@ class KillEffect(Effect):
         """
         logging.debug("Evaluating Kill Effect...")
         logging.warning("-> effect not implemented.")
-

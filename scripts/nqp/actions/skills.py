@@ -2,17 +2,29 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Iterator, TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterator
 
 from snecs.typedefs import EntityID
 
 from scripts.engine import world
-from scripts.engine.component import Position, Aesthetic
-from scripts.engine.core.constants import BASE_ACCURACY, BASE_DAMAGE, BASE_MOVE_COST, DamageType, Direction, \
-    DirectionType, IMAGE_NOT_FOUND_PATH, PrimaryStat, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, \
-    ProjectileSpeedType, Resource, ResourceType, Shape, ShapeType, TargetTag, TargetTagType, \
-    TargetingMethod, TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType
-from scripts.engine.effect import DamageEffect, Effect, MoveActorEffect, ReduceSkillCooldownEffect, ApplyAfflictionEffect
+from scripts.engine.component import Aesthetic, Position
+from scripts.engine.core.constants import (BASE_ACCURACY, BASE_DAMAGE,
+                                           BASE_MOVE_COST,
+                                           IMAGE_NOT_FOUND_PATH, DamageType,
+                                           Direction, DirectionType,
+                                           PrimaryStat, ProjectileExpiry,
+                                           ProjectileExpiryType,
+                                           ProjectileSpeed,
+                                           ProjectileSpeedType, Resource,
+                                           ResourceType, Shape, ShapeType,
+                                           TargetingMethod,
+                                           TargetingMethodType, TargetTag,
+                                           TargetTagType, TerrainCollision,
+                                           TerrainCollisionType, TravelMethod,
+                                           TravelMethodType)
+from scripts.engine.effect import (
+    ApplyAfflictionEffect, DamageEffect, Effect, MoveActorEffect,
+    ReduceSkillCooldownEffect)
 from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 

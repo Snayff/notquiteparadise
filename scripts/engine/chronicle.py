@@ -210,5 +210,3 @@ def set_time_of_last_turn(time: int):
     Set the time of the last turn
     """
     store.time_of_last_turn = time
-
-

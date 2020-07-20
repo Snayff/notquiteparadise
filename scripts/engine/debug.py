@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from snecs import Component
 from snecs.typedefs import EntityID

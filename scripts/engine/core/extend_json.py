@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import json
-from typing import Dict, TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Dict, Type
 
 if TYPE_CHECKING:
     pass
@@ -53,5 +53,3 @@ class ExtendedJsonEncoder(json.JSONEncoder):
         elif type(obj) in JSON_TYPES:
             return obj
         super(ExtendedJsonEncoder, self).default(obj)
-
-

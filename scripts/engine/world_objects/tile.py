@@ -29,6 +29,3 @@ class Tile:
         # TODO - implement following members
         # self.is_lit  # currently in range of a light source
         # self.seen_by_player  # whether the player has seen the tile before
-
-
-

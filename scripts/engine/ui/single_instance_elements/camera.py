@@ -1,8 +1,8 @@
 import logging
 from typing import Iterable, List, Tuple, cast
 
-import pygame_gui
 import pygame
+import pygame_gui
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
@@ -12,8 +12,10 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, IsActor, Position
-from scripts.engine.core.constants import DirectionType, LAYER_CAMERA, TILE_SIZE, EventType, UIElement
-from scripts.engine.utility import clamp, convert_tile_string, is_coordinate_in_bounds
+from scripts.engine.core.constants import (LAYER_CAMERA, TILE_SIZE,
+                                           DirectionType, EventType, UIElement)
+from scripts.engine.utility import (clamp, convert_tile_string,
+                                    is_coordinate_in_bounds)
 from scripts.engine.world_objects.tile import Tile
 
 
@@ -445,4 +447,3 @@ class Camera(UIPanel):
         y_in_camera_edge = is_coordinate_in_bounds(coordinate=player_y, bounds=y_bounds, edge=self.edge_size)
 
         return not x_in_camera_edge or not y_in_camera_edge
-

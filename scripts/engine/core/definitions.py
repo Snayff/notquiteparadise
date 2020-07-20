@@ -1,16 +1,27 @@
 from __future__ import annotations
 
-import pygame
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, Optional
+
+import pygame
 from snecs.typedefs import EntityID
-from scripts.engine.core.constants import AfflictionCategoryType, TRAIT_RENDER_ORDER, TraitGroup, DamageTypeType, \
-    Direction, \
-    DirectionType, \
-    EffectType, \
-    EffectTypeType, PrimaryStatType, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, ProjectileSpeedType, \
-    Resource, ResourceType, SecondaryStatType, Shape, ShapeType, TargetTag, TargetTagType, TargetingMethod, \
-    TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType, AfflictionTriggerType
+
+from scripts.engine.core.constants import (TRAIT_RENDER_ORDER,
+                                           AfflictionCategoryType,
+                                           AfflictionTriggerType,
+                                           DamageTypeType, Direction,
+                                           DirectionType, EffectType,
+                                           EffectTypeType, PrimaryStatType,
+                                           ProjectileExpiry,
+                                           ProjectileExpiryType,
+                                           ProjectileSpeed,
+                                           ProjectileSpeedType, Resource,
+                                           ResourceType, SecondaryStatType,
+                                           Shape, ShapeType, TargetingMethod,
+                                           TargetingMethodType, TargetTag,
+                                           TargetTagType, TerrainCollision,
+                                           TerrainCollisionType, TraitGroup,
+                                           TravelMethod, TravelMethodType)
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
