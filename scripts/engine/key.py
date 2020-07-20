@@ -17,7 +17,7 @@ _input_list = {}  # holds values from input config
 def load_input_list_from_config():
     """
     Load input.json and map values to pygame constants before storing in _input_list dict
-    -"""
+    """
     with open('data/config/input.json') as file:
         data = json.load(file)
 
@@ -26,10 +26,20 @@ def load_input_list_from_config():
         inputs = []
         for value in values:
             try:
-                inputs.append(getattr(pygame, value))
+                # try to map the string to a pygame constant
+                pygame_constant = getattr(pygame, value)
+
+                # is the input already mapped to another intent?
+                if not any(pygame_constant in sublist for sublist in _input_list.values()):
+                    inputs.append(pygame_constant)
+                else:
+                    logging.warning(f"{value} already mapped to another intent in input.json. Not added to {key}")
             except AttributeError:
                 logging.warning(f"{value} specified in input.json not found in pygame constants.")
+
+
         _input_list[key] = inputs
+
 
     logging.debug("Input config loaded.")
 
