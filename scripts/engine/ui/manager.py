@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
-
 import pygame
+from typing import TYPE_CHECKING
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement as pygame_gui_element
 from snecs.typedefs import EntityID
-
 from scripts.engine import debug, utility
 from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_SIZE,
                                            Direction, MessageType,

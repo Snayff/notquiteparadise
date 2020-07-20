@@ -5,7 +5,6 @@ import logging
 import random
 from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
                     cast)
-
 import pygame
 import snecs
 import tcod.map
