@@ -213,6 +213,9 @@ def initialise_game():
         aesthetic.target_draw_x = aesthetic.draw_x
         aesthetic.target_draw_y = aesthetic.draw_y
 
+    # init controls
+    key.load_input_list_from_config()
+
     # loading finished, give player control
     state.set_new(GameState.GAMEMAP)
 
