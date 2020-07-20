@@ -285,7 +285,7 @@ class _UIManager:
         else:
             logging.warning(f"Tried to set player tile in Camera but key not found. Is it init`d?")
 
-    def world_to_screen_position(self, pos: Tuple[int, int]):
+    def world_to_draw_position(self, pos: Tuple[int, int]):
         """
         Convert from the world_objects position to the screen position. 0, 0 if camera not init'd.
         """
@@ -294,7 +294,7 @@ class _UIManager:
 
         # if camera has been init'd
         if camera:
-            return camera.world_to_screen_position(pos)
+            return camera.world_to_draw_position(pos)
         logging.warning("Tried to get screen position but camera not init`d. Likely to draw in wrong place, "
                         "if it draws at all.")
         return 0, 0

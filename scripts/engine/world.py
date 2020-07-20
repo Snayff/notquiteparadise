@@ -292,7 +292,7 @@ def get_gamemap() -> GameMap:
 
 def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     """
-    Get the tile at the specified location. Use tile_x and tile_y. Raises exception if out of bounds or doesnt exist.
+    Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.
     """
     gamemap = get_gamemap()
     x = tile_pos[0]
@@ -316,14 +316,14 @@ def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List
     tiles = []
 
     for coord in coords:
-        tile_x = coord[0] + start_x
-        tile_y = coord[1] + start_y
+        x = coord[0] + start_x
+        y = coord[1] + start_y
 
         # make sure it is in bounds
-        tile = get_tile((tile_x, tile_y))
+        tile = get_tile((x, y))
         if tile:
             if _is_tile_in_bounds(tile):
-                tiles.append(gamemap.tiles[tile_x][tile_y])
+                tiles.append(gamemap.tiles[x][y])
 
     return tiles
 

@@ -226,7 +226,7 @@ class Camera(UIPanel):
 
         # get the updated position of the tile
         col, row = self.get_tile_col_row(element0.object_ids[-1])
-        updated_pos = self._grid_to_screen_position((col + dx, row + dy))
+        updated_pos = self._grid_to_draw_position((col + dx, row + dy))
 
         # update only if the current and updated position don't match
         should_update = updated_pos != (x, y)
@@ -239,7 +239,7 @@ class Camera(UIPanel):
 
                 # get the updated position
                 col, row = self.get_tile_col_row(element.object_ids[-1])
-                updated_pos = self._grid_to_screen_position((col + dx, row + dy))
+                updated_pos = self._grid_to_draw_position((col + dx, row + dy))
 
                 # set updated position
                 element.set_relative_position(updated_pos)
@@ -257,10 +257,10 @@ class Camera(UIPanel):
         # for all the tile positions provided
         for col, row in tile_positions:
             # find the screen position
-            screen_x, screen_y = self._grid_to_screen_position((col, row))
+            draw_x, draw_y = self._grid_to_draw_position((col, row))
 
             # create a rect
-            tile_rect = Rect(screen_x, screen_y, TILE_SIZE, TILE_SIZE)
+            tile_rect = Rect(draw_x, draw_y, TILE_SIZE, TILE_SIZE)
 
             # draw a button
             UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
@@ -270,7 +270,7 @@ class Camera(UIPanel):
         """
         Draw a surface on the surface map. The function handles coordinate transformation to the screen
         """
-        pos = self.world_to_screen_position(col_row)
+        pos = self.world_to_draw_position(col_row)
         map_surface.blit(sprite, pos)
 
     ############## SET #########################
@@ -350,23 +350,23 @@ class Camera(UIPanel):
         # reset animation time
         self.current_sprite_duration = 0
 
-    def world_to_screen_position(self, pos: Tuple[float, float]):
+    def world_to_draw_position(self, pos: Tuple[float, float]):
         """
         Convert from the world_objects position to the screen position
         """
-        screen_x = int((pos[0] - self.start_tile_col) * TILE_SIZE)
-        screen_y = int((pos[1] - self.start_tile_row) * TILE_SIZE)
+        draw_x = int((pos[0] - self.start_tile_col) * TILE_SIZE)
+        draw_y = int((pos[1] - self.start_tile_row) * TILE_SIZE)
 
-        return screen_x, screen_y
+        return draw_x, draw_y
 
-    def _grid_to_screen_position(self, pos: Tuple[float, float]) -> Tuple[int, int]:
+    def _grid_to_draw_position(self, pos: Tuple[float, float]) -> Tuple[int, int]:
         """
         Converts grid positions to screen positions
         """
         x, y = pos
-        screen_x = int(x * TILE_SIZE)
-        screen_y = int(y * TILE_SIZE)
-        return screen_x, screen_y
+        draw_x = int(x * TILE_SIZE)
+        draw_y = int(y * TILE_SIZE)
+        return draw_x, draw_y
 
     ############# QUERIES #########################
 
