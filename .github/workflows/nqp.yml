@@ -25,25 +25,26 @@ jobs:
 
     - name: Install dependencies
       run: |
-        py -3.8 -m pip install --upgrade poetry
-        py -3.8 -m poetry install
+        python -m pip install --upgrade poetry
+        python -m poetry install
         
     - name: test
       run: |
-        py -3.8 -m pip list
+        python -V
+        python -m pip list
     
     - name: Run style checker
       run: |
-        py -3.8 -m black
+        python -m black
 
     - name: Run static linter
       # stop the build if there are Python syntax errors or undefined names
       run: |
-        py -3.8 -m mypy scripts/
+        python -m mypy scripts/
 
     - name: Test with pytest
       run: |
-        py -3.8 -m pytest
+        python -m pytest
       
   docs:
     runs-on: ubuntu-latest
