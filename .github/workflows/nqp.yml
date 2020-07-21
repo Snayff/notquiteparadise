@@ -22,26 +22,41 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+        
+    - name: Cache dependencies
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-python-deps
+      with:
+        path: .github/cache/
+        key: ${{ runner.os }}-build-${{ env.cache-name }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade poetry
         poetry install --no-root
-        
-    - name: test
-      run: |
-        poetry run python -V
-        poetry run python -m pip list
-    
+
+  style:
+    runs-on: windows-latest
+    steps:
     - name: Run style checker
       run: |
-        poetry run python -m black
+        poetry run python -m black scripts/
 
+  lint:
+    runs-on: windows-latest
+    steps:
     - name: Run static linter
-      # stop the build if there are Python syntax errors or undefined names
       run: |
         poetry run python -m mypy scripts/
 
+  test:
+    runs-on: windows-latest
+    steps:
     - name: Test with pytest
       run: |
         poetry run python -m pytest
