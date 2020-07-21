@@ -14,9 +14,19 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        python-version: [3.8]
-        command: ['', 'poetry run python -m black scripts/', 'poetry run python -m mypy scripts/', 'poetry run python -m pytest']
-        name: ['build', 'style', 'lint', 'test']
+        include:
+        - name: build
+          command: python -V
+          python-version: 3.8
+        - name: style
+          command: poetry run python -m black scripts/
+          python-version: 3.8
+        - name: lint
+          command: poetry run python -m mypy scripts/
+          python-version: 3.8
+        - name: test
+          command: poetry run python -m pytest
+          python-version: 3.8
 
     steps:
     - uses: actions/checkout@v2
