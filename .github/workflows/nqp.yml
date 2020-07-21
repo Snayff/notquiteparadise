@@ -65,15 +65,17 @@ jobs:
           restore-keys: ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
+          apt-get install python-sphinx
           python -m pip install sphinx-autodoc-typehints
       - name: build-docs
-        uses: ammaraskar/sphinx-action@0.4
-        with:
-            docs-folder: "docs/"
+        run: |
+          cd docs
+          make html
+          make clean
           
       - name: deploy-docs
         uses: JamesIves/github-pages-deploy-action@3.5.7
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: docs
+          FOLDER: docs/_build
