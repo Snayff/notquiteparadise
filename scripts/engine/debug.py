@@ -62,7 +62,6 @@ def set_fps_visibility(is_visible: bool):
     """
     Set whether the FPS is visible
     """
-    # TODO - this needs to be called from somewhere
     _debugger.fps_visible = is_visible
 
 

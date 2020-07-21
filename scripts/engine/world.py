@@ -83,8 +83,6 @@ def create_god(god_name: str) -> EntityID:
     god.append((Resources(INFINITE, INFINITE)))
     entity = create_entity(god)
 
-    # TODO - readd interventions
-
     logging.debug(f"God, '{data.name}', created.")
 
     return entity
@@ -103,7 +101,7 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
         components.append(IsPlayer())
     components.append(IsActor())
     components.append(Identity(name, description))
-    components.append(Position(x, y))  # TODO - check position not blocked before spawning
+    components.append(Position(x, y))  # FIXME - check position not blocked before spawning
     components.append(HasCombatStats())
     components.append(Blocking(True, DEFAULT_ENTITY_BLOCKS_SIGHT))
     components.append(Traits(trait_names))
@@ -133,7 +131,7 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
                 perm_afflictions_names.append(name)
 
         if data.group == TraitGroup.NPC:
-            # TODO - get behaviour
+            # FIXME - get behaviour
             behaviour = SkipTurnBehaviour
 
     # add aesthetic
@@ -189,7 +187,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
+    projectile.append(Position(x, y))  # FIXME - check position not blocked before spawning
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
 
@@ -358,7 +356,7 @@ def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     """
     Get direction from an entity towards another entity`s location. Respects blocked tiles.
     """
-    # TODO - update to use EC
+    # FIXME - update to use EC
     pass
     #
     # log_string = f"{start_entity.name} is looking for a direct path to {target_entity.name}."
@@ -397,13 +395,12 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     Returns:
 
     """
-    # TODO - update to use EC
+    # FIXME - update to use EC
     pass
     #
     # max_path_length = 25
     # gamemap = _manager.gamemap
     # entities = []
-    # # TODO - update to use ECS
     # for entity, (pos, blocking) in _manager.get_entitys_components(Position, Blocking):
     #     entities.append(entity)
     # entity_to_move = start_entity
@@ -1096,7 +1093,6 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
     """
     Add time_spent to the entity's total time spent.
     """
-    # TODO - modify by time modifier stat
     tracked = get_entitys_component(entity, Tracked)
     if tracked:
         tracked.time_spent += time_spent
@@ -1129,7 +1125,6 @@ def kill_entity(entity: EntityID):
             turn_queue.pop(entity)
 
     else:
-        # TODO add player death
         # placeholder for player death
         ui.log_message(MessageType.LOG, "I should have died just then.")
 
@@ -1172,9 +1167,6 @@ def judge_action(entity: EntityID, action_name: str):
     Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
     the tags in that skill.
     """
-    # TODO - assign tags to replace actions previously used
-    # TODO - loop through tags on the skill and see if the god cares about the tags
-
     for god, (is_god, opinion, identity) in get_components([IsGod, Opinion, Identity]):
         # cast for typing
         opinion = cast(Opinion, opinion)
@@ -1250,9 +1242,8 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     """
     logging.debug(f"Get to hit scores...")
 
+    # roll for the random value to add to the to_hit score.
     roll = random.randint(-3, 3)
-    # TODO - move hit variance to somewhere more easily configurable
-    # TODO - use tcod random (so as to use a seed)
 
     modified_to_hit_score = attacker_accuracy + skill_accuracy + roll
 
@@ -1272,7 +1263,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
     """
     chosen_interventions = []
     desire_to_intervene = 10
-    desire_to_do_nothing = 75  # weighting for doing nothing # TODO - move magic number to config
+    desire_to_do_nothing = 75  # weighting for doing nothing
 
     for entity, (is_god, opinion, identity, knowledge) in get_components([IsGod, Opinion, Identity, Knowledge]):
         # cast for typing
