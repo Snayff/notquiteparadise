@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 from typing import NewType, Tuple
-
 import pygame
 
 ######################## GENERAL CONSTANTS ######################################
@@ -90,6 +89,7 @@ class FOVInfo(SimpleNamespace):
     """
     Constant info about the FOV settings
     """
+    # TODO - this should be somewhere else; where do we use FOV?
     LIGHT_WALLS = True
     FOV_ALGORITHM = 0
 
@@ -139,7 +139,7 @@ class HitValue(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
-    # TODO - externalise the values
+    # TODO - externalise the values for config
     GRAZE = HitValueType(0)
     HIT = HitValueType(5)
     CRIT = HitValueType(20)
@@ -149,7 +149,7 @@ class HitModifier(SimpleNamespace):
     """
     The modifier for each hit type
     """
-    # TODO - externalise the values
+    # TODO - externalise the values for config
     GRAZE = HitModifierType(0.6)
     HIT = HitModifierType(1)
     CRIT = HitModifierType(1.4)
@@ -361,6 +361,7 @@ class ProjectileSpeed(SimpleNamespace):
     """
     The speed at which a projectile travels; how much time to move a tile.
     """
+    # TODO - as this is used externally it needs to map from a string. Set that up.
     SLOW = ProjectileSpeedType(int(BASE_MOVE_COST / 2))
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))

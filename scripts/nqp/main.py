@@ -102,7 +102,7 @@ def initialise_game():
     world.create_gamemap(map_width, map_height)
 
     # init the player
-    player = world.create_actor("player", "a desc", 1, 2, ["shoom", "soft_tops", "dandy"], True)
+    player = world.create_actor("player", "a desc", (1, 2), ["shoom", "soft_tops", "dandy"], True)
     world.recompute_fov(player)
 
     # tell places about the player
@@ -110,8 +110,8 @@ def initialise_game():
 
     # create an enemy
     # TODO - remove when enemy gen is in
-    world.create_actor("dummy steve", "steve's desc", 1, 4, ["training_dummy"])
-    world.create_actor("dummy sally", "sally's desc", 1, 5, ["training_dummy"])
+    world.create_actor("dummy steve", "steve's desc", (1, 4), ["training_dummy"])
+    world.create_actor("dummy sally", "sally's desc", (1, 5), ["training_dummy"])
 
     # create a god
     world.create_god("the_small_gods")

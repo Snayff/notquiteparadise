@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import logging
 import pygame
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from pygame_gui import UIManager
-from pygame_gui.core import UIElement as pygame_gui_element
+from pygame_gui.core import UIElement as PygameGuiElement
 from snecs.typedefs import EntityID
 from scripts.engine import debug, utility
 from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_SIZE,
@@ -25,6 +25,8 @@ from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple
+
+_ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo]
 
 
 class _UIManager:
@@ -53,7 +55,7 @@ class _UIManager:
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
-        self._element_details: Dict[UIElementType, Tuple[pygame_gui_element, pygame.Rect]] = {}
+        self._element_details: Dict[UIElementType, Tuple[PygameGuiElement, pygame.Rect]] = {}
 
         # process config
         self._load_display_config()
@@ -118,7 +120,7 @@ class _UIManager:
 
     ##################### GET ############################
 
-    def get_element(self, element_type: UIElementType) -> pygame_gui_element:
+    def get_element(self, element_type: UIElementType) -> _ui_element_union:
         """
         Get UI element. Creates instance if not found.
         """
@@ -215,7 +217,7 @@ class _UIManager:
                 self.create_element(_element_type)
                 self.set_element_visibility(_element_type, visible)
 
-    def create_element(self, element_type: UIElementType) -> pygame_gui_element:
+    def create_element(self, element_type: UIElementType) -> _ui_element_union:
         """
         Create the specified UI element. Object is returned for convenience, it is already held and can be returned
         with get_element at a later date. If it already exists current instance will be overwritten.
@@ -265,7 +267,7 @@ class _UIManager:
 
     ################################ QUERIES #################################################################
 
-    def element_is_visible(self, element_type: UIElementType):
+    def element_is_visible(self, element_type: UIElementType) -> bool:
         """
         Check if an element is visible.
         """
@@ -287,7 +289,7 @@ class _UIManager:
 
     def world_to_draw_position(self, pos: Tuple[int, int]):
         """
-        Convert from the world_objects position to the screen position. 0, 0 if camera not init'd.
+        Convert from the world_objects position to the draw position. 0, 0 if camera not init'd.
         """
         # TODO - this shouldnt rely on UI, if possible.
         camera = self.get_element(UIElement.CAMERA)

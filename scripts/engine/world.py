@@ -45,6 +45,8 @@ from scripts.nqp.actions.skills import BasicAttack, Move, Skill
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
 
+########################### LOCAL DEFINITIONS ##########################
+
 _C = TypeVar("_C", bound=Component)  # to represent components where we don't know which is being used
 get_entitys_components = snecs.all_components
 get_components = Query
@@ -88,12 +90,13 @@ def create_god(god_name: str) -> EntityID:
     return entity
 
 
-def create_actor(name: str, description: str, x: int, y: int, trait_names: List[str],
+def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_names: List[str],
         is_player: bool = False) -> EntityID:
     """
     Create an entity with all of the components to be an actor. Returns entity ID.
     """
     components: List[Component] = []
+    x, y = tile_pos
 
     # actor components
     if is_player:
@@ -168,12 +171,13 @@ def create_actor(name: str, description: str, x: int, y: int, trait_names: List[
     return entity
 
 
-def create_projectile(creating_entity: EntityID, x: int, y: int, data: ProjectileData) -> EntityID:
+def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data: ProjectileData) -> EntityID:
     """
     Create an entity with all of the components to be a projectile. Returns entity ID.
     """
     skill_name = data.skill_name
     projectile: List[Component] = []
+    x, y = tile_pos
 
     name = get_name(creating_entity)
     projectile_name = f"{skill_name}s projectile"
@@ -307,11 +311,12 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
         logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
 
 
-def get_tiles(start_x: int, start_y: int, coords: List[Tuple[int, int]]) -> List[Tile]:
+def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List[Tile]:
     """
     Get multiple tiles based on starting position and coordinates given. Coords are relative  to start
     position given.
     """
+    start_x, start_y = start_pos
     gamemap = get_gamemap()
     tiles = []
 
@@ -463,11 +468,11 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     # return direction_x, direction_y
 
 
-def get_reflected_direction(current_position: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
+def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
     """
     Use surrounding walls to understand how the object should be reflected.
     """
-    current_x, current_y = current_position
+    current_x, current_y = current_pos
     dir_x, dir_y = target_direction
 
     # work out position of adjacent walls
@@ -506,15 +511,15 @@ def get_reflected_direction(current_position: Tuple[int, int], target_direction:
     return dir_x, dir_y
 
 
-def _get_furthest_free_position(start_position: Tuple[int, int], target_direction: Tuple[int, int],
+def _get_furthest_free_position(start_pos: Tuple[int, int], target_direction: Tuple[int, int],
         max_distance: int, travel_type: TravelMethodType) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
     range blocks movement then the last position checked is returned. If all positions in range block movement
     then starting position is returned.
     """
-    start_x = start_position[0]
-    start_y = start_position[1]
+    start_x = start_pos[0]
+    start_y = start_pos[1]
     dir_x = target_direction[0]
     dir_y = target_direction[1]
     current_x = start_x
@@ -677,7 +682,8 @@ def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
     return position.x, position.y
 
 
-def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int, shape_direction: Optional[Tuple[int, int]] = None):
+def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int,
+        shape_direction: Optional[Tuple[int, int]] = None):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
     have Position, Resources and Combat Stats to be eligible.
@@ -862,10 +868,11 @@ def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
     return False
 
 
-def is_tile_in_fov(x: int, y: int, fov_map) -> bool:
+def is_tile_in_fov(tile_pos: Tuple[int, int], fov_map) -> bool:
     """
     Check if  target tile is in player`s FOV
     """
+    x, y = tile_pos
     return tcod.map_is_in_fov(fov_map, x, y)
 
 
@@ -1100,17 +1107,6 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
     return False
 
 
-def learn_skill(entity: EntityID, skill_name: str) -> bool:
-    """
-    Add the skill name to the entity's knowledge component.
-    """
-    if not entity_has_component(entity, Knowledge):
-        add_component(entity, Knowledge())
-    knowledge = get_entitys_component(entity, Knowledge)
-    skill_class = getattr(skills, skill_name)
-    knowledge.learn_skill(skill_class)
-
-
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
 
 def kill_entity(entity: EntityID):
@@ -1216,6 +1212,17 @@ def remove_affliction(entity: EntityID, affliction: Affliction):
     """
     afflictions = get_entitys_component(entity, Afflictions)
     afflictions.remove(affliction)
+
+
+def learn_skill(entity: EntityID, skill_name: str):
+    """
+    Add the skill name to the entity's knowledge component.
+    """
+    if not entity_has_component(entity, Knowledge):
+        add_component(entity, Knowledge())
+    knowledge = get_entitys_component(entity, Knowledge)
+    skill_class = getattr(skills, skill_name)
+    knowledge.learn_skill(skill_class)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

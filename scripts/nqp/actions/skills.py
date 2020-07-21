@@ -106,7 +106,7 @@ class Skill(ABC):
                 expiry_type=self.expiry_type,
                 sprite=self.projectile_sprite
             )
-            projectile = world.create_projectile(self.user, self.target_tile.x, self.target_tile.y, projectile_data)
+            projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
             self.projectile = projectile
         else:
             world.apply_skill(self)

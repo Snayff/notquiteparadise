@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import math
+import sys
 from typing import TYPE_CHECKING, Any, List, Tuple, Type
 
 import pygame
@@ -276,3 +277,4 @@ def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge
     end_coordinate = bounds[1] - edge - 1
     within_bounds = start_coordinate <= coordinate < end_coordinate
     return within_bounds
+
