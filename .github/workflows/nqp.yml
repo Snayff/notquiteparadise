@@ -10,9 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: build
-          command: poetry build
-          python-version: 3.8
         - name: lint
           command: poetry run python -m mypy scripts/
           python-version: 3.8
