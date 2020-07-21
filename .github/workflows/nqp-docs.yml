@@ -6,16 +6,6 @@ on:
       - develop
 
 jobs:
-  bump_version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 0
-      - name: Bump version and push tag
-        uses: mathieudutour/github-tag-action@v4.5
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
   docs:
     runs-on: ubuntu-latest
     steps:
@@ -47,3 +37,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: docs/_build/html
+          
+          
+  version_tag:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Calculate Tag
+      run: echo ::set-env name=TAG_NAME::$(py -3.8 -c 'from scripts.engine.core.constants import VERSION; print(VERSION);' | sed '$!d')
+    - name: Set Tag
+      uses: hole19/git-tag-action@master
+      env:
+        TAG: echo $TAG_NAME
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
