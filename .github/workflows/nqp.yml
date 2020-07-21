@@ -2,7 +2,7 @@ name: Not Quite Paradise
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop develop-github-actions ]
 
 jobs:
   build:
@@ -65,28 +65,6 @@ jobs:
 
 
 
-
-
-#    # generate change log
-#    - name: Checkout
-#      uses: actions/checkout@v2
-#    - name: Generate changelog
-#      id: changelog
-#      uses: metcalfc/changelog-generator@v0.2.3
-#      with:
-#        myToken: ${{ secrets.GITHUB_TOKEN }}
-#    - name: Create Release
-#      id: create_release
-#      uses: actions/create-release@latest
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        tag_name: ${{ github.ref }}
-#        release_name: Release ${{ github.ref }}
-#        body: ${{ steps.changelog.outputs.changelog }}
-#        draft: false
-#        prerelease: false
-#
 #    # sphinx
 #    - name: Build Sphinx docs
 #      run: |
