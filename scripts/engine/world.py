@@ -20,7 +20,7 @@ from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
 from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
                                            DEFAULT_SIGHT_RANGE, ICON_SIZE,
                                            INFINITE, TILE_SIZE, Direction,
-                                           DirectionType, EffectType, FOVInfo,
+                                           DirectionType, FOVInfo,
                                            HitModifier, HitType, HitTypeType,
                                            HitValue, MessageType, PrimaryStat,
                                            PrimaryStatType, ResourceType,
@@ -1132,17 +1132,6 @@ def kill_entity(entity: EntityID):
         # TODO add player death
         # placeholder for player death
         ui.log_message(MessageType.LOG, "I should have died just then.")
-
-
-def end_turn(entity: EntityID, time_spent: int):
-    """
-    Spend an entities time, progress time, move to next acting entity in queue.
-    """
-    if entity == chronicle.get_turn_holder():
-        spend_time(entity, time_spent)
-        chronicle.next_turn()
-    else:
-        logging.warning(f"Tried to end {get_name(entity)}'s turn but they're not turn holder.")
 
 
 def delete(entity: EntityID):

@@ -2,9 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, cast
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE, TIME_PER_ROUND
@@ -210,3 +208,14 @@ def set_time_of_last_turn(time: int):
     Set the time of the last turn
     """
     store.time_of_last_turn = time
+
+
+def end_turn(entity: EntityID, time_spent: int):
+    """
+    Spend an entities time, progress time, move to next acting entity in queue.
+    """
+    if entity == get_turn_holder():
+        world.spend_time(entity, time_spent)
+        next_turn()
+    else:
+        logging.warning(f"Tried to end {world.get_name(entity)}'s turn but they're not turn holder.")

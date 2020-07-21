@@ -3,9 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import utility, world
 from scripts.engine.component import (Aesthetic, Afflictions, Blocking,
                                       Knowledge, Position, Resources)
@@ -178,8 +176,8 @@ class MoveActorEffect(Effect):
 
 
 class TriggerAfflictionsEffect(Effect):
-    def __init__(self, origin: EntityID, target: EntityID, trigger_type: AfflictionTriggerType, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]]):
+    def __init__(self, origin: EntityID, target: EntityID, trigger_type: AfflictionTriggerType,
+            success_effects: List[Optional[Effect]], failure_effects: List[Optional[Effect]]):
 
         super().__init__(origin, success_effects, failure_effects)
 
@@ -261,7 +259,6 @@ class ApplyAfflictionEffect(Effect):
 
 
 class ReduceSkillCooldownEffect(Effect):
-
     def __init__(self, origin: EntityID, target: EntityID, skill_name: str, amount: int,
                  success_effects: List[Optional[Effect]], failure_effects: List[Optional[Effect]]):
         super().__init__(origin, success_effects, failure_effects)

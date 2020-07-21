@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
+import scripts.engine.chronicle
 from scripts.engine import world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import (BASE_MOVE_COST, ProjectileExpiry,
@@ -124,7 +125,7 @@ class ProjectileBehaviour(AIBehaviour):
             # resolve post activation
             if skill_instance.name == "move":
                 self.distance_travelled += 1
-                world.end_turn(entity, self.data.speed)
+                scripts.engine.chronicle.end_turn(entity, self.data.speed)
             else:
                 # die after activating
                 world.kill_entity(entity)
@@ -140,4 +141,4 @@ class SkipTurnBehaviour(AIBehaviour):
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
-        world.end_turn(self.entity, BASE_MOVE_COST)
+        scripts.engine.chronicle.end_turn(self.entity, BASE_MOVE_COST)

@@ -6,6 +6,7 @@ import pygame
 from pygame_gui import UI_WINDOW_CLOSE
 from snecs.typedefs import EntityID
 
+import scripts.engine.chronicle
 from scripts.engine import debug, key, state, world
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
@@ -221,7 +222,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.name)
         ai_processors.process_interventions()
-        world.end_turn(player, skill.time_cost)
+        scripts.engine.chronicle.end_turn(player, skill.time_cost)
         if skill.name == "move":
             ui.set_player_tile(target_tile)
 
