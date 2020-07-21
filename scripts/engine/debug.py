@@ -74,7 +74,7 @@ def is_fps_visible() -> bool:
 
 
 def get_visible_values() -> List[str]:
-    """"
+    """
     Get all visible values from the debugger
     """
     values = []

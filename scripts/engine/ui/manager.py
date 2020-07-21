@@ -12,7 +12,6 @@ from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_SIZE,
                                            MessageTypeType, UIElement,
                                            UIElementType, VisualInfo)
 from scripts.engine.library import library
-from scripts.engine.ui.basic.fonts import Font
 from scripts.engine.ui.multi_instance_elements.screen_message import \
     ScreenMessage
 from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
@@ -39,6 +38,7 @@ class _UIManager:
 
         # first action needs to be to init pygame.
         pygame.init()
+        pygame.font.init()
 
         #  set the display
         # TODO - allow for selection by player but only multiples of base (16:9)
@@ -114,8 +114,8 @@ class _UIManager:
         debug_font = self.debug_font
 
         for value in values:
-            text, rect = debug_font.render(value, (255, 255, 255))
-            self._main_surface.blit(text, (0, y))
+            surface = debug_font.render(value, False, (255, 255, 255))
+            self._main_surface.blit(surface, (0, y))
             y += 10
 
     ##################### GET ############################
@@ -149,7 +149,7 @@ class _UIManager:
 
     def _load_fonts(self):
         self._gui.add_font_paths("barlow", "assets/fonts/Barlow-Light.otf")
-        self.debug_font = Font().debug
+        self.debug_font = pygame.font.Font("assets/fonts/Kenney Future Narrow.ttf", 12)
 
         fonts = [
             {'name': 'barlow', 'point_size': 24, 'style': 'regular'}

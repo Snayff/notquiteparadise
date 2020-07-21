@@ -5,7 +5,6 @@ from typing import NewType, Tuple
 import pygame
 
 ######################## GENERAL CONSTANTS ######################################
-# TODO - segregate to relevant sections and modules
 VERSION = "0.108.0"
 
 TILE_SIZE = 64
@@ -79,7 +78,6 @@ class VisualInfo(SimpleNamespace):
     """
     Constant info about visual aspects such as resolution and frame rate
     """
-    # TODO -  should this be in UI?
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
     GAME_FPS = 60
@@ -89,7 +87,6 @@ class FOVInfo(SimpleNamespace):
     """
     Constant info about the FOV settings
     """
-    # TODO - this should be somewhere else; where do we use FOV?
     LIGHT_WALLS = True
     FOV_ALGORITHM = 0
 
@@ -139,7 +136,6 @@ class HitValue(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
-    # TODO - externalise the values for config
     GRAZE = HitValueType(0)
     HIT = HitValueType(5)
     CRIT = HitValueType(20)
@@ -149,7 +145,6 @@ class HitModifier(SimpleNamespace):
     """
     The modifier for each hit type
     """
-    # TODO - externalise the values for config
     GRAZE = HitModifierType(0.6)
     HIT = HitModifierType(1)
     CRIT = HitModifierType(1.4)
@@ -185,14 +180,14 @@ class InputIntent(SimpleNamespace):
     CONFIRM = InputIntentType("confirm")
     CANCEL = InputIntentType("cancel")
     EXIT = InputIntentType("exit")
-    DEBUG_TOGGLE = InputIntentType("debug_toggle")  # TODO - move to dev console
+    DEBUG_TOGGLE = InputIntentType("debug_toggle")
     SKILL0 = InputIntentType("skill0")
     SKILL1 = InputIntentType("skill1")
     SKILL2 = InputIntentType("skill2")
     SKILL3 = InputIntentType("skill3")
     SKILL4 = InputIntentType("skill4")
     SKILL5 = InputIntentType("skill5")
-    REFRESH_DATA = InputIntentType("refresh_data")  # TODO - move to dev console
+    REFRESH_DATA = InputIntentType("refresh_data")
     DEV_TOGGLE = InputIntentType("dev_toggle")
     ACTOR_INFO_TOGGLE = InputIntentType("npc_info_toggle")
 
@@ -346,7 +341,6 @@ class TravelMethod(SimpleNamespace):
     """
     STANDARD = TravelMethodType("standard")  # travels tile by tile
     ARC = TravelMethodType("arc")  # only impacts last tile in range, can reflect if hits terrain early.
-    # TODO - extend to allow throw shorter than total length and implement bounces
 
 
 class ProjectileExpiry(SimpleNamespace):
@@ -361,7 +355,6 @@ class ProjectileSpeed(SimpleNamespace):
     """
     The speed at which a projectile travels; how much time to move a tile.
     """
-    # TODO - as this is used externally it needs to map from a string. Set that up.
     SLOW = ProjectileSpeedType(int(BASE_MOVE_COST / 2))
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))

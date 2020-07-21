@@ -36,7 +36,6 @@ class SkillData:
     """
     Data class for a skill. Used by the library to load from json.
     """
-    # TODO - rename relevant sections to indicate they are base values
     # how do we know it?
     name: str = field(default="none")
     description: str = field(default="none")
@@ -262,7 +261,7 @@ class AttitudeData:
     """
     Data class for  a god's attitude
     """
-    action: str = field(default="none")  # TODO - standardise what this can be
+    action: str = field(default="none")
     opinion_change: int = 0
 
 
@@ -272,7 +271,7 @@ class InterventionData:
     """
     Data class for a god's intervention
     """
-    skill_key: str = field(default="none")  # TODO - confirm if we want skill key or name
+    skill_key: str = field(default="none")
     required_opinion: int = 0
 
 
@@ -282,7 +281,6 @@ class GodData:
     """
     Data class for a god
     """
-    # TODO - add gods own sprite collection
     name: str = field(default="none")
     description: str = field(default="none")
     attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
