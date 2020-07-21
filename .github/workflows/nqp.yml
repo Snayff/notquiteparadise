@@ -53,6 +53,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       - name: Use cache
         uses: actions/cache@v2
         with:
@@ -62,8 +66,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade poetry
-          poetry config virtualenvs.create false
-          poetry install --no-root
+          python -m poetry config virtualenvs.create false
+          python -m poetry install --no-root
       - name: build-docs
         uses: ammaraskar/sphinx-action@0.4
         with:
