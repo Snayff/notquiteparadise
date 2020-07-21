@@ -41,6 +41,7 @@ jobs:
         poetry install --no-root
 
   style:
+    needs: build
     runs-on: windows-latest
     steps:
     - name: Run style checker
@@ -48,6 +49,7 @@ jobs:
         poetry run python -m black scripts/
 
   lint:
+    needs: build
     runs-on: windows-latest
     steps:
     - name: Run static linter
@@ -55,6 +57,7 @@ jobs:
         poetry run python -m mypy scripts/
 
   test:
+    needs: build
     runs-on: windows-latest
     steps:
     - name: Test with pytest
@@ -62,6 +65,7 @@ jobs:
         poetry run python -m pytest
       
   docs:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
