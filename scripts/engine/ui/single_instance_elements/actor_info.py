@@ -117,7 +117,6 @@ class ActorInfo(UIWindow):
         if entity:
 
             info: List[Tuple[str, Union[str, pygame.Surface]]] = []
-            # TODO - replace with non-placeholder image
             section_break_image = utility.get_image("assets/ui/menu_window_n_repeat.png",
                                                     (self.rect.width - self.scrollbar_width, 13))
 
@@ -226,7 +225,6 @@ class ActorInfo(UIWindow):
         """
         Create sections for the information about the tile
         """
-        # TODO - create a UIScrollingContainer to enclose the below elements
         sections = []
         current_y = 0
         current_text_block = ""

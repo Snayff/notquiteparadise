@@ -118,7 +118,6 @@ class TileInfo(UIPanel):
             # create the box for the info
             self._create_sections(images, info)
 
-            # TODO - resize self to fit to sections
 
     def cleanse(self):
         """

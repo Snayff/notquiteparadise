@@ -25,8 +25,6 @@ class MessageLog(UIPanel):
         self.text = ""
         self.text_box = None
 
-        # TODO - show on new message, fade out after set time
-
         # complete base class init
         super().__init__(rect, LAYER_BASE_UI, manager, element_id="message_log",
                          anchors={"left": "left",
