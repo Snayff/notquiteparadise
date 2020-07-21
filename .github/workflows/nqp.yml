@@ -10,16 +10,14 @@ on:
 
 jobs:
   build:
-    name: build & test
+    name: ${{ matrix.name }}
     runs-on: windows-latest
     strategy:
+      max-parallel: 1
       matrix:
         include:
         - name: build
           command: python -V
-          python-version: 3.8
-        - name: style
-          command: poetry run python -m black scripts/
           python-version: 3.8
         - name: lint
           command: poetry run python -m mypy scripts/
@@ -51,9 +49,10 @@ jobs:
       run: ${{ matrix.command }}
 
   docs:
-    needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Use cache
         uses: actions/cache@v2
         with:
@@ -65,8 +64,6 @@ jobs:
           python -m pip install --upgrade poetry
           poetry config virtualenvs.create false
           poetry install --no-root
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: build-docs
         uses: ammaraskar/sphinx-action@0.4
         with:
