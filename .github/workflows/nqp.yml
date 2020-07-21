@@ -13,7 +13,6 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: windows-latest
     strategy:
-      max-parallel: 1
       matrix:
         include:
         - name: build
