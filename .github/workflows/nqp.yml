@@ -65,7 +65,7 @@ jobs:
           restore-keys: ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
-          apt-get install python-sphinx
+          sudo apt-get install python-sphinx
           python -m pip install sphinx-autodoc-typehints
       - name: build-docs
         run: |
