@@ -12,7 +12,7 @@ from scripts.engine import world
 from scripts.engine.component import (Aesthetic, Aspect, Identity, Position,
                                       Resources, Traits)
 from scripts.engine.core.constants import (GAP_SIZE, ICON_IN_TEXT_SIZE,
-                                           LAYER_BASE_UI)
+     RenderLayer)
 
 
 class TileInfo(UIPanel):
@@ -26,7 +26,7 @@ class TileInfo(UIPanel):
         self.sections: List[UIElement] = []
 
         # complete base class init
-        super().__init__(rect, LAYER_BASE_UI, manager, element_id="tile_info",
+        super().__init__(rect, RenderLayer.UI_BASE, manager, element_id="tile_info",
                          anchors={"left": "right",
                              "right": "right",
                              "top": "bottom",

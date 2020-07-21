@@ -12,8 +12,8 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, IsActor, Position
-from scripts.engine.core.constants import (LAYER_CAMERA, TILE_SIZE,
-                                           DirectionType, EventType, UIElement)
+from scripts.engine.core.constants import (RenderLayer, TILE_SIZE,
+    DirectionType, EventType, UIElement)
 from scripts.engine.utility import (clamp, convert_tile_string,
                                     is_coordinate_in_bounds)
 from scripts.engine.world_objects.tile import Tile
@@ -59,7 +59,7 @@ class Camera(UIPanel):
         self.overlay_directions: List[DirectionType] = []  # list of tuples
 
         # complete base class init
-        super().__init__(rect, LAYER_CAMERA, manager, element_id="camera")
+        super().__init__(rect, RenderLayer.BOTTOM, manager, element_id="camera")
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)

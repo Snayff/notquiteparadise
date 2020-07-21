@@ -11,11 +11,6 @@ from scripts.engine.core.store import store
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
 
-# TODO What do we need from the turn queue?
-#  Add all entities that are within X range of the player;
-#  Add new entities to the queue as they get into range;
-#  Function to amend an entities position in the queue;
-
 
 ############ ACTIONS ##################
 

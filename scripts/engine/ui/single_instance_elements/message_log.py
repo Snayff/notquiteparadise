@@ -8,7 +8,7 @@ from pygame.math import Vector2
 from pygame.rect import Rect
 from pygame_gui.elements import UIPanel, UITextBox
 
-from scripts.engine.core.constants import LAYER_BASE_UI
+from scripts.engine.core.constants import  RenderLayer
 
 if TYPE_CHECKING:
     import pygame_gui
@@ -26,7 +26,7 @@ class MessageLog(UIPanel):
         self.text_box = None
 
         # complete base class init
-        super().__init__(rect, LAYER_BASE_UI, manager, element_id="message_log",
+        super().__init__(rect, RenderLayer.UI_BASE, manager, element_id="message_log",
                          anchors={"left": "left",
                              "right": "right",
                              "top": "bottom",

@@ -12,16 +12,6 @@ ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
 GAP_SIZE = 2
 SKILL_SIZE = 64
-LAYER_CAMERA = 1  # lowest level
-LAYER_BASE_UI = 3
-LAYER_WINDOW = 5
-TRAIT_RENDER_ORDER = {
-    "npc": 0,
-    "people": 1,
-    "homeland": 2,
-    "savvy": 3
-}
-
 DEFAULT_ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
 TIME_PER_ROUND = 20  # amount of time in a round.
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
@@ -61,6 +51,7 @@ DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
 AfflictionTriggerType = NewType("AfflictionTriggerType", str)
+RenderLayerType = NewType("RenderLayerType", int)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
@@ -89,6 +80,18 @@ class FOVInfo(SimpleNamespace):
     """
     LIGHT_WALLS = True
     FOV_ALGORITHM = 0
+
+
+class RenderLayer(SimpleNamespace):
+    """
+    The possible render layers. Lower number is further down the stack.
+    """
+    BOTTOM = RenderLayerType(10)
+    TILE = RenderLayerType(20)
+    ASPECT = RenderLayerType(30)
+    ACTOR = RenderLayerType(40)
+    UI_BASE = RenderLayerType(50)
+    UI_WINDOW = RenderLayerType(60)
 
 
 class GameState(SimpleNamespace):

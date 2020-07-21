@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Dict, List, Optional
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine.core.constants import (TRAIT_RENDER_ORDER,
+from scripts.engine.core.constants import (
                                            AfflictionCategoryType,
                                            AfflictionTriggerType,
                                            DamageTypeType, Direction,
@@ -197,7 +197,13 @@ class TraitData:
 
     def __post_init__(self):
         # update sprite path render order
-        self.sprite_paths.render_order = TRAIT_RENDER_ORDER.get(self.group)
+        trait_render_order = {
+            "npc": 0,
+            "people": 1,
+            "homeland": 2,
+            "savvy": 3
+        }
+        self.sprite_paths.render_order = trait_render_order.get(self.group)
 
 
 @register_dataclass_with_json

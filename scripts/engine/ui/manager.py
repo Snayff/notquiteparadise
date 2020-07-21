@@ -41,7 +41,6 @@ class _UIManager:
         pygame.font.init()
 
         #  set the display
-        # TODO - allow for selection by player but only multiples of base (16:9)
         self._desired_width = VisualInfo.BASE_WINDOW_WIDTH
         self._desired_height = VisualInfo.BASE_WINDOW_HEIGHT
         self._screen_scaling_mod_x = self._desired_width // VisualInfo.BASE_WINDOW_WIDTH
@@ -239,7 +238,6 @@ class _UIManager:
         """
         Create a message on the screen.
         """
-        # TODO - respect colour chosen. Use colour mapping to go from RGB to Hex.
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
         screen_message = ScreenMessage(text, self.get_gui_manager())
@@ -291,7 +289,7 @@ class _UIManager:
         """
         Convert from the world_objects position to the draw position. 0, 0 if camera not init'd.
         """
-        # TODO - this shouldnt rely on UI, if possible.
+        # FIXME - this shouldnt rely on UI, if possible.
         camera = self.get_element(UIElement.CAMERA)
 
         # if camera has been init'd
@@ -358,8 +356,6 @@ class _UIManager:
             self.create_screen_message(message, colour, size)
 
         elif message_type == MessageType.ENTITY:
-            # TODO - create message over entity
-            #  can we reuse screen message but provide xy?
             pass
 
     def set_element_visibility(self, element_type: UIElementType, visible: bool):

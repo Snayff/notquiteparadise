@@ -18,16 +18,16 @@ from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
                                       Opinion, Position, Resources, Tracked,
                                       Traits)
 from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
-                                           DEFAULT_SIGHT_RANGE, ICON_SIZE,
-                                           INFINITE, TILE_SIZE, Direction,
-                                           DirectionType, FOVInfo,
-                                           HitModifier, HitType, HitTypeType,
-                                           HitValue, MessageType, PrimaryStat,
-                                           PrimaryStatType, ResourceType,
-                                           SecondaryStatType, ShapeType,
-                                           TargetTag, TargetTagType,
-                                           TraitGroup, TravelMethod,
-                                           TravelMethodType)
+    DEFAULT_SIGHT_RANGE, ICON_SIZE,
+    INFINITE, RenderLayer, TILE_SIZE, Direction,
+    DirectionType, FOVInfo,
+    HitModifier, HitType, HitTypeType,
+    HitValue, MessageType, PrimaryStat,
+    PrimaryStatType, ResourceType,
+    SecondaryStatType, ShapeType,
+    TargetTag, TargetTagType,
+    TraitGroup, TravelMethod,
+    TravelMethodType)
 from scripts.engine.core.definitions import (ProjectileData,
                                              TraitSpritePathsData,
                                              TraitSpritesData)
@@ -140,8 +140,8 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
 
     sprites = _create_trait_sprites(traits_paths)
-    # translation to screen coordinates is handled by the camera
-    components.append(Aesthetic(sprites.idle, sprites, x, y))
+    # N.B. translation to screen coordinates is handled by the camera
+    components.append(Aesthetic(sprites.idle, sprites, RenderLayer.ACTOR, (x, y)))
 
     # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
@@ -187,7 +187,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     sprites = TraitSpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
                                idle=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)))
     # translation to screen coordinates is handled by the camera
-    projectile.append(Aesthetic(sprites.move, sprites, x, y))
+    projectile.append(Aesthetic(sprites.move, sprites, RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position(x, y))  # TODO - check position not blocked before spawning
     projectile.append(Resources(999, 999))
