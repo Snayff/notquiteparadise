@@ -1,12 +1,6 @@
 name: Not Quite Paradise
 
-on:
-  push:
-    branches:
-      - develop
-  pull_request:
-    branches:
-      - develop
+on: [push]
 
 jobs:
   build:
@@ -47,35 +41,3 @@ jobs:
         poetry install --no-root
     - name: ${{ matrix.name }}
       run: ${{ matrix.command }}
-
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Use cache
-        uses: actions/cache@v2
-        with:
-          path: ~\AppData\Local\pip\Cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: |
-          sudo apt-get install python-sphinx
-          python -m pip install sphinx-autodoc-typehints
-      - name: build-docs
-        run: |
-          cd docs
-          make html
-          make clean
-          
-      - name: deploy-docs
-        uses: JamesIves/github-pages-deploy-action@3.5.7
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: docs/_build/html
