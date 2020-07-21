@@ -23,22 +23,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Cache dependencies
-      uses: actions/cache@v1
-      env:
-        cache-name: cache-python-deps
-      with:
-        path: .github/cache/
-        key: ${{ runner.os }}-build-${{ env.cache-name }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
-
     - name: Install dependencies
       run: |
         py -3.8 -m pip install --upgrade poetry
         py -3.8 -m poetry install
+        
+    - name: test
+      run: |
+        py -3.8 -m pip list
     
     - name: Run style checker
       run: |
@@ -56,11 +48,12 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-
+      - name: Checkout
+      - uses: actions/checkout@v2
       - name: build-docs
         uses: ammaraskar/sphinx-action@0.4
         with:
-            docs-folder: "."
+            docs-folder: "docs/"
           
       - name: deploy-docs
         uses: JamesIves/github-pages-deploy-action@3.5.7
