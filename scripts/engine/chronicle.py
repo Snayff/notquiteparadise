@@ -83,8 +83,7 @@ def next_round(time_progressed: int):
 
     ## affliction durations
     for entity, (afflictions, ) in world.get_components([Afflictions]):
-        cast(Afflictions, afflictions)
-        reveal_locals()
+        assert isinstance(afflictions, Afflictions)  # handle mypy type error
         for affliction in afflictions.active:
             if affliction.duration == 0:
                 # expired

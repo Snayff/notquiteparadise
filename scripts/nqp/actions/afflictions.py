@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Iterator
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import (BASE_ACCURACY, BASE_DAMAGE,

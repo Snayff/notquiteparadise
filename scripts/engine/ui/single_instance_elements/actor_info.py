@@ -237,11 +237,11 @@ class ActorInfo(UIWindow):
         for type_str, text_or_image in info:
             # build current text block
             if type_str == "text":
-                cast(str, text_or_image)
+                assert isinstance(text_or_image,str)  # handle mypy error
                 current_text_block += text_or_image + "<br>"
 
             elif type_str == "image":
-                cast(pygame.Surface, text_or_image)
+                assert isinstance(text_or_image, pygame.Surface)  # handle mypy error
                 # if we have text in the previous block, show it
                 if current_text_block:
                     ## Display text

@@ -18,11 +18,11 @@ if TYPE_CHECKING:
 
 
 class Effect(ABC):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]]):
+    def __init__(self, origin: EntityID, success_effects: List[Effect],
+            failure_effects: List[Effect]):
         self.origin = origin
-        self.success_effects: List[Optional[Effect]] = success_effects
-        self.failure_effects: List[Optional[Effect]] = failure_effects
+        self.success_effects: List[Effect] = success_effects
+        self.failure_effects: List[Effect] = failure_effects
 
     @abstractmethod
     def evaluate(self):
@@ -36,8 +36,8 @@ class Effect(ABC):
 
 
 class DamageEffect(Effect):
-    def __init__(self, origin: EntityID, target: EntityID, success_effects: List[Optional[Effect]],
-                failure_effects: List[Optional[Effect]], stat_to_target: PrimaryStatType, accuracy: int,
+    def __init__(self, origin: EntityID, target: EntityID, success_effects: List[Effect],
+                failure_effects: List[Effect], stat_to_target: PrimaryStatType, accuracy: int,
                 damage: int, damage_type: DamageTypeType, mod_stat: PrimaryStatType, mod_amount: float):
 
         super().__init__(origin, success_effects, failure_effects)
@@ -53,7 +53,7 @@ class DamageEffect(Effect):
             self._create_affliction_trigger(AfflictionTrigger.TAKE_DAMAGE, self.target)
         ]
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         Resolve the damage effect and return the conditional effects based on if the damage is greater than 0.
         """
@@ -83,8 +83,8 @@ class DamageEffect(Effect):
 
 
 class MoveActorEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]], target: EntityID, direction: DirectionType, move_amount: int):
+    def __init__(self, origin: EntityID, success_effects: List[Effect],
+            failure_effects: List[Effect], target: EntityID, direction: DirectionType, move_amount: int):
 
         super().__init__(origin, success_effects, failure_effects)
 
@@ -95,7 +95,7 @@ class MoveActorEffect(Effect):
             self._create_affliction_trigger(AfflictionTrigger.MOVEMENT, self.target)
         ]
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         Resolve the move effect and return the conditional effects based on if the target moved the full amount.
         """
@@ -177,14 +177,14 @@ class MoveActorEffect(Effect):
 
 class TriggerAfflictionsEffect(Effect):
     def __init__(self, origin: EntityID, target: EntityID, trigger_type: AfflictionTriggerType,
-            success_effects: List[Optional[Effect]], failure_effects: List[Optional[Effect]]):
+            success_effects: List[Effect], failure_effects: List[Effect]):
 
         super().__init__(origin, success_effects, failure_effects)
 
         self.trigger_type = trigger_type
         self.target = target
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         Trigger all the afflictions on the self.target entity that match the trigger type. Fail if nothing matches
         """
@@ -202,8 +202,8 @@ class TriggerAfflictionsEffect(Effect):
 
 
 class AffectStatEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]], cause_name: str,  target: EntityID,
+    def __init__(self, origin: EntityID, success_effects: List[Effect],
+            failure_effects: List[Effect], cause_name: str,  target: EntityID,
             stat_to_target: PrimaryStatType, affect_amount: int):
 
         super().__init__(origin, success_effects, failure_effects)
@@ -213,7 +213,7 @@ class AffectStatEffect(Effect):
         self.target = target
         self.cause_name = cause_name
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         Log the affliction and the stat modification in the Affliction component.
         """
@@ -235,14 +235,14 @@ class AffectStatEffect(Effect):
 
 class ApplyAfflictionEffect(Effect):
     def __init__(self, origin: EntityID, target: EntityID, affliction_name: str, duration: int,
-                 success_effects: List[Optional[Effect]], failure_effects: List[Optional[Effect]]):
+                 success_effects: List[Effect], failure_effects: List[Effect]):
         super().__init__(origin, success_effects, failure_effects)
 
         self.affliction_name = affliction_name
         self.target = target
         self.duration = duration
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         Applies an affliction to an entity
         """
@@ -260,14 +260,14 @@ class ApplyAfflictionEffect(Effect):
 
 class ReduceSkillCooldownEffect(Effect):
     def __init__(self, origin: EntityID, target: EntityID, skill_name: str, amount: int,
-                 success_effects: List[Optional[Effect]], failure_effects: List[Optional[Effect]]):
+                 success_effects: List[Effect], failure_effects: List[Effect]):
         super().__init__(origin, success_effects, failure_effects)
 
         self.target = target
         self.skill_name = skill_name
         self.amount = amount
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         Reduces the cooldown of a skill of an entity
         """
@@ -285,11 +285,11 @@ class ReduceSkillCooldownEffect(Effect):
 
 
 class AddAspectEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]], ):
+    def __init__(self, origin: EntityID, success_effects: List[Effect],
+            failure_effects: List[Effect], ):
         super().__init__(origin, success_effects, failure_effects)
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         TBC - not implemented
         """
@@ -300,11 +300,11 @@ class AddAspectEffect(Effect):
 
 
 class RemoveAspectEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]], ):
+    def __init__(self, origin: EntityID, success_effects: List[Effect],
+            failure_effects: List[Effect], ):
         super().__init__(origin, success_effects, failure_effects)
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         TBC - not implemented
         """
@@ -315,11 +315,11 @@ class RemoveAspectEffect(Effect):
 
 
 class TriggerSkillEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]], ):
+    def __init__(self, origin: EntityID, success_effects: List[Effect],
+            failure_effects: List[Effect], ):
         super().__init__(origin, success_effects, failure_effects)
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         TBC - not implemented
         """
@@ -330,11 +330,11 @@ class TriggerSkillEffect(Effect):
 
 
 class KillEffect(Effect):
-    def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
-            failure_effects: List[Optional[Effect]],):
+    def __init__(self, origin: EntityID, success_effects: List[Effect],
+            failure_effects: List[Effect],):
         super().__init__(origin, success_effects, failure_effects)
 
-    def evaluate(self) -> List[Optional[Effect]]:
+    def evaluate(self) -> List[Effect]:
         """
         TBC - not implemented
         """

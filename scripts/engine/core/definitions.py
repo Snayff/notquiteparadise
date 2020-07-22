@@ -112,9 +112,9 @@ class AfflictionData:
     category: Optional[AfflictionCategoryType] = None
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    required_tags: List[Optional[TargetTagType]] = field(default_factory=list)
-    identity_tags: List[Optional[EffectTypeType]] = field(default_factory=list)
-    triggers: List[Optional[AfflictionTriggerType]] = field(default_factory=list)
+    required_tags: List[TargetTagType] = field(default_factory=list)
+    identity_tags: List[EffectTypeType] = field(default_factory=list)
+    triggers: List[AfflictionTriggerType] = field(default_factory=list)
 
 
 @register_dataclass_with_json
@@ -140,8 +140,8 @@ class EffectData:
     shape_size: int = 1
 
     # what next?
-    success_effects: List[Optional[EffectData]] = field(default_factory=list)
-    fail_effects: List[Optional[EffectData]] = field(default_factory=list)
+    success_effects: List[EffectData] = field(default_factory=list)
+    fail_effects: List[EffectData] = field(default_factory=list)
 
 
 ##################### ACTORS #################################
