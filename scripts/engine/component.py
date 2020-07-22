@@ -147,7 +147,7 @@ class Knowledge(RegisteredComponent):
     """
 
     def __init__(self, skills: List[Type[Skill]] = None, skill_order: List[str] = None):
-        skills = skills or {}
+        skills = skills or []
         skill_order = skill_order or []
 
         self.skill_order: List[str] = skill_order

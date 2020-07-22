@@ -139,7 +139,10 @@ class _LibraryOfAlexandria:
         return self._input
 
     def _get_default_input_dict(self) -> Dict[str, List]:
-        _input = {}
+        """
+        Get the values needed for all input options and return an unmapped input dict.
+        """
+        _input: Dict[str, List] = {}
 
         for name in utility.get_class_members(InputIntent):
             _input[name.lower()] = []
@@ -156,9 +159,9 @@ class _LibraryOfAlexandria:
     def _load_aspects_data(self):
         self._aspects = {}  # FIXME - unstub when json updated inline with skills
         return
-        with open('data/game/aspects.json') as file:
-            data = json.load(file, object_hook=deserialise_dataclasses)
-        self._aspects = data
+        # with open('data/game/aspects.json') as file:
+        #     data = json.load(file, object_hook=deserialise_dataclasses)
+        # self._aspects = data
 
     def _load_traits_data(self):
         with open('data/game/traits.json') as file:

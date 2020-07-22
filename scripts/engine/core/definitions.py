@@ -7,21 +7,21 @@ import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.core.constants import (
-                                           AfflictionCategoryType,
-                                           AfflictionTriggerType,
-                                           DamageTypeType, Direction,
-                                           DirectionType, EffectType,
-                                           EffectTypeType, PrimaryStatType,
-                                           ProjectileExpiry,
-                                           ProjectileExpiryType,
-                                           ProjectileSpeed,
-                                           ProjectileSpeedType, Resource,
-                                           ResourceType, SecondaryStatType,
-                                           Shape, ShapeType, TargetingMethod,
-                                           TargetingMethodType, TargetTag,
-                                           TargetTagType, TerrainCollision,
-                                           TerrainCollisionType, TraitGroup,
-                                           TravelMethod, TravelMethodType)
+    AfflictionCategoryType,
+    AfflictionTrigger, AfflictionTriggerType,
+    DamageTypeType, Direction,
+    DirectionType, EffectType,
+    EffectTypeType, PrimaryStatType,
+    ProjectileExpiry,
+    ProjectileExpiryType,
+    ProjectileSpeed,
+    ProjectileSpeedType, Resource,
+    ResourceType, SecondaryStatType,
+    Shape, ShapeType, TargetingMethod,
+    TargetingMethodType, TargetTag,
+    TargetTagType, TerrainCollision,
+    TerrainCollisionType, TraitGroup,
+    TraitGroupType, TravelMethod, TravelMethodType)
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -78,7 +78,7 @@ class ProjectileData:
     # what created it?
     creator: EntityID
     skill_name: str = field(default="none")
-    skill_instance: Skill = False
+    skill_instance: Optional[Skill] = None
     name: str = ""
     description: str = ""
 
@@ -112,9 +112,9 @@ class AfflictionData:
     category: Optional[AfflictionCategoryType] = None
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    required_tags: List[TargetTagType] = field(default_factory=list(TargetTag.OTHER_ENTITY))
-    identity_tags: List[EffectTypeType] = field(default_factory=list(EffectType.DAMAGE))
-    triggers: List[AfflictionTriggerType] = field(default_factory=list())
+    required_tags: List[Optional[TargetTagType]] = field(default_factory=list)
+    identity_tags: List[Optional[EffectTypeType]] = field(default_factory=list)
+    triggers: List[Optional[AfflictionTriggerType]] = field(default_factory=list)
 
 
 @register_dataclass_with_json
@@ -181,10 +181,10 @@ class TraitData:
     """
     Data class for an aspects
     """
-    name: str = field(default="none")
-    group: TraitGroup = field(default="none")
-    behaviour_name: str = field(default="none")
-    description: str = field(default="none")
+    name: str = "none"
+    group: TraitGroupType = TraitGroup.NPC
+    behaviour_name: str = "none"
+    description: str = "none"
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
     sight_range: int = 0
     vigour: int = 0

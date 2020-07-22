@@ -6,7 +6,7 @@ import traceback
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import chronicle, debug, key, state, world
+from scripts.engine import chronicle, debug, key, state, utility, world
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.debug import create_profiler, disable_logging, disable_profiling, dump_profiling_data, \
     initialise_logging
@@ -134,7 +134,6 @@ def initialise_game():
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
         aesthetic.target_draw_x = aesthetic.draw_x
         aesthetic.target_draw_y = aesthetic.draw_y
-
 
     # loading finished, give player control
     state.set_new(GameState.GAMEMAP)

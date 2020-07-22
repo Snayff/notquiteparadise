@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union, cast
 
 import pygame
 from pygame_gui import UI_BUTTON_PRESSED, UIManager
@@ -68,8 +68,7 @@ class ActorInfo(UIWindow):
         NOTE: Copied from pygame_gui UIWindow to allow overwriting use of close button.
 
         """
-        if (self is not None and
-                event.type == pygame.MOUSEBUTTONDOWN and
+        if (event.type == pygame.MOUSEBUTTONDOWN and
                 event.button in [pygame.BUTTON_LEFT,
                                  pygame.BUTTON_MIDDLE,
                                  pygame.BUTTON_RIGHT]):
@@ -84,7 +83,7 @@ class ActorInfo(UIWindow):
                 self.start_resize_point = scaled_mouse_pos
                 self.start_resize_rect = self.rect.copy()
 
-        if (self is not None and event.type == pygame.MOUSEBUTTONUP and
+        if (event.type == pygame.MOUSEBUTTONUP and
                 event.button == pygame.BUTTON_LEFT and self.resizing_mode_active):
             self.resizing_mode_active = False
 
@@ -238,10 +237,11 @@ class ActorInfo(UIWindow):
         for type_str, text_or_image in info:
             # build current text block
             if type_str == "text":
+                cast(str, text_or_image)
                 current_text_block += text_or_image + "<br>"
 
             elif type_str == "image":
-
+                cast(pygame.Surface, text_or_image)
                 # if we have text in the previous block, show it
                 if current_text_block:
                     ## Display text

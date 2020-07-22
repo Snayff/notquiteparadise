@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class _Store:
     """
-    Hold the current state info required by the engine.
+    Hold the current state info required by the engine. Must be serialised.
     Should only be accessed via getters and setters, not directly.
     """
     def __init__(self):
@@ -26,13 +26,13 @@ class _Store:
         # used in world
         self.current_gamemap = None
 
-        # used in chrono
+        # used in chronicle
         self.turn_queue: Dict[EntityID, int] = {}  # (entity, time)
         self.round: int = 1  # count of the round
         self.time: int = 1  # total time of actions taken
         self.time_of_last_turn: int = 1
         self.round_time: int = 0  # tracker of time progressed in current round
-        self.turn_holder: int = -1  # current acting entity
+        self.turn_holder: EntityID = -1  # current acting entity
 
 
 store = _Store()

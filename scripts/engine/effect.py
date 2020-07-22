@@ -296,6 +296,8 @@ class AddAspectEffect(Effect):
         logging.debug("Evaluating Add Aspect Effect...")
         logging.warning("-> effect not implemented.")
 
+        return []
+
 
 class RemoveAspectEffect(Effect):
     def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
@@ -308,6 +310,8 @@ class RemoveAspectEffect(Effect):
         """
         logging.debug("Evaluating Remove Aspect Effect...")
         logging.warning("-> effect not implemented.")
+
+        return []
 
 
 class TriggerSkillEffect(Effect):
@@ -322,6 +326,8 @@ class TriggerSkillEffect(Effect):
         logging.debug("Evaluating Trigger Skill Effect...")
         logging.warning("-> effect not implemented.")
 
+        return []
+
 
 class KillEffect(Effect):
     def __init__(self, origin: EntityID, success_effects: List[Optional[Effect]],
@@ -334,3 +340,5 @@ class KillEffect(Effect):
         """
         logging.debug("Evaluating Kill Effect...")
         logging.warning("-> effect not implemented.")
+
+        return []

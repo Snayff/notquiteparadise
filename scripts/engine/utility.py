@@ -143,6 +143,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
     This returns an int indicating the number of tile moves between the two points.
     """
+    
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
@@ -211,7 +212,9 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
                 new_row.add(perpendicular)
 
         coord_list += list(last_row)
-        last_row = new_row
+        # FIXME - Incompatible types in assignment (expression has type "Set[Tuple[int, int]]", variable has type
+        #  "List[Tuple[int, int]]")
+        last_row = new_row  # type: ignore
     return coord_list + list(last_row)
 
 

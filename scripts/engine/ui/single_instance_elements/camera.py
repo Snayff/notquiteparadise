@@ -1,5 +1,5 @@
 import logging
-from typing import Iterable, List, Tuple, cast
+from typing import Iterable, List, Optional, Tuple, cast
 
 import pygame
 import pygame_gui
@@ -9,7 +9,6 @@ from pygame.surface import Surface
 from pygame_gui import UIManager
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIPanel
-
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, IsActor, Position
 from scripts.engine.core.constants import (RenderLayer, TILE_SIZE,
@@ -42,8 +41,8 @@ class Camera(UIPanel):
         self.target_tile_row = 0.0
 
         # initialize these variables from self.update_tile_properties()
-        self.x_bounds = None
-        self.y_bounds = None
+        self.x_bounds: Optional[Tuple[int, int]] = None
+        self.y_bounds: Optional[Tuple[int, int]] = None
 
         self.edge_size = 5  # number of tiles to control camera movement
 
@@ -309,7 +308,7 @@ class Camera(UIPanel):
 
     ################## GET ######################
 
-    def get_tile_bounds(self):
+    def get_tile_bounds(self) -> List[Tuple[int, int]]:
         """
         Get the (col, row) bounds
         """
@@ -381,10 +380,15 @@ class Camera(UIPanel):
         is the position inside the current camera view
         """
         x, y = pos
-        x_start, x_max = self.x_bounds
-        y_start, y_max = self.y_bounds
+        if self.x_bounds and self.y_bounds:
+            x_start, x_max = self.x_bounds
+            y_start, y_max = self.y_bounds
 
-        return x_start <= x < x_max and y_start <= y < y_max
+            in_view = x_start <= x < x_max and y_start <= y < y_max
+        else:
+            in_view = False
+
+        return in_view
     
     def should_camera_move(self, start_pos: Tuple, target_pos: Tuple) -> bool:
         """

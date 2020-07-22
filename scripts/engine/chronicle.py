@@ -83,6 +83,8 @@ def next_round(time_progressed: int):
 
     ## affliction durations
     for entity, (afflictions, ) in world.get_components([Afflictions]):
+        cast(Afflictions, afflictions)
+        reveal_locals()
         for affliction in afflictions.active:
             if affliction.duration == 0:
                 # expired
@@ -118,7 +120,7 @@ def _add_time(time_to_add: int):
 
 ############# GET ###################
 
-def get_turn_holder() -> int:
+def get_turn_holder() -> EntityID:
     """
     Get the entity who has the current turn
     """
@@ -169,7 +171,7 @@ def _get_pretty_queue() -> List[Tuple[str, int]]:
     return queue
 
 
-def _get_next_entity_in_queue() -> int:
+def _get_next_entity_in_queue() -> EntityID:
     queue = get_turn_queue()
     next_entity = min(queue, key=queue.get)
     return next_entity
@@ -177,7 +179,7 @@ def _get_next_entity_in_queue() -> int:
 
 ############# SET ###################
 
-def set_turn_holder(active_entity: int):
+def set_turn_holder(active_entity: EntityID):
     """
     Get the entity who has the current turn
     """
