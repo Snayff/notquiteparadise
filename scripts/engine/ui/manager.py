@@ -228,7 +228,7 @@ class _UIManager:
             logging.warning(f"Created new {element_name} ui element, overwriting previous instance.")
 
         # create the element from the details held in element layout
-        element_class, rect = self._element_details.get(element_type)
+        element_class, rect = self._element_details.get(element_type)  # type: ignore  # mypy thinks will return none
         element = element_class(rect, self.get_gui_manager())
         self._elements[element_type] = element
 
@@ -315,10 +315,7 @@ class _UIManager:
             # ensure all directions are of type Direction
             directions = []
             for direction in _directions:
-                if not isinstance(direction, Direction):
-                    directions.append(getattr(Direction, direction.upper()))
-                else:
-                    directions.append(direction)
+                directions.append(getattr(Direction, direction.upper()))  # type: ignore  # direction has string
 
             camera.set_overlay_directions(directions)
             camera.set_overlay_visibility(is_visible)

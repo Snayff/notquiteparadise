@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import math
 import sys
-from typing import TYPE_CHECKING, Any, List, Tuple, Type
+from typing import Optional, TYPE_CHECKING, Any, List, Tuple, Type
 
 import pygame
 import scipy
@@ -218,7 +218,7 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
     return coord_list + list(last_row)
 
 
-def get_coords_from_shape(shape: ShapeType, size: int, direction: Tuple[int, int]) -> List[Tuple[int, int]]:
+def get_coords_from_shape(shape: ShapeType, size: int, direction: Optional[Tuple[int, int]]) -> List[Tuple[int, int]]:
     """
     Get a list of coordinates from a shape, size and direction.
     """
@@ -235,10 +235,14 @@ def get_coords_from_shape(shape: ShapeType, size: int, direction: Tuple[int, int
         return _calculate_cross_shape(size)
 
     elif shape == Shape.CONE:
-        return _calculate_cone_shape(size, direction)
+        if direction:
+            return _calculate_cone_shape(size, direction)
+        else:
+            logging.error(f"No direction passed to get_coords_from_shape for a Cone.")
+            raise KeyError("No direction for Cone.")
 
-    logging.error(f'Unknown shape "{shape}" passed to get_coords_from_shape')
-    raise KeyError(f'Unknown shape "{shape}"')
+    logging.error(f"Unknown shape '{shape}' passed to get_coords_from_shape")
+    raise KeyError(f"Unknown shape '{shape}'")
 
 
 def value_to_member(value: Any, cls: Type[Any]) -> str:

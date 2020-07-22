@@ -196,7 +196,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
     known_skills = [Move]
-    add_component(entity, Knowledge(known_skills))
+    add_component(entity, Knowledge(known_skills))  # type: ignore  # getting mypy error stating Move != Skill
 
     logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
 
@@ -304,9 +304,14 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
         _tile = gamemap.tiles[x][y]
         if _is_tile_in_bounds(_tile):
             return _tile
+        else:
+            raise KeyError
 
     except KeyError:
         logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
+
+        # ensure something always returned.
+        return gamemap.tiles[0][0]
 
 
 def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List[Tile]:
@@ -331,9 +336,9 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     return tiles
 
 
-def get_direction(start_pos: Union[Tuple[int, int], str], target_pos: Union[Tuple[int, int], str]) -> DirectionType:
+def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Tuple[int, int]:
     """
-    Get the direction between two locations. Positions expect either "x,y", or handles tuples (x, y)
+    Get the direction between two locations.
     """
     start_tile = get_tile(start_pos)
     target_tile = get_tile(target_pos)
@@ -591,6 +596,7 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
         return snecs.entity_component(entity, component)
     else:
         debug.log_component_not_found(entity, component)
+        raise Exception("Component not found")
 
 
 def get_name(entity: EntityID) -> str:
@@ -667,11 +673,11 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     Get an entity's known skill from their Knowledge component.
     """
     knowledge = get_entitys_component(entity, Knowledge)
-    if knowledge:
-        try:
-            return knowledge.get_skill(skill_name)
-        except KeyError:
-            logging.warning(f"'{get_name(entity)}' tried to use a skill they dont know.")
+    try:
+        return knowledge.get_skill(skill_name)
+    except KeyError:
+        logging.warning(f"'{get_name(entity)}' tried to use a skill, '{skill_name}', they dont know.")
+        raise Exception("Skill not found")
 
 
 def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
@@ -697,6 +703,7 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
 
     # get relevant entities in target area
     for entity, (position, *others) in get_components([Position, Resources]):
+        assert isinstance(position, Position)  # for mypy typing
         if (position.x, position.y) in affected_positions:
             affected_entities.append(entity)
 
@@ -724,12 +731,14 @@ def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = 
     elif tag == TargetTag.SELF:
         # if entity on tile is same as active entity
         if active_entity:
+            assert isinstance(active_entity, EntityID)
             return _tile_has_specific_entity(tile, active_entity)
         else:
             logging.warning("Tried to get TargetTag.SELF but gave no active_entity.")
     elif tag == TargetTag.OTHER_ENTITY:
         # if entity on tile is not active entity
         if active_entity:
+            assert isinstance(active_entity, EntityID)
             # check both possibilities. either the tile containing the active entity or not
             return _tile_has_other_entities(tile, active_entity)
         else:
@@ -931,6 +940,9 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait {cooldown} more "
                             f"rounds.")
 
+    # we've reached the end, no good.
+    return False
+
 
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
@@ -985,8 +997,7 @@ def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bo
     return False
 
 
-def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: Optional[DirectionType] = None)\
-        -> bool:
+def use_skill(user: EntityID, skill: Type[Skill], target_tile: Tile, direction: DirectionType) -> bool:
     """
     Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if
     criteria to use skill was met, False if not.
@@ -1172,11 +1183,11 @@ def judge_action(entity: EntityID, action_name: str):
         opinion = cast(Opinion, opinion)
         identity = cast(Identity, identity)
 
-        attitudes = library.get_god_attitude_data(identity.name)
+        attitudes = library.get_god_attitudes_data(identity.name)
 
         # check if the god has an attitude towards the action and apply the opinion change,
         # adding the entity to the dict if necessary
-        if action_name in attitudes:
+        if action_name in attitudes.keys():
             if entity in opinion.opinions:
                 opinion.opinions[entity] = opinion.opinions[entity] + attitudes[action_name].opinion_change
             else:
@@ -1200,7 +1211,7 @@ def learn_skill(entity: EntityID, skill_name: str):
     Add the skill name to the entity's knowledge component.
     """
     if not entity_has_component(entity, Knowledge):
-        add_component(entity, Knowledge())
+        add_component(entity, Knowledge([]))
     knowledge = get_entitys_component(entity, Knowledge)
     skill_class = getattr(skills, skill_name)
     knowledge.learn_skill(skill_class)
@@ -1271,7 +1282,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         identity = cast(Identity, identity)
         knowledge = cast(Knowledge, knowledge)
 
-        attitudes = library.get_god_attitude_data(identity.name)
+        attitudes = library.get_god_attitudes_data(identity.name)
         action_name = action
 
         # check if the god has an attitude towards the action and increase likelihood of intervening

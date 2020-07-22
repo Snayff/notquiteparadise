@@ -45,7 +45,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
-            for entity, (position, *other) in world.get_components([Position, IsActor]):
+            for entity, (position, *other) in world.get_components([Position, IsActor]):  # type: ignore
                 if position.x == x and position.y == y:
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
@@ -135,20 +135,21 @@ def _process_gamemap_intents(intent: InputIntentType):
         skill_name = _get_pressed_skills_name(intent)
         current_tile = world.get_tile((position.x, position.y))
 
-        # is skill ready to use
-        if world.can_use_skill(player, skill_name):
-            skill = world.get_known_skill(player, skill_name)
+        if skill_name:
+            # is skill ready to use
+            if world.can_use_skill(player, skill_name):
+                skill = world.get_known_skill(player, skill_name)
 
-            if skill:
-                # if auto targeting use the skill
-                if skill.targeting_method == TargetingMethod.AUTO:
-                    # pass centre as it doesnt matter, the skill will pick the right direction
-                    _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                else:
-                    # trigger targeting overlay
-                    state.set_new(GameState.TARGETING)
-                    state.set_active_skill(skill_name)
-                    ui.update_targeting_overlay(True, skill_name)
+                if skill:
+                    # if auto targeting use the skill
+                    if skill.targeting_method == TargetingMethod.AUTO:
+                        # pass centre as it doesnt matter, the skill will pick the right direction
+                        _process_skill_use(player, skill, current_tile, Direction.CENTRE)
+                    else:
+                        # trigger targeting overlay
+                        state.set_new(GameState.TARGETING)
+                        state.set_active_skill(skill_name)
+                        ui.update_targeting_overlay(True, skill_name)
 
     ## Show actor info - we're in GAMEMAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:

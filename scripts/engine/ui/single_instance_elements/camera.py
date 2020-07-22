@@ -300,7 +300,7 @@ class Camera(UIPanel):
         """
         self.is_overlay_visible = is_visible
 
-    def set_overlay_directions(self, directions: List):
+    def set_overlay_directions(self, directions: List[DirectionType]):
         """
         Set the overlay with possible targeting directions.
         """

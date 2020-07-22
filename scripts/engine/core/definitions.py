@@ -7,7 +7,7 @@ import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.core.constants import (
-    AfflictionCategoryType,
+    AfflictionCategory, AfflictionCategoryType,
     AfflictionTrigger, AfflictionTriggerType,
     DamageTypeType, Direction,
     DirectionType, EffectType,
@@ -109,7 +109,7 @@ class AfflictionData:
     class_name: str = field(default="none")
     description: str = field(default="none")
     icon: str = field(default="none")
-    category: Optional[AfflictionCategoryType] = None
+    category: AfflictionCategoryType = AfflictionCategory.BANE
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
     required_tags: List[TargetTagType] = field(default_factory=list)
@@ -290,5 +290,5 @@ class GodData:
     """
     name: str = field(default="none")
     description: str = field(default="none")
-    attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
-    interventions: Dict[int, InterventionData] = field(default_factory=dict)
+    attitudes: Dict[str, AttitudeData] = field(default_factory=dict)
+    interventions: Dict[str, InterventionData] = field(default_factory=dict)

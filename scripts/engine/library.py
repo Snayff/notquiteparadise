@@ -9,8 +9,8 @@ from scripts.engine import utility
 from scripts.engine.core.constants import (EffectTypeType, InputIntent, PrimaryStatType,
     SecondaryStatType)
 from scripts.engine.core.definitions import (
-    AfflictionData, AspectData, BasePrimaryStatData, BaseSecondaryStatData,
-    EffectData, SkillData, TraitData)
+    AfflictionData, AspectData, AttitudeData, BasePrimaryStatData, BaseSecondaryStatData,
+    EffectData, GodData, InterventionData, SkillData, TraitData)
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
@@ -107,7 +107,7 @@ class _LibraryOfAlexandria:
 
         return stat_data
 
-    def get_god_data(self, god_name: str) -> Dict:
+    def get_god_data(self, god_name: str) -> GodData:
         """
         Get data for a god from the library
         """
@@ -116,7 +116,7 @@ class _LibraryOfAlexandria:
 
         return god_data
 
-    def get_god_intervention_data(self, god_name: str, intervention_name: str) -> Dict:
+    def get_god_intervention_data(self, god_name: str, intervention_name: str) -> InterventionData:
         """
         Get data for a god's specified intervention from the library
         """
@@ -124,7 +124,15 @@ class _LibraryOfAlexandria:
 
         return interventions_data
 
-    def get_god_attitude_data(self, god_name: str) -> Dict[int, Dict]:
+    def get_god_attitude_on_action_data(self, god_name: str, action_name: str) -> AttitudeData:
+        """
+        Get data for a god's attitude on an action
+        """
+        attitude_data = self._gods[god_name].attitudes[action_name]
+
+        return attitude_data
+
+    def get_god_attitudes_data(self, god_name: str) -> Dict[str, AttitudeData]:
         """
         Get data for a god's attitudes from the library
         """

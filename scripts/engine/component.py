@@ -146,7 +146,7 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
-    def __init__(self, skills: List[Type[Skill]] = None, skill_order: List[str] = None):
+    def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None):
         skills = skills or []
         skill_order = skill_order or []
 
