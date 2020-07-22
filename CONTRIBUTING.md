@@ -18,10 +18,11 @@ Provide a way for people to contribute updates, fix bugs, try out ideas, etc.
  personalisation.
 
 ## Coding Style Guide
-There are a number of conventions followed, including using the following tools:
+There are a number of conventions followed, including using the following tool:
 
-* [black] - a style formatter
-* [mypy] - python's static linte
+* [mypy] - python's static linter
+
+[mypy]: http://mypy-lang.org/
 
 Below are the naming conventions followed in this project:
 * If only one of a class should exist the creation function is called "init_[object]", otherwise "create_[object]".
@@ -31,9 +32,11 @@ Below are the naming conventions followed in this project:
 * Where a variable name contains "name" the variable may include spaces and other special characters. Where it
  includes "key" it may contain
  alphanumeric values only.
-
-[black]: https://github.com/psf/black
-[mypy]: http://mypy-lang.org/
+* Arguments should be in a consistent order:
+  1. Identifiers (entity, skill)
+  2. Affected items (position, tiles)
+  3. Qualifiers
+  
 
 
 ## Getting Started

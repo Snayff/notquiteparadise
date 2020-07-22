@@ -2,9 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, cast
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE, TIME_PER_ROUND
@@ -12,11 +10,6 @@ from scripts.engine.core.store import store
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
-
-# TODO What do we need from the turn queue?
-#  Add all entities that are within X range of the player;
-#  Add new entities to the queue as they get into range;
-#  Function to amend an entities position in the queue;
 
 
 ############ ACTIONS ##################
@@ -90,6 +83,7 @@ def next_round(time_progressed: int):
 
     ## affliction durations
     for entity, (afflictions, ) in world.get_components([Afflictions]):
+        assert isinstance(afflictions, Afflictions)  # handle mypy type error
         for affliction in afflictions.active:
             if affliction.duration == 0:
                 # expired
@@ -125,7 +119,7 @@ def _add_time(time_to_add: int):
 
 ############# GET ###################
 
-def get_turn_holder() -> int:
+def get_turn_holder() -> EntityID:
     """
     Get the entity who has the current turn
     """
@@ -176,7 +170,7 @@ def _get_pretty_queue() -> List[Tuple[str, int]]:
     return queue
 
 
-def _get_next_entity_in_queue() -> int:
+def _get_next_entity_in_queue() -> EntityID:
     queue = get_turn_queue()
     next_entity = min(queue, key=queue.get)
     return next_entity
@@ -184,7 +178,7 @@ def _get_next_entity_in_queue() -> int:
 
 ############# SET ###################
 
-def set_turn_holder(active_entity: int):
+def set_turn_holder(active_entity: EntityID):
     """
     Get the entity who has the current turn
     """
@@ -212,3 +206,12 @@ def set_time_of_last_turn(time: int):
     store.time_of_last_turn = time
 
 
+def end_turn(entity: EntityID, time_spent: int):
+    """
+    Spend an entities time, progress time, move to next acting entity in queue.
+    """
+    if entity == get_turn_holder():
+        world.spend_time(entity, time_spent)
+        next_turn()
+    else:
+        logging.warning(f"Tried to end {world.get_name(entity)}'s turn but they're not turn holder.")

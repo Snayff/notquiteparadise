@@ -1,16 +1,21 @@
 from __future__ import annotations
 
 import logging
+from typing import List, Optional, Tuple, Union, cast
+
 import pygame
-from typing import List, Optional, Tuple, Union
-from pygame_gui import UIManager, UI_BUTTON_PRESSED
+from pygame_gui import UI_BUTTON_PRESSED, UIManager
 from pygame_gui.core import UIElement as PygameUiElement
-from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIVerticalScrollBar, UIWindow
+from pygame_gui.elements import (UIImage, UIPanel, UITextBox,
+                                 UIVerticalScrollBar, UIWindow)
 from snecs.typedefs import EntityID
+
 from scripts.engine import state, utility, world
-from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources, Traits
-from scripts.engine.core.constants import EventType, GAP_SIZE, ICON_SIZE, INFINITE, PrimaryStat, SecondaryStat, \
-    UIElement
+from scripts.engine.component import (Aesthetic, Afflictions, Identity,
+                                      Resources, Traits)
+from scripts.engine.core.constants import (GAP_SIZE, ICON_SIZE, INFINITE,
+                                           EventType, PrimaryStat,
+                                           SecondaryStat, UIElement)
 from scripts.engine.utility import get_class_members
 
 
@@ -18,8 +23,6 @@ class ActorInfo(UIWindow):
     """
     Full detail about an npc entity.
     """
-    # TODO - change to window
-    # TODO  - change state when selected
 
     def __init__(self, rect: pygame.Rect, manager: UIManager):
 
@@ -57,7 +60,7 @@ class ActorInfo(UIWindow):
         """
         pass
 
-    def process_event(self, event: pygame.event.Event) -> bool:
+    def process_event(self, event: pygame.event.Event):
         """
         Handles resizing & closing windows. Gives UI Windows access to pygame events. Derived
         windows should super() call this class if they implement their own process_event method.
@@ -65,13 +68,7 @@ class ActorInfo(UIWindow):
         NOTE: Copied from pygame_gui UIWindow to allow overwriting use of close button.
 
         """
-        consumed_event = False
-
-        if self.is_blocking and event.type == pygame.MOUSEBUTTONDOWN:
-            consumed_event = True
-
-        if (self is not None and
-                event.type == pygame.MOUSEBUTTONDOWN and
+        if (event.type == pygame.MOUSEBUTTONDOWN and
                 event.button in [pygame.BUTTON_LEFT,
                                  pygame.BUTTON_MIDDLE,
                                  pygame.BUTTON_RIGHT]):
@@ -85,11 +82,8 @@ class ActorInfo(UIWindow):
                 self.resizing_mode_active = True
                 self.start_resize_point = scaled_mouse_pos
                 self.start_resize_rect = self.rect.copy()
-                consumed_event = True
-            elif self.hover_point(scaled_mouse_pos[0], scaled_mouse_pos[1]):
-                consumed_event = True
 
-        if (self is not None and event.type == pygame.MOUSEBUTTONUP and
+        if (event.type == pygame.MOUSEBUTTONUP and
                 event.button == pygame.BUTTON_LEFT and self.resizing_mode_active):
             self.resizing_mode_active = False
 
@@ -122,7 +116,6 @@ class ActorInfo(UIWindow):
         if entity:
 
             info: List[Tuple[str, Union[str, pygame.Surface]]] = []
-            # TODO - replace with non-placeholder image
             section_break_image = utility.get_image("assets/ui/menu_window_n_repeat.png",
                                                     (self.rect.width - self.scrollbar_width, 13))
 
@@ -244,10 +237,11 @@ class ActorInfo(UIWindow):
         for type_str, text_or_image in info:
             # build current text block
             if type_str == "text":
+                assert isinstance(text_or_image,str)  # handle mypy error
                 current_text_block += text_or_image + "<br>"
 
             elif type_str == "image":
-
+                assert isinstance(text_or_image, pygame.Surface)  # handle mypy error
                 # if we have text in the previous block, show it
                 if current_text_block:
                     ## Display text
@@ -301,5 +295,3 @@ class ActorInfo(UIWindow):
 
         # update main sections list
         self.sections = sections
-
-

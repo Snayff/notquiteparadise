@@ -25,7 +25,20 @@
              "unfilled_bar":"#CCCCCC"
          }
      },
-
+     "panel":
+     {
+         "misc": {
+             "shadow_width": 0,
+             "border_width": 0
+         }
+     },
+     "text_box":
+     {
+         "misc": {
+             "shadow_width": 0,
+             "border_width": 0
+         }
+     },
      "button":
      {
          "colours":
@@ -50,7 +63,8 @@
 
          "misc":
          {
-             "tool_tip_delay": "1.5"
+             "tool_tip_delay": "1.5",
+             "shadow_width": 0
          }
      },
      "#skill_button0":

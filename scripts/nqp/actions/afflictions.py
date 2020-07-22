@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Iterator, TYPE_CHECKING
-
+from typing import TYPE_CHECKING, Iterator
 from snecs.typedefs import EntityID
-
 from scripts.engine import world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import AfflictionCategory, AfflictionCategoryType, AfflictionTriggerType, BASE_ACCURACY, BASE_DAMAGE, \
-    DamageType, EffectType, EffectTypeType, PrimaryStat, Shape, ShapeType, TargetTag, TargetTagType
+from scripts.engine.core.constants import (BASE_ACCURACY, BASE_DAMAGE,
+                                           AfflictionCategory,
+                                           AfflictionCategoryType,
+                                           AfflictionTriggerType, DamageType,
+                                           EffectType, EffectTypeType,
+                                           PrimaryStat, Shape, ShapeType,
+                                           TargetTag, TargetTagType)
 from scripts.engine.effect import AffectStatEffect, DamageEffect, Effect
 from scripts.engine.library import library
 
@@ -113,4 +116,3 @@ class Flaming(Affliction):
         )
 
         return [damage_effect]
-

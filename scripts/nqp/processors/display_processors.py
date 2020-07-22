@@ -100,7 +100,3 @@ def _process_aesthetic_update(delta_time: float):
         elif (aesthetic.current_sprite == aesthetic.sprites.move) or time_exceeded:
             aesthetic.current_sprite = aesthetic.sprites.idle
             aesthetic.current_sprite_duration = 0
-
-
-
-

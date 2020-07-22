@@ -1,11 +1,13 @@
 import pytest
-from tests.mocks import world_mock
+
 from scripts.engine import world
+from scripts.engine.component import Afflictions, Identity, Knowledge, Position
 from scripts.engine.core.constants import AfflictionTrigger
+from scripts.engine.effect import (ReduceSkillCooldownEffect,
+                                   TriggerAfflictionsEffect)
 from scripts.nqp.actions.afflictions import Affliction
-from scripts.engine.component import Afflictions, Identity, Position, Knowledge
-from scripts.engine.effect import TriggerAfflictionsEffect, ReduceSkillCooldownEffect
 from scripts.nqp.actions.skills import Move
+from tests.mocks import world_mock
 
 
 class MockAffliction(Affliction):
@@ -86,5 +88,3 @@ class TestEffects:
         effect.evaluate()
 
         assert knowledge.get_skill_cooldown('move') == 10
-
-

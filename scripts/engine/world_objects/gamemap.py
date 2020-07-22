@@ -14,8 +14,7 @@ class GameMap:
         self.width = width
         self.height = height
 
-        # TODO - move this out of game map to map gen
-
+        # FIXME - move this out of game map to map gen
         floor_sprite = utility.get_image("assets/world/placeholder/_test.png", (TILE_SIZE, TILE_SIZE))
         wall_sprite = utility.get_image("assets/world/placeholder/_testWall.png", (TILE_SIZE, TILE_SIZE))
 

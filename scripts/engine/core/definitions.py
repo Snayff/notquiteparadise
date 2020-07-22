@@ -1,16 +1,27 @@
 from __future__ import annotations
 
-import pygame
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, Optional
+
+import pygame
 from snecs.typedefs import EntityID
-from scripts.engine.core.constants import AfflictionCategoryType, TRAIT_RENDER_ORDER, TraitGroup, DamageTypeType, \
-    Direction, \
-    DirectionType, \
-    EffectType, \
-    EffectTypeType, PrimaryStatType, ProjectileExpiry, ProjectileExpiryType, ProjectileSpeed, ProjectileSpeedType, \
-    Resource, ResourceType, SecondaryStatType, Shape, ShapeType, TargetTag, TargetTagType, TargetingMethod, \
-    TargetingMethodType, TerrainCollision, TerrainCollisionType, TravelMethod, TravelMethodType, AfflictionTriggerType
+
+from scripts.engine.core.constants import (
+    AfflictionCategory, AfflictionCategoryType,
+    AfflictionTrigger, AfflictionTriggerType,
+    DamageTypeType, Direction,
+    DirectionType, EffectType,
+    EffectTypeType, PrimaryStatType,
+    ProjectileExpiry,
+    ProjectileExpiryType,
+    ProjectileSpeed,
+    ProjectileSpeedType, Resource,
+    ResourceType, SecondaryStatType,
+    Shape, ShapeType, TargetingMethod,
+    TargetingMethodType, TargetTag,
+    TargetTagType, TerrainCollision,
+    TerrainCollisionType, TraitGroup,
+    TraitGroupType, TravelMethod, TravelMethodType)
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -25,7 +36,6 @@ class SkillData:
     """
     Data class for a skill. Used by the library to load from json.
     """
-    # TODO - rename relevant sections to indicate they are base values
     # how do we know it?
     name: str = field(default="none")
     description: str = field(default="none")
@@ -68,7 +78,7 @@ class ProjectileData:
     # what created it?
     creator: EntityID
     skill_name: str = field(default="none")
-    skill_instance: Skill = False
+    skill_instance: Optional[Skill] = None
     name: str = ""
     description: str = ""
 
@@ -99,12 +109,12 @@ class AfflictionData:
     class_name: str = field(default="none")
     description: str = field(default="none")
     icon: str = field(default="none")
-    category: Optional[AfflictionCategoryType] = None
+    category: AfflictionCategoryType = AfflictionCategory.BANE
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    required_tags: List[TargetTagType] = field(default_factory=list(TargetTag.OTHER_ENTITY))
-    identity_tags: List[EffectTypeType] = field(default_factory=list(EffectType.DAMAGE))
-    triggers: List[AfflictionTriggerType] = field(default_factory=list())
+    required_tags: List[TargetTagType] = field(default_factory=list)
+    identity_tags: List[EffectTypeType] = field(default_factory=list)
+    triggers: List[AfflictionTriggerType] = field(default_factory=list)
 
 
 @register_dataclass_with_json
@@ -130,8 +140,8 @@ class EffectData:
     shape_size: int = 1
 
     # what next?
-    success_effects: List[Optional[EffectData]] = field(default_factory=list)
-    fail_effects: List[Optional[EffectData]] = field(default_factory=list)
+    success_effects: List[EffectData] = field(default_factory=list)
+    fail_effects: List[EffectData] = field(default_factory=list)
 
 
 ##################### ACTORS #################################
@@ -171,10 +181,10 @@ class TraitData:
     """
     Data class for an aspects
     """
-    name: str = field(default="none")
-    group: TraitGroup = field(default="none")
-    behaviour_name: str = field(default="none")
-    description: str = field(default="none")
+    name: str = "none"
+    group: TraitGroupType = TraitGroup.NPC
+    behaviour_name: str = "none"
+    description: str = "none"
     sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
     sight_range: int = 0
     vigour: int = 0
@@ -187,7 +197,14 @@ class TraitData:
 
     def __post_init__(self):
         # update sprite path render order
-        self.sprite_paths.render_order = TRAIT_RENDER_ORDER.get(self.group)
+        # FIXME - this should be handled prior to coming to the dataclass
+        trait_render_order = {
+            "npc": 0,
+            "people": 1,
+            "homeland": 2,
+            "savvy": 3
+        }
+        self.sprite_paths.render_order = trait_render_order.get(self.group)
 
 
 @register_dataclass_with_json
@@ -251,7 +268,7 @@ class AttitudeData:
     """
     Data class for  a god's attitude
     """
-    action: str = field(default="none")  # TODO - standardise what this can be
+    action: str = field(default="none")
     opinion_change: int = 0
 
 
@@ -261,7 +278,7 @@ class InterventionData:
     """
     Data class for a god's intervention
     """
-    skill_key: str = field(default="none")  # TODO - confirm if we want skill key or name
+    skill_key: str = field(default="none")
     required_opinion: int = 0
 
 
@@ -271,8 +288,7 @@ class GodData:
     """
     Data class for a god
     """
-    # TODO - add gods own sprite collection
     name: str = field(default="none")
     description: str = field(default="none")
-    attitudes: Dict[int, AttitudeData] = field(default_factory=dict)
-    interventions: Dict[int, InterventionData] = field(default_factory=dict)
+    attitudes: Dict[str, AttitudeData] = field(default_factory=dict)
+    interventions: Dict[str, InterventionData] = field(default_factory=dict)

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Any, Tuple
 
 from snecs import RegisteredComponent
 
-from scripts.engine.core.constants import PrimaryStatType, EffectType
+from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
     import pygame
@@ -50,7 +50,6 @@ class HasCombatStats(RegisteredComponent):
     A flag to show if an entity has stats used for combat.
     """
     __slots__ = ()
-    # TODO - move stats to here, set base stats on init then hold modification value
 
 
 #################### OTHERS #########################
@@ -70,13 +69,16 @@ class Aesthetic(RegisteredComponent):
     An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: TraitSpritesData, draw_x: float, draw_y: float):
-        # TODO - add render layer/order
-        self.current_sprite = current_sprite
-        self.sprites = sprites
+    def __init__(self, current_sprite: pygame.Surface, sprites: TraitSpritesData, render_layer: RenderLayerType,
+            draw_pos: Tuple[float, float]):
+        self.current_sprite: pygame.Surface = current_sprite
+        self.sprites: TraitSpritesData = sprites
+        self.render_layer = render_layer
 
+        draw_x, draw_y = draw_pos
         self.draw_x: float = draw_x
         self.draw_y: float = draw_y
+
         self.target_draw_x: float = draw_x
         self.target_draw_y: float = draw_y
         self.current_sprite_duration: float = 0
@@ -135,7 +137,6 @@ class Behaviour(RegisteredComponent):
     An ai behaviour to control an entity.
     """
 
-    # TODO - inherit from AIBehaviour
     def __init__(self, behaviour: AIBehaviour):
         self.behaviour = behaviour
 
@@ -145,8 +146,8 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
-    def __init__(self, skills: List[Type[Skill]] = None, skill_order: List[str] = None):
-        skills = skills or {}
+    def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None):
+        skills = skills or []
         skill_order = skill_order or []
 
         self.skill_order: List[str] = skill_order
@@ -217,8 +218,6 @@ class Afflictions(RegisteredComponent):
 
 
 class Aspect(RegisteredComponent):
-    # TODO - inherit from dict and add to that
-    # TODO - combine aspect and terrain - combine with tile too as only tile can have?
     """
     An entity's aspects. A static tile modifier. Held in a dict as {aspect_name: duration}
     """
@@ -230,7 +229,6 @@ class Aspect(RegisteredComponent):
 
 
 class Opinion(RegisteredComponent):
-    # TODO - inherit from dict and add to that
     """
     An entity's views on other entities. {entity, opinion}
     """

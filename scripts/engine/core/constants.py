@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import pygame
 from types import SimpleNamespace
 from typing import NewType, Tuple
+import pygame
 
 ######################## GENERAL CONSTANTS ######################################
-# TODO - segregate to relevant sections and modules
 VERSION = "0.108.0"
 
 TILE_SIZE = 64
@@ -13,16 +12,6 @@ ICON_IN_TEXT_SIZE = 16
 ICON_SIZE = 32
 GAP_SIZE = 2
 SKILL_SIZE = 64
-LAYER_CAMERA = 1  # lowest level
-LAYER_BASE_UI = 3
-LAYER_WINDOW = 5
-TRAIT_RENDER_ORDER = {
-    "npc": 0,
-    "people": 1,
-    "homeland": 2,
-    "savvy": 3
-}
-
 DEFAULT_ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
 TIME_PER_ROUND = 20  # amount of time in a round.
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
@@ -43,7 +32,6 @@ PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
 ResourceType = NewType("ResourceType", str)
 GameStateType = NewType("GameStateType", int)
-EventTopicType = NewType("EventTopicType", int)
 MessageTypeType = NewType("MessageTypeType", int)
 TargetTagType = NewType("TargetTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
@@ -63,6 +51,7 @@ DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
 AfflictionTriggerType = NewType("AfflictionTriggerType", str)
+RenderLayerType = NewType("RenderLayerType", int)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
@@ -80,7 +69,6 @@ class VisualInfo(SimpleNamespace):
     """
     Constant info about visual aspects such as resolution and frame rate
     """
-    # TODO -  should this be in UI?
     BASE_WINDOW_WIDTH = 1280
     BASE_WINDOW_HEIGHT = 720
     GAME_FPS = 60
@@ -92,6 +80,18 @@ class FOVInfo(SimpleNamespace):
     """
     LIGHT_WALLS = True
     FOV_ALGORITHM = 0
+
+
+class RenderLayer(SimpleNamespace):
+    """
+    The possible render layers. Lower number is further down the stack.
+    """
+    BOTTOM = RenderLayerType(10)
+    TILE = RenderLayerType(20)
+    ASPECT = RenderLayerType(30)
+    ACTOR = RenderLayerType(40)
+    UI_BASE = RenderLayerType(50)
+    UI_WINDOW = RenderLayerType(60)
 
 
 class GameState(SimpleNamespace):
@@ -139,7 +139,6 @@ class HitValue(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
-    # TODO - externalise the values
     GRAZE = HitValueType(0)
     HIT = HitValueType(5)
     CRIT = HitValueType(20)
@@ -149,7 +148,6 @@ class HitModifier(SimpleNamespace):
     """
     The modifier for each hit type
     """
-    # TODO - externalise the values
     GRAZE = HitModifierType(0.6)
     HIT = HitModifierType(1)
     CRIT = HitModifierType(1.4)
@@ -185,14 +183,14 @@ class InputIntent(SimpleNamespace):
     CONFIRM = InputIntentType("confirm")
     CANCEL = InputIntentType("cancel")
     EXIT = InputIntentType("exit")
-    DEBUG_TOGGLE = InputIntentType("debug_toggle")  # TODO - move to dev console
+    DEBUG_TOGGLE = InputIntentType("debug_toggle")
     SKILL0 = InputIntentType("skill0")
     SKILL1 = InputIntentType("skill1")
     SKILL2 = InputIntentType("skill2")
     SKILL3 = InputIntentType("skill3")
     SKILL4 = InputIntentType("skill4")
     SKILL5 = InputIntentType("skill5")
-    REFRESH_DATA = InputIntentType("refresh_data")  # TODO - move to dev console
+    REFRESH_DATA = InputIntentType("refresh_data")
     DEV_TOGGLE = InputIntentType("dev_toggle")
     ACTOR_INFO_TOGGLE = InputIntentType("npc_info_toggle")
 
@@ -207,7 +205,6 @@ class TargetTag(SimpleNamespace):
     SELF = TargetTagType("self")
     OTHER_ENTITY = TargetTagType("other_entity")
     NO_ENTITY = TargetTagType("no_entity")
-    OUT_OF_BOUNDS = TargetTagType("out_of_bounds")
     ANY = TargetTagType("any")
     OPEN_SPACE = TargetTagType("open_space")
     BLOCKED_MOVEMENT = TargetTagType("blocked_movement")
@@ -347,7 +344,6 @@ class TravelMethod(SimpleNamespace):
     """
     STANDARD = TravelMethodType("standard")  # travels tile by tile
     ARC = TravelMethodType("arc")  # only impacts last tile in range, can reflect if hits terrain early.
-    # TODO - extend to allow throw shorter than total length and implement bounces
 
 
 class ProjectileExpiry(SimpleNamespace):

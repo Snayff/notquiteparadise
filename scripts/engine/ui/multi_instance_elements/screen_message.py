@@ -18,12 +18,9 @@ class ScreenMessage(UITextBox):
     """
     def __init__(self, text, manager: UIManager,):
 
-        # TODO - consider moving to pygame_gui.windows.ui_message_window module
-
-        # TODO - centre the text on the screen
         x = VisualInfo.BASE_WINDOW_WIDTH / 4
         y = VisualInfo.BASE_WINDOW_HEIGHT / 4
-        width = VisualInfo.BASE_WINDOW_WIDTH / 2  # TODO - get width of text
+        width = VisualInfo.BASE_WINDOW_WIDTH / 2
         height = -1  # force auto size
         rect = Rect((x, y), (width, height))
 
