@@ -1,6 +1,7 @@
 import pytest
-from scripts.engine.core.constants import Shape
+
 from scripts.engine import utility
+from scripts.engine.core.constants import Shape
 
 
 class TestUtility:
@@ -23,4 +24,3 @@ class TestUtility:
         """
         coordinates = utility.get_coords_from_shape(shape, size, direction)
         assert coordinates == expected
-

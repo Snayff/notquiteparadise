@@ -9,12 +9,6 @@ if TYPE_CHECKING:
 class Tile:
     """
     A Tile on the GameMap.
-
-    Attributes:
-        x(int): tile_x
-        y(int): tile_y
-        is_visible(bool): if tile is visible to player
-        sprite(pygame.Surface): the sprite of the floor.
     """
 
     def __init__(self, x: int, y: int, sprite: pygame.Surface, blocks_sight: bool = False,
@@ -25,10 +19,3 @@ class Tile:
         self.is_visible = False
         self.blocks_sight = blocks_sight
         self.blocks_movement = blocks_movement
-
-        # TODO - implement following members
-        # self.is_lit  # currently in range of a light source
-        # self.seen_by_player  # whether the player has seen the tile before
-
-
-

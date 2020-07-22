@@ -3,16 +3,20 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from typing import List, Optional, Dict, Callable
-
-import pygame_gui
 import pygame
+import pygame_gui
 from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel
 
-from scripts.engine.core.constants import GAP_SIZE, LAYER_BASE_UI, MAX_SKILLS, SKILL_SIZE, EventType, InputIntent, InputIntentType
+from scripts.engine.core.constants import (
+    GAP_SIZE,  MAX_SKILLS, RenderLayer, SKILL_SIZE, EventType, InputIntent,
+    InputIntentType)
+
+if TYPE_CHECKING:
+    from typing import List, Optional, Dict, Callable
+
+
 
 
 class SkillBar(UIPanel):
@@ -35,7 +39,7 @@ class SkillBar(UIPanel):
         self.start_y = 0
 
         # complete base class init
-        super().__init__(rect, LAYER_BASE_UI, manager, element_id="skill_bar",
+        super().__init__(rect, RenderLayer.UI_BASE, manager, element_id="skill_bar",
                          anchors={"left": "left",
                              "right": "right",
                              "top": "bottom",
@@ -81,5 +85,3 @@ class SkillBar(UIPanel):
             skill_button = UIButton(relative_rect=Rect((x, y), (SKILL_SIZE, SKILL_SIZE)), text=f"{skill_slot + 1}",
                              manager=manager, container=self.get_container(), object_id=f"#skill_button{skill_slot}")
             self.skill_buttons.append(skill_button)
-
-

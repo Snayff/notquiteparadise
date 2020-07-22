@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import logging
 import math
-from typing import Any, List, TYPE_CHECKING, Tuple, Type
+import sys
+from typing import Optional, TYPE_CHECKING, Any, List, Tuple, Type
 
 import pygame
 import scipy
-import logging
 
-from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, Shape, ShapeType, TILE_SIZE
+from scripts.engine.core.constants import (IMAGE_NOT_FOUND_PATH, TILE_SIZE,
+                                           Shape, ShapeType)
 
 if TYPE_CHECKING:
     from typing import Tuple
@@ -141,7 +143,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
     This returns an int indicating the number of tile moves between the two points.
     """
-    # TODO - take chebyshev code from scipy and remove scipy
+    
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
@@ -210,11 +212,13 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
                 new_row.add(perpendicular)
 
         coord_list += list(last_row)
-        last_row = new_row
+        # FIXME - Incompatible types in assignment (expression has type "Set[Tuple[int, int]]", variable has type
+        #  "List[Tuple[int, int]]")
+        last_row = new_row  # type: ignore
     return coord_list + list(last_row)
 
 
-def get_coords_from_shape(shape: ShapeType, size: int, direction: Tuple[int, int]) -> List[Tuple[int, int]]:
+def get_coords_from_shape(shape: ShapeType, size: int, direction: Optional[Tuple[int, int]]) -> List[Tuple[int, int]]:
     """
     Get a list of coordinates from a shape, size and direction.
     """
@@ -231,10 +235,14 @@ def get_coords_from_shape(shape: ShapeType, size: int, direction: Tuple[int, int
         return _calculate_cross_shape(size)
 
     elif shape == Shape.CONE:
-        return _calculate_cone_shape(size, direction)
+        if direction:
+            return _calculate_cone_shape(size, direction)
+        else:
+            logging.error(f"No direction passed to get_coords_from_shape for a Cone.")
+            raise KeyError("No direction for Cone.")
 
-    logging.error(f'Unknown shape "{shape}" passed to get_coords_from_shape')
-    raise KeyError(f'Unknown shape "{shape}"')
+    logging.error(f"Unknown shape '{shape}' passed to get_coords_from_shape")
+    raise KeyError(f"Unknown shape '{shape}'")
 
 
 def value_to_member(value: Any, cls: Type[Any]) -> str:
@@ -275,3 +283,4 @@ def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge
     end_coordinate = bounds[1] - edge - 1
     within_bounds = start_coordinate <= coordinate < end_coordinate
     return within_bounds
+

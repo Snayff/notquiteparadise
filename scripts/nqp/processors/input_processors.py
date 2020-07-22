@@ -1,17 +1,20 @@
 from __future__ import annotations
 
-from typing import Optional, TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Optional, Type
 
+import pygame
 from pygame_gui import UI_WINDOW_CLOSE
 from snecs.typedefs import EntityID
-import pygame
-from scripts.engine import debug, state, world, key
+
+import scripts.engine.chronicle
+from scripts.engine import debug, key, state, world
 from scripts.engine.component import IsActor, Knowledge, Position
-from scripts.engine.core.constants import Direction, DirectionType, GameState, GameStateType, InputIntent, \
-    InputIntentType, TargetingMethod, UIElement, EventType
+from scripts.engine.core.constants import (
+    Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
+    InputIntentType, TargetingMethod, UIElement)
 from scripts.engine.library import library
-from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
+from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions.skills import Move, Skill
 from scripts.nqp.processors import ai_processors
@@ -42,7 +45,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
-            for entity, (position, *other) in world.get_components([Position, IsActor]):
+            for entity, (position, *other) in world.get_components([Position, IsActor]):  # type: ignore
                 if position.x == x and position.y == y:
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
@@ -132,20 +135,21 @@ def _process_gamemap_intents(intent: InputIntentType):
         skill_name = _get_pressed_skills_name(intent)
         current_tile = world.get_tile((position.x, position.y))
 
-        # is skill ready to use
-        if world.can_use_skill(player, skill_name):
-            skill = world.get_known_skill(player, skill_name)
+        if skill_name:
+            # is skill ready to use
+            if world.can_use_skill(player, skill_name):
+                skill = world.get_known_skill(player, skill_name)
 
-            if skill:
-                # if auto targeting use the skill
-                if skill.targeting_method == TargetingMethod.AUTO:
-                    # pass centre as it doesnt matter, the skill will pick the right direction
-                    _process_skill_use(player, skill, current_tile, Direction.CENTRE)
-                else:
-                    # trigger targeting overlay
-                    state.set_new(GameState.TARGETING)
-                    state.set_active_skill(skill_name)
-                    ui.update_targeting_overlay(True, skill_name)
+                if skill:
+                    # if auto targeting use the skill
+                    if skill.targeting_method == TargetingMethod.AUTO:
+                        # pass centre as it doesnt matter, the skill will pick the right direction
+                        _process_skill_use(player, skill, current_tile, Direction.CENTRE)
+                    else:
+                        # trigger targeting overlay
+                        state.set_new(GameState.TARGETING)
+                        state.set_active_skill(skill_name)
+                        ui.update_targeting_overlay(True, skill_name)
 
     ## Show actor info - we're in GAMEMAP so it cant be visible
     elif intent == InputIntent.ACTOR_INFO_TOGGLE:
@@ -219,7 +223,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.name)
         ai_processors.process_interventions()
-        world.end_turn(player, skill.time_cost)
+        scripts.engine.chronicle.end_turn(player, skill.time_cost)
         if skill.name == "move":
             ui.set_player_tile(target_tile)
 

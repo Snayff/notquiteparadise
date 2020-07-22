@@ -37,15 +37,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: docs/_build/html
-          
-          
-  version_tag:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Calculate Tag
-      run: echo ::set-env name=TAG_NAME::$(py -3.8 -c 'from scripts.engine.core.constants import VERSION; print(VERSION);' | sed '$!d')
-    - name: Set Tag
-      uses: hole19/git-tag-action@master
-      env:
-        TAG: echo $TAG_NAME
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
