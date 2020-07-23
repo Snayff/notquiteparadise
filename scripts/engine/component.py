@@ -9,7 +9,7 @@ from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLay
 if TYPE_CHECKING:
     import pygame
     import tcod.map
-    from typing import List, Dict, Optional, Type
+    from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
     from scripts.nqp.actions.skills import Skill
@@ -66,9 +66,30 @@ class Position(RegisteredComponent):
     An entity's position on the map.
     """
 
-    def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
+    def __init__(self, *positions: Tuple[int, int]):
+        # Sort the positions from top-left to down-right
+        sorted_positions = sorted(positions, key=lambda x: (x[0]**2 + x[1]**2))
+        self.coordinates = [Coordinate(x, y) for x, y in sorted_positions]
+
+        if not self.coordinates:
+            raise ValueError('Must provide at least 1 coordinate for the entity.')
+
+    @property
+    def x(self) -> int:
+        """
+        Returns the x component of the top-left position
+        """
+        return self.coordinates[0].x
+
+    @property
+    def y(self) -> int:
+        """
+        Returns the y component of the top-left position
+        """
+        return self.coordinates[0].y
+
+    def get_coordinates(self) -> List[Coordinate]:
+        return self.coordinates
 
 
 class Aesthetic(RegisteredComponent):
