@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 from scripts.engine import world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
-from scripts.engine.core.constants import INFINITE, TIME_PER_ROUND
+from scripts.engine.core.constants import INFINITE
 from scripts.engine.core.store import store
+from scripts.engine.library import library
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
@@ -58,7 +59,7 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     set_time_of_last_turn(get_time())
 
     # check if we need to set new round
-    if get_time_in_round() + time_progressed >= TIME_PER_ROUND:
+    if get_time_in_round() + time_progressed >= library.get_game_config_data("default_values")["time_per_round"]:
         next_round(time_progressed)
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
@@ -95,7 +96,8 @@ def next_round(time_progressed: int):
 
     ## time management
     # add progressed time and minus time_in_round to keep the remaining time
-    set_time_in_round((get_time_in_round() + time_progressed) - TIME_PER_ROUND)
+    set_time_in_round((get_time_in_round() + time_progressed) -
+                      library.get_game_config_data("default_values")["time_per_round"])
 
     # increment rounds
     _increment_round_number()

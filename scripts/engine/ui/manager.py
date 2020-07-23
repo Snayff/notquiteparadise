@@ -12,14 +12,14 @@ from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_BUTTON_SI
                                            UIElement,
                                            UIElementType)
 from scripts.engine.library import library
-from scripts.engine.ui.multi_instance_elements.screen_message import \
+from scripts.engine.ui.widgets.screen_message import \
     ScreenMessage
-from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
-from scripts.engine.ui.single_instance_elements.camera import Camera
-from scripts.engine.ui.single_instance_elements.data_editor import DataEditor
-from scripts.engine.ui.single_instance_elements.message_log import MessageLog
-from scripts.engine.ui.single_instance_elements.skill_bar import SkillBar
-from scripts.engine.ui.single_instance_elements.tile_info import TileInfo
+from scripts.engine.ui.elements.actor_info import ActorInfo
+from scripts.engine.ui.elements.camera import Camera
+from scripts.engine.ui.elements.data_editor import DataEditor
+from scripts.engine.ui.elements.message_log import MessageLog
+from scripts.engine.ui.elements.skill_bar import SkillBar
+from scripts.engine.ui.elements.tile_info import TileInfo
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

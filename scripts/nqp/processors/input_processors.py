@@ -14,7 +14,7 @@ from scripts.engine.core.constants import (
     InputIntentType, TargetingMethod, UIElement)
 from scripts.engine.library import library
 from scripts.engine.ui.manager import ui
-from scripts.engine.ui.single_instance_elements.actor_info import ActorInfo
+from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions.skills import Move, Skill
 from scripts.nqp.processors import ai_processors

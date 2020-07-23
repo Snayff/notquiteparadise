@@ -17,8 +17,8 @@ from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
                                       IsActor, IsGod, IsPlayer, Knowledge,
                                       Opinion, Position, Resources, Tracked,
                                       Traits)
-from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
-    DEFAULT_SIGHT_RANGE, ICON_SIZE,
+from scripts.engine.core.constants import (
+    ICON_SIZE,
     INFINITE, RenderLayer, TILE_SIZE, Direction,
     DirectionType,
     HitType, HitTypeType,
@@ -103,7 +103,7 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     components.append(Identity(name, description))
     components.append(Position(x, y))  # FIXME - check position not blocked before spawning
     components.append(HasCombatStats())
-    components.append(Blocking(True, DEFAULT_ENTITY_BLOCKS_SIGHT))
+    components.append(Blocking(True, library.get_game_config_data("default_values")["entity_blocks_sight"]))
     components.append(Traits(trait_names))
     components.append(FOV(create_fov_map()))
     components.append(Tracked(chronicle.get_time()))
@@ -336,7 +336,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     return tiles
 
 
-def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Tuple[int, int]:
+def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> DirectionType:
     """
     Get the direction between two locations.
     """
@@ -354,7 +354,7 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Tu
     dir_x = utility.clamp(dir_x, -1, 1)
     dir_y = utility.clamp(dir_y, -1, 1)
 
-    return dir_x, dir_y
+    return cast(DirectionType, (dir_x, dir_y))
 
 
 def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
@@ -470,7 +470,7 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     # return direction_x, direction_y
 
 
-def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
+def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> DirectionType:
     """
     Use surrounding walls to understand how the object should be reflected.
     """
@@ -510,7 +510,7 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
             dir_x *= -1
             dir_y *= -1
 
-    return dir_x, dir_y
+    return cast(DirectionType, (dir_x, dir_y))
 
 
 def _get_furthest_free_position(start_pos: Tuple[int, int], target_direction: Tuple[int, int],
@@ -957,7 +957,7 @@ def recompute_fov(entity: EntityID) -> bool:
             stats = create_combat_stats(entity)
             sight_range = stats.sight_range
         else:
-            sight_range = DEFAULT_SIGHT_RANGE
+            sight_range = library.get_game_config_data("default_values")["sight_range"]
 
         # get the needed components
         fov = get_entitys_component(entity, FOV)

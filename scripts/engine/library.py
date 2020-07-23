@@ -4,13 +4,11 @@ import time
 import json
 import logging
 import os
-from typing import List, TYPE_CHECKING, Union
-from scripts.engine import debug, utility
-from scripts.engine.core.constants import (EffectTypeType, InputIntent, PrimaryStatType,
-    SecondaryStatType)
-from scripts.engine.core.definitions import (
-    AfflictionData, AspectData, AttitudeData, BasePrimaryStatData, BaseSecondaryStatData,
-    EffectData, GodData, InterventionData, SkillData, TraitData)
+from typing import List, TYPE_CHECKING
+from scripts.engine import utility
+from scripts.engine.core.constants import (InputIntent, PrimaryStatType, SecondaryStatType)
+from scripts.engine.core.definitions import (AfflictionData, AspectData, AttitudeData, BasePrimaryStatData,
+    BaseSecondaryStatData, GodData, InterventionData, SkillData, TraitData)
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
@@ -31,7 +29,7 @@ class _LibraryOfAlexandria:
         self._gods = {}
         self._skills = {}
         self._input = self._get_default_input_dict()
-        self.video = {}
+        self._video = {}
         self._game = {}
 
         self.refresh_library_data()
@@ -169,13 +167,13 @@ class _LibraryOfAlexandria:
 
     def get_video_config_data(self, key: str) -> int:
         """
-        Get video config data
+        Get _video config data
         """
         return utility.recursive_find_in_dict(self._video, key)
 
     def get_game_config_data(self, key: str) -> int:
         """
-        Get video config data
+        Get game config data
         """
         return utility.recursive_find_in_dict(self._game, key)
 
@@ -257,7 +255,7 @@ class _LibraryOfAlexandria:
 
     def _load_video_config(self):
         """
-        Load the video config
+        Load the _video config
         """
         with open('data/config/video.json') as file:
             data = json.load(file)

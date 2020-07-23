@@ -5,8 +5,7 @@ from typing import TYPE_CHECKING, Iterator
 from snecs.typedefs import EntityID
 from scripts.engine import world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import (BASE_ACCURACY, BASE_DAMAGE,
-                                           AfflictionCategory,
+from scripts.engine.core.constants import (AfflictionCategory,
                                            AfflictionCategoryType,
                                            AfflictionTriggerType, DamageType,
                                            EffectType, EffectTypeType,
@@ -108,8 +107,8 @@ class Flaming(Affliction):
             failure_effects=[],
             target=entity,
             stat_to_target=PrimaryStat.BUSTLE,
-            accuracy=BASE_ACCURACY,
-            damage=int(BASE_DAMAGE / 2),
+            accuracy=library.get_game_config_data("base_values")["accuracy"],
+            damage=int(library.get_game_config_data("base_values")["damage"] / 2),
             damage_type=DamageType.BURN,
             mod_stat=PrimaryStat.SKULLDUGGERY,
             mod_amount=0.1

@@ -1,27 +1,14 @@
 from __future__ import annotations
 
+import pygame
 from types import SimpleNamespace
 from typing import NewType, Tuple
-import pygame
 
 ######################## GENERAL CONSTANTS ######################################
+
 VERSION = "0.111.0"
 
-# TODO - move to config
-BASE_WINDOW_WIDTH = 1280
-BASE_WINDOW_HEIGHT = 720
-GAME_FPS = 60
-
 MAX_SKILLS = 5
-DEFAULT_ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
-TIME_PER_ROUND = 20  # amount of time in a round.
-DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
-BASE_MOVE_COST = 20  # amount of time spent to move.
-BASE_ACCURACY = 100
-BASE_DAMAGE = 5  # base amount of damage a skill should do. used as a starting point.
-
-
-
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = TILE_SIZE // 4
 ICON_SIZE = TILE_SIZE // 2
@@ -95,7 +82,7 @@ class GameState(SimpleNamespace):
 
 class UIElement(SimpleNamespace):
     """
-    The different UI elements
+    The different, single instance UI elements
     """
     MESSAGE_LOG = UIElementType(1)
     ACTOR_INFO = UIElementType(2)
@@ -104,21 +91,6 @@ class UIElement(SimpleNamespace):
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
     TILE_INFO = UIElementType(8)
-
-
-class Direction(SimpleNamespace):
-    """
-    Holds a tuple for each direction of the (x, y) relative direction.
-    """
-    UP_LEFT = DirectionType((-1, -1))
-    UP = DirectionType((0, -1))
-    UP_RIGHT = DirectionType((1, -1))
-    LEFT = DirectionType((-1, 0))
-    CENTRE = DirectionType((0, 0))
-    RIGHT = DirectionType((1, 0))
-    DOWN_LEFT = DirectionType((-1, 1))
-    DOWN = DirectionType((0, 1))
-    DOWN_RIGHT = DirectionType((1, 1))
 
 
 class InputIntent(SimpleNamespace):
@@ -150,6 +122,21 @@ class InputIntent(SimpleNamespace):
 
 #################### EXTERNAL, SERIALISED  ###########################################
 # i.e used externally
+
+class Direction(SimpleNamespace):
+    """
+    Holds a tuple for each direction of the (x, y) relative direction.
+    """
+    UP_LEFT = DirectionType((-1, -1))
+    UP = DirectionType((0, -1))
+    UP_RIGHT = DirectionType((1, -1))
+    LEFT = DirectionType((-1, 0))
+    CENTRE = DirectionType((0, 0))
+    RIGHT = DirectionType((1, 0))
+    DOWN_LEFT = DirectionType((-1, 1))
+    DOWN = DirectionType((0, 1))
+    DOWN_RIGHT = DirectionType((1, 1))
+
 
 class TargetTag(SimpleNamespace):
     """
@@ -286,9 +273,9 @@ class TerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
-    REFLECT = TerrainCollisionType("reflect")
-    ACTIVATE = TerrainCollisionType("activate")
-    FIZZLE = TerrainCollisionType("fizzle")
+    REFLECT = TerrainCollisionType("reflect")  # bounce back
+    ACTIVATE = TerrainCollisionType("activate")  # trigger effects
+    FIZZLE = TerrainCollisionType("fizzle")  # kill self
 
 
 class TravelMethod(SimpleNamespace):
@@ -310,8 +297,11 @@ class ProjectileExpiry(SimpleNamespace):
 class ProjectileSpeed(SimpleNamespace):
     """
     The speed at which a projectile travels; how much time to move a tile.
+    N.B. does not use base move_cost
     """
-    SLOW = ProjectileSpeedType(int(BASE_MOVE_COST / 2))
+
+    SLOW = ProjectileSpeedType(10)
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))
     INSTANT = ProjectileSpeedType(0)
+
