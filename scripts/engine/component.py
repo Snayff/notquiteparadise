@@ -88,6 +88,18 @@ class Position(RegisteredComponent):
         """
         return self.coordinates[0].y
 
+    @x.setter
+    def x(self, new: int):
+        """
+        """
+        self.coordinates[0].x = new
+
+    @y.setter
+    def y(self, new: int):
+        """
+        """
+        self.coordinates[0].y = new
+
     def get_coordinates(self) -> List[Coordinate]:
         return self.coordinates
 
