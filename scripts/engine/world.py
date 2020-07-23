@@ -101,7 +101,7 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
         components.append(IsPlayer())
     components.append(IsActor())
     components.append(Identity(name, description))
-    components.append(Position(x, y))  # FIXME - check position not blocked before spawning
+    components.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     components.append(HasCombatStats())
     components.append(Blocking(True, DEFAULT_ENTITY_BLOCKS_SIGHT))
     components.append(Traits(trait_names))
@@ -187,7 +187,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position(x, y))  # FIXME - check position not blocked before spawning
+    projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
 
