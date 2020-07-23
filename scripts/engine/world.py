@@ -20,7 +20,7 @@ from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
 from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
     DEFAULT_SIGHT_RANGE, ICON_SIZE,
     INFINITE, RenderLayer, TILE_SIZE, Direction,
-    DirectionType, FOVInfo,
+    DirectionType,
     HitModifier, HitType, HitTypeType,
     HitValue, MessageType, PrimaryStat,
     PrimaryStatType, ResourceType,
@@ -962,7 +962,8 @@ def recompute_fov(entity: EntityID) -> bool:
         pos = get_entitys_component(entity, Position)
 
         # compute the fov
-        tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
+        if fov and pos:
+            tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, fov.light_walls, fov.algorithm)
 
         # update tiles if it is player
         if entity == get_player():

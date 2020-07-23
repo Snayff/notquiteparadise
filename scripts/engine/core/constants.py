@@ -72,14 +72,6 @@ class EventType(SimpleNamespace):
     EXIT_MENU = pygame.USEREVENT + 3
 
 
-class FOVInfo(SimpleNamespace):
-    """
-    Constant info about the FOV settings
-    """
-    LIGHT_WALLS = True
-    FOV_ALGORITHM = 0
-
-
 class RenderLayer(SimpleNamespace):
     """
     The possible render layers. Lower number is further down the stack.
