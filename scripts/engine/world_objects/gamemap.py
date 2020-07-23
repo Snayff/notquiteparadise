@@ -1,5 +1,6 @@
-from typing import List
+from __future__ import annotations
 
+from typing import List
 from scripts.engine import utility
 from scripts.engine.core.constants import TILE_SIZE
 from scripts.engine.world_objects.tile import Tile

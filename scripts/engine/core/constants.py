@@ -42,8 +42,6 @@ GameStateType = NewType("GameStateType", int)
 TargetTagType = NewType("TargetTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
-HitValueType = NewType("HitValueType", int)
-HitModifierType = NewType("HitModifierType", float)
 EffectTypeType = NewType("EffectTypeType", str)
 AfflictionCategoryType = NewType("AfflictionCategoryType", str)
 ShapeType = NewType("ShapeType", str)
@@ -106,24 +104,6 @@ class UIElement(SimpleNamespace):
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
     TILE_INFO = UIElementType(8)
-
-
-class HitValue(SimpleNamespace):
-    """
-    The value of each hit type. The value is the starting amount.
-    """
-    GRAZE = HitValueType(0)
-    HIT = HitValueType(5)
-    CRIT = HitValueType(20)
-
-
-class HitModifier(SimpleNamespace):
-    """
-    The modifier for each hit type
-    """
-    GRAZE = HitModifierType(0.6)
-    HIT = HitModifierType(1)
-    CRIT = HitModifierType(1.4)
 
 
 class Direction(SimpleNamespace):

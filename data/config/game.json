@@ -1,0 +1,17 @@
+{
+    "hit_types": {
+        "graze": {
+            "value": 0,
+            "modifier": 0.6
+        },
+        "hit": {
+            "value": 5,
+            "modifier": 1
+        },
+        "crit": {
+            "value": 20,
+            "modifier": 1.5
+        }
+    }
+    
+}

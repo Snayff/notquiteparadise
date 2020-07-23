@@ -21,8 +21,8 @@ from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
     DEFAULT_SIGHT_RANGE, ICON_SIZE,
     INFINITE, RenderLayer, TILE_SIZE, Direction,
     DirectionType,
-    HitModifier, HitType, HitTypeType,
-    HitValue, PrimaryStat,
+    HitType, HitTypeType,
+    PrimaryStat,
     PrimaryStatType, ResourceType,
     SecondaryStatType, ShapeType,
     TargetTag, TargetTagType,
@@ -571,9 +571,11 @@ def get_hit_type(to_hit_score: int) -> HitTypeType:
     """
     Get the hit type from the to hit score
     """
-    if to_hit_score >= HitValue.CRIT:
+    hit_types_data = library.get_game_config_data("hit_types")
+
+    if to_hit_score >= hit_types_data[HitType.CRIT]["value"]:
         return HitType.CRIT
-    elif to_hit_score >= HitValue.HIT:
+    elif to_hit_score >= hit_types_data[HitType.HIT]["value"]:
         return HitType.HIT
     else:
         return HitType.GRAZE
@@ -1228,13 +1230,16 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
     # mitigate damage with defence
     mitigated_damage = (base_damage + damage_mod_amount) - resist_value
 
+    # get modifiers
+    hit_types_data = library.get_game_config_data("hit_types")
+
     # apply to hit modifier to damage
     if hit_type == HitType.CRIT:
-        modified_damage = mitigated_damage * HitModifier.CRIT
+        modified_damage = mitigated_damage * hit_types_data[HitType.CRIT]["modifier"]
     elif hit_type == HitType.HIT:
-        modified_damage = mitigated_damage * HitModifier.HIT
+        modified_damage = mitigated_damage * hit_types_data[HitType.HIT]["modifier"]
     else:
-        modified_damage = mitigated_damage * HitModifier.GRAZE
+        modified_damage = mitigated_damage * hit_types_data[HitType.GRAZE]["modifier"]
 
     # round down the dmg
     int_modified_damage = int(modified_damage)

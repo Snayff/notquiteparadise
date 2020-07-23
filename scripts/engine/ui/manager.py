@@ -41,8 +41,8 @@ class _UIManager:
         pygame.font.init()
 
         # get config info
-        base_window_data = library.get_video_data("base_window")
-        desired_window_data = library.get_video_data("desired_window")
+        base_window_data = library.get_video_config_data("base_window")
+        desired_window_data = library.get_video_config_data("desired_window")
 
 
         ##  set the display
