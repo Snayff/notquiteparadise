@@ -24,4 +24,4 @@ class TestUtility:
         Test get coordinates from shape returns the correct coordinates
         """
         coordinates = utility.get_coords_from_shape(shape, size, direction)
-        assert coordinates == expected
+        assert set(coordinates) == set(expected)
