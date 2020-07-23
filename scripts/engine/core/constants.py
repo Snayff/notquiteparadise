@@ -5,21 +5,28 @@ from typing import NewType, Tuple
 import pygame
 
 ######################## GENERAL CONSTANTS ######################################
-VERSION = "0.108.0"
+VERSION = "0.111.0"
 
-TILE_SIZE = 64
-ICON_IN_TEXT_SIZE = 16
-ICON_SIZE = 32
-GAP_SIZE = 2
-SKILL_SIZE = 64
+# TODO - move to config
+BASE_WINDOW_WIDTH = 1280
+BASE_WINDOW_HEIGHT = 720
+GAME_FPS = 60
+
+MAX_SKILLS = 5
 DEFAULT_ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
 TIME_PER_ROUND = 20  # amount of time in a round.
 DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
 BASE_MOVE_COST = 20  # amount of time spent to move.
 BASE_ACCURACY = 100
 BASE_DAMAGE = 5  # base amount of damage a skill should do. used as a starting point.
-MAX_SKILLS = 5
 
+
+
+TILE_SIZE = 64
+ICON_IN_TEXT_SIZE = TILE_SIZE // 4
+ICON_SIZE = TILE_SIZE // 2
+GAP_SIZE = 2
+SKILL_BUTTON_SIZE = 64
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
 
@@ -63,15 +70,6 @@ class EventType(SimpleNamespace):
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
     EXIT_MENU = pygame.USEREVENT + 3
-
-
-class VisualInfo(SimpleNamespace):
-    """
-    Constant info about visual aspects such as resolution and frame rate
-    """
-    BASE_WINDOW_WIDTH = 1280
-    BASE_WINDOW_HEIGHT = 720
-    GAME_FPS = 60
 
 
 class FOVInfo(SimpleNamespace):

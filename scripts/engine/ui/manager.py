@@ -7,10 +7,10 @@ from pygame_gui import UIManager
 from pygame_gui.core import UIElement as PygameGuiElement
 from snecs.typedefs import EntityID
 from scripts.engine import debug, utility
-from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_SIZE,
+from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_BUTTON_SIZE,
                                            Direction, MessageType,
                                            MessageTypeType, UIElement,
-                                           UIElementType, VisualInfo)
+                                           UIElementType)
 from scripts.engine.library import library
 from scripts.engine.ui.multi_instance_elements.screen_message import \
     ScreenMessage
@@ -40,17 +40,26 @@ class _UIManager:
         pygame.init()
         pygame.font.init()
 
-        #  set the display
-        self._desired_width = VisualInfo.BASE_WINDOW_WIDTH
-        self._desired_height = VisualInfo.BASE_WINDOW_HEIGHT
-        self._screen_scaling_mod_x = self._desired_width // VisualInfo.BASE_WINDOW_WIDTH
-        self._screen_scaling_mod_y = self._desired_height // VisualInfo.BASE_WINDOW_HEIGHT
+        # get config info
+        base_window_data = library.get_video_data("base_window")
+        desired_window_data = library.get_video_data("desired_window")
+
+
+        ##  set the display
+        # base values
+        self._base_width = base_window_data["width"]
+        self._base_height = base_window_data["height"]
+        self._main_surface: pygame.Surface = pygame.Surface((self._base_width, self._base_height), pygame.SRCALPHA)
+
+        # values to scale to
+        self._desired_width = desired_window_data["width"]
+        self._desired_height = desired_window_data["height"]
+        self._screen_scaling_mod_x = self._desired_width // self._base_width
+        self._screen_scaling_mod_y = self._desired_height // self._base_height
         self._window: pygame.display = pygame.display.set_mode((self._desired_width, self._desired_height))
-        self._main_surface: pygame.Surface = pygame.Surface((VisualInfo.BASE_WINDOW_WIDTH,
-                                                            VisualInfo.BASE_WINDOW_HEIGHT), pygame.SRCALPHA)
 
         # now that the display is configured  init the pygame_gui
-        self._gui = UIManager((VisualInfo.BASE_WINDOW_WIDTH, VisualInfo.BASE_WINDOW_HEIGHT), "data/ui/themes.json")
+        self._gui = UIManager((self._base_width, self._base_height), "data/ui/themes.json")
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
@@ -164,14 +173,14 @@ class _UIManager:
         message_y = -message_height
 
         # Skill Bar
-        skill_width = MAX_SKILLS * (SKILL_SIZE + GAP_SIZE)
-        skill_height = SKILL_SIZE
-        skill_x = (VisualInfo.BASE_WINDOW_WIDTH // 2) - (skill_width // 2)
-        skill_y = -SKILL_SIZE
+        skill_width = MAX_SKILLS * (SKILL_BUTTON_SIZE + GAP_SIZE)
+        skill_height = SKILL_BUTTON_SIZE
+        skill_x = (self._base_width // 2) - (skill_width // 2)
+        skill_y = -SKILL_BUTTON_SIZE
 
         # Camera
-        camera_width = VisualInfo.BASE_WINDOW_WIDTH
-        camera_height = VisualInfo.BASE_WINDOW_HEIGHT
+        camera_width = self._base_width
+        camera_height = self._base_height
         camera_x = 0
         camera_y = 0
 
@@ -182,14 +191,14 @@ class _UIManager:
         tile_info_y = -tile_info_height
 
         # Data Editor
-        data_width = VisualInfo.BASE_WINDOW_WIDTH
-        data_height = VisualInfo.BASE_WINDOW_HEIGHT
+        data_width = self._base_width
+        data_height = self._base_height
         data_x = 5
         data_y = 10
 
         # Npc info
-        npc_info_width = VisualInfo.BASE_WINDOW_WIDTH / 2
-        npc_info_height = VisualInfo.BASE_WINDOW_HEIGHT - (VisualInfo.BASE_WINDOW_HEIGHT / 4)
+        npc_info_width = self._base_width / 2
+        npc_info_height = self._base_height - (self._base_height / 4)
         npc_info_x = 5
         npc_info_y = 10
 
@@ -240,7 +249,8 @@ class _UIManager:
         """
         col = "#531B75"
         text = f"<font face=barlow color={col} size={size}>{message}</font>"
-        screen_message = ScreenMessage(text, self.get_gui_manager())
+        rect = pygame.Rect((self._base_width / 4, self._base_height/4), (self._base_width / 2, -1))
+        screen_message = ScreenMessage(rect, text, self.get_gui_manager())
 
     ######################## KILL ###############################################
 

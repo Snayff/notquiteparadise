@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import math
 import sys
-from typing import Optional, TYPE_CHECKING, Any, List, Tuple, Type
+from typing import Dict, Iterable, Optional, TYPE_CHECKING, Any, List, Tuple, Type, Union
 
 import pygame
 import scipy
@@ -65,15 +65,9 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
     return base
 
 
-def recursive_replace(obj, key, value_to_replace, new_value):
+def recursive_replace(obj: Union[Dict, List], key: str, value_to_replace: Any, new_value: Any):
     """
     Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
-
-    Args:
-        obj (object): dict, list, string, or anything else to be checked.
-        key (str): The key to look for in the object
-        value_to_replace (): The value to look for, stored against the key.
-        new_value (): The value to set.
     """
     if isinstance(obj, dict):
         # Break the dict out and run recursively against the elements
@@ -94,6 +88,21 @@ def recursive_replace(obj, key, value_to_replace, new_value):
         # Break the list out and run recursively against the elements
         for element in obj:
             recursive_replace(element, key, value_to_replace, new_value)
+
+
+def recursive_find_in_dict(obj: Union[Dict, List], key: str) -> Any:
+    """
+    Check through any number of nested dicts for the specified key and return the value. Returns after
+    finding the first key.
+    """
+    if isinstance(obj, dict):
+        # Break the dict out and run recursively against the elements
+        for k, v in obj.items():
+            if k == key:
+                return v
+            else:
+                # go a layer down
+                recursive_find_in_dict(v, key)
 
 
 def get_class_members(cls: Type[Any]) -> List[str]:

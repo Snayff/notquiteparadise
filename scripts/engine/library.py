@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import List, TYPE_CHECKING
-
+from typing import List, TYPE_CHECKING, Union
 from scripts.engine import utility
 from scripts.engine.core.constants import (EffectTypeType, InputIntent, PrimaryStatType,
     SecondaryStatType)
@@ -31,6 +30,7 @@ class _LibraryOfAlexandria:
         self._gods = {}
         self._skills = {}
         self._input = self._get_default_input_dict()
+        self.video = {}
 
         self.refresh_library_data()
 
@@ -52,6 +52,7 @@ class _LibraryOfAlexandria:
             self._load_gods_data()
             self._load_skills_data()
             self._load_input_config()
+            self._load_video_config()
 
         logging.info(f"Library data refreshed.")
 
@@ -140,7 +141,7 @@ class _LibraryOfAlexandria:
 
         return attitude_data
 
-    def get_input_data(self) -> Dict[str, List[int]]:
+    def get_all_input_data(self) -> Dict[str, List[int]]:
         """
         Get the input data
         """
@@ -156,6 +157,12 @@ class _LibraryOfAlexandria:
             _input[name.lower()] = []
 
         return _input
+
+    def get_video_data(self, key: str) -> int:
+        """
+        Get video config data
+        """
+        return utility.recursive_find_in_dict(self._video, key)
 
     ####################### LOAD ##############################
 
@@ -233,5 +240,13 @@ class _LibraryOfAlexandria:
         # add mapped data
         self._input = _input_list
 
+    def _load_video_config(self):
+        """
+        Load the video config
+        """
+        with open('data/config/video.json') as file:
+            data = json.load(file)
+
+        self._video = data
 
 library = _LibraryOfAlexandria()
