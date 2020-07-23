@@ -39,7 +39,6 @@ PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
 ResourceType = NewType("ResourceType", str)
 GameStateType = NewType("GameStateType", int)
-MessageTypeType = NewType("MessageTypeType", int)
 TargetTagType = NewType("TargetTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
@@ -52,7 +51,6 @@ TerrainCollisionType = NewType("TerrainCollisionType", str)
 TravelMethodType = NewType("TravelMethodType", str)
 ProjectileExpiryType = NewType("ProjectileExpiryType", str)
 ProjectileSpeedType = NewType("ProjectileSpeedType", int)
-InputModeType = NewType("InputModeType", int)
 UIElementType = NewType("UIElementType", int)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
@@ -95,21 +93,6 @@ class GameState(SimpleNamespace):
     EXIT_GAME = GameStateType(5)  # while exiting
     DEVELOPER = GameStateType(6)  # while using dev mode
     MENU = GameStateType(7)  # while using a menu
-
-
-class MessageType(SimpleNamespace):
-    """Types of Message Events"""
-    LOG = MessageTypeType(1)
-    ENTITY = MessageTypeType(2)
-    SCREEN = MessageTypeType(3)
-
-
-class InputMode(SimpleNamespace):
-    """
-    Input hardware being used
-    """
-    MOUSE_AND_KB = InputModeType(1)
-    GAMEPAD = InputModeType(2)
 
 
 class UIElement(SimpleNamespace):

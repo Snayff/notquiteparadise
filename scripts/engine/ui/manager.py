@@ -8,8 +8,8 @@ from pygame_gui.core import UIElement as PygameGuiElement
 from snecs.typedefs import EntityID
 from scripts.engine import debug, utility
 from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_BUTTON_SIZE,
-                                           Direction, MessageType,
-                                           MessageTypeType, UIElement,
+                                           Direction,
+                                           UIElement,
                                            UIElementType)
 from scripts.engine.library import library
 from scripts.engine.ui.multi_instance_elements.screen_message import \
@@ -343,7 +343,7 @@ class _UIManager:
         else:
             logging.warning(f"Tried to update TileInfo but key not found. Is it init`d?")
 
-    def _add_to_message_log(self, message: str):
+    def log_message(self, message: str):
         """
         Add a text to the message log. Includes processing of the text.
         """
@@ -354,16 +354,6 @@ class _UIManager:
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init`d?")
 
-    def log_message(self, message_type: MessageTypeType,  message: str, colour: str = None, size: int = 4,
-            entity: EntityID = None):
-        if message_type == MessageType.LOG:
-            self._add_to_message_log(message)
-
-        elif message_type == MessageType.SCREEN:
-            self.create_screen_message(message, colour, size)
-
-        elif message_type == MessageType.ENTITY:
-            pass
 
     def set_element_visibility(self, element_type: UIElementType, visible: bool):
         """

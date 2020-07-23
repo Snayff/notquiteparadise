@@ -22,7 +22,7 @@ from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
     INFINITE, RenderLayer, TILE_SIZE, Direction,
     DirectionType,
     HitModifier, HitType, HitTypeType,
-    HitValue, MessageType, PrimaryStat,
+    HitValue, PrimaryStat,
     PrimaryStatType, ResourceType,
     SecondaryStatType, ShapeType,
     TargetTag, TargetTagType,
@@ -926,7 +926,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not can_afford:
         # is it the player that can't afford it?
         if entity == player:
-            ui.log_message(MessageType.LOG, "I cannot afford to do that.")
+            ui.log_message("I cannot afford to do that.")
         else:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, which they can`t afford.")
 
@@ -934,7 +934,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not not_on_cooldown:
         # is it the player that's can't afford it?
         if entity == player:
-            ui.log_message(MessageType.LOG, "I'm not ready to do that, yet.")
+            ui.log_message("I'm not ready to do that, yet.")
         else:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait {cooldown} more "
                             f"rounds.")
@@ -1137,7 +1137,7 @@ def kill_entity(entity: EntityID):
 
     else:
         # placeholder for player death
-        ui.log_message(MessageType.LOG, "I should have died just then.")
+        ui.log_message("I should have died just then.")
 
 
 def delete(entity: EntityID):
