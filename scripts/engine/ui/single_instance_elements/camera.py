@@ -105,10 +105,11 @@ class Camera(UIPanel):
                 from scripts.engine.ui.manager import ui
                 for entity, (position, ) in world.get_components([Position]):
                     position: Position
-                    if position.x == x and position.y == y:
-                        ui.set_selected_tile_pos((x, y))
-                        ui.set_element_visibility(UIElement.TILE_INFO, True)
-                        updated_tile_info = True
+                    for coordinate in position.get_coordinates():
+                        if coordinate.x == x and coordinate.y == y:
+                            ui.set_selected_tile_pos((x, y))
+                            ui.set_element_visibility(UIElement.TILE_INFO, True)
+                            updated_tile_info = True
                 # entity not found at location so hide
                 if not updated_tile_info:
                     if ui.element_is_visible(UIElement.TILE_INFO):
