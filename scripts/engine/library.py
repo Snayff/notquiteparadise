@@ -1,16 +1,14 @@
 from __future__ import annotations
 
+import time
 import json
 import logging
 import os
-from typing import List, TYPE_CHECKING
-
+from typing import Any, List, TYPE_CHECKING, Union
 from scripts.engine import utility
-from scripts.engine.core.constants import (EffectTypeType, InputIntent, PrimaryStatType,
-    SecondaryStatType)
-from scripts.engine.core.definitions import (
-    AfflictionData, AspectData, AttitudeData, BasePrimaryStatData, BaseSecondaryStatData,
-    EffectData, GodData, InterventionData, SkillData, TraitData)
+from scripts.engine.core.constants import (InputIntent, PrimaryStatType, SecondaryStatType)
+from scripts.engine.core.definitions import (AfflictionData, AspectData, AttitudeData, BasePrimaryStatData,
+    BaseSecondaryStatData, GodData, InterventionData, SkillData, TraitData)
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
@@ -31,10 +29,12 @@ class _LibraryOfAlexandria:
         self._gods = {}
         self._skills = {}
         self._input = self._get_default_input_dict()
+        self._video = {}
+        self._game = {}
 
         self.refresh_library_data()
 
-        logging.info(f"Data Library initialised.")  # FIXME - this isnt being logged
+        logging.info(f"Data Library initialised.")  # FIXME - this isnt being logged because debug inits after
 
     ####################### LIBRARY MANAGEMENT ####################
 
@@ -42,6 +42,8 @@ class _LibraryOfAlexandria:
         """
         Load all json data into the library.
         """
+        start_time = time.time()
+
         # N.B. this is set in Sphinx config when Sphinx is running
         if "GENERATING_SPHINX_DOCS" not in os.environ:
             self._load_traits_data()
@@ -52,8 +54,14 @@ class _LibraryOfAlexandria:
             self._load_gods_data()
             self._load_skills_data()
             self._load_input_config()
+            self._load_video_config()
+            self._load_game_config()
 
         logging.info(f"Library data refreshed.")
+
+        end_time = time.time()
+        logging.debug(f"-> loaded data in {format(end_time - start_time, '.5f')}")
+
 
     ####################### GET ##############################
 
@@ -140,7 +148,7 @@ class _LibraryOfAlexandria:
 
         return attitude_data
 
-    def get_input_data(self) -> Dict[str, List[int]]:
+    def get_all_input_config_data(self) -> Dict[str, List[int]]:
         """
         Get the input data
         """
@@ -156,6 +164,18 @@ class _LibraryOfAlexandria:
             _input[name.lower()] = []
 
         return _input
+
+    def get_video_config_data(self, key: str) -> Any:
+        """
+        Get _video config data
+        """
+        return utility.recursive_find_in_dict(self._video, key)
+
+    def get_game_config_data(self, key: str) -> Any:
+        """
+        Get game config data
+        """
+        return utility.recursive_find_in_dict(self._game, key)
 
     ####################### LOAD ##############################
 
@@ -232,6 +252,24 @@ class _LibraryOfAlexandria:
 
         # add mapped data
         self._input = _input_list
+
+    def _load_video_config(self):
+        """
+        Load the _video config
+        """
+        with open('data/config/video.json') as file:
+            data = json.load(file)
+
+        self._video = data
+
+    def _load_game_config(self):
+        """
+        Load the game config
+        """
+        with open('data/config/game.json') as file:
+            data = json.load(file)
+
+        self._game = data
 
 
 library = _LibraryOfAlexandria()

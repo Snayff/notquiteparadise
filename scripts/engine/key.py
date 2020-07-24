@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from typing import Optional, Tuple
 
 
-_input_list = library.get_input_data()  # holds values from input config
+_input_list = library.get_all_input_config_data()  # holds values from input config
 
 
 def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntentType]:
