@@ -74,8 +74,9 @@ class DamageEffect(Effect):
         # apply the damage
         if world.apply_damage(self.target, damage):
             defenders_resources = world.get_entitys_component(self.target, Resources)
-            if damage >= defenders_resources.health:
-                world.kill_entity(self.target)
+            if defenders_resources:
+                if damage >= defenders_resources.health:
+                    world.kill_entity(self.target)
 
             return self.success_effects + self.success_triggers
         else:
@@ -190,11 +191,13 @@ class TriggerAfflictionsEffect(Effect):
         """
         logging.debug(f"Evaluating Trigger Affliction Effect of type '{self.trigger_type}'...")
         afflictions = world.get_entitys_component(self.target, Afflictions)
-        # iterate over each affliction and trigger it if necessary
-        success = True
-        for affliction in afflictions.active:
-            if self.trigger_type in affliction.triggers:
-                success = success and world.apply_affliction(affliction)
+        success = False
+
+        if afflictions:
+            # iterate over each affliction and trigger it if necessary
+            for affliction in afflictions.active:
+                if self.trigger_type in affliction.triggers:
+                    success = world.apply_affliction(affliction)
 
         if success:
             return self.success_effects
@@ -219,13 +222,13 @@ class AffectStatEffect(Effect):
         """
         logging.debug("Evaluating Affect Stat Effect...")
         success = False
-
         afflictions = world.get_entitys_component(self.target, Afflictions)
 
-        # if not already applied
-        if self.cause_name not in afflictions.stat_modifiers:
-            afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
-            success = True
+        if afflictions:
+            # if not already applied
+            if self.cause_name not in afflictions.stat_modifiers:
+                afflictions.stat_modifiers[self.cause_name] = (self.stat_to_target, self.affect_amount)
+                success = True
 
         if success:
             return self.success_effects

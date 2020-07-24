@@ -1,25 +1,19 @@
 from __future__ import annotations
 
+import pygame
 from types import SimpleNamespace
 from typing import NewType, Tuple
-import pygame
 
 ######################## GENERAL CONSTANTS ######################################
-VERSION = "0.108.0"
 
+VERSION = "0.111.0"
+
+MAX_SKILLS = 6
 TILE_SIZE = 64
-ICON_IN_TEXT_SIZE = 16
-ICON_SIZE = 32
+ICON_IN_TEXT_SIZE = TILE_SIZE // 4
+ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
-SKILL_SIZE = 64
-DEFAULT_ENTITY_BLOCKS_SIGHT = False  # do entities block sight by default
-TIME_PER_ROUND = 20  # amount of time in a round.
-DEFAULT_SIGHT_RANGE = 2  # amount in tiles. also used if entity has no combatstats
-BASE_MOVE_COST = 20  # amount of time spent to move.
-BASE_ACCURACY = 100
-BASE_DAMAGE = 5  # base amount of damage a skill should do. used as a starting point.
-MAX_SKILLS = 5
-
+SKILL_BUTTON_SIZE = 64
 IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
 
@@ -32,12 +26,9 @@ PrimaryStatType = NewType("PrimaryStatType", str)
 SecondaryStatType = NewType("SecondaryStatType", str)
 ResourceType = NewType("ResourceType", str)
 GameStateType = NewType("GameStateType", int)
-MessageTypeType = NewType("MessageTypeType", int)
 TargetTagType = NewType("TargetTagType", str)
 DamageTypeType = NewType("DamageTypeType", str)
 HitTypeType = NewType("HitTypeType", str)
-HitValueType = NewType("HitValueType", int)
-HitModifierType = NewType("HitModifierType", float)
 EffectTypeType = NewType("EffectTypeType", str)
 AfflictionCategoryType = NewType("AfflictionCategoryType", str)
 ShapeType = NewType("ShapeType", str)
@@ -45,7 +36,6 @@ TerrainCollisionType = NewType("TerrainCollisionType", str)
 TravelMethodType = NewType("TravelMethodType", str)
 ProjectileExpiryType = NewType("ProjectileExpiryType", str)
 ProjectileSpeedType = NewType("ProjectileSpeedType", int)
-InputModeType = NewType("InputModeType", int)
 UIElementType = NewType("UIElementType", int)
 DirectionType = NewType("DirectionType", Tuple[int, int])
 TargetingMethodType = NewType("TargetingMethodType", str)
@@ -63,23 +53,6 @@ class EventType(SimpleNamespace):
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
     EXIT_MENU = pygame.USEREVENT + 3
-
-
-class VisualInfo(SimpleNamespace):
-    """
-    Constant info about visual aspects such as resolution and frame rate
-    """
-    BASE_WINDOW_WIDTH = 1280
-    BASE_WINDOW_HEIGHT = 720
-    GAME_FPS = 60
-
-
-class FOVInfo(SimpleNamespace):
-    """
-    Constant info about the FOV settings
-    """
-    LIGHT_WALLS = True
-    FOV_ALGORITHM = 0
 
 
 class RenderLayer(SimpleNamespace):
@@ -107,24 +80,9 @@ class GameState(SimpleNamespace):
     MENU = GameStateType(7)  # while using a menu
 
 
-class MessageType(SimpleNamespace):
-    """Types of Message Events"""
-    LOG = MessageTypeType(1)
-    ENTITY = MessageTypeType(2)
-    SCREEN = MessageTypeType(3)
-
-
-class InputMode(SimpleNamespace):
-    """
-    Input hardware being used
-    """
-    MOUSE_AND_KB = InputModeType(1)
-    GAMEPAD = InputModeType(2)
-
-
 class UIElement(SimpleNamespace):
     """
-    The different UI elements
+    The different, single instance UI elements
     """
     MESSAGE_LOG = UIElementType(1)
     ACTOR_INFO = UIElementType(2)
@@ -133,39 +91,6 @@ class UIElement(SimpleNamespace):
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
     TILE_INFO = UIElementType(8)
-
-
-class HitValue(SimpleNamespace):
-    """
-    The value of each hit type. The value is the starting amount.
-    """
-    GRAZE = HitValueType(0)
-    HIT = HitValueType(5)
-    CRIT = HitValueType(20)
-
-
-class HitModifier(SimpleNamespace):
-    """
-    The modifier for each hit type
-    """
-    GRAZE = HitModifierType(0.6)
-    HIT = HitModifierType(1)
-    CRIT = HitModifierType(1.4)
-
-
-class Direction(SimpleNamespace):
-    """
-    Holds a tuple for each direction of the (x, y) relative direction.
-    """
-    UP_LEFT = DirectionType((-1, -1))
-    UP = DirectionType((0, -1))
-    UP_RIGHT = DirectionType((1, -1))
-    LEFT = DirectionType((-1, 0))
-    CENTRE = DirectionType((0, 0))
-    RIGHT = DirectionType((1, 0))
-    DOWN_LEFT = DirectionType((-1, 1))
-    DOWN = DirectionType((0, 1))
-    DOWN_RIGHT = DirectionType((1, 1))
 
 
 class InputIntent(SimpleNamespace):
@@ -197,6 +122,21 @@ class InputIntent(SimpleNamespace):
 
 #################### EXTERNAL, SERIALISED  ###########################################
 # i.e used externally
+
+class Direction(SimpleNamespace):
+    """
+    Holds a tuple for each direction of the (x, y) relative direction.
+    """
+    UP_LEFT = DirectionType((-1, -1))
+    UP = DirectionType((0, -1))
+    UP_RIGHT = DirectionType((1, -1))
+    LEFT = DirectionType((-1, 0))
+    CENTRE = DirectionType((0, 0))
+    RIGHT = DirectionType((1, 0))
+    DOWN_LEFT = DirectionType((-1, 1))
+    DOWN = DirectionType((0, 1))
+    DOWN_RIGHT = DirectionType((1, 1))
+
 
 class TargetTag(SimpleNamespace):
     """
@@ -333,9 +273,9 @@ class TerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
-    REFLECT = TerrainCollisionType("reflect")
-    ACTIVATE = TerrainCollisionType("activate")
-    FIZZLE = TerrainCollisionType("fizzle")
+    REFLECT = TerrainCollisionType("reflect")  # bounce back
+    ACTIVATE = TerrainCollisionType("activate")  # trigger effects
+    FIZZLE = TerrainCollisionType("fizzle")  # kill self
 
 
 class TravelMethod(SimpleNamespace):
@@ -357,8 +297,11 @@ class ProjectileExpiry(SimpleNamespace):
 class ProjectileSpeed(SimpleNamespace):
     """
     The speed at which a projectile travels; how much time to move a tile.
+    N.B. does not use base move_cost
     """
-    SLOW = ProjectileSpeedType(int(BASE_MOVE_COST / 2))
+
+    SLOW = ProjectileSpeedType(10)
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))
     INSTANT = ProjectileSpeedType(0)
+

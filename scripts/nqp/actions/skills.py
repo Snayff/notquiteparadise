@@ -8,9 +8,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (BASE_ACCURACY, BASE_DAMAGE,
-                                           BASE_MOVE_COST,
-                                           IMAGE_NOT_FOUND_PATH, DamageType,
+from scripts.engine.core.constants import (DamageType,
                                            Direction, DirectionType,
                                            PrimaryStat, ProjectileExpiry,
                                            ProjectileExpiryType,
@@ -186,7 +184,7 @@ class Move(Skill):
     icon_path = ""
     resource_type = Resource.STAMINA
     resource_cost = 0
-    time_cost = BASE_MOVE_COST
+    time_cost = library.get_game_config_data("base_values")["move_cost"]
     base_cooldown = 0
     targeting_method = TargetingMethod.TARGET
     target_directions = [
@@ -210,7 +208,10 @@ class Move(Skill):
         """
         # override target
         position = world.get_entitys_component(user, Position)
-        tile = world.get_tile((position.x, position.y))
+        if position:
+            tile = world.get_tile((position.x, position.y))
+        else:
+            tile = world.get_tile((0, 0))
 
         super().__init__(user, tile, direction)
 
@@ -253,8 +254,8 @@ class BasicAttack(Skill):
             failure_effects=[],
             target=entity,
             stat_to_target=PrimaryStat.VIGOUR,
-            accuracy=BASE_ACCURACY,
-            damage=BASE_DAMAGE,
+            accuracy=library.get_game_config_data("base_values")["accuracy"],
+            damage=library.get_game_config_data("base_values")["damage"],
             damage_type=DamageType.MUNDANE,
             mod_stat=PrimaryStat.CLOUT,
             mod_amount=0.1
@@ -274,13 +275,17 @@ class Lunge(Skill):
     """
     name = "lunge"
 
-    def __init__(self, user: EntityID, _: Tile, direction):
+    def __init__(self, user: EntityID, tile: Tile, direction: DirectionType):
         """
-        Set the target tile as the current tile since we need to move
+        Set the target tile as the current tile since we need to move.
+        N.B. ignores provided tile.
         """
         position = world.get_entitys_component(user, Position)
-        tile = world.get_tile((position.x, position.y))
-        super().__init__(user, tile, direction)
+        if position:
+            _tile = world.get_tile((position.x, position.y))
+        else:
+            _tile = world.get_tile((0, 0))  # should always have position but just in case
+        super().__init__(user, _tile, direction)
         self.move_amount = 2
 
     def build_effects(self, entity: EntityID) -> List[Effect]:
@@ -330,8 +335,8 @@ class Lunge(Skill):
                 failure_effects=[],
                 target=target,
                 stat_to_target=PrimaryStat.VIGOUR,
-                accuracy=BASE_ACCURACY,
-                damage=BASE_DAMAGE,
+                accuracy=library.get_game_config_data("base_values")["accuracy"],
+                damage=library.get_game_config_data("base_values")["damage"],
                 damage_type=DamageType.MUNDANE,
                 mod_stat=PrimaryStat.CLOUT,
                 mod_amount=0.1
@@ -386,10 +391,14 @@ class TarAndFeather(Skill):
         """
         Build the skill effects
         """
+        # get position
+        position = world.get_entitys_component(hit_entity, Position)
+        if not position:
+            return []
 
         # the cone should start where the hit occurred and in the direction of the projectile.
-        entity_position = world.get_entitys_position(hit_entity)
-        entities_in_cone = world.get_affected_entities(entity_position, Shape.CONE, self.cone_size, self.direction)
+        entities_in_cone = world.get_affected_entities((position.x, position.y), Shape.CONE, self.cone_size,
+                                                       self.direction)
         # we should also ignore the hit entity and the projectile from the extra effects
         entities_in_cone = [x for x in entities_in_cone if x is not hit_entity and x is not self.projectile]
 
@@ -425,8 +434,8 @@ class TarAndFeather(Skill):
             failure_effects=[],
             target=entity,
             stat_to_target=PrimaryStat.VIGOUR,
-            accuracy=BASE_ACCURACY,
-            damage=int(BASE_DAMAGE * modifier),
+            accuracy=library.get_game_config_data("base_values")["accuracy"],
+            damage=int(library.get_game_config_data("base_values")["damage"] * modifier),
             damage_type=DamageType.MUNDANE,
             mod_stat=PrimaryStat.CLOUT,
             mod_amount=0.1

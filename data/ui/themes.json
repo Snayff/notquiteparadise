@@ -73,11 +73,11 @@
          {
              "normal_image":
              {
-                 "path": "assets/skills/placeholder/icon_00.png"
+                 "path": "assets/skills/placeholder/icon_01.png"
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_01.png"
+                 "path": "assets/skills/placeholder/icon_02.png"
              }
          },
          "misc":
@@ -96,7 +96,7 @@
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_03.png"
+                 "path": "assets/skills/placeholder/icon_04.png"
              }
          },
          "misc":
@@ -135,7 +135,7 @@
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_07.png"
+                 "path": "assets/skills/placeholder/icon_08.png"
              }
          },
          "misc":

@@ -3,15 +3,12 @@ from __future__ import annotations
 import cProfile
 import datetime
 import io
-
 import logging
 import pstats
 import time
 from typing import TYPE_CHECKING, List
-
 from snecs import Component
 from snecs.typedefs import EntityID
-
 from scripts.engine import state, world
 from scripts.engine.core.constants import VERSION
 
@@ -26,7 +23,10 @@ class _Debugger:
         self.average_fps = 0
         self.frames = 0
 
+        # flags
         self.fps_visible = True
+        self.profiling = True
+        self.logging = True
 
     def update(self):
         self.frames += 1
@@ -112,6 +112,7 @@ def initialise_logging():
         'a' - open for writing, appending to the end of the file if it exists
 
     """
+    _debugger.logging = True
 
     log_file_name = "logs/" + "game.log"
     log_level = logging.DEBUG
@@ -135,6 +136,7 @@ def create_profiler():
     """
     profiler = cProfile.Profile()
     profiler.enable()
+    _debugger.profiling = True
 
     return profiler
 
@@ -144,6 +146,7 @@ def disable_logging():
     Turn off current logging and clear logging resources
     """
     logging.shutdown()
+    _debugger.logging = False
 
 
 def disable_profiling(profiler):
@@ -151,6 +154,7 @@ def disable_profiling(profiler):
     Turn off current profiling
     """
     profiler.disable()
+    _debugger.profiling = False
 
 
 def dump_profiling_data(profiler):
@@ -167,6 +171,14 @@ def dump_profiling_data(profiler):
     out_stream = open("logs/profiling/" + date_and_time.strftime("%Y%m%d@%H%M") + "_" + VERSION + ".profile", "w")
     ps = pstats.Stats("logs/profiling/profile.dump", stream=out_stream)
     ps.strip_dirs().sort_stats("cumulative").print_stats()
+
+
+def is_profiling() -> bool:
+    return _debugger.profiling
+
+
+def is_logging() -> bool:
+    return _debugger.logging
 
 
 ########################## INIT DEBUGGER #####################################
