@@ -28,6 +28,42 @@ def main():
     # initialise the game
     initialise_game()
 
+    # evaluation of  library
+    import timeit
+    from scripts.engine.library import library
+    from scripts.engine import library2
+    library2.refresh_library()
+
+    s = "library.get_trait_data('soft_tops')"
+    old_trait = timeit.timeit(s, setup='from scripts.engine.library import library', number=10000)
+    s = "library.get_skill_data('lunge')"
+    old_skill = timeit.timeit(s, setup='from scripts.engine.library import library', number=10000)
+    s = "library.get_game_config_data('graze')"
+    old_g_config = timeit.timeit(s, setup='from scripts.engine.library import library', number=10000)
+
+    s2 = "library2.TRAITS.get('soft_tops')"
+    new_trait = timeit.timeit(s2, setup='from scripts.engine import library2', number=10000)
+    s2 = "library2.SKILLS.get('lunge')"
+    new_skill = timeit.timeit(s2, setup='from scripts.engine import library2', number=10000)
+    s2 = "library2.GAME_CONFIG.get('hit_types').get('graze')"
+    new_g_config = timeit.timeit(s2, setup='from scripts.engine import library2', number=10000)
+
+    old_refresh = timeit.timeit(library.refresh_library_data, number=1000)
+    new_refresh = timeit.timeit(library2.refresh_library, number=1000)
+
+    
+    print("| Access (x10k) |")
+    print(f"Old Library: ")
+    print(f"Trait({format(old_trait, '.5f')}), Skill({format(old_skill, '.5f')}), Game config"
+          f"({format(old_g_config, '.5f')}),")
+    print(f"New Library: ")
+    print(f"Trait({format(new_trait, '.5f')}), Skill({format(new_skill, '.5f')}), Game config"
+          f"({format(new_g_config, '.5f')}),")
+    print("| Refresh (x1k) |")
+    print(f"Old Library: {format(old_refresh, '0.5f')}")
+    print(f"New Library: {format(new_refresh, '0.5f')}")
+
+
     # run the game
     try:
         game_loop()
