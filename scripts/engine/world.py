@@ -178,8 +178,8 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    projectile_name = f"{skill_name}s projectile"
-    desc = f"{name}s {skill_name} projectile"
+    projectile_name = f"{name}s {skill_name}s projectile"
+    desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
     sprites = TraitSpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
@@ -598,6 +598,7 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]
         return snecs.entity_component(entity, component)
     else:
         debug.log_component_not_found(entity, component)
+        return None
 
 
 def get_name(entity: EntityID) -> str:
@@ -624,14 +625,16 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     value += stat_data.base_value
 
     trait = get_entitys_component(entity, Traits)
-    for name in trait.names:
-        data = library.get_trait_data(name)
-        value += getattr(data, stat)
+    if trait:
+        for name in trait.names:
+            data = library.get_trait_data(name)
+            value += getattr(data, stat)
 
     afflictions = get_entitys_component(entity, Afflictions)
-    for modifier in afflictions.stat_modifiers.values():
-        if modifier[0] == stat:
-            value += modifier[1]
+    if afflictions:
+        for modifier in afflictions.stat_modifiers.values():
+            if modifier[0] == stat:
+                value += modifier[1]
 
     # ensure no dodgy numbers, like floats or negative
     value = max(1, int(value))
@@ -659,9 +662,10 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
 
     # afflictions
     afflictions = get_entitys_component(entity, Afflictions)
-    for modifier in afflictions.stat_modifiers.values():
-        if modifier[0] == stat:
-            value += modifier[1]
+    if afflictions:
+        for modifier in afflictions.stat_modifiers.values():
+            if modifier[0] == stat:
+                value += modifier[1]
 
     # ensure no dodgy numbers, like floats or negative
     value = max(1, int(value))
@@ -675,15 +679,13 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     """
     knowledge = get_entitys_component(entity, Knowledge)
     try:
-        return knowledge.get_skill(skill_name)
+        if knowledge:
+            return knowledge.get_skill(skill_name)
     except KeyError:
-        logging.warning(f"'{get_name(entity)}' tried to use a skill, '{skill_name}', they dont know.")
-        raise Exception("Skill not found")
+        pass
 
-
-def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
-    position = get_entitys_component(entity, Position)
-    return position.x, position.y
+    logging.warning(f"'{get_name(entity)}' tried to use a skill, '{skill_name}', they dont know.")
+    raise Exception("Skill not found")
 
 
 def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int,
@@ -917,9 +919,13 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     can_afford = _can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
     knowledge = get_entitys_component(entity, Knowledge)
-    cooldown = knowledge.get_skill_cooldown(skill_name)
-    if cooldown <= 0:
-        not_on_cooldown = True
+    if knowledge:
+        cooldown = knowledge.get_skill_cooldown(skill_name)
+        if cooldown <= 0:
+            not_on_cooldown = True
+    else:
+        not_on_cooldown = False
+        cooldown = "unknown"
 
     if can_afford and not_on_cooldown:
         return True
@@ -967,9 +973,9 @@ def recompute_fov(entity: EntityID) -> bool:
         if fov and pos:
             tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, fov.light_walls, fov.algorithm)
 
-        # update tiles if it is player
-        if entity == get_player():
-            update_tile_visibility(fov.map)
+            # update tiles if it is player
+            if entity == get_player():
+                update_tile_visibility(fov.map)
 
         return True
     return False
@@ -1057,18 +1063,20 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
     affliction = affliction_instance
     target = affliction_instance.affected_entity
     position = get_entitys_component(target, Position)
-    target_tile = get_tile((position.x, position.y))
+    if position:
+        target_tile = get_tile((position.x, position.y))
 
-    # ensure they are the right target type
-    if tile_has_tags(target_tile, affliction.required_tags, affliction.creator):
-        for entity, effects in affliction.apply():
-            effect_queue = list(effects)
-            while effect_queue:
-                effect = effect_queue.pop()
-                effect_queue.extend(effect.evaluate())
-        return True
-    else:
-        logging.info(f"Could not apply affliction \"{affliction.name}\", target tile does not have required tags ({affliction.required_tags}).")
+        # ensure they are the right target type
+        if tile_has_tags(target_tile, affliction.required_tags, affliction.creator):
+            for entity, effects in affliction.apply():
+                effect_queue = list(effects)
+                while effect_queue:
+                    effect = effect_queue.pop()
+                    effect_queue.extend(effect.evaluate())
+            return True
+        else:
+            logging.info(f"Could not apply affliction \"{affliction.name}\", target tile does not have required "
+                         f"tags ({affliction.required_tags}).")
 
     return False
 
@@ -1205,7 +1213,8 @@ def remove_affliction(entity: EntityID, affliction: Affliction):
     Remove affliction from active list and undo any stat modification.
     """
     afflictions = get_entitys_component(entity, Afflictions)
-    afflictions.remove(affliction)
+    if afflictions:
+        afflictions.remove(affliction)
 
 
 def learn_skill(entity: EntityID, skill_name: str):
@@ -1215,8 +1224,9 @@ def learn_skill(entity: EntityID, skill_name: str):
     if not entity_has_component(entity, Knowledge):
         add_component(entity, Knowledge([]))
     knowledge = get_entitys_component(entity, Knowledge)
-    skill_class = getattr(skills, skill_name)
-    knowledge.learn_skill(skill_class)
+    if knowledge:
+        skill_class = getattr(skills, skill_name)
+        knowledge.learn_skill(skill_class)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################

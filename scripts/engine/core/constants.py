@@ -8,7 +8,7 @@ from typing import NewType, Tuple
 
 VERSION = "0.111.0"
 
-MAX_SKILLS = 5
+MAX_SKILLS = 6
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = TILE_SIZE // 4
 ICON_SIZE = TILE_SIZE // 2

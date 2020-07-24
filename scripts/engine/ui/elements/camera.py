@@ -48,7 +48,10 @@ class Camera(UIPanel):
 
         # game map info
         pos = world.get_entitys_component(world.get_player(), Position)
-        tile = world.get_tile((pos.x, pos.y))
+        if pos:
+            tile = world.get_tile((pos.x, pos.y))
+        else:
+            tile = world.get_tile((0, 0))  # player should always have Position but just in case
         self.player_tile = tile  # the tile in which the player resides
         self.last_updated_player_tile = tile  # the tile the player was in when camera last updated movement
         self.tiles: List[Tile] = []

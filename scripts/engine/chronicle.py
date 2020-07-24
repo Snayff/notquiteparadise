@@ -51,7 +51,12 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
     turn_holder = get_turn_holder()
 
     # whats the difference between current time and when they last acted?
-    next_entity_time = world.get_entitys_component(turn_holder, Tracked).time_spent
+    tracked = world.get_entitys_component(turn_holder, Tracked)
+    if tracked:
+        next_entity_time = tracked.time_spent
+    else:
+        next_entity_time = get_time_of_last_turn()  # turn holder should always have Tracked but handle if they dont
+
     time_progressed = next_entity_time - get_time_of_last_turn()
 
     # add the difference to the time

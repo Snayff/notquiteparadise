@@ -4,7 +4,7 @@ import time
 import json
 import logging
 import os
-from typing import List, TYPE_CHECKING
+from typing import Any, List, TYPE_CHECKING, Union
 from scripts.engine import utility
 from scripts.engine.core.constants import (InputIntent, PrimaryStatType, SecondaryStatType)
 from scripts.engine.core.definitions import (AfflictionData, AspectData, AttitudeData, BasePrimaryStatData,
@@ -165,13 +165,13 @@ class _LibraryOfAlexandria:
 
         return _input
 
-    def get_video_config_data(self, key: str) -> int:
+    def get_video_config_data(self, key: str) -> Any:
         """
         Get _video config data
         """
         return utility.recursive_find_in_dict(self._video, key)
 
-    def get_game_config_data(self, key: str) -> int:
+    def get_game_config_data(self, key: str) -> Any:
         """
         Get game config data
         """

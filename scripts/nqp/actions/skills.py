@@ -208,7 +208,10 @@ class Move(Skill):
         """
         # override target
         position = world.get_entitys_component(user, Position)
-        tile = world.get_tile((position.x, position.y))
+        if position:
+            tile = world.get_tile((position.x, position.y))
+        else:
+            tile = world.get_tile((0, 0))
 
         super().__init__(user, tile, direction)
 
@@ -278,7 +281,10 @@ class Lunge(Skill):
         N.B. ignores provided tile.
         """
         position = world.get_entitys_component(user, Position)
-        _tile = world.get_tile((position.x, position.y))
+        if position:
+            _tile = world.get_tile((position.x, position.y))
+        else:
+            _tile = world.get_tile((0, 0))  # should always have position but just in case
         super().__init__(user, _tile, direction)
         self.move_amount = 2
 
@@ -385,10 +391,14 @@ class TarAndFeather(Skill):
         """
         Build the skill effects
         """
+        # get position
+        position = world.get_entitys_component(hit_entity, Position)
+        if not position:
+            return []
 
         # the cone should start where the hit occurred and in the direction of the projectile.
-        entity_position = world.get_entitys_position(hit_entity)
-        entities_in_cone = world.get_affected_entities(entity_position, Shape.CONE, self.cone_size, self.direction)
+        entities_in_cone = world.get_affected_entities((position.x, position.y), Shape.CONE, self.cone_size,
+                                                       self.direction)
         # we should also ignore the hit entity and the projectile from the extra effects
         entities_in_cone = [x for x in entities_in_cone if x is not hit_entity and x is not self.projectile]
 

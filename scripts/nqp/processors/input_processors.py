@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Optional, Type
 
 import pygame
@@ -37,16 +38,17 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate skill on mouse click while in targeting mode
             player = world.get_player()
             position = world.get_entitys_component(player, Position)
-            event_x, event_y = event.tile_pos
-            direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
-            intent = key.convert_vector_to_intent(direction)
+            if position:
+                event_x, event_y = event.tile_pos
+                direction = (max(-1, min(1, event_x - position.x)), max(-1, min(1, position.y - event_y)))
+                intent = key.convert_vector_to_intent(direction)
 
         elif game_state == GameState.GAMEMAP:
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
             for entity, (position, *other) in world.get_components([Position, IsActor]):  # type: ignore
-                if position.x == x and position.y == y:
+                if position.x == x and position.y == y:  # type: ignore
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
                     actor_info.set_entity(entity)
@@ -270,15 +272,17 @@ def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:
         if skills:
             skill_order = skills.skill_order
 
-            if intent == InputIntent.SKILL0:
-                skill_name = skill_order[0]
-            elif intent == InputIntent.SKILL1:
-                skill_name = skill_order[1]
-            elif intent == InputIntent.SKILL2:
-                skill_name = skill_order[2]
-            elif intent == InputIntent.SKILL3:
-                skill_name = skill_order[3]
-            elif intent == InputIntent.SKILL4:
-                skill_name = skill_order[4]
-
+            try:
+                if intent == InputIntent.SKILL0:
+                    skill_name = skill_order[0]
+                elif intent == InputIntent.SKILL1:
+                    skill_name = skill_order[1]
+                elif intent == InputIntent.SKILL2:
+                    skill_name = skill_order[2]
+                elif intent == InputIntent.SKILL3:
+                    skill_name = skill_order[3]
+                elif intent == InputIntent.SKILL4:
+                    skill_name = skill_order[4]
+            except IndexError:
+                logging.warning(f"_get_pressed_skills_name: Tried to use skill {intent} but no skill in that slot.")
     return skill_name
