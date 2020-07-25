@@ -12,7 +12,7 @@ from snecs import Component
 from snecs.typedefs import EntityID
 
 from scripts.engine import state, world
-from scripts.engine.core.constants import VERSION
+from scripts.engine.core.constants import INFINITE, VERSION
 
 if TYPE_CHECKING:
     from typing import Type
@@ -20,14 +20,19 @@ if TYPE_CHECKING:
 
 class _Debugger:
     def __init__(self):
+        # objects
+        self.profiler = None
+
+        # counters
         self.current_fps = 0
         self.recent_average_fps = 0
         self.average_fps = 0
         self.frames = 0
+        self.profile_duration_remaining = 0
 
         # flags
         self.fps_visible = True
-        self.profiling = True
+        self.profiling = False
         self.logging = True
 
     def update(self):
@@ -35,12 +40,20 @@ class _Debugger:
         self.current_fps = state.get_internal_clock().get_fps()
         self.average_fps += (self.current_fps - self.average_fps) / self.frames
 
+        # count down profiler duration, if it isnt running temporarily
+        if self.profile_duration_remaining != INFINITE:
+            self.profile_duration_remaining -= 1
+
         # get recent fps
         if self.frames >= 600:
             frames_to_count = 600
         else:
             frames_to_count = self.frames
         self.recent_average_fps += (self.current_fps - self.average_fps) / frames_to_count
+
+        # check if profiler needs to turn off
+        if self.profile_duration_remaining == 0:
+            disable_profiling(True)
 
 
 ########################## FUNCTIONS #####################################
@@ -134,35 +147,59 @@ def initialise_logging():
 
 def create_profiler():
     """
-    Create and enable the profiler
+    Create the profiler. If it exists does nothing.
     """
-    profiler = cProfile.Profile()
-    profiler.enable()
+    if not _debugger.profiler:
+        _debugger.profiler = cProfile.Profile()
+
+
+def enable_profiling(duration: int = INFINITE):
+    """
+    Enable profiling. Create profiler if one doesnt exist
+    """
+    if not _debugger.profiler:
+        create_profiler()
+
+    _debugger.profiler.enable()
     _debugger.profiling = True
+    _debugger.profile_duration_remaining = duration
 
-    return profiler
 
-
-def disable_logging():
+def disable_profiling(dump_data: bool = False):
     """
-    Turn off current logging and clear logging resources
+    Turn off current profiling. Dump data to file if required.
+    """
+    if _debugger.profiler:
+        _debugger.profiler.disable()
+        _debugger.profiling = False
+
+        if dump_data:
+            _dump_profiling_data()
+
+
+def kill_profiler():
+    """
+    Kill profiling resource
+    """
+    if _debugger.profiler:
+        disable_profiling(False)
+        _debugger.profiler = None
+
+
+def kill_logging():
+    """
+    Kill logging resources
     """
     logging.shutdown()
     _debugger.logging = False
 
 
-def disable_profiling(profiler):
-    """
-    Turn off current profiling
-    """
-    profiler.disable()
-    _debugger.profiling = False
-
-
-def dump_profiling_data(profiler):
+def _dump_profiling_data():
     """
     Dump data to a readable file
     """
+    profiler = _debugger.profiler
+
     # dump the profiler stats
     s = io.StringIO()
     ps = pstats.Stats(profiler, stream=s).sort_stats("cumulative")

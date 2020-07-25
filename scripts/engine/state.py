@@ -35,13 +35,6 @@ def get_active_skill() -> str:
     return store.active_skill
 
 
-def get_delta_time() -> float:
-    """
-    get delta time and set frame rate with .tick()
-    """
-    return store.internal_clock.tick(store.fps_limit) / 1000.0
-
-
 def get_current() -> GameStateType:
     """
     Get the current game state
@@ -60,12 +53,11 @@ def set_active_skill(skill_name: str):
 
 ################### MANAGING STATE ###################
 
-def update_clock():
+def update_clock() -> float:
     """
-    Tick the internal clock. Manages the frame rate.
+    Tick the internal clock. Manages the frame rate. Returns delta time.
     """
-    # set frame rate
-    store.internal_clock.tick(store.fps_limit)
+    return store.internal_clock.tick(store.fps_limit) / 1000.0
 
 
 def set_new(new_game_state: GameStateType):

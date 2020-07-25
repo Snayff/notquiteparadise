@@ -98,6 +98,8 @@ def _check_actions(event: pygame.event):
             return InputIntent.CONFIRM
         elif event.key in INPUT_CONFIG["exit"]:
             return InputIntent.EXIT
+        elif event.key in INPUT_CONFIG["profile"]:
+            return InputIntent.BURST_PROFILE
 
 
 def _check_dev_actions(event: pygame.event):
