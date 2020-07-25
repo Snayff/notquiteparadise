@@ -5,8 +5,7 @@ from typing import TYPE_CHECKING, Iterator
 from snecs.typedefs import EntityID
 from scripts.engine import world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import (BASE_ACCURACY, BASE_DAMAGE,
-                                           AfflictionCategory,
+from scripts.engine.core.constants import (AfflictionCategory,
                                            AfflictionCategoryType,
                                            AfflictionTriggerType, DamageType,
                                            EffectType, EffectTypeType,
@@ -51,9 +50,10 @@ class Affliction(ABC):
         """
 
         position = world.get_entitys_component(self.affected_entity, Position)
-        for coordinate in position.get_coordinates():
-            for entity in world.get_affected_entities((coordinate.x, coordinate.y), self.shape, self.shape_size):
-                yield entity, self.build_effects(entity)
+        if position:
+            for coordinate in position.get_coordinates():
+                for entity in world.get_affected_entities((coordinate.x, coordinate.y), self.shape, self.shape_size):
+                    yield entity, self.build_effects(entity)
 
     @abstractmethod
     def build_effects(self, entity: EntityID):
@@ -110,8 +110,8 @@ class Flaming(Affliction):
             failure_effects=[],
             target=entity,
             stat_to_target=PrimaryStat.BUSTLE,
-            accuracy=BASE_ACCURACY,
-            damage=int(BASE_DAMAGE / 2),
+            accuracy=library.get_game_config_data("base_values")["accuracy"],
+            damage=int(library.get_game_config_data("base_values")["damage"] / 2),
             damage_type=DamageType.BURN,
             mod_stat=PrimaryStat.SKULLDUGGERY,
             mod_amount=0.1

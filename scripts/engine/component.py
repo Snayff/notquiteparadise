@@ -309,3 +309,5 @@ class FOV(RegisteredComponent):
 
     def __init__(self, fov_map: tcod.map.Map):
         self.map: tcod.map.Map = fov_map
+        self.algorithm = 0
+        self.light_walls = True

@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from scripts.engine import utility
-from scripts.engine.core.constants import GameState, GameStateType, VisualInfo
+from scripts.engine.core.constants import GameState, GameStateType
 from scripts.engine.core.store import store
 
 if TYPE_CHECKING:
@@ -39,7 +39,7 @@ def get_delta_time() -> float:
     """
     get delta time and set frame rate with .tick()
     """
-    return store.internal_clock.tick(VisualInfo.GAME_FPS) / 1000.0
+    return store.internal_clock.tick(store.fps_limit) / 1000.0
 
 
 def get_current() -> GameStateType:
@@ -65,7 +65,7 @@ def update_clock():
     Tick the internal clock. Manages the frame rate.
     """
     # set frame rate
-    store.internal_clock.tick(VisualInfo.GAME_FPS)
+    store.internal_clock.tick(store.fps_limit)
 
 
 def set_new(new_game_state: GameStateType):

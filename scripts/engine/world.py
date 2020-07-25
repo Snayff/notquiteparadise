@@ -17,12 +17,12 @@ from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
                                       IsActor, IsGod, IsPlayer, Knowledge,
                                       Opinion, Position, Resources, Tracked,
                                       Traits)
-from scripts.engine.core.constants import (DEFAULT_ENTITY_BLOCKS_SIGHT,
-    DEFAULT_SIGHT_RANGE, ICON_SIZE,
+from scripts.engine.core.constants import (
+    ICON_SIZE,
     INFINITE, RenderLayer, TILE_SIZE, Direction,
-    DirectionType, FOVInfo,
-    HitModifier, HitType, HitTypeType,
-    HitValue, MessageType, PrimaryStat,
+    DirectionType,
+    HitType, HitTypeType,
+    PrimaryStat,
     PrimaryStatType, ResourceType,
     SecondaryStatType, ShapeType,
     TargetTag, TargetTagType,
@@ -103,7 +103,7 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     components.append(Identity(name, description))
     components.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     components.append(HasCombatStats())
-    components.append(Blocking(True, DEFAULT_ENTITY_BLOCKS_SIGHT))
+    components.append(Blocking(True, library.get_game_config_data("default_values")["entity_blocks_sight"]))
     components.append(Traits(trait_names))
     components.append(FOV(create_fov_map()))
     components.append(Tracked(chronicle.get_time()))
@@ -178,8 +178,8 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     x, y = tile_pos
 
     name = get_name(creating_entity)
-    projectile_name = f"{skill_name}s projectile"
-    desc = f"{name}s {skill_name} projectile"
+    projectile_name = f"{name}s {skill_name}s projectile"
+    desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
     sprites = TraitSpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
@@ -336,7 +336,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     return tiles
 
 
-def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Tuple[int, int]:
+def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> DirectionType:
     """
     Get the direction between two locations.
     """
@@ -354,7 +354,7 @@ def get_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]) -> Tu
     dir_x = utility.clamp(dir_x, -1, 1)
     dir_y = utility.clamp(dir_y, -1, 1)
 
-    return dir_x, dir_y
+    return cast(DirectionType, (dir_x, dir_y))
 
 
 def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
@@ -470,7 +470,7 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     # return direction_x, direction_y
 
 
-def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> Tuple[int, int]:
+def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tuple[int, int]) -> DirectionType:
     """
     Use surrounding walls to understand how the object should be reflected.
     """
@@ -510,7 +510,7 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
             dir_x *= -1
             dir_y *= -1
 
-    return dir_x, dir_y
+    return cast(DirectionType, (dir_x, dir_y))
 
 
 def _get_furthest_free_position(start_pos: Tuple[int, int], target_direction: Tuple[int, int],
@@ -571,9 +571,11 @@ def get_hit_type(to_hit_score: int) -> HitTypeType:
     """
     Get the hit type from the to hit score
     """
-    if to_hit_score >= HitValue.CRIT:
+    hit_types_data = library.get_game_config_data("hit_types")
+
+    if to_hit_score >= hit_types_data[HitType.CRIT]["value"]:
         return HitType.CRIT
-    elif to_hit_score >= HitValue.HIT:
+    elif to_hit_score >= hit_types_data[HitType.HIT]["value"]:
         return HitType.HIT
     else:
         return HitType.GRAZE
@@ -588,7 +590,7 @@ def get_player() -> EntityID:
     raise ValueError
 
 
-def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
+def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]:
     """
     Get an entity's component. Log if component not found.
     """
@@ -596,7 +598,7 @@ def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
         return snecs.entity_component(entity, component)
     else:
         debug.log_component_not_found(entity, component)
-        raise Exception("Component not found")
+        return None
 
 
 def get_name(entity: EntityID) -> str:
@@ -623,14 +625,16 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     value += stat_data.base_value
 
     trait = get_entitys_component(entity, Traits)
-    for name in trait.names:
-        data = library.get_trait_data(name)
-        value += getattr(data, stat)
+    if trait:
+        for name in trait.names:
+            data = library.get_trait_data(name)
+            value += getattr(data, stat)
 
     afflictions = get_entitys_component(entity, Afflictions)
-    for modifier in afflictions.stat_modifiers.values():
-        if modifier[0] == stat:
-            value += modifier[1]
+    if afflictions:
+        for modifier in afflictions.stat_modifiers.values():
+            if modifier[0] == stat:
+                value += modifier[1]
 
     # ensure no dodgy numbers, like floats or negative
     value = max(1, int(value))
@@ -658,9 +662,10 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
 
     # afflictions
     afflictions = get_entitys_component(entity, Afflictions)
-    for modifier in afflictions.stat_modifiers.values():
-        if modifier[0] == stat:
-            value += modifier[1]
+    if afflictions:
+        for modifier in afflictions.stat_modifiers.values():
+            if modifier[0] == stat:
+                value += modifier[1]
 
     # ensure no dodgy numbers, like floats or negative
     value = max(1, int(value))
@@ -674,15 +679,13 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     """
     knowledge = get_entitys_component(entity, Knowledge)
     try:
-        return knowledge.get_skill(skill_name)
+        if knowledge:
+            return knowledge.get_skill(skill_name)
     except KeyError:
-        logging.warning(f"'{get_name(entity)}' tried to use a skill, '{skill_name}', they dont know.")
-        raise Exception("Skill not found")
+        pass
 
-
-def get_entitys_position(entity: EntityID) -> Tuple[int, int]:
-    position = get_entitys_component(entity, Position)
-    return position.x, position.y
+    logging.warning(f"'{get_name(entity)}' tried to use a skill, '{skill_name}', they dont know.")
+    raise Exception("Skill not found")
 
 
 def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int,
@@ -917,9 +920,13 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     can_afford = _can_afford_cost(entity, skill.resource_type, skill.resource_cost)
 
     knowledge = get_entitys_component(entity, Knowledge)
-    cooldown = knowledge.get_skill_cooldown(skill_name)
-    if cooldown <= 0:
-        not_on_cooldown = True
+    if knowledge:
+        cooldown = knowledge.get_skill_cooldown(skill_name)
+        if cooldown <= 0:
+            not_on_cooldown = True
+    else:
+        not_on_cooldown = False
+        cooldown = "unknown"
 
     if can_afford and not_on_cooldown:
         return True
@@ -928,7 +935,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not can_afford:
         # is it the player that can't afford it?
         if entity == player:
-            ui.log_message(MessageType.LOG, "I cannot afford to do that.")
+            ui.log_message("I cannot afford to do that.")
         else:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, which they can`t afford.")
 
@@ -936,7 +943,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
     if not not_on_cooldown:
         # is it the player that's can't afford it?
         if entity == player:
-            ui.log_message(MessageType.LOG, "I'm not ready to do that, yet.")
+            ui.log_message("I'm not ready to do that, yet.")
         else:
             logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait {cooldown} more "
                             f"rounds.")
@@ -957,18 +964,19 @@ def recompute_fov(entity: EntityID) -> bool:
             stats = create_combat_stats(entity)
             sight_range = stats.sight_range
         else:
-            sight_range = DEFAULT_SIGHT_RANGE
+            sight_range = library.get_game_config_data("default_values")["sight_range"]
 
         # get the needed components
         fov = get_entitys_component(entity, FOV)
         pos = get_entitys_component(entity, Position)
 
         # compute the fov
-        tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, FOVInfo.LIGHT_WALLS, FOVInfo.FOV_ALGORITHM)
+        if fov and pos:
+            tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, fov.light_walls, fov.algorithm)
 
-        # update tiles if it is player
-        if entity == get_player():
-            update_tile_visibility(fov.map)
+            # update tiles if it is player
+            if entity == get_player():
+                update_tile_visibility(fov.map)
 
         return True
     return False
@@ -1056,18 +1064,20 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
     affliction = affliction_instance
     target = affliction_instance.affected_entity
     position = get_entitys_component(target, Position)
-    target_tile = get_tile((position.x, position.y))
+    if position:
+        target_tile = get_tile((position.x, position.y))
 
-    # ensure they are the right target type
-    if tile_has_tags(target_tile, affliction.required_tags, affliction.creator):
-        for entity, effects in affliction.apply():
-            effect_queue = list(effects)
-            while effect_queue:
-                effect = effect_queue.pop()
-                effect_queue.extend(effect.evaluate())
-        return True
-    else:
-        logging.info(f"Could not apply affliction \"{affliction.name}\", target tile does not have required tags ({affliction.required_tags}).")
+        # ensure they are the right target type
+        if tile_has_tags(target_tile, affliction.required_tags, affliction.creator):
+            for entity, effects in affliction.apply():
+                effect_queue = list(effects)
+                while effect_queue:
+                    effect = effect_queue.pop()
+                    effect_queue.extend(effect.evaluate())
+            return True
+        else:
+            logging.info(f"Could not apply affliction \"{affliction.name}\", target tile does not have required "
+                         f"tags ({affliction.required_tags}).")
 
     return False
 
@@ -1138,7 +1148,7 @@ def kill_entity(entity: EntityID):
 
     else:
         # placeholder for player death
-        ui.log_message(MessageType.LOG, "I should have died just then.")
+        ui.log_message("I should have died just then.")
 
 
 def delete(entity: EntityID):
@@ -1204,7 +1214,8 @@ def remove_affliction(entity: EntityID, affliction: Affliction):
     Remove affliction from active list and undo any stat modification.
     """
     afflictions = get_entitys_component(entity, Afflictions)
-    afflictions.remove(affliction)
+    if afflictions:
+        afflictions.remove(affliction)
 
 
 def learn_skill(entity: EntityID, skill_name: str):
@@ -1214,8 +1225,9 @@ def learn_skill(entity: EntityID, skill_name: str):
     if not entity_has_component(entity, Knowledge):
         add_component(entity, Knowledge([]))
     knowledge = get_entitys_component(entity, Knowledge)
-    skill_class = getattr(skills, skill_name)
-    knowledge.learn_skill(skill_class)
+    if knowledge:
+        skill_class = getattr(skills, skill_name)
+        knowledge.learn_skill(skill_class)
 
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################
@@ -1229,13 +1241,16 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
     # mitigate damage with defence
     mitigated_damage = (base_damage + damage_mod_amount) - resist_value
 
+    # get modifiers
+    hit_types_data = library.get_game_config_data("hit_types")
+
     # apply to hit modifier to damage
     if hit_type == HitType.CRIT:
-        modified_damage = mitigated_damage * HitModifier.CRIT
+        modified_damage = mitigated_damage * hit_types_data[HitType.CRIT]["modifier"]
     elif hit_type == HitType.HIT:
-        modified_damage = mitigated_damage * HitModifier.HIT
+        modified_damage = mitigated_damage * hit_types_data[HitType.HIT]["modifier"]
     else:
-        modified_damage = mitigated_damage * HitModifier.GRAZE
+        modified_damage = mitigated_damage * hit_types_data[HitType.GRAZE]["modifier"]
 
     # round down the dmg
     int_modified_damage = int(modified_damage)
