@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Iterator
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import library, world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import (AfflictionCategory,
@@ -12,7 +14,6 @@ from scripts.engine.core.constants import (AfflictionCategory,
                                            PrimaryStat, Shape, ShapeType,
                                            TargetTag, TargetTagType)
 from scripts.engine.effect import AffectStatEffect, DamageEffect, Effect
-
 
 if TYPE_CHECKING:
     from typing import Tuple, List

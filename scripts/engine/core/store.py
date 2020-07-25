@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-import pygame
 from typing import TYPE_CHECKING
+
+import pygame
 from snecs.typedefs import EntityID
+
 from scripts.engine import library
 from scripts.engine.core.constants import GameState, GameStateType
 

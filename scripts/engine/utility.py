@@ -5,7 +5,8 @@ import logging
 import math
 import sys
 import timeit
-from typing import Callable, Dict, Iterable, Optional, TYPE_CHECKING, Any, List, Tuple, Type, Union
+from typing import (TYPE_CHECKING, Any, Callable, Dict, Iterable, List,
+                    Optional, Tuple, Type, Union)
 
 import pygame
 import scipy

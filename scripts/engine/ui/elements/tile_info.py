@@ -12,7 +12,7 @@ from scripts.engine import world
 from scripts.engine.component import (Aesthetic, Aspect, Identity, Position,
                                       Resources, Traits)
 from scripts.engine.core.constants import (GAP_SIZE, ICON_IN_TEXT_SIZE,
-     RenderLayer)
+                                           RenderLayer)
 
 
 class TileInfo(UIPanel):

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import pygame
 from types import SimpleNamespace
 from typing import NewType, Tuple
+
+import pygame
 
 ######################## GENERAL CONSTANTS ######################################
 
@@ -304,4 +305,3 @@ class ProjectileSpeed(SimpleNamespace):
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))
     INSTANT = ProjectileSpeedType(0)
-

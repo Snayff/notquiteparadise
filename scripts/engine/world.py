@@ -5,6 +5,7 @@ import logging
 import random
 from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
                     cast)
+
 import pygame
 import snecs
 import tcod.map
@@ -18,21 +19,14 @@ from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
                                       Opinion, Position, Resources, Tracked,
                                       Traits)
 from scripts.engine.core.constants import (
-    ICON_SIZE,
-    INFINITE, RenderLayer, TILE_SIZE, Direction,
-    DirectionType,
-    HitType, HitTypeType,
-    PrimaryStat,
-    PrimaryStatType, ResourceType,
-    SecondaryStatType, ShapeType,
-    TargetTag, TargetTagType,
-    TraitGroup, TravelMethod,
-    TravelMethodType)
+    ICON_SIZE, INFINITE, TILE_SIZE, Direction, DirectionType, HitType,
+    HitTypeType, PrimaryStat, PrimaryStatType, RenderLayer, ResourceType,
+    SecondaryStatType, ShapeType, TargetTag, TargetTagType, TraitGroup,
+    TravelMethod, TravelMethodType)
 from scripts.engine.core.definitions import (ProjectileData,
                                              TraitSpritePathsData,
                                              TraitSpritesData)
 from scripts.engine.core.store import store
-
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -1308,7 +1302,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         eligible_interventions = []
         intervention_weightings = []
         for intervention_name in knowledge.get_skill_names():
-            intervention_data = library.GODS[identity.name].interventions.get(intervention_name)
+            intervention_data = library.GODS[identity.name].interventions[intervention_name]
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
             try:

@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, cast
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE
 from scripts.engine.core.store import store
-
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional

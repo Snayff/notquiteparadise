@@ -8,9 +8,9 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import library, world
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (DamageType,
-                                           Direction, DirectionType,
-                                           PrimaryStat, ProjectileExpiry,
+from scripts.engine.core.constants import (DamageType, Direction,
+                                           DirectionType, PrimaryStat,
+                                           ProjectileExpiry,
                                            ProjectileExpiryType,
                                            ProjectileSpeed,
                                            ProjectileSpeedType, Resource,
@@ -23,7 +23,6 @@ from scripts.engine.core.constants import (DamageType,
 from scripts.engine.effect import (
     ApplyAfflictionEffect, DamageEffect, Effect, MoveActorEffect,
     ReduceSkillCooldownEffect)
-
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

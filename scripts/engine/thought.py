@@ -3,10 +3,13 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import chronicle, library, world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import (ProjectileExpiry, TargetTag, TerrainCollision)
+from scripts.engine.core.constants import (ProjectileExpiry, TargetTag,
+                                           TerrainCollision)
 from scripts.engine.core.definitions import ProjectileData
 from scripts.nqp.actions.skills import Move
 

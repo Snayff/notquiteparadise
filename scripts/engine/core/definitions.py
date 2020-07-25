@@ -2,24 +2,28 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional
+
 import pygame
 from snecs.typedefs import EntityID
-from scripts.engine.core.constants import (
-    AfflictionCategory, AfflictionCategoryType,
-    AfflictionTrigger, AfflictionTriggerType,
-    DamageTypeType, Direction,
-    DirectionType, EffectType,
-    EffectTypeType, PrimaryStatType,
-    ProjectileExpiry,
-    ProjectileExpiryType,
-    ProjectileSpeed,
-    ProjectileSpeedType, Resource,
-    ResourceType, SecondaryStatType,
-    Shape, ShapeType, TargetingMethod,
-    TargetingMethodType, TargetTag,
-    TargetTagType, TerrainCollision,
-    TerrainCollisionType, TraitGroup,
-    TraitGroupType, TravelMethod, TravelMethodType)
+
+from scripts.engine.core.constants import (AfflictionCategory,
+                                           AfflictionCategoryType,
+                                           AfflictionTrigger,
+                                           AfflictionTriggerType,
+                                           DamageTypeType, Direction,
+                                           DirectionType, EffectType,
+                                           EffectTypeType, PrimaryStatType,
+                                           ProjectileExpiry,
+                                           ProjectileExpiryType,
+                                           ProjectileSpeed,
+                                           ProjectileSpeedType, Resource,
+                                           ResourceType, SecondaryStatType,
+                                           Shape, ShapeType, TargetingMethod,
+                                           TargetingMethodType, TargetTag,
+                                           TargetTagType, TerrainCollision,
+                                           TerrainCollisionType, TraitGroup,
+                                           TraitGroupType, TravelMethod,
+                                           TravelMethodType)
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:

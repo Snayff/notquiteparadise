@@ -3,13 +3,17 @@ from __future__ import annotations
 import logging
 import sys
 import traceback
+
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import library, chronicle, debug, key, state, utility, world
+
+from scripts.engine import (chronicle, debug, key, library, state, utility,
+                            world)
 from scripts.engine.core.constants import GameState, UIElement
-from scripts.engine.debug import create_profiler, disable_logging, disable_profiling, dump_profiling_data, \
-    initialise_logging
+from scripts.engine.debug import (create_profiler, disable_logging,
+                                  disable_profiling, dump_profiling_data,
+                                  initialise_logging)
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors
 
