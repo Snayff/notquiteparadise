@@ -270,7 +270,7 @@ class Camera(UIPanel):
 
     def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float]):
         """
-        Draw a surface on the surface map. The function handles coordinate transformation to the screen
+        Draw a surface on the surface map. The function handles coordinates transformation to the screen
         """
         pos = self.world_to_draw_position(col_row)
         map_surface.blit(sprite, pos)
