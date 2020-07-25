@@ -274,6 +274,7 @@ class Lunge(Skill):
     Lunge skill for an entity
     """
     name = "lunge"
+    # FIXME - only applying damage when moving 2 spaces, anything less fails to apply.
 
     def __init__(self, user: EntityID, tile: Tile, direction: DirectionType):
         """
