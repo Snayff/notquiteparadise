@@ -7,6 +7,7 @@ from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
                     cast)
 import pygame
 import snecs
+import numpy as np
 import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
@@ -88,23 +89,21 @@ def create_god(god_name: str) -> EntityID:
     return entity
 
 
-def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_names: List[str],
+def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, int]], trait_names: List[str],
         is_player: bool = False) -> EntityID:
     """
     Create an entity with all of the components to be an actor. Returns entity ID.
     """
     components: List[Component] = []
+    tile_pos = occupying_tiles[0]
     x, y = tile_pos
 
     # actor components
     if is_player:
         components.append(IsPlayer())
     components.append(IsActor())
+    components.append(Position(*occupying_tiles))
     components.append(Identity(name, description))
-    if not is_player:
-        components.append(Position((x, y)))  # FIXME - check position not blocked before spawning
-    else:
-        components.append(Position((x, y), (x+1, y), (x, y+1), (x+1, y+1)))
     components.append(HasCombatStats())
     components.append(Blocking(True, library.get_game_config_data("default_values")["entity_blocks_sight"]))
     components.append(Traits(trait_names))
@@ -247,7 +246,6 @@ def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpri
 
     # flatten the images
     for name, surface_list in sprites.items():
-        logging.warning((name, surface_list))
         flattened_sprites[name] = utility.flatten_images(surface_list)
 
     # convert to dataclass
@@ -270,13 +268,13 @@ def create_fov_map() -> tcod.map.Map:
     width = gamemap.width
     height = gamemap.height
 
-    fov_map = tcod.map_new(width, height)
+    fov_map = np.zeros((width, height), dtype=bool, order="F")
 
     for x in range(width):
         for y in range(height):
             tile = get_tile((x, y))
             if tile:
-                tcod.map_set_properties(fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
+                fov_map[x][y] = not tile.blocks_sight and not tile.blocks_movement
 
     return fov_map
 
@@ -888,7 +886,7 @@ def is_tile_in_fov(tile_pos: Tuple[int, int], fov_map) -> bool:
     Check if  target tile is in player`s FOV
     """
     x, y = tile_pos
-    return tcod.map_is_in_fov(fov_map, x, y)
+    return fov_map[x][y]
 
 
 def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
@@ -977,8 +975,15 @@ def recompute_fov(entity: EntityID) -> bool:
 
         # compute the fov
         if fov and pos:
-            tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, fov.light_walls, fov.algorithm)
+            tranparency = create_fov_map()
+            maps = []
+            for c in pos.get_coordinates():
+                map = tcod.map.compute_fov(tranparency, (c.x, c.y), sight_range, fov.light_walls, fov.algorithm)
+                maps.append(map)
 
+            fov.map = maps[0]
+            for m in maps:
+                fov.map |= m
             # update tiles if it is player
             if entity == get_player():
                 update_tile_visibility(fov.map)
@@ -1186,7 +1191,7 @@ def update_tile_visibility(fov_map: tcod.map.Map):
 
     for x in range(0, gamemap.width):
         for y in range(0, gamemap.height):
-            gamemap.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
+            gamemap.tiles[x][y].is_visible = fov_map[x][y]
 
 
 def judge_action(entity: EntityID, action_name: str):
