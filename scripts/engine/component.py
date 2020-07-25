@@ -68,19 +68,25 @@ class Position(RegisteredComponent):
 
     def __init__(self, *positions: Tuple[int, int]):
         # Sort the positions from top-left to down-right
-        sorted_positions = sorted(positions, key=lambda x: (x[0]**2 + x[1]**2))
-        self.coordinates = [Coordinate(x, y) for x, y in sorted_positions]
-
-        if not self.coordinates:
+        if not positions:
             raise ValueError('Must provide at least 1 coordinate for the entity.')
+
+        sorted_positions = sorted(positions, key=lambda x: (x[0]**2 + x[1]**2))
+        top_left = sorted_positions[0]
+        self.offsets = [(x - top_left[0], y - top_left[1]) for x, y in sorted_positions]
+        self.position = top_left
+
+    def set(self, x, y):
+        self.position = (x, y)
 
     @property
     def x(self) -> int:
         """
         :return: The x component of the top-left position
         """
-        return self.coordinates[0].x
+        return self.position[0]
 
+    '''
     @x.setter
     def x(self, new: int):
         """
@@ -88,14 +94,15 @@ class Position(RegisteredComponent):
         :param new: The new component
         """
         self.coordinates[0].x = new
-
+    '''
     @property
     def y(self) -> int:
         """
         :return: The y component of the top-left position
         """
-        return self.coordinates[0].y
+        return self.position[1]
 
+    '''
     @y.setter
     def y(self, new: int):
         """
@@ -103,12 +110,12 @@ class Position(RegisteredComponent):
         :param new: The new component
         """
         self.coordinates[0].y = new
-
+    '''
     def get_coordinates(self) -> List[Coordinate]:
         """
         :return: The list of coordinates that this Position represents
         """
-        return self.coordinates
+        return [Coordinate(self.x + x, self.y + y) for x, y in self.offsets]
 
     def contains(self, x: int, y: int):
         """
