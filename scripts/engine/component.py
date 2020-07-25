@@ -79,6 +79,24 @@ class Position(RegisteredComponent):
     def set(self, x, y):
         self.position = (x, y)
 
+    def get_outmost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
+        """
+        Calculate the outmost tile in the direction provided
+        :param direction: Direction to use
+        :return: The position of the outmost tile
+        """
+        coordinates = self.get_coordinates()
+        # Calculate center
+        center = (sum(c.x for c in coordinates), sum(c.y for c in coordinates))
+        transformed = [np.dot((c.x, c.y), direction) for c in coordinates]
+        # Find the coordinate that is nearest the direction
+        arg_max = np.argwhere(transformed == np.amax(transformed))
+        # From all the nearest coordinates find the one nearest to the center of the entity
+        arg_min = np.argmin(
+            np.sqrt((center[0] - transformed[i[0]][0])**2 + (center[1] - transformed[i[0]][1])**2) for i in arg_max
+        )
+        return coordinates[arg_max[arg_min][0]].x, coordinates[arg_max[arg_min][0]].y
+
     @property
     def x(self) -> int:
         """
