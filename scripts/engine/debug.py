@@ -7,8 +7,10 @@ import logging
 import pstats
 import time
 from typing import TYPE_CHECKING, List
+
 from snecs import Component
 from snecs.typedefs import EntityID
+
 from scripts.engine import state, world
 from scripts.engine.core.constants import VERSION
 

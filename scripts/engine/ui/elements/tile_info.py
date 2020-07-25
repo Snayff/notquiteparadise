@@ -12,7 +12,7 @@ from scripts.engine import world
 from scripts.engine.component import (Aesthetic, Aspect, Identity, Position,
                                       Resources, Traits)
 from scripts.engine.core.constants import (GAP_SIZE, ICON_IN_TEXT_SIZE,
-     RenderLayer)
+                                           RenderLayer)
 
 
 class TileInfo(UIPanel):
@@ -147,6 +147,7 @@ class TileInfo(UIPanel):
         text_height = 0  # box will resize height anyway
 
         # loop each image provided and use as header for each group of info
+        # FIXME - hovering projectile breaks it due to not havign a surface (missing icon?)
         for image in images:
             #  create image
             _image = pygame.transform.scale(image, (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE))

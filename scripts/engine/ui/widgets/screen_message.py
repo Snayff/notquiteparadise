@@ -6,7 +6,6 @@ from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UITextBox
 
-
 if TYPE_CHECKING:
     pass
 
