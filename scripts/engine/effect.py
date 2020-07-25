@@ -114,7 +114,7 @@ class MoveActorEffect(Effect):
         for _ in range(0, self.move_amount):
             new_x = pos.x + dir_x
             new_y = pos.y + dir_y
-            collides = MoveActorEffect._check_collision(entity, pos, dir_x, dir_y)
+            collides = MoveActorEffect._check_collision(entity, dir_x, dir_y)
             success = not collides
 
             if not collides:
