@@ -77,31 +77,56 @@ class Position(RegisteredComponent):
     @property
     def x(self) -> int:
         """
-        Returns the x component of the top-left position
+        :return: The x component of the top-left position
         """
         return self.coordinates[0].x
-
-    @property
-    def y(self) -> int:
-        """
-        Returns the y component of the top-left position
-        """
-        return self.coordinates[0].y
 
     @x.setter
     def x(self, new: int):
         """
+        Sets the x component of the top-left position
+        :param new: The new component
         """
         self.coordinates[0].x = new
+
+    @property
+    def y(self) -> int:
+        """
+        :return: The y component of the top-left position
+        """
+        return self.coordinates[0].y
 
     @y.setter
     def y(self, new: int):
         """
+        Sets the y component of the top-left position
+        :param new: The new component
         """
         self.coordinates[0].y = new
 
     def get_coordinates(self) -> List[Coordinate]:
+        """
+        :return: The list of coordinates that this Position represents
+        """
         return self.coordinates
+
+    def contains(self, x: int, y: int):
+        """
+        :param x: X coordinate to test against
+        :param y: Y coordinate to test against
+        :return: A bool that represents if the Position contains the provided coordinates
+        """
+        return (x, y) in self
+
+    def __contains__(self, key: Tuple[int, int]):
+        """
+        :param key: Coordinate to test against
+        :return: A bool that represents if the Position contains the provided coordinates
+        """
+        for coordinate in self.get_coordinates():
+            if coordinate.x == key[0] and coordinate.y == key[1]:
+                return True
+        return False
 
 
 class Aesthetic(RegisteredComponent):
