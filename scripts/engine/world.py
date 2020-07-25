@@ -1183,7 +1183,7 @@ def add_component(entity: EntityID, component: Component):
     snecs.add_component(entity, component)
 
 
-def update_tile_visibility(fov_map: tcod.map.Map):
+def update_tile_visibility(fov_map: np.array):
     """
     Update the the visibility of the tiles on the came map
     """
