@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Tuple
 
 from snecs import RegisteredComponent
-
+import numpy as np
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
