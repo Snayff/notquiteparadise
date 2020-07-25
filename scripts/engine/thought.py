@@ -3,16 +3,11 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
-
 from snecs.typedefs import EntityID
-
-import scripts.engine.chronicle
-from scripts.engine import world
+from scripts.engine import chronicle, library, world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import (ProjectileExpiry,
-                                           TargetTag, TerrainCollision)
+from scripts.engine.core.constants import (ProjectileExpiry, TargetTag, TerrainCollision)
 from scripts.engine.core.definitions import ProjectileData
-from scripts.engine.library import library
 from scripts.nqp.actions.skills import Move
 
 if TYPE_CHECKING:
@@ -142,4 +137,4 @@ class SkipTurnBehaviour(AIBehaviour):
     def act(self):
         name = world.get_name(self.entity)
         logging.debug(f"'{name}' skipped their turn.")
-        scripts.engine.chronicle.end_turn(self.entity, library.get_game_config_data("base_values")["move_cost"])
+        chronicle.end_turn(self.entity, library.GAME_CONFIG.base_values.move_cost)

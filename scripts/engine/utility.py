@@ -312,7 +312,7 @@ def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str,
 
     example usage:
     method_descs = ["Set Var", "Access Skill"]
-    old_methods = [("x = 1", ""),("library.get_skill_data('lunge')", "from scripts.engine.library import library")]
+    old_methods = [("x = 1", ""),("library.get_skill_data('lunge')", "")]
     new_methods = [("x = 'one'", ""), ("library2.SKILLS.get('lunge')", "from scripts.engine import library2")]
     print( performance_test(method_descs, old_methods, new_methods) )
     """

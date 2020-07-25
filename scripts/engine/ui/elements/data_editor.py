@@ -19,7 +19,7 @@ from scripts.engine.core.constants import (AfflictionCategory, DamageType,
                                            TerrainCollision, TravelMethod)
 from scripts.engine.core.definitions import EffectData, SkillData, TraitData
 from scripts.engine.core.extend_json import ExtendedJsonEncoder
-from scripts.engine.library import library
+
 
 if TYPE_CHECKING:
     from typing import Any, Tuple, List, Dict, Optional

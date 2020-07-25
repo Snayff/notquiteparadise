@@ -11,7 +11,7 @@ import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
-from scripts.engine import chronicle, debug, utility
+from scripts.engine import chronicle, debug, library, utility
 from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
                                       Blocking, HasCombatStats, Identity,
                                       IsActor, IsGod, IsPlayer, Knowledge,
@@ -32,7 +32,7 @@ from scripts.engine.core.definitions import (ProjectileData,
                                              TraitSpritePathsData,
                                              TraitSpritesData)
 from scripts.engine.core.store import store
-from scripts.engine.library import library
+
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -74,7 +74,7 @@ def create_god(god_name: str) -> EntityID:
     """
     Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
-    data = library.get_god_data(god_name)
+    data = library.GODS[god_name]
     god: List[Component] = []
 
     god.append(Identity(data.name, data.description))
@@ -103,7 +103,7 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     components.append(Identity(name, description))
     components.append(Position(x, y))  # FIXME - check position not blocked before spawning
     components.append(HasCombatStats())
-    components.append(Blocking(True, library.get_game_config_data("default_values")["entity_blocks_sight"]))
+    components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(trait_names))
     components.append(FOV(create_fov_map()))
     components.append(Tracked(chronicle.get_time()))
@@ -116,12 +116,12 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     behaviour = None
 
     for name in trait_names:
-        data = library.get_trait_data(name)
+        data = library.TRAITS[name]
         traits_paths.append(data.sprite_paths)
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill_data = library.get_skill_data(skill_name)
+                skill_data = library.SKILLS[skill_name]
                 skill_class = getattr(skills, skill_data.class_name)
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
@@ -207,7 +207,7 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     """
     Creates an instance of an Affliction provided the name
     """
-    affliction_data = library.get_affliction_data(name)
+    affliction_data = library.AFFLICTIONS[name]
     return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
@@ -571,11 +571,11 @@ def get_hit_type(to_hit_score: int) -> HitTypeType:
     """
     Get the hit type from the to hit score
     """
-    hit_types_data = library.get_game_config_data("hit_types")
+    hit_types_data = library.GAME_CONFIG.hit_types
 
-    if to_hit_score >= hit_types_data[HitType.CRIT]["value"]:
+    if to_hit_score >= hit_types_data.crit.value:
         return HitType.CRIT
-    elif to_hit_score >= hit_types_data[HitType.HIT]["value"]:
+    elif to_hit_score >= hit_types_data.hit.value:
         return HitType.HIT
     else:
         return HitType.GRAZE
@@ -621,13 +621,13 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     stat = primary_stat
     value = 0
 
-    stat_data = library.get_primary_stat_data(stat)
+    stat_data = library.BASE_STATS_PRIMARY[stat]
     value += stat_data.base_value
 
     trait = get_entitys_component(entity, Traits)
     if trait:
         for name in trait.names:
-            data = library.get_trait_data(name)
+            data = library.TRAITS[name]
             value += getattr(data, stat)
 
     afflictions = get_entitys_component(entity, Afflictions)
@@ -650,7 +650,7 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
     value = 0
 
     # base values
-    stat_data = library.get_secondary_stat_data(stat)
+    stat_data = library.BASE_STATS_SECONDARY[stat]
     value += stat_data.base_value
 
     # values from primary stats
@@ -963,7 +963,7 @@ def recompute_fov(entity: EntityID) -> bool:
             stats = create_combat_stats(entity)
             sight_range = stats.sight_range
         else:
-            sight_range = library.get_game_config_data("default_values")["sight_range"]
+            sight_range = 0
 
         # get the needed components
         fov = get_entitys_component(entity, FOV)
@@ -1193,7 +1193,7 @@ def judge_action(entity: EntityID, action_name: str):
         opinion = cast(Opinion, opinion)
         identity = cast(Identity, identity)
 
-        attitudes = library.get_god_attitudes_data(identity.name)
+        attitudes = library.GODS[identity.name].attitudes
 
         # check if the god has an attitude towards the action and apply the opinion change,
         # adding the entity to the dict if necessary
@@ -1241,15 +1241,15 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
     mitigated_damage = (base_damage + damage_mod_amount) - resist_value
 
     # get modifiers
-    hit_types_data = library.get_game_config_data("hit_types")
+    hit_types_data = library.GAME_CONFIG.hit_types
 
     # apply to hit modifier to damage
     if hit_type == HitType.CRIT:
-        modified_damage = mitigated_damage * hit_types_data[HitType.CRIT]["modifier"]
+        modified_damage = mitigated_damage * hit_types_data.crit.modifier
     elif hit_type == HitType.HIT:
-        modified_damage = mitigated_damage * hit_types_data[HitType.HIT]["modifier"]
+        modified_damage = mitigated_damage * hit_types_data.hit.modifier
     else:
-        modified_damage = mitigated_damage * hit_types_data[HitType.GRAZE]["modifier"]
+        modified_damage = mitigated_damage * hit_types_data.graze.modifier
 
     # round down the dmg
     int_modified_damage = int(modified_damage)
@@ -1297,7 +1297,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         identity = cast(Identity, identity)
         knowledge = cast(Knowledge, knowledge)
 
-        attitudes = library.get_god_attitudes_data(identity.name)
+        attitudes = library.GODS[identity.name].attitudes
         action_name = action
 
         # check if the god has an attitude towards the action and increase likelihood of intervening
@@ -1308,7 +1308,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         eligible_interventions = []
         intervention_weightings = []
         for intervention_name in knowledge.get_skill_names():
-            intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
+            intervention_data = library.GODS[identity.name].interventions.get(intervention_name)
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
             try:

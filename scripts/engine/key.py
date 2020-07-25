@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 import pygame
-from scripts.engine.core.constants import (EventType, InputIntent,
-                                           InputIntentType)
-from scripts.engine.library import library
+from scripts.engine.core.constants import (InputIntent,  InputIntentType)
+from scripts.engine.library import INPUT_CONFIG
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple
 
-
-_input_list = library.get_all_input_config_data()  # holds values from input config
 
 
 def convert_vector_to_intent(direction: Tuple[int, int]) -> Optional[InputIntentType]:
@@ -59,21 +55,21 @@ def _check_directions(event: pygame.event):
 
     # handle key press events
     if event.type == pygame.KEYDOWN:
-        if event.key in _input_list["up"]:
+        if event.key in INPUT_CONFIG["up"]:
             return InputIntent.UP
-        elif event.key in _input_list["down"]:
+        elif event.key in INPUT_CONFIG["down"]:
             return InputIntent.DOWN
-        elif event.key in _input_list["left"]:
+        elif event.key in INPUT_CONFIG["left"]:
             return InputIntent.LEFT
-        elif event.key in _input_list["right"]:
+        elif event.key in INPUT_CONFIG["right"]:
             return InputIntent.RIGHT
-        elif event.key in _input_list["up_left"]:
+        elif event.key in INPUT_CONFIG["up_left"]:
             return InputIntent.UP_LEFT
-        elif event.key in _input_list["up_right"]:
+        elif event.key in INPUT_CONFIG["up_right"]:
             return InputIntent.UP_RIGHT
-        elif event.key in _input_list["down_left"]:
+        elif event.key in INPUT_CONFIG["down_left"]:
             return InputIntent.DOWN_LEFT
-        elif event.key in _input_list["down_right"]:
+        elif event.key in INPUT_CONFIG["down_right"]:
             return InputIntent.DOWN_RIGHT
 
 
@@ -84,21 +80,21 @@ def _check_actions(event: pygame.event):
 
     # handle key press events
     if event.type == pygame.KEYDOWN:
-        if event.key in _input_list["skill0"]:
+        if event.key in INPUT_CONFIG["skill0"]:
             return InputIntent.SKILL0
-        elif event.key in _input_list["skill1"]:
+        elif event.key in INPUT_CONFIG["skill1"]:
             return InputIntent.SKILL1
-        elif event.key in _input_list["skill2"]:
+        elif event.key in INPUT_CONFIG["skill2"]:
             return InputIntent.SKILL2
-        elif event.key in _input_list["skill3"]:
+        elif event.key in INPUT_CONFIG["skill3"]:
             return InputIntent.SKILL3
-        elif event.key in _input_list["skill4"]:
+        elif event.key in INPUT_CONFIG["skill4"]:
             return InputIntent.SKILL4
-        elif event.key in _input_list["skill5"]:
+        elif event.key in INPUT_CONFIG["skill5"]:
             return InputIntent.SKILL5
-        elif event.key in _input_list["confirm"]:
+        elif event.key in INPUT_CONFIG["confirm"]:
             return InputIntent.CONFIRM
-        elif event.key in _input_list["exit"]:
+        elif event.key in INPUT_CONFIG["exit"]:
             return InputIntent.EXIT
 
 

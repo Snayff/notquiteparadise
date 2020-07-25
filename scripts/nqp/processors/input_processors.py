@@ -13,7 +13,7 @@ from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
     Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
     InputIntentType, TargetingMethod, UIElement)
-from scripts.engine.library import library
+
 from scripts.engine.ui.manager import ui
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.world_objects.tile import Tile

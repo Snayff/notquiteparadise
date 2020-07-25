@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING, Union
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement as PygameGuiElement
 from snecs.typedefs import EntityID
-from scripts.engine import debug, utility
+from scripts.engine import debug, library, utility
 from scripts.engine.core.constants import (GAP_SIZE, MAX_SKILLS, SKILL_BUTTON_SIZE,
                                            Direction,
                                            UIElement,
                                            UIElementType)
-from scripts.engine.library import library
+
 from scripts.engine.ui.widgets.screen_message import \
     ScreenMessage
 from scripts.engine.ui.elements.actor_info import ActorInfo
@@ -41,19 +41,19 @@ class _UIManager:
         pygame.font.init()
 
         # get config info
-        base_window_data = library.get_video_config_data("base_window")
-        desired_window_data = library.get_video_config_data("desired_window")
+        base_window_data = library.VIDEO_CONFIG.base_window
+        desired_window_data = library.VIDEO_CONFIG.desired_window
 
 
         ##  set the display
         # base values
-        self._base_width = base_window_data["width"]
-        self._base_height = base_window_data["height"]
+        self._base_width = base_window_data.width
+        self._base_height = base_window_data.height
         self._main_surface: pygame.Surface = pygame.Surface((self._base_width, self._base_height), pygame.SRCALPHA)
 
         # values to scale to
-        self._desired_width = desired_window_data["width"]
-        self._desired_height = desired_window_data["height"]
+        self._desired_width = desired_window_data.width
+        self._desired_height = desired_window_data.height
         self._screen_scaling_mod_x = self._desired_width // self._base_width
         self._screen_scaling_mod_y = self._desired_height // self._base_height
         self._window: pygame.display = pygame.display.set_mode((self._desired_width, self._desired_height))
@@ -317,7 +317,7 @@ class _UIManager:
         if camera:
             # update directions to either clear or use info from skill
             if is_visible and skill_name:
-                data = library.get_skill_data(skill_name)
+                data = library.SKILLS[skill_name]
                 _directions = data.target_directions
             else:
                 _directions = []

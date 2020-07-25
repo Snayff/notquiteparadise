@@ -2,10 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional
-
 import pygame
 from snecs.typedefs import EntityID
-
 from scripts.engine.core.constants import (
     AfflictionCategory, AfflictionCategoryType,
     AfflictionTrigger, AfflictionTriggerType,
@@ -292,3 +290,58 @@ class GodData:
     description: str = field(default="none")
     attitudes: Dict[str, AttitudeData] = field(default_factory=dict)
     interventions: Dict[str, InterventionData] = field(default_factory=dict)
+
+
+################### CONFIG ###################################################
+
+@register_dataclass_with_json
+@dataclass
+class Dimensions:
+    height: int
+    width: int
+
+
+@register_dataclass_with_json
+@dataclass
+class VideoConfigData:
+    base_window: Dimensions
+    desired_window: Dimensions
+    fps_limit: int
+
+
+@register_dataclass_with_json
+@dataclass
+class HitInfoData:
+    value: int
+    modifier: float
+
+
+@register_dataclass_with_json
+@dataclass
+class HitTypeData:
+    graze: HitInfoData
+    hit: HitInfoData
+    crit: HitInfoData
+
+
+@register_dataclass_with_json
+@dataclass
+class BaseValueData:
+    move_cost: int
+    accuracy: int
+    damage: int
+
+
+@register_dataclass_with_json
+@dataclass
+class DefaultValueData:
+    time_per_round: int
+    entity_blocks_sight: bool
+
+
+@register_dataclass_with_json
+@dataclass
+class GameConfigData:
+    hit_types: HitTypeData
+    base_values: BaseValueData
+    default_values: DefaultValueData
