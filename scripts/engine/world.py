@@ -101,7 +101,10 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
         components.append(IsPlayer())
     components.append(IsActor())
     components.append(Identity(name, description))
-    components.append(Position((x, y)))  # FIXME - check position not blocked before spawning
+    if not is_player:
+        components.append(Position((x, y)))  # FIXME - check position not blocked before spawning
+    else:
+        components.append(Position((x, y), (x+1, y), (x, y+1), (x+1, y+1)))
     components.append(HasCombatStats())
     components.append(Blocking(True, library.get_game_config_data("default_values")["entity_blocks_sight"]))
     components.append(Traits(trait_names))
@@ -138,8 +141,10 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
 
     sprites = _create_trait_sprites(traits_paths)
+
     # N.B. translation to screen coordinates is handled by the camera
     components.append(Aesthetic(sprites.idle, sprites, RenderLayer.ACTOR, (x, y)))
+
 
     # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
@@ -234,15 +239,15 @@ def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpri
     # convert to sprites
     for name, path_list in paths.items():
         # get the size to convert to
+        size = None
         if name == "icon":
             size = (ICON_SIZE, ICON_SIZE)
-        else:
-            size = (TILE_SIZE, TILE_SIZE)
 
         sprites[name] = utility.get_images(path_list, size)
 
     # flatten the images
     for name, surface_list in sprites.items():
+        logging.warning((name, surface_list))
         flattened_sprites[name] = utility.flatten_images(surface_list)
 
     # convert to dataclass
