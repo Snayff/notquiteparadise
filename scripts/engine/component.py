@@ -321,7 +321,7 @@ class FOV(RegisteredComponent):
     An entity's field of view.
     """
 
-    def __init__(self, fov_map: tcod.map.Map):
-        self.map: tcod.map.Map = fov_map
+    def __init__(self, fov_map: np.array):
+        self.map: np.array = fov_map
         self.algorithm = 0
         self.light_walls = True
