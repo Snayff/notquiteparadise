@@ -97,7 +97,7 @@ def _process_stateless_intents(intent: InputIntentType):
 
     ## Refresh Library Data
     elif intent == InputIntent.REFRESH_DATA:
-        # TODO - have this trigger dev console and move skill editor to a command in the console.
+        # TODO - move to a command in the console.
         library.refresh_library()
 
     ## Activate data editor
@@ -109,6 +109,9 @@ def _process_stateless_intents(intent: InputIntentType):
         else:
             ui.create_element(UIElement.DATA_EDITOR)
             state.set_new(GameState.DEVELOPER)
+
+    elif intent == InputIntent.BURST_PROFILE:
+        debug.enable_profiling(120)
 
 
 def _process_gamemap_intents(intent: InputIntentType):
