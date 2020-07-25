@@ -104,15 +104,6 @@ class Position(RegisteredComponent):
         """
         return self.position[0]
 
-    '''
-    @x.setter
-    def x(self, new: int):
-        """
-        Sets the x component of the top-left position
-        :param new: The new component
-        """
-        self.coordinates[0].x = new
-    '''
     @property
     def y(self) -> int:
         """
@@ -120,15 +111,13 @@ class Position(RegisteredComponent):
         """
         return self.position[1]
 
-    '''
-    @y.setter
-    def y(self, new: int):
+    def get_offsets(self) -> List[Tuple[int, int]]:
         """
-        Sets the y component of the top-left position
-        :param new: The new component
+        Returns the list of offsets from the most top-left tile
+        :return: A list of offsets
         """
-        self.coordinates[0].y = new
-    '''
+        return self.offsets
+
     def get_coordinates(self) -> List[Coordinate]:
         """
         :return: The list of coordinates that this Position represents
