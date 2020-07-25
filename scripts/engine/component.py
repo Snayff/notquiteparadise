@@ -76,7 +76,7 @@ class Position(RegisteredComponent):
         self.offsets = [(x - top_left[0], y - top_left[1]) for x, y in sorted_positions]
         self.position = top_left
 
-    def set(self, x, y):
+    def set(self, x: int, y: int):
         self.position = (x, y)
 
     def get_outmost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
