@@ -704,8 +704,9 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
     # get relevant entities in target area
     for entity, (position, *others) in get_components([Position, Resources]):
         assert isinstance(position, Position)  # for mypy typing
-        if (position.x, position.y) in affected_positions:
-            affected_entities.append(entity)
+        for affected_pos in affected_positions:
+            if affected_pos in position:
+                affected_entities.append(entity)
 
     return affected_entities
 
@@ -828,7 +829,7 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     entities = []
     for entity, (position,) in get_components([Position]):
         position = cast(Position, position)
-        if position.x == x and position.y == y:
+        if (x, y) in position:
             entities.append(entity)
     return entities
 
@@ -857,7 +858,7 @@ def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     for entity, (position, blocking) in get_components([Position, Blocking]):
         position = cast(Position, position)
         blocking = cast(Blocking, blocking)
-        if position.x == x and position.y == y and blocking.blocks_movement:
+        if (x, y) in position and blocking.blocks_movement:
             return True
     return False
 
@@ -869,7 +870,7 @@ def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
     for entity, (position, blocking) in get_components([Position, Blocking]):
         position = cast(Position, position)
         blocking = cast(Blocking, blocking)
-        if position.x == x and position.y == y and blocking.blocks_sight:
+        if (x, y) in position and blocking.blocks_sight:
             return True
     return False
 

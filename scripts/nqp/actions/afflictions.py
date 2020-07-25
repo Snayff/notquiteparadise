@@ -49,9 +49,11 @@ class Affliction(ABC):
         """
         An iterator over pairs of (affected entity, [effects])
         """
+
         position = world.get_entitys_component(self.affected_entity, Position)
-        for entity in world.get_affected_entities((position.x, position.y), self.shape, self.shape_size):
-            yield entity, self.build_effects(entity)
+        for coordinate in position.get_coordinates():
+            for entity in world.get_affected_entities((coordinate.x, coordinate.y), self.shape, self.shape_size):
+                yield entity, self.build_effects(entity)
 
     @abstractmethod
     def build_effects(self, entity: EntityID):
