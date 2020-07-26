@@ -1,0 +1,10 @@
+tests.nqp package
+=================
+
+Module contents
+---------------
+
+.. automodule:: tests.nqp
+   :members:
+   :undoc-members:
+   :show-inheritance:

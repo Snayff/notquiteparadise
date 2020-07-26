@@ -1,0 +1,38 @@
+scripts.nqp.processors package
+==============================
+
+Submodules
+----------
+
+scripts.nqp.processors.ai\_processors module
+--------------------------------------------
+
+.. automodule:: scripts.nqp.processors.ai_processors
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.nqp.processors.display\_processors module
+-------------------------------------------------
+
+.. automodule:: scripts.nqp.processors.display_processors
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.nqp.processors.input\_processors module
+-----------------------------------------------
+
+.. automodule:: scripts.nqp.processors.input_processors
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: scripts.nqp.processors
+   :members:
+   :undoc-members:
+   :show-inheritance:

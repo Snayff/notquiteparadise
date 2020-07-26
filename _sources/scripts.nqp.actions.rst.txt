@@ -1,0 +1,30 @@
+scripts.nqp.actions package
+===========================
+
+Submodules
+----------
+
+scripts.nqp.actions.afflictions module
+--------------------------------------
+
+.. automodule:: scripts.nqp.actions.afflictions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.nqp.actions.skills module
+---------------------------------
+
+.. automodule:: scripts.nqp.actions.skills
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: scripts.nqp.actions
+   :members:
+   :undoc-members:
+   :show-inheritance:

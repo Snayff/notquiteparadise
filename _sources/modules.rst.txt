@@ -1,0 +1,8 @@
+notquiteparadise
+================
+
+.. toctree::
+   :maxdepth: 4
+
+   scripts
+   tests

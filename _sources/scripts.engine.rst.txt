@@ -1,0 +1,104 @@
+scripts.engine package
+======================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   scripts.engine.core
+   scripts.engine.ui
+   scripts.engine.world_objects
+
+Submodules
+----------
+
+scripts.engine.chronicle module
+-------------------------------
+
+.. automodule:: scripts.engine.chronicle
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.component module
+-------------------------------
+
+.. automodule:: scripts.engine.component
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.debug module
+---------------------------
+
+.. automodule:: scripts.engine.debug
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.effect module
+----------------------------
+
+.. automodule:: scripts.engine.effect
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.key module
+-------------------------
+
+.. automodule:: scripts.engine.key
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.library module
+-----------------------------
+
+.. automodule:: scripts.engine.library
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.state module
+---------------------------
+
+.. automodule:: scripts.engine.state
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.thought module
+-----------------------------
+
+.. automodule:: scripts.engine.thought
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.utility module
+-----------------------------
+
+.. automodule:: scripts.engine.utility
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.world module
+---------------------------
+
+.. automodule:: scripts.engine.world
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: scripts.engine
+   :members:
+   :undoc-members:
+   :show-inheritance:

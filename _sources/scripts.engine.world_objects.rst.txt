@@ -1,0 +1,38 @@
+scripts.engine.world\_objects package
+=====================================
+
+Submodules
+----------
+
+scripts.engine.world\_objects.combat\_stats module
+--------------------------------------------------
+
+.. automodule:: scripts.engine.world_objects.combat_stats
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.world\_objects.gamemap module
+--------------------------------------------
+
+.. automodule:: scripts.engine.world_objects.gamemap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.world\_objects.tile module
+-----------------------------------------
+
+.. automodule:: scripts.engine.world_objects.tile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: scripts.engine.world_objects
+   :members:
+   :undoc-members:
+   :show-inheritance:

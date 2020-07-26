@@ -1,0 +1,31 @@
+scripts.nqp package
+===================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   scripts.nqp.actions
+   scripts.nqp.processors
+
+Submodules
+----------
+
+scripts.nqp.main module
+-----------------------
+
+.. automodule:: scripts.nqp.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: scripts.nqp
+   :members:
+   :undoc-members:
+   :show-inheritance:

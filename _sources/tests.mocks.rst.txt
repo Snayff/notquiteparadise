@@ -1,0 +1,30 @@
+tests.mocks package
+===================
+
+Submodules
+----------
+
+tests.mocks.ui\_mock module
+---------------------------
+
+.. automodule:: tests.mocks.ui_mock
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.mocks.world\_mock module
+------------------------------
+
+.. automodule:: tests.mocks.world_mock
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: tests.mocks
+   :members:
+   :undoc-members:
+   :show-inheritance:
