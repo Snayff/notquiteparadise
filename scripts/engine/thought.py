@@ -7,11 +7,11 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
+from scripts.engine.actions.skills import Move
 from scripts.engine.component import Position
 from scripts.engine.core.constants import (ProjectileExpiry, TargetTag,
                                            TerrainCollision)
 from scripts.engine.core.definitions import ProjectileData
-from scripts.engine.actions import Move
 
 if TYPE_CHECKING:
     pass

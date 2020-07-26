@@ -4,7 +4,7 @@ import dataclasses
 import logging
 import random
 from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
-                    cast)
+    cast)
 
 import pygame
 import snecs
@@ -14,19 +14,21 @@ from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, debug, library, utility
+from scripts.engine.actions.afflictions import Affliction
+from scripts.engine.actions.skills import BasicAttack, Move, Skill
 from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
-                                      Blocking, HasCombatStats, Identity,
-                                      IsActor, IsGod, IsPlayer, Knowledge,
-                                      Opinion, Position, Resources, Tracked,
-                                      Traits)
+    Blocking, HasCombatStats, Identity,
+    IsActor, IsGod, IsPlayer, Knowledge,
+    Opinion, Position, Resources, Tracked,
+    Traits)
 from scripts.engine.core.constants import (
     ICON_SIZE, INFINITE, TILE_SIZE, Direction, DirectionType, HitType,
     HitTypeType, PrimaryStat, PrimaryStatType, RenderLayer, ResourceType,
     SecondaryStatType, ShapeType, TargetTag, TargetTagType, TraitGroup,
     TravelMethod, TravelMethodType)
 from scripts.engine.core.definitions import (ProjectileData,
-                                             SpritePathsData,
-                                             SpritesData)
+    SpritePathsData,
+    SpritesData)
 from scripts.engine.core.store import store
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
@@ -34,8 +36,6 @@ from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.actions import afflictions, skills
-from scripts.engine.actions import Affliction
-from scripts.engine.actions import BasicAttack, Move, Skill
 
 if TYPE_CHECKING:
     from typing import Optional, Any, Tuple, Dict, List
@@ -139,7 +139,6 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
     # N.B. translation to screen coordinates is handled by the camera
     components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (x, y)))
-
 
     # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
@@ -843,7 +842,7 @@ def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     """
     entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
-    return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or\
+    return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or \
            (len(entities_on_tile) > 1 and active_entity_is_on_tile)
 
 
@@ -1046,7 +1045,8 @@ def apply_skill(skill_instance: Skill) -> bool:
                     effect_queue.extend(effect.evaluate())
         return True
     else:
-        logging.info(f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
+        logging.info(
+            f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
@@ -1066,7 +1066,8 @@ def set_skill_on_cooldown(skill_instance: Skill) -> bool:
 
 def apply_affliction(affliction_instance: Affliction) -> bool:
     """
-    Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met, False if not.
+    Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met,
+    False if not.
     """
     affliction = affliction_instance
     target = affliction_instance.affected_entity
@@ -1135,7 +1136,6 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
 
 def kill_entity(entity: EntityID):
-
     # if not player
     if entity != get_player():
         # delete from world

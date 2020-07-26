@@ -314,17 +314,30 @@ class Knowledge(RegisteredComponent):
     An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
     """
 
-    def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None):
+    def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None,
+            cooldowns: Optional[Dict[str, int]] = None):
         skills = skills or []
         skill_order = skill_order or []
+        cooldowns = cooldowns or {}
 
         self.skill_order: List[str] = skill_order
-        self.cooldowns: Dict[str, int] = {}
+        self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []
-        self.skills: Dict[str, Type[Skill]] = {}
+        self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
 
         for skill_class in skills:
-            self.learn_skill(skill_class, add_to_order=False)
+            # dont override skill order if it has been provided
+            if skill_order:
+                _add_to_order = False
+            else:
+                _add_to_order = True
+
+            if cooldowns:
+                _set_cooldown = False
+            else:
+                _set_cooldown = True
+
+            self.learn_skill(skill_class, _add_to_order, _set_cooldown)
 
     def set_skill_cooldown(self, name: str, value: int):
         """
@@ -332,30 +345,39 @@ class Knowledge(RegisteredComponent):
         """
         self.cooldowns[name] = max(0, value)
 
-    def learn_skill(self, skill_class, add_to_order=True):
+    def learn_skill(self, skill: Type[Skill], add_to_order: bool = True, set_cooldown: bool = True):
         """
         Learn a new skill
         """
-        self.cooldowns[skill_class.name] = 0
-        self.skill_names.append(skill_class.name)
+        self.skill_names.append(skill.name)
+        self.skills[skill.name] = skill
         if add_to_order:
-            self.skill_order.append(skill_class.name)
-        self.skills[skill_class.name] = skill_class
+            self.skill_order.append(skill.name)
+        if set_cooldown:
+            self.cooldowns[skill.name] = 0
+
 
     def serialize(self):
-        skills = []
-        for skill in self.skills:
-            skills.append(asdict(skill))
-
         _dict = {
-            "skills": skills,
-
+            "skill_names": self.skill_names,
+            "cooldowns": self.cooldowns,
+            "skill_order": self.skill_order
         }
-        return self.skills, self.skill_order
+        return _dict
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        skill_names = serialized["skill_names"]
+        # TODO - convert skill names into skills
+        skills = []
+        for name in skill_names:
+            # get skill
+            pass
+
+        cooldowns = serialized["cooldowns"]
+        skill_order = serialized["skill_order"]
+
+        return Knowledge(skills, skill_order, cooldowns)
 
 
 class Afflictions(RegisteredComponent):
