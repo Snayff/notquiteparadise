@@ -58,7 +58,7 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
     Flatten a list of images into a single image. All images must be the same size. Images are blitted in order.
     """
 
-    biggest_image = None
+    biggest_image: Optional[pygame.Surface] = None
     biggest_image_index = -1
     for i in range(len(images)):
         img = images[i]
@@ -66,7 +66,7 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
             biggest_image = img
             biggest_image_index = i
 
-    base = biggest_image
+    base: pygame.Surface = biggest_image
     for image in images[0:biggest_image_index] + images[biggest_image_index:]:
         if image != biggest_image:
             base.blit(image, (0, 0))
