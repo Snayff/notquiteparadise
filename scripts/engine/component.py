@@ -54,13 +54,6 @@ class HasCombatStats(RegisteredComponent):
 
 #################### OTHERS #########################
 
-class Coordinate:
-
-    def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
-
-
 class Position(RegisteredComponent):
     """
     An entity's position on the map.
@@ -87,15 +80,15 @@ class Position(RegisteredComponent):
         """
         coordinates = self.get_coordinates()
         # Calculate center
-        center = (sum(c.x for c in coordinates), sum(c.y for c in coordinates))
-        transformed = [np.dot((c.x, c.y), direction) for c in coordinates]
+        center = (sum(c[0] for c in coordinates), sum(c[1] for c in coordinates))
+        transformed = [np.dot((c[0], c[1]), direction) for c in coordinates]
         # Find the coordinate that is nearest the direction
         arg_max = np.argwhere(transformed == np.amax(transformed))
         # From all the nearest coordinates find the one nearest to the center of the entity
         arg_min = np.argmin(
             np.sqrt((center[0] - transformed[i[0]][0])**2 + (center[1] - transformed[i[0]][1])**2) for i in arg_max
         )
-        return coordinates[arg_max[arg_min][0]].x, coordinates[arg_max[arg_min][0]].y
+        return coordinates[arg_max[arg_min][0]][0], coordinates[arg_max[arg_min][0]][1]
 
     @property
     def x(self) -> int:
@@ -118,11 +111,11 @@ class Position(RegisteredComponent):
         """
         return self.offsets
 
-    def get_coordinates(self) -> List[Coordinate]:
+    def get_coordinates(self) -> List[Tuple[int, int]]:
         """
         :return: The list of coordinates that this Position represents
         """
-        return [Coordinate(self.x + x, self.y + y) for x, y in self.offsets]
+        return [(self.x + x, self.y + y) for x, y in self.offsets]
 
     def contains(self, x: int, y: int):
         """
@@ -138,7 +131,7 @@ class Position(RegisteredComponent):
         :return: A bool that represents if the Position contains the provided coordinates
         """
         for coordinate in self.get_coordinates():
-            if coordinate.x == key[0] and coordinate.y == key[1]:
+            if coordinate == key:
                 return True
         return False
 

@@ -52,7 +52,7 @@ class Affliction(ABC):
         position = world.get_entitys_component(self.affected_entity, Position)
         if position:
             for coordinate in position.get_coordinates():
-                for entity in world.get_affected_entities((coordinate.x, coordinate.y), self.shape, self.shape_size):
+                for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
                     if entity not in entities:
                         entities.add(entity)
                         yield entity, self.build_effects(entity)

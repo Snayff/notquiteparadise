@@ -156,8 +156,8 @@ class MoveActorEffect(Effect):
         position = world.get_entitys_component(entity, Position)
 
         for coordinate in position.get_coordinates():
-            target_x = coordinate.x + dir_x
-            target_y = coordinate.y + dir_y
+            target_x = coordinate[0] + dir_x
+            target_y = coordinate[1] + dir_y
             target_tile = world.get_tile((target_x, target_y))
 
             # check a tile was returned
