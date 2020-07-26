@@ -29,6 +29,8 @@ jobs:
           cd docs
           make html
           make clean
+      - name: test
+        run: git status
           
       - name: deploy-docs
         uses: JamesIves/github-pages-deploy-action@3.5.7
