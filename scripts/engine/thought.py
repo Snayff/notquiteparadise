@@ -124,7 +124,7 @@ class ProjectileBehaviour(AIBehaviour):
             # resolve post activation
             if skill_instance.name == "move":
                 self.distance_travelled += 1
-                scripts.engine.chronicle.end_turn(entity, self.data.speed)
+                chronicle.end_turn(entity, self.data.speed)
             else:
                 # die after activating
                 world.kill_entity(entity)

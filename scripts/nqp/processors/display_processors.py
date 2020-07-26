@@ -70,7 +70,7 @@ def _process_aesthetic_update(delta_time: float):
         # cast for typing
         aesthetic = cast(Aesthetic, aesthetic)
 
-        max_duration = 0.2
+        max_duration = 0.3
 
         # increment time
         aesthetic.current_sprite_duration += delta_time

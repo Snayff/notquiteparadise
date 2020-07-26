@@ -7,7 +7,7 @@ import pygame
 
 ######################## GENERAL CONSTANTS ######################################
 
-VERSION = "0.113.0"
+VERSION = "0.114.0"
 
 MAX_SKILLS = 6
 TILE_SIZE = 64
