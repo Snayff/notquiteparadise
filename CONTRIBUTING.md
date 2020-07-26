@@ -36,6 +36,7 @@ Below are the naming conventions followed in this project:
   1. Identifiers (entity, skill)
   2. Affected items (position, tiles)
   3. Qualifiers
+* Externally held data should be defined in a dataclass in definitions.py.
   
 
 

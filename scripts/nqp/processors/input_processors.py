@@ -4,18 +4,16 @@ import logging
 from typing import TYPE_CHECKING, Optional, Type
 
 import pygame
-from pygame_gui import UI_WINDOW_CLOSE
 from snecs.typedefs import EntityID
 
 import scripts.engine.chronicle
-from scripts.engine import debug, key, state, world
+from scripts.engine import debug, key, library, state, world
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
     Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
     InputIntentType, TargetingMethod, UIElement)
-from scripts.engine.library import library
-from scripts.engine.ui.manager import ui
 from scripts.engine.ui.elements.actor_info import ActorInfo
+from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions.skills import Move, Skill
 from scripts.nqp.processors import ai_processors
@@ -99,8 +97,8 @@ def _process_stateless_intents(intent: InputIntentType):
 
     ## Refresh Library Data
     elif intent == InputIntent.REFRESH_DATA:
-        # TODO - have this trigger dev console and move skill editor to a command in the console.
-        library.refresh_library_data()
+        # TODO - move to a command in the console.
+        library.refresh_library()
 
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
@@ -111,6 +109,9 @@ def _process_stateless_intents(intent: InputIntentType):
         else:
             ui.create_element(UIElement.DATA_EDITOR)
             state.set_new(GameState.DEVELOPER)
+
+    elif intent == InputIntent.BURST_PROFILE:
+        debug.enable_profiling(120)
 
 
 def _process_gamemap_intents(intent: InputIntentType):

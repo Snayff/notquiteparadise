@@ -3,13 +3,15 @@ from __future__ import annotations
 import logging
 import sys
 import traceback
+
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import chronicle, debug, key, state, utility, world
+
+from scripts.engine import (chronicle, debug, key, library, state, utility,
+                            world)
 from scripts.engine.core.constants import GameState, UIElement
-from scripts.engine.debug import create_profiler, disable_logging, disable_profiling, dump_profiling_data, \
-    initialise_logging
+from scripts.engine.debug import (create_profiler, kill_logging, initialise_logging)
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors
 
@@ -19,11 +21,12 @@ def main():
     The entry for the game initialisation and game loop
     """
     # initialise logging
-    initialise_logging()
+    if debug.is_logging():
+        initialise_logging()
 
     # initialise profiling
-    # TODO - set to turn off for production builds
-    profiler = create_profiler()
+    if debug.is_profiling():
+        create_profiler()
 
     # initialise the game
     initialise_game()
@@ -32,7 +35,7 @@ def main():
     try:
         game_loop()
     except Exception:
-        logging.critical(f"Something went wrong and killed the game loop")
+        logging.critical(f"Something went wrong and killed the game loop!")
         exc_type, exc_value, exc_traceback = sys.exc_info()
         tb_list = traceback.format_exception(exc_type, exc_value, exc_traceback)
         for line in tb_list:
@@ -41,16 +44,18 @@ def main():
         traceback.print_exc()
 
     # we've left the game loop so now close everything down
-    disable_profiling(profiler)
-    dump_profiling_data(profiler)
-    disable_logging()
+    if debug.is_profiling():
+        kill_logging()
+        # print debug values
+        debug.print_values_to_console()
+    if debug.is_logging():
+        kill_logging()
 
-    # print debug values
-    debug.print_values_to_console()
+    # clean up pygame resources
+    pygame.quit()
 
-    pygame.quit()  # clean up pygame resources
-
-    raise SystemExit  # exit window and python
+    # exit window and python
+    raise SystemExit
 
 
 def game_loop():
@@ -59,9 +64,10 @@ def game_loop():
     """
 
     while not state.get_current() == GameState.EXIT_GAME:
+        # progress frame
+        delta_time = state.update_clock()
 
         # get info to support UI updates and handling events
-        delta_time = state.get_delta_time()
         current_state = state.get_current()
         turn_holder = chronicle.get_turn_holder()
 
@@ -88,9 +94,6 @@ def game_loop():
 
         # show the new state
         ui.draw()
-
-        # progress frame
-        state.update_clock()
 
 
 def initialise_game():

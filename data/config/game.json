@@ -1,27 +1,33 @@
 {
+    "__dataclass__": "GameConfigData",
     "hit_types": {
+        "__dataclass__": "HitTypeData",
         "graze": {
+            "__dataclass__": "HitInfoData",
             "value": 0,
             "modifier": 0.6
         },
         "hit": {
+            "__dataclass__": "HitInfoData",
             "value": 5,
             "modifier": 1
         },
         "crit": {
+            "__dataclass__": "HitInfoData",
             "value": 20,
             "modifier": 1.5
         }
     },
     "base_values": {
+        "__dataclass__": "BaseValueData",
         "move_cost": 20,
         "accuracy": 100,
         "damage": 5
         },
     "default_values": {
+        "__dataclass__": "DefaultValueData",
         "time_per_round": 20,
-        "entity_blocks_sight": true,
-        "sight_range": 2
+        "entity_blocks_sight": true
     }
     
 }
