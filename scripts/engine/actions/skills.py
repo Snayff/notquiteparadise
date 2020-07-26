@@ -3,9 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Iterator
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import library, world
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (DamageType, Direction,
@@ -20,7 +18,7 @@ from scripts.engine.core.constants import (DamageType, Direction,
                                            TargetTagType, TerrainCollision,
                                            TerrainCollisionType, TravelMethod,
                                            TravelMethodType)
-from scripts.engine.effect import (
+from scripts.engine.actions.effect import (
     ApplyAfflictionEffect, DamageEffect, Effect, MoveActorEffect,
     ReduceSkillCooldownEffect)
 from scripts.engine.world_objects.tile import Tile
@@ -43,7 +41,7 @@ class Skill(ABC):
     not dependent on the individual cast - stuff like shape, base accuracy, etc.
 
     An instance of Skill represents an individual use of that skill,
-    and holds only the data that is tied to the individual use - stuff like
+    and additionally holds only the data that is tied to the individual use - stuff like
     the user and target.
     """
 

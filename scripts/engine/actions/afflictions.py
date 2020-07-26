@@ -13,7 +13,7 @@ from scripts.engine.core.constants import (AfflictionCategory,
                                            EffectType, EffectTypeType,
                                            PrimaryStat, Shape, ShapeType,
                                            TargetTag, TargetTagType)
-from scripts.engine.effect import AffectStatEffect, DamageEffect, Effect
+from scripts.engine.actions.effect import AffectStatEffect, DamageEffect, Effect
 
 if TYPE_CHECKING:
     from typing import Tuple, List

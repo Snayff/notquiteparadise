@@ -33,12 +33,12 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions import afflictions, skills
-from scripts.nqp.actions.afflictions import Affliction
-from scripts.nqp.actions.skills import BasicAttack, Move, Skill
+from scripts.engine.actions import afflictions, skills
+from scripts.engine.actions import Affliction
+from scripts.engine.actions import BasicAttack, Move, Skill
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional, Any, Tuple, Dict, List
 
 ########################### LOCAL DEFINITIONS ##########################
 

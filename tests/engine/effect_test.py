@@ -1,12 +1,10 @@
-import pytest
-
 from scripts.engine import world
 from scripts.engine.component import Afflictions, Identity, Knowledge, Position
 from scripts.engine.core.constants import EffectType, AfflictionTrigger, TargetTag
-from scripts.engine.effect import (ReduceSkillCooldownEffect,
+from scripts.engine.actions.effect import (ReduceSkillCooldownEffect,
                                    TriggerAfflictionsEffect)
-from scripts.nqp.actions.afflictions import Affliction
-from scripts.nqp.actions.skills import Move
+from scripts.engine.actions import Affliction
+from scripts.engine.actions import Move
 from tests.mocks import world_mock
 
 

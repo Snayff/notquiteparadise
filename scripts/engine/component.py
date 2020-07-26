@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
-from typing import TYPE_CHECKING, Any, Tuple
+from typing import TYPE_CHECKING
 
 from snecs import RegisteredComponent
 import numpy as np
@@ -12,10 +12,9 @@ if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
-    from snecs.typedefs import EntityID
-    from scripts.nqp.actions.skills import Skill
+    from scripts.engine.actions import Skill
     from scripts.engine.core.definitions import SpritePathsData, SpritesData
-    from scripts.nqp.actions.afflictions import Affliction
+    from scripts.engine.actions import Affliction
 
 
 ##########################################################
@@ -220,11 +219,11 @@ class Tracked(RegisteredComponent):
         self.time_spent: int = time_spent
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.time_spent
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Tracked(*serialized)
 
 
 class Resources(RegisteredComponent):
@@ -237,11 +236,11 @@ class Resources(RegisteredComponent):
         self.stamina: int = stamina
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.health, self.stamina
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Resources(*serialized)
 
 
 class Blocking(RegisteredComponent):
@@ -254,11 +253,11 @@ class Blocking(RegisteredComponent):
         self.blocks_sight: bool = blocks_sight
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.blocks_movement, self.blocks_sight
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Blocking(*serialized)
 
 
 class Identity(RegisteredComponent):
@@ -271,7 +270,7 @@ class Identity(RegisteredComponent):
         self.description: str = description
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.name, self.description
 
     @classmethod
     def deserialize(cls, serialized):
@@ -287,11 +286,11 @@ class Traits(RegisteredComponent):
         self.names: List[str] = trait_names
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.names
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Traits(*serialized)
 
 
 class Behaviour(RegisteredComponent):
@@ -303,11 +302,11 @@ class Behaviour(RegisteredComponent):
         self.behaviour = behaviour
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.behaviour
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Behaviour(*serialized)
 
 
 class Knowledge(RegisteredComponent):
@@ -344,7 +343,15 @@ class Knowledge(RegisteredComponent):
         self.skills[skill_class.name] = skill_class
 
     def serialize(self):
-        return (self.first, self.second)
+        skills = []
+        for skill in self.skills:
+            skills.append(asdict(skill))
+
+        _dict = {
+            "skills": skills,
+
+        }
+        return self.skills, self.skill_order
 
     @classmethod
     def deserialize(cls, serialized):

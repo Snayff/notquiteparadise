@@ -15,7 +15,7 @@ from scripts.engine.core.constants import (
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions.skills import Move, Skill
+from scripts.engine.actions import Move, Skill
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:

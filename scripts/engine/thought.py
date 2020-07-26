@@ -11,7 +11,7 @@ from scripts.engine.component import Position
 from scripts.engine.core.constants import (ProjectileExpiry, TargetTag,
                                            TerrainCollision)
 from scripts.engine.core.definitions import ProjectileData
-from scripts.nqp.actions.skills import Move
+from scripts.engine.actions import Move
 
 if TYPE_CHECKING:
     pass
