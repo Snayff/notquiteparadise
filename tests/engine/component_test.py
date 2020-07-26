@@ -1,30 +1,42 @@
-from scripts.engine import state
-from scripts.engine.core.constants import GameState
+import pytest
+from typing import List, Tuple
+from scripts.engine.component import Position
 
 
-class TestState:
+class TestPosition:
+    test_position_outmost_parameters = [
+        [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (1, 0), (1, 0)],
+        [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (-1, 0), (-1, 0)],
+        [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (0, -1), (0, -1)],
+        [[(0, 0), (1, 0), (0, 1), (1, 1), (-1, 0), (-1, -1), (-1, 1), (1, -1), (0, -1)], (0, 1), (0, 1)],
+    ]
 
-
-    def test_position_contains(self):
+    def test_position_detect_top_left(self):
         """
         Test the Position component
         """
-        pass
+        pos = Position((6, 6), (6, 5), (5, 5), (5, 6))
+        assert pos.x == 5 and pos.y == 5
 
-    def test_position_contains(self):
+    def test_position_coordinates(self):
         """
-        Test the Position component
+        Test the Position coordinates
         """
-        pass
+        coordinates = [(6, 6), (6, 5), (5, 5), (5, 6)]
+        pos = Position(*coordinates)
+        assert set(coordinates) == set(pos.get_coordinates())
 
-    def test_position_contains(self):
+    def test_position_centers(self):
         """
-        Test the Position component
+        Test the Position centers correctly
         """
-        pass
+        pos = Position((5, 5), (6, 5), (6, 6), (5, 6))
+        assert set(pos.get_offsets()) == {(0, 0), (1, 0), (1, 1), (0, 1)}
 
-    def test_position_contains(self):
+    @pytest.mark.parametrize("coordinates, direction, expected", test_position_outmost_parameters)
+    def test_position_outmost(self, coordinates: List[Tuple[int, int]], direction: Tuple[int, int], expected: Tuple[int, int]):
         """
-        Test the Position component
+        Test the Position outmost function
         """
-        pass
+        pos = Position(*coordinates)
+        assert pos.get_outmost(direction) == expected
