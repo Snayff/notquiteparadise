@@ -7,23 +7,23 @@ import pygame
 from snecs.typedefs import EntityID
 
 from scripts.engine.core.constants import (AfflictionCategory,
-                                           AfflictionCategoryType,
-                                           AfflictionTrigger,
-                                           AfflictionTriggerType,
-                                           DamageTypeType, Direction,
-                                           DirectionType, EffectType,
-                                           EffectTypeType, PrimaryStatType,
-                                           ProjectileExpiry,
-                                           ProjectileExpiryType,
-                                           ProjectileSpeed,
-                                           ProjectileSpeedType, Resource,
-                                           ResourceType, SecondaryStatType,
-                                           Shape, ShapeType, TargetingMethod,
-                                           TargetingMethodType, TargetTag,
-                                           TargetTagType, TerrainCollision,
-                                           TerrainCollisionType, TraitGroup,
-                                           TraitGroupType, TravelMethod,
-                                           TravelMethodType)
+    AfflictionCategoryType,
+    AfflictionTrigger,
+    AfflictionTriggerType,
+    DamageTypeType, Direction,
+    DirectionType, EffectType,
+    EffectTypeType, PrimaryStatType,
+    ProjectileExpiry,
+    ProjectileExpiryType,
+    ProjectileSpeed,
+    ProjectileSpeedType, RenderLayer, Resource,
+    ResourceType, SecondaryStatType,
+    Shape, ShapeType, TargetingMethod,
+    TargetingMethodType, TargetTag,
+    TargetTagType, TerrainCollision,
+    TerrainCollisionType, TraitGroup,
+    TraitGroupType, TravelMethod,
+    TravelMethodType)
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -150,9 +150,9 @@ class EffectData:
 
 @register_dataclass_with_json
 @dataclass
-class TraitSpritesData:
+class SpritesData:
     """
-    Possible sprites for a trait
+    Possible sprites.
     """
     icon: Optional[pygame.Surface] = None
     idle: Optional[pygame.Surface] = None
@@ -164,11 +164,11 @@ class TraitSpritesData:
 
 @register_dataclass_with_json
 @dataclass
-class TraitSpritePathsData:
+class SpritePathsData:
     """
     Possible sprites paths for a trait
     """
-    render_order: int = field(default=0)
+    render_order: RenderLayer = field(default=RenderLayer.BOTTOM)
     icon: str = field(default="none")
     idle: str = field(default="none")
     attack: str = field(default="none")
@@ -187,7 +187,7 @@ class TraitData:
     group: TraitGroupType = TraitGroup.NPC
     behaviour_name: str = "none"
     description: str = "none"
-    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
+    sprite_paths: SpritePathsData = field(default_factory=SpritePathsData)
     sight_range: int = 0
     vigour: int = 0
     clout: int = 0

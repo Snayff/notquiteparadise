@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import asdict
 from typing import TYPE_CHECKING, Any, Tuple
 
 from snecs import RegisteredComponent
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
     from scripts.nqp.actions.skills import Skill
-    from scripts.engine.core.definitions import TraitSpritesData
+    from scripts.engine.core.definitions import SpritePathsData, SpritesData
     from scripts.nqp.actions.afflictions import Affliction
 
 
@@ -162,10 +163,11 @@ class Aesthetic(RegisteredComponent):
     An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: TraitSpritesData, render_layer: RenderLayerType,
-            draw_pos: Tuple[float, float]):
+    def __init__(self, current_sprite: pygame.Surface, sprites: SpritesData,
+            sprite_paths: List[SpritePathsData], render_layer: RenderLayerType, draw_pos: Tuple[float, float]):
+        self._sprite_paths: List[SpritePathsData] = sprite_paths
         self.current_sprite: pygame.Surface = current_sprite
-        self.sprites: TraitSpritesData = sprites
+        self.sprites: SpritesData = sprites
         self.render_layer = render_layer
 
         draw_x, draw_y = draw_pos
@@ -177,11 +179,36 @@ class Aesthetic(RegisteredComponent):
         self.current_sprite_duration: float = 0
 
     def serialize(self):
-        return (self.first, self.second)
+
+        # loop all sprite paths and convert to dict
+        sprite_paths = []
+        for sprite_path in self._sprite_paths:
+            sprite_paths.append(asdict(sprite_path))
+
+        _dict = {
+            "draw_pos": (self.draw_x, self.draw_y),
+            "render_layer": self.render_layer,
+            "sprite_paths": sprite_paths
+        }
+        return _dict
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+
+        x, y = serialized["draw_pos"]
+        render_layer = serialized["render_layer"]
+        _sprite_paths = serialized["sprite_paths"]
+
+        # unpack sprite paths
+        sprite_paths = []
+        for sprite_path in _sprite_paths:
+            sprite_paths.append(SpritePathsData(**sprite_path))
+
+        # convert sprite paths to sprites
+        from scripts.engine import world
+        sprites = world.build_sprites_from_paths(sprite_paths)
+
+        return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
 
 
 class Tracked(RegisteredComponent):

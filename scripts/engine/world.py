@@ -25,8 +25,8 @@ from scripts.engine.core.constants import (
     SecondaryStatType, ShapeType, TargetTag, TargetTagType, TraitGroup,
     TravelMethod, TravelMethodType)
 from scripts.engine.core.definitions import (ProjectileData,
-                                             TraitSpritePathsData,
-                                             TraitSpritesData)
+                                             SpritePathsData,
+                                             SpritesData)
 from scripts.engine.core.store import store
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
@@ -135,11 +135,10 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
-
-    sprites = _create_trait_sprites(traits_paths)
+    sprites = build_sprites_from_paths(traits_paths)
 
     # N.B. translation to screen coordinates is handled by the camera
-    components.append(Aesthetic(sprites.idle, sprites, RenderLayer.ACTOR, (x, y)))
+    components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (x, y)))
 
 
     # add skills to entity
@@ -183,8 +182,8 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
-    sprites = TraitSpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
-                               idle=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)))
+    sprites = SpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
+                          idle=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)))
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
@@ -212,17 +211,18 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
-def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpritesData:
+def build_sprites_from_paths(sprite_paths: List[SpritePathsData]) -> SpritesData:
     """
-    Build a TraitSpritesData class from a list of sprite paths
+    Build a SpritesData class from a list of SpritePathsData. For each member in SpritePathsData, combines the
+     sprites from each SpritePathsData in the  list and flattens to a single surface.
     """
     paths: Dict[str, List[str]] = {}
     sprites: Dict[str, List[pygame.Surface]] = {}
     flattened_sprites: Dict[str, pygame.Surface] = {}
 
     # bundle into cross-trait sprite path lists
-    for trait in sprite_paths:
-        char_dict = dataclasses.asdict(trait)
+    for sprite_path in sprite_paths:
+        char_dict = dataclasses.asdict(sprite_path)
         for name, path in char_dict.items():
             if name != "render_order":
                 # check if key exists
@@ -246,7 +246,7 @@ def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpri
         flattened_sprites[name] = utility.flatten_images(surface_list)
 
     # convert to dataclass
-    converted = TraitSpritesData(**flattened_sprites)
+    converted = SpritesData(**flattened_sprites)
     return converted
 
 
