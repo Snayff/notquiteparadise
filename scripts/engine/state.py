@@ -123,6 +123,10 @@ def load_game(filename: str):
     with open(SAVE_PATH + filename + ".json", "r") as file:
         save = json.load(file)
 
+    # check the version
+    if save["version"] != VERSION:
+        logging.warning(f"Loading data from a previous version, {save['version']}.")
+
     # deserialise data
     new_world = world.deserialise(save["world"])
 

@@ -311,7 +311,7 @@ class Behaviour(RegisteredComponent):
 
 class Knowledge(RegisteredComponent):
     """
-    An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
+    An entity's knowledge, including skills.
     """
 
     def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None,
@@ -384,19 +384,29 @@ class Afflictions(RegisteredComponent):
     """
     An entity's Boons and Banes. held in .active as a list of Affliction.
     """
-    def __init__(self, active: List[Affliction] = None):
-        if active is None:
-            active = []
+    def __init__(self, active: Optional[List[Affliction]] = None,
+            stat_modifiers: Optional[Dict[str, Tuple[PrimaryStatType, int]]] = None):
+        active = active or []
+        stat_modifiers = stat_modifiers or {}
 
         self.active: List[Affliction] = active
-        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
+        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = stat_modifiers
 
     def serialize(self):
-        return (self.first, self.second)
+        active = []
+        for affliction in self.active:
+            active.append(asdict(affliction))
+
+        _dict = {
+            "active": active,
+            "stat_modifiers": self.stat_modifiers
+        }
+
+        return _dict
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Afflictions(*serialized)
 
     def add(self, affliction: Affliction):
         self.active.append(affliction)
@@ -417,16 +427,15 @@ class Aspect(RegisteredComponent):
     """
 
     def __init__(self, aspects: Optional[Dict[str, int]] = None):
-        if aspects is None:
-            aspects = {}
+        aspects = aspects or {}
         self.aspects: Dict[str, int] = aspects
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.aspects
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Aspect(*serialized)
 
 
 class Opinion(RegisteredComponent):
@@ -434,30 +443,31 @@ class Opinion(RegisteredComponent):
     An entity's views on other entities. {entity, opinion}
     """
 
-    def __init__(self):
-        self.opinions: Dict[int, int] = {}
+    def __init__(self, opinions: Optional[Dict[int, int]] = None):
+        opinions = opinions or {}
+        self.opinions: Dict[int, int] = opinions
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.opinions
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Opinion(*serialized)
 
 
 class FOV(RegisteredComponent):
     """
     An entity's field of view.
     """
+    algorithm: int = 0
+    light_walls: bool = True
 
     def __init__(self, fov_map: np.array):
         self.map: np.array = fov_map
-        self.algorithm = 0
-        self.light_walls = True
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.map
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return FOV(*serialized)
