@@ -974,7 +974,7 @@ def recompute_fov(entity: EntityID) -> bool:
         if fov and pos:
             tranparency = create_fov_map()
             maps = []
-            for coordinate in pos.get_coordinates():
+            for coordinate in pos.coordinates:
                 map = tcod.map.compute_fov(tranparency, coordinate, sight_range, fov.light_walls, fov.algorithm)
                 maps.append(map)
 

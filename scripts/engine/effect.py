@@ -157,7 +157,7 @@ class MoveActorEffect(Effect):
         direction_name = utility.value_to_member((dir_x, dir_y), Direction)
         position = world.get_entitys_component(entity, Position)
 
-        for coordinate in position.get_coordinates():
+        for coordinate in position.coordinates:
             target_x = coordinate[0] + dir_x
             target_y = coordinate[1] + dir_y
             target_tile = world.get_tile((target_x, target_y))

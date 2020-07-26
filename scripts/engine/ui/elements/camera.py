@@ -168,7 +168,7 @@ class Camera(UIPanel):
         # draw entities
         for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
             # if in camera view
-            for offset in pos.get_offsets():
+            for offset in pos.offsets:
                 src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                 position = (pos.x + offset[0], pos.y + offset[1])
                 draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])

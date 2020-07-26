@@ -24,14 +24,14 @@ class TestPosition:
         """
         coordinates = [(6, 6), (6, 5), (5, 5), (5, 6)]
         pos = Position(*coordinates)
-        assert set(coordinates) == set(pos.get_coordinates())
+        assert set(coordinates) == set(pos.coordinates)
 
     def test_position_centers(self):
         """
         Test the Position centers correctly
         """
         pos = Position((5, 5), (6, 5), (6, 6), (5, 6))
-        assert set(pos.get_offsets()) == {(0, 0), (1, 0), (1, 1), (0, 1)}
+        assert set(pos.offsets) == {(0, 0), (1, 0), (1, 1), (0, 1)}
 
     @pytest.mark.parametrize("coordinates, direction, expected", test_position_outmost_parameters)
     def test_position_outmost(self, coordinates: List[Tuple[int, int]], direction: Tuple[int, int], expected: Tuple[int, int]):

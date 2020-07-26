@@ -30,11 +30,11 @@ class IsPlayer(RegisteredComponent):
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
     def serialize(self):
-        return (self.first, self.second)
+        return True
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return IsPlayer()
 
 
 class IsActor(RegisteredComponent):
@@ -44,11 +44,11 @@ class IsActor(RegisteredComponent):
     __slots__ = ()
 
     def serialize(self):
-        return (self.first, self.second)
+        return True
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return IsActor()
 
 
 class IsGod(RegisteredComponent):
@@ -58,11 +58,11 @@ class IsGod(RegisteredComponent):
     __slots__ = ()
 
     def serialize(self):
-        return (self.first, self.second)
+        return True
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return IsGod()
 
 
 class HasCombatStats(RegisteredComponent):
@@ -72,18 +72,19 @@ class HasCombatStats(RegisteredComponent):
     __slots__ = ()
 
     def serialize(self):
-        return (self.first, self.second)
+        return True
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return HasCombatStats()
 
 
 #################### OTHERS #########################
 
 class Position(RegisteredComponent):
     """
-    An entity's position on the map.
+    An entity's position on the map. At initiation provide all positions the entity holds. After initiation only need
+     to set the top left, or reference position as the other coordinates are held as offsets.
     """
 
     def __init__(self, *positions: Tuple[int, int]):
@@ -94,17 +95,17 @@ class Position(RegisteredComponent):
         sorted_positions = sorted(positions, key=lambda x: (x[0]**2 + x[1]**2))
         top_left = sorted_positions[0]
         self.offsets = [(x - top_left[0], y - top_left[1]) for x, y in sorted_positions]
-        self.position = top_left
+        self.reference_position = top_left
 
     def serialize(self):
-        return (self.first, self.second)
+        return self.coordinates
 
     @classmethod
     def deserialize(cls, serialized):
-        return cls(*serialized)
+        return Position(*serialized)
 
     def set(self, x: int, y: int):
-        self.position = (x, y)
+        self.reference_position = (x, y)
 
     def get_outermost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
         """
@@ -112,7 +113,7 @@ class Position(RegisteredComponent):
         :param direction: Direction to use
         :return: The position of the outermost tile
         """
-        coordinates = self.get_coordinates()
+        coordinates = self.coordinates
         # Calculate center
         center = (sum(c[0] for c in coordinates), sum(c[1] for c in coordinates))
         transformed = [np.dot((c[0], c[1]), direction) for c in coordinates]
@@ -129,23 +130,17 @@ class Position(RegisteredComponent):
         """
         :return: The x component of the top-left position
         """
-        return self.position[0]
+        return self.reference_position[0]
 
     @property
     def y(self) -> int:
         """
         :return: The y component of the top-left position
         """
-        return self.position[1]
+        return self.reference_position[1]
 
-    def get_offsets(self) -> List[Tuple[int, int]]:
-        """
-        Returns the list of offsets from the most top-left tile
-        :return: A list of offsets
-        """
-        return self.offsets
-
-    def get_coordinates(self) -> List[Tuple[int, int]]:
+    @property
+    def coordinates(self) -> List[Tuple[int, int]]:
         """
         :return: The list of coordinates that this Position represents
         """
@@ -156,7 +151,7 @@ class Position(RegisteredComponent):
         :param key: Coordinate to test against
         :return: A bool that represents if the Position contains the provided coordinates
         """
-        for coordinate in self.get_coordinates():
+        for coordinate in self.coordinates:
             if coordinate == key:
                 return True
         return False
@@ -340,6 +335,13 @@ class Afflictions(RegisteredComponent):
         self.active: List[Affliction] = active
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
     def add(self, affliction: Affliction):
         self.active.append(affliction)
 
@@ -363,6 +365,13 @@ class Aspect(RegisteredComponent):
             aspects = {}
         self.aspects: Dict[str, int] = aspects
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
 
 class Opinion(RegisteredComponent):
     """
@@ -371,6 +380,13 @@ class Opinion(RegisteredComponent):
 
     def __init__(self):
         self.opinions: Dict[int, int] = {}
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
 
 
 class FOV(RegisteredComponent):
@@ -382,3 +398,10 @@ class FOV(RegisteredComponent):
         self.map: np.array = fov_map
         self.algorithm = 0
         self.light_walls = True
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
