@@ -1,6 +1,8 @@
 name: Not Quite Paradise
 
-on: [push]
+on:
+  push:
+    branches: develop
 
 jobs:
   docs:
