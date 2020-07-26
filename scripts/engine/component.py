@@ -117,14 +117,6 @@ class Position(RegisteredComponent):
         """
         return [(self.x + x, self.y + y) for x, y in self.offsets]
 
-    def contains(self, x: int, y: int):
-        """
-        :param x: X coordinate to test against
-        :param y: Y coordinate to test against
-        :return: A bool that represents if the Position contains the provided coordinates
-        """
-        return (x, y) in self
-
     def __contains__(self, key: Tuple[int, int]):
         """
         :param key: Coordinate to test against
