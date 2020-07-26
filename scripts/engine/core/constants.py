@@ -1,22 +1,28 @@
 from __future__ import annotations
 
+import os
 from types import SimpleNamespace
 from typing import NewType, Tuple
 
 import pygame
 
-######################## GENERAL CONSTANTS ######################################
+######################## TOP LEVEL CONSTANTS ######################################
 
 VERSION = "0.114.0"
 
 MAX_SKILLS = 6
+MAX_SAVES = 3
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = TILE_SIZE // 4
 ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
 SKILL_BUTTON_SIZE = 64
-IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
+
+######################## PATHS ######################################
+IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
+SAVE_PATH = "data/saves/"
+CURRENT_WORKING_DIRECTORY = os.getcwd() + "/"
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of

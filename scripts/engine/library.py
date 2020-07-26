@@ -4,10 +4,8 @@ import json
 import logging
 import os
 import time
-from typing import TYPE_CHECKING
-
 import pygame
-
+from typing import TYPE_CHECKING
 from scripts.engine import utility
 from scripts.engine.core.constants import InputIntent
 from scripts.engine.core.definitions import (AfflictionData, AspectData,

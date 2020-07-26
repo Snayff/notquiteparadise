@@ -199,7 +199,7 @@ def _process_targeting_mode_intents(intent):
     elif intent in skill.target_directions:
         direction = _get_pressed_direction(intent)
         if position and skill and direction:
-            outmost = position.get_outmost(direction)
+            outmost = position.get_outermost(direction)
             tile = world.get_tile((outmost[0] + direction[0], outmost[1] + direction[1]))
             if tile:
                 # we already checked if we could use the skill before activating the targeting mode

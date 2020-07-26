@@ -297,9 +297,10 @@ class ReduceSkillCooldownEffect(Effect):
         knowledge = world.get_entitys_component(self.target, Knowledge)
 
         if knowledge:
-            current_cooldown = knowledge.get_skill_cooldown(self.skill_name)
+            current_cooldown = knowledge.cooldowns[self.skill_name]
             knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.amount)
-            logging.debug(f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to {knowledge.get_skill_cooldown(self.skill_name)}")
+            logging.debug(f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
+                          f"{knowledge.cooldowns[self.skill_name]}")
             return self.success_effects
 
         return self.failure_effects

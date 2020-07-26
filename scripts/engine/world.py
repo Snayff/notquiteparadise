@@ -46,6 +46,9 @@ _C = TypeVar("_C", bound=Component)  # to represent components where we don't kn
 get_entitys_components = snecs.all_components
 get_components = Query
 entity_has_component = snecs.has_component
+serialise = snecs.serialize_world
+deserialise = snecs.deserialize_world
+move_world = snecs.ecs.move_world
 
 
 ################################ CREATE - INIT OBJECT - RETURN NEW OBJECT ###############################
@@ -677,7 +680,7 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     knowledge = get_entitys_component(entity, Knowledge)
     try:
         if knowledge:
-            return knowledge.get_skill(skill_name)
+            return knowledge.skills[skill_name]
     except KeyError:
         pass
 
@@ -918,7 +921,7 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
-        cooldown = knowledge.get_skill_cooldown(skill_name)
+        cooldown = knowledge.cooldowns[skill_name]
         if cooldown <= 0:
             not_on_cooldown = True
     else:
@@ -1312,7 +1315,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         # get eligible interventions and their weightings. Need separate lists for random.choices
         eligible_interventions = []
         intervention_weightings = []
-        for intervention_name in knowledge.get_skill_names():
+        for intervention_name in knowledge.skill_names:
             intervention_data = library.GODS[identity.name].interventions[intervention_name]
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion

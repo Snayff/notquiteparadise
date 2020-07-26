@@ -79,12 +79,12 @@ class TestEffects:
         Test for the reduce skill cooldown effect
         """
         knowledge = Knowledge([Move])
-        knowledge.set_skill_cooldown('move', 15)
+        knowledge.set_skill_cooldown("move", 15)
 
         entity = TestEffects._create_default_entity()
         world.add_component(entity, knowledge)
 
-        effect = ReduceSkillCooldownEffect(entity, entity, 'move', 5, [], [])
+        effect = ReduceSkillCooldownEffect(entity, entity, "move", 5, [], [])
         effect.evaluate()
 
-        assert knowledge.get_skill_cooldown('move') == 10
+        assert knowledge.cooldowns["move"] == 10

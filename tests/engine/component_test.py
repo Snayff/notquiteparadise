@@ -39,4 +39,4 @@ class TestPosition:
         Test the Position outmost function
         """
         pos = Position(*coordinates)
-        assert pos.get_outmost(direction) == expected
+        assert pos.get_outermost(direction) == expected

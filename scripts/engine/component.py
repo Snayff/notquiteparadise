@@ -9,7 +9,6 @@ from scripts.engine.core.constants import (EffectType, PrimaryStatType,
 
 if TYPE_CHECKING:
     import pygame
-    import tcod.map
     from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
@@ -30,6 +29,13 @@ class IsPlayer(RegisteredComponent):
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
 
 class IsActor(RegisteredComponent):
     """
@@ -37,13 +43,26 @@ class IsActor(RegisteredComponent):
     """
     __slots__ = ()
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
 
 class IsGod(RegisteredComponent):
     """
     Whether the entity is a god.
     """
-
     __slots__ = ()
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
 
 
 class HasCombatStats(RegisteredComponent):
@@ -51,6 +70,13 @@ class HasCombatStats(RegisteredComponent):
     A flag to show if an entity has stats used for combat.
     """
     __slots__ = ()
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
 
 
 #################### OTHERS #########################
@@ -70,14 +96,21 @@ class Position(RegisteredComponent):
         self.offsets = [(x - top_left[0], y - top_left[1]) for x, y in sorted_positions]
         self.position = top_left
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
     def set(self, x: int, y: int):
         self.position = (x, y)
 
-    def get_outmost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
+    def get_outermost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
         """
-        Calculate the outmost tile in the direction provided
+        Calculate the outermost tile in the direction provided
         :param direction: Direction to use
-        :return: The position of the outmost tile
+        :return: The position of the outermost tile
         """
         coordinates = self.get_coordinates()
         # Calculate center
@@ -148,6 +181,13 @@ class Aesthetic(RegisteredComponent):
         self.target_draw_y: float = draw_y
         self.current_sprite_duration: float = 0
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
 
 class Tracked(RegisteredComponent):
     """
@@ -156,6 +196,13 @@ class Tracked(RegisteredComponent):
 
     def __init__(self, time_spent: int = 0):
         self.time_spent: int = time_spent
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
 
 
 class Resources(RegisteredComponent):
@@ -167,6 +214,13 @@ class Resources(RegisteredComponent):
         self.health: int = health
         self.stamina: int = stamina
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
 
 class Blocking(RegisteredComponent):
     """
@@ -176,6 +230,13 @@ class Blocking(RegisteredComponent):
     def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
         self.blocks_movement: bool = blocks_movement
         self.blocks_sight: bool = blocks_sight
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
 
 
 class Identity(RegisteredComponent):
@@ -187,6 +248,13 @@ class Identity(RegisteredComponent):
         self.name: str = name
         self.description: str = description
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
 
 class Traits(RegisteredComponent):
     """
@@ -196,6 +264,13 @@ class Traits(RegisteredComponent):
     def __init__(self, trait_names: List[str]):
         self.names: List[str] = trait_names
 
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
+
 
 class Behaviour(RegisteredComponent):
     """
@@ -204,6 +279,13 @@ class Behaviour(RegisteredComponent):
 
     def __init__(self, behaviour: AIBehaviour):
         self.behaviour = behaviour
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
 
 
 class Knowledge(RegisteredComponent):
@@ -218,28 +300,10 @@ class Knowledge(RegisteredComponent):
         self.skill_order: List[str] = skill_order
         self.cooldowns: Dict[str, int] = {}
         self.skill_names: List[str] = []
-        self.skills: Dict[str, Skill] = {}
+        self.skills: Dict[str, Type[Skill]] = {}
 
         for skill_class in skills:
             self.learn_skill(skill_class, add_to_order=False)
-
-    def get_skill(self, name: str):
-        """
-        Returns a skill
-        """
-        return self.skills[name]
-
-    def get_skill_names(self):
-        """
-        Return a list of all the skill names
-        """
-        return self.skill_names
-
-    def get_skill_cooldown(self, name: str):
-        """
-        Returns the cooldown of a skill
-        """
-        return self.cooldowns[name]
 
     def set_skill_cooldown(self, name: str, value: int):
         """
@@ -256,6 +320,13 @@ class Knowledge(RegisteredComponent):
         if add_to_order:
             self.skill_order.append(skill_class.name)
         self.skills[skill_class.name] = skill_class
+
+    def serialize(self):
+        return (self.first, self.second)
+
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(*serialized)
 
 
 class Afflictions(RegisteredComponent):
