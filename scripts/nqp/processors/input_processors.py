@@ -45,8 +45,8 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
-            for entity, (position, *other) in world.get_components([Position, IsActor]):  # type: ignore
-                if position.x == x and position.y == y:  # type: ignore
+            for entity, (position, *other) in world.get_components([Position, IsActor]): # type: ignore
+                if (x, y) in position: # type: ignore
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
                     actor_info.set_entity(entity)
@@ -133,6 +133,7 @@ def _process_gamemap_intents(intent: InputIntentType):
         if direction in possible_moves:
             _process_skill_use(player, Move, target_tile, direction)
 
+
     ## Use a skill
     elif intent in possible_skill_intents and position:
         skill_name = _get_pressed_skills_name(intent)
@@ -198,7 +199,8 @@ def _process_targeting_mode_intents(intent):
     elif intent in skill.target_directions:
         direction = _get_pressed_direction(intent)
         if position and skill and direction:
-            tile = world.get_tile((position.x + direction[0], position.y + direction[1]))
+            outmost = position.get_outmost(direction)
+            tile = world.get_tile((outmost[0] + direction[0], outmost[1] + direction[1]))
             if tile:
                 # we already checked if we could use the skill before activating the targeting mode
                 _process_skill_use(player, skill, tile, direction)

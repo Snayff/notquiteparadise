@@ -109,7 +109,7 @@ class Camera(UIPanel):
                 from scripts.engine.ui.manager import ui
                 for entity, (position, ) in world.get_components([Position]):
                     position: Position
-                    if position.x == x and position.y == y:
+                    if (x, y) in position:
                         ui.set_selected_tile_pos((x, y))
                         ui.set_element_visibility(UIElement.TILE_INFO, True)
                         updated_tile_info = True
@@ -168,10 +168,14 @@ class Camera(UIPanel):
         # draw entities
         for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
             # if in camera view
-            if self.is_in_camera_view((pos.x, pos.y)):
-                tile = world.get_tile((pos.x, pos.y))
-                if tile.is_visible:
-                    self.draw_surface(aesthetic.current_sprite, map_surf, (aesthetic.draw_x, aesthetic.draw_y))
+            for offset in pos.get_offsets():
+                src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                position = (pos.x + offset[0], pos.y + offset[1])
+                draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])
+                if self.is_in_camera_view(position):
+                    tile = world.get_tile(position)
+                    if tile.is_visible:
+                        self.draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
 
         self.gamemap.set_image(map_surf)
 
@@ -269,12 +273,12 @@ class Camera(UIPanel):
             UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
                      object_id=f"#tile{col},{row}")
 
-    def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float]):
+    def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float], src_area: Optional[Rect] = None):
         """
-        Draw a surface on the surface map. The function handles coordinate transformation to the screen
+        Draw a surface on the surface map. The function handles coordinates transformation to the screen
         """
         pos = self.world_to_draw_position(col_row)
-        map_surface.blit(sprite, pos)
+        map_surface.blit(sprite, pos, area=src_area)
 
     ############## SET #########################
 

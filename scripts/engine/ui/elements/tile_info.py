@@ -77,7 +77,7 @@ class TileInfo(UIPanel):
 
             # get entities at selected position
             for entity, (position, identity, aesthetic) in world.get_components([Position, Identity, Aesthetic]):
-                if self.selected_tile_pos == (position.x, position.y):
+                if self.selected_tile_pos in position:
 
                     # get universal info
                     images.append(aesthetic.sprites.icon)

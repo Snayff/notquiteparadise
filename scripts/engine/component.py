@@ -3,14 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Tuple
 
 from snecs import RegisteredComponent
-
+import numpy as np
 from scripts.engine.core.constants import (EffectType, PrimaryStatType,
                                            RenderLayerType)
 
 if TYPE_CHECKING:
     import pygame
     import tcod.map
-    from typing import List, Dict, Optional, Type
+    from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
     from snecs.typedefs import EntityID
     from scripts.nqp.actions.skills import Skill
@@ -60,9 +60,73 @@ class Position(RegisteredComponent):
     An entity's position on the map.
     """
 
-    def __init__(self, x: int, y: int):
-        self.x = x
-        self.y = y
+    def __init__(self, *positions: Tuple[int, int]):
+        # Sort the positions from top-left to down-right
+        if not positions:
+            raise ValueError('Must provide at least 1 coordinate for the entity.')
+
+        sorted_positions = sorted(positions, key=lambda x: (x[0]**2 + x[1]**2))
+        top_left = sorted_positions[0]
+        self.offsets = [(x - top_left[0], y - top_left[1]) for x, y in sorted_positions]
+        self.position = top_left
+
+    def set(self, x: int, y: int):
+        self.position = (x, y)
+
+    def get_outmost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
+        """
+        Calculate the outmost tile in the direction provided
+        :param direction: Direction to use
+        :return: The position of the outmost tile
+        """
+        coordinates = self.get_coordinates()
+        # Calculate center
+        center = (sum(c[0] for c in coordinates), sum(c[1] for c in coordinates))
+        transformed = [np.dot((c[0], c[1]), direction) for c in coordinates]
+        # Find the coordinate that is nearest the direction
+        arg_max = np.argwhere(transformed == np.amax(transformed))
+        # From all the nearest coordinates find the one nearest to the center of the entity
+        arg_min = np.argmin(
+            np.sqrt((center[0] - transformed[i[0]][0])**2 + (center[1] - transformed[i[0]][1])**2) for i in arg_max
+        )
+        return coordinates[arg_max[arg_min][0]][0], coordinates[arg_max[arg_min][0]][1]
+
+    @property
+    def x(self) -> int:
+        """
+        :return: The x component of the top-left position
+        """
+        return self.position[0]
+
+    @property
+    def y(self) -> int:
+        """
+        :return: The y component of the top-left position
+        """
+        return self.position[1]
+
+    def get_offsets(self) -> List[Tuple[int, int]]:
+        """
+        Returns the list of offsets from the most top-left tile
+        :return: A list of offsets
+        """
+        return self.offsets
+
+    def get_coordinates(self) -> List[Tuple[int, int]]:
+        """
+        :return: The list of coordinates that this Position represents
+        """
+        return [(self.x + x, self.y + y) for x, y in self.offsets]
+
+    def __contains__(self, key: Tuple[int, int]):
+        """
+        :param key: Coordinate to test against
+        :return: A bool that represents if the Position contains the provided coordinates
+        """
+        for coordinate in self.get_coordinates():
+            if coordinate == key:
+                return True
+        return False
 
 
 class Aesthetic(RegisteredComponent):
@@ -243,7 +307,7 @@ class FOV(RegisteredComponent):
     An entity's field of view.
     """
 
-    def __init__(self, fov_map: tcod.map.Map):
-        self.map: tcod.map.Map = fov_map
+    def __init__(self, fov_map: np.array):
+        self.map: np.array = fov_map
         self.algorithm = 0
         self.light_walls = True
