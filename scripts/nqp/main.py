@@ -3,13 +3,10 @@ from __future__ import annotations
 import logging
 import sys
 import traceback
-
 import pygame
 import snecs
 from snecs.world import default_world
-
-from scripts.engine import (chronicle, debug, key, library, state, utility,
-                            world)
+from scripts.engine import (chronicle, debug, state, world)
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.debug import (create_profiler, kill_logging, initialise_logging)
 from scripts.engine.ui.manager import ui
@@ -21,11 +18,11 @@ def main():
     The entry for the game initialisation and game loop
     """
     # initialise logging
-    if debug.is_logging():
+    if debug.IS_LOGGING:
         initialise_logging()
 
     # initialise profiling
-    if debug.is_profiling():
+    if debug.IS_PROFILING:
         create_profiler()
 
     # initialise the game
@@ -44,11 +41,11 @@ def main():
         traceback.print_exc()
 
     # we've left the game loop so now close everything down
-    if debug.is_profiling():
+    if debug.IS_LOGGING:
         kill_logging()
         # print debug values
         debug.print_values_to_console()
-    if debug.is_logging():
+    if debug.IS_PROFILING:
         kill_logging()
 
     # clean up pygame resources

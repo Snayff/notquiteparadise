@@ -6,128 +6,84 @@ import io
 import logging
 import pstats
 import time
-from typing import TYPE_CHECKING, List
-
+from typing import Optional, TYPE_CHECKING, List
 from snecs import Component
 from snecs.typedefs import EntityID
-
 from scripts.engine import state, world
 from scripts.engine.core.constants import INFINITE, VERSION
 
 if TYPE_CHECKING:
     from typing import Type
 
+# objects
+PROFILER: Optional[cProfile.Profile] = None
 
-class _Debugger:
-    def __init__(self):
-        # objects
-        self.profiler = None
+# counters
+CURRENT_FPS: int = 0
+RECENT_AVERAGE_FPS: int = 0
+AVERAGE_FPS: int = 0
+_FRAMES: int = 0
+_PROFILE_DURATION_REMAINING: int = 0
 
-        # counters
-        self.current_fps = 0
-        self.recent_average_fps = 0
-        self.average_fps = 0
-        self.frames = 0
-        self.profile_duration_remaining = 0
+# flags
+IS_FPS_VISIBLE: bool = True
+IS_PROFILING: bool = False
+IS_LOGGING: bool = True
 
-        # flags
-        self.fps_visible = True
-        self.profiling = False
-        self.logging = True
-
-    def update(self):
-        self.frames += 1
-        self.current_fps = state.get_internal_clock().get_fps()
-        self.average_fps += (self.current_fps - self.average_fps) / self.frames
-
-        # count down profiler duration, if it isnt running temporarily
-        if self.profile_duration_remaining != INFINITE:
-            self.profile_duration_remaining -= 1
-
-        # get recent fps
-        if self.frames >= 600:
-            frames_to_count = 600
-        else:
-            frames_to_count = self.frames
-        self.recent_average_fps += (self.current_fps - self.average_fps) / frames_to_count
-
-        # check if profiler needs to turn off
-        if self.profile_duration_remaining == 0:
-            disable_profiling(True)
+# values
+_NUM_FRAMES_CONSIDERED_RECENT: int = 600
 
 
-########################## FUNCTIONS #####################################
+########################## UPDATE #####################################
 
 def update():
-    """
-    Update all values held in the debugger.
-    """
-    _debugger.update()
+    global _FRAMES
+    global CURRENT_FPS
+    global _PROFILE_DURATION_REMAINING
+    global AVERAGE_FPS
+    global RECENT_AVERAGE_FPS
 
+    _FRAMES += 1
+    CURRENT_FPS = state.get_internal_clock().get_fps()
+    AVERAGE_FPS += (CURRENT_FPS - AVERAGE_FPS) / _FRAMES
 
-def print_values_to_console():
-    """
-    Print the debuggers stats.
-    """
-    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}, "
-          f"R_Avg: {format(_debugger.recent_average_fps, '.2f')}")
+    # count down profiler duration, if it isnt running temporarily
+    if _PROFILE_DURATION_REMAINING != INFINITE:
+        _PROFILE_DURATION_REMAINING -= 1
 
+    # check if profiler needs to turn off
+    if _PROFILE_DURATION_REMAINING == 0:
+        disable_profiling(True)
 
-def set_fps_visibility(is_visible: bool):
-    """
-    Set whether the FPS is visible
-    """
-    _debugger.fps_visible = is_visible
-
-
-def is_fps_visible() -> bool:
-    if _debugger.fps_visible:
-        return True
+    # get recent fps
+    if _FRAMES >= _NUM_FRAMES_CONSIDERED_RECENT:
+        frames_to_count = _NUM_FRAMES_CONSIDERED_RECENT
     else:
-        return False
+        frames_to_count = _FRAMES
+    RECENT_AVERAGE_FPS += (CURRENT_FPS - AVERAGE_FPS) / frames_to_count
 
 
-def get_visible_values() -> List[str]:
-    """
-    Get all visible values from the debugger
-    """
-    values = []
-    if _debugger.fps_visible:
-        values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, "
-                      f"R_Avg={format(_debugger.recent_average_fps, '.2f')}, "
-                      f"Avg={format(_debugger.average_fps, '.2f')}")
-
-    return values
-
-
-def log_component_not_found(entity: EntityID, component: Type[Component]):
-    """
-    Use if component not found. Log the error as a warning in the format '{entity} tried to get {component} but it was
-    not found.'
-    """
-    name = world.get_name(entity)
-    logging.warning(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")
-
+########################## LOGGING AND PROFILING #####################################
 
 def initialise_logging():
     """
-    Configure logging
-
-    Logging levels:
-        CRITICAL - A serious error, indicating that may be unable to continue running.
-        ERROR - A more serious problem, has not been able to perform some function.
-        WARNING - An indication that something unexpected happened, but otherwise still working as expected.
-        INFO - Confirmation that things are working as expected.
-        DEBUG - Detailed information, typically of interest only when diagnosing problems
-
-    File mode options:
-        'r' - open for reading(default)
-        'w' - open for writing, truncating the file first
-        'x' - open for exclusive creation, failing if the file already exists
-        'a' - open for writing, appending to the end of the file if it exists
-
+    Initialise logging.
     """
-    _debugger.logging = True
+    # Logging levels:
+    #     CRITICAL - A serious error, indicating that may be unable to continue running.
+    #     ERROR - A more serious problem, has not been able to perform some function.
+    #     WARNING - An indication that something unexpected happened, but otherwise still working as expected.
+    #     INFO - Confirmation that things are working as expected.
+    #     DEBUG - Detailed information, typically of interest only when diagnosing problems
+    #
+    # File mode options:
+    #     'r' - open for reading(default)
+    #     'w' - open for writing, truncating the file first
+    #     'x' - open for exclusive creation, failing if the file already exists
+    #     'a' - open for writing, appending to the end of the file if it exists
+
+    global IS_LOGGING
+    IS_LOGGING = True
 
     log_file_name = "logs/" + "game.log"
     log_level = logging.DEBUG
@@ -149,29 +105,40 @@ def create_profiler():
     """
     Create the profiler. If it exists does nothing.
     """
-    if not _debugger.profiler:
-        _debugger.profiler = cProfile.Profile()
+    global PROFILER
+    if not PROFILER:
+        PROFILER = cProfile.Profile()
 
 
 def enable_profiling(duration: int = INFINITE):
     """
     Enable profiling. Create profiler if one doesnt exist
     """
-    if not _debugger.profiler:
+    global IS_PROFILING
+    global _PROFILE_DURATION_REMAINING
+
+    # if we dont have a profiler create one
+    if not PROFILER:
         create_profiler()
 
-    _debugger.profiler.enable()
-    _debugger.profiling = True
-    _debugger.profile_duration_remaining = duration
+    # enable, set flag and set duration
+    assert isinstance(PROFILER, cProfile.Profile)
+    PROFILER.enable()
+    IS_PROFILING = True
+    _PROFILE_DURATION_REMAINING = duration
 
 
 def disable_profiling(dump_data: bool = False):
     """
     Turn off current profiling. Dump data to file if required.
     """
-    if _debugger.profiler:
-        _debugger.profiler.disable()
-        _debugger.profiling = False
+    global PROFILER
+    global IS_PROFILING
+
+    if PROFILER:
+        assert isinstance(PROFILER, cProfile.Profile)
+        PROFILER.disable()
+        IS_PROFILING = False
 
         if dump_data:
             _dump_profiling_data()
@@ -181,28 +148,30 @@ def kill_profiler():
     """
     Kill profiling resource
     """
-    if _debugger.profiler:
+    global PROFILER
+
+    if PROFILER:
         disable_profiling(False)
-        _debugger.profiler = None
+        PROFILER = None
 
 
 def kill_logging():
     """
     Kill logging resources
     """
+    global IS_LOGGING
+
     logging.shutdown()
-    _debugger.logging = False
+    IS_LOGGING = False
 
 
 def _dump_profiling_data():
     """
     Dump data to a readable file
     """
-    profiler = _debugger.profiler
-
     # dump the profiler stats
     s = io.StringIO()
-    ps = pstats.Stats(profiler, stream=s).sort_stats("cumulative")
+    ps = pstats.Stats(PROFILER, stream=s).sort_stats("cumulative")
     ps.dump_stats("logs/profiling/profile.dump")
 
     # convert profiling to human readable format
@@ -212,14 +181,47 @@ def _dump_profiling_data():
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
 
-def is_profiling() -> bool:
-    return _debugger.profiling
+########################## GET OR SET VALUES #####################################
+
+def print_values_to_console():
+    """
+    Print the debuggers stats.
+    """
+    print(f"Avg FPS: {format(AVERAGE_FPS, '.2f')}, "
+          f"R_Avg: {format(RECENT_AVERAGE_FPS, '.2f')}")
 
 
-def is_logging() -> bool:
-    return _debugger.logging
+def set_fps_visibility(is_visible: bool = True):
+    """
+    Set whether the FPS is visible
+    """
+    global IS_FPS_VISIBLE
+    IS_FPS_VISIBLE = is_visible
 
 
-########################## INIT DEBUGGER #####################################
+def get_visible_values() -> List[str]:
+    """
+    Get all visible values from the debugger
+    """
+    values = []
+    if IS_FPS_VISIBLE:
+        values.append(f"FPS: C={format(CURRENT_FPS, '.2f')}, "
+                      f"R_Avg={format(RECENT_AVERAGE_FPS, '.2f')}, "
+                      f"Avg={format(AVERAGE_FPS, '.2f')}")
 
-_debugger = _Debugger()
+    return values
+
+
+########################## DEBUG FUNCTIONS #####################################
+
+def log_component_not_found(entity: EntityID, component: Type[Component]):
+    """
+    Use if component not found. Log the error as a warning in the format '{entity} tried to get {component} but it was
+    not found.'
+    """
+    name = world.get_name(entity)
+    logging.warning(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")
+
+
+
+
