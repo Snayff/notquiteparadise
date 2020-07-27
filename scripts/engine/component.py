@@ -2,22 +2,19 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from typing import TYPE_CHECKING
-
 from snecs import RegisteredComponent
 import numpy as np
-
 from scripts.engine import utility
 from scripts.engine.core.constants import (EffectType, PrimaryStatType,
                                            RenderLayerType)
-from scripts.engine.library import SKILLS
 
 if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
-    from scripts.engine.actions import Skill
+    from scripts.engine.actions.skills import Skill
     from scripts.engine.core.definitions import SpritePathsData, SpritesData
-    from scripts.engine.actions import Affliction
+    from scripts.engine.actions.afflictions import Affliction
 
 
 ##########################################################
@@ -305,11 +302,15 @@ class Behaviour(RegisteredComponent):
         self.behaviour = behaviour
 
     def serialize(self):
-        return self.behaviour
+        # FIXME - need to deserialise behaviour properly
+        return self.behaviour.entity
 
     @classmethod
     def deserialize(cls, serialized):
-        return Behaviour(*serialized)
+        from scripts.engine.thought import SkipTurnBehaviour
+        skip_turn = SkipTurnBehaviour(serialized)
+        # FIXME - need to deserialise behaviour properly
+        return Behaviour(skip_turn)
 
 
 class Knowledge(RegisteredComponent):
@@ -323,23 +324,24 @@ class Knowledge(RegisteredComponent):
         skill_order = skill_order or []
         cooldowns = cooldowns or {}
 
+        # determine if we need to add cooldowns or not - must be before setting self
+        if cooldowns:
+            _set_cooldown = False
+        else:
+            _set_cooldown = True
+
+        # dont override skill order if it has been provided
+        if skill_order:
+            _add_to_order = False
+        else:
+            _add_to_order = True
+
         self.skill_order: List[str] = skill_order
         self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []
         self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
 
         for skill_class in skills:
-            # dont override skill order if it has been provided
-            if skill_order:
-                _add_to_order = False
-            else:
-                _add_to_order = True
-
-            if cooldowns:
-                _set_cooldown = False
-            else:
-                _set_cooldown = True
-
             self.learn_skill(skill_class, _add_to_order, _set_cooldown)
 
     def set_skill_cooldown(self, name: str, value: int):
@@ -350,7 +352,7 @@ class Knowledge(RegisteredComponent):
 
     def learn_skill(self, skill: Type[Skill], add_to_order: bool = True, set_cooldown: bool = True):
         """
-        Learn a new skill
+        Learn a new skill.
         """
         self.skill_names.append(skill.name)
         self.skills[skill.name] = skill
@@ -371,13 +373,15 @@ class Knowledge(RegisteredComponent):
     @classmethod
     def deserialize(cls, serialized):
         skill_names = serialized["skill_names"]
-        
+        cooldowns = serialized["cooldowns"]
+        skill_order = serialized["skill_order"]
+
+        from scripts.engine.library import SKILLS
         skills = []
         for name in skill_names:
             skills.append(utility.get_skill_class(SKILLS[name].class_name))
 
-        cooldowns = serialized["cooldowns"]
-        skill_order = serialized["skill_order"]
+
 
         return Knowledge(skills, skill_order, cooldowns)
 
@@ -395,9 +399,10 @@ class Afflictions(RegisteredComponent):
         self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = stat_modifiers
 
     def serialize(self):
-        active = []
+        active = {}
         for affliction in self.active:
-            active.append(asdict(affliction))
+            active[affliction.__class__.__name__] = (affliction.creator, affliction.affected_entity,
+                                                    affliction.duration)
 
         _dict = {
             "active": active,
@@ -408,7 +413,15 @@ class Afflictions(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialized):
-        return Afflictions(*serialized)
+        active_dict = serialized["active"]
+
+        active_instances = []
+        for name, value_tuple in active_dict.items():
+            _affliction = utility.get_affliction_class(name)
+            affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
+            active_instances.append(affliction)
+
+        return Afflictions(active_instances, serialized["stat_modifiers"])
 
     def add(self, affliction: Affliction):
         self.active.append(affliction)
@@ -468,8 +481,10 @@ class FOV(RegisteredComponent):
         self.map: np.array = fov_map
 
     def serialize(self):
-        return self.map
+        fov_map = self.map.tolist()
+        return fov_map
 
     @classmethod
     def deserialize(cls, serialized):
-        return FOV(*serialized)
+        fov_map = np.array(serialized)
+        return FOV(fov_map)

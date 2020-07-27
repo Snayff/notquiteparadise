@@ -3,21 +3,20 @@ from __future__ import annotations
 import gc
 import logging
 import math
-import sys
 import timeit
-from typing import (TYPE_CHECKING, Any, Callable, Dict, Iterable, List,
-                    Optional, Tuple, Type, Union)
-
 import pygame
 import scipy
 
-from scripts.engine import actions
-from scripts.engine.actions.skills import Skill
+from typing import TYPE_CHECKING
+from scripts.engine.actions import skills
 from scripts.engine.core.constants import (IMAGE_NOT_FOUND_PATH, TILE_SIZE,
                                            Shape, ShapeType)
 
 if TYPE_CHECKING:
-    from typing import Tuple
+    from typing import (Any, Callable, Dict, Iterable, List,
+        Optional, Tuple, Type, Union)
+    from scripts.engine.actions.skills import Skill
+    from scripts.engine.actions.afflictions import Affliction
 
 
 ################################### IMAGES ########################################
@@ -140,7 +139,15 @@ def get_skill_class(skill_class_name: str) -> Type[Skill]:
     """
     Get the Skill from the name of the skill class.
     """
-    skill = getattr(actions.skills, skill_class_name)
+    skill = getattr(skills, skill_class_name)
+    return skill
+
+
+def get_affliction_class(affliction_class_name: str) -> Type[Affliction]:
+    """
+    Get the Affliction from the name of the affliction class.
+    """
+    skill = getattr(skills, affliction_class_name)
     return skill
 
 
@@ -353,8 +360,8 @@ def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str,
         name = method_descs[x]
         old = min(timeit.repeat(old_methods[x][0], setup=old_methods[x][1], number=num_runs, repeat=repeats))
         new = min(timeit.repeat(new_methods[x][0], setup=new_methods[x][1], number=num_runs, repeat=repeats))
-        result += f"\n{name}: {format(old, '.5f')} -> {format(new, '.5f')}" \
-                  f"({format(((old - new) / old) * 100, '0.5f')}%)"
+        result += f"\n{name}: {format(old, '0.5f')} -> {format(new, '0.5f')}" \
+                  f"({format(((old - new) / old) * 100, '0.2f')}%)"
 
     gc.enable()
     return result

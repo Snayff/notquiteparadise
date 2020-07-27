@@ -23,11 +23,11 @@ CURRENT_FPS: int = 0
 RECENT_AVERAGE_FPS: int = 0
 AVERAGE_FPS: int = 0
 _FRAMES: int = 0
-_PROFILE_DURATION_REMAINING: int = 0
+_PROFILE_DURATION_REMAINING: int = INFINITE
 
 # flags
 IS_FPS_VISIBLE: bool = True
-IS_PROFILING: bool = False
+IS_PROFILING: bool = True
 IS_LOGGING: bool = True
 
 # values
@@ -101,7 +101,7 @@ def initialise_logging():
     logging.Formatter.converter = time.gmtime
 
 
-def create_profiler():
+def _create_profiler():
     """
     Create the profiler. If it exists does nothing.
     """
@@ -116,10 +116,11 @@ def enable_profiling(duration: int = INFINITE):
     """
     global IS_PROFILING
     global _PROFILE_DURATION_REMAINING
+    global PROFILER
 
     # if we dont have a profiler create one
     if not PROFILER:
-        create_profiler()
+        _create_profiler()
 
     # enable, set flag and set duration
     assert isinstance(PROFILER, cProfile.Profile)
@@ -137,11 +138,11 @@ def disable_profiling(dump_data: bool = False):
 
     if PROFILER:
         assert isinstance(PROFILER, cProfile.Profile)
-        PROFILER.disable()
-        IS_PROFILING = False
-
         if dump_data:
             _dump_profiling_data()
+
+        PROFILER.disable()
+        IS_PROFILING = False
 
 
 def kill_profiler():
@@ -151,7 +152,7 @@ def kill_profiler():
     global PROFILER
 
     if PROFILER:
-        disable_profiling(False)
+        disable_profiling(True)
         PROFILER = None
 
 
@@ -169,6 +170,8 @@ def _dump_profiling_data():
     """
     Dump data to a readable file
     """
+    global PROFILER
+    _ = PROFILER.create_stats()
     # dump the profiler stats
     s = io.StringIO()
     ps = pstats.Stats(PROFILER, stream=s).sort_stats("cumulative")

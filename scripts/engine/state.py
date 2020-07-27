@@ -5,7 +5,7 @@ import json
 import logging
 import os
 from typing import TYPE_CHECKING
-from scripts.engine import utility, world
+from scripts.engine import library, utility, world
 from scripts.engine.core.constants import CURRENT_WORKING_DIRECTORY, GameState, GameStateType, MAX_SAVES, SAVE_PATH, \
     VERSION
 from scripts.engine.core.store import store
@@ -60,7 +60,7 @@ def update_clock() -> float:
     """
     Tick the internal clock. Manages the frame rate. Returns delta time.
     """
-    return store.internal_clock.tick(store.fps_limit) / 1000.0
+    return store.internal_clock.tick(library.VIDEO_CONFIG.fps_limit) / 1000.0
 
 
 def set_new(new_game_state: GameStateType):
@@ -77,12 +77,12 @@ def set_new(new_game_state: GameStateType):
     logging.info(log_string)
 
 
-def save_game(is_auto_save: bool = False):
+def save_game():
     """
     Serialise the game data to a file
     """
     # get the info needed
-    full_save_path = CURRENT_WORKING_DIRECTORY + SAVE_PATH
+    full_save_path = os.getcwd() + "/" + SAVE_PATH
     save = {}
 
     # add data to dict
@@ -93,7 +93,7 @@ def save_game(is_auto_save: bool = False):
     player = world.get_player()
     name = world.get_name(player)
     name = name.replace(" ", "_")  # clean name
-    date_and_time = datetime.datetime.utcnow().strftime("%Y%m%d@%H%M")
+    date_and_time = datetime.datetime.utcnow().strftime("%Y%m%d@%H%M%S")
     save_name_prefix = f"{name}"
     new_save_name = f"{save_name_prefix}_{date_and_time}"
 

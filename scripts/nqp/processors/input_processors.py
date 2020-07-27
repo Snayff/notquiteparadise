@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Optional, Type
-
 import pygame
-from snecs.typedefs import EntityID
 
-import scripts.engine.chronicle
-from scripts.engine import debug, key, library, state, world
+from typing import TYPE_CHECKING, Optional, Type
+from snecs.typedefs import EntityID
+from scripts.engine import chronicle, debug, key, library, state, world
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
     Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
@@ -15,7 +13,7 @@ from scripts.engine.core.constants import (
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.engine.actions import Move, Skill
+from scripts.engine.actions.skills import Move, Skill
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
@@ -112,6 +110,14 @@ def _process_stateless_intents(intent: InputIntentType):
 
     elif intent == InputIntent.BURST_PROFILE:
         debug.enable_profiling(120)
+
+    elif intent == InputIntent.CONFIRM:
+        pass
+        # _repr = [("state.stupid_save_game()", "from scripts.engine import state")]
+        # dump = [("state.save_game()", "from scripts.engine import state")]
+        #
+        # from scripts.engine import utility
+        # print(utility.performance_test(["serialise"], dump, _repr, 20, 3))
 
 
 def _process_gamemap_intents(intent: InputIntentType):
@@ -228,7 +234,10 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.name)
         ai_processors.process_interventions()
-        scripts.engine.chronicle.end_turn(player, skill.time_cost)
+        chronicle.end_turn(player, skill.time_cost)
+
+        state.save_game()
+
         if skill.name == "move":
             ui.set_player_tile(target_tile)
 

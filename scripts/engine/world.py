@@ -3,16 +3,16 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
-    cast)
 
 import pygame
 import snecs
 import numpy as np
 import tcod.map
+
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-
+from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
+    cast)
 from scripts.engine import chronicle, debug, library, utility
 from scripts.engine.actions.afflictions import Affliction
 from scripts.engine.actions.skills import BasicAttack, Move, Skill

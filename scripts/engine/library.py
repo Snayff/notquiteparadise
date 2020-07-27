@@ -6,7 +6,6 @@ import os
 import time
 import pygame
 from typing import TYPE_CHECKING
-from scripts.engine import utility
 from scripts.engine.core.constants import InputIntent
 from scripts.engine.core.definitions import (AfflictionData, AspectData,
                                              BasePrimaryStatData,
@@ -34,8 +33,9 @@ VIDEO_CONFIG: VideoConfigData
 GAME_CONFIG: GameConfigData
 
 # build default list for input - needed in case json doesnt include all required values
-for name in utility.get_class_members(InputIntent):
-    INPUT_CONFIG[name.lower()] = []
+for member in InputIntent.__dict__.keys():
+    if member[:2] != "__":
+        INPUT_CONFIG[member.lower()] = []
 
 
 ####################### REFRESH ##############################

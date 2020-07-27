@@ -8,10 +8,10 @@ import pygame
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.114.0"
+VERSION = "0.116.0"
 
 MAX_SKILLS = 6
-MAX_SAVES = 3
+MAX_SAVES = 1
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = TILE_SIZE // 4
 ICON_SIZE = TILE_SIZE // 2
