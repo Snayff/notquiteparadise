@@ -5,8 +5,11 @@ from typing import TYPE_CHECKING
 
 from snecs import RegisteredComponent
 import numpy as np
+
+from scripts.engine import utility
 from scripts.engine.core.constants import (EffectType, PrimaryStatType,
                                            RenderLayerType)
+from scripts.engine.library import SKILLS
 
 if TYPE_CHECKING:
     import pygame
@@ -368,11 +371,10 @@ class Knowledge(RegisteredComponent):
     @classmethod
     def deserialize(cls, serialized):
         skill_names = serialized["skill_names"]
-        # TODO - convert skill names into skills
+        
         skills = []
         for name in skill_names:
-            # get skill
-            pass
+            skills.append(utility.get_skill_class(SKILLS[name].class_name))
 
         cooldowns = serialized["cooldowns"]
         skill_order = serialized["skill_order"]

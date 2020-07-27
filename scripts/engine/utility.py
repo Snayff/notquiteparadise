@@ -11,12 +11,16 @@ from typing import (TYPE_CHECKING, Any, Callable, Dict, Iterable, List,
 import pygame
 import scipy
 
+from scripts.engine import actions
+from scripts.engine.actions.skills import Skill
 from scripts.engine.core.constants import (IMAGE_NOT_FOUND_PATH, TILE_SIZE,
                                            Shape, ShapeType)
 
 if TYPE_CHECKING:
     from typing import Tuple
 
+
+################################### IMAGES ########################################
 
 def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pygame.Surface:
     """
@@ -77,6 +81,8 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
     return base
 
 
+################################### QUERY TOOLS ########################################
+
 def recursive_replace(obj: Union[Dict, List], key: str, value_to_replace: Any, new_value: Any):
     """
     Check through any number of nested dicts or lists for the specified key->value pair and replace the value.
@@ -129,6 +135,16 @@ def get_class_members(cls: Type[Any]) -> List[str]:
 
     return members
 
+
+def get_skill_class(skill_class_name: str) -> Type[Skill]:
+    """
+    Get the Skill from the name of the skill class.
+    """
+    skill = getattr(actions.skills, skill_class_name)
+    return skill
+
+
+################################### MATHS ########################################
 
 def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> float:
     """
@@ -266,6 +282,25 @@ def get_coords_from_shape(shape: ShapeType, size: int, direction: Optional[Tuple
     raise KeyError(f"Unknown shape '{shape}'")
 
 
+def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
+    """
+    returns true if the absolute distance between both coordinates is less than delta
+    """
+    return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
+
+
+def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge=0) -> bool:
+    """
+    check if a coordinate is inside a bound for a given edge
+    """
+    start_coordinate = bounds[0] + edge
+    end_coordinate = bounds[1] - edge - 1
+    within_bounds = start_coordinate <= coordinate < end_coordinate
+    return within_bounds
+
+
+################################### CONVERSIONS ########################################
+
 def value_to_member(value: Any, cls: Type[Any]) -> str:
     """
     Get a member of a class that matches the value given
@@ -289,22 +324,7 @@ def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
     return x, y
 
 
-def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
-    """
-    returns true if the absolute distance between both coordinates is less than delta
-    """
-    return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
-
-
-def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge=0) -> bool:
-    """
-    check if a coordinate is inside a bound for a given edge
-    """
-    start_coordinate = bounds[0] + edge
-    end_coordinate = bounds[1] - edge - 1
-    within_bounds = start_coordinate <= coordinate < end_coordinate
-    return within_bounds
-
+################################### DEV ########################################
 
 def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str, Callable], str]],
         new_methods: List[Tuple[Union[str, Callable], str]], num_runs: int = 1000, repeats: int = 3) -> str:
