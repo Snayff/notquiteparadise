@@ -12,7 +12,7 @@ from scripts.engine import world
 from scripts.engine.component import (Aesthetic, Aspect, Identity, Position,
                                       Resources, Traits)
 from scripts.engine.core.constants import (GAP_SIZE, ICON_IN_TEXT_SIZE,
-     RenderLayer)
+                                           RenderLayer)
 
 
 class TileInfo(UIPanel):
@@ -77,7 +77,7 @@ class TileInfo(UIPanel):
 
             # get entities at selected position
             for entity, (position, identity, aesthetic) in world.get_components([Position, Identity, Aesthetic]):
-                if self.selected_tile_pos == (position.x, position.y):
+                if self.selected_tile_pos in position:
 
                     # get universal info
                     images.append(aesthetic.sprites.icon)
@@ -147,6 +147,7 @@ class TileInfo(UIPanel):
         text_height = 0  # box will resize height anyway
 
         # loop each image provided and use as header for each group of info
+        # FIXME - hovering projectile breaks it due to not havign a surface (missing icon?)
         for image in images:
             #  create image
             _image = pygame.transform.scale(image, (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE))

@@ -28,9 +28,7 @@ copyright = '2020, Snayff'
 author = 'Snayff'
 
 # The short X.Y version
-version = '0.103.0'
-# The full version, including alpha/beta/rc tags
-release = '0.103.0'
+version = "0.113.0"
 
 
 # -- General configuration ---------------------------------------------------

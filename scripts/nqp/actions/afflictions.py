@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Iterator
+
 from snecs.typedefs import EntityID
-from scripts.engine import world
+
+from scripts.engine import library, world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import (AfflictionCategory,
                                            AfflictionCategoryType,
@@ -12,7 +14,6 @@ from scripts.engine.core.constants import (AfflictionCategory,
                                            PrimaryStat, Shape, ShapeType,
                                            TargetTag, TargetTagType)
 from scripts.engine.effect import AffectStatEffect, DamageEffect, Effect
-from scripts.engine.library import library
 
 if TYPE_CHECKING:
     from typing import Tuple, List
@@ -48,10 +49,14 @@ class Affliction(ABC):
         """
         An iterator over pairs of (affected entity, [effects])
         """
+        entities = set()
         position = world.get_entitys_component(self.affected_entity, Position)
         if position:
-            for entity in world.get_affected_entities((position.x, position.y), self.shape, self.shape_size):
-                yield entity, self.build_effects(entity)
+            for coordinate in position.get_coordinates():
+                for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
+                    if entity not in entities:
+                        entities.add(entity)
+                        yield entity, self.build_effects(entity)
 
     @abstractmethod
     def build_effects(self, entity: EntityID):
@@ -62,7 +67,7 @@ class Affliction(ABC):
 
 
 class BoggedDown(Affliction):
-    data = library.get_affliction_data("bogged_down")
+    data = library.AFFLICTIONS["bogged_down"]
     name = data.name
     required_tags = data.required_tags
     identity_tags = data.identity_tags
@@ -88,7 +93,7 @@ class BoggedDown(Affliction):
 
 
 class Flaming(Affliction):
-    data = library.get_affliction_data("flaming")
+    data = library.AFFLICTIONS["flaming"]
     name = data.name
     required_tags = data.required_tags
     identity_tags = data.identity_tags
@@ -108,8 +113,8 @@ class Flaming(Affliction):
             failure_effects=[],
             target=entity,
             stat_to_target=PrimaryStat.BUSTLE,
-            accuracy=library.get_game_config_data("base_values")["accuracy"],
-            damage=int(library.get_game_config_data("base_values")["damage"] / 2),
+            accuracy=library.GAME_CONFIG.base_values.accuracy,
+            damage=int(library.GAME_CONFIG.base_values.damage / 2),
             damage_type=DamageType.BURN,
             mod_stat=PrimaryStat.SKULLDUGGERY,
             mod_amount=0.1

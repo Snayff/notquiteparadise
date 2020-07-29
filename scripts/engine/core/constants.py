@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import pygame
 from types import SimpleNamespace
 from typing import NewType, Tuple
 
+import pygame
+
 ######################## GENERAL CONSTANTS ######################################
 
-VERSION = "0.111.0"
+VERSION = "0.114.0"
 
 MAX_SKILLS = 6
 TILE_SIZE = 64
@@ -117,7 +118,8 @@ class InputIntent(SimpleNamespace):
     SKILL5 = InputIntentType("skill5")
     REFRESH_DATA = InputIntentType("refresh_data")
     DEV_TOGGLE = InputIntentType("dev_toggle")
-    ACTOR_INFO_TOGGLE = InputIntentType("npc_info_toggle")
+    ACTOR_INFO_TOGGLE = InputIntentType("actor_info_toggle")
+    BURST_PROFILE = InputIntentType("burst_profile")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################
@@ -304,4 +306,3 @@ class ProjectileSpeed(SimpleNamespace):
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))
     INSTANT = ProjectileSpeedType(0)
-

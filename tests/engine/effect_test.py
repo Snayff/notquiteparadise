@@ -2,7 +2,7 @@ import pytest
 
 from scripts.engine import world
 from scripts.engine.component import Afflictions, Identity, Knowledge, Position
-from scripts.engine.core.constants import AfflictionTrigger
+from scripts.engine.core.constants import EffectType, AfflictionTrigger, TargetTag
 from scripts.engine.effect import (ReduceSkillCooldownEffect,
                                    TriggerAfflictionsEffect)
 from scripts.nqp.actions.afflictions import Affliction
@@ -13,13 +13,13 @@ from tests.mocks import world_mock
 class MockAffliction(Affliction):
     name = 'mock_affliction'
     identity_tags = [
-        "affect_stat"
+        EffectType.AFFECT_STAT
     ]
     triggers = [
-        "movement"
+        AfflictionTrigger.MOVEMENT
     ]
     required_tags = [
-        "other_entity"
+        TargetTag.OTHER_ENTITY
     ]
 
     def __init__(self, creator, affected_entity, duration):
@@ -33,13 +33,13 @@ class MockAffliction(Affliction):
 
 class MockAfflictionDamage(MockAffliction):
     triggers = [
-        "take_damage"
+        AfflictionTrigger.TAKE_DAMAGE
     ]
 
 
 class MockAfflictionMovement(MockAffliction):
     triggers = [
-        "movement"
+        AfflictionTrigger.MOVEMENT
     ]
 
 
@@ -47,7 +47,7 @@ class TestEffects:
 
     @staticmethod
     def _create_default_entity():
-        components = [Identity('mock_entity'), Position(0, 0)]
+        components = [Identity('mock_entity'), Position((0, 0))]
         entity = world.create_entity(components)
         return entity
 
@@ -57,7 +57,7 @@ class TestEffects:
         """
         affliction_called = None
 
-        def _trigger_affliction_mock(affliction):
+        def _trigger_affliction_mock(affliction: Affliction):
             nonlocal affliction_called
             affliction_called = affliction
 

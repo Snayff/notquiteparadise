@@ -3,7 +3,9 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import utility, world
 from scripts.engine.component import (Aesthetic, Afflictions, Blocking,
                                       Knowledge, Position, Resources)
@@ -109,62 +111,27 @@ class MoveActorEffect(Effect):
 
         dir_x, dir_y = self.direction
         entity = self.target
-        name = world.get_name(entity)
-        direction_name = utility.value_to_member((dir_x, dir_y), Direction)
 
         # loop each target tile in turn
         for _ in range(0, self.move_amount):
-    
-            target_x = pos.x + dir_x
-            target_y = pos.y + dir_y
-            target_tile = world.get_tile((target_x, target_y))
-    
-            # check a tile was returned
-            if target_tile:
-                is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTag.BLOCKED_MOVEMENT, entity)
-                is_entity_on_tile = not world.tile_has_tag(target_tile, TargetTag.NO_ENTITY)
-            else:
-                is_tile_blocking_movement = True
-                is_entity_on_tile = False
-                
-            # check for no entity in way but tile is blocked
-            if not is_entity_on_tile and is_tile_blocking_movement and target_tile:
-                logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
-                              f" blocked by terrain. ")
-                success = False
+            new_x = pos.x + dir_x
+            new_y = pos.y + dir_y
+            collides = MoveActorEffect._check_collision(entity, dir_x, dir_y)
+            success = not collides
 
-            # check if entity blocking tile
-            elif is_entity_on_tile and target_tile:
-                for blocking_entity, (position, blocking) in world.get_components([Position, Blocking]):
-                    # cast for typing
-                    position = cast(Position, position)
-                    blocking = cast(Blocking, blocking)
-
-                    if blocking.blocks_movement and (position.x == target_tile.x and position.y == target_tile.y):
-                        # blocked by entity
-                        blockers_name = world.get_name(blocking_entity)
-                        logging.debug(
-                            f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
-                            f" by '{blockers_name}'. ")
-                        success = False
-                        break
-
-            # if nothing in the way, time to move!
-            # not is_entity_on_tile and not is_tile_blocking_movement
-            else:
+            if not collides:
                 # named _position as typing was inferring from position above
                 _position = world.get_entitys_component(entity, Position)
 
                 # update position
                 if _position:
-                    _position.x = target_x
-                    _position.y = target_y
+                    _position.set(new_x, new_y)
                     success = True
 
                 # animate change
                 aesthetic = world.get_entitys_component(entity, Aesthetic)
                 if aesthetic:
-                    aesthetic.target_draw_x, aesthetic.target_draw_y = (target_x, target_y)
+                    aesthetic.target_draw_x, aesthetic.target_draw_y = (new_x, new_y)
                     aesthetic.current_sprite = aesthetic.sprites.move
 
                 # update fov
@@ -174,6 +141,57 @@ class MoveActorEffect(Effect):
             return self.success_effects + self.success_triggers
         else:
             return self.failure_effects
+
+    @staticmethod
+    def _check_collision(entity, dir_x, dir_y):
+        """
+        Checks if the entity will be able to move in the provided direction
+        :param entity: Entity to test
+        :param dir_x: X component of the direction
+        :param dir_y: Y component of the direction
+        :return: A bool that represents if the entity will collide if it moves in the provided direction
+        """
+        collides = False
+
+        name = world.get_name(entity)
+        direction_name = utility.value_to_member((dir_x, dir_y), Direction)
+        position = world.get_entitys_component(entity, Position)
+
+        for coordinate in position.get_coordinates():
+            target_x = coordinate[0] + dir_x
+            target_y = coordinate[1] + dir_y
+            target_tile = world.get_tile((target_x, target_y))
+
+            # check a tile was returned
+            if target_tile:
+                is_tile_blocking_movement = world.tile_has_tag(target_tile, TargetTag.BLOCKED_MOVEMENT, entity)
+                is_entity_on_tile = not world.tile_has_tag(target_tile, TargetTag.NO_ENTITY)
+            else:
+                is_tile_blocking_movement = True
+                is_entity_on_tile = False
+
+            # check for no entity in way but tile is blocked
+            if not is_entity_on_tile and is_tile_blocking_movement and target_tile:
+                logging.debug(f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was"
+                              f" blocked by terrain. ")
+                collides = True
+
+            # check if entity blocking tile
+            elif is_entity_on_tile and target_tile:
+                for blocking_entity, (position, blocking) in world.get_components([Position, Blocking]):
+                    # cast for typing
+                    position = cast(Position, position)
+                    blocking = cast(Blocking, blocking)
+                    if blocking_entity != entity and blocking.blocks_movement and (target_x, target_y) in position:
+                        # blocked by entity
+                        blockers_name = world.get_name(blocking_entity)
+                        logging.debug(
+                            f"'{name}' tried to move in {direction_name} to ({target_x},{target_y}) but was blocked"
+                            f" by '{blockers_name}'. ")
+                        collides = True
+                        break
+
+        return collides
 
 
 class TriggerAfflictionsEffect(Effect):

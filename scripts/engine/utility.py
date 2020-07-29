@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import gc
 import logging
 import math
 import sys
-from typing import Dict, Iterable, Optional, TYPE_CHECKING, Any, List, Tuple, Type, Union
+import timeit
+from typing import (TYPE_CHECKING, Any, Callable, Dict, Iterable, List,
+                    Optional, Tuple, Type, Union)
 
 import pygame
 import scipy
@@ -57,10 +60,19 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
     """
     Flatten a list of images into a single image. All images must be the same size. Images are blitted in order.
     """
-    base = images.pop(0)
 
-    for image in images:
-        base.blit(image, (0, 0))
+    biggest_image: Optional[pygame.Surface] = None
+    biggest_image_index = -1
+    for i in range(len(images)):
+        img = images[i]
+        if (biggest_image is None) or (img.get_width() > biggest_image.get_width() and img.get_height() > biggest_image.get_height()):
+            biggest_image = img
+            biggest_image_index = i
+
+    base: pygame.Surface = biggest_image
+    for image in images[0:biggest_image_index] + images[biggest_image_index:]:
+        if image != biggest_image:
+            base.blit(image, (0, 0))
 
     return base
 
@@ -293,3 +305,36 @@ def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge
     within_bounds = start_coordinate <= coordinate < end_coordinate
     return within_bounds
 
+
+def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str, Callable], str]],
+        new_methods: List[Tuple[Union[str, Callable], str]], num_runs: int = 1000, repeats: int = 3) -> str:
+    """
+    Run performance testing on a collection of methods/functions. Returns a formatted string detailing performance of
+     old, new and % change between them.
+
+    method_descs are used as descriptions only.
+    old_methods/new_methods expects a list of tuples that are (method_to_test, setup). Setup can be an empty string
+    but is usually an import.
+    Index in each list much match, i.e. method_name[0] is the alias of the methods in old_methods[0] and
+    new_methods[0].
+
+    Outputs as "Access Trait: 0.00123 -> 0.00036(71.00033%)".
+
+    example usage:
+    method_descs = ["Set Var", "Access Skill"]
+    old_methods = [("x = 1", ""),("library.get_skill_data('lunge')", "")]
+    new_methods = [("x = 'one'", ""), ("library2.SKILLS.get('lunge')", "from scripts.engine import library2")]
+    print( performance_test(method_descs, old_methods, new_methods) )
+    """
+    result = f"== Performance Test ==\n(Run {num_runs} * {repeats})"
+    gc.disable()
+
+    for x in range(0, len(method_descs)):
+        name = method_descs[x]
+        old = min(timeit.repeat(old_methods[x][0], setup=old_methods[x][1], number=num_runs, repeat=repeats))
+        new = min(timeit.repeat(new_methods[x][0], setup=new_methods[x][1], number=num_runs, repeat=repeats))
+        result += f"\n{name}: {format(old, '.5f')} -> {format(new, '.5f')}" \
+                  f"({format(((old - new) / old) * 100, '0.5f')}%)"
+
+    gc.enable()
+    return result

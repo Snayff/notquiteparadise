@@ -5,34 +5,29 @@ import logging
 import random
 from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
                     cast)
+
 import pygame
 import snecs
+import numpy as np
 import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
-from scripts.engine import chronicle, debug, utility
+from scripts.engine import chronicle, debug, library, utility
 from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
                                       Blocking, HasCombatStats, Identity,
                                       IsActor, IsGod, IsPlayer, Knowledge,
                                       Opinion, Position, Resources, Tracked,
                                       Traits)
 from scripts.engine.core.constants import (
-    ICON_SIZE,
-    INFINITE, RenderLayer, TILE_SIZE, Direction,
-    DirectionType,
-    HitType, HitTypeType,
-    PrimaryStat,
-    PrimaryStatType, ResourceType,
-    SecondaryStatType, ShapeType,
-    TargetTag, TargetTagType,
-    TraitGroup, TravelMethod,
-    TravelMethodType)
+    ICON_SIZE, INFINITE, TILE_SIZE, Direction, DirectionType, HitType,
+    HitTypeType, PrimaryStat, PrimaryStatType, RenderLayer, ResourceType,
+    SecondaryStatType, ShapeType, TargetTag, TargetTagType, TraitGroup,
+    TravelMethod, TravelMethodType)
 from scripts.engine.core.definitions import (ProjectileData,
                                              TraitSpritePathsData,
                                              TraitSpritesData)
 from scripts.engine.core.store import store
-from scripts.engine.library import library
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -74,7 +69,7 @@ def create_god(god_name: str) -> EntityID:
     """
     Create an entity with all of the components to be a god. god_name must be in the gods json file.
     """
-    data = library.get_god_data(god_name)
+    data = library.GODS[god_name]
     god: List[Component] = []
 
     god.append(Identity(data.name, data.description))
@@ -88,22 +83,23 @@ def create_god(god_name: str) -> EntityID:
     return entity
 
 
-def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_names: List[str],
+def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, int]], trait_names: List[str],
         is_player: bool = False) -> EntityID:
     """
     Create an entity with all of the components to be an actor. Returns entity ID.
     """
     components: List[Component] = []
+    tile_pos = occupying_tiles[0]
     x, y = tile_pos
 
     # actor components
     if is_player:
         components.append(IsPlayer())
     components.append(IsActor())
+    components.append(Position(*occupying_tiles))
     components.append(Identity(name, description))
-    components.append(Position(x, y))  # FIXME - check position not blocked before spawning
     components.append(HasCombatStats())
-    components.append(Blocking(True, library.get_game_config_data("default_values")["entity_blocks_sight"]))
+    components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(trait_names))
     components.append(FOV(create_fov_map()))
     components.append(Tracked(chronicle.get_time()))
@@ -116,12 +112,12 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     behaviour = None
 
     for name in trait_names:
-        data = library.get_trait_data(name)
+        data = library.TRAITS[name]
         traits_paths.append(data.sprite_paths)
         if data.known_skills != ["none"]:
 
             for skill_name in data.known_skills:
-                skill_data = library.get_skill_data(skill_name)
+                skill_data = library.SKILLS[skill_name]
                 skill_class = getattr(skills, skill_data.class_name)
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
@@ -138,8 +134,10 @@ def create_actor(name: str, description: str, tile_pos: Tuple[int, int], trait_n
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
 
     sprites = _create_trait_sprites(traits_paths)
+
     # N.B. translation to screen coordinates is handled by the camera
     components.append(Aesthetic(sprites.idle, sprites, RenderLayer.ACTOR, (x, y)))
+
 
     # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
@@ -187,7 +185,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
-    projectile.append(Position(x, y))  # FIXME - check position not blocked before spawning
+    projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     projectile.append(Resources(999, 999))
     projectile.append(Afflictions())
 
@@ -207,7 +205,7 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     """
     Creates an instance of an Affliction provided the name
     """
-    affliction_data = library.get_affliction_data(name)
+    affliction_data = library.AFFLICTIONS[name]
     return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
@@ -234,10 +232,9 @@ def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpri
     # convert to sprites
     for name, path_list in paths.items():
         # get the size to convert to
+        size = None
         if name == "icon":
             size = (ICON_SIZE, ICON_SIZE)
-        else:
-            size = (TILE_SIZE, TILE_SIZE)
 
         sprites[name] = utility.get_images(path_list, size)
 
@@ -265,13 +262,13 @@ def create_fov_map() -> tcod.map.Map:
     width = gamemap.width
     height = gamemap.height
 
-    fov_map = tcod.map_new(width, height)
+    fov_map = np.zeros((width, height), dtype=bool, order="F")
 
     for x in range(width):
         for y in range(height):
             tile = get_tile((x, y))
             if tile:
-                tcod.map_set_properties(fov_map, x, y, not tile.blocks_sight, not tile.blocks_movement)
+                fov_map[x][y] = not tile.blocks_sight and not tile.blocks_movement
 
     return fov_map
 
@@ -571,11 +568,11 @@ def get_hit_type(to_hit_score: int) -> HitTypeType:
     """
     Get the hit type from the to hit score
     """
-    hit_types_data = library.get_game_config_data("hit_types")
+    hit_types_data = library.GAME_CONFIG.hit_types
 
-    if to_hit_score >= hit_types_data[HitType.CRIT]["value"]:
+    if to_hit_score >= hit_types_data.crit.value:
         return HitType.CRIT
-    elif to_hit_score >= hit_types_data[HitType.HIT]["value"]:
+    elif to_hit_score >= hit_types_data.hit.value:
         return HitType.HIT
     else:
         return HitType.GRAZE
@@ -621,13 +618,13 @@ def get_primary_stat(entity: EntityID, primary_stat: PrimaryStatType) -> int:
     stat = primary_stat
     value = 0
 
-    stat_data = library.get_primary_stat_data(stat)
+    stat_data = library.BASE_STATS_PRIMARY[stat]
     value += stat_data.base_value
 
     trait = get_entitys_component(entity, Traits)
     if trait:
         for name in trait.names:
-            data = library.get_trait_data(name)
+            data = library.TRAITS[name]
             value += getattr(data, stat)
 
     afflictions = get_entitys_component(entity, Afflictions)
@@ -650,7 +647,7 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
     value = 0
 
     # base values
-    stat_data = library.get_secondary_stat_data(stat)
+    stat_data = library.BASE_STATS_SECONDARY[stat]
     value += stat_data.base_value
 
     # values from primary stats
@@ -707,8 +704,9 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
     # get relevant entities in target area
     for entity, (position, *others) in get_components([Position, Resources]):
         assert isinstance(position, Position)  # for mypy typing
-        if (position.x, position.y) in affected_positions:
-            affected_entities.append(entity)
+        for affected_pos in affected_positions:
+            if affected_pos in position:
+                affected_entities.append(entity)
 
     return affected_entities
 
@@ -831,7 +829,7 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     entities = []
     for entity, (position,) in get_components([Position]):
         position = cast(Position, position)
-        if position.x == x and position.y == y:
+        if (x, y) in position:
             entities.append(entity)
     return entities
 
@@ -860,7 +858,7 @@ def _tile_has_entity_blocking_movement(tile: Tile) -> bool:
     for entity, (position, blocking) in get_components([Position, Blocking]):
         position = cast(Position, position)
         blocking = cast(Blocking, blocking)
-        if position.x == x and position.y == y and blocking.blocks_movement:
+        if (x, y) in position and blocking.blocks_movement:
             return True
     return False
 
@@ -872,7 +870,7 @@ def _tile_has_entity_blocking_sight(tile: Tile) -> bool:
     for entity, (position, blocking) in get_components([Position, Blocking]):
         position = cast(Position, position)
         blocking = cast(Blocking, blocking)
-        if position.x == x and position.y == y and blocking.blocks_sight:
+        if (x, y) in position and blocking.blocks_sight:
             return True
     return False
 
@@ -882,7 +880,7 @@ def is_tile_in_fov(tile_pos: Tuple[int, int], fov_map) -> bool:
     Check if  target tile is in player`s FOV
     """
     x, y = tile_pos
-    return tcod.map_is_in_fov(fov_map, x, y)
+    return fov_map[x][y]
 
 
 def _can_afford_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
@@ -963,7 +961,7 @@ def recompute_fov(entity: EntityID) -> bool:
             stats = create_combat_stats(entity)
             sight_range = stats.sight_range
         else:
-            sight_range = library.get_game_config_data("default_values")["sight_range"]
+            sight_range = 0
 
         # get the needed components
         fov = get_entitys_component(entity, FOV)
@@ -971,8 +969,15 @@ def recompute_fov(entity: EntityID) -> bool:
 
         # compute the fov
         if fov and pos:
-            tcod.map_compute_fov(fov.map, pos.x, pos.y, sight_range, fov.light_walls, fov.algorithm)
+            tranparency = create_fov_map()
+            maps = []
+            for coordinate in pos.get_coordinates():
+                map = tcod.map.compute_fov(tranparency, coordinate, sight_range, fov.light_walls, fov.algorithm)
+                maps.append(map)
 
+            fov.map = maps[0]
+            for m in maps:
+                fov.map |= m
             # update tiles if it is player
             if entity == get_player():
                 update_tile_visibility(fov.map)
@@ -1172,7 +1177,7 @@ def add_component(entity: EntityID, component: Component):
     snecs.add_component(entity, component)
 
 
-def update_tile_visibility(fov_map: tcod.map.Map):
+def update_tile_visibility(fov_map: np.array):
     """
     Update the the visibility of the tiles on the came map
     """
@@ -1180,7 +1185,7 @@ def update_tile_visibility(fov_map: tcod.map.Map):
 
     for x in range(0, gamemap.width):
         for y in range(0, gamemap.height):
-            gamemap.tiles[x][y].is_visible = tcod.map_is_in_fov(fov_map, x, y)
+            gamemap.tiles[x][y].is_visible = fov_map[x][y]
 
 
 def judge_action(entity: EntityID, action_name: str):
@@ -1193,7 +1198,7 @@ def judge_action(entity: EntityID, action_name: str):
         opinion = cast(Opinion, opinion)
         identity = cast(Identity, identity)
 
-        attitudes = library.get_god_attitudes_data(identity.name)
+        attitudes = library.GODS[identity.name].attitudes
 
         # check if the god has an attitude towards the action and apply the opinion change,
         # adding the entity to the dict if necessary
@@ -1241,15 +1246,15 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
     mitigated_damage = (base_damage + damage_mod_amount) - resist_value
 
     # get modifiers
-    hit_types_data = library.get_game_config_data("hit_types")
+    hit_types_data = library.GAME_CONFIG.hit_types
 
     # apply to hit modifier to damage
     if hit_type == HitType.CRIT:
-        modified_damage = mitigated_damage * hit_types_data[HitType.CRIT]["modifier"]
+        modified_damage = mitigated_damage * hit_types_data.crit.modifier
     elif hit_type == HitType.HIT:
-        modified_damage = mitigated_damage * hit_types_data[HitType.HIT]["modifier"]
+        modified_damage = mitigated_damage * hit_types_data.hit.modifier
     else:
-        modified_damage = mitigated_damage * hit_types_data[HitType.GRAZE]["modifier"]
+        modified_damage = mitigated_damage * hit_types_data.graze.modifier
 
     # round down the dmg
     int_modified_damage = int(modified_damage)
@@ -1297,7 +1302,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         identity = cast(Identity, identity)
         knowledge = cast(Knowledge, knowledge)
 
-        attitudes = library.get_god_attitudes_data(identity.name)
+        attitudes = library.GODS[identity.name].attitudes
         action_name = action
 
         # check if the god has an attitude towards the action and increase likelihood of intervening
@@ -1308,7 +1313,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         eligible_interventions = []
         intervention_weightings = []
         for intervention_name in knowledge.get_skill_names():
-            intervention_data = library.get_god_intervention_data(identity.name, intervention_name)
+            intervention_data = library.GODS[identity.name].interventions[intervention_name]
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
             try:

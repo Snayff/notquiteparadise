@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING, Iterator
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import world
+from scripts.engine import library, world
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (DamageType,
-                                           Direction, DirectionType,
-                                           PrimaryStat, ProjectileExpiry,
+from scripts.engine.core.constants import (DamageType, Direction,
+                                           DirectionType, PrimaryStat,
+                                           ProjectileExpiry,
                                            ProjectileExpiryType,
                                            ProjectileSpeed,
                                            ProjectileSpeedType, Resource,
@@ -23,7 +23,6 @@ from scripts.engine.core.constants import (DamageType,
 from scripts.engine.effect import (
     ApplyAfflictionEffect, DamageEffect, Effect, MoveActorEffect,
     ReduceSkillCooldownEffect)
-from scripts.engine.library import library
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -151,7 +150,7 @@ class Skill(ABC):
         """
         Sets the class properties of the skill from a skill name
         """
-        cls.data = library.get_skill_data(cls.name)
+        cls.data = library.SKILLS[cls.name]
         cls.required_tags = cls.data.required_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon
@@ -184,7 +183,7 @@ class Move(Skill):
     icon_path = ""
     resource_type = Resource.STAMINA
     resource_cost = 0
-    time_cost = library.get_game_config_data("base_values")["move_cost"]
+    time_cost = library.GAME_CONFIG.base_values.move_cost
     base_cooldown = 0
     targeting_method = TargetingMethod.TARGET
     target_directions = [
@@ -254,8 +253,8 @@ class BasicAttack(Skill):
             failure_effects=[],
             target=entity,
             stat_to_target=PrimaryStat.VIGOUR,
-            accuracy=library.get_game_config_data("base_values")["accuracy"],
-            damage=library.get_game_config_data("base_values")["damage"],
+            accuracy=library.GAME_CONFIG.base_values.accuracy,
+            damage=library.GAME_CONFIG.base_values.damage,
             damage_type=DamageType.MUNDANE,
             mod_stat=PrimaryStat.CLOUT,
             mod_amount=0.1
@@ -274,6 +273,7 @@ class Lunge(Skill):
     Lunge skill for an entity
     """
     name = "lunge"
+    # FIXME - only applying damage when moving 2 spaces, anything less fails to apply.
 
     def __init__(self, user: EntityID, tile: Tile, direction: DirectionType):
         """
@@ -335,8 +335,8 @@ class Lunge(Skill):
                 failure_effects=[],
                 target=target,
                 stat_to_target=PrimaryStat.VIGOUR,
-                accuracy=library.get_game_config_data("base_values")["accuracy"],
-                damage=library.get_game_config_data("base_values")["damage"],
+                accuracy=library.GAME_CONFIG.base_values.accuracy,
+                damage=library.GAME_CONFIG.base_values.damage,
                 damage_type=DamageType.MUNDANE,
                 mod_stat=PrimaryStat.CLOUT,
                 mod_amount=0.1
@@ -434,8 +434,8 @@ class TarAndFeather(Skill):
             failure_effects=[],
             target=entity,
             stat_to_target=PrimaryStat.VIGOUR,
-            accuracy=library.get_game_config_data("base_values")["accuracy"],
-            damage=int(library.get_game_config_data("base_values")["damage"] * modifier),
+            accuracy=library.GAME_CONFIG.base_values.accuracy,
+            damage=int(library.GAME_CONFIG.base_values.damage * modifier),
             damage_type=DamageType.MUNDANE,
             mod_stat=PrimaryStat.CLOUT,
             mod_amount=0.1

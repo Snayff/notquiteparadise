@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 import pygame
 from snecs.typedefs import EntityID
 
+from scripts.engine import library
 from scripts.engine.core.constants import GameState, GameStateType
-from scripts.engine.library import library
 
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict
@@ -21,7 +21,7 @@ class _Store:
         # used in state
         self.current_game_state: GameStateType = GameState.LOADING
         self.previous_game_state: GameStateType = GameState.LOADING
-        self.fps_limit = library.get_video_config_data("fps_limit")
+        self.fps_limit = library.VIDEO_CONFIG.fps_limit
         self.internal_clock = pygame.time.Clock()
         self.active_skill = None
 
