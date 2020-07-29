@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Iterator
-
+import collections
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, world
@@ -28,6 +28,7 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Tuple, List, Optional
 
+REDUCE_AMOUNT=0.1
 
 def data_defined_skill(cls):
     """
@@ -129,14 +130,17 @@ class Skill(ABC):
         """
         An iterator over pairs of (affected entity, [effects])
         """
-        entity_names = []
+        applied_entities = collections.defaultdict(lambda: 1)
+        entitiy_names = []
 
         for entity in world.get_affected_entities((self.target_tile.x, self.target_tile.y), self.shape,
                                                   self.shape_size, self.direction):
-            yield entity, self.build_effects(entity)
-            entity_names.append(world.get_name(entity))
 
-        logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entity_names}.")
+            yield entity, self.build_effects(entity, applied_entities[entity])
+            entitiy_names.append(world.get_name(entity))
+            applied_entities[entity] -= REDUCE_AMOUNT
+
+        logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entitiy_names}.")
 
     @abstractmethod
     def build_effects(self, entity, effect_strength: float):
