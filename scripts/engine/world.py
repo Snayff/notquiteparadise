@@ -247,11 +247,11 @@ def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpri
     return converted
 
 
-def create_gamemap(width, height):
+def create_gamemap(seed: int, algorithm_name: str, width: int, height: int):
     """
     Create new GameMap
     """
-    store.current_gamemap = GameMap(width, height)
+    store.current_gamemap = GameMap(seed, algorithm_name, width, height)
 
 
 def create_fov_map() -> tcod.map.Map:

@@ -99,10 +99,10 @@ def initialise_game():
     """
     map_width = 50
     map_height = 30
-    world.create_gamemap(map_width, map_height)
+    world.create_gamemap(10, 'room_addition', map_width, map_height)
 
     # init the player
-    player = world.create_actor("player", "a desc", [(1, 2)], ["shoom", "soft_tops", "dandy"], True)
+    player = world.create_actor("player", "a desc", [(3, 5)], ["shoom", "soft_tops", "dandy"], True)
     world.recompute_fov(player)
 
     # tell places about the player
