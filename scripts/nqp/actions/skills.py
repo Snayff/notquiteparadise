@@ -28,7 +28,6 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Tuple, List, Optional
 
-REDUCE_AMOUNT=0.1
 
 def data_defined_skill(cls):
     """
@@ -138,7 +137,7 @@ class Skill(ABC):
 
             yield entity, self.build_effects(entity, applied_entities[entity])
             entitiy_names.append(world.get_name(entity))
-            applied_entities[entity] -= REDUCE_AMOUNT
+            applied_entities[entity] -= library.GAME_CONFIG.reduced_effectiveness_multi_tile_modifier
 
         logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entitiy_names}.")
 
