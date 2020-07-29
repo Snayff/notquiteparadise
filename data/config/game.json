@@ -28,6 +28,10 @@
         "__dataclass__": "DefaultValueData",
         "time_per_round": 20,
         "entity_blocks_sight": true
+    },
+    "world_values": {
+        "__dataclass__": "WorldValueData",
+        "min_room_space": 16,
+        "max_enemies_per_room": 1
     }
-    
 }
