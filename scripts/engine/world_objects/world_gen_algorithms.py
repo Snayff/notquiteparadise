@@ -18,11 +18,11 @@ class RoomAddition:
     but I think it's good enough to demonstrait the concept.
     '''
 
-    def __init__(self):
+    def __init__(self, min_room_size: int):
         self.level = []
 
         self.ROOM_MAX_SIZE = 18  # max height and width for cellular automata rooms
-        self.ROOM_MIN_SIZE = 16  # min size in number of floor tiles, not height and width
+        self.ROOM_MIN_SIZE = min_room_size  # min size in number of floor tiles, not height and width
         self.MAX_NUM_ROOMS = 30
 
         self.SQUARE_ROOM_MAX_SIZE = 12
@@ -49,37 +49,38 @@ class RoomAddition:
         self.shortcutLength = 5
         self.minPathfindingDistance = 50
 
-    def generateLevel(self, mapWidth, mapHeight):
+    def generate_level(self, seed, map_width, map_height):
         self.rooms = []
 
         self.level = [[1
-                       for y in range(mapHeight)]
-                      for x in range(mapWidth)]
+                       for y in range(map_height)]
+                      for x in range(map_width)]
 
+        random.seed(seed)
         # generate the first room
-        room = self.generateRoom()
-        roomWidth, roomHeight = self.getRoomDimensions(room)
-        roomX = int((mapWidth / 2 - roomWidth / 2) - 1)
-        roomY = int((mapHeight / 2 - roomHeight / 2) - 1)
-        self.addRoom(roomX, roomY, room)
+        room = self.generate_room()
+        room_width, room_height = self.get_room_dimensions(room)
+        roomX = int((map_width / 2 - room_width / 2) - 1)
+        roomY = int((map_height / 2 - room_height / 2) - 1)
+        self.add_room(roomX, roomY, room)
 
         # generate other rooms
         for i in range(self.buildRoomAttempts):
-            room = self.generateRoom()
+            room = self.generate_room()
             # try to position the room, get roomX and roomY
-            roomX, roomY, wallTile, direction, tunnelLength = self.placeRoom(room, mapWidth, mapHeight)
+            roomX, roomY, wall_tile, direction, tunnel_length = self.place_room(room, map_width, map_height)
             if roomX and roomY:
-                self.addRoom(roomX, roomY, room)
-                self.addTunnel(wallTile, direction, tunnelLength)
+                self.add_room(roomX, roomY, room)
+                self.add_tunnel(wall_tile, direction, tunnel_length)
                 if len(self.rooms) >= self.MAX_NUM_ROOMS:
                     break
 
-        if self.includeShortcuts == True:
-            self.addShortcuts(mapWidth, mapHeight)
+        if self.includeShortcuts:
+            self.add_shortcuts(map_width, map_height)
 
         return self.level
 
-    def generateRoom(self):
+    def generate_room(self):
         # select a room type to generate
         # generate and return that room
         if self.rooms:
@@ -87,49 +88,49 @@ class RoomAddition:
             choice = random.random()
 
             if choice < self.squareRoomChance:
-                room = self.generateRoomSquare()
+                room = self.generate_room_square()
             elif self.squareRoomChance <= choice < (self.squareRoomChance + self.crossRoomChance):
-                room = self.generateRoomCross()
+                room = self.generate_room_cross()
             else:
-                room = self.generateRoomCellularAutomata()
+                room = self.generate_room_cellular_automata()
 
         else:  # it's the first room
             choice = random.random()
             if choice < self.cavernChance:
-                room = self.generateRoomCavern()
+                room = self.generate_room_cavern()
             else:
-                room = self.generateRoomSquare()
+                room = self.generate_room_square()
 
         return room
 
-    def generateRoomCross(self):
-        roomHorWidth = int((random.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
+    def generate_room_cross(self):
+        room_hor_width = int((random.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
 
-        roomVirHeight = int((random.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
+        room_vir_height = int((random.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
 
-        roomHorHeight = int((random.randint(self.CROSS_ROOM_MIN_SIZE, roomVirHeight - 2)) / 2 * 2)
+        room_hor_height = int((random.randint(self.CROSS_ROOM_MIN_SIZE, room_vir_height - 2)) / 2 * 2)
 
-        roomVirWidth = int((random.randint(self.CROSS_ROOM_MIN_SIZE, roomHorWidth - 2)) / 2 * 2)
+        room_vir_width = int((random.randint(self.CROSS_ROOM_MIN_SIZE, room_hor_width - 2)) / 2 * 2)
 
         room = [[1
-                 for y in range(roomVirHeight)]
-                for x in range(roomHorWidth)]
+                 for y in range(room_vir_height)]
+                for x in range(room_hor_width)]
 
         # Fill in horizontal space
-        virOffset = int(roomVirHeight / 2 - roomHorHeight / 2)
-        for y in range(virOffset, roomHorHeight + virOffset):
-            for x in range(0, roomHorWidth):
+        virOffset = int(room_vir_height / 2 - room_hor_height / 2)
+        for y in range(virOffset, room_hor_height + virOffset):
+            for x in range(0, room_hor_width):
                 room[x][y] = 0
 
         # Fill in virtical space
-        horOffset = int(roomHorWidth / 2 - roomVirWidth / 2)
-        for y in range(0, roomVirHeight):
-            for x in range(horOffset, roomVirWidth + horOffset):
+        horOffset = int(room_hor_width / 2 - room_vir_width / 2)
+        for y in range(0, room_vir_height):
+            for x in range(horOffset, room_vir_width + horOffset):
                 room[x][y] = 0
 
         return room
 
-    def generateRoomSquare(self):
+    def generate_room_square(self):
         roomWidth = random.randint(self.SQUARE_ROOM_MIN_SIZE, self.SQUARE_ROOM_MAX_SIZE)
         roomHeight = random.randint(max(int(roomWidth * 0.5), self.SQUARE_ROOM_MIN_SIZE),
                                     min(int(roomWidth * 1.5), self.SQUARE_ROOM_MAX_SIZE))
@@ -144,7 +145,7 @@ class RoomAddition:
 
         return room
 
-    def generateRoomCellularAutomata(self):
+    def generate_room_cellular_automata(self):
         while True:
             # if a room is too small, generate another
             room = [[1
@@ -163,23 +164,23 @@ class RoomAddition:
                     for x in range(1, self.ROOM_MAX_SIZE - 1):
 
                         # if the cell's neighboring walls > self.neighbors, set it to 1
-                        if self.getAdjacentWalls(x, y, room) > self.neighbors:
+                        if self.get_adjacent_walls(x, y, room) > self.neighbors:
                             room[x][y] = 1
                         # otherwise, set it to 0
-                        elif self.getAdjacentWalls(x, y, room) < self.neighbors:
+                        elif self.get_adjacent_walls(x, y, room) < self.neighbors:
                             room[x][y] = 0
 
             # floodfill to remove small caverns
-            room = self.floodFill(room)
+            room = self.flood_fill(room)
 
             # start over if the room is completely filled in
-            roomWidth, roomHeight = self.getRoomDimensions(room)
+            roomWidth, roomHeight = self.get_room_dimensions(room)
             for x in range(roomWidth):
                 for y in range(roomHeight):
                     if room[x][y] == 0:
                         return room
 
-    def generateRoomCavern(self):
+    def generate_room_cavern(self):
         while True:
             # if a room is too small, generate another
             room = [[1
@@ -198,27 +199,27 @@ class RoomAddition:
                     for x in range(1, self.CAVERN_MAX_SIZE - 1):
 
                         # if the cell's neighboring walls > self.neighbors, set it to 1
-                        if self.getAdjacentWalls(x, y, room) > self.neighbors:
+                        if self.get_adjacent_walls(x, y, room) > self.neighbors:
                             room[x][y] = 1
                         # otherwise, set it to 0
-                        elif self.getAdjacentWalls(x, y, room) < self.neighbors:
+                        elif self.get_adjacent_walls(x, y, room) < self.neighbors:
                             room[x][y] = 0
 
             # floodfill to remove small caverns
-            room = self.floodFill(room)
+            room = self.flood_fill(room)
 
             # start over if the room is completely filled in
-            roomWidth, roomHeight = self.getRoomDimensions(room)
+            roomWidth, roomHeight = self.get_room_dimensions(room)
             for x in range(roomWidth):
                 for y in range(roomHeight):
                     if room[x][y] == 0:
                         return room
 
-    def floodFill(self, room):
+    def flood_fill(self, room):
         '''
         Find the largest region. Fill in all other regions.
         '''
-        roomWidth, roomHeight = self.getRoomDimensions(room)
+        roomWidth, roomHeight = self.get_room_dimensions(room)
         largestRegion = set()
 
         for x in range(roomWidth):
@@ -259,18 +260,18 @@ class RoomAddition:
 
         return room
 
-    def placeRoom(self, room, mapWidth, mapHeight):  # (self,room,direction,)
+    def place_room(self, room, mapWidth, mapHeight):  # (self,room,direction,)
         roomX = None
         roomY = None
 
-        roomWidth, roomHeight = self.getRoomDimensions(room)
+        roomWidth, roomHeight = self.get_room_dimensions(room)
 
         # try n times to find a wall that lets you build room in that direction
         for i in range(self.placeRoomAttempts):
             # try to place the room against the tile, else connected by a tunnel of length i
 
             wallTile = None
-            direction = self.getDirection()
+            direction = self.get_direction()
             while not wallTile:
                 '''
                 randomly select tiles until you find
@@ -305,7 +306,7 @@ class RoomAddition:
                 possibleRoomX = startRoomX + direction[0] * tunnelLength
                 possibleRoomY = startRoomY + direction[1] * tunnelLength
 
-                enoughRoom = self.getOverlap(room, possibleRoomX, possibleRoomY, mapWidth, mapHeight)
+                enoughRoom = self.get_overlap(room, possibleRoomX, possibleRoomY, mapWidth, mapHeight)
 
                 if enoughRoom:
                     roomX = possibleRoomX
@@ -325,8 +326,8 @@ class RoomAddition:
 
         return None, None, None, None, None
 
-    def addRoom(self, roomX, roomY, room):
-        roomWidth, roomHeight = self.getRoomDimensions(room)
+    def add_room(self, roomX, roomY, room):
+        roomWidth, roomHeight = self.get_room_dimensions(room)
         for x in range(roomWidth):
             for y in range(roomHeight):
                 if room[x][y] == 0:
@@ -334,7 +335,7 @@ class RoomAddition:
 
         self.rooms.append(room)
 
-    def addTunnel(self, wallTile, direction, tunnelLength):
+    def add_tunnel(self, wallTile, direction, tunnelLength):
         # carve a tunnel from a point in the room back to
         # the wall tile that was used in its original placement
 
@@ -351,7 +352,7 @@ class RoomAddition:
                     (y + direction[1]) == wallTile[1]):
                 break
 
-    def getRoomDimensions(self, room):
+    def get_room_dimensions(self, room):
         if room:
             roomWidth = len(room)
             roomHeight = len(room[0])
@@ -361,7 +362,7 @@ class RoomAddition:
             roomHeight = 0
             return roomWidth, roomHeight
 
-    def getAdjacentWalls(self, tileX, tileY, room):  # finds the walls in 8 directions
+    def get_adjacent_walls(self, tileX, tileY, room):  # finds the walls in 8 directions
         wallCounter = 0
         for x in range(tileX - 1, tileX + 2):
             for y in range(tileY - 1, tileY + 2):
@@ -370,7 +371,7 @@ class RoomAddition:
                         wallCounter += 1
         return wallCounter
 
-    def getDirection(self):
+    def get_direction(self):
         # direction = (dx,dy)
         north = (0, -1)
         south = (0, 1)
@@ -380,7 +381,7 @@ class RoomAddition:
         direction = random.choice([north, south, east, west])
         return direction
 
-    def getOverlap(self, room, roomX, roomY, mapWidth, mapHeight):
+    def get_overlap(self, room, roomX, roomY, mapWidth, mapHeight):
         '''
         for each 0 in room, check the cooresponding tile in
         self.level and the eight tiles around it. Though slow,
@@ -389,7 +390,7 @@ class RoomAddition:
         <> check for overlap with self.level
         <> check for out of bounds
         '''
-        roomWidth, roomHeight = self.getRoomDimensions(room)
+        roomWidth, roomHeight = self.get_room_dimensions(room)
         for x in range(roomWidth):
             for y in range(roomHeight):
                 if room[x][y] == 0:
@@ -422,7 +423,7 @@ class RoomAddition:
                         return False
         return True
 
-    def addShortcuts(self, mapWidth, mapHeight):
+    def add_shortcuts(self, mapWidth, mapHeight):
         '''
         I use libtcodpy's built in pathfinding here, since I'm
         already using libtcodpy for the iu. At the moment,
@@ -435,7 +436,7 @@ class RoomAddition:
 
         # initialize the libtcodpy map
         libtcodMap = libtcod.map_new(mapWidth, mapHeight)
-        self.recomputePathMap(mapWidth, mapHeight, libtcodMap)
+        self.recompute_path_map(mapWidth, mapHeight, libtcodMap)
 
         for i in range(self.shortcutAttempts):
             # check i times for places where shortcuts can be made
@@ -465,13 +466,13 @@ class RoomAddition:
 
                             if distance > self.minPathfindingDistance:
                                 # make shortcut
-                                self.carveShortcut(floorX, floorY, newX, newY)
-                                self.recomputePathMap(mapWidth, mapHeight, libtcodMap)
+                                self.carve_shortcut(floorX, floorY, newX, newY)
+                                self.recompute_path_map(mapWidth, mapHeight, libtcodMap)
 
         # destroy the path object
         libtcod.path_delete(pathMap)
 
-    def recomputePathMap(self, mapWidth, mapHeight, libtcodMap):
+    def recompute_path_map(self, mapWidth, mapHeight, libtcodMap):
         for x in range(mapWidth):
             for y in range(mapHeight):
                 if self.level[x][y] == 1:
@@ -479,7 +480,7 @@ class RoomAddition:
                 else:
                     libtcod.map_set_properties(libtcodMap, x, y, True, True)
 
-    def carveShortcut(self, x1, y1, x2, y2):
+    def carve_shortcut(self, x1, y1, x2, y2):
         if x1 - x2 == 0:
             # Carve virtical tunnel
             for y in range(min(y1, y2), max(y1, y2) + 1):
@@ -510,8 +511,8 @@ class RoomAddition:
                 y -= 1
                 self.level[x][y] = 0
 
-    def checkRoomExists(self, room):
-        roomWidth, roomHeight = self.getRoomDimensions(room)
+    def check_room_exists(self, room):
+        roomWidth, roomHeight = self.get_room_dimensions(room)
         for x in range(roomWidth):
             for y in range(roomHeight):
                 if room[x][y] == 0:
