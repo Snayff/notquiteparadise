@@ -129,7 +129,7 @@ class Skill(ABC):
         """
         An iterator over pairs of (affected entity, [effects])
         """
-        applied_entities = collections.defaultdict(lambda: 1)
+        applied_entities: collections.defaultdict = collections.defaultdict(lambda: 1)
         entitiy_names = []
 
         for entity in world.get_affected_entities((self.target_tile.x, self.target_tile.y), self.shape,
@@ -137,7 +137,8 @@ class Skill(ABC):
 
             yield entity, self.build_effects(entity, applied_entities[entity])
             entitiy_names.append(world.get_name(entity))
-            applied_entities[entity] -= library.GAME_CONFIG.reduced_effectiveness_multi_tile_modifier
+            applied_entities[entity] -= \
+                library.GAME_CONFIG.default_values.reduced_effectiveness_multi_tile_modifier
 
         logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entitiy_names}.")
 
