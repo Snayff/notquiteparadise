@@ -137,8 +137,7 @@ class Skill(ABC):
 
             yield entity, self.build_effects(entity, applied_entities[entity])
             entitiy_names.append(world.get_name(entity))
-            applied_entities[entity] -= \
-                library.GAME_CONFIG.default_values.reduced_effectiveness_multi_tile_modifier
+            applied_entities[entity] -= library.GAME_CONFIG.default_values.reduced_effectiveness_multi_tile_modifier
 
         logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entitiy_names}.")
 
