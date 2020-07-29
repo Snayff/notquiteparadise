@@ -139,7 +139,7 @@ class Skill(ABC):
         logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entity_names}.")
 
     @abstractmethod
-    def build_effects(self, entity):
+    def build_effects(self, entity, effect_strength: float):
         """
         Build the effects of this skill applying to a single entity. Must be overridden by subclass.
         """
@@ -214,7 +214,7 @@ class Move(Skill):
 
         super().__init__(user, tile, direction)
 
-    def build_effects(self, entity: EntityID) -> List[MoveActorEffect]:
+    def build_effects(self, entity: EntityID, effect_strength: float) -> List[MoveActorEffect]:
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -242,7 +242,7 @@ class BasicAttack(Skill):
     """
     name = "basic_attack"
 
-    def build_effects(self, entity: EntityID) -> List[DamageEffect]:
+    def build_effects(self, entity: EntityID, effect_strength: float) -> List[DamageEffect]:
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -254,7 +254,7 @@ class BasicAttack(Skill):
             target=entity,
             stat_to_target=PrimaryStat.VIGOUR,
             accuracy=library.GAME_CONFIG.base_values.accuracy,
-            damage=library.GAME_CONFIG.base_values.damage,
+            damage=int(library.GAME_CONFIG.base_values.damage * effect_strength),
             damage_type=DamageType.MUNDANE,
             mod_stat=PrimaryStat.CLOUT,
             mod_amount=0.1
@@ -288,7 +288,7 @@ class Lunge(Skill):
         super().__init__(user, _tile, direction)
         self.move_amount = 2
 
-    def build_effects(self, entity: EntityID) -> List[Effect]:
+    def build_effects(self, entity: EntityID, effect_strength: float) -> List[Effect]:
         """
         Build the skill effects
         """
@@ -299,7 +299,8 @@ class Lunge(Skill):
             entity=entity
         )
         damage_effect = self._build_damage_effect(
-            success_effects=[cooldown_effect]
+            success_effects=[cooldown_effect],
+            effect_strength=effect_strength
         )
         move_effect = self._build_move_effect(
             entity=entity,
@@ -322,7 +323,7 @@ class Lunge(Skill):
         )
         return move_effect
 
-    def _build_damage_effect(self, success_effects: List[Effect]) -> Optional[DamageEffect]:
+    def _build_damage_effect(self, success_effects: List[Effect], effect_strength: float) -> Optional[DamageEffect]:
         """
         Return the damage effect for the lunge
         """
@@ -336,7 +337,7 @@ class Lunge(Skill):
                 target=target,
                 stat_to_target=PrimaryStat.VIGOUR,
                 accuracy=library.GAME_CONFIG.base_values.accuracy,
-                damage=library.GAME_CONFIG.base_values.damage,
+                damage=int(library.GAME_CONFIG.base_values.damage * effect_strength),
                 damage_type=DamageType.MUNDANE,
                 mod_stat=PrimaryStat.CLOUT,
                 mod_amount=0.1
@@ -387,7 +388,7 @@ class TarAndFeather(Skill):
         self.reduced_modifier = 0.5
         self.cone_size = 1
 
-    def build_effects(self, hit_entity: EntityID) -> List[Effect]:
+    def build_effects(self, hit_entity: EntityID, effect_strength: float) -> List[Effect]:
         """
         Build the skill effects
         """
@@ -404,10 +405,10 @@ class TarAndFeather(Skill):
 
         reduced_effects = []
         for entity_in_cone in entities_in_cone:
-            reduced_effects += self._create_effects(target=entity_in_cone, modifier=self.reduced_modifier)
+            reduced_effects += self._create_effects(target=entity_in_cone, modifier=self.reduced_modifier * effect_strength)
             logging.warning(f"creating effects for {entity_in_cone}")
 
-        first_hit_effects = self._create_effects(target=hit_entity, success_effects=reduced_effects)
+        first_hit_effects = self._create_effects(target=hit_entity, success_effects=reduced_effects, modifier=effect_strength)
 
         return first_hit_effects
 
@@ -421,7 +422,7 @@ class TarAndFeather(Skill):
             origin=self.user,
             target=entity,
             affliction_name=self.affliction_name,
-            duration=int(self.affliction_duration * modifier),
+            duration=max(1, int(self.affliction_duration * modifier)),
             success_effects=[],
             failure_effects=[]
         )
