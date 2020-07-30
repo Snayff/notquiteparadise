@@ -2,8 +2,9 @@ from scripts.engine.world_objects.world_gen_algorithms import RoomAddition
 from scripts.engine import utility, library
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.core.constants import TILE_SIZE
-from scripts.engine.world_objects.entity_gen import EntityPool
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Set
+import json
+import collections
 
 
 class DungeonGeneration:
@@ -19,6 +20,7 @@ class DungeonGeneration:
         self.seed = seed
         self.width = width
         self.height = height
+        self.min_room_space = library.GAME_CONFIG.world_values.min_room_space
         self.algorithm = self._create_algorithm()
         self.tiles: List[List[Tile]] = \
             [[Tile(x, y, self.floor_sprite) for y in range(self.height)] for x in range(self.width)]
@@ -28,7 +30,7 @@ class DungeonGeneration:
         Create the algorithm to be used from the name
         """
         return DungeonGeneration.generation_algorithms[self.algorithm_name](
-            library.GAME_CONFIG.world_values.min_room_space
+            self.min_room_space
         )
 
     def generate(self) -> Tuple[List[List[Tile]], List[Tuple[Tuple[int, int], List[List[int]]]]]:
@@ -61,5 +63,84 @@ class DungeonGeneration:
     def visualize(self):
         pass
 
-    def dump(self):
-        pass
+    def _build_graph(self) -> Tuple[Dict[int, List[int]], Set[Tuple[int, int]], Dict[Tuple[int, int], int]]:
+        """
+        Builds a graph from the room data
+        :return: The graph built
+        """
+        rooms = self.algorithm.rooms
+        start_room = rooms[0]
+        vertices: Set[Tuple[int, int]] = set(pos for pos, _ in rooms)
+        vertices_names: Dict[Tuple[int, int], int] = {}
+        i = 0
+        for v in vertices:
+            vertices_names[v] = i
+        visited = set()
+        edges: Dict[int, List[int]] = collections.defaultdict(list)
+        queue = collections.deque([(vertices_names[start_room[0]], start_room[0])])
+        while queue:
+            parent, position = queue.pop()
+            x, y = position
+            if position in visited or self.algorithm.level[x][y] == 1:
+                continue
+
+            new_parent = parent
+            if position in vertices:
+                new_parent = vertices_names[position]
+                edges[parent].append(new_parent)
+
+            visited.add(position)
+            for direction in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                queue.append(
+                    (new_parent, (x + direction[0], y + direction[1]))
+                )
+        return edges, vertices, vertices_names
+
+    def _build_tree(self, edges: Dict[int, List[int]], vertices_name: Dict[Tuple[int, int], int]):
+        """
+        Builds a tree like representation from a graph
+        :return: The representation
+        """
+        tree = {}
+        root = self.algorithm.rooms[0][0]
+        visited = set()
+
+        def _traverse(node: int, structure):
+            structure['name'] = node
+            children_structure = []
+            # iterate over the neighbours
+            for child in edges[node]:
+                if child in visited:
+                    continue
+                visited.add(child)
+                child_structure = {}
+                _traverse(child, child_structure)
+                children_structure.append(child_structure)
+            structure['children'] = children_structure
+
+        _traverse(vertices_name[root], tree)
+        return tree
+
+    def dump(self, path: str):
+        """
+        Dumps the dungeon tree into a file
+        :param path: File path
+        """
+        edges, vertices, vertices_names = self._build_graph()
+        room_graph = {
+            'vertices': list(vertices_names.values()),
+            'edges': edges,
+            'tree': self._build_tree(edges, vertices_names)
+        }
+
+        content = {
+            'seed': self.seed,
+            'algorithm': self.algorithm_name,
+            'width': self.width,
+            'height': self.height,
+            'min_room_space': self.min_room_space,
+            'rooms': room_graph
+        }
+        #print(room_graph)
+        with open(path, 'w') as fp:
+            fp.write(json.dumps(content, indent=4))
