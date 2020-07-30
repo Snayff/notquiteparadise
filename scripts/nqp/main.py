@@ -93,6 +93,7 @@ def game_loop():
         # show the new state
         ui.draw()
 
+
 def _create_entity_pool() -> EntityPool:
     """
     Return a pool of entities for the gamemap
@@ -113,12 +114,11 @@ def initialise_game():
     world.create_gamemap(10, 'room_addition', map_width, map_height)
 
     players, actors = world.populate(pool)
-    logging.warning(players)
-    logging.warning(actors)
 
     # init the player
     player = players[0]
     world.recompute_fov(player)
+
 
     # tell places about the player
     chronicle.set_turn_holder(player)
