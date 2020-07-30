@@ -2,10 +2,11 @@ from scripts.engine.world_objects.world_gen_algorithms import RoomAddition
 from scripts.engine import utility, library
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.core.constants import TILE_SIZE
-from typing import List
+from scripts.engine.world_objects.entity_gen import EntityPool
+from typing import List, Tuple
 
 
-class WorldGeneration:
+class DungeonGeneration:
 
     generation_algorithms = {
         'room_addition': RoomAddition,
@@ -19,14 +20,21 @@ class WorldGeneration:
         self.width = width
         self.height = height
         self.algorithm = self._create_algorithm()
-        self.tiles: List[List[Tile]] = [[Tile(x, y, self.floor_sprite) for y in range(self.height)] for x in range(self.width)]
+        self.tiles: List[List[Tile]] = \
+            [[Tile(x, y, self.floor_sprite) for y in range(self.height)] for x in range(self.width)]
 
     def _create_algorithm(self):
-        return WorldGeneration.generation_algorithms[self.algorithm_name](
+        """
+        Create the algorithm to be used from the name
+        """
+        return DungeonGeneration.generation_algorithms[self.algorithm_name](
             library.GAME_CONFIG.world_values.min_room_space
         )
 
-    def generate(self):
+    def generate(self) -> Tuple[List[List[Tile]], List[Tuple[Tuple[int, int], List[List[int]]]]]:
+        """
+        Generate the map using the specified algorithm
+        """
         self.algorithm.generate_level(self.seed, self.width, self.height)
 
         for x in range(self.width):
@@ -37,9 +45,21 @@ class WorldGeneration:
         return self.tiles, self.algorithm.rooms
 
     def _is_map_border(self, x: int, y: int):
+        """
+        Returns a bool that represents if this is a map border
+        """
         return x == 0 or y == 0 or x == self.width - 1 or y == self.height - 1
 
     def _make_wall(self, x: int, y: int):
+        """
+        Makes the tile at the coordinate a wall
+        """
         self.tiles[x][y].blocks_sight = True
         self.tiles[x][y].blocks_movement = True
         self.tiles[x][y].sprite = self.wall_sprite
+
+    def visualize(self):
+        pass
+
+    def dump(self):
+        pass
