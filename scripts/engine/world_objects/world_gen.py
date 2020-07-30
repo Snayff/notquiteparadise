@@ -75,6 +75,7 @@ class DungeonGeneration:
         i = 0
         for v in vertices:
             vertices_names[v] = i
+            i += 1
         visited = set()
         edges: Dict[int, List[int]] = collections.defaultdict(list)
         queue = collections.deque([(vertices_names[start_room[0]], start_room[0])])
@@ -87,7 +88,8 @@ class DungeonGeneration:
             new_parent = parent
             if position in vertices:
                 new_parent = vertices_names[position]
-                edges[parent].append(new_parent)
+                if new_parent != parent:
+                    edges[parent].append(new_parent)
 
             visited.add(position)
             for direction in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
