@@ -4,6 +4,8 @@ Taken from https://github.com/AtTheMatinee/dungeon-generation/blob/master/dungeo
 
 import random
 import tcod as libtcod
+from typing import List, Tuple
+
 
 class RoomAddition:
     '''
@@ -19,7 +21,8 @@ class RoomAddition:
     '''
 
     def __init__(self, min_room_size: int):
-        self.level = []
+        self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = []
+        self.level: List[List[int]] = []
 
         self.ROOM_MAX_SIZE = 18  # max height and width for cellular automata rooms
         self.ROOM_MIN_SIZE = min_room_size  # min size in number of floor tiles, not height and width
@@ -40,7 +43,7 @@ class RoomAddition:
         self.squareRoomChance = 0.2
         self.crossRoomChance = 0.15
 
-        self.buildRoomAttempts = 500
+        self.build_room_attempts = 500
         self.placeRoomAttempts = 20
         self.maxTunnelLength = 12
 
@@ -50,11 +53,8 @@ class RoomAddition:
         self.minPathfindingDistance = 50
 
     def generate_level(self, seed, map_width, map_height):
-        self.rooms = []
 
-        self.level = [[1
-                       for y in range(map_height)]
-                      for x in range(map_width)]
+        self.level = [[1 for _ in range(map_height)] for _ in range(map_width)]
 
         random.seed(seed)
         # generate the first room
@@ -65,7 +65,7 @@ class RoomAddition:
         self.add_room(roomX, roomY, room)
 
         # generate other rooms
-        for i in range(self.buildRoomAttempts):
+        for i in range(self.build_room_attempts):
             room = self.generate_room()
             # try to position the room, get roomX and roomY
             roomX, roomY, wall_tile, direction, tunnel_length = self.place_room(room, map_width, map_height)
@@ -333,7 +333,7 @@ class RoomAddition:
                 if room[x][y] == 0:
                     self.level[roomX + x][roomY + y] = 0
 
-        self.rooms.append(room)
+        self.rooms.append(((roomX, roomY), room))
 
     def add_tunnel(self, wallTile, direction, tunnelLength):
         # carve a tunnel from a point in the room back to
