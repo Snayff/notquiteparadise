@@ -11,6 +11,7 @@ from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.debug import (create_profiler, kill_logging, initialise_logging)
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors
+from scripts.engine.world_objects.entity_gen import EntityPool
 
 
 def main():
@@ -92,6 +93,15 @@ def game_loop():
         # show the new state
         ui.draw()
 
+def _create_entity_pool() -> EntityPool:
+    """
+    Return a pool of entities for the gamemap
+    """
+    pool = EntityPool()
+    pool.add("player", "a desc", [(0, 0)], ["shoom", "soft_tops", "dandy"], True, 1, 1),
+    pool.add("dummy steve", "steve's desc", [(0, 0)], ["training_dummy"], False, 3, 0.25)
+    return pool
+
 
 def initialise_game():
     """
@@ -99,19 +109,19 @@ def initialise_game():
     """
     map_width = 50
     map_height = 30
+    pool = _create_entity_pool()
     world.create_gamemap(10, 'room_addition', map_width, map_height)
 
+    players, actors = world.populate(pool)
+    logging.warning(players)
+    logging.warning(actors)
+
     # init the player
-    player = world.create_actor("player", "a desc", [(3, 5)], ["shoom", "soft_tops", "dandy"], True)
+    player = players[0]
     world.recompute_fov(player)
 
     # tell places about the player
     chronicle.set_turn_holder(player)
-
-    # create an enemy
-    # TODO - remove when enemy gen is in
-    world.create_actor("dummy steve", "steve's desc", [(1, 4)], ["training_dummy"])
-    world.create_actor("dummy sally", "sally's desc", [(1, 5)], ["training_dummy"])
 
     # create a god
     world.create_god("the_small_gods")
