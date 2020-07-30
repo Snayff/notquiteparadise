@@ -143,6 +143,6 @@ class DungeonGeneration:
             'min_room_space': self.min_room_space,
             'rooms': room_graph
         }
-        #print(room_graph)
+
         with open(path, 'w') as fp:
             fp.write(json.dumps(content, indent=2))
