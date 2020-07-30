@@ -143,4 +143,4 @@ class DungeonGeneration:
         }
         #print(room_graph)
         with open(path, 'w') as fp:
-            fp.write(json.dumps(content, indent=4))
+            fp.write(json.dumps(content, indent=2))
