@@ -110,8 +110,8 @@ class EntityPool:
             for y in range(len(room[x])):
                 if room[x][y] == 0:
                     available.append((x, y))
-        cell = None
-        while not cell or self._collides(cell, room, offsets):
+        cell = self.rng.choice(available)
+        while self._collides(cell, room, offsets):
             cell = self.rng.choice(available)
         return cell
 
