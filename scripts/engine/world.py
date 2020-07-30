@@ -257,11 +257,7 @@ def create_gamemap(seed: int, algorithm_name: str, width: int, height: int):
 
 
 def populate(pool: EntityPool):
-    generator = EntityGeneration(store.current_gamemap.seed, pool, store.current_gamemap.rooms)
-    players = generator.place_players()
-    actors = generator.place_entities()
-
-    return players, actors
+    return store.current_gamemap.populate(pool)
 
 
 def create_fov_map() -> tcod.map.Map:

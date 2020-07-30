@@ -32,6 +32,6 @@
     "world_values": {
         "__dataclass__": "WorldValueData",
         "min_room_space": 16,
-        "max_enemies_per_room": 1
+        "max_enemies_per_room": 3
     }
 }
