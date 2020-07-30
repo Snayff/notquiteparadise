@@ -54,7 +54,7 @@ class Camera(UIPanel):
         else:
             tile = world.get_tile((0, 0))  # player should always have Position but just in case
         self.player_tile = tile  # the tile in which the player resides
-        self.last_updated_player_tile = world.get_tile((0, 0))  # the tile the player was in when camera last updated movement
+        self.last_updated_player_tile = tile # the tile the player was in when camera last updated movement
 
         self.tiles: List[Tile] = []
 
@@ -78,7 +78,10 @@ class Camera(UIPanel):
         self.update_tile_properties()
         self.update_gamemap()
         self.update_grid()
-        self._set_initial_position(pos.x, pos.y)
+
+        if pos:
+            self._set_initial_position(pos.x, pos.y)
+
         # confirm init complete
         logging.debug(f"Camera initialised.")
 
@@ -210,14 +213,14 @@ class Camera(UIPanel):
 
         self._draw_grid(tile_positions)
 
-    def _set_initial_position(self, x, y):
+    def _set_initial_position(self, x: int, y: int):
         """
         Moves the camera to a suitable position from a given tile coordinate
         :param x: X position of the tile
         :param y: Y position of the tile
         """
-        p_x = max(0, x + self.edge_size - self.columns)
-        p_y = max(0, y + self.edge_size - self.rows)
+        p_x = int(clamp(x + self.edge_size - self.columns, 0, self.columns))
+        p_y = int(clamp(y + self.edge_size - self.rows, 0, self.rows))
         self.start_tile_col = p_x
         self.start_tile_row = p_y
         self.move_camera(p_x, p_y)
