@@ -35,7 +35,14 @@ class EntityPool:
             EntityPoolEntry(name, description, traits, offset, is_player, max_per_room, weight)
         )
 
-    def pick(self, position: Tuple[int, int]):
+    def seed(self, seed: int):
+        """
+        Seeds the pool's rng
+        :param seed: The seed to use
+        """
+        self.rng.seed(seed)
+
+    def spawn_players(self, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]) -> List[EntityID]:
         x, y = position
         entry =
         actor = world.create_actor(entry.name, entry.desc, [(w[0] + x, w[1] + y) for w in entry.offset], ["training_dummy"])
