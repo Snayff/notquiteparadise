@@ -431,7 +431,7 @@ class Camera(UIPanel):
                         return True
                 if edge_end_x > start_x >= edge_end_x - self.edge_size - 2:
                     # player is on the right side, are we moving right?
-                    if 0 < dir_x:
+                    if dir_x > 0:
                         return True
                 if edge_start_y <= start_y < edge_start_y + self.edge_size + 1:
                     # player is on the up side, are we moving up?
@@ -439,7 +439,7 @@ class Camera(UIPanel):
                         return True
                 if edge_end_y > start_y >= edge_end_y - self.edge_size - 2:
                     # player is on the down side, are we moving down?
-                    if 0 < dir_y:
+                    if dir_y > 0:
                         return True
 
         elif target_pos_in_edge:
