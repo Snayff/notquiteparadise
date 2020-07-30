@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Tuple
 from scripts.engine.world_objects.world_gen import DungeonGeneration
 from scripts.engine.world_objects.tile import Tile
 
@@ -11,7 +11,7 @@ class GameMap:
     """
     def __init__(self, seed: int, algorithm_name: str, width: int, height: int):
         self.tiles: List[List[Tile]] = []
-        self.rooms: List[List[List[int]]] = []
+        self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = []
         self.width = width
         self.height = height
         self.seed = seed
