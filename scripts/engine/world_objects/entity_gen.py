@@ -81,7 +81,7 @@ class EntityPool:
 
         max_per_room = min(entry.max_per_room, library.GAME_CONFIG.world_values.max_enemies_per_room)
         actors = []
-        for _ in range(self.rng.randint(1, max_per_room)):
+        for _ in range(self.rng.randint(0, max_per_room)):
             actors.append(self._spawn_single_actor(room_cells, entry, x, y))
         return actors
 
@@ -156,10 +156,17 @@ class EntityPool:
 
 class EntityGeneration:
 
-    def __init__(self, seed: int, pool: EntityPool, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]):
-        self.pool = pool
+    def __init__(self, seed: int, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]):
+        self.pool: EntityPool = None
         self.rooms = rooms
         self.seed = seed
+
+    def set_pool(self, pool: EntityPool):
+        """
+        Sets the entity pool to use
+        :param pool: Entity pool to use
+        """
+        self.pool = pool
 
     def place_players(self):
         """
@@ -175,7 +182,12 @@ class EntityGeneration:
         """
         self.pool.seed(self.seed)
         actors = []
+        actors_per_room = {}
+        i = 0
         for room in self.rooms:
             position, cells = room
-            actors += self.pool.spawn_non_players(position, cells)
-        return actors
+            new_actors = self.pool.spawn_non_players(position, cells)
+            actors += new_actors
+            actors_per_room[i] = new_actors
+            i += 1
+        return actors, actors_per_room

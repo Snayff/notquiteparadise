@@ -63,86 +63,23 @@ class DungeonGeneration:
     def visualize(self):
         pass
 
-    def _build_graph(self) -> Tuple[Dict[int, List[int]], Set[Tuple[int, int]], Dict[Tuple[int, int], int]]:
+    def calculate_room_area(self, room_cells: List[List[int]]):
+        area = 0
+        for i in range(len(room_cells)):
+            for j in range(len(room_cells[i])):
+                if room_cells[i][j] == 0:
+                    area += 1
+        return area
+
+    def get_gen_info(self):
         """
-        Builds a graph from the room data
-        :return: The graph built
+        Returns the generation parameters
+        :return: A dict with the parameters
         """
-        rooms = self.algorithm.rooms
-        start_room = rooms[0]
-        vertices: Set[Tuple[int, int]] = set(pos for pos, _ in rooms)
-        vertices_names: Dict[Tuple[int, int], int] = {}
-        i = 0
-        for v in vertices:
-            vertices_names[v] = i
-            i += 1
-        visited = set()
-        edges: Dict[int, List[int]] = collections.defaultdict(list)
-        queue = collections.deque([(vertices_names[start_room[0]], start_room[0])])
-        while queue:
-            parent, position = queue.pop()
-            x, y = position
-            if position in visited or self.algorithm.level[x][y] == 1:
-                continue
-
-            new_parent = parent
-            if position in vertices:
-                new_parent = vertices_names[position]
-                if new_parent != parent:
-                    edges[parent].append(new_parent)
-
-            visited.add(position)
-            for direction in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                queue.append(
-                    (new_parent, (x + direction[0], y + direction[1]))
-                )
-        return edges, vertices, vertices_names
-
-    def _build_tree(self, edges: Dict[int, List[int]], vertices_name: Dict[Tuple[int, int], int]):
-        """
-        Builds a tree like representation from a graph
-        :return: The representation
-        """
-        tree: Dict[str, Any] = {}
-        root = self.algorithm.rooms[0][0]
-        visited = set()
-
-        def _traverse(node: int, structure: Dict[str, Any]):
-            structure['name'] = node
-            children_structure: List[Dict[str, Any]] = []
-            # iterate over the neighbours
-            for child in edges[node]:
-                if child in visited:
-                    continue
-                visited.add(child)
-                child_structure: Dict[str, Any] = {}
-                _traverse(child, child_structure)
-                children_structure.append(child_structure)
-            structure['children'] = children_structure
-
-        _traverse(vertices_name[root], tree)
-        return tree
-
-    def dump(self, path: str):
-        """
-        Dumps the dungeon tree into a file
-        :param path: File path
-        """
-        edges, vertices, vertices_names = self._build_graph()
-        room_graph = {
-            'vertices': list(vertices_names.values()),
-            'edges': edges,
-            'tree': self._build_tree(edges, vertices_names)
-        }
-
-        content = {
+        return {
             'seed': self.seed,
             'algorithm': self.algorithm_name,
             'width': self.width,
             'height': self.height,
             'min_room_space': self.min_room_space,
-            'rooms': room_graph
         }
-
-        with open(path, 'w') as fp:
-            fp.write(json.dumps(content, indent=2))
