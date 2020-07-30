@@ -39,3 +39,17 @@ class EntityPool:
         x, y = position
         entry =
         actor = world.create_actor(entry.name, entry.desc, [(w[0] + x, w[1] + y) for w in entry.offset], ["training_dummy"])
+
+
+
+class EntityGeneration:
+
+    def __init__(self, seed: int, pool: EntityPool, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]):
+        self.pool = pool
+        self.rooms = rooms
+        self.seed = seed
+
+    def place(self):
+        for room in rooms:
+            x, y, cells = room
+            entity = pool.pick()
