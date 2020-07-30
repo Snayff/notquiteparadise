@@ -43,6 +43,23 @@ class EntityPool:
         self.rng.seed(seed)
 
     def spawn_players(self, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]) -> List[EntityID]:
+        """
+        Spawns the players into rooms
+        :param rooms: Rooms to spawn in
+        :return:
+        """
+        players = [e for e in self.pool if e.is_player]
+        actors = []
+        for player in players:
+            spawned = False
+            while not spawned:
+                room_pos, room = random.choice(rooms)
+                x, y = room_pos
+                actor = self._spawn_single_actor(room, player, x, y)
+                if actor:
+                    spawned = True
+                    actors.append(actor)
+        return actors
         x, y = position
         entry =
         actor = world.create_actor(entry.name, entry.desc, [(w[0] + x, w[1] + y) for w in entry.offset], ["training_dummy"])
