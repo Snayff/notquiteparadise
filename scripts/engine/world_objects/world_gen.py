@@ -2,7 +2,7 @@ from scripts.engine.world_objects.world_gen_algorithms import RoomAddition
 from scripts.engine import utility, library
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.core.constants import TILE_SIZE
-from typing import List, Tuple, Dict, Set
+from typing import List, Tuple, Dict, Set, Any
 import json
 import collections
 
@@ -103,19 +103,19 @@ class DungeonGeneration:
         Builds a tree like representation from a graph
         :return: The representation
         """
-        tree = {}
+        tree: Dict[str, Any] = {}
         root = self.algorithm.rooms[0][0]
         visited = set()
 
-        def _traverse(node: int, structure):
+        def _traverse(node: int, structure: Dict[str, Any]):
             structure['name'] = node
-            children_structure = []
+            children_structure: List[Dict[str, Any]] = []
             # iterate over the neighbours
             for child in edges[node]:
                 if child in visited:
                     continue
                 visited.add(child)
-                child_structure = {}
+                child_structure: Dict[str, Any] = {}
                 _traverse(child, child_structure)
                 children_structure.append(child_structure)
             structure['children'] = children_structure
