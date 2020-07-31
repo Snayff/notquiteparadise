@@ -23,6 +23,7 @@ class RoomAddition:
     def __init__(self, min_room_size: int):
         self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = []
         self.level: List[List[int]] = []
+        self.tunnels: List[Tuple[Tuple[int, int], Tuple[int, int], int]] = []
 
         self.ROOM_MAX_SIZE = 18  # max height and width for cellular automata rooms
         self.ROOM_MIN_SIZE = min_room_size  # min size in number of floor tiles, not height and width
@@ -342,15 +343,18 @@ class RoomAddition:
         startX = wallTile[0] + direction[0] * tunnelLength
         startY = wallTile[1] + direction[1] * tunnelLength
         # self.level[startX][startY] = 1
-
+        real_length = 0
+        x, y = 0, 0
         for i in range(self.maxTunnelLength):
             x = startX - direction[0] * i
             y = startY - direction[1] * i
             self.level[x][y] = 0
+            real_length += 1
             # If you want doors, this is where the code should go
-            if ((x + direction[0]) == wallTile[0] and
-                    (y + direction[1]) == wallTile[1]):
+            if (x + direction[0]) == wallTile[0] and (y + direction[1]) == wallTile[1]:
                 break
+        tunnel = ((x, y), direction, real_length)
+        self.tunnels.append(tunnel)
 
     def get_room_dimensions(self, room):
         if room:
