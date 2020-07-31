@@ -36,9 +36,11 @@ from scripts.engine.world_objects.tile import Tile
 from scripts.nqp.actions import afflictions, skills
 from scripts.nqp.actions.afflictions import Affliction
 from scripts.nqp.actions.skills import BasicAttack, Move, Skill
+from scripts.engine.world_objects.entity_gen import EntityGeneration
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
+    from scripts.engine.world_objects.entity_gen import EntityPool, EntityGeneration
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -247,11 +249,15 @@ def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpri
     return converted
 
 
-def create_gamemap(width, height):
+def create_gamemap(seed: int, algorithm_name: str, width: int, height: int):
     """
     Create new GameMap
     """
-    store.current_gamemap = GameMap(width, height)
+    store.current_gamemap = GameMap(seed, algorithm_name, width, height)
+
+
+def populate(pool: EntityPool):
+    return store.current_gamemap.populate(pool)
 
 
 def create_fov_map() -> tcod.map.Map:
