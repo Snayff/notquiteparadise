@@ -62,7 +62,7 @@ class EntityPool:
         for player in players:
             spawned = False
             while not spawned:
-                room_pos, room = random.choice(rooms)
+                room_pos, room = self.rng.choice(rooms)
                 x, y = room_pos
                 actor = self._spawn_single_actor(room, player, x, y)
                 if actor:
@@ -152,7 +152,7 @@ class EntityPool:
         non_player_entries = [e for e in self.pool if not e.is_player]
         total = sum([e.weight for e in non_player_entries])
         # we normalize the weights
-        return random.choices(population=non_player_entries, weights=[e.weight / total for e in non_player_entries], k=1)[0]
+        return self.rng.choices(population=non_player_entries, weights=[e.weight / total for e in non_player_entries], k=1)[0]
 
 
 class EntityGeneration:
