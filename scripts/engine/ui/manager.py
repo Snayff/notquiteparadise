@@ -18,6 +18,7 @@ from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.ui.elements.tile_info import TileInfo
+from scripts.engine.ui.elements.dungeon_dev_view import DungeonDevView
 from scripts.engine.ui.widgets.screen_message import ScreenMessage
 from scripts.engine.world_objects.tile import Tile
 
@@ -183,6 +184,12 @@ class _UIManager:
         camera_x = 0
         camera_y = 0
 
+        # Dungeon dev view
+        dungeon_dev_view_width = self._base_width
+        dungeon_dev_view_height = self._base_height
+        dungeon_dev_view_x = 0
+        dungeon_dev_view_y = 0
+
         # Tile Info
         tile_info_width = 240
         tile_info_height = 160
@@ -208,7 +215,8 @@ class _UIManager:
             UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
             UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
             UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
-            UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height)))
+            UIElement.DUNGEON_DEV_VIEW: (DungeonDevView, pygame.Rect((dungeon_dev_view_x, dungeon_dev_view_y), (dungeon_dev_view_width, dungeon_dev_view_height))),
+            UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
         }
         self._element_details = layout
 

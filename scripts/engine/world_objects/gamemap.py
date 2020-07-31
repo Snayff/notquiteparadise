@@ -1,63 +1,67 @@
 from __future__ import annotations
 
-from typing import List
-
-from scripts.engine import utility
-from scripts.engine.core.constants import TILE_SIZE
+from typing import List, Tuple, Dict, Any
+from scripts.engine.world_objects.world_gen import DungeonGeneration
+from scripts.engine.world_objects.entity_gen import EntityGeneration, EntityPool
 from scripts.engine.world_objects.tile import Tile
+from snecs.typedefs import EntityID
+import json
 
 
 class GameMap:
     """
     object to hold tile and fov
     """
-    def __init__(self, width: int, height: int):
+    def __init__(self, seed: int, algorithm_name: str, width: int, height: int):
         self.tiles: List[List[Tile]] = []
+        self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = []
         self.width = width
         self.height = height
+        self.seed = seed
+        self.world_gen = DungeonGeneration(seed, algorithm_name, width, height)
+        tiles, rooms, tunnels = self.world_gen.generate()
+        self.tiles = tiles
+        self.rooms = rooms
+        self.tunnels = tunnels
+        self.entity_gen = EntityGeneration(self.seed, self.rooms)
+        self.actors_per_room: Dict[int, List[EntityID]] = {}
 
-        # FIXME - move all the below out of game map to map gen
-        floor_sprite = utility.get_image("assets/world/placeholder/_test.png", (TILE_SIZE, TILE_SIZE))
-        wall_sprite = utility.get_image("assets/world/placeholder/_testWall.png", (TILE_SIZE, TILE_SIZE))
+    def populate(self, pool: EntityPool):
+        """
+        Populate the gamemap with entities and players
+        :return: The players and actors spawned
+        """
+        self.entity_gen.set_pool(pool)
+        players = self.entity_gen.place_players()
+        actors, actors_per_room = self.entity_gen.place_entities()
+        self.actors_per_room = actors_per_room
+        return players, actors
 
-        # populate map with tiles
-        for x in range(self.width):
-            # give each new row an empty list
-            self.tiles.append([])
-            for y in range(self.height):
-                # add to the column
-                self.tiles[x].append(Tile(x, y, floor_sprite))
-        
-        
-        # create an outer ring of walls
-        for x in range(self.width):
-            top_tile = self.tiles[x][0]
-            bottom_tile = self.tiles[x][self.height - 1]
-            
-            top_tile.sprite = bottom_tile.sprite = wall_sprite
-            top_tile.blocks_movement = bottom_tile.blocks_movement = True
-            top_tile.blocks_sight = bottom_tile.blocks_sight = True
-        
-        for y in range(self.height):
-            left_tile = self.tiles[0][y]
-            right_tile = self.tiles[self.width - 1][y]
+    def dump(self, path: str):
+        """
+        Dumps the dungeon tree into a file
+        :param path: File path
+        """
+        rooms_data: Dict[str, Any] = {}
+        rooms = self.rooms
+        i = 0
+        for room_pos, room_cells in rooms:
+            area = self.world_gen.calculate_room_area(room_cells)
+            rooms_data[f"{i}"] = {
+                "area": area,
+                "actors": len(self.actors_per_room[i]),
+                "aspects": 0
+            }
+            i += 1
 
-            left_tile.sprite = right_tile.sprite = wall_sprite
-            left_tile.blocks_movement = right_tile.blocks_movement = True
-            left_tile.blocks_sight = right_tile.blocks_sight = True
-        
-        # create some walls for testing
-        wall1 = self.tiles[3][4]
-        wall1.blocks_sight = True
-        wall1.blocks_movement = True
-        wall1.sprite = wall_sprite
+        gen_content = self.world_gen.get_gen_info()
+        content = {
+            **gen_content,
+            'rooms': rooms_data
+        }
+        with open(path, 'w') as fp:
+            fp.write(json.dumps(content, indent=2))
 
-        wall2 = self.tiles[6][7]
-        wall2.blocks_sight = True
-        wall2.blocks_movement = True
-        wall2.sprite = wall_sprite
 
-        wall3 = self.tiles[6][4]
-        wall3.blocks_sight = True
-        wall3.blocks_movement = True
-        wall3.sprite = wall_sprite
+
+
