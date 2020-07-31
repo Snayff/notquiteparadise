@@ -19,9 +19,10 @@ class GameMap:
         self.height = height
         self.seed = seed
         self.world_gen = DungeonGeneration(seed, algorithm_name, width, height)
-        tiles, rooms = self.world_gen.generate()
+        tiles, rooms, tunnels = self.world_gen.generate()
         self.tiles = tiles
         self.rooms = rooms
+        self.tunnels = tunnels
         self.entity_gen = EntityGeneration(self.seed, self.rooms)
         self.actors_per_room: Dict[str, List[EntityID]] = {}
 

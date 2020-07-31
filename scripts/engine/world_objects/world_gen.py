@@ -33,7 +33,7 @@ class DungeonGeneration:
             self.min_room_space
         )
 
-    def generate(self) -> Tuple[List[List[Tile]], List[Tuple[Tuple[int, int], List[List[int]]]]]:
+    def generate(self) -> Tuple[List[List[Tile]], List[Tuple[Tuple[int, int], List[List[int]]]], List[Tuple[Tuple[int, int], Tuple[int, int], int]]]:
         """
         Generate the map using the specified algorithm
         """
@@ -44,7 +44,7 @@ class DungeonGeneration:
                 # Is this a wall? Or is this a border?
                 if self.algorithm.level[x][y] == 1 or self._is_map_border(x, y):
                     self._make_wall(x, y)
-        return self.tiles, self.algorithm.rooms
+        return self.tiles, self.algorithm.rooms, self.algorithm.tunnels
 
     def _is_map_border(self, x: int, y: int):
         """
@@ -69,7 +69,8 @@ class DungeonGeneration:
             for j in range(len(room_cells[i])):
                 if room_cells[i][j] == 0:
                     area += 1
-        return area
+        # take into account the door slot
+        return area + 1
 
     def get_gen_info(self):
         """
