@@ -24,7 +24,7 @@ class GameMap:
         self.rooms = rooms
         self.tunnels = tunnels
         self.entity_gen = EntityGeneration(self.seed, self.rooms)
-        self.actors_per_room: Dict[str, List[EntityID]] = {}
+        self.actors_per_room: Dict[int, List[EntityID]] = {}
 
     def populate(self, pool: EntityPool):
         """
