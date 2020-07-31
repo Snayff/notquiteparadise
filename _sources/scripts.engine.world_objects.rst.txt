@@ -12,6 +12,14 @@ scripts.engine.world\_objects.combat\_stats module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.world\_objects.entity\_gen module
+------------------------------------------------
+
+.. automodule:: scripts.engine.world_objects.entity_gen
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.world\_objects.gamemap module
 --------------------------------------------
 
@@ -24,6 +32,22 @@ scripts.engine.world\_objects.tile module
 -----------------------------------------
 
 .. automodule:: scripts.engine.world_objects.tile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.world\_objects.world\_gen module
+-----------------------------------------------
+
+.. automodule:: scripts.engine.world_objects.world_gen
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scripts.engine.world\_objects.world\_gen\_algorithms module
+-----------------------------------------------------------
+
+.. automodule:: scripts.engine.world_objects.world_gen_algorithms
    :members:
    :undoc-members:
    :show-inheritance:

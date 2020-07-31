@@ -28,6 +28,14 @@ scripts.engine.ui.elements.data\_editor module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.ui.elements.dungeon\_dev\_view module
+----------------------------------------------------
+
+.. automodule:: scripts.engine.ui.elements.dungeon_dev_view
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.ui.elements.message\_log module
 ----------------------------------------------
 
