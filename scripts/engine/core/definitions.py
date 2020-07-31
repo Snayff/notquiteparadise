@@ -341,6 +341,7 @@ class BaseValueData:
 class DefaultValueData:
     time_per_round: int
     entity_blocks_sight: bool
+    reduced_effectiveness_multi_tile_modifier: float
 
 
 @register_dataclass_with_json
