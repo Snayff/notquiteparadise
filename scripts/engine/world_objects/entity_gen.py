@@ -2,6 +2,7 @@ from typing import List, Tuple
 import scripts.engine.world as world
 import scripts.engine.library as library
 import random
+import copy
 from snecs.typedefs import EntityID
 
 
@@ -158,7 +159,7 @@ class EntityGeneration:
 
     def __init__(self, seed: int, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]):
         self.pool: EntityPool = None
-        self.rooms = rooms
+        self.rooms = copy.deepcopy(rooms)
         self.seed = seed
 
     def set_pool(self, pool: EntityPool):
