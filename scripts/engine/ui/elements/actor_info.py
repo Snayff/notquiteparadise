@@ -264,7 +264,7 @@ class ActorInfo(UIWindow):
                 image_width = text_or_image.get_width()
                 image_height = text_or_image.get_height()
 
-                # if image is the icon then draw centre, otherwise draw left
+                # if image is the icon_path then draw centre, otherwise draw left
                 if image_width == ICON_SIZE:
                     draw_x = int((self.rect.width / 2) - (image_width / 2))
                 else:

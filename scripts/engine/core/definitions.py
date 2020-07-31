@@ -9,7 +9,7 @@ from snecs.typedefs import EntityID
 from scripts.engine.core.constants import (AfflictionCategory,
     AfflictionCategoryType,
     AfflictionTriggerType,
-    DirectionType, EffectType,
+    Direction, DirectionType, EffectType,
     EffectTypeType, PrimaryStatType,
     ProjectileExpiry,
     ProjectileExpiryType,
@@ -24,126 +24,10 @@ from scripts.engine.core.constants import (AfflictionCategory,
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
-    from scripts.engine.actions import Skill
+    from scripts.engine.action import Skill
 
 
-######################### ACTIONS ##################################
-
-@register_dataclass_with_json
-@dataclass
-class SkillData:
-    """
-    Data class for a skill. Used by the library to load from json.
-    """
-    # how do we know it?
-    name: str = field(default="none")
-    description: str = field(default="none")
-    icon: str = field(default="none")
-    class_name: str = ""
-
-    # when do we use it?
-    required_tags: List[TargetTagType] = field(default_factory=list)
-
-    # what does it cost?
-    resource_type: ResourceType = Resource.STAMINA
-    resource_cost: int = 0
-    time_cost: int = 0
-    cooldown: int = 0
-
-    # how does it travel from the user?
-    targeting_method: TargetingMethodType = TargetingMethod.TARGET
-    target_directions: List[DirectionType] = field(default_factory=list)
-
-    # what is the area of effect?
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
-
-    # projectile info
-    uses_projectile: bool = True
-    projectile_speed: ProjectileSpeedType = ProjectileSpeed.SLOW
-    travel_method: TravelMethodType = TravelMethod.STANDARD
-    range: int = 1
-    terrain_collision: TerrainCollisionType = TerrainCollision.FIZZLE
-    expiry_type: ProjectileExpiryType = ProjectileExpiry.FIZZLE
-    projectile_sprite: str = field(default="none")
-
-
-@register_dataclass_with_json
-@dataclass
-class ProjectileData:
-    """
-    Data class for a projectile
-    """
-    # what created it?
-    creator: EntityID
-    skill_name: str = field(default="none")
-    skill_instance: Optional[Skill] = None
-    name: str = ""
-    description: str = ""
-
-    # what does it look like?
-    sprite: str = field(default="none")
-
-    # who are we targeting?
-    required_tags: List[TargetTagType] = field(default_factory=list)
-
-    # how does it travel?
-    direction: Optional[DirectionType] = None
-    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
-    travel_method: Optional[TravelMethodType] = None
-    range: int = 1
-
-    # how does it interact?
-    terrain_collision: Optional[TerrainCollisionType] = None
-    expiry_type: Optional[ProjectileExpiryType] = None
-
-
-@register_dataclass_with_json
-@dataclass()
-class AfflictionData:
-    """
-    Data class for an Afflictions
-    """
-    name: str = field(default="none")
-    class_name: str = field(default="none")
-    description: str = field(default="none")
-    icon: str = field(default="none")
-    category: AfflictionCategoryType = AfflictionCategory.BANE
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
-    required_tags: List[TargetTagType] = field(default_factory=list)
-    identity_tags: List[EffectTypeType] = field(default_factory=list)
-    triggers: List[AfflictionTriggerType] = field(default_factory=list)
-
-
-@register_dataclass_with_json
-@dataclass
-class EffectData:
-    """
-    Base data class for an effect.
-    """
-    # who am I?
-    originator: Optional[EntityID] = None  # actor
-    creators_name: Optional[str] = None  # skill, projectile, etc.'s name
-    effect_type = EffectType.MOVE
-
-    # who are we targeting?
-    required_tags: List[TargetTagType] = field(default_factory=list)
-
-    # how are we targeting?
-    stat_to_target: Optional[PrimaryStatType] = None
-    accuracy: int = 0
-
-    # what is the area of effect?
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
-
-    # what next?
-    success_effects: List[EffectData] = field(default_factory=list)
-    fail_effects: List[EffectData] = field(default_factory=list)
-
-
-##################### ACTORS #################################
+######################### Aesthetics ##################################
 
 @register_dataclass_with_json
 @dataclass
@@ -173,6 +57,8 @@ class SpritePathsData:
     dead: str = field(default="none")
     move: str = field(default="none")
 
+
+##################### ACTORS #################################
 
 @register_dataclass_with_json
 @dataclass
@@ -243,7 +129,43 @@ class BaseSecondaryStatData:
     exactitude_mod: int = 0
 
 
-####################### WORLD ######################
+####################### NON-ACTOR ENTITIES ######################
+
+@register_dataclass_with_json
+@dataclass
+class ProjectileData:
+    """
+    Data class for a projectile
+    """
+    # what created it?
+    creator: EntityID = 0
+    skill_name: str = "none"
+    skill_instance: Optional[Skill] = None
+    name: str = "none"
+    description: str = "none"
+
+    # who are we targeting?
+    required_tags: List[TargetTagType] = field(default_factory=list)
+
+    # where are we going?
+    direction: Optional[DirectionType] = None
+
+    # what does it look like?
+    sprite_paths: SpritePathsData = field(default_factory=SpritePathsData)
+
+    # how does it travel?
+    speed: ProjectileSpeedType = ProjectileSpeed.SLOW
+    travel_method: TravelMethodType = TravelMethod.STANDARD
+    range: int = 1
+
+    # how does it interact?
+    terrain_collision: Optional[TerrainCollisionType] = None
+    expiry_type: Optional[ProjectileExpiryType] = None
+
+    def __post_init__(self):
+        self.speed = getattr(ProjectileSpeed, self.speed.upper())
+
+
 
 @register_dataclass_with_json
 @dataclass
@@ -291,6 +213,96 @@ class GodData:
     description: str = field(default="none")
     attitudes: Dict[str, AttitudeData] = field(default_factory=dict)
     interventions: Dict[str, InterventionData] = field(default_factory=dict)
+
+
+######################### ACTIONS ##################################
+
+@register_dataclass_with_json
+@dataclass
+class SkillData:
+    """
+    Data class for a skill. Used by the library to load from json.
+    """
+    # how do we know it?
+    name: str = "none"
+    description: str = "none"
+    icon_path: str = "none"
+    class_name: str = "none"
+
+    # when do we use it?
+    required_tags: List[TargetTagType] = field(default_factory=list)
+
+    # what does it cost?
+    resource_type: ResourceType = Resource.STAMINA
+    resource_cost: int = 0
+    time_cost: int = 0
+    cooldown: int = 0
+
+    # how does it travel from the user?
+    targeting_method: TargetingMethodType = TargetingMethod.TARGET
+    target_directions: List[DirectionType] = field(default_factory=list)
+
+    # what is the area of effect?
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+
+    # projectile info
+    uses_projectile: bool = True
+    projectile_data: Optional[ProjectileData] = None
+
+    def __post_init__(self):
+        # convert directions to their constant values
+        _mapped_directions = []
+
+        for _direction in self.target_directions:
+            _mapped_directions.append(getattr(Direction, _direction.upper()))
+
+        self.target_directions = _mapped_directions
+
+
+@register_dataclass_with_json
+@dataclass()
+class AfflictionData:
+    """
+    Data class for an Afflictions
+    """
+    name: str = field(default="none")
+    class_name: str = field(default="none")
+    description: str = field(default="none")
+    icon_path: str = field(default="none")
+    category: AfflictionCategoryType = AfflictionCategory.BANE
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+    required_tags: List[TargetTagType] = field(default_factory=list)
+    identity_tags: List[EffectTypeType] = field(default_factory=list)
+    triggers: List[AfflictionTriggerType] = field(default_factory=list)
+
+
+@register_dataclass_with_json
+@dataclass
+class EffectData:
+    """
+    Base data class for an effect.
+    """
+    # who am I?
+    originator: Optional[EntityID] = None  # actor
+    creators_name: Optional[str] = None  # skill, projectile, etc.'s name
+    effect_type = EffectType.MOVE
+
+    # who are we targeting?
+    required_tags: List[TargetTagType] = field(default_factory=list)
+
+    # how are we targeting?
+    stat_to_target: Optional[PrimaryStatType] = None
+    accuracy: int = 0
+
+    # what is the area of effect?
+    shape: ShapeType = Shape.TARGET
+    shape_size: int = 1
+
+    # what next?
+    success_effects: List[EffectData] = field(default_factory=list)
+    fail_effects: List[EffectData] = field(default_factory=list)
 
 
 ################### CONFIG ###################################################

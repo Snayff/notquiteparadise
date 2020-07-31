@@ -3,7 +3,6 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-
 import pygame
 import snecs
 import numpy as np
@@ -14,15 +13,13 @@ from snecs.typedefs import EntityID
 from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
     cast)
 from scripts.engine import chronicle, debug, library, utility
-from scripts.engine.actions.afflictions import Affliction
-from scripts.engine.actions.skills import BasicAttack, Move, Skill
 from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
     Blocking, HasCombatStats, Identity,
     IsActor, IsGod, IsPlayer, Knowledge,
     Opinion, Position, Resources, Tracked,
     Traits)
 from scripts.engine.core.constants import (
-    ICON_SIZE, INFINITE, TILE_SIZE, Direction, DirectionType, HitType,
+    ICON_SIZE, INFINITE, Direction, DirectionType, HitType,
     HitTypeType, PrimaryStat, PrimaryStatType, RenderLayer, ResourceType,
     SecondaryStatType, ShapeType, TargetTag, TargetTagType, TraitGroup,
     TravelMethod, TravelMethodType)
@@ -35,10 +32,10 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.engine.actions import afflictions, skills
 
 if TYPE_CHECKING:
     from typing import Optional, Any, Tuple, Dict, List
+    from scripts.engine.action import Affliction, Move, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -109,6 +106,8 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
     # get info from traits
     traits_paths = []  # for aesthetic
+    from scripts.nqp.actions.skills import BasicAttack
+    from scripts.engine.action import Move
     known_skills = [BasicAttack, Move]  # for knowledge
     skill_order = ['basic_attack']  # for knowledge
     perm_afflictions_names = []  # for affliction
@@ -121,7 +120,7 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
             for skill_name in data.known_skills:
                 skill_data = library.SKILLS[skill_name]
-                skill_class = getattr(skills, skill_data.class_name)
+                skill_class = utility.get_skill_class(skill_data.class_name)
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -181,10 +180,10 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
-    sprites = SpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
-                          idle=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)))
+    sprites = build_sprites_from_paths([data.sprite_paths])
+
     # translation to screen coordinates is handled by the camera
-    projectile.append(Aesthetic(sprites.move, sprites, RenderLayer.ACTOR, (x, y)))
+    projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     projectile.append(Resources(999, 999))
@@ -194,6 +193,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
+    from scripts.engine.action import Move
     known_skills = [Move]
     add_component(entity, Knowledge(known_skills))  # type: ignore  # getting mypy error stating Move != Skill
 
@@ -207,6 +207,7 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     Creates an instance of an Affliction provided the name
     """
     affliction_data = library.AFFLICTIONS[name]
+    from scripts.nqp.actions import afflictions
     return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
@@ -235,7 +236,7 @@ def build_sprites_from_paths(sprite_paths: List[SpritePathsData]) -> SpritesData
     for name, path_list in paths.items():
         # get the size to convert to
         size = None
-        if name == "icon":
+        if name == "icon_path":
             size = (ICON_SIZE, ICON_SIZE)
 
         sprites[name] = utility.get_images(path_list, size)
@@ -691,7 +692,7 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
         shape_direction: Optional[Tuple[int, int]] = None):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
-    have Position, Resources and Combat Stats to be eligible.
+    have Position, Resources to be eligible.
     """
     affected_entities = []
     affected_positions = []
@@ -1233,6 +1234,7 @@ def learn_skill(entity: EntityID, skill_name: str):
         add_component(entity, Knowledge([]))
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
+        from scripts.nqp.actions import skills
         skill_class = getattr(skills, skill_name)
         knowledge.learn_skill(skill_class)
 

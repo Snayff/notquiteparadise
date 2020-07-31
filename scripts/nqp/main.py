@@ -31,6 +31,7 @@ def main():
     # run the game
     try:
         game_loop()
+
     except Exception:
         logging.critical(f"Something went wrong and killed the game loop!")
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -39,6 +40,9 @@ def main():
             clean_line = line.replace("\n", "")
             logging.critical(f"{clean_line}")
         traceback.print_exc()
+
+    # dump any held save data
+    state.dump_save_game()
 
     # we've left the game loop so now close everything down
     if debug.IS_LOGGING:

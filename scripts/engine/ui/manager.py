@@ -317,14 +317,9 @@ class _UIManager:
             # update directions to either clear or use info from skill
             if is_visible and skill_name:
                 data = library.SKILLS[skill_name]
-                _directions = data.target_directions
+                directions = data.target_directions
             else:
-                _directions = []
-
-            # ensure all directions are of type Direction
-            directions = []
-            for direction in _directions:
-                directions.append(getattr(Direction, direction.upper()))  # type: ignore  # direction has string
+                directions = []
 
             camera.set_overlay_directions(directions)
             camera.set_overlay_visibility(is_visible)

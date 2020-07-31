@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import os
+import pygame
+
 from types import SimpleNamespace
 from typing import NewType, Tuple
 
-import pygame
-
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.116.0"
+VERSION = "0.118.0"
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -133,8 +133,9 @@ class InputIntent(SimpleNamespace):
 
 class Direction(SimpleNamespace):
     """
-    Holds a tuple for each direction of the (x, y) relative direction.
+    Holds a tuple as (x, y) for the relative direction.
     """
+    # N.B external values  must be actively mapped to these on load as they are not held as strings
     UP_LEFT = DirectionType((-1, -1))
     UP = DirectionType((0, -1))
     UP_RIGHT = DirectionType((1, -1))
@@ -307,7 +308,7 @@ class ProjectileSpeed(SimpleNamespace):
     The speed at which a projectile travels; how much time to move a tile.
     N.B. does not use base move_cost
     """
-
+    # N.B external values  must be actively mapped to these on load as they are not held as strings
     SLOW = ProjectileSpeedType(10)
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))

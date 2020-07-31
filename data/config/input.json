@@ -8,7 +8,7 @@
     "down_right": ["K_c", "K_KP1","K_b"],
     "down_left": ["K_z", "K_KP3","K_n"],
     "confirm": ["K_RETURN"],
-    "cancel": [],
+    "cancel": ["K_BACKSPACE"],
     "exit": ["K_ESCAPE"],
     "skill0": ["K_1"],
     "skill1": ["K_2"],

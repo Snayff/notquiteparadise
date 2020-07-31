@@ -116,6 +116,7 @@ def _load_skills_data():
     with open('data/game/skills.json') as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global SKILLS
+
     SKILLS = data
 
 

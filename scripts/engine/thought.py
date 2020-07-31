@@ -5,9 +5,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
-
 from scripts.engine import chronicle, library, world
-from scripts.engine.actions.skills import Move
 from scripts.engine.component import Position
 from scripts.engine.core.constants import (ProjectileExpiry, TargetTag,
                                            TerrainCollision)
@@ -48,6 +46,7 @@ class ProjectileBehaviour(AIBehaviour):
         current_tile = world.get_tile((position.x, position.y))
         dir_x, dir_y = self.data.direction[0], self.data.direction[1]
         target_tile = world.get_tile((current_tile.x + dir_x, current_tile.y + dir_y))
+        from scripts.engine.action import Move
         skill_instance = Move(self.entity, target_tile, self.data.direction)
 
         # if we havent moved check for collision in current tile (it might be cast on top of enemy)

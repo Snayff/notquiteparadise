@@ -14,7 +14,7 @@ from scripts.engine import world
 from scripts.engine.component import Aesthetic, IsActor, Position
 from scripts.engine.core.constants import (
     TILE_SIZE, DirectionType, EventType, RenderLayer, UIElement)
-from scripts.engine.utility import (clamp, convert_tile_string,
+from scripts.engine.utility import (clamp, convert_tile_string_to_xy,
                                     is_coordinate_in_bounds)
 from scripts.engine.world_objects.tile import Tile
 
@@ -331,7 +331,7 @@ class Camera(UIPanel):
         prefix = '#tile'
         index = id_string.index(prefix)
         tile_string = id_string[index + len(prefix):]
-        return convert_tile_string(tile_string)
+        return convert_tile_string_to_xy(tile_string)
 
     def _get_current_tiles(self):
         """

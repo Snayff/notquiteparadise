@@ -5,7 +5,7 @@ import pygame
 
 from typing import TYPE_CHECKING, Optional, Type
 from snecs.typedefs import EntityID
-from scripts.engine import chronicle, debug, key, library, state, world
+from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
     Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
@@ -13,7 +13,7 @@ from scripts.engine.core.constants import (
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.engine.actions.skills import Move, Skill
+from scripts.engine.action import Move, Skill
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
@@ -202,11 +202,11 @@ def _process_targeting_mode_intents(intent):
                     state.set_active_skill(pressed_skill_name)
 
     ## Use skill
-    elif intent in skill.target_directions:
+    elif intent.upper() in utility.get_class_members(Direction):
         direction = _get_pressed_direction(intent)
         if position and skill and direction:
-            outmost = position.get_outermost(direction)
-            tile = world.get_tile((outmost[0] + direction[0], outmost[1] + direction[1]))
+            outermost = position.get_outermost(direction)
+            tile = world.get_tile((outermost[0] + direction[0], outermost[1] + direction[1]))
             if tile:
                 # we already checked if we could use the skill before activating the targeting mode
                 _process_skill_use(player, skill, tile, direction)
@@ -269,6 +269,9 @@ def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
         direction = Direction.CENTRE
 
     return direction
+
+
+
 
 
 def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:

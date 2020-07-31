@@ -6,17 +6,12 @@ import math
 import timeit
 import pygame
 import scipy
-
 from typing import TYPE_CHECKING
-from scripts.engine.actions import skills
-from scripts.engine.core.constants import (IMAGE_NOT_FOUND_PATH, TILE_SIZE,
-                                           Shape, ShapeType)
+from scripts.engine.core.constants import (DirectionType, IMAGE_NOT_FOUND_PATH, TILE_SIZE, Shape, ShapeType)
 
 if TYPE_CHECKING:
-    from typing import (Any, Callable, Dict, Iterable, List,
-        Optional, Tuple, Type, Union)
-    from scripts.engine.actions.skills import Skill
-    from scripts.engine.actions.afflictions import Affliction
+    from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
+    from scripts.engine.action import Affliction, Skill
 
 
 ################################### IMAGES ########################################
@@ -139,6 +134,8 @@ def get_skill_class(skill_class_name: str) -> Type[Skill]:
     """
     Get the Skill from the name of the skill class.
     """
+    # FIXME - this points to NQP. Shouldnt.
+    from scripts.nqp.actions import skills
     skill = getattr(skills, skill_class_name)
     return skill
 
@@ -147,8 +144,10 @@ def get_affliction_class(affliction_class_name: str) -> Type[Affliction]:
     """
     Get the Affliction from the name of the affliction class.
     """
-    skill = getattr(skills, affliction_class_name)
-    return skill
+    # FIXME - this points to NQP. Shouldnt.
+    from scripts.nqp.actions import afflictions
+    affliction = getattr(afflictions, affliction_class_name)
+    return affliction
 
 
 ################################### MATHS ########################################
@@ -321,7 +320,7 @@ def value_to_member(value: Any, cls: Type[Any]) -> str:
     return "No member with value found."
 
 
-def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
+def convert_tile_string_to_xy(tile_pos_string: str) -> Tuple[int, int]:
     """
     Convert a tile position string to (x, y)
     """
@@ -329,6 +328,29 @@ def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
     x = int(_x)  # str to int
     y = int(_y)
     return x, y
+
+
+def convert_direction_to_name(direction: DirectionType) -> str:
+    """
+    Get the direction name from the direction. (0,1) = 'up' etc.
+    """
+    directions = {
+        (0, 1): "up",
+        (0, -1): "down",
+        (1, 0): "right",
+        (-1, 0): "left",
+        (1, 1): "up_right",
+        (-1, 1): "up_left",
+        (1, -1): "down_right",
+        (-1, -1): "down_left"
+    }
+
+    try:
+        direction_name = directions[direction]
+    except KeyError:
+        direction_name = "centre"
+
+    return direction_name
 
 
 ################################### DEV ########################################

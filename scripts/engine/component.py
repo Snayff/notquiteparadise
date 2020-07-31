@@ -12,9 +12,8 @@ if TYPE_CHECKING:
     import pygame
     from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
-    from scripts.engine.actions.skills import Skill
+    from scripts.engine.action import Affliction, Skill
     from scripts.engine.core.definitions import SpritePathsData, SpritesData
-    from scripts.engine.actions.afflictions import Affliction
 
 
 ##########################################################

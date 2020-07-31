@@ -4,7 +4,7 @@
         "class_name": "BasicAttack",
         "cooldown": 2,
         "description": "A simple attack.",
-        "icon": "assets/skills/placeholder/basic_attack.png",
+        "icon_path": "assets/skills/placeholder/basic_attack.png",
         "name": "basic attack",
         "resource_cost": 10,
         "resource_type": "stamina",
@@ -26,24 +26,32 @@
         "shape": "target",
         "shape_size": 1,
         "uses_projectile": true,
-        "projectile_speed": "average",
-        "projectile_sprite": "assets/skills/placeholder/projectile.png",
-        "travel_method": "standard",
-        "range": 2,
-        "terrain_collision": "fizzle",
-        "expiry_type": "fizzle"
+        "projectile_data": {
+            "__dataclass__": "ProjectileData",
+            "sprite_paths": {
+                "__dataclass__": "SpritePathsData",
+                "idle": "assets/skills/placeholder/projectile.png",
+                "move": "assets/skills/placeholder/projectile.png"
+            },
+            "speed": "average",
+            "travel_method": "standard",
+            "range": 2,
+            "terrain_collision": "fizzle",
+            "expiry_type": "fizzle"
+        }
     },
     "lunge": {
         "__dataclass__": "SkillData",
         "class_name": "Lunge",
         "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
-        "icon": "placeholder/lunge.png",
+        "icon_path": "placeholder/lunge.png",
         "name": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
         "uses_projectile": false,
+        "projectile_data": null,
         "target_directions": [
             "down",
             "left",
@@ -62,7 +70,7 @@
         "class_name": "TarAndFeather",
         "cooldown": 1,
         "description": "Launch a projectile that deals damage to enemies in the specified direction.",
-        "icon": "placeholder/lunge.png",
+        "icon_path": "placeholder/lunge.png",
         "name": "tar_and_feather",
         "resource_cost": 15,
         "resource_type": "stamina",
@@ -80,11 +88,18 @@
         "shape": "target",
         "shape_size": 1,
         "uses_projectile": true,
-        "projectile_speed": "average",
-        "projectile_sprite": "assets/skills/placeholder/projectile.png",
-        "travel_method": "standard",
-        "range": 5,
-        "terrain_collision": "fizzle",
-        "expiry_type": "fizzle"
+        "projectile_data": {
+            "__dataclass__": "ProjectileData",
+            "sprite_paths": {
+                "__dataclass__": "SpritePathsData",
+                "idle": "assets/skills/placeholder/projectile.png",
+                "move": "assets/skills/placeholder/projectile.png"
+            },
+            "speed": "average",
+            "travel_method": "standard",
+            "range": 5,
+            "terrain_collision": "fizzle",
+            "expiry_type": "fizzle"
+        }
     }
 }

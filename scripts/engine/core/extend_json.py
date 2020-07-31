@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Dict, Type
 if TYPE_CHECKING:
     pass
 
+
 ####################### UTILITY ############################
 
 def deserialise_dataclasses(dct):

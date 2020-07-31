@@ -13,6 +13,7 @@ from scripts.engine.core.store import store
 if TYPE_CHECKING:
     pass
 
+_SAVE = {}
 
 ################### GET ##############################
 
@@ -79,8 +80,13 @@ def set_new(new_game_state: GameStateType):
 
 def save_game():
     """
-    Serialise the game data to a file
+    Serialise the game data to an internal container
     """
+    global _SAVE
+
+    # clear existing save data
+    _SAVE = {}
+
     # get the info needed
     full_save_path = os.getcwd() + "/" + SAVE_PATH
     save = {}
@@ -109,10 +115,21 @@ def save_game():
         save_name = existing_saves.pop(0)
         os.remove(full_save_path + "/" + save_name)
 
+    # update save data
+    _SAVE[new_save_name] = save
 
-    # write to json
-    with open(SAVE_PATH + new_save_name + ".json", "w") as file:
-        json.dump(save, file, indent=4)
+
+def dump_save_game():
+    """
+    Export the save game data, if it exists, to an external json file
+    """
+    global _SAVE
+
+    for save_name, save_values in _SAVE.items():
+
+        # write to json
+        with open(SAVE_PATH + save_name + ".json", "w") as file:
+            json.dump(save_values, file, indent=4)
 
 
 def load_game(filename: str):
