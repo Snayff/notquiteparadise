@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import scripts.engine.world as world
 import scripts.engine.library as library
 import random
@@ -158,7 +158,7 @@ class EntityPool:
 class EntityGeneration:
 
     def __init__(self, seed: int, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]):
-        self.pool: EntityPool = None
+        self.pool: Optional[EntityPool] = None
         self.rooms = copy.deepcopy(rooms)
         self.seed = seed
 
