@@ -102,6 +102,16 @@ def _process_stateless_intents(intent: InputIntentType):
 
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
+    elif intent == InputIntent.DUNGEON_DEV_VIEW:
+        element = ui.get_element(UIElement.DUNGEON_DEV_VIEW)
+        if not element.visible:
+            element.set_data(world.get_gamemap().rooms, world.get_gamemap().tunnels)
+            ui.set_element_visibility(UIElement.DUNGEON_DEV_VIEW, True)
+            state.set_new(GameState.MENU)
+        else:
+            ui.set_element_visibility(UIElement.DUNGEON_DEV_VIEW, False)
+            state.set_new(state.get_previous())
+
     elif intent == InputIntent.DEV_TOGGLE:
         if ui.get_element(UIElement.DATA_EDITOR):
             ui.set_element_visibility(UIElement.DATA_EDITOR, False)
