@@ -112,5 +112,7 @@ def _check_dev_actions(event: pygame.event):
             return InputIntent.DEBUG_TOGGLE
         elif event.key == pygame.K_F5:
             return InputIntent.REFRESH_DATA
+        elif event.key == pygame.K_F3:
+            return InputIntent.DUNGEON_DEV_VIEW
         elif event.key == pygame.K_F2:
             return InputIntent.DEV_TOGGLE
