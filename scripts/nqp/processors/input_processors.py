@@ -105,7 +105,7 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
         element = ui.get_element(UIElement.DUNGEON_DEV_VIEW)
         if not element.visible:
-            element.set_data(world.get_gamemap().rooms, world.get_gamemap().tunnels)
+            element.set_data(world.get_gamemap().world_gen)
             ui.set_element_visibility(UIElement.DUNGEON_DEV_VIEW, True)
             state.set_new(GameState.MENU)
         else:

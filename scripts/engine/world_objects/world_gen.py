@@ -46,6 +46,10 @@ class DungeonGeneration:
                     self._make_wall(x, y)
         return self.tiles, self.algorithm.rooms, self.algorithm.tunnels
 
+    def generate_steps(self):
+        for step in self.algorithm.generate_level_steps(self.seed, self.width, self.height):
+            yield step
+
     def _is_map_border(self, x: int, y: int):
         """
         Returns a bool that represents if this is a map border

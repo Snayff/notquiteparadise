@@ -53,10 +53,10 @@ class RoomAddition:
         self.shortcutLength = 5
         self.minPathfindingDistance = 50
 
-    def generate_level(self, seed, map_width, map_height):
+    def generate_level_steps(self, seed, map_width, map_height):
 
         self.level = [[1 for _ in range(map_height)] for _ in range(map_width)]
-
+        yield self.level
         random.seed(seed)
         # generate the first room
         room = self.generate_room()
@@ -64,7 +64,7 @@ class RoomAddition:
         roomX = int((map_width / 2 - room_width / 2) - 1)
         roomY = int((map_height / 2 - room_height / 2) - 1)
         self.add_room(roomX, roomY, room)
-
+        yield self.level
         # generate other rooms
         for i in range(self.build_room_attempts):
             room = self.generate_room()
@@ -72,13 +72,20 @@ class RoomAddition:
             roomX, roomY, wall_tile, direction, tunnel_length = self.place_room(room, map_width, map_height)
             if roomX and roomY:
                 self.add_room(roomX, roomY, room)
+                yield self.level
                 self.add_tunnel(wall_tile, direction, tunnel_length)
+                yield self.level
                 if len(self.rooms) >= self.MAX_NUM_ROOMS:
                     break
-
+        yield self.level
         if self.includeShortcuts:
             self.add_shortcuts(map_width, map_height)
 
+        return self.level
+
+    def generate_level(self, seed, map_width, map_height):
+        for _ in self.generate_level_steps(seed, map_width, map_height):
+            pass
         return self.level
 
     def generate_room(self):
@@ -353,7 +360,7 @@ class RoomAddition:
             # If you want doors, this is where the code should go
             if (x + direction[0]) == wallTile[0] and (y + direction[1]) == wallTile[1]:
                 break
-        tunnel = ((x, y), direction, real_length)
+        tunnel = ((x, y), (direction[0], direction[1]), real_length)
         self.tunnels.append(tunnel)
 
     def get_room_dimensions(self, room):
@@ -485,8 +492,9 @@ class RoomAddition:
                     libtcod.map_set_properties(libtcodMap, x, y, True, True)
 
     def carve_shortcut(self, x1, y1, x2, y2):
+        tunnel = None
         if x1 - x2 == 0:
-            # Carve virtical tunnel
+            # Carve vertical tunnel
             for y in range(min(y1, y2), max(y1, y2) + 1):
                 self.level[x1][y] = 0
 
@@ -514,6 +522,7 @@ class RoomAddition:
                 self.level[x][y] = 0
                 y -= 1
                 self.level[x][y] = 0
+
 
     def check_room_exists(self, room):
         roomWidth, roomHeight = self.get_room_dimensions(room)
