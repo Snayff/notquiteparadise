@@ -9,7 +9,7 @@ from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIImage, UIWindow
 from scripts.engine.core.constants import RenderLayer
 from scripts.engine.world_objects.world_gen import DungeonGeneration
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Iterator
 
 
 class DungeonDevView(UIWindow):
@@ -31,10 +31,10 @@ class DungeonDevView(UIWindow):
         self.view = UIImage(relative_rect=Rect((0, 0), rect.size), image_surface=blank_surf, manager=manager,
                                container=self.get_container(), object_id="#roomview")
 
-        self.timer = 0
+        self.timer: float = 0.0
         self.level = None
-        self.iterator = None
-        self.world_gen = None
+        self.iterator: Optional[Iterator] = None
+        self.world_gen: Optional[DungeonGeneration] = None
 
     def update_view(self):
         """
@@ -67,9 +67,9 @@ class DungeonDevView(UIWindow):
         if self.visible:
             self.timer += time_delta
             if self.timer > DungeonDevView.SLEEP_PER_ROOM:
-                self.level = next(self.iterator, None)
+                self.level = next(self.iterator, None)  # type: ignore
                 if self.level:
-                    self.update_view()
+                    self.update_view()  # type: ignore
                 self.timer = 0
 
     def reset(self):
