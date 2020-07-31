@@ -111,7 +111,7 @@ def initialise_game():
     map_width = 50
     map_height = 30
     pool = _create_entity_pool()
-    world.create_gamemap(15, 'room_addition', map_width, map_height)
+    world.create_gamemap(10, 'room_addition', map_width, map_height)
 
     players, actors = world.populate(pool)
 
