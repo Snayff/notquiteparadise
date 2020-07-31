@@ -47,7 +47,12 @@ class DungeonGeneration:
         return self.tiles, self.algorithm.rooms, self.algorithm.tunnels
 
     def generate_steps(self):
-        for step in self.algorithm.generate_level_steps(self.seed, self.width, self.height):
+        """
+        Generates the map using the specified algorithm, returning each step of the generation
+        :return: The state of the map at a step
+        """
+        algorithm = self._create_algorithm()
+        for step in algorithm.generate_level_steps(self.seed, self.width, self.height):
             yield step
 
     def _is_map_border(self, x: int, y: int):
