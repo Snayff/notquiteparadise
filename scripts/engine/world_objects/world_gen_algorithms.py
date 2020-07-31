@@ -24,6 +24,7 @@ class RoomAddition:
         self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = []
         self.level: List[List[int]] = []
         self.tunnels: List[Tuple[Tuple[int, int], Tuple[int, int], int]] = []
+        self.rng = random.Random()
 
         self.ROOM_MAX_SIZE = 18  # max height and width for cellular automata rooms
         self.ROOM_MIN_SIZE = min_room_size  # min size in number of floor tiles, not height and width
@@ -57,7 +58,7 @@ class RoomAddition:
 
         self.level = [[1 for _ in range(map_height)] for _ in range(map_width)]
         yield self.level
-        random.seed(seed)
+        self.rng.seed(seed)
         # generate the first room
         room = self.generate_room()
         room_width, room_height = self.get_room_dimensions(room)
@@ -93,7 +94,7 @@ class RoomAddition:
         # generate and return that room
         if self.rooms:
             # There is at least one room already
-            choice = random.random()
+            choice = self.rng.random()
 
             if choice < self.squareRoomChance:
                 room = self.generate_room_square()
@@ -103,7 +104,7 @@ class RoomAddition:
                 room = self.generate_room_cellular_automata()
 
         else:  # it's the first room
-            choice = random.random()
+            choice = self.rng.random()
             if choice < self.cavernChance:
                 room = self.generate_room_cavern()
             else:
@@ -112,13 +113,13 @@ class RoomAddition:
         return room
 
     def generate_room_cross(self):
-        room_hor_width = int((random.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
+        room_hor_width = int((self.rng.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
 
-        room_vir_height = int((random.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
+        room_vir_height = int((self.rng.randint(self.CROSS_ROOM_MIN_SIZE + 2, self.CROSS_ROOM_MAX_SIZE)) / 2 * 2)
 
-        room_hor_height = int((random.randint(self.CROSS_ROOM_MIN_SIZE, room_vir_height - 2)) / 2 * 2)
+        room_hor_height = int((self.rng.randint(self.CROSS_ROOM_MIN_SIZE, room_vir_height - 2)) / 2 * 2)
 
-        room_vir_width = int((random.randint(self.CROSS_ROOM_MIN_SIZE, room_hor_width - 2)) / 2 * 2)
+        room_vir_width = int((self.rng.randint(self.CROSS_ROOM_MIN_SIZE, room_hor_width - 2)) / 2 * 2)
 
         room = [[1
                  for y in range(room_vir_height)]
@@ -139,8 +140,8 @@ class RoomAddition:
         return room
 
     def generate_room_square(self):
-        roomWidth = random.randint(self.SQUARE_ROOM_MIN_SIZE, self.SQUARE_ROOM_MAX_SIZE)
-        roomHeight = random.randint(max(int(roomWidth * 0.5), self.SQUARE_ROOM_MIN_SIZE),
+        roomWidth = self.rng.randint(self.SQUARE_ROOM_MIN_SIZE, self.SQUARE_ROOM_MAX_SIZE)
+        roomHeight = self.rng.randint(max(int(roomWidth * 0.5), self.SQUARE_ROOM_MIN_SIZE),
                                     min(int(roomWidth * 1.5), self.SQUARE_ROOM_MAX_SIZE))
 
         room = [[1
@@ -163,7 +164,7 @@ class RoomAddition:
             # random fill map
             for y in range(2, self.ROOM_MAX_SIZE - 2):
                 for x in range(2, self.ROOM_MAX_SIZE - 2):
-                    if random.random() >= self.wallProbability:
+                    if self.rng.random() >= self.wallProbability:
                         room[x][y] = 0
 
             # create distinctive regions
@@ -198,7 +199,7 @@ class RoomAddition:
             # random fill map
             for y in range(2, self.CAVERN_MAX_SIZE - 2):
                 for x in range(2, self.CAVERN_MAX_SIZE - 2):
-                    if random.random() >= self.wallProbability:
+                    if self.rng.random() >= self.wallProbability:
                         room[x][y] = 0
 
             # create distinctive regions
@@ -288,8 +289,8 @@ class RoomAddition:
                 opposite direction.
                 '''
                 # direction == tuple(dx,dy)
-                tileX = random.randint(1, mapWidth - 2)
-                tileY = random.randint(1, mapHeight - 2)
+                tileX = self.rng.randint(1, mapWidth - 2)
+                tileY = self.rng.randint(1, mapHeight - 2)
                 if ((self.level[tileX][tileY] == 1) and
                         (self.level[tileX + direction[0]][tileY + direction[1]] == 1) and
                         (self.level[tileX - direction[0]][tileY - direction[1]] == 0)):
@@ -303,8 +304,8 @@ class RoomAddition:
             random floor tile instead of the top left floor tile
             '''
             while not startRoomX and not startRoomY:
-                x = random.randint(0, roomWidth - 1)
-                y = random.randint(0, roomHeight - 1)
+                x = self.rng.randint(0, roomWidth - 1)
+                y = self.rng.randint(0, roomHeight - 1)
                 if room[x][y] == 0:
                     startRoomX = wallTile[0] - x
                     startRoomY = wallTile[1] - y
@@ -389,7 +390,7 @@ class RoomAddition:
         east = (1, 0)
         west = (-1, 0)
 
-        direction = random.choice([north, south, east, west])
+        direction = self.rng.choice([north, south, east, west])
         return direction
 
     def get_overlap(self, room, roomX, roomY, mapWidth, mapHeight):
@@ -453,8 +454,8 @@ class RoomAddition:
             # check i times for places where shortcuts can be made
             while True:
                 # Pick a random floor tile
-                floorX = random.randint(self.shortcutLength + 1, (mapWidth - self.shortcutLength - 1))
-                floorY = random.randint(self.shortcutLength + 1, (mapHeight - self.shortcutLength - 1))
+                floorX = self.rng.randint(self.shortcutLength + 1, (mapWidth - self.shortcutLength - 1))
+                floorY = self.rng.randint(self.shortcutLength + 1, (mapHeight - self.shortcutLength - 1))
                 if self.level[floorX][floorY] == 0:
                     if (self.level[floorX - 1][floorY] == 1 or
                             self.level[floorX + 1][floorY] == 1 or
