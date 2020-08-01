@@ -126,6 +126,7 @@ class InputIntent(SimpleNamespace):
     DEV_TOGGLE = InputIntentType("dev_toggle")
     ACTOR_INFO_TOGGLE = InputIntentType("actor_info_toggle")
     BURST_PROFILE = InputIntentType("burst_profile")
+    TEST = InputIntentType("test")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################

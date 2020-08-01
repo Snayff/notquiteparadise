@@ -16,5 +16,6 @@
     "skill3": ["K_4"],
     "skill4": ["K_5"],
     "skill5": ["K_6"],
-    "burst_profile": ["K_F9"]
+    "burst_profile": ["K_F9"],
+    "test": ["K_F1"]
 }

@@ -9,7 +9,7 @@ from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
     Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
-    InputIntentType, TargetingMethod, UIElement)
+    InputIntentType, SAVE_PATH, TargetingMethod, UIElement)
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
@@ -111,13 +111,11 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.BURST_PROFILE:
         debug.enable_profiling(120)
 
-    elif intent == InputIntent.CONFIRM:
-        pass
-        # _repr = [("state.stupid_save_game()", "from scripts.engine import state")]
-        # dump = [("state.save_game()", "from scripts.engine import state")]
-        #
-        # from scripts.engine import utility
-        # print(utility.performance_test(["serialise"], dump, _repr, 20, 3))
+    elif intent == InputIntent.TEST:
+        import os
+        full_save_path = os.getcwd() + "/" + SAVE_PATH
+        for save_name in os.listdir(full_save_path):
+            state.load_game(save_name)
 
 
 def _process_gamemap_intents(intent: InputIntentType):

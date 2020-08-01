@@ -94,6 +94,7 @@ def save_game():
     # add data to dict
     save["version"] = VERSION
     save["world"] = world.serialise()
+    save["store"] = store.serialise()
 
     # prep filename
     player = world.get_player()
@@ -146,6 +147,7 @@ def load_game(filename: str):
 
     # deserialise data
     new_world = world.deserialise(save["world"])
+    store.deserialise(save["store"])
 
     # set the data as the default world
     world.move_world(new_world)
