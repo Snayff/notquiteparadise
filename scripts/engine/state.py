@@ -131,6 +131,7 @@ def dump_save_game():
         # write to json
         with open(SAVE_PATH + save_name + ".json", "w") as file:
             json.dump(save_values, file, indent=4)
+            logging.info("Save file dumped.")
 
 
 def load_game(filename: str):

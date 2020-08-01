@@ -257,7 +257,7 @@ def create_gamemap(width, height):
     store.current_gamemap = GameMap(width, height)
 
 
-def create_fov_map() -> tcod.map.Map:
+def create_fov_map() -> np.array:
     """
     Create an fov map
     """
@@ -1189,7 +1189,7 @@ def update_tile_visibility(fov_map: np.array):
 
     for x in range(0, gamemap.width):
         for y in range(0, gamemap.height):
-            gamemap.tiles[x][y].is_visible = fov_map[x][y]
+            gamemap.tiles[x][y].is_visible = bool(fov_map[x][y])  # cast to bool as otherwise is _bool from numpy
 
 
 def judge_action(entity: EntityID, action_name: str):

@@ -115,7 +115,8 @@ def _process_stateless_intents(intent: InputIntentType):
         import os
         full_save_path = os.getcwd() + "/" + SAVE_PATH
         for save_name in os.listdir(full_save_path):
-            state.load_game(save_name)
+            save = save_name.replace(".json","")
+            state.load_game(save)
 
 
 def _process_gamemap_intents(intent: InputIntentType):
@@ -267,9 +268,6 @@ def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
         direction = Direction.CENTRE
 
     return direction
-
-
-
 
 
 def _get_pressed_skills_name(intent: InputIntentType) -> Optional[str]:

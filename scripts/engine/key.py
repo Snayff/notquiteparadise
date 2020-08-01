@@ -98,8 +98,6 @@ def _check_actions(event: pygame.event):
             return InputIntent.CONFIRM
         elif event.key in INPUT_CONFIG["exit"]:
             return InputIntent.EXIT
-        elif event.key in INPUT_CONFIG["burst_profile"]:
-            return InputIntent.BURST_PROFILE
         elif event.key in INPUT_CONFIG["cancel"]:
             return InputIntent.CANCEL
 
@@ -112,7 +110,13 @@ def _check_dev_actions(event: pygame.event):
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_F1:
             return InputIntent.DEBUG_TOGGLE
-        elif event.key == pygame.K_F5:
-            return InputIntent.REFRESH_DATA
         elif event.key == pygame.K_F2:
             return InputIntent.DEV_TOGGLE
+        elif event.key == pygame.K_F3:
+            return InputIntent.BURST_PROFILE
+        elif event.key == pygame.K_F4:
+            return InputIntent.REFRESH_DATA
+
+        elif event.key == pygame.K_F12:
+            return InputIntent.TEST
+

@@ -41,10 +41,11 @@ class _Store:
         """
         Serialise all data held in the store.
         """
+
         _dict = {
             "current_game_state": self.current_game_state,
             "previous_game_state": self.previous_game_state,
-            "current_gamemap": self.current_gamemap,
+            "current_gamemap": self.current_gamemap.serialise(),
             "turn_queue": self.turn_queue,
             "round": self.round,
             "time": self.time,
@@ -61,7 +62,7 @@ class _Store:
         try:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
-            self.current_gamemap = serialised["current_gamemap"]
+            self.current_gamemap = serialised["current_gamemap"].deserialise()
             self.turn_queue = serialised["turn_queue"]
             self.round = serialised["round"]
             self.time = serialised["time"]

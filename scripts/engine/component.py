@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import numpy as np
+
 from dataclasses import asdict
 from typing import TYPE_CHECKING
 from snecs import RegisteredComponent
-import numpy as np
-from scripts.engine import utility
 from scripts.engine.core.constants import (EffectType, PrimaryStatType,
                                            RenderLayerType)
 
@@ -199,6 +199,7 @@ class Aesthetic(RegisteredComponent):
 
         # unpack sprite paths
         sprite_paths = []
+        from scripts.engine.core.definitions import SpritePathsData
         for sprite_path in _sprite_paths:
             sprite_paths.append(SpritePathsData(**sprite_path))
 
@@ -222,7 +223,7 @@ class Tracked(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialized):
-        return Tracked(*serialized)
+        return Tracked(serialized)
 
 
 class Resources(RegisteredComponent):
@@ -289,7 +290,7 @@ class Traits(RegisteredComponent):
 
     @classmethod
     def deserialize(cls, serialized):
-        return Traits(*serialized)
+        return Traits(serialized)
 
 
 class Behaviour(RegisteredComponent):
@@ -377,7 +378,9 @@ class Knowledge(RegisteredComponent):
 
         from scripts.engine.library import SKILLS
         skills = []
+        from scripts.engine import utility
         for name in skill_names:
+            # FIXME - not finding move, need to just treat move like a normal skill now. 
             skills.append(utility.get_skill_class(SKILLS[name].class_name))
 
 
@@ -415,6 +418,7 @@ class Afflictions(RegisteredComponent):
         active_dict = serialized["active"]
 
         active_instances = []
+        from scripts.engine import utility
         for name, value_tuple in active_dict.items():
             _affliction = utility.get_affliction_class(name)
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
