@@ -21,8 +21,8 @@ from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
 from scripts.engine.core.constants import (
     ICON_SIZE, INFINITE, Direction, DirectionType, HitType,
     HitTypeType, PrimaryStat, PrimaryStatType, RenderLayer, ResourceType,
-    SecondaryStatType, ShapeType, TargetTag, TargetTagType, TraitGroup,
-    TravelMethod, TravelMethodType)
+    SecondaryStatType, ShapeType, TILE_SIZE, TargetTag, TargetTagType, TraitGroup,
+    TravelMethod, TravelMethodType, UIElement)
 from scripts.engine.core.definitions import (ProjectileData,
     SpritePathsData,
     SpritesData)
@@ -180,7 +180,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
-    sprites = build_sprites_from_paths([data.sprite_paths])
+    sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
 
     # translation to screen coordinates is handled by the camera
     projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
@@ -211,7 +211,8 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
-def build_sprites_from_paths(sprite_paths: List[SpritePathsData]) -> SpritesData:
+def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
+        desired_size: Optional[Tuple[int, int]] = None) -> SpritesData:
     """
     Build a SpritesData class from a list of SpritePathsData. For each member in SpritePathsData, combines the
      sprites from each SpritePathsData in the  list and flattens to a single surface.
@@ -234,12 +235,11 @@ def build_sprites_from_paths(sprite_paths: List[SpritePathsData]) -> SpritesData
 
     # convert to sprites
     for name, path_list in paths.items():
-        # get the size to convert to
-        size = None
+        # override size for icon
         if name == "icon_path":
-            size = (ICON_SIZE, ICON_SIZE)
+            desired_size = (ICON_SIZE, ICON_SIZE)
 
-        sprites[name] = utility.get_images(path_list, size)
+        sprites[name] = utility.get_images(path_list, desired_size)
 
     # flatten the images
     for name, surface_list in sprites.items():

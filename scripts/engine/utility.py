@@ -30,6 +30,7 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pyga
 
         except:
             image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
+            logging.warning(f"Used not_found image. Tried to use {img_path}.")
     else:
         image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         image.set_alpha(0)

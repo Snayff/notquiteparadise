@@ -70,8 +70,8 @@ class Camera(UIPanel):
                                 container=self.get_container(), object_id="#gamemap")
 
         # create grid
-        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager, container=self.get_container(),
-                                object_id="#grid")
+        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager,
+                                container=self.get_container(), object_id="#grid")
 
         # update everything
         self.update_tile_properties()
@@ -273,7 +273,8 @@ class Camera(UIPanel):
             UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
                      object_id=f"#tile{col},{row}")
 
-    def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float], src_area: Optional[Rect] = None):
+    def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float],
+            src_area: Optional[Rect] = None):
         """
         Draw a surface on the surface map. The function handles coordinates transformation to the screen
         """
