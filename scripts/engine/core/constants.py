@@ -98,6 +98,7 @@ class UIElement(SimpleNamespace):
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
     TILE_INFO = UIElementType(8)
+    DUNGEON_DEV_VIEW = UIElementType(9)
 
 
 class InputIntent(SimpleNamespace):
@@ -127,6 +128,7 @@ class InputIntent(SimpleNamespace):
     ACTOR_INFO_TOGGLE = InputIntentType("actor_info_toggle")
     BURST_PROFILE = InputIntentType("burst_profile")
     TEST = InputIntentType("test")
+    DUNGEON_DEV_VIEW = InputIntentType("dungeon_dev_toggle")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################

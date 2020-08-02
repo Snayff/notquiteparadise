@@ -365,6 +365,14 @@ class BaseValueData:
 class DefaultValueData:
     time_per_round: int
     entity_blocks_sight: bool
+    reduced_effectiveness_multi_tile_modifier: float
+
+
+@register_dataclass_with_json
+@dataclass
+class WorldValueData:
+    min_room_space: int
+    max_enemies_per_room: int
 
 
 @register_dataclass_with_json
@@ -373,3 +381,4 @@ class GameConfigData:
     hit_types: HitTypeData
     base_values: BaseValueData
     default_values: DefaultValueData
+    world_values: WorldValueData

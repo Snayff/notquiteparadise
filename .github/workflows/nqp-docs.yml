@@ -2,8 +2,7 @@ name: Not Quite Paradise
 
 on:
   push:
-    branches:
-      - develop
+    branches: develop
 
 jobs:
   docs:
@@ -28,9 +27,9 @@ jobs:
           python -m pip install sphinx-autodoc-typehints
       - name: build-docs
         run: |
+          sphinx-apidoc -o ./docs .
           cd docs
           make html
-          make clean
           
       - name: deploy-docs
         uses: JamesIves/github-pages-deploy-action@3.5.7

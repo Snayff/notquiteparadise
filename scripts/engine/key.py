@@ -116,6 +116,8 @@ def _check_dev_actions(event: pygame.event):
             return InputIntent.BURST_PROFILE
         elif event.key == pygame.K_F4:
             return InputIntent.REFRESH_DATA
+        elif event.key == pygame.K_F5:
+            return InputIntent.DUNGEON_DEV_VIEW
 
         elif event.key == pygame.K_F12:
             return InputIntent.TEST

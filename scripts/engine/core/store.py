@@ -27,7 +27,7 @@ class _Store:
         self.active_skill = None
 
         # used in world
-        self.current_gamemap: GameMap = GameMap(20, 20)  # load empty gamemap
+        self.current_gamemap: Optional[GameMap] = None
 
         # used in chronicle
         self.turn_queue: Dict[EntityID, int] = {}  # (entity, time)
@@ -41,11 +41,15 @@ class _Store:
         """
         Serialise all data held in the store.
         """
+        if self.current_gamemap:
+            game_map = self.current_gamemap.serialise()
+        else:
+            game_map = None
 
         _dict = {
             "current_game_state": self.current_game_state,
             "previous_game_state": self.previous_game_state,
-            "current_gamemap": self.current_gamemap.serialise(),
+            "current_gamemap":  game_map,
             "turn_queue": self.turn_queue,
             "round": self.round,
             "time": self.time,
@@ -62,7 +66,11 @@ class _Store:
         try:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
-            self.current_gamemap = GameMap.deserialise(serialised["current_gamemap"])
+            if serialised["current_gamemap"]:
+                game_map = GameMap.deserialise(serialised["current_gamemap"])
+            else:
+                game_map = None
+            self.current_gamemap = game_map
             self.turn_queue = serialised["turn_queue"]
             self.round = serialised["round"]
             self.time = serialised["time"]

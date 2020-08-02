@@ -62,7 +62,8 @@ class Camera(UIPanel):
         else:
             tile = world.get_tile((0, 0))  # player should always have Position but just in case
         self.player_tile = tile  # the tile in which the player resides
-        self.last_updated_player_tile = tile  # the tile the player was in when camera last updated movement
+        self.last_updated_player_tile = tile # the tile the player was in when camera last updated movement
+
         self.tiles: List[Tile] = []
 
         # overlay info
@@ -86,6 +87,8 @@ class Camera(UIPanel):
         self.update_gamemap()
         self.update_grid()
 
+        if pos:
+            self._set_initial_position(pos.x, pos.y)
 
         # confirm init complete
         logging.debug(f"Camera initialised.")
@@ -133,7 +136,7 @@ class Camera(UIPanel):
         Update based on current state and data. Run every frame.
         """
         super().update(time_delta)
-        
+
         if self.last_updated_player_tile != self.player_tile:
             start_pos = (self.last_updated_player_tile.x, self.last_updated_player_tile.y)
             target_pos = (self.player_tile.x, self.player_tile.y)
@@ -217,6 +220,19 @@ class Camera(UIPanel):
                         tile_positions.append((x, y))
 
         self._draw_grid(tile_positions)
+
+    def _set_initial_position(self, x: int, y: int):
+        """
+        Moves the camera to a suitable position from a given tile coordinate
+        :param x: X position of the tile
+        :param y: Y position of the tile
+        """
+        p_x = int(clamp(x + self.edge_size - self.columns, 0, self.columns))
+        p_y = int(clamp(y + self.edge_size - self.rows, 0, self.rows))
+        self.start_tile_col = p_x
+        self.start_tile_row = p_y
+        self.move_camera(p_x, p_y)
+        self.update_tile_properties()
 
     def _update_ui_element_pos(self):
         """
@@ -412,10 +428,10 @@ class Camera(UIPanel):
         Determine if camera should move based on start and target pos and intersecting the edge of the screen.
         pos is x, y.
         """
+
         # FIXME - camera moves when player walks into a wall and does not move
         start_x, start_y = start_pos
         target_x, target_y = target_pos
-
 
         edge_start_x = self.start_tile_col
         edge_end_x = self.start_tile_col + self.columns
@@ -440,7 +456,7 @@ class Camera(UIPanel):
                         return True
                 if edge_end_x > start_x >= edge_end_x - self.edge_size - 2:
                     # player is on the right side, are we moving right?
-                    if 0 < dir_x:
+                    if dir_x > 0:
                         return True
                 if edge_start_y <= start_y < edge_start_y + self.edge_size + 1:
                     # player is on the up side, are we moving up?
@@ -448,7 +464,7 @@ class Camera(UIPanel):
                         return True
                 if edge_end_y > start_y >= edge_end_y - self.edge_size - 2:
                     # player is on the down side, are we moving down?
-                    if 0 < dir_y:
+                    if dir_y > 0:
                         return True
 
         elif target_pos_in_edge:

@@ -72,10 +72,12 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
+from scripts.engine.world_objects.entity_gen import EntityGeneration
 
 if TYPE_CHECKING:
-    from typing import Optional, Any, Tuple, Dict, List
+    from typing import Union, Optional, Any, Tuple, Dict, List
     from scripts.engine.action import Affliction, Move, Skill
+    from scripts.engine.world_objects.entity_gen import EntityPool, EntityGeneration
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -290,11 +292,15 @@ def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
     return converted
 
 
-def create_gamemap(width, height):
+def create_gamemap(seed: int, algorithm_name: str, width: int, height: int):
     """
     Create new GameMap
     """
-    store.current_gamemap = GameMap(width, height)
+    store.current_gamemap = GameMap(seed, algorithm_name, width, height)
+
+
+def populate(pool: EntityPool):
+    return store.current_gamemap.populate(pool)
 
 
 def create_fov_map() -> np.array:
