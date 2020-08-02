@@ -1,22 +1,28 @@
 from __future__ import annotations
 
+import os
 from types import SimpleNamespace
 from typing import NewType, Tuple
 
 import pygame
 
-######################## GENERAL CONSTANTS ######################################
+######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.114.0"
+VERSION = "0.118.0"
 
 MAX_SKILLS = 6
+MAX_SAVES = 1
 TILE_SIZE = 64
 ICON_IN_TEXT_SIZE = TILE_SIZE // 4
 ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
 SKILL_BUTTON_SIZE = 64
-IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
 INFINITE = 999
+
+######################## PATHS ######################################
+IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
+SAVE_PATH = "data/saves/"
+CURRENT_WORKING_DIRECTORY = os.getcwd() + "/"
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of
@@ -120,6 +126,7 @@ class InputIntent(SimpleNamespace):
     DEV_TOGGLE = InputIntentType("dev_toggle")
     ACTOR_INFO_TOGGLE = InputIntentType("actor_info_toggle")
     BURST_PROFILE = InputIntentType("burst_profile")
+    TEST = InputIntentType("test")
 
 
 #################### EXTERNAL, SERIALISED  ###########################################
@@ -127,8 +134,9 @@ class InputIntent(SimpleNamespace):
 
 class Direction(SimpleNamespace):
     """
-    Holds a tuple for each direction of the (x, y) relative direction.
+    Holds a tuple as (x, y) for the relative direction.
     """
+    # N.B external values  must be actively mapped to these on load as they are not held as strings
     UP_LEFT = DirectionType((-1, -1))
     UP = DirectionType((0, -1))
     UP_RIGHT = DirectionType((1, -1))
@@ -301,7 +309,7 @@ class ProjectileSpeed(SimpleNamespace):
     The speed at which a projectile travels; how much time to move a tile.
     N.B. does not use base move_cost
     """
-
+    # N.B external values  must be actively mapped to these on load as they are not held as strings
     SLOW = ProjectileSpeedType(10)
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))

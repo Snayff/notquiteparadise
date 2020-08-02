@@ -8,14 +8,18 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from scripts.engine import utility
 from scripts.engine.core.constants import InputIntent
-from scripts.engine.core.definitions import (AfflictionData, AspectData,
-                                             BasePrimaryStatData,
-                                             BaseSecondaryStatData,
-                                             GameConfigData, GodData,
-                                             SkillData, TraitData,
-                                             VideoConfigData)
+from scripts.engine.core.definitions import (
+    AfflictionData,
+    AspectData,
+    BasePrimaryStatData,
+    BaseSecondaryStatData,
+    GameConfigData,
+    GodData,
+    SkillData,
+    TraitData,
+    VideoConfigData,
+)
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
@@ -36,8 +40,9 @@ VIDEO_CONFIG: VideoConfigData
 GAME_CONFIG: GameConfigData
 
 # build default list for input - needed in case json doesnt include all required values
-for name in utility.get_class_members(InputIntent):
-    INPUT_CONFIG[name.lower()] = []
+for member in InputIntent.__dict__.keys():
+    if member[:2] != "__":
+        INPUT_CONFIG[member.lower()] = []
 
 
 ####################### REFRESH ##############################
@@ -118,6 +123,7 @@ def _load_skills_data():
     with open('data/game/skills.json') as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global SKILLS
+
     SKILLS = data
 
 

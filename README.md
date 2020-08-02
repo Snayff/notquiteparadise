@@ -1,5 +1,16 @@
+
 # Not Quite Paradise
 Possibly, one day, a roguelike.
+
+![GitHub tag (latest by date
+  )](https://img.shields.io/github/v/tag/Snayff/notquiteparadise?label=version)
+  
+  ![GitHub
+ Workflow Status](https://img.shields.io/github/workflow/status/Snayff/notquiteparadise/Not%20Quite%20Paradise
+ )  ![Code Climate coverage](https://img.shields.io/codeclimate/coverage/Snayff/notquiteparadise) ![Code Climate
+  maintainability](https://img.shields.io/codeclimate/maintainability/Snayff/notquiteparadise) ![Code Climate
+  technical debt](https://img.shields.io/codeclimate/tech-debt/Snayff/notquiteparadise) 
+
 
 ## Motivation
 Create a fast, dynamic, combat-focused, traditional roguelike where the environment, enemies and even the gods all

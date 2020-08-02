@@ -6,16 +6,32 @@ from typing import List, Optional, Tuple, Union, cast
 import pygame
 from pygame_gui import UI_BUTTON_PRESSED, UIManager
 from pygame_gui.core import UIElement as PygameUiElement
-from pygame_gui.elements import (UIImage, UIPanel, UITextBox,
-                                 UIVerticalScrollBar, UIWindow)
+from pygame_gui.elements import (
+    UIImage,
+    UIPanel,
+    UITextBox,
+    UIVerticalScrollBar,
+    UIWindow,
+)
 from snecs.typedefs import EntityID
 
 from scripts.engine import state, utility, world
-from scripts.engine.component import (Aesthetic, Afflictions, Identity,
-                                      Resources, Traits)
-from scripts.engine.core.constants import (GAP_SIZE, ICON_SIZE, INFINITE,
-                                           EventType, PrimaryStat,
-                                           SecondaryStat, UIElement)
+from scripts.engine.component import (
+    Aesthetic,
+    Afflictions,
+    Identity,
+    Resources,
+    Traits,
+)
+from scripts.engine.core.constants import (
+    GAP_SIZE,
+    ICON_SIZE,
+    INFINITE,
+    EventType,
+    PrimaryStat,
+    SecondaryStat,
+    UIElement,
+)
 from scripts.engine.utility import get_class_members
 
 
@@ -264,7 +280,7 @@ class ActorInfo(UIWindow):
                 image_width = text_or_image.get_width()
                 image_height = text_or_image.get_height()
 
-                # if image is the icon then draw centre, otherwise draw left
+                # if image is the icon_path then draw centre, otherwise draw left
                 if image_width == ICON_SIZE:
                     draw_x = int((self.rect.width / 2) - (image_width / 2))
                 else:

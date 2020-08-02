@@ -89,7 +89,6 @@ def _process_aesthetic_update(delta_time: float):
                 aesthetic.draw_x = aesthetic.target_draw_x
                 aesthetic.draw_y = aesthetic.target_draw_y
 
-
             # keep moving:
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))

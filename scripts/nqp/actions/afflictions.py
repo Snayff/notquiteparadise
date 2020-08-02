@@ -1,80 +1,21 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Iterator
+from typing import TYPE_CHECKING
 
 from snecs.typedefs import EntityID
 
-from scripts.engine import library, world
-from scripts.engine.component import Position
-from scripts.engine.core.constants import (AfflictionCategory,
-                                           AfflictionCategoryType,
-                                           AfflictionTriggerType, DamageType,
-                                           EffectType, EffectTypeType,
-                                           PrimaryStat, Shape, ShapeType,
-                                           TargetTag, TargetTagType)
-from scripts.engine.effect import AffectStatEffect, DamageEffect, Effect
+from scripts.engine import library
+from scripts.engine.action import Affliction, properties_set_by_data
+from scripts.engine.core.constants import DamageType, PrimaryStat
+from scripts.engine.effect import AffectStatEffect, DamageEffect
 
 if TYPE_CHECKING:
-    from typing import Tuple, List
+    from typing import List
 
 
-class Affliction(ABC):
-    """
-    A subclass of Affliction represents an affliction (a semi-permanent modifier) and holds all the data that is
-    not dependent on the individual instances -  stuff like applicable targets etc.
-
-    An instance of Affliction represents an individual application of that affliction,
-    and holds only the data that is tied to the individual use - stuff like
-    the user and target.
-    """
-
-    # to be overwritten in subclass
-    name: str = ""
-    description: str = ""
-    icon_path: str = ""
-    required_tags: List[TargetTagType] = [TargetTag.OTHER_ENTITY]
-    identity_tags: List[EffectTypeType] = [EffectType.DAMAGE]
-    triggers: List[AfflictionTriggerType] = []
-    category: AfflictionCategoryType = AfflictionCategory.BANE
-    shape: ShapeType = Shape.TARGET
-    shape_size: int = 1
-
-    def __init__(self, creator: EntityID, affected_entity: EntityID, duration: int):
-        self.creator = creator
-        self.affected_entity = affected_entity
-        self.duration = duration
-
-    def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
-        """
-        An iterator over pairs of (affected entity, [effects])
-        """
-        entities = set()
-        position = world.get_entitys_component(self.affected_entity, Position)
-        if position:
-            for coordinate in position.get_coordinates():
-                for entity in world.get_affected_entities(coordinate, self.shape, self.shape_size):
-                    if entity not in entities:
-                        entities.add(entity)
-                        yield entity, self.build_effects(entity)
-
-    @abstractmethod
-    def build_effects(self, entity: EntityID):
-        """
-        Build the effects of this affliction applying to a single entity. Must be overridden by subclass.
-        """
-        pass
-
-
+@properties_set_by_data
 class BoggedDown(Affliction):
-    data = library.AFFLICTIONS["bogged_down"]
-    name = data.name
-    required_tags = data.required_tags
-    identity_tags = data.identity_tags
-    description = data.description
-    icon_path = data.icon
-    category = data.category
-    triggers = data.triggers
+    name = "bogged_down"
 
     def build_effects(self, entity: EntityID) -> List[AffectStatEffect]:
         # TODO - externalise effect data to allow specifying in json
@@ -92,15 +33,9 @@ class BoggedDown(Affliction):
         return [affect_stat_effect]
 
 
+@properties_set_by_data
 class Flaming(Affliction):
-    data = library.AFFLICTIONS["flaming"]
-    name = data.name
-    required_tags = data.required_tags
-    identity_tags = data.identity_tags
-    description = data.description
-    icon_path = data.icon
-    category = data.category
-    triggers = data.triggers
+    name = "flaming"
 
     def build_effects(self, entity: EntityID) -> List[DamageEffect]:
         """

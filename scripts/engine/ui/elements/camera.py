@@ -13,9 +13,17 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, IsActor, Position
 from scripts.engine.core.constants import (
-    TILE_SIZE, DirectionType, EventType, RenderLayer, UIElement)
-from scripts.engine.utility import (clamp, convert_tile_string,
-                                    is_coordinate_in_bounds)
+    TILE_SIZE,
+    DirectionType,
+    EventType,
+    RenderLayer,
+    UIElement,
+)
+from scripts.engine.utility import (
+    clamp,
+    convert_tile_string_to_xy,
+    is_coordinate_in_bounds,
+)
 from scripts.engine.world_objects.tile import Tile
 
 
@@ -70,8 +78,8 @@ class Camera(UIPanel):
                                 container=self.get_container(), object_id="#gamemap")
 
         # create grid
-        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager, container=self.get_container(),
-                                object_id="#grid")
+        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager,
+                                container=self.get_container(), object_id="#grid")
 
         # update everything
         self.update_tile_properties()
@@ -168,7 +176,7 @@ class Camera(UIPanel):
         # draw entities
         for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
             # if in camera view
-            for offset in pos.get_offsets():
+            for offset in pos.offsets:
                 src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                 position = (pos.x + offset[0], pos.y + offset[1])
                 draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])
@@ -273,7 +281,8 @@ class Camera(UIPanel):
             UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
                      object_id=f"#tile{col},{row}")
 
-    def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float], src_area: Optional[Rect] = None):
+    def draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float],
+            src_area: Optional[Rect] = None):
         """
         Draw a surface on the surface map. The function handles coordinates transformation to the screen
         """
@@ -331,7 +340,7 @@ class Camera(UIPanel):
         prefix = '#tile'
         index = id_string.index(prefix)
         tile_string = id_string[index + len(prefix):]
-        return convert_tile_string(tile_string)
+        return convert_tile_string_to_xy(tile_string)
 
     def _get_current_tiles(self):
         """

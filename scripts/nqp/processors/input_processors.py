@@ -6,16 +6,32 @@ from typing import TYPE_CHECKING, Optional, Type
 import pygame
 from snecs.typedefs import EntityID
 
-import scripts.engine.chronicle
-from scripts.engine import debug, key, library, state, world
+from scripts.engine import (
+    chronicle,
+    debug,
+    key,
+    library,
+    state,
+    utility,
+    world,
+)
+from scripts.engine.action import Move, Skill
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
-    Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
-    InputIntentType, TargetingMethod, UIElement)
+    SAVE_PATH,
+    Direction,
+    DirectionType,
+    EventType,
+    GameState,
+    GameStateType,
+    InputIntent,
+    InputIntentType,
+    TargetingMethod,
+    UIElement,
+)
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions.skills import Move, Skill
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
@@ -113,6 +129,13 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.BURST_PROFILE:
         debug.enable_profiling(120)
 
+    elif intent == InputIntent.TEST:
+        import os
+        full_save_path = os.getcwd() + "/" + SAVE_PATH
+        for save_name in os.listdir(full_save_path):
+            save = save_name.replace(".json","")
+            state.load_game(save)
+
 
 def _process_gamemap_intents(intent: InputIntentType):
     """
@@ -196,11 +219,11 @@ def _process_targeting_mode_intents(intent):
                     state.set_active_skill(pressed_skill_name)
 
     ## Use skill
-    elif intent in skill.target_directions:
+    elif intent.upper() in utility.get_class_members(Direction):
         direction = _get_pressed_direction(intent)
         if position and skill and direction:
-            outmost = position.get_outmost(direction)
-            tile = world.get_tile((outmost[0] + direction[0], outmost[1] + direction[1]))
+            outermost = position.get_outermost(direction)
+            tile = world.get_tile((outermost[0] + direction[0], outermost[1] + direction[1]))
             if tile:
                 # we already checked if we could use the skill before activating the targeting mode
                 _process_skill_use(player, skill, tile, direction)
@@ -228,7 +251,10 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.name)
         ai_processors.process_interventions()
-        scripts.engine.chronicle.end_turn(player, skill.time_cost)
+        chronicle.end_turn(player, skill.time_cost)
+
+        state.save_game()
+
         if skill.name == "move":
             ui.set_player_tile(target_tile)
 

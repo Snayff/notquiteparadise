@@ -3,20 +3,26 @@ from __future__ import annotations
 import gc
 import logging
 import math
-import sys
 import timeit
-from typing import (TYPE_CHECKING, Any, Callable, Dict, Iterable, List,
-                    Optional, Tuple, Type, Union)
+from typing import TYPE_CHECKING
 
 import pygame
 import scipy
 
-from scripts.engine.core.constants import (IMAGE_NOT_FOUND_PATH, TILE_SIZE,
-                                           Shape, ShapeType)
+from scripts.engine.core.constants import (
+    IMAGE_NOT_FOUND_PATH,
+    TILE_SIZE,
+    DirectionType,
+    Shape,
+    ShapeType,
+)
 
 if TYPE_CHECKING:
-    from typing import Tuple
+    from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
+    from scripts.engine.action import Affliction, Skill
 
+
+################################### IMAGES ########################################
 
 def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pygame.Surface:
     """
@@ -32,6 +38,7 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pyga
 
         except:
             image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
+            logging.warning(f"Used not_found image. Tried to use {img_path}.")
     else:
         image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         image.set_alpha(0)
@@ -76,6 +83,8 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
 
     return base
 
+
+################################### QUERY TOOLS ########################################
 
 def recursive_replace(obj: Union[Dict, List], key: str, value_to_replace: Any, new_value: Any):
     """
@@ -129,6 +138,28 @@ def get_class_members(cls: Type[Any]) -> List[str]:
 
     return members
 
+
+def get_skill_class(skill_class_name: str) -> Type[Skill]:
+    """
+    Get the Skill from the name of the skill class.
+    """
+    # FIXME - this points to NQP. Shouldnt.
+    from scripts.nqp.actions import skills
+    skill = getattr(skills, skill_class_name)
+    return skill
+
+
+def get_affliction_class(affliction_class_name: str) -> Type[Affliction]:
+    """
+    Get the Affliction from the name of the affliction class.
+    """
+    # FIXME - this points to NQP. Shouldnt.
+    from scripts.nqp.actions import afflictions
+    affliction = getattr(afflictions, affliction_class_name)
+    return affliction
+
+
+################################### MATHS ########################################
 
 def lerp(initial_value: float, target_value: float, lerp_fraction: float) -> float:
     """
@@ -266,29 +297,6 @@ def get_coords_from_shape(shape: ShapeType, size: int, direction: Optional[Tuple
     raise KeyError(f"Unknown shape '{shape}'")
 
 
-def value_to_member(value: Any, cls: Type[Any]) -> str:
-    """
-    Get a member of a class that matches the value given
-    """
-    members = get_class_members(cls)
-
-    for member in members:
-        if getattr(cls, member) == value:
-            return member
-
-    return "No member with value found."
-
-
-def convert_tile_string(tile_pos_string: str) -> Tuple[int, int]:
-    """
-    Convert a tile position string to (x, y)
-    """
-    _x, _y = tile_pos_string.split(",")
-    x = int(_x)  # str to int
-    y = int(_y)
-    return x, y
-
-
 def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
     """
     returns true if the absolute distance between both coordinates is less than delta
@@ -305,6 +313,56 @@ def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge
     within_bounds = start_coordinate <= coordinate < end_coordinate
     return within_bounds
 
+
+################################### CONVERSIONS ########################################
+
+def value_to_member(value: Any, cls: Type[Any]) -> str:
+    """
+    Get a member of a class that matches the value given
+    """
+    members = get_class_members(cls)
+
+    for member in members:
+        if getattr(cls, member) == value:
+            return member
+
+    return "No member with value found."
+
+
+def convert_tile_string_to_xy(tile_pos_string: str) -> Tuple[int, int]:
+    """
+    Convert a tile position string to (x, y)
+    """
+    _x, _y = tile_pos_string.split(",")
+    x = int(_x)  # str to int
+    y = int(_y)
+    return x, y
+
+
+def convert_direction_to_name(direction: DirectionType) -> str:
+    """
+    Get the direction name from the direction. (0,1) = 'up' etc.
+    """
+    directions = {
+        (0, 1): "up",
+        (0, -1): "down",
+        (1, 0): "right",
+        (-1, 0): "left",
+        (1, 1): "up_right",
+        (-1, 1): "up_left",
+        (1, -1): "down_right",
+        (-1, -1): "down_left"
+    }
+
+    try:
+        direction_name = directions[direction]
+    except KeyError:
+        direction_name = "centre"
+
+    return direction_name
+
+
+################################### DEV ########################################
 
 def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str, Callable], str]],
         new_methods: List[Tuple[Union[str, Callable], str]], num_runs: int = 1000, repeats: int = 3) -> str:
@@ -333,8 +391,8 @@ def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str,
         name = method_descs[x]
         old = min(timeit.repeat(old_methods[x][0], setup=old_methods[x][1], number=num_runs, repeat=repeats))
         new = min(timeit.repeat(new_methods[x][0], setup=new_methods[x][1], number=num_runs, repeat=repeats))
-        result += f"\n{name}: {format(old, '.5f')} -> {format(new, '.5f')}" \
-                  f"({format(((old - new) / old) * 100, '0.5f')}%)"
+        result += f"\n{name}: {format(old, '0.5f')} -> {format(new, '0.5f')}" \
+                  f"({format(((old - new) / old) * 100, '0.2f')}%)"
 
     gc.enable()
     return result

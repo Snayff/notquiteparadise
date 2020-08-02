@@ -1,21 +1,23 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Tuple
+from dataclasses import asdict
+from typing import TYPE_CHECKING
 
-from snecs import RegisteredComponent
 import numpy as np
-from scripts.engine.core.constants import (EffectType, PrimaryStatType,
-                                           RenderLayerType)
+from snecs import RegisteredComponent
+
+from scripts.engine.core.constants import (
+    EffectType,
+    PrimaryStatType,
+    RenderLayerType,
+)
 
 if TYPE_CHECKING:
     import pygame
-    import tcod.map
     from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
-    from snecs.typedefs import EntityID
-    from scripts.nqp.actions.skills import Skill
-    from scripts.engine.core.definitions import TraitSpritesData
-    from scripts.nqp.actions.afflictions import Affliction
+    from scripts.engine.action import Affliction, Skill
+    from scripts.engine.core.definitions import SpritePathsData, SpritesData
 
 
 ##########################################################
@@ -30,6 +32,13 @@ class IsPlayer(RegisteredComponent):
     """
     __slots__ = ()  # reduces memory footprint as it prevents the creation of __dict__ and __weakref__ per instance
 
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return IsPlayer()
+
 
 class IsActor(RegisteredComponent):
     """
@@ -37,13 +46,26 @@ class IsActor(RegisteredComponent):
     """
     __slots__ = ()
 
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return IsActor()
+
 
 class IsGod(RegisteredComponent):
     """
     Whether the entity is a god.
     """
-
     __slots__ = ()
+
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return IsGod()
 
 
 class HasCombatStats(RegisteredComponent):
@@ -52,12 +74,20 @@ class HasCombatStats(RegisteredComponent):
     """
     __slots__ = ()
 
+    def serialize(self):
+        return True
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return HasCombatStats()
+
 
 #################### OTHERS #########################
 
 class Position(RegisteredComponent):
     """
-    An entity's position on the map.
+    An entity's position on the map. At initiation provide all positions the entity holds. After initiation only need
+     to set the top left, or reference position as the other coordinates are held as offsets.
     """
 
     def __init__(self, *positions: Tuple[int, int]):
@@ -68,18 +98,25 @@ class Position(RegisteredComponent):
         sorted_positions = sorted(positions, key=lambda x: (x[0]**2 + x[1]**2))
         top_left = sorted_positions[0]
         self.offsets = [(x - top_left[0], y - top_left[1]) for x, y in sorted_positions]
-        self.position = top_left
+        self.reference_position = top_left
+
+    def serialize(self):
+        return self.coordinates
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Position(*serialised)
 
     def set(self, x: int, y: int):
-        self.position = (x, y)
+        self.reference_position = (x, y)
 
-    def get_outmost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
+    def get_outermost(self, direction: Tuple[int, int]) -> Tuple[int, int]:
         """
-        Calculate the outmost tile in the direction provided
+        Calculate the outermost tile in the direction provided
         :param direction: Direction to use
-        :return: The position of the outmost tile
+        :return: The position of the outermost tile
         """
-        coordinates = self.get_coordinates()
+        coordinates = self.coordinates
         # Calculate center
         center = (sum(c[0] for c in coordinates), sum(c[1] for c in coordinates))
         transformed = [np.dot((c[0], c[1]), direction) for c in coordinates]
@@ -96,23 +133,17 @@ class Position(RegisteredComponent):
         """
         :return: The x component of the top-left position
         """
-        return self.position[0]
+        return self.reference_position[0]
 
     @property
     def y(self) -> int:
         """
         :return: The y component of the top-left position
         """
-        return self.position[1]
+        return self.reference_position[1]
 
-    def get_offsets(self) -> List[Tuple[int, int]]:
-        """
-        Returns the list of offsets from the most top-left tile
-        :return: A list of offsets
-        """
-        return self.offsets
-
-    def get_coordinates(self) -> List[Tuple[int, int]]:
+    @property
+    def coordinates(self) -> List[Tuple[int, int]]:
         """
         :return: The list of coordinates that this Position represents
         """
@@ -123,7 +154,7 @@ class Position(RegisteredComponent):
         :param key: Coordinate to test against
         :return: A bool that represents if the Position contains the provided coordinates
         """
-        for coordinate in self.get_coordinates():
+        for coordinate in self.coordinates:
             if coordinate == key:
                 return True
         return False
@@ -134,10 +165,11 @@ class Aesthetic(RegisteredComponent):
     An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: TraitSpritesData, render_layer: RenderLayerType,
-            draw_pos: Tuple[float, float]):
+    def __init__(self, current_sprite: pygame.Surface, sprites: SpritesData,
+            sprite_paths: List[SpritePathsData], render_layer: RenderLayerType, draw_pos: Tuple[float, float]):
+        self._sprite_paths: List[SpritePathsData] = sprite_paths
         self.current_sprite: pygame.Surface = current_sprite
-        self.sprites: TraitSpritesData = sprites
+        self.sprites: SpritesData = sprites
         self.render_layer = render_layer
 
         draw_x, draw_y = draw_pos
@@ -148,6 +180,39 @@ class Aesthetic(RegisteredComponent):
         self.target_draw_y: float = draw_y
         self.current_sprite_duration: float = 0
 
+    def serialize(self):
+
+        # loop all sprite paths and convert to dict
+        sprite_paths = []
+        for sprite_path in self._sprite_paths:
+            sprite_paths.append(asdict(sprite_path))
+
+        _dict = {
+            "draw_pos": (self.draw_x, self.draw_y),
+            "render_layer": self.render_layer,
+            "sprite_paths": sprite_paths
+        }
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+
+        x, y = serialised["draw_pos"]
+        render_layer = serialised["render_layer"]
+        _sprite_paths = serialised["sprite_paths"]
+
+        # unpack sprite paths
+        sprite_paths = []
+        from scripts.engine.core.definitions import SpritePathsData
+        for sprite_path in _sprite_paths:
+            sprite_paths.append(SpritePathsData(**sprite_path))
+
+        # convert sprite paths to sprites
+        from scripts.engine import world
+        sprites = world.build_sprites_from_paths(sprite_paths)
+
+        return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
+
 
 class Tracked(RegisteredComponent):
     """
@@ -156,6 +221,13 @@ class Tracked(RegisteredComponent):
 
     def __init__(self, time_spent: int = 0):
         self.time_spent: int = time_spent
+
+    def serialize(self):
+        return self.time_spent
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Tracked(serialised)
 
 
 class Resources(RegisteredComponent):
@@ -167,6 +239,13 @@ class Resources(RegisteredComponent):
         self.health: int = health
         self.stamina: int = stamina
 
+    def serialize(self):
+        return self.health, self.stamina
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Resources(*serialised)
+
 
 class Blocking(RegisteredComponent):
     """
@@ -176,6 +255,13 @@ class Blocking(RegisteredComponent):
     def __init__(self, blocks_movement: bool = False, blocks_sight: bool = False):
         self.blocks_movement: bool = blocks_movement
         self.blocks_sight: bool = blocks_sight
+
+    def serialize(self):
+        return self.blocks_movement, self.blocks_sight
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Blocking(*serialised)
 
 
 class Identity(RegisteredComponent):
@@ -187,6 +273,13 @@ class Identity(RegisteredComponent):
         self.name: str = name
         self.description: str = description
 
+    def serialize(self):
+        return self.name, self.description
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return cls(*serialised)
+
 
 class Traits(RegisteredComponent):
     """
@@ -195,6 +288,13 @@ class Traits(RegisteredComponent):
 
     def __init__(self, trait_names: List[str]):
         self.names: List[str] = trait_names
+
+    def serialize(self):
+        return self.names
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Traits(serialised)
 
 
 class Behaviour(RegisteredComponent):
@@ -205,41 +305,48 @@ class Behaviour(RegisteredComponent):
     def __init__(self, behaviour: AIBehaviour):
         self.behaviour = behaviour
 
+    def serialize(self):
+        # FIXME - need to deserialise behaviour properly
+        return self.behaviour.entity
+
+    @classmethod
+    def deserialize(cls, serialised):
+        from scripts.engine.thought import SkipTurnBehaviour
+        skip_turn = SkipTurnBehaviour(serialised)
+        # FIXME - need to deserialise behaviour properly
+        return Behaviour(skip_turn)
+
 
 class Knowledge(RegisteredComponent):
     """
-    An entity's knowledge, including skills. Skills are held as skill_name : {Skill, cooldown}.
+    An entity's knowledge, including skills.
     """
 
-    def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None):
+    def __init__(self, skills: List[Type[Skill]], skill_order: Optional[List[str]] = None,
+            cooldowns: Optional[Dict[str, int]] = None):
         skills = skills or []
         skill_order = skill_order or []
+        cooldowns = cooldowns or {}
+
+        # determine if we need to add cooldowns or not - must be before setting self
+        if cooldowns:
+            _set_cooldown = False
+        else:
+            _set_cooldown = True
+
+        # dont override skill order if it has been provided
+        if skill_order:
+            _add_to_order = False
+        else:
+            _add_to_order = True
 
         self.skill_order: List[str] = skill_order
-        self.cooldowns: Dict[str, int] = {}
+        self.cooldowns: Dict[str, int] = cooldowns
         self.skill_names: List[str] = []
-        self.skills: Dict[str, Skill] = {}
+        self.skills: Dict[str, Type[Skill]] = {}  # dont set skills here, use learn skill
 
         for skill_class in skills:
-            self.learn_skill(skill_class, add_to_order=False)
-
-    def get_skill(self, name: str):
-        """
-        Returns a skill
-        """
-        return self.skills[name]
-
-    def get_skill_names(self):
-        """
-        Return a list of all the skill names
-        """
-        return self.skill_names
-
-    def get_skill_cooldown(self, name: str):
-        """
-        Returns the cooldown of a skill
-        """
-        return self.cooldowns[name]
+            self.learn_skill(skill_class, _add_to_order, _set_cooldown)
 
     def set_skill_cooldown(self, name: str, value: int):
         """
@@ -247,27 +354,84 @@ class Knowledge(RegisteredComponent):
         """
         self.cooldowns[name] = max(0, value)
 
-    def learn_skill(self, skill_class, add_to_order=True):
+    def learn_skill(self, skill: Type[Skill], add_to_order: bool = True, set_cooldown: bool = True):
         """
-        Learn a new skill
+        Learn a new skill.
         """
-        self.cooldowns[skill_class.name] = 0
-        self.skill_names.append(skill_class.name)
+        self.skill_names.append(skill.name)
+        self.skills[skill.name] = skill
         if add_to_order:
-            self.skill_order.append(skill_class.name)
-        self.skills[skill_class.name] = skill_class
+            self.skill_order.append(skill.name)
+        if set_cooldown:
+            self.cooldowns[skill.name] = 0
+
+
+    def serialize(self):
+        _dict = {
+            "skill_names": self.skill_names,
+            "cooldowns": self.cooldowns,
+            "skill_order": self.skill_order
+        }
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+        skill_names = serialised["skill_names"]
+        cooldowns = serialised["cooldowns"]
+        skill_order = serialised["skill_order"]
+
+        from scripts.engine.library import SKILLS
+        skills = []
+        from scripts.engine import utility
+        from scripts.engine.action import Move
+        for name in skill_names:
+            if name == "move":
+                skills.append(Move)
+            else:
+                skills.append(utility.get_skill_class(SKILLS[name].class_name))
+
+
+
+        return Knowledge(skills, skill_order, cooldowns)
 
 
 class Afflictions(RegisteredComponent):
     """
     An entity's Boons and Banes. held in .active as a list of Affliction.
     """
-    def __init__(self, active: List[Affliction] = None):
-        if active is None:
-            active = []
+    def __init__(self, active: Optional[List[Affliction]] = None,
+            stat_modifiers: Optional[Dict[str, Tuple[PrimaryStatType, int]]] = None):
+        active = active or []
+        stat_modifiers = stat_modifiers or {}
 
         self.active: List[Affliction] = active
-        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = {}
+        self.stat_modifiers: Dict[str, Tuple[PrimaryStatType, int]] = stat_modifiers
+
+    def serialize(self):
+        active = {}
+        for affliction in self.active:
+            active[affliction.__class__.__name__] = (affliction.creator, affliction.affected_entity,
+                                                    affliction.duration)
+
+        _dict = {
+            "active": active,
+            "stat_modifiers": self.stat_modifiers
+        }
+
+        return _dict
+
+    @classmethod
+    def deserialize(cls, serialised):
+        active_dict = serialised["active"]
+
+        active_instances = []
+        from scripts.engine import utility
+        for name, value_tuple in active_dict.items():
+            _affliction = utility.get_affliction_class(name)
+            affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
+            active_instances.append(affliction)
+
+        return Afflictions(active_instances, serialised["stat_modifiers"])
 
     def add(self, affliction: Affliction):
         self.active.append(affliction)
@@ -288,9 +452,15 @@ class Aspect(RegisteredComponent):
     """
 
     def __init__(self, aspects: Optional[Dict[str, int]] = None):
-        if aspects is None:
-            aspects = {}
+        aspects = aspects or {}
         self.aspects: Dict[str, int] = aspects
+
+    def serialize(self):
+        return self.aspects
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Aspect(*serialised)
 
 
 class Opinion(RegisteredComponent):
@@ -298,16 +468,33 @@ class Opinion(RegisteredComponent):
     An entity's views on other entities. {entity, opinion}
     """
 
-    def __init__(self):
-        self.opinions: Dict[int, int] = {}
+    def __init__(self, opinions: Optional[Dict[int, int]] = None):
+        opinions = opinions or {}
+        self.opinions: Dict[int, int] = opinions
+
+    def serialize(self):
+        return self.opinions
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return Opinion(*serialised)
 
 
 class FOV(RegisteredComponent):
     """
     An entity's field of view.
     """
+    algorithm: int = 0
+    light_walls: bool = True
 
     def __init__(self, fov_map: np.array):
         self.map: np.array = fov_map
-        self.algorithm = 0
-        self.light_walls = True
+
+    def serialize(self):
+        fov_map = self.map.tolist()
+        return fov_map
+
+    @classmethod
+    def deserialize(cls, serialised):
+        fov_map = np.array(serialised)
+        return FOV(fov_map)

@@ -7,13 +7,23 @@ from typing import TYPE_CHECKING, cast
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import (Aesthetic, Afflictions, Blocking,
-                                      Knowledge, Position, Resources)
-from scripts.engine.core.constants import (AfflictionTrigger,
-                                           AfflictionTriggerType,
-                                           DamageTypeType, Direction,
-                                           DirectionType, PrimaryStatType,
-                                           TargetTag)
+from scripts.engine.component import (
+    Aesthetic,
+    Afflictions,
+    Blocking,
+    Knowledge,
+    Position,
+    Resources,
+)
+from scripts.engine.core.constants import (
+    AfflictionTrigger,
+    AfflictionTriggerType,
+    DamageTypeType,
+    Direction,
+    DirectionType,
+    PrimaryStatType,
+    TargetTag,
+)
 
 if TYPE_CHECKING:
     from typing import Optional, List
@@ -157,7 +167,7 @@ class MoveActorEffect(Effect):
         direction_name = utility.value_to_member((dir_x, dir_y), Direction)
         position = world.get_entitys_component(entity, Position)
 
-        for coordinate in position.get_coordinates():
+        for coordinate in position.coordinates:
             target_x = coordinate[0] + dir_x
             target_y = coordinate[1] + dir_y
             target_tile = world.get_tile((target_x, target_y))
@@ -297,9 +307,10 @@ class ReduceSkillCooldownEffect(Effect):
         knowledge = world.get_entitys_component(self.target, Knowledge)
 
         if knowledge:
-            current_cooldown = knowledge.get_skill_cooldown(self.skill_name)
+            current_cooldown = knowledge.cooldowns[self.skill_name]
             knowledge.set_skill_cooldown(self.skill_name, current_cooldown - self.amount)
-            logging.debug(f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to {knowledge.get_skill_cooldown(self.skill_name)}")
+            logging.debug(f"Reduced cooldown of skill '{self.skill_name}' from {current_cooldown} to "
+                          f"{knowledge.cooldowns[self.skill_name]}")
             return self.success_effects
 
         return self.failure_effects

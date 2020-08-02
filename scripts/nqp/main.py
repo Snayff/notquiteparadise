@@ -3,12 +3,18 @@ from __future__ import annotations
 import logging
 import sys
 import traceback
+
 import pygame
 import snecs
 from snecs.world import default_world
-from scripts.engine import (chronicle, debug, state, world)
+
+from scripts.engine import chronicle, debug, state, world
 from scripts.engine.core.constants import GameState, UIElement
-from scripts.engine.debug import (create_profiler, kill_logging, initialise_logging)
+from scripts.engine.debug import (
+    enable_profiling,
+    initialise_logging,
+    kill_logging,
+)
 from scripts.engine.ui.manager import ui
 from scripts.nqp.processors import display_processors, input_processors
 
@@ -23,7 +29,7 @@ def main():
 
     # initialise profiling
     if debug.IS_PROFILING:
-        create_profiler()
+        enable_profiling()
 
     # initialise the game
     initialise_game()
@@ -31,6 +37,7 @@ def main():
     # run the game
     try:
         game_loop()
+
     except Exception:
         logging.critical(f"Something went wrong and killed the game loop!")
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -40,13 +47,16 @@ def main():
             logging.critical(f"{clean_line}")
         traceback.print_exc()
 
+    # dump any held save data
+    state.dump_save_game()
+
     # we've left the game loop so now close everything down
     if debug.IS_LOGGING:
         kill_logging()
         # print debug values
         debug.print_values_to_console()
     if debug.IS_PROFILING:
-        kill_logging()
+        debug.kill_profiler()
 
     # clean up pygame resources
     pygame.quit()

@@ -83,8 +83,8 @@ def next_round(time_progressed: int):
     ## skill cooldowns
     for entity, (knowledge,) in world.get_components([Knowledge]):
         knowledge = cast(Knowledge, knowledge)
-        for skill_name in knowledge.get_skill_names():
-            skill_cooldown = knowledge.get_skill_cooldown(skill_name)
+        for skill_name in knowledge.skill_names:
+            skill_cooldown = knowledge.cooldowns[skill_name]
             if skill_cooldown > 0:
                 knowledge.set_skill_cooldown(skill_name, skill_cooldown - 1)
 

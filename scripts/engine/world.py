@@ -3,42 +3,79 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
-                    cast)
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+    cast,
+)
 
+import numpy as np
 import pygame
 import snecs
-import numpy as np
 import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, debug, library, utility
-from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
-                                      Blocking, HasCombatStats, Identity,
-                                      IsActor, IsGod, IsPlayer, Knowledge,
-                                      Opinion, Position, Resources, Tracked,
-                                      Traits)
+from scripts.engine.component import (
+    FOV,
+    Aesthetic,
+    Afflictions,
+    Behaviour,
+    Blocking,
+    HasCombatStats,
+    Identity,
+    IsActor,
+    IsGod,
+    IsPlayer,
+    Knowledge,
+    Opinion,
+    Position,
+    Resources,
+    Tracked,
+    Traits,
+)
 from scripts.engine.core.constants import (
-    ICON_SIZE, INFINITE, TILE_SIZE, Direction, DirectionType, HitType,
-    HitTypeType, PrimaryStat, PrimaryStatType, RenderLayer, ResourceType,
-    SecondaryStatType, ShapeType, TargetTag, TargetTagType, TraitGroup,
-    TravelMethod, TravelMethodType)
-from scripts.engine.core.definitions import (ProjectileData,
-                                             TraitSpritePathsData,
-                                             TraitSpritesData)
+    ICON_SIZE,
+    INFINITE,
+    TILE_SIZE,
+    Direction,
+    DirectionType,
+    HitType,
+    HitTypeType,
+    PrimaryStat,
+    PrimaryStatType,
+    RenderLayer,
+    ResourceType,
+    SecondaryStatType,
+    ShapeType,
+    TargetTag,
+    TargetTagType,
+    TraitGroup,
+    TravelMethod,
+    TravelMethodType,
+    UIElement,
+)
+from scripts.engine.core.definitions import (
+    ProjectileData,
+    SpritePathsData,
+    SpritesData,
+)
 from scripts.engine.core.store import store
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.nqp.actions import afflictions, skills
-from scripts.nqp.actions.afflictions import Affliction
-from scripts.nqp.actions.skills import BasicAttack, Move, Skill
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional, Any, Tuple, Dict, List
+    from scripts.engine.action import Affliction, Move, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
 
@@ -46,6 +83,9 @@ _C = TypeVar("_C", bound=Component)  # to represent components where we don't kn
 get_entitys_components = snecs.all_components
 get_components = Query
 entity_has_component = snecs.has_component
+serialise = snecs.serialize_world
+deserialise = snecs.deserialize_world
+move_world = snecs.ecs.move_world
 
 
 ################################ CREATE - INIT OBJECT - RETURN NEW OBJECT ###############################
@@ -106,8 +146,10 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
     # get info from traits
     traits_paths = []  # for aesthetic
+    from scripts.nqp.actions.skills import BasicAttack
+    from scripts.engine.action import Move
     known_skills = [BasicAttack, Move]  # for knowledge
-    skill_order = ['basic_attack']  # for knowledge
+    skill_order = ["basic_attack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
@@ -118,7 +160,7 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
             for skill_name in data.known_skills:
                 skill_data = library.SKILLS[skill_name]
-                skill_class = getattr(skills, skill_data.class_name)
+                skill_class = utility.get_skill_class(skill_data.class_name)
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -132,12 +174,10 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
     # add aesthetic
     traits_paths.sort(key=lambda path: path.render_order, reverse=True)
-
-    sprites = _create_trait_sprites(traits_paths)
+    sprites = build_sprites_from_paths(traits_paths)
 
     # N.B. translation to screen coordinates is handled by the camera
-    components.append(Aesthetic(sprites.idle, sprites, RenderLayer.ACTOR, (x, y)))
-
+    components.append(Aesthetic(sprites.idle, sprites, traits_paths, RenderLayer.ACTOR, (x, y)))
 
     # add skills to entity
     components.append(Knowledge(known_skills, skill_order))
@@ -180,10 +220,10 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
     desc = f"{skill_name} on its way."
     projectile.append(Identity(projectile_name, desc))
 
-    sprites = TraitSpritesData(move=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)),
-                               idle=utility.get_image(data.sprite, (TILE_SIZE, TILE_SIZE)))
+    sprites = build_sprites_from_paths([data.sprite_paths], (TILE_SIZE, TILE_SIZE))
+
     # translation to screen coordinates is handled by the camera
-    projectile.append(Aesthetic(sprites.move, sprites, RenderLayer.ACTOR, (x, y)))
+    projectile.append(Aesthetic(sprites.move, sprites, [data.sprite_paths], RenderLayer.ACTOR, (x, y)))
     projectile.append(Tracked(chronicle.get_time_of_last_turn() - 1))  # allocate time to ensure they act next
     projectile.append(Position((x, y)))  # FIXME - check position not blocked before spawning
     projectile.append(Resources(999, 999))
@@ -193,6 +233,7 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
+    from scripts.engine.action import Move
     known_skills = [Move]
     add_component(entity, Knowledge(known_skills))  # type: ignore  # getting mypy error stating Move != Skill
 
@@ -206,20 +247,23 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     Creates an instance of an Affliction provided the name
     """
     affliction_data = library.AFFLICTIONS[name]
+    from scripts.nqp.actions import afflictions
     return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
 
 
-def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpritesData:
+def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
+        desired_size: Optional[Tuple[int, int]] = None) -> SpritesData:
     """
-    Build a TraitSpritesData class from a list of sprite paths
+    Build a SpritesData class from a list of SpritePathsData. For each member in SpritePathsData, combines the
+     sprites from each SpritePathsData in the  list and flattens to a single surface.
     """
     paths: Dict[str, List[str]] = {}
     sprites: Dict[str, List[pygame.Surface]] = {}
     flattened_sprites: Dict[str, pygame.Surface] = {}
 
     # bundle into cross-trait sprite path lists
-    for trait in sprite_paths:
-        char_dict = dataclasses.asdict(trait)
+    for sprite_path in sprite_paths:
+        char_dict = dataclasses.asdict(sprite_path)
         for name, path in char_dict.items():
             if name != "render_order":
                 # check if key exists
@@ -231,19 +275,18 @@ def _create_trait_sprites(sprite_paths: List[TraitSpritePathsData]) -> TraitSpri
 
     # convert to sprites
     for name, path_list in paths.items():
-        # get the size to convert to
-        size = None
-        if name == "icon":
-            size = (ICON_SIZE, ICON_SIZE)
+        # override size for icon
+        if name == "icon_path":
+            desired_size = (ICON_SIZE, ICON_SIZE)
 
-        sprites[name] = utility.get_images(path_list, size)
+        sprites[name] = utility.get_images(path_list, desired_size)
 
     # flatten the images
     for name, surface_list in sprites.items():
         flattened_sprites[name] = utility.flatten_images(surface_list)
 
     # convert to dataclass
-    converted = TraitSpritesData(**flattened_sprites)
+    converted = SpritesData(**flattened_sprites)
     return converted
 
 
@@ -254,7 +297,7 @@ def create_gamemap(width, height):
     store.current_gamemap = GameMap(width, height)
 
 
-def create_fov_map() -> tcod.map.Map:
+def create_fov_map() -> np.array:
     """
     Create an fov map
     """
@@ -677,7 +720,7 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     knowledge = get_entitys_component(entity, Knowledge)
     try:
         if knowledge:
-            return knowledge.get_skill(skill_name)
+            return knowledge.skills[skill_name]
     except KeyError:
         pass
 
@@ -689,7 +732,7 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
         shape_direction: Optional[Tuple[int, int]] = None):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
-    have Position, Resources and Combat Stats to be eligible.
+    have Position, Resources to be eligible.
     """
     affected_entities = []
     affected_positions = []
@@ -840,7 +883,7 @@ def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     """
     entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
-    return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or\
+    return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or \
            (len(entities_on_tile) > 1 and active_entity_is_on_tile)
 
 
@@ -918,12 +961,12 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
-        cooldown = knowledge.get_skill_cooldown(skill_name)
+        cooldown: int = knowledge.cooldowns[skill_name]
         if cooldown <= 0:
             not_on_cooldown = True
     else:
         not_on_cooldown = False
-        cooldown = "unknown"
+        cooldown = INFINITE
 
     if can_afford and not_on_cooldown:
         return True
@@ -942,8 +985,12 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
         if entity == player:
             ui.log_message("I'm not ready to do that, yet.")
         else:
-            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait {cooldown} more "
-                            f"rounds.")
+            if cooldown == INFINITE:
+                cooldown_msg = "unknown"
+            else:
+                cooldown_msg = str(cooldown)
+            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait "
+                            f"{cooldown_msg} more rounds.")
 
     # we've reached the end, no good.
     return False
@@ -971,7 +1018,7 @@ def recompute_fov(entity: EntityID) -> bool:
         if fov and pos:
             tranparency = create_fov_map()
             maps = []
-            for coordinate in pos.get_coordinates():
+            for coordinate in pos.coordinates:
                 map = tcod.map.compute_fov(tranparency, coordinate, sight_range, fov.light_walls, fov.algorithm)
                 maps.append(map)
 
@@ -1043,7 +1090,8 @@ def apply_skill(skill_instance: Skill) -> bool:
                     effect_queue.extend(effect.evaluate())
         return True
     else:
-        logging.info(f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
+        logging.info(
+            f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
@@ -1063,7 +1111,8 @@ def set_skill_on_cooldown(skill_instance: Skill) -> bool:
 
 def apply_affliction(affliction_instance: Affliction) -> bool:
     """
-    Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met, False if not.
+    Apply the affliction's effects. Returns True is successful if criteria to trigger the affliction was met,
+    False if not.
     """
     affliction = affliction_instance
     target = affliction_instance.affected_entity
@@ -1132,7 +1181,6 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
 
 def kill_entity(entity: EntityID):
-
     # if not player
     if entity != get_player():
         # delete from world
@@ -1185,7 +1233,7 @@ def update_tile_visibility(fov_map: np.array):
 
     for x in range(0, gamemap.width):
         for y in range(0, gamemap.height):
-            gamemap.tiles[x][y].is_visible = fov_map[x][y]
+            gamemap.tiles[x][y].is_visible = bool(fov_map[x][y])  # cast to bool as otherwise is _bool from numpy
 
 
 def judge_action(entity: EntityID, action_name: str):
@@ -1230,6 +1278,7 @@ def learn_skill(entity: EntityID, skill_name: str):
         add_component(entity, Knowledge([]))
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
+        from scripts.nqp.actions import skills
         skill_class = getattr(skills, skill_name)
         knowledge.learn_skill(skill_class)
 
@@ -1312,7 +1361,7 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         # get eligible interventions and their weightings. Need separate lists for random.choices
         eligible_interventions = []
         intervention_weightings = []
-        for intervention_name in knowledge.get_skill_names():
+        for intervention_name in knowledge.skill_names:
             intervention_data = library.GODS[identity.name].interventions[intervention_name]
 
             # is the god willing to intervene i.e. does the opinion score meet the required opinion
