@@ -13,9 +13,17 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 from scripts.engine import world
 from scripts.engine.component import Aesthetic, IsActor, Position
 from scripts.engine.core.constants import (
-    TILE_SIZE, DirectionType, EventType, RenderLayer, UIElement)
-from scripts.engine.utility import (clamp, convert_tile_string_to_xy,
-                                    is_coordinate_in_bounds)
+    TILE_SIZE,
+    DirectionType,
+    EventType,
+    RenderLayer,
+    UIElement,
+)
+from scripts.engine.utility import (
+    clamp,
+    convert_tile_string_to_xy,
+    is_coordinate_in_bounds,
+)
 from scripts.engine.world_objects.tile import Tile
 
 

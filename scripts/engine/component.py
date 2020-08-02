@@ -1,12 +1,16 @@
 from __future__ import annotations
 
-import numpy as np
-
 from dataclasses import asdict
 from typing import TYPE_CHECKING
+
+import numpy as np
 from snecs import RegisteredComponent
-from scripts.engine.core.constants import (EffectType, PrimaryStatType,
-                                           RenderLayerType)
+
+from scripts.engine.core.constants import (
+    EffectType,
+    PrimaryStatType,
+    RenderLayerType,
+)
 
 if TYPE_CHECKING:
     import pygame
@@ -32,7 +36,7 @@ class IsPlayer(RegisteredComponent):
         return True
 
     @classmethod
-    def deserialize(cls, serialized):
+    def deserialize(cls, serialised):
         return IsPlayer()
 
 
@@ -46,7 +50,7 @@ class IsActor(RegisteredComponent):
         return True
 
     @classmethod
-    def deserialize(cls, serialized):
+    def deserialize(cls, serialised):
         return IsActor()
 
 
@@ -60,7 +64,7 @@ class IsGod(RegisteredComponent):
         return True
 
     @classmethod
-    def deserialize(cls, serialized):
+    def deserialize(cls, serialised):
         return IsGod()
 
 
@@ -74,7 +78,7 @@ class HasCombatStats(RegisteredComponent):
         return True
 
     @classmethod
-    def deserialize(cls, serialized):
+    def deserialize(cls, serialised):
         return HasCombatStats()
 
 
@@ -100,8 +104,8 @@ class Position(RegisteredComponent):
         return self.coordinates
 
     @classmethod
-    def deserialize(cls, serialized):
-        return Position(*serialized)
+    def deserialize(cls, serialised):
+        return Position(*serialised)
 
     def set(self, x: int, y: int):
         self.reference_position = (x, y)
@@ -191,11 +195,11 @@ class Aesthetic(RegisteredComponent):
         return _dict
 
     @classmethod
-    def deserialize(cls, serialized):
+    def deserialize(cls, serialised):
 
-        x, y = serialized["draw_pos"]
-        render_layer = serialized["render_layer"]
-        _sprite_paths = serialized["sprite_paths"]
+        x, y = serialised["draw_pos"]
+        render_layer = serialised["render_layer"]
+        _sprite_paths = serialised["sprite_paths"]
 
         # unpack sprite paths
         sprite_paths = []
@@ -222,8 +226,8 @@ class Tracked(RegisteredComponent):
         return self.time_spent
 
     @classmethod
-    def deserialize(cls, serialized):
-        return Tracked(serialized)
+    def deserialize(cls, serialised):
+        return Tracked(serialised)
 
 
 class Resources(RegisteredComponent):
@@ -239,8 +243,8 @@ class Resources(RegisteredComponent):
         return self.health, self.stamina
 
     @classmethod
-    def deserialize(cls, serialized):
-        return Resources(*serialized)
+    def deserialize(cls, serialised):
+        return Resources(*serialised)
 
 
 class Blocking(RegisteredComponent):
@@ -256,8 +260,8 @@ class Blocking(RegisteredComponent):
         return self.blocks_movement, self.blocks_sight
 
     @classmethod
-    def deserialize(cls, serialized):
-        return Blocking(*serialized)
+    def deserialize(cls, serialised):
+        return Blocking(*serialised)
 
 
 class Identity(RegisteredComponent):
@@ -273,8 +277,8 @@ class Identity(RegisteredComponent):
         return self.name, self.description
 
     @classmethod
-    def deserialize(cls, serialized):
-        return cls(*serialized)
+    def deserialize(cls, serialised):
+        return cls(*serialised)
 
 
 class Traits(RegisteredComponent):
@@ -289,8 +293,8 @@ class Traits(RegisteredComponent):
         return self.names
 
     @classmethod
-    def deserialize(cls, serialized):
-        return Traits(serialized)
+    def deserialize(cls, serialised):
+        return Traits(serialised)
 
 
 class Behaviour(RegisteredComponent):
@@ -306,9 +310,9 @@ class Behaviour(RegisteredComponent):
         return self.behaviour.entity
 
     @classmethod
-    def deserialize(cls, serialized):
+    def deserialize(cls, serialised):
         from scripts.engine.thought import SkipTurnBehaviour
-        skip_turn = SkipTurnBehaviour(serialized)
+        skip_turn = SkipTurnBehaviour(serialised)
         # FIXME - need to deserialise behaviour properly
         return Behaviour(skip_turn)
 
@@ -371,17 +375,20 @@ class Knowledge(RegisteredComponent):
         return _dict
 
     @classmethod
-    def deserialize(cls, serialized):
-        skill_names = serialized["skill_names"]
-        cooldowns = serialized["cooldowns"]
-        skill_order = serialized["skill_order"]
+    def deserialize(cls, serialised):
+        skill_names = serialised["skill_names"]
+        cooldowns = serialised["cooldowns"]
+        skill_order = serialised["skill_order"]
 
         from scripts.engine.library import SKILLS
         skills = []
         from scripts.engine import utility
+        from scripts.engine.action import Move
         for name in skill_names:
-            # FIXME - not finding move, need to just treat move like a normal skill now. 
-            skills.append(utility.get_skill_class(SKILLS[name].class_name))
+            if name == "move":
+                skills.append(Move)
+            else:
+                skills.append(utility.get_skill_class(SKILLS[name].class_name))
 
 
 
@@ -414,8 +421,8 @@ class Afflictions(RegisteredComponent):
         return _dict
 
     @classmethod
-    def deserialize(cls, serialized):
-        active_dict = serialized["active"]
+    def deserialize(cls, serialised):
+        active_dict = serialised["active"]
 
         active_instances = []
         from scripts.engine import utility
@@ -424,7 +431,7 @@ class Afflictions(RegisteredComponent):
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
             active_instances.append(affliction)
 
-        return Afflictions(active_instances, serialized["stat_modifiers"])
+        return Afflictions(active_instances, serialised["stat_modifiers"])
 
     def add(self, affliction: Affliction):
         self.active.append(affliction)
@@ -452,8 +459,8 @@ class Aspect(RegisteredComponent):
         return self.aspects
 
     @classmethod
-    def deserialize(cls, serialized):
-        return Aspect(*serialized)
+    def deserialize(cls, serialised):
+        return Aspect(*serialised)
 
 
 class Opinion(RegisteredComponent):
@@ -469,8 +476,8 @@ class Opinion(RegisteredComponent):
         return self.opinions
 
     @classmethod
-    def deserialize(cls, serialized):
-        return Opinion(*serialized)
+    def deserialize(cls, serialised):
+        return Opinion(*serialised)
 
 
 class FOV(RegisteredComponent):
@@ -488,6 +495,6 @@ class FOV(RegisteredComponent):
         return fov_map
 
     @classmethod
-    def deserialize(cls, serialized):
-        fov_map = np.array(serialized)
+    def deserialize(cls, serialised):
+        fov_map = np.array(serialised)
         return FOV(fov_map)

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING, Any, Optional
 
 import pygame
-
-from typing import Any, Optional, TYPE_CHECKING
 from snecs.typedefs import EntityID
+
 from scripts.engine.core.constants import GameState, GameStateType
 from scripts.engine.world_objects.gamemap import GameMap
 
@@ -27,7 +27,7 @@ class _Store:
         self.active_skill = None
 
         # used in world
-        self.current_gamemap: Optional[GameMap] = None
+        self.current_gamemap: GameMap = GameMap(20, 20)  # load empty gamemap
 
         # used in chronicle
         self.turn_queue: Dict[EntityID, int] = {}  # (entity, time)
@@ -62,15 +62,15 @@ class _Store:
         try:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
-            self.current_gamemap = serialised["current_gamemap"].deserialise()
+            self.current_gamemap = GameMap.deserialise(serialised["current_gamemap"])
             self.turn_queue = serialised["turn_queue"]
             self.round = serialised["round"]
             self.time = serialised["time"]
             self.time_of_last_turn = serialised["time_of_last_turn"]
             self.round_time = serialised["round_time"]
             self.turn_holder = serialised["turn_holder"]
-        except KeyError:
-            logging.error(f"Store:Deserialise: Incorrect key given. Data not loaded correctly.")
+        except KeyError as e:
+            logging.warning(f"Store.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
 
 
 store = _Store()

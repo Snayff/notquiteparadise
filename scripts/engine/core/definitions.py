@@ -1,26 +1,41 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional, cast
 
 import pygame
 from snecs.typedefs import EntityID
 
-from scripts.engine.core.constants import (AfflictionCategory,
+from scripts.engine.core.constants import (
+    AfflictionCategory,
     AfflictionCategoryType,
     AfflictionTriggerType,
-    Direction, DirectionType, EffectType,
-    EffectTypeType, PrimaryStatType,
+    Direction,
+    DirectionType,
+    EffectType,
+    EffectTypeType,
+    PrimaryStatType,
     ProjectileExpiry,
     ProjectileExpiryType,
     ProjectileSpeed,
-    ProjectileSpeedType, RenderLayer, Resource,
-    ResourceType, SecondaryStatType,
-    Shape, ShapeType, TargetingMethod,
-    TargetingMethodType, TargetTagType, TerrainCollision,
-    TerrainCollisionType, TraitGroup,
-    TraitGroupType, TravelMethod,
-    TravelMethodType)
+    ProjectileSpeedType,
+    RenderLayer,
+    RenderLayerType,
+    Resource,
+    ResourceType,
+    SecondaryStatType,
+    Shape,
+    ShapeType,
+    TargetingMethod,
+    TargetingMethodType,
+    TargetTagType,
+    TerrainCollision,
+    TerrainCollisionType,
+    TraitGroup,
+    TraitGroupType,
+    TravelMethod,
+    TravelMethodType,
+)
 from scripts.engine.core.extend_json import register_dataclass_with_json
 
 if TYPE_CHECKING:
@@ -49,7 +64,7 @@ class SpritePathsData:
     """
     Possible sprites paths for a trait
     """
-    render_order: RenderLayer = field(default=RenderLayer.BOTTOM)
+    render_order: RenderLayerType = field(default=RenderLayer.BOTTOM)
     icon: str = field(default="none")
     idle: str = field(default="none")
     attack: str = field(default="none")
@@ -138,7 +153,7 @@ class ProjectileData:
     Data class for a projectile
     """
     # what created it?
-    creator: EntityID = 0
+    creator: EntityID = cast(EntityID, 0)  # this will be overwritten or will break, but need defaults to allow passing
     skill_name: str = "none"
     skill_instance: Optional[Skill] = None
     name: str = "none"

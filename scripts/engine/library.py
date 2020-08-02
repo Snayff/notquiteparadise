@@ -4,15 +4,22 @@ import json
 import logging
 import os
 import time
-import pygame
 from typing import TYPE_CHECKING
+
+import pygame
+
 from scripts.engine.core.constants import InputIntent
-from scripts.engine.core.definitions import (AfflictionData, AspectData,
-                                             BasePrimaryStatData,
-                                             BaseSecondaryStatData,
-                                             GameConfigData, GodData,
-                                             SkillData, TraitData,
-                                             VideoConfigData)
+from scripts.engine.core.definitions import (
+    AfflictionData,
+    AspectData,
+    BasePrimaryStatData,
+    BaseSecondaryStatData,
+    GameConfigData,
+    GodData,
+    SkillData,
+    TraitData,
+    VideoConfigData,
+)
 from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:

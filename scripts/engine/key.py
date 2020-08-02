@@ -119,4 +119,3 @@ def _check_dev_actions(event: pygame.event):
 
         elif event.key == pygame.K_F12:
             return InputIntent.TEST
-

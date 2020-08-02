@@ -4,10 +4,18 @@ import gc
 import logging
 import math
 import timeit
+from typing import TYPE_CHECKING
+
 import pygame
 import scipy
-from typing import TYPE_CHECKING
-from scripts.engine.core.constants import (DirectionType, IMAGE_NOT_FOUND_PATH, TILE_SIZE, Shape, ShapeType)
+
+from scripts.engine.core.constants import (
+    IMAGE_NOT_FOUND_PATH,
+    TILE_SIZE,
+    DirectionType,
+    Shape,
+    ShapeType,
+)
 
 if TYPE_CHECKING:
     from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)

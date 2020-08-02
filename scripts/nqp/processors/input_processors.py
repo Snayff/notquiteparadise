@@ -1,19 +1,37 @@
 from __future__ import annotations
 
 import logging
-import pygame
-
 from typing import TYPE_CHECKING, Optional, Type
+
+import pygame
 from snecs.typedefs import EntityID
-from scripts.engine import chronicle, debug, key, library, state, utility, world
+
+from scripts.engine import (
+    chronicle,
+    debug,
+    key,
+    library,
+    state,
+    utility,
+    world,
+)
+from scripts.engine.action import Move, Skill
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
-    Direction, DirectionType, EventType, GameState, GameStateType, InputIntent,
-    InputIntentType, SAVE_PATH, TargetingMethod, UIElement)
+    SAVE_PATH,
+    Direction,
+    DirectionType,
+    EventType,
+    GameState,
+    GameStateType,
+    InputIntent,
+    InputIntentType,
+    TargetingMethod,
+    UIElement,
+)
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
-from scripts.engine.action import Move, Skill
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:

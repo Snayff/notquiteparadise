@@ -6,9 +6,11 @@ import io
 import logging
 import pstats
 import time
-from typing import Optional, TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
+
 from snecs import Component
 from snecs.typedefs import EntityID
+
 from scripts.engine import state, world
 from scripts.engine.core.constants import INFINITE, VERSION
 
@@ -224,7 +226,3 @@ def log_component_not_found(entity: EntityID, component: Type[Component]):
     """
     name = world.get_name(entity)
     logging.warning(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")
-
-
-
-

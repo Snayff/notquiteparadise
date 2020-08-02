@@ -2,15 +2,25 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import library, world
 from scripts.engine.action import Skill, properties_set_by_data
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (DamageType, DirectionType, PrimaryStat,
-    Shape)
+from scripts.engine.core.constants import (
+    DamageType,
+    DirectionType,
+    PrimaryStat,
+    Shape,
+)
 from scripts.engine.effect import (
-    ApplyAfflictionEffect, DamageEffect, Effect, MoveActorEffect,
-    ReduceSkillCooldownEffect)
+    ApplyAfflictionEffect,
+    DamageEffect,
+    Effect,
+    MoveActorEffect,
+    ReduceSkillCooldownEffect,
+)
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

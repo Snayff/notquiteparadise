@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import library
 from scripts.engine.action import Affliction, properties_set_by_data
-from scripts.engine.core.constants import (DamageType,
-    PrimaryStat)
+from scripts.engine.core.constants import DamageType, PrimaryStat
 from scripts.engine.effect import AffectStatEffect, DamageEffect
 
 if TYPE_CHECKING:

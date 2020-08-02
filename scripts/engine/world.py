@@ -3,29 +3,69 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    TypeVar,
+    cast,
+)
+
+import numpy as np
 import pygame
 import snecs
-import numpy as np
 import tcod.map
-
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-from typing import (TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar,
-    cast)
+
 from scripts.engine import chronicle, debug, library, utility
-from scripts.engine.component import (FOV, Aesthetic, Afflictions, Behaviour,
-    Blocking, HasCombatStats, Identity,
-    IsActor, IsGod, IsPlayer, Knowledge,
-    Opinion, Position, Resources, Tracked,
-    Traits)
+from scripts.engine.component import (
+    FOV,
+    Aesthetic,
+    Afflictions,
+    Behaviour,
+    Blocking,
+    HasCombatStats,
+    Identity,
+    IsActor,
+    IsGod,
+    IsPlayer,
+    Knowledge,
+    Opinion,
+    Position,
+    Resources,
+    Tracked,
+    Traits,
+)
 from scripts.engine.core.constants import (
-    ICON_SIZE, INFINITE, Direction, DirectionType, HitType,
-    HitTypeType, PrimaryStat, PrimaryStatType, RenderLayer, ResourceType,
-    SecondaryStatType, ShapeType, TILE_SIZE, TargetTag, TargetTagType, TraitGroup,
-    TravelMethod, TravelMethodType, UIElement)
-from scripts.engine.core.definitions import (ProjectileData,
+    ICON_SIZE,
+    INFINITE,
+    TILE_SIZE,
+    Direction,
+    DirectionType,
+    HitType,
+    HitTypeType,
+    PrimaryStat,
+    PrimaryStatType,
+    RenderLayer,
+    ResourceType,
+    SecondaryStatType,
+    ShapeType,
+    TargetTag,
+    TargetTagType,
+    TraitGroup,
+    TravelMethod,
+    TravelMethodType,
+    UIElement,
+)
+from scripts.engine.core.definitions import (
+    ProjectileData,
     SpritePathsData,
-    SpritesData)
+    SpritesData,
+)
 from scripts.engine.core.store import store
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
@@ -109,7 +149,7 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
     from scripts.nqp.actions.skills import BasicAttack
     from scripts.engine.action import Move
     known_skills = [BasicAttack, Move]  # for knowledge
-    skill_order = ['basic_attack']  # for knowledge
+    skill_order = ["basic_attack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
@@ -921,12 +961,12 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
-        cooldown = knowledge.cooldowns[skill_name]
+        cooldown: int = knowledge.cooldowns[skill_name]
         if cooldown <= 0:
             not_on_cooldown = True
     else:
         not_on_cooldown = False
-        cooldown = "unknown"
+        cooldown = INFINITE
 
     if can_afford and not_on_cooldown:
         return True
@@ -945,8 +985,12 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
         if entity == player:
             ui.log_message("I'm not ready to do that, yet.")
         else:
-            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait {cooldown} more "
-                            f"rounds.")
+            if cooldown == INFINITE:
+                cooldown_msg = "unknown"
+            else:
+                cooldown_msg = str(cooldown)
+            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait "
+                            f"{cooldown_msg} more rounds.")
 
     # we've reached the end, no good.
     return False

@@ -5,9 +5,16 @@ import json
 import logging
 import os
 from typing import TYPE_CHECKING
+
 from scripts.engine import library, utility, world
-from scripts.engine.core.constants import CURRENT_WORKING_DIRECTORY, GameState, GameStateType, MAX_SAVES, SAVE_PATH, \
-    VERSION
+from scripts.engine.core.constants import (
+    CURRENT_WORKING_DIRECTORY,
+    MAX_SAVES,
+    SAVE_PATH,
+    VERSION,
+    GameState,
+    GameStateType,
+)
 from scripts.engine.core.store import store
 
 if TYPE_CHECKING:
@@ -152,3 +159,5 @@ def load_game(filename: str):
 
     # set the data as the default world
     world.move_world(new_world)
+
+    logging.info(f"Game loaded from {filename}.")

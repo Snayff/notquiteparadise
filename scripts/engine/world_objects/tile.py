@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict
 
 from scripts.engine.core.constants import TILE_SIZE
 
@@ -38,19 +38,25 @@ class Tile:
         }
         return _dict
 
-    def deserialise(self, serialised: Dict[str, Any]):
+    @classmethod
+    def deserialise(cls, serialised: Dict[str, Any]):
         """
         Loads the details from the serialised data back into the Tile.
         """
         try:
-            self.x = serialised["x"]
-            self.y = serialised["y"]
-            self.sprite_path = serialised["sprite_path"]
+            x = serialised["x"]
+            y = serialised["y"]
+            sprite_path = serialised["sprite_path"]
             from scripts.engine import utility
-            self.sprite = utility.get_image(self.sprite_path, (TILE_SIZE, TILE_SIZE))
-            self.is_visible = serialised["is_visible"]
-            self.blocks_sight = serialised["blocks_sight"]
-            self.blocks_movement = serialised["blocks_movement"]
+            sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+            is_visible = serialised["is_visible"]
+            blocks_sight = serialised["blocks_sight"]
+            blocks_movement = serialised["blocks_movement"]
 
-        except KeyError:
-            logging.error(f"Tile:Deserialise: Incorrect key given. Data not loaded correctly.")
+            tile = Tile(x, y, sprite, sprite_path, blocks_sight, blocks_movement)
+            tile.is_visible = is_visible
+            return tile
+
+        except KeyError as e:
+            logging.warning(f"Tile.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
+            raise Exception  # throw exception to hit outer error handler and exit

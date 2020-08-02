@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import os
-import pygame
-
 from types import SimpleNamespace
 from typing import NewType, Tuple
+
+import pygame
 
 ######################## TOP LEVEL CONSTANTS ######################################
 

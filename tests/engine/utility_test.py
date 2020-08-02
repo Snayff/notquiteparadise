@@ -1,8 +1,9 @@
-import pytest
+from typing import List, Tuple
+
+import pytest  # type: ignore
 
 from scripts.engine import utility
-from scripts.engine.core.constants import Shape
-from typing import Tuple, List
+from scripts.engine.core.constants import Shape, ShapeType
 
 
 class TestUtility:
@@ -18,7 +19,7 @@ class TestUtility:
     ]
 
     @pytest.mark.parametrize("shape, size, direction, expected", test_get_coordinates_from_shape_parameters)
-    def test_get_coordinates_from_shape(self, shape: Shape, size: int, direction: Tuple[int, int],
+    def test_get_coordinates_from_shape(self, shape: ShapeType, size: int, direction: Tuple[int, int],
                                         expected: List[Tuple[int, int]]):
         """
         Test get coordinates from shape returns the correct coordinates

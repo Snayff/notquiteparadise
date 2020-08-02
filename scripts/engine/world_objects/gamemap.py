@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import Any, Dict, List
 
 from scripts.engine import utility
@@ -73,13 +74,41 @@ class GameMap:
         """
         Serialise the game map to dict.
         """
-        tiles = []
+        tiles: List[List[Dict]] = []
+        # build list of lists
         for x in range(self.width):
+            # give each new row an empty list
+            tiles.append([])
             for y in range(self.height):
-                tiles.append(self.tiles[x][y].serialise())
+                # add to the column
+                tiles[x].append(self.tiles[x][y].serialise())
+
+
         _dict = {
             "width": self.width,
             "height": self.height,
             "tiles": tiles
         }
         return _dict
+
+    @classmethod
+    def deserialise(cls, serialised: Dict[str, Any]):
+        """
+        Loads the details from the serialised data back into the GameMap.
+        """
+        try:
+            width = serialised["width"]
+            height = serialised["height"]
+
+            tiles: List[List[Tile]] = []
+            for x in range(width):
+                tiles.append([])
+                for y in range(height):
+                    tiles[x].append(Tile.deserialise(serialised["tiles"][x][y]))
+
+            game_map = GameMap(width, height)
+            game_map.tiles = tiles
+            return game_map
+        except KeyError as e:
+            logging.warning(f"GameMap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
+            raise Exception  # throw exception to hit outer error handler and exit

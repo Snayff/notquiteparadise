@@ -1,9 +1,15 @@
 from scripts.engine import world
 from scripts.engine.action import Affliction, Move
 from scripts.engine.component import Afflictions, Identity, Knowledge, Position
-from scripts.engine.core.constants import EffectType, AfflictionTrigger, TargetTag
-from scripts.engine.effect import (ReduceSkillCooldownEffect,
-                                   TriggerAfflictionsEffect)
+from scripts.engine.core.constants import (
+    AfflictionTrigger,
+    EffectType,
+    TargetTag,
+)
+from scripts.engine.effect import (
+    ReduceSkillCooldownEffect,
+    TriggerAfflictionsEffect,
+)
 from tests.mocks import world_mock
 
 
