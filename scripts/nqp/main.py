@@ -95,6 +95,9 @@ def game_loop():
             input_processors.process_event(event, current_state)
             ui.process_ui_events(event)
 
+        from scripts.engine.core.store import store
+        store.current_gamemap
+
         # allow everything to update in response to new state
         display_processors.process_display_updates(delta_time)
         debug.update()

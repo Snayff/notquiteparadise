@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Iterator
+from typing import Dict, TYPE_CHECKING, Iterator, Type
 
 from snecs.typedefs import EntityID
 
@@ -29,13 +29,11 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Tuple, List
 
+__all__ = ["Skill", "Affliction", "properties_set_by_data", "register_action", "skill_registry",
+    "affliction_registry"]
 
-def properties_set_by_data(cls):
-    """
-    Class decorator used for initializing class with a  set properties method so as to avoid repeating code.
-    """
-    cls.set_properties()
-    return cls
+skill_registry: Dict[str, Type[Skill]] = {}
+affliction_registry: Dict[str, Type[Affliction]] = {}
 
 
 class Skill(ABC):
@@ -49,7 +47,7 @@ class Skill(ABC):
     """
 
     # to be overwritten in subclass, including being set by external data
-    name: str
+    key: str
     description: str
     icon_path: str
     resource_type: ResourceType
@@ -78,7 +76,7 @@ class Skill(ABC):
         If uses_projectile then create a projectile to carry the skill effects. Otherwise call self.apply
         """
         from scripts.engine import world
-        logging.debug(f"'{world.get_name(self.user)}' used '{self.name}'.")
+        logging.debug(f"'{world.get_name(self.user)}' used '{self.key}'.")
 
         # animate the skill user
         self._play_animation()
@@ -91,7 +89,7 @@ class Skill(ABC):
             # update projectile values
             projectile_data = self.projectile_data
             projectile_data.creator = self.user
-            projectile_data.skill_name = self.name
+            projectile_data.skill_name = self.key
             projectile_data.skill_instance = self
             projectile_data.direction = self.direction
 
@@ -125,7 +123,7 @@ class Skill(ABC):
             yield entity, self.build_effects(entity)
             entity_names.append(world.get_name(entity))
 
-        logging.debug(f"'{world.get_name(self.user)}' applied '{self.name}' to {entity_names}.")
+        logging.debug(f"'{world.get_name(self.user)}' applied '{self.key}' to {entity_names}.")
 
     @abstractmethod
     def get_animation(self, aesthetic: Aesthetic):
@@ -135,7 +133,7 @@ class Skill(ABC):
         pass
 
     @abstractmethod
-    def build_effects(self, entity):
+    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[Effect]:
         """
         Build the effects of this skill applying to a single entity. Must be overridden by subclass.
         """
@@ -147,7 +145,7 @@ class Skill(ABC):
         Sets the class properties of the skill from a skill name
         """
         from scripts.engine import library
-        cls.data = library.SKILLS[cls.name]
+        cls.data = library.SKILLS[cls.key]
         cls.required_tags = cls.data.required_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
@@ -163,72 +161,6 @@ class Skill(ABC):
         cls.projectile_data = cls.data.projectile_data
 
 
-class Move(Skill):
-    """
-    Basic move for an entity.
-    """
-    # Move's definitions are not defined in the json. They are set here and only here.
-    from scripts.engine import library
-    name = "move"
-    required_tags = [TargetTag.SELF]
-    description = "this is the normal movement."
-    icon_path = ""
-    resource_type = Resource.STAMINA
-    resource_cost = 0
-    time_cost = library.GAME_CONFIG.base_values.move_cost
-    base_cooldown = 0
-    targeting_method = TargetingMethod.TARGET
-    target_directions = [
-        Direction.UP_LEFT,
-        Direction.UP,
-        Direction.UP_RIGHT,
-        Direction.LEFT,
-        Direction.CENTRE,
-        Direction.RIGHT,
-        Direction.DOWN_LEFT,
-        Direction.DOWN,
-        Direction.DOWN_RIGHT
-    ]
-    shape = Shape.TARGET
-    shape_size = 1
-    uses_projectile = False
-
-    def __init__(self, user: EntityID, target_tile: Tile, direction):
-        """
-        Only Move needs an init as it overrides the target tile
-        """
-        from scripts.engine import world
-
-        # override target
-        position = world.get_entitys_component(user, Position)
-        if position:
-            tile = world.get_tile((position.x, position.y))
-        else:
-            tile = world.get_tile((0, 0))
-
-        super().__init__(user, tile, direction)
-
-    def build_effects(self, entity: EntityID) -> List[MoveActorEffect]:
-        """
-        Build the effects of this skill applying to a single entity.
-        """
-
-        move_effect = MoveActorEffect(
-            origin=self.user,
-            target=entity,
-            success_effects=[],
-            failure_effects=[],
-            direction=self.direction,
-            move_amount=1
-        )
-
-        return [move_effect]
-
-    def get_animation(self, aesthetic: Aesthetic):
-        # this special case is handled in the MoveActorEffect
-        return None
-
-
 class Affliction(ABC):
     """
     A subclass of Affliction represents an affliction (a semi-permanent modifier) and holds all the data that is
@@ -240,7 +172,7 @@ class Affliction(ABC):
     """
 
     # to be overwritten in subclass, including being set by external data
-    name: str = ""
+    key: str = ""
     description: str = ""
     icon_path: str = ""
     required_tags: List[TargetTagType]
@@ -283,8 +215,8 @@ class Affliction(ABC):
         """
         from scripts.engine import library
 
-        cls.data = library.AFFLICTIONS[cls.name]
-        cls.name = cls.data.name
+        cls.data = library.AFFLICTIONS[cls.key]
+        cls.key = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.category = cls.data.category
@@ -293,3 +225,23 @@ class Affliction(ABC):
         cls.required_tags = cls.data.required_tags
         cls.identity_tags = cls.data.identity_tags
         cls.triggers = cls.data.triggers
+
+
+def properties_set_by_data(cls):
+    """
+    Class decorator used for initializing class with a  set properties method so as to avoid repeating code.
+    """
+    cls.set_properties()
+    return cls
+
+
+def register_action(cls):
+    """
+    Class decorator used to register an action with the engine.
+    """
+    if issubclass(cls, Skill):
+        skill_registry[cls.key] = cls
+    elif issubclass(cls, Affliction):
+        affliction_registry[cls.key] = cls
+
+    return cls

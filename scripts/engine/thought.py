@@ -125,7 +125,7 @@ class ProjectileBehaviour(AIBehaviour):
             world.pay_resource_cost(entity, skill_instance.resource_type, skill_instance.resource_cost)
 
             # resolve post activation
-            if skill_instance.name == "move":
+            if skill_instance.key == "move":
                 self.distance_travelled += 1
                 chronicle.end_turn(entity, self.data.speed)
             else:

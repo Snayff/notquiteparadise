@@ -51,15 +51,13 @@ class EntityPool:
         """
         self.rng.seed(seed)
 
-    def spawn_players(self, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]) -> List[EntityID]:
+    def spawn_player(self, rooms: List[Tuple[Tuple[int, int], List[List[int]]]]) -> List[EntityID]:
         """
-        Spawns the players into rooms
-        :param rooms: Rooms to spawn in
-        :return:
+        Spawns the player into rooms
         """
-        players = [e for e in self.pool if e.is_player]
+        player = [e for e in self.pool if e.is_player]
         actors = []
-        for player in players:
+        for player in player:
             spawned = False
             while not spawned:
                 room_pos, room = self.rng.choice(rooms)
@@ -72,7 +70,7 @@ class EntityPool:
 
     def spawn_non_players(self, position: Tuple[int, int], room_cells: List[List[int]]) -> List[EntityID]:
         """
-        Spawns random non player actors in the provded position and room cells
+        Spawns random non player actors in the provided position and room cells
         :param position: Position of the room
         :param room_cells: room cells
         :return: The list of actors it spawned
@@ -86,7 +84,7 @@ class EntityPool:
             actors.append(self._spawn_single_actor(room_cells, entry, x, y))
         return actors
 
-    def _spawn_single_actor(self, room_cells: List[List[int]], entry: EntityPoolEntry, x: int, y: int):
+    def _spawn_single_actor(self, room_cells: List[List[int]], entry: EntityPoolEntry, x: int, y: int) -> EntityID:
         """
         Spawns a single actor with the given parameters
         :param room_cells: Room to spawn on
@@ -130,7 +128,7 @@ class EntityPool:
             room[x][y] = 1
 
     @staticmethod
-    def _collides(position: Tuple[int, int], room: List[List[int]], offsets: List[Tuple[int, int]]):
+    def _collides(position: Tuple[int, int], room: List[List[int]], offsets: List[Tuple[int, int]]) -> bool:
         """
         Returns a bool that represents if the position with the offsets will collide in the room
         :param position: Position to use
@@ -169,12 +167,12 @@ class EntityGeneration:
         """
         self.pool = pool
 
-    def place_players(self):
+    def place_player(self):
         """
-        Places the players into rooms
+        Places the player into rooms
         """
         self.pool.seed(self.seed)
-        return self.pool.spawn_players(self.rooms)
+        return self.pool.spawn_player(self.rooms)
 
     def place_entities(self):
         """

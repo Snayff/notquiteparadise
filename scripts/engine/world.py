@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import dataclasses
-import logging
-import random
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -13,15 +10,17 @@ from typing import (
     TypeVar,
     cast,
 )
-
+import dataclasses
+import logging
+import random
 import numpy as np
 import pygame
 import snecs
 import tcod.map
+
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-
-from scripts.engine import chronicle, debug, library, utility
+from scripts.engine import action, chronicle, debug, library, utility
 from scripts.engine.component import (
     FOV,
     Aesthetic,
@@ -59,7 +58,6 @@ from scripts.engine.core.constants import (
     TraitGroup,
     TravelMethod,
     TravelMethodType,
-    UIElement,
 )
 from scripts.engine.core.definitions import (
     ProjectileData,
@@ -72,11 +70,11 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.engine.world_objects.tile import Tile
-from scripts.engine.world_objects.entity_gen import EntityGeneration
+
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
-    from scripts.engine.action import Affliction, Move, Skill
+    from scripts.engine.action import Affliction, Skill
     from scripts.engine.world_objects.entity_gen import EntityPool, EntityGeneration
 
 ########################### LOCAL DEFINITIONS ##########################
@@ -148,9 +146,10 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
     # get info from traits
     traits_paths = []  # for aesthetic
-    from scripts.nqp.actions.skills import BasicAttack
-    from scripts.engine.action import Move
-    known_skills = [BasicAttack, Move]  # for knowledge
+
+    move = action.skill_registry["move"]
+    basic_attack = action.skill_registry["basic_attack"]
+    known_skills = [move, basic_attack]  # for knowledge
     skill_order = ["basic_attack"]  # for knowledge
     perm_afflictions_names = []  # for affliction
     behaviour = None
@@ -162,7 +161,7 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
             for skill_name in data.known_skills:
                 skill_data = library.SKILLS[skill_name]
-                skill_class = utility.get_skill_class(skill_data.class_name)
+                skill_class = action.skill_registry[skill_data.class_name]
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 
@@ -235,8 +234,8 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     add_component(entity, Behaviour(ProjectileBehaviour(entity, data)))
 
-    from scripts.engine.action import Move
-    known_skills = [Move]
+    move = action.skill_registry["move"]
+    known_skills = [move]
     add_component(entity, Knowledge(known_skills))  # type: ignore  # getting mypy error stating Move != Skill
 
     logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
@@ -249,8 +248,7 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     Creates an instance of an Affliction provided the name
     """
     affliction_data = library.AFFLICTIONS[name]
-    from scripts.nqp.actions import afflictions
-    return getattr(afflictions, affliction_data.class_name)(creator, target, duration)
+    return action.affliction_registry[affliction_data.name](creator, target, duration)
 
 
 def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
@@ -1097,7 +1095,7 @@ def apply_skill(skill_instance: Skill) -> bool:
         return True
     else:
         logging.info(
-            f"Could not apply skill \"{skill.name}\", target tile does not have required tags ({skill.required_tags}).")
+            f"Could not apply skill \"{skill.key}\", target tile does not have required tags ({skill.required_tags}).")
 
     return False
 
@@ -1107,7 +1105,7 @@ def set_skill_on_cooldown(skill_instance: Skill) -> bool:
     Sets a skill on cooldown
     """
     user = skill_instance.user
-    name = skill_instance.name
+    name = skill_instance.key
     knowledge = get_entitys_component(user, Knowledge)
     if knowledge:
         knowledge.set_skill_cooldown(name, skill_instance.base_cooldown)
@@ -1135,7 +1133,7 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
                     effect_queue.extend(effect.evaluate())
             return True
         else:
-            logging.info(f"Could not apply affliction \"{affliction.name}\", target tile does not have required "
+            logging.info(f"Could not apply affliction \"{affliction.key}\", target tile does not have required "
                          f"tags ({affliction.required_tags}).")
 
     return False
@@ -1284,8 +1282,7 @@ def learn_skill(entity: EntityID, skill_name: str):
         add_component(entity, Knowledge([]))
     knowledge = get_entitys_component(entity, Knowledge)
     if knowledge:
-        from scripts.nqp.actions import skills
-        skill_class = getattr(skills, skill_name)
+        skill_class = action.skill_registry[skill_name]
         knowledge.learn_skill(skill_class)
 
 
@@ -1342,7 +1339,7 @@ def calculate_to_hit_score(attacker_accuracy: int, skill_accuracy: int, stat_to_
     return mitigated_to_hit_score
 
 
-def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, str]]:
+def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[EntityID, str]]:
     """
     Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
     or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).
@@ -1358,7 +1355,6 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
         knowledge = cast(Knowledge, knowledge)
 
         attitudes = library.GODS[identity.name].attitudes
-        action_name = action
 
         # check if the god has an attitude towards the action and increase likelihood of intervening
         if action_name in attitudes:
@@ -1402,3 +1398,4 @@ def choose_interventions(entity: EntityID, action: Any) -> List[Tuple[EntityID, 
             chosen_interventions.append((entity, chosen_intervention))
 
     return chosen_interventions
+

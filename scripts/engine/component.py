@@ -358,12 +358,12 @@ class Knowledge(RegisteredComponent):
         """
         Learn a new skill.
         """
-        self.skill_names.append(skill.name)
-        self.skills[skill.name] = skill
+        self.skill_names.append(skill.key)
+        self.skills[skill.key] = skill
         if add_to_order:
-            self.skill_order.append(skill.name)
+            self.skill_order.append(skill.key)
         if set_cooldown:
-            self.cooldowns[skill.name] = 0
+            self.cooldowns[skill.key] = 0
 
 
     def serialize(self):
@@ -380,17 +380,10 @@ class Knowledge(RegisteredComponent):
         cooldowns = serialised["cooldowns"]
         skill_order = serialised["skill_order"]
 
-        from scripts.engine.library import SKILLS
         skills = []
-        from scripts.engine import utility
-        from scripts.engine.action import Move
+        from scripts.engine import action
         for name in skill_names:
-            if name == "move":
-                skills.append(Move)
-            else:
-                skills.append(utility.get_skill_class(SKILLS[name].class_name))
-
-
+            skills.append(action.skill_registry[name])
 
         return Knowledge(skills, skill_order, cooldowns)
 
@@ -425,9 +418,9 @@ class Afflictions(RegisteredComponent):
         active_dict = serialised["active"]
 
         active_instances = []
-        from scripts.engine import utility
+        from scripts.engine import action
         for name, value_tuple in active_dict.items():
-            _affliction = utility.get_affliction_class(name)
+            _affliction = action.affliction_registry[name]
             affliction = _affliction(value_tuple[0], value_tuple[1], value_tuple[2])
             active_instances.append(affliction)
 
@@ -440,7 +433,7 @@ class Afflictions(RegisteredComponent):
         if affliction in self.active:
             # if it is affect_stat remove the affect
             if EffectType.AFFECT_STAT in affliction.identity_tags:
-                self.stat_modifiers.pop(affliction.name)
+                self.stat_modifiers.pop(affliction.key)
 
             # remove from active list
             self.active.remove(affliction)

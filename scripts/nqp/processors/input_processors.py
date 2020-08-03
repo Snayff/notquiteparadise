@@ -259,13 +259,13 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
      """
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.name)
+        world.judge_action(player, skill.key)
         ai_processors.process_interventions()
         chronicle.end_turn(player, skill.time_cost)
 
         state.save_game()
 
-        if skill.name == "move":
+        if skill.key == "move":
             ui.set_player_tile(target_tile)
 
 

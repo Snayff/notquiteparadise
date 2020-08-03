@@ -240,9 +240,9 @@ class SkillData:
     """
     # how do we know it?
     name: str = "none"
+    key: str = "none"
     description: str = "none"
     icon_path: str = "none"
-    class_name: str = "none"
 
     # when do we use it?
     required_tags: List[TargetTagType] = field(default_factory=list)
@@ -281,10 +281,10 @@ class AfflictionData:
     """
     Data class for an Afflictions
     """
-    name: str = field(default="none")
-    class_name: str = field(default="none")
-    description: str = field(default="none")
-    icon_path: str = field(default="none")
+    name: str = "none"
+    key: str = "none"
+    description: str = "none"
+    icon_path: str = "none"
     category: AfflictionCategoryType = AfflictionCategory.BANE
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1

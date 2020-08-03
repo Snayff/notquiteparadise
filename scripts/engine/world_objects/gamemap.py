@@ -37,7 +37,7 @@ class GameMap:
         :return: The players and actors spawned
         """
         self.entity_gen.set_pool(pool)
-        players = self.entity_gen.place_players()
+        players = self.entity_gen.place_player()
         actors, actors_per_room = self.entity_gen.place_entities()
         self.actors_per_room = actors_per_room
         return players, actors

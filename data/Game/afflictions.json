@@ -2,10 +2,10 @@
     "bogged_down": {
         "__dataclass__": "AfflictionData",
         "category": "bane",
-        "class_name": "BoggedDown",
         "description": "It weakens mundane defence and makes you a little bit slower.",
         "icon_path": "placeholder/root.png",
         "name": "bogged down",
+        "key": "bogged_down",
         "shape": "target",
         "shape_size": 1,
         "required_tags": [
@@ -25,6 +25,7 @@
         "description": "It does damage.",
         "icon_path": "placeholder/torch.png",
         "name": "flaming",
+        "key": "flaming",
         "shape": "target",
         "shape_size": 1,
         "required_tags": [

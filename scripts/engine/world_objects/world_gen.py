@@ -61,7 +61,13 @@ class DungeonGeneration:
         """
         Returns a bool that represents if this is a map border
         """
-        return x == 0 or y == 0 or x == self.width - 1 or y == self.height - 1
+        border_size = 4
+
+        if (x <= border_size or x >= (self.width - border_size)) or (y <= border_size or y >=
+                                                                     (self.height - border_size)):
+            return True
+        else:
+            return False
 
     def _make_wall(self, x: int, y: int):
         """
@@ -70,6 +76,7 @@ class DungeonGeneration:
         self.tiles[x][y].blocks_sight = True
         self.tiles[x][y].blocks_movement = True
         self.tiles[x][y].sprite = self.wall_sprite
+        self.tiles[x][y].sprite_path = self.wall_sprite_path
 
     def visualize(self):
         pass

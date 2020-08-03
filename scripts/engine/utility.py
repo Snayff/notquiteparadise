@@ -1,11 +1,10 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import gc
 import logging
 import math
 import timeit
-from typing import TYPE_CHECKING
-
 import pygame
 import scipy
 
@@ -19,7 +18,6 @@ from scripts.engine.core.constants import (
 
 if TYPE_CHECKING:
     from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
-    from scripts.engine.action import Affliction, Skill
 
 
 ################################### IMAGES ########################################
@@ -137,26 +135,6 @@ def get_class_members(cls: Type[Any]) -> List[str]:
             members.append(member)
 
     return members
-
-
-def get_skill_class(skill_class_name: str) -> Type[Skill]:
-    """
-    Get the Skill from the name of the skill class.
-    """
-    # FIXME - this points to NQP. Shouldnt.
-    from scripts.nqp.actions import skills
-    skill = getattr(skills, skill_class_name)
-    return skill
-
-
-def get_affliction_class(affliction_class_name: str) -> Type[Affliction]:
-    """
-    Get the Affliction from the name of the affliction class.
-    """
-    # FIXME - this points to NQP. Shouldnt.
-    from scripts.nqp.actions import afflictions
-    affliction = getattr(afflictions, affliction_class_name)
-    return affliction
 
 
 ################################### MATHS ########################################
