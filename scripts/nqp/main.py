@@ -70,7 +70,6 @@ def game_loop():
     """
     The core game loop, handling input, rendering and logic.
     """
-
     while not state.get_current() == GameState.EXIT_GAME:
         # progress frame
         delta_time = state.update_clock()
@@ -94,9 +93,6 @@ def game_loop():
         for event in pygame.event.get():
             input_processors.process_event(event, current_state)
             ui.process_ui_events(event)
-
-        from scripts.engine.core.store import store
-        store.current_gamemap
 
         # allow everything to update in response to new state
         display_processors.process_display_updates(delta_time)

@@ -312,7 +312,7 @@ class RoomAddition:
                     # build connecting tunnel
                     # Attempt 1
                     """
-                    for i in range(tunnelLength+1):
+                    for i in range(tunnel_length+1):
                         x = wall_tile[0] + direction[0]*i
                         y = wall_tile[1] + direction[1]*i
                         self.level[x][y] = 0
