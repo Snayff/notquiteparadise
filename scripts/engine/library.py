@@ -1,11 +1,10 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import json
 import logging
 import os
 import time
-from typing import TYPE_CHECKING
-
 import pygame
 
 from scripts.engine.core.constants import InputIntent
@@ -16,7 +15,7 @@ from scripts.engine.core.definitions import (
     BaseSecondaryStatData,
     GameConfigData,
     GodData,
-    SkillData,
+    MapData, SkillData,
     TraitData,
     VideoConfigData,
 )
@@ -24,6 +23,10 @@ from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
     from typing import Dict, Any, List, Union
+
+
+__all__ = ["TRAITS", "AFFLICTIONS", "ASPECTS", "BASE_STATS_PRIMARY", "BASE_STATS_SECONDARY", "GODS", "SKILLS",
+    "MAPS", "INPUT_CONFIG", "VIDEO_CONFIG", "GAME_CONFIG", "refresh_library"]
 
 
 ####################### DATA DICTS ##############################
@@ -35,6 +38,7 @@ BASE_STATS_PRIMARY: Dict[str, BasePrimaryStatData] = {}
 BASE_STATS_SECONDARY: Dict[str, BaseSecondaryStatData] = {}
 GODS: Dict[str, GodData] = {}
 SKILLS: Dict[str, SkillData] = {}
+MAPS: Dict[str, MapData] = {}
 INPUT_CONFIG: Dict[str, List[str]] = {}
 VIDEO_CONFIG: VideoConfigData
 GAME_CONFIG: GameConfigData
@@ -125,6 +129,14 @@ def _load_skills_data():
     global SKILLS
 
     SKILLS = data
+
+
+def _load_map_data():
+    with open('data/game/maps.json') as file:
+        data = json.load(file, object_hook=deserialise_dataclasses)
+    global MAPS
+
+    MAPS = data
 
 
 def _load_input_config():

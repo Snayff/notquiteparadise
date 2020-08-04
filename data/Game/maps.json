@@ -1,0 +1,7 @@
+{
+    "cave": {
+        "__dataclass__": "LevelData",
+        "min_room_space": 16,
+        "max_enemies_per_room": 3
+    }
+}

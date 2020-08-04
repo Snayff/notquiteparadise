@@ -4,6 +4,8 @@ import logging
 import json
 
 from typing import Any, Dict, List, Tuple
+
+from scripts.engine import dungen
 from scripts.engine.world_objects.entity_gen import EntityGeneration, EntityPool
 from scripts.engine.world_objects.tile import Tile
 from snecs.typedefs import EntityID
@@ -20,16 +22,19 @@ class GameMap:
         self.seed: int = seed
         self.algorithm_name: str = algorithm_name
 
-        world_gen = DungeonGeneration(seed, algorithm_name, width, height)
-        tiles, rooms, tunnels = world_gen.generate()
-
-        self.tiles: List[List[Tile]] = tiles
-        self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = rooms
-        self.tunnels = tunnels
-        self.world_gen_info = world_gen.get_gen_info()
+        self.tiles: List[List[Tile]] = []
+        self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = []
+        self.tunnels = []
 
         self.entity_gen = EntityGeneration(self.seed, self.rooms)
         self.actors_per_room: Dict[int, List[EntityID]] = {}
+
+    def generate_level(self):
+        """
+        Generate the level for the current game map. Creates tiles. Saves the values directly to the GameMap.
+        """
+        self.tiles, self.rooms, self.tunnels = dungen.generate(self.seed, self.algorithm_name, self.width,
+                                                               self.height)
 
     def populate(self, pool: EntityPool) -> Tuple[List[EntityID], List[EntityID]]:
         """

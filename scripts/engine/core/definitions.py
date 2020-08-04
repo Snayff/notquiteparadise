@@ -230,6 +230,18 @@ class GodData:
     interventions: Dict[str, InterventionData] = field(default_factory=dict)
 
 
+####################### WORLD ######################
+
+@register_dataclass_with_json
+@dataclass
+class MapData:
+    """
+    Data class for a level
+    """
+    min_room_space: int = 0
+    max_enemies_per_room: int = 0
+
+
 ######################### ACTIONS ##################################
 
 @register_dataclass_with_json
@@ -370,15 +382,7 @@ class DefaultValueData:
 
 @register_dataclass_with_json
 @dataclass
-class WorldValueData:
-    min_room_space: int
-    max_enemies_per_room: int
-
-
-@register_dataclass_with_json
-@dataclass
 class GameConfigData:
     hit_types: HitTypeData
     base_values: BaseValueData
     default_values: DefaultValueData
-    world_values: WorldValueData
