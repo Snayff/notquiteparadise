@@ -1,6 +1,6 @@
 {
     "cave": {
-        "__dataclass__": "LevelData",
+        "__dataclass__": "MapData",
         "algorithm_name": "room_addition",
         "max_enemies_per_room": 3,
         "max_rooms": 30,

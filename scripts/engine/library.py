@@ -66,6 +66,7 @@ def refresh_library():
         _load_base_stat_secondary_data()
         _load_gods_data()
         _load_skills_data()
+        _load_map_data()
         _load_input_config()
         _load_video_config()
         _load_game_config()

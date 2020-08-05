@@ -15,7 +15,7 @@ from scripts.engine import (
     utility,
     world,
 )
-from scripts.engine.action import Move, Skill
+from scripts.engine.action import Skill
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
     SAVE_PATH,
@@ -32,6 +32,7 @@ from scripts.engine.core.constants import (
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
+from scripts.nqp.actions.skills import Move
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:

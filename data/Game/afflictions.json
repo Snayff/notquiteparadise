@@ -21,7 +21,6 @@
     "flaming": {
         "__dataclass__": "AfflictionData",
         "category": "bane",
-        "class_name": "Flaming",
         "description": "It does damage.",
         "icon_path": "placeholder/torch.png",
         "name": "flaming",

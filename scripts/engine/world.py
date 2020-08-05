@@ -290,13 +290,6 @@ def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
     return converted
 
 
-def create_gamemap(seed: int, algorithm_name: str, width: int, height: int):
-    """
-    Create new GameMap
-    """
-    store.current_gamemap = GameMap(seed, algorithm_name, width, height)
-
-
 def populate(pool: EntityPool):
     return store.current_gamemap.populate(pool)
 
@@ -349,9 +342,9 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
         if _is_tile_in_bounds(_tile):
             return _tile
         else:
-            raise KeyError
+            raise IndexError
 
-    except KeyError:
+    except IndexError:
         logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
 
         # ensure something always returned.

@@ -35,7 +35,7 @@ class BoggedDown(Affliction):
 @properties_set_by_data
 @register_action
 class Flaming(Affliction):
-    name = "flaming"
+    key = "flaming"
 
     def build_effects(self, entity: EntityID) -> List[DamageEffect]:
         """

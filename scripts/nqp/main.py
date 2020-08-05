@@ -10,12 +10,14 @@ from snecs.world import default_world
 
 from scripts.engine import chronicle, debug, state, world
 from scripts.engine.core.constants import GameState, UIElement
+from scripts.engine.core.store import store
 from scripts.engine.debug import (
     enable_profiling,
     initialise_logging,
     kill_logging,
 )
 from scripts.engine.ui.manager import ui
+from scripts.engine.world_objects.gamemap import GameMap
 from scripts.nqp.processors import display_processors, input_processors
 from scripts.engine.world_objects.entity_gen import EntityPool
 
@@ -117,15 +119,17 @@ def initialise_game():
     """
     Init the game`s required info
     """
-    map_width = 50
-    map_height = 30
-    pool = _create_entity_pool()
-    world.create_gamemap(10, 'room_addition', map_width, map_height)
 
-    players, actors = world.populate(pool)
+    pool = _create_entity_pool()
+    game_map = GameMap("cave", 10)
+    game_map.generate_level()
+    store.current_gamemap = game_map
+
+    player = world.create_actor("player", "a desc", [(1, 2)], ["shoom", "soft_tops", "dandy"], True)
+    #players, actors = world.populate(pool)
 
     # init the player
-    player = players[0]
+    #player = players[0]
     world.recompute_fov(player)
 
 

@@ -244,7 +244,9 @@ def generate_room_cellular_automata(rng) -> Room:
     wall_probability = _map_data.chance_of_in_room_wall
     neighbours = _map_data.max_neighbouring_walls_in_room
     
-    while True:
+    for _ in range(_generate_room_attempts):
+
+        # fill with walls
         tile_categories = [[TileCategory.WALL
                  for y in range(room_max_area)]
                 for x in range(room_max_area)]
@@ -262,10 +264,10 @@ def generate_room_cellular_automata(rng) -> Room:
 
                     # if the cell's neighboring walls > neighbours, set it to 1
                     if get_adjacent_walls(x, y, tile_categories) > neighbours:
-                        tile_categories[x][y] = _create_wall_tile(x, y)
+                        tile_categories[x][y] = TileCategory.WALL
                     # otherwise, set it to 0
                     elif get_adjacent_walls(x, y, tile_categories) < neighbours:
-                        tile_categories[x][y] = _create_floor_tile(x, y)
+                        tile_categories[x][y] = TileCategory.FLOOR
 
         # flood fill to remove small caverns
         tile_categories = flood_fill(tile_categories)

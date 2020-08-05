@@ -100,7 +100,7 @@ class BasicAttack(Skill):
     """
     Basic attack for an entity
     """
-    name = "basic_attack"
+    key = "basic_attack"
 
     def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[DamageEffect]:
         """
@@ -133,7 +133,7 @@ class Lunge(Skill):
     """
     Lunge skill for an entity
     """
-    name = "lunge"
+    key = "lunge"
     # FIXME - only applying damage when moving 2 spaces, anything less fails to apply.
 
     def __init__(self, user: EntityID, tile: Tile, direction: DirectionType):
@@ -241,7 +241,7 @@ class TarAndFeather(Skill):
     """
     TarAndFeather skill for an entity
     """
-    name = "tar_and_feather"
+    key = "tar_and_feather"
 
     def __init__(self, user: EntityID, target_tile: Tile, direction: DirectionType):
         super().__init__(user, target_tile, direction)

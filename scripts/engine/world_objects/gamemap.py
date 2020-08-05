@@ -22,18 +22,23 @@ class GameMap:
         self.rng = random.Random()
         self.rng.seed(self.seed)
 
-        self.tiles: List[List[Tile]] = []
-        self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = []
-        self.tunnels = []
+        from scripts.engine import library
+        _map_data = library.MAPS[map_name]
+        self.width = _map_data.width
+        self.height = _map_data.height
 
-        self.entity_gen = EntityGeneration(self.seed, self.rooms)
+        self.tiles: List[List[Tile]] = []
         self.actors_per_room: Dict[int, List[EntityID]] = {}
+
+        self.generation_info: str = ""
+
+        self.entity_gen = None #EntityGeneration(self.seed, self.rooms)
 
     def generate_level(self):
         """
         Generate the level for the current game map. Creates tiles. Saves the values directly to the GameMap.
         """
-        self.tiles, self.rooms, self.tunnels = dungen.generate(self.name, self.rng)
+        self.tiles, self.generation_info = dungen.generate(self.name, self.rng)
 
     def populate(self, pool: EntityPool) -> Tuple[List[EntityID], List[EntityID]]:
         """
@@ -70,18 +75,6 @@ class GameMap:
         }
         with open(path, 'w') as fp:
             fp.write(json.dumps(content, indent=2))
-
-    def calculate_room_area(self, room_cells: List[List[int]]) -> int:
-        """
-        Calculate the area of a room based on the cells given
-        """
-        area = 0
-        for i in range(len(room_cells)):
-            for j in range(len(room_cells[i])):
-                if room_cells[i][j] == 0:
-                    area += 1
-        # take into account the door slot
-        return area + 1
 
     def serialise(self) -> Dict[str, Any]:
         """
