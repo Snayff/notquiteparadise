@@ -236,7 +236,7 @@ class GodData:
 @dataclass
 class MapData:
     """
-    Data class for a level
+    Data class for a Map.
     """
     algorithm_name: str = "none"
 

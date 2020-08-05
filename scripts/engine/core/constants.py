@@ -8,7 +8,7 @@ import pygame
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.118.0"
+VERSION = "0.119.0"
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -49,6 +49,7 @@ TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
 AfflictionTriggerType = NewType("AfflictionTriggerType", str)
 RenderLayerType = NewType("RenderLayerType", int)
+TileCategoryType = NewType("TileCategoryType", str)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
@@ -316,3 +317,10 @@ class ProjectileSpeed(SimpleNamespace):
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))
     INSTANT = ProjectileSpeedType(0)
+
+class TileCategory(SimpleNamespace):
+    """
+    The type of tile to be placed
+    """
+    FLOOR = TileCategoryType("floor")
+    WALL = TileCategoryType("wall")
