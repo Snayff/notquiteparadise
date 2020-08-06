@@ -48,7 +48,9 @@ class RoomAddition:
 
     def generate_level_steps(self, seed, map_width, map_height):
 
-        self.level = [[1 for _ in range(map_height)] for _ in range(map_width)]
+        self.level = [[1
+            for _ in range(map_height)]
+            for _ in range(map_width)]
         yield self.level
         self.rng.seed(seed)
         # generate the first room

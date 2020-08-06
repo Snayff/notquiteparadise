@@ -19,9 +19,9 @@ _map: List[List[Tile]] = []  # list of list of tiles to be passed back to the ga
 _map_data: MapData = MapData()
 
 # parameters/config
-_generate_room_attempts = 500
+_generate_room_attempts = 100
 _place_room_attempts = 20
-_generate_shortcut_attempts = 500
+_generate_shortcut_attempts = 100
 
 
 def generate(map_name: str, rng: random.Random) -> Tuple[List[List[Tile]], str]:
@@ -38,7 +38,7 @@ def generate(map_name: str, rng: random.Random) -> Tuple[List[List[Tile]], str]:
     height = _map_data.height
 
     # generate the level
-    generate_level(rng)
+    generate_map(rng)
 
     # ensure all borders are walls
     for x in range(width):
@@ -52,7 +52,7 @@ def generate(map_name: str, rng: random.Random) -> Tuple[List[List[Tile]], str]:
     # build generation string
     gen_info = f"{map_name}: \n"
     for room in _placed_rooms:
-        gen_info += room.gen_info + "\n"
+        gen_info += room.generation_info + "\n"
 
     # clear existing info
     _map = []
@@ -103,11 +103,11 @@ def generate_steps(rng: random.Random):
     include_shortcuts = _map_data.include_shortcuts
     max_rooms = _map_data.max_rooms
 
-    for step in generate_level_steps(rng, width, height, max_rooms, include_shortcuts):
+    for step in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts):
         yield step
 
 
-def generate_level(rng: random.Random):
+def generate_map(rng: random.Random):
     """
     Generates the map.
     :return: The completed map.
@@ -117,12 +117,12 @@ def generate_level(rng: random.Random):
     include_shortcuts = _map_data.include_shortcuts
     max_rooms = _map_data.max_rooms
 
-    for _ in generate_level_steps(rng, width, height, max_rooms, include_shortcuts):
+    for _ in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts):
         pass
     return _map
 
 
-def generate_level_steps(rng: random.Random, width: int, height: int, max_rooms: int, include_shortcuts: bool):
+def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms: int, include_shortcuts: bool):
     """
     Generate the next step of the level generation.
     """
@@ -136,31 +136,34 @@ def generate_level_steps(rng: random.Random, width: int, height: int, max_rooms:
 
     # generate the first room in the centre of the map
     room = generate_room(rng)
-    room_x = int((width / 2 - room.width / 2) - 1)
-    room_y = int((height / 2 - room.height / 2) - 1)
+    if not room:
+        raise Exception("Failed to generate level.")
+    # pick random position to place the first room
+    room_x = rng.randint(4, width - (room.width - 4))
+    room_y = rng.randint(4, height - (room.height - 4))
     add_room_to_map(room_x, room_y, room)
     yield _map
     
     # generate other rooms
-    for i in range(_generate_room_attempts):
-        room = generate_room(rng)
-
-        # try to find a position for the room
-        room_pos, tunnel_pos, direction, tunnel_length = find_place_for_next_room(rng, room, width, height)
-        if room_pos:
-            add_room_to_map(room_pos[0], room_pos[1], room)
-            yield _map
-
-            # from previous room
-            add_direct_tunnel_to_map(tunnel_pos, direction, tunnel_length)
-            yield _map
-
-            # check if enough rooms are places
-            if len(_placed_rooms) >= max_rooms:
-                break
-    yield _map
-    if include_shortcuts:
-        add_shortcuts(rng, width, height)
+    # for i in range(_generate_room_attempts):
+    #     room = generate_room(rng)
+    #
+    #     # try to find a position for the room
+    #     room_pos, tunnel_pos, direction, tunnel_length = find_place_for_next_room(rng, room, width, height)
+    #     if room_pos:
+    #         add_room_to_map(room_pos[0], room_pos[1], room)
+    #         yield _map
+    #
+    #         # from previous room
+    #         add_direct_tunnel_to_map(tunnel_pos, direction, tunnel_length)
+    #         yield _map
+    #
+    #         # check if enough rooms are places
+    #         if len(_placed_rooms) >= max_rooms:
+    #             break
+    # yield _map
+    # if include_shortcuts:
+    #     add_shortcuts(rng, width, height)
 
 
 ############################ GENERATE ROOMS ############################
@@ -170,9 +173,9 @@ def generate_room(rng: random.Random) -> Room:
     Select a room type to generate and return that room
     """
     room_weights = _map_data.room_weights
-    options = [generate_room_square, generate_room_cross, generate_room_cellular_automata, generate_room_cavern]
-    weights = [room_weights["square"], room_weights["cross"], room_weights["cellular"], room_weights["cavern"]]
-    
+    options = [_generate_cellular_automata_room]
+    weights = [room_weights["cellular"]]
+
     # pick a generation method based on weights
     room_generation_method = rng.choices(options, weights, k=1)[0]
     room = room_generation_method(rng)
@@ -180,204 +183,51 @@ def generate_room(rng: random.Random) -> Room:
     return room
 
 
-def generate_room_cross(rng: random.Random) -> Room:
+def _generate_cellular_automata_room(rng: random.Random) -> Room:
     """
-    Generate a cross shaped room.
+    Generate a room using cellular automata generation.
     """
-    room_min_area = _map_data.min_room_areas["cross"]
-    room_max_area = _map_data.max_room_areas["cross"]
+    chance_of_spawning_wall = _map_data.chance_of_spawning_wall
+    birth_limit = 4
+    death_limit = 3
 
-    room_hor_width = int((rng.randint(room_min_area + 2, room_max_area)) / 2 * 2)
-    room_ver_width = int((rng.randint(room_min_area, room_hor_width - 2)) / 2 * 2)
-    room_ver_height = int((rng.randint(room_min_area + 2, room_max_area)) / 2 * 2)
-    room_hor_height = int((rng.randint(room_min_area, room_ver_height - 2)) / 2 * 2)
+    # randomly pick a size for the room
+    min_tiles_per_side = 4
+    width = rng.randint(min_tiles_per_side, _map_data.max_room_areas["cellular"] // min_tiles_per_side)
+    min_height = max(min_tiles_per_side, _map_data.min_room_areas["cellular"] // width)
+    max_height = max(min_tiles_per_side, _map_data.max_room_areas["cellular"] // width)
+    height = rng.randint(min_height, max_height)
 
-    # fill with walls
-    tile_categories = [[TileCategory.WALL
-             for y in range(room_ver_height)]
-            for x in range(room_hor_width)]
+    # populate the room with floor
+    room_tile_cats = [[TileCategory.FLOOR for y in range(height)] for x in range(width)]
 
-    # Fill in horizontal space
-    ver_offset = int(room_ver_height / 2 - room_hor_height / 2)
-    for y in range(ver_offset, room_hor_height + ver_offset):
-        for x in range(0, room_hor_width):
-            tile_categories[x][y] = TileCategory.FLOOR
+    # randomly place some walls
+    for y in range(height):
+        for x in range(width):
+            if rng.random() <= chance_of_spawning_wall:
+                room_tile_cats[x][y] = TileCategory.WALL
 
-    # Fill in vertical space
-    hor_offset = int(room_hor_width / 2 - room_ver_width / 2)
-    for y in range(0, room_ver_height):
-        for x in range(hor_offset, room_ver_width + hor_offset):
-            tile_categories[x][y] = TileCategory.FLOOR
+    # spawn new walls around neighbours
+    for y in range(height):
+        for x in range(width):
+            num_neighbours = count_neighbouring_walls(x, y, room_tile_cats)
+
+            # if we have a wall check if enough neighbours to keep alive
+            if room_tile_cats[x][y] == TileCategory.WALL:
+                if num_neighbours < death_limit:
+                    room_tile_cats[x][y] = TileCategory.FLOOR
+                else:
+                    room_tile_cats[x][y] = TileCategory.WALL
+            else:
+                # we have a floor so see if enough neighbours to birth new wall
+                if num_neighbours > birth_limit:
+                    room_tile_cats[x][y] = TileCategory.WALL
+                else:
+                    room_tile_cats[x][y] = TileCategory.FLOOR
 
     # convert to room
-    room = Room(tile_categories=tile_categories, design="cross")
-
+    room = Room(tile_categories=room_tile_cats, design="cellular")
     return room
-
-
-def generate_room_square(rng: random.Random) -> Room:
-    """
-    Generate a square-shaped room.
-    """
-    room_min_area = _map_data.min_room_areas["square"]
-    room_max_area = _map_data.max_room_areas["square"]
-    
-    room_width = rng.randint(room_min_area, room_max_area)
-    room_height = rng.randint(max(int(room_width * 0.5), room_min_area),
-                              min(int(room_width * 1.5), room_max_area))
-
-    tile_categories = [[TileCategory.FLOOR
-             for y in range(1, room_height - 1)]
-            for x in range(1, room_width - 1)]
-
-    # convert to room
-    room = Room(tile_categories=tile_categories, design="square")
-
-    return room
-
-
-def generate_room_cellular_automata(rng) -> Room:
-    """
-    Generate a room using cellular automata.
-    """
-    room_max_area = _map_data.max_room_areas["cellular"]
-    wall_probability = _map_data.chance_of_in_room_wall
-    neighbours = _map_data.max_neighbouring_walls_in_room
-    
-    for _ in range(_generate_room_attempts):
-
-        # fill with walls
-        tile_categories = [[TileCategory.WALL
-                 for y in range(room_max_area)]
-                for x in range(room_max_area)]
-
-        # random fill map
-        for y in range(2, room_max_area - 2):
-            for x in range(2, room_max_area - 2):
-                if rng.random() >= wall_probability:
-                    tile_categories[x][y] = TileCategory.WALL
-
-        # create distinctive regions
-        for i in range(4):
-            for y in range(1, room_max_area - 1):
-                for x in range(1, room_max_area - 1):
-
-                    # if the cell's neighboring walls > neighbours, set it to 1
-                    if get_adjacent_walls(x, y, tile_categories) > neighbours:
-                        tile_categories[x][y] = TileCategory.WALL
-                    # otherwise, set it to 0
-                    elif get_adjacent_walls(x, y, tile_categories) < neighbours:
-                        tile_categories[x][y] = TileCategory.FLOOR
-
-        # flood fill to remove small caverns
-        tile_categories = flood_fill(tile_categories)
-
-        # convert to room
-        room = Room(tile_categories=tile_categories, design="cellular")
-
-        # start over if the room is completely filled in
-        width = room.width
-        height = room.height
-        for x in range(width):
-            for y in range(height):
-                if tile_categories[x][y] == TileCategory.FLOOR:
-                    # return non entirely-filled room
-                    return room
-
-
-def generate_room_cavern(rng):
-    """
-    Generate a cavern-type room.
-    """
-    room_max_area = _map_data.max_room_areas["cavern"]
-    neighbours = _map_data.max_neighbouring_walls_in_room
-    wall_probability = _map_data.chance_of_in_room_wall
-
-    while True:
-        tile_categories = [[TileCategory.WALL
-                 for y in range(room_max_area)]
-                for x in range(room_max_area)]
-
-        # random fill map
-        for y in range(2, room_max_area - 2):
-            for x in range(2, room_max_area - 2):
-                if rng.random() >= wall_probability:
-                    tile_categories[x][y] = TileCategory.WALL
-
-        # create distinctive regions
-        for i in range(4):
-            for y in range(1, room_max_area - 1):
-                for x in range(1, room_max_area - 1):
-
-                    # if the cell's neighboring walls > neighbours, set it to 1
-                    if get_adjacent_walls(x, y, tile_categories) > neighbours:
-                        tile_categories[x][y] = TileCategory.WALL
-                    # otherwise, set it to 0
-                    elif get_adjacent_walls(x, y, tile_categories) < neighbours:
-                        tile_categories[x][y] = TileCategory.FLOOR
-
-        # flood fill to remove small caverns
-        tile_categories = flood_fill(tile_categories)
-
-        # convert to room
-        room = Room(tile_categories=tile_categories, design="cavern")
-
-        # start over if the room is completely filled in
-        width = room.width
-        height = room.height
-        for x in range(width):
-            for y in range(height):
-                if tile_categories[x][y] == 0:
-                    return room
-
-
-def flood_fill(tile_categories: List[List[TileCategoryType]]):
-    """
-    Find the largest region. Fill in all other regions.
-    """
-    room_width = len(tile_categories)
-    room_height = len(tile_categories[0])
-    min_room_area = min(_map_data.min_room_areas.values())
-    largest_region = set()
-
-    for x in range(room_width):
-        for y in range(room_height):
-            if tile_categories[x][y] == TileCategory.FLOOR:
-                new_region = set()
-                tile = (x, y)
-                to_be_filled = set([tile])
-                while to_be_filled:
-                    tile = to_be_filled.pop()
-
-                    if tile not in new_region:
-                        new_region.add(tile)
-
-                        tile_categories[tile[0]][tile[1]] = TileCategory.WALL
-
-                        # check adjacent cells
-                        x = tile[0]
-                        y = tile[1]
-                        north = (x, y - 1)
-                        south = (x, y + 1)
-                        east = (x + 1, y)
-                        west = (x - 1, y)
-
-                        for direction in [north, south, east, west]:
-
-                            if tile_categories[direction[0]][direction[1]] == TileCategory.FLOOR:
-                                if direction not in to_be_filled and direction not in new_region:
-                                    to_be_filled.add(direction)
-
-                if len(new_region) >= min_room_area:
-                    if len(new_region) > len(largest_region):
-                        largest_region.clear()
-                        largest_region.update(new_region)
-
-    for tile in largest_region:
-        tile_categories[tile[0]][tile[1]] = TileCategory.FLOOR
-
-    return tile_categories
-
 
 ####################### PLACEMENT ##############################
 
@@ -435,7 +285,7 @@ def find_place_for_next_room(rng: random.Random, room: Room, width: int,
 
 def add_room_to_map(x: int, y: int, room: Room):
     """
-    Add a room to the specified place on the map.
+    Add a room to the specified place on the map. Converts TileCategory to Tile.
     """
     global _placed_rooms, _map
 
@@ -565,18 +415,24 @@ def add_shortcuts(rng, width, height):
 ######################### QUERIES & HELPER FUNCTIONS #################################
 
 
-def get_adjacent_walls(x: int, y: int, tile_categories: List[List[TileCategoryType]]) -> int:
+def count_neighbouring_walls(x: int, y: int, tile_categories: List[List[TileCategoryType]]) -> int:
     """
-    Get the number of  walls in 8 directions
+    Get the number of walls in 8 directions.
     """
     wall_counter = 0
+    width = len(tile_categories)
+    height = len(tile_categories[0])
 
-    for _x in range(x - 1, x + 2):
-        for _y in range(y - 1, y + 2):
-            if tile_categories[_x][_y] == TileCategory.WALL:
+    for neighbor_x in range(x - 1, x + 2):
+        for neighbor_y in range(y - 1, y + 2):
+            # Edges are considered alive. Makes map more likely to appear naturally closed.
+            if neighbor_x < 0 or neighbor_y < 0 or neighbor_y >= height or neighbor_x >= width:
+                wall_counter += 1
+            elif tile_categories[neighbor_x][neighbor_y] == TileCategory.WALL:
                 # exclude (x,y) from adjacency check
-                if (_x != x) or (_y != y):
+                if (neighbor_x != x) or (neighbor_y != y):
                     wall_counter += 1
+
     return wall_counter
 
 
@@ -642,3 +498,205 @@ def _is_in_map_border(width: int, height: int, x: int, y: int) -> bool:
         return True
     else:
         return False
+
+
+
+################################## NOT WORKING ###########################
+
+# def generate_room_cross(rng: random.Random) -> Room:
+#     """
+#     Generate a cross shaped room.
+#     """
+#     room_min_area = _map_data.min_room_areas["cross"]
+#     room_max_area = _map_data.max_room_areas["cross"]
+#
+#     room_hor_width = int((rng.randint(room_min_area + 2, room_max_area)) / 2 * 2)
+#     room_ver_width = int((rng.randint(room_min_area, room_hor_width - 2)) / 2 * 2)
+#     room_ver_height = int((rng.randint(room_min_area + 2, room_max_area)) / 2 * 2)
+#     room_hor_height = int((rng.randint(room_min_area, room_ver_height - 2)) / 2 * 2)
+#
+#     # fill with walls
+#     tile_categories = [[TileCategory.WALL
+#         for y in range(room_ver_height)]
+#         for x in range(room_hor_width)]
+#
+#     # Fill in horizontal space
+#     ver_offset = int(room_ver_height / 2 - room_hor_height / 2)
+#     for y in range(ver_offset, room_hor_height + ver_offset):
+#         for x in range(0, room_hor_width):
+#             tile_categories[x][y] = TileCategory.FLOOR
+#
+#     # Fill in vertical space
+#     hor_offset = int(room_hor_width / 2 - room_ver_width / 2)
+#     for y in range(0, room_ver_height):
+#         for x in range(hor_offset, room_ver_width + hor_offset):
+#             tile_categories[x][y] = TileCategory.FLOOR
+#
+#     # convert to room
+#     room = Room(tile_categories=tile_categories, design="cross")
+#
+#     return room
+#
+#
+# def generate_room_square(rng: random.Random) -> Room:
+#     """
+#     Generate a square-shaped room.
+#     """
+#     room_min_area = _map_data.min_room_areas["square"]
+#     room_max_area = _map_data.max_room_areas["square"]
+#
+#     room_width = rng.randint(room_min_area, room_max_area)
+#     room_height = rng.randint(max(int(room_width * 0.5), room_min_area),
+#                               min(int(room_width * 1.5), room_max_area))
+#
+#     tile_categories = [[TileCategory.FLOOR
+#         for y in range(1, room_height - 1)]
+#         for x in range(1, room_width - 1)]
+#
+#     # convert to room
+#     room = Room(tile_categories=tile_categories, design="square")
+#
+#     return room
+#
+#
+# def generate_room_cellular_automata(rng) -> Room:
+#     """
+#     Generate a room using cellular automata.
+#     """
+#     room_max_area = _map_data.max_room_areas["cellular"]
+#     wall_probability = _map_data.chance_of_spawning_wall
+#     neighbours = _map_data.max_neighbouring_walls_in_room
+#
+#     for _ in range(_generate_room_attempts):
+#
+#         # fill with floor
+#         tile_categories = [[TileCategory.FLOOR
+#             for y in range(room_max_area)]
+#             for x in range(room_max_area)]
+#
+#         # random fill map
+#         for y in range(2, room_max_area - 2):
+#             for x in range(2, room_max_area - 2):
+#                 if rng.random() >= wall_probability:
+#                     tile_categories[x][y] = TileCategory.WALL
+#
+#         # create distinctive regions
+#         for i in range(4):
+#             for y in range(1, room_max_area - 1):
+#                 for x in range(1, room_max_area - 1):
+#
+#                     # if the cell's neighboring walls > neighbours, set it to 1
+#                     if count_neighbouring_walls(x, y, tile_categories) > neighbours:
+#                         tile_categories[x][y] = TileCategory.WALL
+#                     # otherwise, set it to 0
+#                     elif count_neighbouring_walls(x, y, tile_categories) < neighbours:
+#                         tile_categories[x][y] = TileCategory.FLOOR
+#
+#         # flood fill to remove small caverns
+#         tile_categories = flood_fill(tile_categories)
+#
+#         # convert to room
+#         room = Room(tile_categories=tile_categories, design="cellular")
+#
+#         # start over if the room is completely filled in
+#         width = room.width
+#         height = room.height
+#         for x in range(width):
+#             for y in range(height):
+#                 if tile_categories[x][y] == TileCategory.FLOOR:
+#                     # return non entirely-filled room
+#                     return room
+#
+#
+# def generate_room_cavern(rng):
+#     """
+#     Generate a cavern-type room.
+#     """
+#     room_max_area = _map_data.max_room_areas["cavern"]
+#     neighbours = _map_data.max_neighbouring_walls_in_room
+#     wall_probability = _map_data.chance_of_spawning_wall
+#
+#     while True:
+#         tile_categories = [[TileCategory.WALL
+#             for y in range(room_max_area)]
+#             for x in range(room_max_area)]
+#
+#         # random fill map
+#         for y in range(2, room_max_area - 2):
+#             for x in range(2, room_max_area - 2):
+#                 if rng.random() >= wall_probability:
+#                     tile_categories[x][y] = TileCategory.WALL
+#
+#         # create distinctive regions
+#         for i in range(4):
+#             for y in range(1, room_max_area - 1):
+#                 for x in range(1, room_max_area - 1):
+#
+#                     # if the cell's neighboring walls > neighbours, set it to 1
+#                     if count_neighbouring_walls(x, y, tile_categories) > neighbours:
+#                         tile_categories[x][y] = TileCategory.WALL
+#                     # otherwise, set it to 0
+#                     elif count_neighbouring_walls(x, y, tile_categories) < neighbours:
+#                         tile_categories[x][y] = TileCategory.FLOOR
+#
+#         # flood fill to remove small caverns
+#         tile_categories = flood_fill(tile_categories)
+#
+#         # convert to room
+#         room = Room(tile_categories=tile_categories, design="cavern")
+#
+#         # start over if the room is completely filled in
+#         width = room.width
+#         height = room.height
+#         for x in range(width):
+#             for y in range(height):
+#                 if tile_categories[x][y] == 0:
+#                     return room
+#
+#
+# def flood_fill(tile_categories: List[List[TileCategoryType]]):
+#     """
+#     Find the largest region. Fill in all other regions.
+#     """
+#     room_width = len(tile_categories)
+#     room_height = len(tile_categories[0])
+#     min_room_area = min(_map_data.min_room_areas.values())
+#     largest_region = set()
+#
+#     for x in range(room_width):
+#         for y in range(room_height):
+#             if tile_categories[x][y] == TileCategory.FLOOR:
+#                 new_region = set()
+#                 tile = (x, y)
+#                 to_be_filled = set([tile])
+#                 while to_be_filled:
+#                     tile = to_be_filled.pop()
+#
+#                     if tile not in new_region:
+#                         new_region.add(tile)
+#
+#                         tile_categories[tile[0]][tile[1]] = TileCategory.WALL
+#
+#                         # check adjacent cells
+#                         x = tile[0]
+#                         y = tile[1]
+#                         north = (x, y - 1)
+#                         south = (x, y + 1)
+#                         east = (x + 1, y)
+#                         west = (x - 1, y)
+#
+#                         for direction in [north, south, east, west]:
+#
+#                             if tile_categories[direction[0]][direction[1]] == TileCategory.FLOOR:
+#                                 if direction not in to_be_filled and direction not in new_region:
+#                                     to_be_filled.add(direction)
+#
+#                 if len(new_region) >= min_room_area:
+#                     if len(new_region) > len(largest_region):
+#                         largest_region.clear()
+#                         largest_region.update(new_region)
+#
+#     for tile in largest_region:
+#         tile_categories[tile[0]][tile[1]] = TileCategory.FLOOR
+#
+#     return tile_categories

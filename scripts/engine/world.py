@@ -161,7 +161,7 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
 
             for skill_name in data.known_skills:
                 skill_data = library.SKILLS[skill_name]
-                skill_class = action.skill_registry[skill_data.class_name]
+                skill_class = action.skill_registry[skill_data.key]
                 known_skills.append(skill_class)
                 skill_order.append(skill_name)
 

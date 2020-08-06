@@ -26,7 +26,7 @@
             "cavern": 40,
             "cellular": 35
         },
-        "chance_of_in_room_wall": 0.45,
+        "chance_of_spawning_wall": 0.45,
         "max_neighbouring_walls_in_room": 4,
         "shortcut_length": 5,
         "min_path_distance_for_shortcut": 50,

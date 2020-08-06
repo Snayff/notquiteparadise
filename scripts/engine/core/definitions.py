@@ -249,7 +249,7 @@ class MapData:
     max_rooms: int = 0
     max_tunnel_length: int = 0
     max_neighbouring_walls_in_room: int = 0
-    chance_of_in_room_wall: float = 0.0
+    chance_of_spawning_wall: float = 0.0
     include_shortcuts: bool = True
     room_weights: Dict[str, float] = field(default_factory=dict)
     min_room_areas: Dict[str, int] = field(default_factory=dict)

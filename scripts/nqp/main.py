@@ -123,7 +123,6 @@ def initialise_game():
     pool = _create_entity_pool()
     game_map = GameMap("cave", 10)
     game_map.generate_level()
-    store.current_gamemap = game_map
 
     player = world.create_actor("player", "a desc", [(1, 2)], ["shoom", "soft_tops", "dandy"], True)
     #players, actors = world.populate(pool)
