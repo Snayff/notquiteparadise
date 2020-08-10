@@ -11,8 +11,8 @@ class EntityPoolEntry:
     An entry for the entity pool.
     """
 
-    def __init__(self, name: str, description: str, traits: List[str], offsets: List[Tuple[int, int]], is_player: bool,
-                 max_per_room: int, weight: float):
+    def __init__(self, name: str, description: str, traits: List[str], offsets: List[Tuple[int, int]],
+            is_player: bool, max_per_room: int, weight: float):
         self.name = name
         self.offsets = offsets
         self.description = description

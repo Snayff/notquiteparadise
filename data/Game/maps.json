@@ -31,6 +31,9 @@
         "shortcut_length": 5,
         "min_path_distance_for_shortcut": 50,
         "floor_sprite_path": "assets/world/placeholder/_test.png",
-        "wall_sprite_path": "assets/world/placeholder/_testWall.png"
+        "wall_sprite_path": "assets/world/placeholder/_testWall.png",
+        "actors": [
+            "training_dummy"
+        ]
     }
 }

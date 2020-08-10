@@ -60,7 +60,7 @@ from scripts.engine.core.constants import (
     TravelMethodType,
 )
 from scripts.engine.core.definitions import (
-    ProjectileData,
+    ActorData, ProjectileData,
     SpritePathsData,
     SpritesData,
 )
@@ -123,24 +123,30 @@ def create_god(god_name: str) -> EntityID:
     return entity
 
 
-def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, int]], trait_names: List[str],
-        is_player: bool = False) -> EntityID:
+def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: bool = False) -> EntityID:
     """
     Create an entity with all of the components to be an actor. Returns entity ID.
     """
     components: List[Component] = []
-    tile_pos = occupying_tiles[0]
-    x, y = tile_pos
+    x, y = spawn_pos
+
+    # get dimensions of actor
+    occupied_tiles = []
+    for offset in actor_data.position_offsets:
+        occupied_tiles.append((offset[0] + x, offset[1] + y))
+
+    #  choose a name
+    name = random.choice(actor_data.possible_names)
 
     # actor components
     if is_player:
         components.append(IsPlayer())
     components.append(IsActor())
-    components.append(Position(*occupying_tiles))
-    components.append(Identity(name, description))
+    components.append(Position(*occupied_tiles))
+    components.append(Identity(name, actor_data.description))
     components.append(HasCombatStats())
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
-    components.append(Traits(trait_names))
+    components.append(Traits(actor_data.trait_names))
     components.append(FOV(create_fov_map()))
     components.append(Tracked(chronicle.get_time()))
 
@@ -154,7 +160,8 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
     perm_afflictions_names = []  # for affliction
     behaviour = None
 
-    for name in trait_names:
+    # loop each trait and get info for skills etc.
+    for name in actor_data.trait_names:
         data = library.TRAITS[name]
         traits_paths.append(data.sprite_paths)
         if data.known_skills != ["none"]:
@@ -166,8 +173,8 @@ def create_actor(name: str, description: str, occupying_tiles: List[Tuple[int, i
                 skill_order.append(skill_name)
 
         if data.permanent_afflictions != ["none"]:
-            for name in data.permanent_afflictions:
-                perm_afflictions_names.append(name)
+            for _name in data.permanent_afflictions:
+                perm_afflictions_names.append(_name)
 
         if data.group == TraitGroup.NPC:
             # FIXME - get behaviour
@@ -290,13 +297,9 @@ def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
     return converted
 
 
-def populate(pool: EntityPool):
-    return store.current_gamemap.populate(pool)
-
-
 def create_fov_map() -> np.array:
     """
-    Create an fov map
+    Create a blank fov map
     """
     gamemap = get_gamemap()
     width = gamemap.width
@@ -1227,9 +1230,11 @@ def update_tile_visibility(fov_map: np.array):
     Update the the visibility of the tiles on the came map
     """
     gamemap = get_gamemap()
+    width = gamemap.width
+    height = gamemap.height
 
-    for x in range(0, gamemap.width):
-        for y in range(0, gamemap.height):
+    for x in range(0, width):
+        for y in range(0, height):
             gamemap.tiles[x][y].is_visible = bool(fov_map[x][y])  # cast to bool as otherwise is _bool from numpy
 
 

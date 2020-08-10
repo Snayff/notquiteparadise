@@ -2,7 +2,6 @@
     "soft_tops": {
         "__dataclass__": "TraitData",
         "group":"homeland",
-        "behaviour_name": "none",
         "bustle": 1,
         "clout": 3,
         "description": "Home to beautiful wildlife, towering, majestic fauna and the air of constant, never-ending warfare.",
@@ -30,10 +29,9 @@
     "goblynn": {
         "__dataclass__": "TraitData",
         "group":"people",
-        "behaviour_name": "none",
         "bustle": 0,
         "clout": 0,
-        "description": "A goblinn description",
+        "description": "A goblynn description",
         "exactitude": 0,
         "name": "goblynn",
         "sight_range": 3,
@@ -58,7 +56,6 @@
 	"shoom": {
         "__dataclass__": "TraitData",
         "group":"people",
-        "behaviour_name": "none",
         "bustle": 0,
         "clout": -1,
         "description": "Often found in their ancestral home of the Soft Tops they have spent most of the last century being drafted into a war over which of the causes it the right one. Not that anyone can quite remember which cause they're fighting for.",
@@ -86,7 +83,6 @@
     "fungechist": {
         "__dataclass__": "TraitData",
         "group":"savvy",
-        "behaviour_name": "none",
         "bustle": 1,
         "clout": -1,
         "description": "Drafted into service as a chemist to the Mushroom Barons of the Soft Tops the fungechists always keep Ou in their minds.",
@@ -114,7 +110,6 @@
 	"dandy": {
         "__dataclass__": "TraitData",
         "group":"savvy",
-        "behaviour_name": "none",
         "bustle": 2,
         "clout": 2,
         "description": "Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword.",
@@ -140,15 +135,14 @@
         },
         "vigour": -1
     },
-    "training_dummy": {
+    "dummy": {
         "__dataclass__": "TraitData",
         "group":"npc",
-        "behaviour_name": "skip",
         "bustle": 1,
         "clout": 1,
         "description": "",
         "exactitude": 1,
-        "name": "training dummy",
+        "name": "dummy",
         "sight_range": 1,
         "known_skills": [
             "none"

@@ -15,7 +15,7 @@ from scripts.engine.core.definitions import (
     BaseSecondaryStatData,
     GameConfigData,
     GodData,
-    MapData, SkillData,
+    MapData, ActorData, SkillData,
     TraitData,
     VideoConfigData,
 )
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 
 __all__ = ["TRAITS", "AFFLICTIONS", "ASPECTS", "BASE_STATS_PRIMARY", "BASE_STATS_SECONDARY", "GODS", "SKILLS",
-    "MAPS", "INPUT_CONFIG", "VIDEO_CONFIG", "GAME_CONFIG", "refresh_library"]
+    "MAPS", "NPCS", "INPUT_CONFIG", "VIDEO_CONFIG", "GAME_CONFIG", "refresh_library"]
 
 
 ####################### DATA DICTS ##############################
@@ -39,6 +39,7 @@ BASE_STATS_SECONDARY: Dict[str, BaseSecondaryStatData] = {}
 GODS: Dict[str, GodData] = {}
 SKILLS: Dict[str, SkillData] = {}
 MAPS: Dict[str, MapData] = {}
+NPCS: Dict[str, ActorData] = {}
 INPUT_CONFIG: Dict[str, List[str]] = {}
 VIDEO_CONFIG: VideoConfigData
 GAME_CONFIG: GameConfigData
@@ -67,6 +68,7 @@ def refresh_library():
         _load_gods_data()
         _load_skills_data()
         _load_map_data()
+        _load_npc_data()
         _load_input_config()
         _load_video_config()
         _load_game_config()
@@ -138,6 +140,14 @@ def _load_map_data():
     global MAPS
 
     MAPS = data
+
+
+def _load_npc_data():
+    with open('data/game/actors.json') as file:
+        data = json.load(file, object_hook=deserialise_dataclasses)
+    global NPCS
+
+    NPCS = data
 
 
 def _load_input_config():

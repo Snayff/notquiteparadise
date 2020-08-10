@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List, Optional, cast
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, cast
 
 import pygame
 from snecs.typedefs import EntityID
@@ -77,13 +77,26 @@ class SpritePathsData:
 
 @register_dataclass_with_json
 @dataclass
+class ActorData:
+    """
+    Data class for an actor
+    """
+    possible_names: List[str] = field(default_factory=list)
+    description: str = "none"
+    position_offsets: List[Tuple[int, int]] = field(default_factory=list)
+    trait_names: List[str] = field(default_factory=list)
+    behaviour_name: str = "none"
+
+
+
+@register_dataclass_with_json
+@dataclass
 class TraitData:
     """
-    Data class for an aspects
+    Data class for a trait.
     """
     name: str = "none"
     group: TraitGroupType = TraitGroup.NPC
-    behaviour_name: str = "none"
     description: str = "none"
     sprite_paths: SpritePathsData = field(default_factory=SpritePathsData)
     sight_range: int = 0
@@ -256,6 +269,7 @@ class MapData:
     max_room_areas: Dict[str, int] = field(default_factory=dict)
     shortcut_length: int = 0
     min_path_distance_for_shortcut: int = 0
+    actors: List[str] = field(default_factory=list)
 
     # aesthetics
     floor_sprite_path: str = "none"

@@ -1,12 +1,12 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import Callable, TYPE_CHECKING
 
 import random
 import tcod as libtcod
 
-from scripts.engine import library
+from scripts.engine import library, world
 from scripts.engine.core.constants import Direction, DirectionType, TILE_SIZE, TileCategory, TileCategoryType
-from scripts.engine.core.definitions import MapData
+from scripts.engine.core.definitions import ActorData, MapData
 from scripts.engine.world_objects.tile import Tile
 from scripts.engine.world_objects.room import Room
 
@@ -24,7 +24,8 @@ _place_room_attempts = 20
 _generate_shortcut_attempts = 100
 
 
-def generate(map_name: str, rng: random.Random) -> Tuple[List[List[Tile]], str]:
+def generate(map_name: str, rng: random.Random,
+        player_data: Optional[ActorData] = None) -> Tuple[List[List[Tile]], str]:
     """
     Generate the map using the specified details.
     """
@@ -38,7 +39,7 @@ def generate(map_name: str, rng: random.Random) -> Tuple[List[List[Tile]], str]:
     height = _map_data.height
 
     # generate the level
-    generate_map(rng)
+    generate_map(rng, player_data)
 
     # ensure all borders are walls
     for x in range(width):
@@ -93,7 +94,7 @@ def _create_floor_tile(x: int, y: int) -> Tile:
 
 ############################ GENERATE LEVEL ############################
 
-def generate_steps(rng: random.Random):
+def generate_steps(rng: random.Random, player_data: Optional[ActorData] = None):
     """
     Generates the map, returning each step of the generation
     :return: The state of the map at a step
@@ -107,7 +108,7 @@ def generate_steps(rng: random.Random):
         yield step
 
 
-def generate_map(rng: random.Random):
+def generate_map(rng: random.Random, player_data: Optional[ActorData] = None):
     """
     Generates the map.
     :return: The completed map.
@@ -117,12 +118,13 @@ def generate_map(rng: random.Random):
     include_shortcuts = _map_data.include_shortcuts
     max_rooms = _map_data.max_rooms
 
-    for _ in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts):
+    for _ in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts, player_data):
         pass
     return _map
 
 
-def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms: int, include_shortcuts: bool):
+def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms: int, include_shortcuts: bool,
+        player_data: Optional[ActorData] = None):
     """
     Generate the next step of the level generation.
     """
@@ -146,6 +148,10 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
     room_y = rng.randint(4, height - (room.height - 4))
     room.start_x = room_x
     room.start_y = room_y
+
+    # move player to the room
+    if player_data:
+        world.create_actor(player_data, (room_x, room_y), True)
 
     # place on the map
     add_room_to_map(room)
@@ -186,17 +192,22 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
 
 ############################ GENERATE ROOMS ############################
 
-def generate_room(rng: random.Random) -> Room:
+def generate_room(rng: random.Random, room_generation_method: Callable = None) -> Room:
     """
-    Select a room type to generate and return that room
+    Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
+    random, using weightings in the data.
     """
-    room_weights = _map_data.room_weights
-    options = [_generate_cellular_automata_room]
-    weights = [room_weights["cellular"]]
+    # if generation provided then use that, otherwise pick from available
+    if room_generation_method:
+        room = room_generation_method(rng)
+    else:
+        room_weights = _map_data.room_weights
+        options = [_generate_cellular_automata_room]
+        weights = [room_weights["cellular"]]
 
-    # pick a generation method based on weights
-    room_generation_method = rng.choices(options, weights, k=1)[0]
-    room = room_generation_method(rng)
+        # pick a generation method based on weights
+        _room_generation_method = rng.choices(options, weights, k=1)[0]
+        room = _room_generation_method(rng)
 
     return room
 
@@ -246,6 +257,11 @@ def _generate_cellular_automata_room(rng: random.Random) -> Room:
     # convert to room
     room = Room(tile_categories=room_tile_cats, design="cellular")
     return room
+
+
+############################ GENERATE ENTITIES ############################
+
+
 
 
 ####################### PLACEMENT ##############################
