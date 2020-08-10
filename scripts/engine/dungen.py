@@ -128,6 +128,8 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
     """
     global _map
 
+    rooms_placed = 0
+
     # set everything to walls
     _map = [[_create_wall_tile(x, y)
         for y in range(height)]
@@ -138,32 +140,48 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
     room = generate_room(rng)
     if not room:
         raise Exception("Failed to generate level.")
+
     # pick random position to place the first room
     room_x = rng.randint(4, width - (room.width - 4))
     room_y = rng.randint(4, height - (room.height - 4))
-    add_room_to_map(room_x, room_y, room)
+    room.start_x = room_x
+    room.start_y = room_y
+
+    # place on the map
+    add_room_to_map(room)
+    rooms_placed += 1
     yield _map
     
     # generate other rooms
-    # for i in range(_generate_room_attempts):
-    #     room = generate_room(rng)
-    #
-    #     # try to find a position for the room
-    #     room_pos, tunnel_pos, direction, tunnel_length = find_place_for_next_room(rng, room, width, height)
-    #     if room_pos:
-    #         add_room_to_map(room_pos[0], room_pos[1], room)
-    #         yield _map
-    #
-    #         # from previous room
-    #         add_direct_tunnel_to_map(tunnel_pos, direction, tunnel_length)
-    #         yield _map
-    #
-    #         # check if enough rooms are places
-    #         if len(_placed_rooms) >= max_rooms:
-    #             break
-    # yield _map
-    # if include_shortcuts:
-    #     add_shortcuts(rng, width, height)
+    for i in range(_generate_room_attempts):
+        room = generate_room(rng)
+
+        # try to find a position for the room
+        room_pos = find_place_for_room(rng, room, width, height)
+        if room_pos:
+            # update room info
+            room.start_x = room_pos[0]
+            room.start_y = room_pos[1]
+
+            add_room_to_map(room)
+            rooms_placed += 1
+            yield _map
+
+            # create tunnel between new room and last placed room
+            previous_room = _placed_rooms[-1]
+            latest_x = rng.randint(room.start_x, room.start_x + room.width)
+            latest_y = rng.randint(room.start_y, room.start_y + room.height)
+            previous_x = rng.randint(previous_room.start_x, previous_room.start_x + previous_room.width)
+            previous_y = rng.randint(previous_room.start_y, previous_room.start_y + previous_room.height)
+            add_tunnel_to_map(latest_x, latest_y, previous_x, previous_y)
+            yield _map
+
+            # check if enough rooms are places
+            if len(_placed_rooms) >= max_rooms:
+                break
+    yield _map
+    if include_shortcuts:
+        add_shortcuts(rng, width, height)
 
 
 ############################ GENERATE ROOMS ############################
@@ -229,12 +247,13 @@ def _generate_cellular_automata_room(rng: random.Random) -> Room:
     room = Room(tile_categories=room_tile_cats, design="cellular")
     return room
 
+
 ####################### PLACEMENT ##############################
 
-def find_place_for_next_room(rng: random.Random, room: Room, width: int,
-        height: int) -> Optional[Tuple[Tuple[int, int], Tuple[int, int], Direction, int]]:
+def find_place_for_room(rng: random.Random, room: Room, width: int,
+        height: int) -> Optional[Tuple[int, int]]:
     """
-    Find am appropriate place for a room.
+    Find an appropriate place for a room.
 
     :returns: room_placement_position, tunnel_placement_position, tunnel_direction, tunnel_length
     """
@@ -244,53 +263,78 @@ def find_place_for_next_room(rng: random.Random, room: Room, width: int,
 
     # try n times to find a wall that lets you build room in that direction
     for i in range(_place_room_attempts):
-        # try to place the room against the tile, else connected by a tunnel of length i
-        tunnel_placement_position = None
-        direction = rng.choice([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT])
-        while not tunnel_placement_position:
-            # randomly select tiles until you find a wall that has another wall in the chosen direction and has a
-            # floor in the opposite direction.
-            tile_x = rng.randint(1, width - 2)
-            tile_y = rng.randint(1, height - 2)
-            if (_map[tile_x][tile_y].blocks_movement and
-                    _map[tile_x + direction[0]][tile_y + direction[1]].blocks_movement and
-                    not _map[tile_x - direction[0]][tile_y - direction[1]].blocks_movement):
-                tunnel_placement_position = (tile_x, tile_y)
 
-        # spawn the room touching wall_tile
-        start_room_x = None
-        start_room_y = None
-        while not start_room_x and not start_room_y:
-            x = rng.randint(0, room_width - 1)
-            y = rng.randint(0, room_height - 1)
-            if room.tile_categories[x][y] == TileCategory.FLOOR:
-                start_room_x = tunnel_placement_position[0] - x
-                start_room_y = tunnel_placement_position[1] - y
+        # find space for room
+        start_room_x = rng.randint(0, width - room_width - 1)
+        start_room_y = rng.randint(0, height - room_height - 1)
 
-        # then slide it until it doesn't touch anything
-        for tunnel_length in range(max_tunnel_length):
-            possible_room_x = start_room_x + direction[0] * tunnel_length
-            possible_room_y = start_room_y + direction[1] * tunnel_length
+        # check specified tile and one to the right are walls
+        if _map[start_room_x][start_room_y].blocks_movement and _map[start_room_x + 1][start_room_y].blocks_movement:
+            direction = rng.choice([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT])
+            for tunnel_length in range(max_tunnel_length):
+                possible_room_x = start_room_x + direction[0] * tunnel_length
+                possible_room_y = start_room_y + direction[1] * tunnel_length
 
-            has_enough_room = has_walled_exterior(room, possible_room_x, possible_room_y, width, height)
+                has_enough_room = has_walled_exterior(room, possible_room_x, possible_room_y, width, height)
 
-            if has_enough_room:
-                room_x = possible_room_x
-                room_y = possible_room_y
+                if has_enough_room:
+                    room_x = possible_room_x
+                    room_y = possible_room_y
 
-                return (room_x, room_y), tunnel_placement_position, direction, tunnel_length
+                    return room_x, room_y
+
+        #
+        #
+        # # try to place the room against the tile, else connected by a tunnel of length i
+        # tunnel_placement_position = None
+        # direction = rng.choice([Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT])
+        # # while not tunnel_placement_position:
+        # #     # randomly select tiles until you find a wall that has another wall in the chosen direction and has a
+        # #     # floor in the opposite direction.
+        # #     tile_x = rng.randint(1, width - 2)
+        # #     tile_y = rng.randint(1, height - 2)
+        # #     if (_map[tile_x][tile_y].blocks_movement and
+        # #             _map[tile_x + direction[0]][tile_y + direction[1]].blocks_movement and
+        # #             not _map[tile_x - direction[0]][tile_y - direction[1]].blocks_movement):
+        # #         tunnel_placement_position = (tile_x, tile_y)
+        #
+        # # spawn the room touching wall_tile
+        # start_room_x = None
+        # start_room_y = None
+        # while not start_room_x and not start_room_y:
+        #     x = rng.randint(0, room_width - 1)
+        #     y = rng.randint(0, room_height - 1)
+        #     if room.tile_categories[x][y] == TileCategory.FLOOR:
+        #         start_room_x = tunnel_placement_position[0] - x
+        #         start_room_y = tunnel_placement_position[1] - y
+        #
+        # # then slide it until it doesn't touch anything
+        # for tunnel_length in range(max_tunnel_length):
+        #     possible_room_x = start_room_x + direction[0] * tunnel_length
+        #     possible_room_y = start_room_y + direction[1] * tunnel_length
+        #
+        #     has_enough_room = has_walled_exterior(room, possible_room_x, possible_room_y, width, height)
+        #
+        #     if has_enough_room:
+        #         room_x = possible_room_x
+        #         room_y = possible_room_y
+        #
+        #         return (room_x, room_y), tunnel_placement_position, direction, tunnel_length
 
     return None
 
 
-def add_room_to_map(x: int, y: int, room: Room):
+def add_room_to_map(room: Room):
     """
-    Add a room to the specified place on the map. Converts TileCategory to Tile.
+    Add a room to the map using its start x/y. Converts TileCategory to Tile.
     """
     global _placed_rooms, _map
 
     width = room.width
     height = room.height
+    x = room.start_x
+    y = room.start_y
+
     for _x in range(width):
         for _y in range(height):
             # use given xy and offset with tile xy to add Tile to map
@@ -303,31 +347,9 @@ def add_room_to_map(x: int, y: int, room: Room):
     _placed_rooms.append(room)
 
 
-def add_direct_tunnel_to_map(tunnel_pos: Tuple[int, int], direction: DirectionType, tunnel_length: int):
+def add_tunnel_to_map(x1: int, y1: int, x2: int, y2: int):
     """
-    Add a tunnel from a point in a direction for a specified length.
-    """
-    global _tunnels, _map
-
-    max_tunnel_length = _map_data.max_tunnel_length
-    real_length = 0
-    x, y = 0, 0
-
-    start_x = tunnel_pos[0] + direction[0] * tunnel_length
-    start_y = tunnel_pos[1] + direction[1] * tunnel_length
-
-    for i in range(max_tunnel_length):
-        x = start_x - direction[0] * i
-        y = start_y - direction[1] * i
-        _map[x][y] = _create_floor_tile(x, y)
-        real_length += 1
-        if (x + direction[0]) == tunnel_pos[0] and (y + direction[1]) == tunnel_pos[1]:
-            break
-
-
-def add_indirect_tunnel_to_map(x1: int, y1: int, x2: int, y2: int):
-    """
-    Add a tunnel between two positions.
+    Add a tunnel between two positions. Sets the relevant locations in the map to a floor tiles.
     """
     global _map
 
@@ -404,7 +426,7 @@ def add_shortcuts(rng, width, height):
 
                         if distance > min_pathfinding_distance:
                             # make shortcut
-                            add_indirect_tunnel_to_map(tile_x, tile_y, new_x, new_y)
+                            add_tunnel_to_map(tile_x, tile_y, new_x, new_y)
                             recompute_path_map(width, height, libtcod_map)
 
     # destroy the path object
@@ -700,3 +722,25 @@ def _is_in_map_border(width: int, height: int, x: int, y: int) -> bool:
 #         tile_categories[tile[0]][tile[1]] = TileCategory.FLOOR
 #
 #     return tile_categories
+
+
+# def add_direct_tunnel_to_map(tunnel_pos: Tuple[int, int], direction: DirectionType, tunnel_length: int):
+#     """
+#     Add a tunnel from a point in a direction for a specified length.
+#     """
+#     global _tunnels, _map
+#
+#     max_tunnel_length = _map_data.max_tunnel_length
+#     real_length = 0
+#     x, y = 0, 0
+#
+#     start_x = tunnel_pos[0] + direction[0] * tunnel_length
+#     start_y = tunnel_pos[1] + direction[1] * tunnel_length
+#
+#     for i in range(max_tunnel_length):
+#         x = start_x - direction[0] * i
+#         y = start_y - direction[1] * i
+#         _map[x][y] = _create_floor_tile(x, y)
+#         real_length += 1
+#         if (x + direction[0]) == tunnel_pos[0] and (y + direction[1]) == tunnel_pos[1]:
+#             break

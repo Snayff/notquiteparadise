@@ -8,11 +8,6 @@ from scripts.engine.core.constants import TileCategory
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
 
-# 0 - floor
-# 1 = wall
-#
-
-
 
 @dataclass
 class Room:
@@ -21,6 +16,9 @@ class Room:
     """
     tile_categories: List[List[TileCategory]]  # what to place in a tile
     design: str  # type of room places
+    start_x: int = -1
+    start_y: int = -1
+
 
     @property
     def available_area(self) -> int:
@@ -33,7 +31,6 @@ class Room:
                 if tile_cat == TileCategory.FLOOR:
                     unblocked_count += 1
         return unblocked_count
-
 
     @property
     def total_area(self) -> int:
