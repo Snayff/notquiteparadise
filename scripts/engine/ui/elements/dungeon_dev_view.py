@@ -34,7 +34,6 @@ class DungeonDevView(UIWindow):
         self.timer: float = 0.0
         self.level = None
         self.iterator: Optional[Iterator] = None
-        self.world_gen: Optional[DungeonGeneration] = None
 
     def update_view(self):
         """
@@ -55,7 +54,6 @@ class DungeonDevView(UIWindow):
         Sets the data for the viewer
         :param world_gen: The world gen used
         """
-        self.world_gen = world_gen
         self.iterator = world_gen.generate_steps()
         self.reset()
 

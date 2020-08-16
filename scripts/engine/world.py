@@ -75,7 +75,6 @@ from scripts.engine.world_objects.tile import Tile
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
     from scripts.engine.action import Affliction, Skill
-    from scripts.engine.world_objects.entity_gen import EntityPool, EntityGeneration
 
 ########################### LOCAL DEFINITIONS ##########################
 

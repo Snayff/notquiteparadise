@@ -1,18 +1,17 @@
 {
     "cave": {
         "__dataclass__": "MapData",
-        "algorithm_name": "room_addition",
         "max_enemies_per_room": 3,
         "max_rooms": 30,
-        "max_tunnel_length": 10,
+        "max_tunnel_length": 20,
         "include_shortcuts": true,
         "width": 50,
         "height": 20,
         "room_weights": {
-            "cross": 0.15,
-            "square": 0.2,
-            "cavern": 0.1,
-            "cellular": 0.4
+            "cross": 0,
+            "square": 1,
+            "cavern": 0,
+            "cellular": 0
         },
         "min_room_areas": {
             "cross": 4,
@@ -22,14 +21,14 @@
         },
         "max_room_areas": {
             "cross": 12,
-            "square": 12,
+            "square": 30,
             "cavern": 40,
             "cellular": 35
         },
         "chance_of_spawning_wall": 0.45,
         "max_neighbouring_walls_in_room": 4,
-        "shortcut_length": 5,
-        "min_path_distance_for_shortcut": 50,
+        "shortcut_length": 10,
+        "min_path_distance_for_shortcut": 5,
         "floor_sprite_path": "assets/world/placeholder/_test.png",
         "wall_sprite_path": "assets/world/placeholder/_testWall.png",
         "actors": [

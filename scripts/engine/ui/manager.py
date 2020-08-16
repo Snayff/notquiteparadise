@@ -361,7 +361,6 @@ class _UIManager:
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init`d?")
 
-
     def set_element_visibility(self, element_type: UIElementType, visible: bool):
         """
         Set whether the element is visible or not.

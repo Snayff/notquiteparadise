@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Type
 
 from scripts.engine.core.constants import TileCategory
@@ -18,6 +18,7 @@ class Room:
     design: str  # type of room places
     start_x: int = -1
     start_y: int = -1
+    entities: List[str] = field(default_factory=list)
 
 
     @property
@@ -66,3 +67,21 @@ class Room:
                    f"| a:{self.available_area}/ t:{self.total_area}."
 
         return gen_info
+
+    @property
+    def end_x(self) -> int:
+        return self.start_x + self.width
+
+    @property
+    def end_y(self) -> int:
+        return self.start_y + self.height
+
+    def intersects(self, room: Room) -> bool:
+        """
+        Check if this room intersects with another.
+        """
+        if (self.start_x <= room.end_x and self.end_x >= room.start_x) and \
+                (self.start_y <= room.end_y and self.end_y >= room.start_y):
+            return True
+        else:
+            return False

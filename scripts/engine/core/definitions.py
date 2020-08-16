@@ -251,7 +251,6 @@ class MapData:
     """
     Data class for a Map.
     """
-    algorithm_name: str = "none"
 
     # map size
     width: int = 0

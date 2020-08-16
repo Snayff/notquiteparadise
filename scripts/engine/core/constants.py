@@ -8,7 +8,7 @@ import pygame
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.119.0"
+VERSION = "0.119.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 
 MAX_SKILLS = 6
 MAX_SAVES = 1

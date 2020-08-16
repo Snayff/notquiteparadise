@@ -125,7 +125,7 @@ def initialise_game():
     store.current_gamemap = game_map
 
     # populate the map
-    player_data = ActorData(["player"], "a desc", [(10, 6)], ["shoom", "soft_tops", "dandy"])
+    player_data = ActorData(["player"], "a desc", [(0, 0)], ["shoom", "soft_tops", "dandy"])
     game_map.generate_new_map(player_data)
 
 

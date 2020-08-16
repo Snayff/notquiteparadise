@@ -94,18 +94,36 @@ def _create_floor_tile(x: int, y: int) -> Tile:
 
 ############################ GENERATE LEVEL ############################
 
-def generate_steps(rng: random.Random, player_data: Optional[ActorData] = None):
+def generate_steps(map_name: str, rng: random.Random,):
     """
-    Generates the map, returning each step of the generation
+    Generates a map, returning each step of the generation. Used for dev view.
+
     :return: The state of the map at a step
     """
+    global _map, _placed_rooms, _map_data
+
+    # save map data to be used across functions while building
+    _map_data = library.MAPS[map_name]
+
+    # get required info from library
     width = _map_data.width
     height = _map_data.height
+
     include_shortcuts = _map_data.include_shortcuts
     max_rooms = _map_data.max_rooms
 
     for step in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts):
         yield step
+
+    # ensure all borders are walls
+    for x in range(width):
+        for y in range(height):
+            if _is_in_map_border(width, height, x, y):
+                _create_wall_tile(x, y)
+
+    # clear existing info
+    _map = []
+    _placed_rooms = []
 
 
 def generate_map(rng: random.Random, player_data: Optional[ActorData] = None):
@@ -144,8 +162,8 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
         raise Exception("Failed to generate level.")
 
     # pick random position to place the first room
-    room_x = rng.randint(4, width - (room.width - 4))
-    room_y = rng.randint(4, height - (room.height - 4))
+    room_x = rng.randint(0, max(0, width - (room.width - 1)))
+    room_y = rng.randint(0, max(0, height - (room.height - 1)))
     room.start_x = room_x
     room.start_y = room_y
 
@@ -192,22 +210,18 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
 
 ############################ GENERATE ROOMS ############################
 
-def generate_room(rng: random.Random, room_generation_method: Callable = None) -> Room:
+def generate_room(rng: random.Random) -> Room:
     """
     Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
     random, using weightings in the data.
     """
-    # if generation provided then use that, otherwise pick from available
-    if room_generation_method:
-        room = room_generation_method(rng)
-    else:
-        room_weights = _map_data.room_weights
-        options = [_generate_cellular_automata_room]
-        weights = [room_weights["cellular"]]
+    room_weights = _map_data.room_weights
+    options = [_generate_cellular_automata_room, _generate_room_square]
+    weights = [room_weights["cellular"], room_weights["square"]]
 
-        # pick a generation method based on weights
-        _room_generation_method = rng.choices(options, weights, k=1)[0]
-        room = _room_generation_method(rng)
+    # pick a generation method based on weights
+    _room_generation_method = rng.choices(options, weights, k=1)[0]
+    room = _room_generation_method(rng)
 
     return room
 
@@ -258,6 +272,26 @@ def _generate_cellular_automata_room(rng: random.Random) -> Room:
     room = Room(tile_categories=room_tile_cats, design="cellular")
     return room
 
+
+def _generate_room_square(rng: random.Random) -> Room:
+    """
+    Generate a square-shaped room.
+    """
+    room_min_area = _map_data.min_room_areas["square"]
+    room_max_area = _map_data.max_room_areas["square"]
+
+    room_width = rng.randint(room_min_area, room_max_area)
+    room_height = rng.randint(max(int(room_width * 0.5), room_min_area),
+                              min(int(room_width * 1.5), room_max_area))
+
+    tile_categories = [[TileCategory.FLOOR
+        for y in range(1, room_height - 1)]
+        for x in range(1, room_width - 1)]
+
+    # convert to room
+    room = Room(tile_categories=tile_categories, design="square")
+
+    return room
 
 ############################ GENERATE ENTITIES ############################
 
@@ -576,25 +610,7 @@ def _is_in_map_border(width: int, height: int, x: int, y: int) -> bool:
 #     return room
 #
 #
-# def generate_room_square(rng: random.Random) -> Room:
-#     """
-#     Generate a square-shaped room.
-#     """
-#     room_min_area = _map_data.min_room_areas["square"]
-#     room_max_area = _map_data.max_room_areas["square"]
-#
-#     room_width = rng.randint(room_min_area, room_max_area)
-#     room_height = rng.randint(max(int(room_width * 0.5), room_min_area),
-#                               min(int(room_width * 1.5), room_max_area))
-#
-#     tile_categories = [[TileCategory.FLOOR
-#         for y in range(1, room_height - 1)]
-#         for x in range(1, room_width - 1)]
-#
-#     # convert to room
-#     room = Room(tile_categories=tile_categories, design="square")
-#
-#     return room
+
 #
 #
 # def generate_room_cellular_automata(rng) -> Room:
