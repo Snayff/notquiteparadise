@@ -4,7 +4,7 @@ from typing import Any, Callable, TYPE_CHECKING
 import random
 import tcod as libtcod
 
-from scripts.engine import library, world
+from scripts.engine import library, utility, world
 from scripts.engine.core.constants import Direction, DirectionType, TILE_SIZE, TileCategory, TileCategoryType
 from scripts.engine.core.definitions import ActorData, MapData
 from scripts.engine.world_objects.tile import Tile
@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
 # containers
 _placed_rooms: List[Room] = []  # rooms created
-_map: List[List[Tile]] = []  # list of lists of tiles to be passed back to the gamemap
 _map_of_categories: List[List[TileCategory]] = []  # a list of a lists of tile categories
 _map_data: MapData = MapData()
 
@@ -34,7 +33,7 @@ def generate(map_name: str, rng: random.Random,
     """
     Generate the map using the specified details.
     """
-    global _map, _placed_rooms, _map_data
+    global _placed_rooms, _map_data, _map_of_categories
     
     # save map data to be used across functions while building
     _map_data = library.MAPS[map_name]
@@ -46,14 +45,19 @@ def generate(map_name: str, rng: random.Random,
     # generate the level
     generate_map(rng, player_data)
 
+    # TODO : add outer border (maybe add size as a global value and make all map take into account?)
     # ensure all borders are walls
-    for x in range(width):
-        for y in range(height):
-            if _is_in_map_border(width, height, x, y):
-                _create_wall_tile(x, y)
+    # for x in range(width):
+    #     for y in range(height):
+    #         if _is_in_map_border(width, height, x, y):
+    #             _create_wall_tile(x, y)
 
-    # copy value to be returned to a local var
-    generated_level = _map
+    # create the map with tiles
+    generated_level = []
+    for x in range(width):
+        generated_level.append([])
+        for y in range(height):
+            generated_level[x].append(_create_tile_from_category(x, y, _map_of_categories[x][y]))
 
     # build generation string
     gen_info = f"{map_name}: \n"
@@ -61,7 +65,7 @@ def generate(map_name: str, rng: random.Random,
         gen_info += room.generation_info + "\n"
 
     # clear existing info
-    _map = []
+    _map_of_categories = []
     _placed_rooms = []
 
     return generated_level, gen_info
@@ -105,7 +109,7 @@ def generate_steps(map_name: str, rng: random.Random,):
 
     :return: The state of the map at a step
     """
-    global _map, _placed_rooms, _map_data
+    global _placed_rooms, _map_data, _map_of_categories
 
     # save map data to be used across functions while building
     _map_data = library.MAPS[map_name]
@@ -127,7 +131,7 @@ def generate_steps(map_name: str, rng: random.Random,):
                 _create_wall_tile(x, y)
 
     # clear existing info
-    _map = []
+    _map_of_categories = []
     _placed_rooms = []
 
 
@@ -143,7 +147,7 @@ def generate_map(rng: random.Random, player_data: Optional[ActorData] = None):
 
     for _ in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts, player_data):
         pass
-    return _map
+    return _map_of_categories
 
 
 def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms: int, include_shortcuts: bool,
@@ -151,7 +155,7 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
     """
     Generate the next step of the level generation.
     """
-    global _map, _map_of_categories, _placed_rooms
+    global _map_of_categories, _placed_rooms
 
     rooms_placed = 0
     placement_attempts = 0
@@ -329,11 +333,11 @@ def _add_shortcuts(rng, width, height):
             tile_y = rng.randint(shortcut_length + 1, (height - shortcut_length - 1))
 
             # look for a wall around the position given
-            if _map[tile_x][tile_y].blocks_movement:
-                if (_map[tile_x - 1][tile_y].blocks_movement or
-                        _map[tile_x + 1][tile_y].blocks_movement or
-                        _map[tile_x][tile_y - 1].blocks_movement or
-                        _map[tile_x][tile_y + 1].blocks_movement):
+            if _map_of_categories[tile_x][tile_y].blocks_movement:
+                if (_map_of_categories[tile_x - 1][tile_y].blocks_movement or
+                        _map_of_categories[tile_x + 1][tile_y].blocks_movement or
+                        _map_of_categories[tile_x][tile_y - 1].blocks_movement or
+                        _map_of_categories[tile_x][tile_y + 1].blocks_movement):
                     break
 
         # look around the tile for floor tiles
@@ -342,7 +346,7 @@ def _add_shortcuts(rng, width, height):
                 if x != 0 or y != 0:  # Exclude the center tile
                     new_x = tile_x + (x * shortcut_length)
                     new_y = tile_y + (y * shortcut_length)
-                    if not _map[new_x][new_y].blocks_movement:
+                    if not _map_of_categories[new_x][new_y].blocks_movement:
                         # run pathfinding algorithm between the two points
                         # back to the libtcod nonsense
                         path_map = libtcod.path_new_using_map(libtcod_map)
@@ -528,7 +532,7 @@ def _recompute_path_map(width: int, height: int, libtcod_map):
     """
     for x in range(width):
         for y in range(height):
-            if _map[x][y] == 1:
+            if _map_of_categories[x][y] == 1:
                 libtcod.map_set_properties(libtcod_map, x, y, False, False)
             else:
                 libtcod.map_set_properties(libtcod_map, x, y, True, True)
@@ -559,3 +563,22 @@ def _is_in_bounds(x: int, y: int):
         return False
 
 
+def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType) -> Tile:
+    """
+    Convert a tile category into the relevant tile
+    """
+    if tile_category == TileCategory.WALL:
+        sprite_path = _map_data.wall_sprite_path
+        sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+        blocks_sight = True
+        blocks_movement = True
+    elif tile_category == TileCategory.FLOOR:
+        sprite_path = _map_data.floor_sprite_path
+        sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+        blocks_sight = False
+        blocks_movement = False
+
+    tile = Tile(x, y, sprite, sprite_path, blocks_sight, blocks_movement)
+
+
+    return tile

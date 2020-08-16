@@ -27,12 +27,12 @@ class GameMap:
         self.width = _map_data.width
         self.height = _map_data.height
 
-        # get details for an empty floor tile
+        # get details for a wall tile
         from scripts.engine import utility
         wall_sprite_path = _map_data.wall_sprite_path
         wall_sprite = utility.get_image(wall_sprite_path, (TILE_SIZE, TILE_SIZE))
-        blocks_sight = False
-        blocks_movement = False
+        blocks_sight = True
+        blocks_movement = True
 
         # populate with wall tiles
         self.tiles: List[List[Tile]] = []
