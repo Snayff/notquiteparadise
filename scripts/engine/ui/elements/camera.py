@@ -35,6 +35,7 @@ class Camera(UIPanel):
     def __init__(self, rect: Rect, manager: UIManager):
 
         # general info
+        self.ignore_fov = True
         self.rows = rect.height // TILE_SIZE
         self.columns = rect.width // TILE_SIZE
 
@@ -173,7 +174,7 @@ class Camera(UIPanel):
         # draw tiles
         for tile in self._get_current_tiles():
             # if in player fov
-            if tile.is_visible:
+            if tile.is_visible or self.ignore_fov:
                 self.draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
         # draw entities
@@ -185,7 +186,7 @@ class Camera(UIPanel):
                 draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])
                 if self.is_in_camera_view(position):
                     tile = world.get_tile(position)
-                    if tile.is_visible:
+                    if tile.is_visible or self.ignore_fov:
                         self.draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
 
         self.gamemap.set_image(map_surf)

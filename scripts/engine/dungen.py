@@ -71,36 +71,6 @@ def generate(map_name: str, rng: random.Random,
     return generated_level, gen_info
 
 
-def _create_wall_tile(x: int, y: int) -> Tile:
-    """
-    Gets a wall tile for the current map
-    """
-    from scripts.engine import utility
-    wall_sprite_path = _map_data.wall_sprite_path
-    wall_sprite = utility.get_image(wall_sprite_path, (TILE_SIZE, TILE_SIZE))
-    blocks_sight = True
-    blocks_movement = True
-
-    tile = Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement)
-
-    return tile
-
-
-def _create_floor_tile(x: int, y: int) -> Tile:
-    """
-    Makes the tile at the coordinate a floor
-    """
-    from scripts.engine import utility
-    floor_sprite_path = _map_data.floor_sprite_path
-    floor_sprite = utility.get_image(floor_sprite_path, (TILE_SIZE, TILE_SIZE))
-    blocks_sight = False
-    blocks_movement = False
-
-    tile = Tile(x, y, floor_sprite, floor_sprite_path, blocks_sight, blocks_movement)
-
-    return tile
-
-
 ############################ GENERATE LEVEL ############################
 
 def generate_steps(map_name: str, rng: random.Random,):
@@ -123,12 +93,6 @@ def generate_steps(map_name: str, rng: random.Random,):
 
     for step in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts):
         yield step
-
-    # ensure all borders are walls
-    for x in range(width):
-        for y in range(height):
-            if _is_in_map_border(width, height, x, y):
-                _create_wall_tile(x, y)
 
     # clear existing info
     _map_of_categories = []

@@ -120,6 +120,7 @@ def _process_stateless_intents(intent: InputIntentType):
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
+        # TODO - fix DUNGEN DEV VIEW
         element = ui.get_element(UIElement.DUNGEON_DEV_VIEW)
         if not element.visible:
             element.set_data(world.get_gamemap().world_gen)
