@@ -6,7 +6,7 @@
         "max_tunnel_length": 20,
         "include_shortcuts": true,
         "width": 50,
-        "height": 20,
+        "height": 40,
         "room_weights": {
             "cross": 0,
             "square": 1,

@@ -343,14 +343,9 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
         _tile = gamemap.tiles[x][y]
         if _is_tile_in_bounds(_tile):
             return _tile
-        else:
-            raise IndexError
 
     except IndexError:
-        logging.warning(f"Tried to get tile({x},{y}), which is out of bounds.")
-
-        # ensure something always returned.
-        return gamemap.tiles[0][0]
+        raise Exception(f"Tried to get tile({x},{y}), which is out of bounds.")
 
 
 def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List[Tile]:

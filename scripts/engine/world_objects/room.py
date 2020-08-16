@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Type
 
@@ -15,7 +16,8 @@ class Room:
     Details of a room. Used for world generation.
     """
     tile_categories: List[List[TileCategory]]  # what to place in a tile
-    design: str  # type of room places
+    design: str  # algorithm used to generate
+    category: str  # the type of room placed
     start_x: int = -1
     start_y: int = -1
     entities: List[str] = field(default_factory=list)
@@ -56,15 +58,21 @@ class Room:
         """
         Tallest height
         """
-        return len(self.tile_categories[0])
+        try:
+            height = len(self.tile_categories[0])
+        except IndexError:
+            height = 0
+            logging.error("Something referenced room height before the room had any tile categories.")
+
+        return height
 
     @property
     def generation_info(self) -> str:
         """
         Return the generation information about the room
         """
-        gen_info = f"{self.design} | (w:{self.width}, h:{self.height}) " \
-                   f"| a:{self.available_area}/ t:{self.total_area}."
+        gen_info = f"{self.category} | {self.design} | (w:{self.width}, h:{self.height}) " \
+                   f"| available:{self.available_area}/ total:{self.total_area}."
 
         return gen_info
 

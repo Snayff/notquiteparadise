@@ -29,17 +29,17 @@ class GameMap:
 
         # get details for an empty floor tile
         from scripts.engine import utility
-        floor_sprite_path = _map_data.floor_sprite_path
-        floor_sprite = utility.get_image(floor_sprite_path, (TILE_SIZE, TILE_SIZE))
+        wall_sprite_path = _map_data.wall_sprite_path
+        wall_sprite = utility.get_image(wall_sprite_path, (TILE_SIZE, TILE_SIZE))
         blocks_sight = False
         blocks_movement = False
 
-        # populate with empty floor tiles
-        self.tiles: List[List[Tile]] = [[
-            Tile(x, y, floor_sprite, floor_sprite_path, blocks_sight, blocks_movement)
-            for y in range(self.height)]
-            for x in range(self.width)
-        ]
+        # populate with wall tiles
+        self.tiles: List[List[Tile]] = []
+        for x in range(self.width):
+            self.tiles.append([])  # create new list for every col
+            for y in range(self.height):
+                self.tiles[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement))
 
         self.generation_info: str = ""
 
