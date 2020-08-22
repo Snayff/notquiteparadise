@@ -99,7 +99,7 @@ class UIElement(SimpleNamespace):
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
     TILE_INFO = UIElementType(8)
-    DUNGEON_DEV_VIEW = UIElementType(9)
+    DUNGEN_VIEWER = UIElementType(9)
 
 
 class InputIntent(SimpleNamespace):

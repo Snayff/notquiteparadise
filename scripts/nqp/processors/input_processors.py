@@ -120,15 +120,13 @@ def _process_stateless_intents(intent: InputIntentType):
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
-        # TODO - fix DUNGEN DEV VIEW
-        element = ui.get_element(UIElement.DUNGEON_DEV_VIEW)
-        if not element.visible:
-            element.set_data(world.get_gamemap().world_gen)
-            ui.set_element_visibility(UIElement.DUNGEON_DEV_VIEW, True)
-            state.set_new(GameState.MENU)
-        else:
-            ui.set_element_visibility(UIElement.DUNGEON_DEV_VIEW, False)
+        if ui.element_is_visible(UIElement.DUNGEN_VIEWER):
+            ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
+        else:
+            ui.get_element(UIElement.DUNGEN_VIEWER).init_viewer()
+            ui.set_element_visibility(UIElement.DUNGEN_VIEWER, True)
+            state.set_new(GameState.MENU)
 
     elif intent == InputIntent.DEV_TOGGLE:
         if ui.get_element(UIElement.DATA_EDITOR):
@@ -142,10 +140,11 @@ def _process_stateless_intents(intent: InputIntentType):
         debug.enable_profiling(120)
 
     elif intent == InputIntent.TEST:
+        # add whatever we want to test here
         import os
         full_save_path = os.getcwd() + "/" + SAVE_PATH
         for save_name in os.listdir(full_save_path):
-            save = save_name.replace(".json","")
+            save = save_name.replace(".json", "")
             state.load_game(save)
 
 

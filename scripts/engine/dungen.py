@@ -13,9 +13,11 @@ from scripts.engine.world_objects.room import Room
 if TYPE_CHECKING:
     from typing import Optional, Tuple, List
 
+__all__ = ["generate", "generate_steps"]
+
 # containers
 _placed_rooms: List[Room] = []  # rooms created
-_map_of_categories: List[List[TileCategory]] = []  # a list of a lists of tile categories
+_map_of_categories: List[List[TileCategoryType]] = []  # a list of a lists of tile categories
 _map_data: MapData = MapData()
 
 # parameters/config
@@ -43,7 +45,7 @@ def generate(map_name: str, rng: random.Random,
     height = _map_data.height
 
     # generate the level
-    generate_map(rng, player_data)
+    _generate_map_categories(rng, player_data)
 
     # TODO : add outer border (maybe add size as a global value and make all map take into account?)
     # ensure all borders are walls
@@ -73,48 +75,42 @@ def generate(map_name: str, rng: random.Random,
 
 ############################ GENERATE LEVEL ############################
 
-def generate_steps(map_name: str, rng: random.Random,):
+def generate_steps(map_name: str):
     """
     Generates a map, returning each step of the generation. Used for dev view.
-
-    :return: The state of the map at a step
     """
     global _placed_rooms, _map_data, _map_of_categories
 
     # save map data to be used across functions while building
     _map_data = library.MAPS[map_name]
 
+    # create rng
+    rng = random.Random()
+
     # get required info from library
     width = _map_data.width
     height = _map_data.height
-
     include_shortcuts = _map_data.include_shortcuts
     max_rooms = _map_data.max_rooms
 
-    for step in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts):
+    for step in _generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts):
         yield step
 
-    # clear existing info
-    _map_of_categories = []
-    _placed_rooms = []
 
-
-def generate_map(rng: random.Random, player_data: Optional[ActorData] = None):
+def _generate_map_categories(rng: random.Random, player_data: Optional[ActorData] = None):
     """
-    Generates the map.
-    :return: The completed map.
+    Generates the tile categories on the map.
     """
     width = _map_data.width
     height = _map_data.height
     include_shortcuts = _map_data.include_shortcuts
     max_rooms = _map_data.max_rooms
 
-    for _ in generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts, player_data):
+    for _ in _generate_map_in_steps(rng, width, height, max_rooms, include_shortcuts, player_data):
         pass
-    return _map_of_categories
 
 
-def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms: int, include_shortcuts: bool,
+def _generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms: int, include_shortcuts: bool,
         player_data: Optional[ActorData] = None):
     """
     Generate the next step of the level generation.
@@ -137,7 +133,7 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
     while rooms_placed <= max_rooms and placement_attempts < _max_place_room_attempts:
         placement_attempts += 1
 
-        room = generate_room(rng)
+        room = _generate_room(rng)
 
         # pick random location to place room
         room.start_x = start_x = rng.randint(1, max(1, width - room.width))
@@ -185,7 +181,7 @@ def generate_map_in_steps(rng: random.Random, width: int, height: int, max_rooms
 
 ############################ GENERATE ROOMS ############################
 
-def generate_room(rng: random.Random) -> Room:
+def _generate_room(rng: random.Random) -> Room:
     """
     Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
     random, using weightings in the data.
