@@ -1,10 +1,10 @@
 {
     "cave": {
+        "name": "cave",
         "__dataclass__": "MapData",
         "max_enemies_per_room": 3,
         "max_rooms": 30,
         "max_tunnel_length": 20,
-        "include_shortcuts": true,
         "width": 50,
         "height": 40,
         "room_weights": {
@@ -27,7 +27,6 @@
         },
         "chance_of_spawning_wall": 0.45,
         "max_neighbouring_walls_in_room": 4,
-        "shortcut_length": 10,
         "min_path_distance_for_shortcut": 5,
         "floor_sprite_path": "assets/world/placeholder/_test.png",
         "wall_sprite_path": "assets/world/placeholder/_testWall.png",

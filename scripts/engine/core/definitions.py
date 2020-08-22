@@ -251,6 +251,7 @@ class MapData:
     """
     Data class for a Map.
     """
+    name: str = ""
 
     # map size
     width: int = 0
@@ -262,11 +263,9 @@ class MapData:
     max_tunnel_length: int = 0
     max_neighbouring_walls_in_room: int = 0
     chance_of_spawning_wall: float = 0.0
-    include_shortcuts: bool = True
     room_weights: Dict[str, float] = field(default_factory=dict)
     min_room_areas: Dict[str, int] = field(default_factory=dict)
     max_room_areas: Dict[str, int] = field(default_factory=dict)
-    shortcut_length: int = 0
     min_path_distance_for_shortcut: int = 0
     actors: List[str] = field(default_factory=list)
 
