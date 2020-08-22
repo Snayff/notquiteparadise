@@ -21,7 +21,7 @@
         },
         "max_room_areas": {
             "cross": 12,
-            "square": 30,
+            "square": 18,
             "cavern": 40,
             "cellular": 35
         },

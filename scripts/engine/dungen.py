@@ -119,6 +119,7 @@ def _generate_map_in_steps(rng: random.Random, width: int, height: int, max_room
 
     rooms_placed = 0
     placement_attempts = 0
+    rooms_generated = 0
 
     # set everything to walls
     _map_of_categories = []
@@ -130,30 +131,47 @@ def _generate_map_in_steps(rng: random.Random, width: int, height: int, max_room
     yield _map_of_categories
 
     # generate and place rooms
-    while rooms_placed <= max_rooms and placement_attempts < _max_place_room_attempts:
-        placement_attempts += 1
+    while rooms_placed <= max_rooms and rooms_generated <= _max_generate_room_attempts:
+        intersects = False
+        found_place = False
 
         room = _generate_room(rng)
+        rooms_generated += 1
 
-        # pick random location to place room
-        room.start_x = start_x = rng.randint(1, max(1, width - room.width))
-        room.start_y = start_y = rng.randint(1, max(1, height - room.height))
+        # find place for the room
+        while placement_attempts < _max_place_room_attempts and not found_place:
+            placement_attempts += 1
 
-        # if placed there does room overlap any existing rooms?
-        for _room in _placed_rooms:
-            if room.intersects(_room):
-                break
+            # pick random location to place room
+            room.start_x = start_x = rng.randint(1, max(1, width - room.width))
+            room.start_y = start_y = rng.randint(1, max(1, height - room.height))
+
+            # if placed there does room overlap any existing rooms?
+            for _room in _placed_rooms:
+                if room.intersects(_room):
+                    intersects = True
+                    break
+                else:
+                    intersects = False
+
+            if not intersects:
+                found_place = True
+
+        if not found_place:
+            break
 
         # doesnt intersect so paint room on map and add room to list
         for x in range(room.width):
             for y in range(room.height):
                 _map_of_categories[start_x + x][start_y + y] = room.tile_categories[x][y]
-                _placed_rooms.append(room)
-                rooms_placed += 1
 
-                # do we need to spawn the player?
-                if rooms_placed == 1 and player_data:
-                    world.create_actor(player_data, (start_x, start_y), True)
+        # place room
+        _placed_rooms.append(room)
+        rooms_placed += 1
+
+        # do we need to spawn the player?
+        if rooms_placed == 1 and player_data:
+            world.create_actor(player_data, (start_x, start_y), True)
 
         # yield map after each room is painted
         yield _map_of_categories
@@ -517,7 +535,7 @@ def _is_in_bounds(x: int, y: int):
     width = _map_data.width
     height = _map_data.height
 
-    if 0 < x < width and 0 < y < height:
+    if 0 < x < width - 1 and 0 < y < height - 1:
         return True
     else:
         return False

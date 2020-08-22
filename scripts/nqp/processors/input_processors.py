@@ -124,7 +124,7 @@ def _process_stateless_intents(intent: InputIntentType):
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
         else:
-            ui.get_element(UIElement.DUNGEN_VIEWER).init_viewer()
+            ui.get_element(UIElement.DUNGEN_VIEWER).refresh_viewer()
             ui.set_element_visibility(UIElement.DUNGEN_VIEWER, True)
             state.set_new(GameState.MENU)
 

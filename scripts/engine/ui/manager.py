@@ -29,6 +29,8 @@ if TYPE_CHECKING:
 
 _ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer]
 
+__all__ = ["ui"]
+
 
 class _UIManager:
     """

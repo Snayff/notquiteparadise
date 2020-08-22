@@ -8,6 +8,8 @@ from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame_gui.elements import UIImage, UIWindow
+
+from scripts.engine import library
 from scripts.engine.core.constants import TileCategory
 
 
@@ -68,12 +70,19 @@ class DungenViewer(UIWindow):
 
         self.view.set_image(surf)
 
-    def init_viewer(self):
+    def refresh_viewer(self):
         """
-        Gets the data for the viewer
+        Gets the data for the viewer and runs generation again.
         """
+        map_name = "cave"
+
+        # set the scale so map always fits on screen
+        map_data = library.MAPS[map_name]
+        max_side_length = max(map_data.height, map_data.width)
+        self.scale_factor = self.rect.height // max_side_length
+
         from scripts.engine import dungen
-        self.iterator = dungen.generate_steps("cave")
+        self.iterator = dungen.generate_steps(map_name)
         self._reset()
 
     def _reset(self):
