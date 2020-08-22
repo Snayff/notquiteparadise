@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING, List, Optional
 
 import cProfile
 import datetime
@@ -6,11 +7,9 @@ import io
 import logging
 import pstats
 import time
-from typing import TYPE_CHECKING, List, Optional
 
 from snecs import Component
 from snecs.typedefs import EntityID
-
 from scripts.engine import state, world
 from scripts.engine.core.constants import INFINITE, VERSION
 

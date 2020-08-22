@@ -32,7 +32,7 @@ _ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, T
 __all__ = ["ui"]
 
 
-class _UIManager:
+class UI:
     """
     Manage the UI, such as windows, resource bars etc
     """
@@ -375,4 +375,4 @@ class _UIManager:
             logging.debug(f"Hid {element_name} ui element.")
 
 
-ui = _UIManager()
+ui = UI()

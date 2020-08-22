@@ -150,8 +150,8 @@ def initialise_game():
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
-    # FIXME - entities load before camera so they cant get their screen position. If ui loads before entities then it
-    #  fails due to player not existing. Below is a hacky fix.
+    # FIXME - entities load before camera so they cant get their screen position.
+    #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
     from scripts.engine.component import Aesthetic, Position, FOV
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)

@@ -1,5 +1,7 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+
+import logging
+from typing import List, TYPE_CHECKING
 
 import random
 
@@ -8,7 +10,6 @@ from scripts.engine import library, utility, world
 from scripts.engine.core.constants import Direction, TILE_SIZE, TileCategory, TileCategoryType
 from scripts.engine.core.definitions import ActorData, MapData
 from scripts.engine.world_objects.tile import Tile
-from scripts.engine.world_objects.room import Room
 
 if TYPE_CHECKING:
     from typing import Optional, Tuple, List
@@ -17,7 +18,7 @@ __all__ = ["generate", "generate_steps"]
 
 
 @dataclass
-class _DungeonGenerator:
+class DungeonGenerator:
     rng: random.Random
 
     # containers
@@ -131,13 +132,100 @@ class _DungeonGenerator:
         return tile
 
 
+@dataclass
+class Room:
+    """
+    Details of a room. Used for world generation.
+    """
+    tile_categories: List[List[TileCategory]]  # what to place in a tile
+    design: str  # algorithm used to generate
+    category: str  # the type of room placed
+    start_x: int = -1
+    start_y: int = -1
+    entities: List[str] = field(default_factory=list)
+
+
+    @property
+    def available_area(self) -> int:
+        """
+        Number of unblocked tiles.
+        """
+        unblocked_count = 0
+        for row in self.tile_categories:
+            for tile_cat in row:
+                if tile_cat == TileCategory.FLOOR:
+                    unblocked_count += 1
+        return unblocked_count
+
+    @property
+    def total_area(self) -> int:
+        """
+        Number of tiles in room.
+        """
+        count = 0
+        for row in self.tile_categories:
+            for tile_cat in row:
+                count += 1
+        return count
+
+    @property
+    def width(self) -> int:
+        """
+        Widest width.
+        """
+        return len(self.tile_categories)
+
+    @property
+    def height(self) -> int:
+        """
+        Tallest height
+        """
+        try:
+            height = len(self.tile_categories[0])
+        except IndexError:
+            height = 0
+            logging.error("Something referenced room height before the room had any tile categories.")
+
+        return height
+
+    @property
+    def generation_info(self) -> str:
+        """
+        Return the generation information about the room
+        """
+        gen_info = f"{self.category} | {self.design} | (w:{self.width}, h:{self.height}) " \
+                   f"| available:{self.available_area}/ total:{self.total_area}."
+
+        return gen_info
+
+    @property
+    def end_x(self) -> int:
+        return self.start_x + self.width
+
+    @property
+    def end_y(self) -> int:
+        return self.start_y + self.height
+
+    def intersects(self, room: Room) -> bool:
+        """
+        Check if this room intersects with another.
+        """
+        if (self.start_x <= room.end_x and self.end_x >= room.start_x) and \
+                (self.start_y <= room.end_y and self.end_y >= room.start_y):
+            return True
+        else:
+            return False
+
+
+############################ GENERATE MAP ############################
+
 def generate(map_name: str, rng: random.Random,
         player_data: Optional[ActorData] = None) -> Tuple[List[List[Tile]], str]:
     """
     Generate the map using the specified details.
     """
     # create generator
-    dungen = _DungeonGenerator(rng, library.MAPS[map_name])
+    dungen = DungeonGenerator(rng, library.MAPS[map_name])
 
     # generate the level
     _generate_map_categories(dungen, player_data)
@@ -153,21 +241,19 @@ def generate(map_name: str, rng: random.Random,
     return dungen.map_of_tiles, dungen.generation_string
 
 
-############################ GENERATE LEVEL ############################
-
 def generate_steps(map_name: str):
     """
     Generates a map, returning each step of the generation. Used for dev view.
     """
 
     # create generator
-    dungen = _DungeonGenerator(random.Random(), library.MAPS[map_name])
+    dungen = DungeonGenerator(random.Random(), library.MAPS[map_name])
 
     for step in _generate_map_in_steps(dungen):
         yield step
 
 
-def _generate_map_categories(dungen: _DungeonGenerator, player_data: Optional[ActorData] = None):
+def _generate_map_categories(dungen: DungeonGenerator, player_data: Optional[ActorData] = None):
     """
     Generates the tile categories on the map.
     """
@@ -175,7 +261,7 @@ def _generate_map_categories(dungen: _DungeonGenerator, player_data: Optional[Ac
         pass
 
 
-def _generate_map_in_steps(dungen: _DungeonGenerator, player_data: Optional[ActorData] = None):
+def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[ActorData] = None):
     """
     Generate the next step of the level generation.
     """
@@ -255,13 +341,15 @@ def _generate_map_in_steps(dungen: _DungeonGenerator, player_data: Optional[Acto
             if not dungen.is_in_room(x, y):
                 # if its a wall, fill it in.
                 if dungen.map_of_categories[x][y] == TileCategory.WALL:
-                    _add_tunnels(dungen, x, y)
-
-                    # yield map after each set of tunnels added
-                    yield dungen.map_of_categories
+                    if _add_tunnels(dungen, x, y):
+                        # yield map after each tunnel is successfully  added
+                        yield dungen.map_of_categories
 
     # join tunnels and rooms
-    _join_tunnels_to_rooms(dungen)
+    _create_entrances(dungen)
+
+    # TODO - remove open diagonals (where you could move from one room to another diagonally)
+    # TODO - remove dead ends.
 
     # yield map after tunnels connected to rooms
     yield dungen.map_of_categories
@@ -269,7 +357,7 @@ def _generate_map_in_steps(dungen: _DungeonGenerator, player_data: Optional[Acto
 
 ############################ GENERATE ROOMS ############################
 
-def _generate_room(dungen: _DungeonGenerator) -> Room:
+def _generate_room(dungen: DungeonGenerator) -> Room:
     """
     Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
     random, using weightings in the data.
@@ -285,7 +373,7 @@ def _generate_room(dungen: _DungeonGenerator) -> Room:
     return room
 
 
-def _generate_cellular_automata_room(dungen: _DungeonGenerator,) -> Room:
+def _generate_cellular_automata_room(dungen: DungeonGenerator, ) -> Room:
     """
     Generate a room using cellular automata generation.
     """
@@ -333,7 +421,7 @@ def _generate_cellular_automata_room(dungen: _DungeonGenerator,) -> Room:
     return room
 
 
-def _generate_room_square(dungen: _DungeonGenerator) -> Room:
+def _generate_room_square(dungen: DungeonGenerator) -> Room:
     """
     Generate a square-shaped room.
     """
@@ -361,13 +449,13 @@ def _generate_room_square(dungen: _DungeonGenerator) -> Room:
 
 ####################### MAP AMENDMENTS ##############################
 
-def _add_tunnels(dungen: _DungeonGenerator, x: int, y: int):
+def _add_tunnels(dungen: DungeonGenerator, x: int, y: int) -> bool:
     """
     Follow a path from origin (xy) setting relevant position in map_of_categories to TileCategory.FLOOR. Uses flood
-    fill.
+    fill. Returns True if tunnel added
     """
+    added_tunnel = False
     to_fill_positions = set()
-    to_fill_positions.add((x, y))
     last_direction = (0, 0)
     room_tile_categories = []
 
@@ -383,6 +471,14 @@ def _add_tunnels(dungen: _DungeonGenerator, x: int, y: int):
     room_x = 0
     room_y = 0
 
+    # check position we've been given is OK before entering loop
+    in_bounds = dungen.is_in_bounds(x, y)
+    in_room = dungen.is_in_room(x, y)
+    num_walls = dungen.count_neighbouring_walls(x, y)
+    if in_bounds and not in_room and num_walls >= 6:
+        # first position is good, add to list
+        to_fill_positions.add((x, y))
+
     while to_fill_positions:
         possible_directions = []
 
@@ -395,6 +491,7 @@ def _add_tunnels(dungen: _DungeonGenerator, x: int, y: int):
 
         # build room info
         room_tile_categories[room_x][room_y] = TileCategory.FLOOR
+        added_tunnel = True
 
         # check for appropriate, adjacent wall tiles
         for direction in (Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT):
@@ -430,12 +527,15 @@ def _add_tunnels(dungen: _DungeonGenerator, x: int, y: int):
             room_x += new_direction[0]
             room_y += new_direction[1]
 
-    # create the tunnel as a room
-    dungen.placed_rooms.append(Room(tile_categories=room_tile_categories, design="flood_fill", category="tunnel",
+    if added_tunnel:
+        # create the tunnel as a room
+        dungen.placed_rooms.append(Room(tile_categories=room_tile_categories, design="flood_fill", category="tunnel",
                                start_x=x, start_y=y))
 
+    return added_tunnel
 
-def _join_tunnels_to_rooms(dungen: _DungeonGenerator):
+
+def _create_entrances(dungen: DungeonGenerator):
     """
     Loop all rooms and if it isnt a tunnel then search the outer edge for two adjoining floors and break through to
     link the locations.
@@ -444,6 +544,7 @@ def _join_tunnels_to_rooms(dungen: _DungeonGenerator):
     for room in dungen.placed_rooms:
         if room.category != "tunnel":
             entrances = 0
+            attempts = 0
 
             # roll for an extra entrance
             if dungen.rng.randint(1, 100) >= dungen.extra_entrance_chance:
@@ -451,60 +552,45 @@ def _join_tunnels_to_rooms(dungen: _DungeonGenerator):
             else:
                 max_entrances = dungen.max_room_entrances
 
-            # check top and bottom of room
-            for x in range(1, room.width):
-                above = ""
-                below = ""
-                y = 0
+            max_place_entrance_attempts = 50
 
-                # check top side
-                if room.tile_categories[x][0] == TileCategory.WALL:
-                    y = 0
-                    above = dungen.map_of_categories[x + room.start_x][y + room.start_y - 1]
-                    below = dungen.map_of_categories[x + room.start_x][y + room.start_y + 1]
+            while attempts <= max_place_entrance_attempts and entrances <= max_entrances:
+                attempts += 1
+                poss_positions = []
+
+                # pick random positions
+                top_pos = (room.start_x + dungen.rng.randint(0, room.width), room.start_y - 1)
+                next_top_pos = top_pos[0], top_pos[1] - 1
+
+                bot_pos = (room.start_x + dungen.rng.randint(0, room.width), room.start_y + room.height + 1)
+                next_bot_pos = bot_pos[0], bot_pos[1] + 1
+
+                left_pos = (room.start_x - 1, room.start_y + dungen.rng.randint(0, room.height))
+                next_left_pos = left_pos[0] - 1, left_pos[1]
+
+                right_pos = (room.start_x + room.width + 1, room.start_y + dungen.rng.randint(0, room.height))
+                next_right_pos = right_pos[0] + 1, right_pos[1]
+
+                # note which ones are applicable
+                for _pos, _next_pos in (
+                        (top_pos, next_top_pos),
+                        (bot_pos, next_bot_pos),
+                        (left_pos, next_left_pos),
+                        (right_pos, next_right_pos)):
+                    next_pos_is_floor = False
+
+                    in_bounds = dungen.is_in_bounds(_pos[0], _pos[1])
+                    if dungen.is_in_bounds(_next_pos[0], _next_pos[1]):
+                        if dungen.map_of_categories[_next_pos[0]][_next_pos[1]] == TileCategory.FLOOR:
+                            next_pos_is_floor = True
 
 
-                # check bottom side
-                if room.tile_categories[x][room.height - 1] == TileCategory.WALL:
-                    y = room.height - 1  # -1 due to counting from 0
-                    above = dungen.map_of_categories[x + room.start_x][y + room.start_y - 1]
-                    below = dungen.map_of_categories[x + room.start_x][y + room.start_y + 1]
+                    if in_bounds and next_pos_is_floor:
+                        poss_positions.append(_pos)
 
+                # pick one of the possible options and update the map
+                if poss_positions:
+                    pos = dungen.rng.choice(poss_positions)
+                    dungen.map_of_categories[pos[0]][pos[1]] = TileCategory.FLOOR
 
-                # check between two walls
-                if above == TileCategory.FLOOR and below == TileCategory.FLOOR:
-                    # make the wall a flor
-                    dungen.map_of_categories[x + room.start_x][y + room.start_y] = TileCategory.FLOOR
                     entrances += 1
-
-                    # if enough entrances placed go to next room
-                    if entrances >= max_entrances:
-                        break
-
-            # check left and right of room
-            for y in range(1, room.height):
-                left = ""
-                right = ""
-                x = 0
-
-                # check left side
-                if room.tile_categories[0][y] == TileCategory.WALL:
-                    x = 0
-                    left = dungen.map_of_categories[x + room.start_x - 1][y + room.start_y]
-                    right = dungen.map_of_categories[x + room.start_x + 1][y + room.start_y]
-
-                # check right side
-                if room.tile_categories[0][y] == TileCategory.WALL:
-                    x = room.width - 1  # -1 due to counting from 0
-                    left = dungen.map_of_categories[x + room.start_x - 1][y + room.start_y]
-                    right = dungen.map_of_categories[x + room.start_x + 1][y + room.start_y]
-
-                # check between two walls
-                if left == TileCategory.FLOOR and right == TileCategory.FLOOR:
-                    # make the wall a flor
-                    dungen.map_of_categories[x + room.start_x][y + room.start_y] = TileCategory.FLOOR
-                    entrances += 1
-
-                    # if enough entrances placed go to next room
-                    if entrances >= max_entrances:
-                        break
