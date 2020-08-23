@@ -128,7 +128,6 @@ def initialise_game():
     player_data = ActorData(["player"], "a desc", [(0, 0)], ["shoom", "soft_tops", "dandy"])
     game_map.generate_new_map(player_data)
 
-
     # init the player
     player = world.get_player()
     world.recompute_fov(player)
