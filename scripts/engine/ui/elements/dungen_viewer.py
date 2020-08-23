@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, Optional, Iterator
+from typing import Optional, Iterator
 
 import pygame
 import pygame_gui
@@ -7,25 +7,28 @@ import pygame_gui
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
-from pygame_gui.elements import UIImage, UIWindow
-
+from pygame_gui.elements import UIImage, UIPanel
 from scripts.engine import library
-from scripts.engine.core.constants import TileCategory
+from scripts.engine.core.constants import RenderLayer, TileCategory
 
 
-class DungenViewer(UIWindow):
+class DungenViewer(UIPanel):
     """
     UI component that renders the construction of a dungeon as a separate window, step by step.
     """
 
     def __init__(self, rect: Rect, manager: pygame_gui.ui_manager.UIManager):
-        super().__init__(rect, manager, element_id="dungeon_dev_view")
+        super().__init__(rect, RenderLayer.UI_WINDOW, manager, element_id="dungeon_dev_view")
 
         # config of view
-        self.sleep_per_room = 0.2
+        self.sleep_per_room = 0.1
         self.scale_factor = 20.0
-        self.floor_colour = (214, 211, 191, 255)
-        self.wall_colour = (51, 39, 18, 255)
+        self.category_colours = {
+                    TileCategory.FLOOR: (214, 211, 191, 255),
+                    TileCategory.WALL: (51, 39, 18, 255),
+                    TileCategory.DEBUG: (255, 0, 0, 255),
+                    TileCategory.ANCHOR: (0, 255, 0, 255)
+                }
 
         # create the image to hold the rooms
         rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
@@ -65,8 +68,12 @@ class DungenViewer(UIWindow):
 
         for x in range(len(self.level)):
             for y in range(len(self.level[x])):
-                color = self.floor_colour if self.level[x][y] == TileCategory.FLOOR else self.wall_colour
-                surf.fill(color, rect=Rect((x * scale, y * scale), (scale, scale)))
+                tile_cat = self.level[x][y]
+                if tile_cat in self.category_colours:
+                    colour = self.category_colours[tile_cat]
+                else:
+                    colour = self.category_colours[TileCategory.DEBUG]
+                surf.fill(colour, rect=Rect((x * scale, y * scale), (scale, scale)))
 
         self.view.set_image(surf)
 
@@ -78,8 +85,9 @@ class DungenViewer(UIWindow):
 
         # set the scale so map always fits on screen
         map_data = library.MAPS[map_name]
-        max_side_length = max(map_data.height, map_data.width)
-        self.scale_factor = self.rect.height // max_side_length
+        x_scale = self.rect.width // map_data.width
+        y_scale = self.rect.height // map_data.height
+        self.scale_factor = min(x_scale, y_scale)
 
         from scripts.engine import dungen
         self.iterator = dungen.generate_steps(map_name)

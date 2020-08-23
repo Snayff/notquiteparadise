@@ -45,10 +45,7 @@ class DungeonGenerator:
         """
         Check if a position is in the bounds of the map
         """
-        width = self.map_data.width
-        height = self.map_data.height
-
-        if 0 < x < width - 1 and 0 < y < height - 1:
+        if 0 < x < self.map_data.width - 1 and 0 < y < self.map_data.height - 1:
             return True
         else:
             return False
@@ -76,6 +73,17 @@ class DungeonGenerator:
 
         # not accessible at all
         return False
+
+    def is_in_border(self, x: int, y: int):
+        """
+        Check if a position is in the border of the map
+        """
+        border = self.border_size
+        if (x < border or x > self.map_data.width - border - 1) and\
+                (y < border or y > self.map_data.height - border - 1):
+            return True
+        else:
+            return False
 
     def count_neighbouring_walls(self, x: int, y: int) -> int:
         """
@@ -193,7 +201,6 @@ class Room:
     start_y: int = -1
     entities: List[str] = field(default_factory=list)
 
-
     @property
     def available_area(self) -> int:
         """
@@ -255,6 +262,16 @@ class Room:
     def end_y(self) -> int:
         return self.start_y + self.height
 
+    @property
+    def centre_x(self) -> int:
+        centre_x = (self.width // 2) + self.start_x
+        return centre_x
+
+    @property
+    def centre_y(self) -> int:
+        centre_y = (self.height // 2) + self.start_y
+        return centre_y
+
     def intersects(self, room: Room) -> bool:
         """
         Check if this room intersects with another.
@@ -309,23 +326,20 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
     rooms_placed = 0
     placement_attempts = 0
     rooms_generated = 0
-    start_x = 0
-    start_y = 0
 
     # set everything to walls
     dungen.map_of_categories = []
-    width = dungen.map_data.width
-    height = dungen.map_data.height
-    for x in range(width):
+    map_width = dungen.map_data.width
+    map_height = dungen.map_data.height
+    for x in range(map_width):
         dungen.map_of_categories.append([])  # create new list for every col
-        for y in range(height):
+        for y in range(map_height):
             dungen.map_of_categories[x].append(TileCategory.WALL)
 
     yield dungen.map_of_categories
 
     # generate and place rooms
     while rooms_placed <= dungen.map_data.max_rooms and rooms_generated <= dungen.max_generate_room_attempts:
-        intersects = False
         found_place = False
 
         room = _generate_room(dungen)
@@ -334,30 +348,35 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
         # find place for the room
         while placement_attempts < dungen.max_place_room_attempts and not found_place:
             placement_attempts += 1
+            intersects = False
 
             # pick random location to place room
-            room.start_x = start_x = dungen.rng.randint(1, max(1, width - room.width))
-            room.start_y = start_y = dungen.rng.randint(1, max(1, height - room.height))
+            room.start_x = dungen.rng.randint(1, max(1, map_width - room.width - 1))
+            room.start_y = dungen.rng.randint(1, max(1, map_height - room.height - 1))
 
             # if placed there does room overlap any existing rooms?
             for _room in dungen.placed_rooms:
                 if room.intersects(_room):
                     intersects = True
                     break
-                else:
-                    intersects = False
 
             if not intersects:
                 found_place = True
 
+        # if no place found for the room try again
         if not found_place:
-            break
+            continue
 
         # doesnt intersect so paint room on map and add room to list
-        for x in range(room.width):
-            for y in range(room.height):
-                dungen.map_of_categories[start_x + x][start_y + y] = room.tile_categories[x][y]
-                dungen.positions_in_rooms.append((start_x + x, start_y + y))
+        for room_x in range(room.width):
+            for room_y in range(room.height):
+                map_x = room.start_x + room_x
+                map_y = room.start_y + room_y
+                in_bounds = dungen.is_in_bounds(map_x, map_y)
+                in_border = dungen.is_in_border(map_x, map_y)
+                if in_bounds and not in_border:
+                    dungen.map_of_categories[map_x][map_y] = room.tile_categories[room_x][room_y]
+                    dungen.positions_in_rooms.append((map_x, map_y))
 
         # place room
         dungen.placed_rooms.append(room)
@@ -365,7 +384,7 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
 
         # do we need to spawn the player?
         if rooms_placed == 1 and player_data:
-            world.create_actor(player_data, (start_x, start_y), True)
+            world.create_actor(player_data, (room.start_x, room.start_y), True)
 
         # yield map after each room is painted
         yield dungen.map_of_categories
@@ -375,15 +394,14 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
         raise Exception("No rooms placed on the map.")
 
     # room placement complete, fill tunnels, without connecting to rooms
-    for x in range(width):
-        for y in range(height):
+    for x in range(map_width):
+        for y in range(map_height):
 
-            # check not part of a room
+            # check is not part of a room
             if not dungen.is_in_room(x, y):
-                # if its a wall, fill it in.
+                # if its a wall, start a tunnel
                 if dungen.map_of_categories[x][y] == TileCategory.WALL:
                     if _add_tunnels(dungen, x, y):
-                        # yield map after each tunnel is successfully  added
                         yield dungen.map_of_categories
 
     # join rooms to tunnels
@@ -391,14 +409,14 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
         _add_entrances(dungen, room)
         yield dungen.map_of_categories
 
+    _make_rooms_accessible(dungen)
+    yield dungen.map_of_categories
+
     _add_border_to_map(dungen)
     yield dungen.map_of_categories
 
-    # make diagonal only positions accessible to cardinal movement
+    # this is needed due to cardinal only movement
     _open_diagonal_only_positions_on_map(dungen)
-    yield dungen.map_of_categories
-
-    _make_rooms_accessible(dungen)
     yield dungen.map_of_categories
 
     _make_rooms_accessible(dungen)
@@ -557,7 +575,7 @@ def _add_tunnels(dungen: DungeonGenerator, x: int, y: int) -> bool:
 
             # direction must be in bounds, not in a room and be surrounded by walls on all but X sides
             # N.B. the lower the num walls the more overlapping and joined up the tunnels are
-            if in_bounds and not in_room and num_walls >= 2:
+            if in_bounds and not in_room and num_walls >= 3:
                 if dungen.map_of_categories[x_check][y_check] == TileCategory.WALL and \
                         not dungen.is_in_room(_x + (x_dir * 2), _y + (y_dir * 2)):
                     possible_directions.append((x_dir, y_dir))
@@ -590,12 +608,17 @@ def _add_ignorant_tunnel(dungen: DungeonGenerator, start_x: int, start_y: int, e
     """
     x = min(start_x, end_x)
     y = min(start_y, end_y)
-    while x != max(start_x, end_x):
+    max_x = max(start_x, end_x) - 1
+    max_y = max(start_y, end_y) - 1
+
+    while x < max_x:
+        if dungen.is_in_bounds(x, y):
+            dungen.map_of_categories[x][y] = TileCategory.FLOOR
         x += 1
-        dungen.map_of_categories[x][y] = TileCategory.FLOOR
-    while y != max(start_y, end_y):
+    while y < max_y:
+        if dungen.is_in_bounds(x, y):
+            dungen.map_of_categories[x][y] = TileCategory.FLOOR
         y += 1
-        dungen.map_of_categories[x][y] = TileCategory.FLOOR
 
 
 def _add_entrances(dungen: DungeonGenerator, room: Room):
@@ -638,10 +661,10 @@ def _add_entrances(dungen: DungeonGenerator, room: Room):
             next_pos_is_floor = False
 
             in_bounds = dungen.is_in_bounds(_pos[0], _pos[1])
-            if dungen.is_in_bounds(_next_pos[0], _next_pos[1]):
+            in_border = dungen.is_in_border(_pos[0], _pos[1])
+            if in_bounds and not in_border:
                 if dungen.map_of_categories[_next_pos[0]][_next_pos[1]] == TileCategory.FLOOR:
                     next_pos_is_floor = True
-
 
             if in_bounds and next_pos_is_floor:
                 poss_positions.append(_pos)
@@ -698,7 +721,9 @@ def _open_diagonal_only_positions_on_map(dungen: DungeonGenerator):
                 for x_dir, y_dir in (Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT):
                     x_check = x + x_dir
                     y_check = y + y_dir
-                    if dungen.is_in_bounds(x_check, y_check):
+                    in_bounds = dungen.is_in_bounds(x_check, y_check)
+                    in_border = dungen.is_in_border(x_check, y_check)
+                    if in_bounds and not in_border:
                         dungen.map_of_categories[x_check][y_check] = TileCategory.FLOOR
 
 
@@ -725,18 +750,23 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
     """
     bools_map = dungen.map_of_bools
 
-    # start with picking one room that everything should connect to
+    # start by picking one room that all other rooms should connect to
     anchor_room = dungen.rng.choice(dungen.placed_rooms)
 
-    # pick spot in room as anchor
-    anchor_x = anchor_room.start_x + (anchor_room.width // 2)
-    anchor_y = anchor_room.start_y + (anchor_room.height // 2)
+    # pick spot in room as anchor and make sure it is open
+    anchor_x = anchor_room.centre_x
+    anchor_y = anchor_room.centre_y
     dungen.map_of_categories[anchor_x][anchor_y] = TileCategory.FLOOR
 
     # loop all rooms
+    counter = 0
+    add_path_counter = 0
     for room in dungen.placed_rooms:
-        x = room.start_x + (room.width // 2)
-        y = room.start_y + (room.height // 2)
+        counter += 1
+        x = room.centre_x
+        y = room.centre_y
+
+        # ensure the centre of the room is open
         dungen.map_of_categories[x][y] = TileCategory.FLOOR
 
         # check if route is possible between anchor and target
@@ -747,3 +777,8 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
         # if no possible route, make one
         if not path:
             _add_ignorant_tunnel(dungen, anchor_x, anchor_y, x, y)
+            add_path_counter += 1
+
+    # repaint the anchor room's centre
+    dungen.map_of_categories[anchor_x][anchor_y] = TileCategory.ANCHOR
+

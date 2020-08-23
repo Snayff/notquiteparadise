@@ -218,7 +218,8 @@ class UI:
             UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
             UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
             UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
-            UIElement.DUNGEN_VIEWER: (DungenViewer, pygame.Rect((dungeon_dev_view_x, dungeon_dev_view_y), (dungeon_dev_view_width, dungeon_dev_view_height))),
+            UIElement.DUNGEN_VIEWER: (DungenViewer, pygame.Rect((dungeon_dev_view_x, dungeon_dev_view_y),
+                                                                (dungeon_dev_view_width, dungeon_dev_view_height))),
             UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
         }
         self._element_details = layout

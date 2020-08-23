@@ -318,9 +318,12 @@ class ProjectileSpeed(SimpleNamespace):
     FAST = ProjectileSpeedType(int(AVERAGE / 2))
     INSTANT = ProjectileSpeedType(0)
 
+
 class TileCategory(SimpleNamespace):
     """
     The type of tile to be placed
     """
     FLOOR = TileCategoryType("floor")
     WALL = TileCategoryType("wall")
+    DEBUG = TileCategoryType("debug")
+    ANCHOR = TileCategoryType("anchor")

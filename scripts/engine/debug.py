@@ -27,7 +27,7 @@ _FRAMES: int = 0
 _PROFILE_DURATION_REMAINING: int = INFINITE
 
 # flags
-IS_FPS_VISIBLE: bool = True
+IS_FPS_VISIBLE: bool = False
 IS_PROFILING: bool = True
 IS_LOGGING: bool = True
 
