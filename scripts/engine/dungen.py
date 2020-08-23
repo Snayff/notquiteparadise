@@ -30,10 +30,11 @@ class DungeonGenerator:
     # parameters/config
     max_generate_room_attempts = 100
     max_place_room_attempts = 200
+    max_place_entrance_attempts = 50
     max_room_entrances = 2
     extra_entrance_chance = 20
     room_extra_size = 0
-    chance_of_tunnel_winding = 0
+    chance_of_tunnel_winding = 10
 
     def is_in_map_border(self, x: int, y: int) -> bool:
         """
@@ -68,6 +69,21 @@ class DungeonGenerator:
         else:
             return False
 
+    def is_only_accessible_diagonally(self, x: int, y: int) -> bool:
+        """
+        Checks if a tile is only accessible via a diagonal move.
+        """
+        # can be reached by cardinal
+        if self.count_adjacent_walls(x, y) > 0:
+            return False
+
+        # can be reached by diagonal
+        if self.count_neighbouring_walls(x, y) > 0:
+            return True
+
+        # not accessible at all
+        return False
+
     def count_neighbouring_walls(self, x: int, y: int) -> int:
         """
         Get the number of walls in 8 directions.
@@ -85,6 +101,27 @@ class DungeonGenerator:
                     # exclude (x,y) from adjacency check
                     if (neighbor_x != x) or (neighbor_y != y):
                         wall_counter += 1
+
+        return wall_counter
+
+    def count_adjacent_walls(self, x: int, y: int) -> int:
+        """
+        Get the number of walls in 4 directions.
+        """
+        wall_counter = 0
+
+        left = (x - 1, y)
+        right = (x + 1, y)
+        top = (x, y - 1)
+        bot = (x, y + 1)
+
+        for _x, _y in (left, right, top, bot):
+            # count out of bounds as a wall
+            if self.is_in_bounds(_x, _y):
+                if self.map_of_categories[_x][_y] == TileCategory.WALL:
+                    wall_counter += 1
+            else:
+                wall_counter += 1
 
         return wall_counter
 
@@ -346,13 +383,28 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
                         yield dungen.map_of_categories
 
     # join tunnels and rooms
-    _create_entrances(dungen)
+    for room in dungen.placed_rooms:
+        if room.category != "tunnel":
+            _create_entrances_in_room(dungen, room)
 
-    # TODO - remove open diagonals (where you could move from one room to another diagonally)
-    # TODO - remove dead ends.
+            # yield map after each room connected to a tunnel
+            yield dungen.map_of_categories
 
-    # yield map after tunnels connected to rooms
+    # make diagonal only positions accessible
+    _open_diagonal_only_positions(dungen)
     yield dungen.map_of_categories
+
+    # clear up deadends
+    for tunnel in dungen.placed_rooms:
+        if tunnel.category == "tunnel":
+            _remove_deadends_from_room(dungen, tunnel)
+
+            # show updated position after each set of deadends removed
+            yield dungen.map_of_categories
+
+    # remove inaccessible spaces
+    # _remove_inaccessible_from_map(dungen)
+    # yield dungen.map_of_categories
 
 
 ############################ GENERATE ROOMS ############################
@@ -474,8 +526,8 @@ def _add_tunnels(dungen: DungeonGenerator, x: int, y: int) -> bool:
     # check position we've been given is OK before entering loop
     in_bounds = dungen.is_in_bounds(x, y)
     in_room = dungen.is_in_room(x, y)
-    num_walls = dungen.count_neighbouring_walls(x, y)
-    if in_bounds and not in_room and num_walls >= 6:
+    num_walls = dungen.count_neighbouring_walls(x, y)  # only start where no other floors are
+    if in_bounds and not in_room and num_walls >= 8:
         # first position is good, add to list
         to_fill_positions.add((x, y))
 
@@ -499,10 +551,10 @@ def _add_tunnels(dungen: DungeonGenerator, x: int, y: int) -> bool:
             y_dir = direction[1]
             in_bounds = dungen.is_in_bounds(_x + x_dir, _y + y_dir)
             in_room = dungen.is_in_room(_x + x_dir, _y + y_dir)
-            num_walls = dungen.count_neighbouring_walls(_x + x_dir, _y + y_dir)
+            num_walls = dungen.count_adjacent_walls(_x + x_dir, _y + y_dir)  # can only move cardinal so check that
 
             # direction must be in bounds, not in a room and be surrounded by walls on all but 2 sides
-            if in_bounds and not in_room and num_walls >= 6:
+            if in_bounds and not in_room and num_walls >= 3:
                 # we dont want to break into rooms so must have 2 walls in direction
                 if dungen.map_of_categories[_x + x_dir][_y + y_dir] == TileCategory.WALL and \
                         not dungen.is_in_room(_x + (x_dir * 2), _y + (y_dir * 2)):
@@ -535,62 +587,116 @@ def _add_tunnels(dungen: DungeonGenerator, x: int, y: int) -> bool:
     return added_tunnel
 
 
-def _create_entrances(dungen: DungeonGenerator):
+def _create_entrances_in_room(dungen: DungeonGenerator, room: Room):
     """
     Loop all rooms and if it isnt a tunnel then search the outer edge for two adjoining floors and break through to
     link the locations.
     """
-    # loop all rooms that aren't tunnels
-    for room in dungen.placed_rooms:
-        if room.category != "tunnel":
-            entrances = 0
-            attempts = 0
+    entrances = 0
+    attempts = 0
 
-            # roll for an extra entrance
-            if dungen.rng.randint(1, 100) >= dungen.extra_entrance_chance:
-                max_entrances = dungen.max_room_entrances + 1
-            else:
-                max_entrances = dungen.max_room_entrances
+    # roll for an extra entrance
+    if dungen.rng.randint(1, 100) >= dungen.extra_entrance_chance:
+        max_entrances = dungen.max_room_entrances + 1
+    else:
+        max_entrances = dungen.max_room_entrances
 
-            max_place_entrance_attempts = 50
+    while attempts <= dungen.max_place_entrance_attempts and entrances <= max_entrances:
+        attempts += 1
+        poss_positions = []
 
-            while attempts <= max_place_entrance_attempts and entrances <= max_entrances:
-                attempts += 1
-                poss_positions = []
+        # pick random positions
+        top_pos = (room.start_x + dungen.rng.randint(0, room.width - 1), room.start_y - 1)
+        next_top_pos = top_pos[0], top_pos[1] - 1
 
-                # pick random positions
-                top_pos = (room.start_x + dungen.rng.randint(0, room.width), room.start_y - 1)
-                next_top_pos = top_pos[0], top_pos[1] - 1
+        bot_pos = (room.start_x + dungen.rng.randint(0, room.width - 1), room.start_y + room.height + 1)
+        next_bot_pos = bot_pos[0], bot_pos[1] + 1
 
-                bot_pos = (room.start_x + dungen.rng.randint(0, room.width), room.start_y + room.height + 1)
-                next_bot_pos = bot_pos[0], bot_pos[1] + 1
+        left_pos = (room.start_x - 1, room.start_y + dungen.rng.randint(0, room.height - 1))
+        next_left_pos = left_pos[0] - 1, left_pos[1]
 
-                left_pos = (room.start_x - 1, room.start_y + dungen.rng.randint(0, room.height))
-                next_left_pos = left_pos[0] - 1, left_pos[1]
+        right_pos = (room.start_x + room.width + 1, room.start_y + dungen.rng.randint(0, room.height - 1))
+        next_right_pos = right_pos[0] + 1, right_pos[1]
 
-                right_pos = (room.start_x + room.width + 1, room.start_y + dungen.rng.randint(0, room.height))
-                next_right_pos = right_pos[0] + 1, right_pos[1]
+        # note which ones are applicable
+        for _pos, _next_pos in (
+                (top_pos, next_top_pos),
+                (bot_pos, next_bot_pos),
+                (left_pos, next_left_pos),
+                (right_pos, next_right_pos)):
+            next_pos_is_floor = False
 
-                # note which ones are applicable
-                for _pos, _next_pos in (
-                        (top_pos, next_top_pos),
-                        (bot_pos, next_bot_pos),
-                        (left_pos, next_left_pos),
-                        (right_pos, next_right_pos)):
-                    next_pos_is_floor = False
-
-                    in_bounds = dungen.is_in_bounds(_pos[0], _pos[1])
-                    if dungen.is_in_bounds(_next_pos[0], _next_pos[1]):
-                        if dungen.map_of_categories[_next_pos[0]][_next_pos[1]] == TileCategory.FLOOR:
-                            next_pos_is_floor = True
+            in_bounds = dungen.is_in_bounds(_pos[0], _pos[1])
+            if dungen.is_in_bounds(_next_pos[0], _next_pos[1]):
+                if dungen.map_of_categories[_next_pos[0]][_next_pos[1]] == TileCategory.FLOOR:
+                    next_pos_is_floor = True
 
 
-                    if in_bounds and next_pos_is_floor:
-                        poss_positions.append(_pos)
+            if in_bounds and next_pos_is_floor:
+                poss_positions.append(_pos)
 
-                # pick one of the possible options and update the map
-                if poss_positions:
-                    pos = dungen.rng.choice(poss_positions)
-                    dungen.map_of_categories[pos[0]][pos[1]] = TileCategory.FLOOR
+        # pick one of the possible options and update the map
+        if poss_positions:
+            pos = dungen.rng.choice(poss_positions)
+            dungen.map_of_categories[pos[0]][pos[1]] = TileCategory.FLOOR
 
-                    entrances += 1
+            entrances += 1
+
+
+def _remove_deadends_from_room(dungen: DungeonGenerator, tunnel: Room):
+    """
+    Find all instances where a tunnel has a deadend and uncarve it, converting it back to a wall.
+    """
+    deadends = set()
+
+    # find initial deadends
+    for x in range(0, len(tunnel.tile_categories)):
+        for y in range(0, len(tunnel.tile_categories[0])):
+            if tunnel.tile_categories[x][y] == TileCategory.FLOOR and\
+                    dungen.count_adjacent_walls(x + tunnel.start_x, y + tunnel.start_y) >= 3:
+                deadends.add((x, y))
+
+    while deadends:
+        _x, _y = deadends.pop()
+
+        # mark as wall
+        tunnel.tile_categories[_x][_y] = TileCategory.WALL
+        if _x + tunnel.start_x < dungen.map_data.width and _y + tunnel.start_y < dungen.map_data.height:
+            dungen.map_of_categories[_x + tunnel.start_x][_y + tunnel.start_y] = TileCategory.WALL
+
+        # check around where we just amended for new deadends
+        for x_dir, y_dir in (Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP_LEFT,
+        Direction.UP_RIGHT, Direction.DOWN_LEFT, Direction.DOWN_RIGHT):
+            x_check = _x + x_dir
+            y_check = _y + y_dir
+
+            # if tile still in room
+            if x_check < tunnel.width and y_check < tunnel.height:
+                num_walls = dungen.count_adjacent_walls(x_check + tunnel.start_x, y_check + tunnel.start_y)
+                tile_cat = tunnel.tile_categories[x_check][y_check]
+
+                if num_walls >= 3 and tile_cat == TileCategory.FLOOR:
+                    deadends.add((x_check, y_check))
+
+
+def _open_diagonal_only_positions(dungen: DungeonGenerator):
+    """
+    Find positions where they can only be accessed via a diagonal and set surrounding tiles to floor.
+    """
+    for x in range(dungen.map_data.width):
+        for y in range(dungen.map_data.height):
+            if dungen.is_only_accessible_diagonally(x, y):
+                for x_dir, y_dir in (Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT):
+                    if dungen.is_in_bounds(x + x_dir, y + y_dir):
+                        dungen.map_of_categories[x + x_dir][y + y_dir] = TileCategory.FLOOR
+
+
+def _remove_inaccessible_from_map(dungen: DungeonGenerator):
+    """
+    Find all positions where they cannot be accessed at all and set to wall.
+    """
+    for x in range(dungen.map_data.width):
+        for y in range(dungen.map_data.height):
+            if dungen.map_of_categories[x][y] == TileCategory.FLOOR:
+                if dungen.count_neighbouring_walls(x, y) == 0:
+                    dungen.map_of_categories[x][y] = TileCategory.WALL
