@@ -16,7 +16,7 @@
         ],
         "skullduggery": 0,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/homeland/soft_tops_idle.png",
             "attack": "assets/actor/homeland/soft_tops_attack.png",
             "hit": "assets/actor/homeland/soft_tops_hit.png",
@@ -43,7 +43,7 @@
         ],
         "skullduggery": 0,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/people/goblynn_idle.png",
             "attack": "assets/actor/people/goblynn_attack.png",
             "hit": "assets/actor/people/goblynn_hit.png",
@@ -70,7 +70,7 @@
         ],
         "skullduggery": 2,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/people/shoom_idle.png",
             "attack": "assets/actor/people/shoom_attack.png",
             "hit": "assets/actor/people/shoom_hit.png",
@@ -97,7 +97,7 @@
         ],
         "skullduggery": 4,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/savvy/fungechist_idle.png",
             "attack": "assets/actor/savvy/fungechist_attack.png",
             "hit": "assets/actor/savvy/fungechist_hit.png",
@@ -125,7 +125,7 @@
         ],
         "skullduggery": 1,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/savvy/dandy_idle.png",
             "attack": "assets/actor/savvy/dandy_attack.png",
             "hit": "assets/actor/savvy/dandy_hit.png",
@@ -152,7 +152,7 @@
         ],
         "skullduggery": 1,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/npc/training_dummy_idle.png",
             "attack": "assets/actor/npc/training_dummy_idle.png",
             "hit": "assets/actor/npc/training_dummy_idle.png",

@@ -1,0 +1,22 @@
+{
+    "combat_room": {
+        "name": "Combat Room",
+        "key": "combat_room",
+        "__dataclass__": "RoomData",
+        "design": "square",
+        "max_enemies_per_room": 3,
+        "min_width": 2,
+        "min_height": 4,
+        "max_width": 10,
+        "max_height": 10,
+        "chance_of_spawning_wall": 0.45,
+        "max_neighbouring_walls_in_room": 4,
+        "sprite_paths": {
+            "floor": "assets/world/placeholder/_test.png",
+            "wall": "assets/world/placeholder/_testWall.png"
+        },
+        "actors": {
+            "training_dummy": 1
+        }
+    }
+}

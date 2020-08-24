@@ -61,8 +61,8 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.core.definitions import (
     ActorData, ProjectileData,
-    SpritePathsData,
-    SpritesData,
+    TraitSpritePathsData,
+    TraitSpritesData,
 )
 from scripts.engine.core.store import store
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
@@ -257,11 +257,11 @@ def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, 
     return action.affliction_registry[affliction_data.name](creator, target, duration)
 
 
-def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
-        desired_size: Optional[Tuple[int, int]] = None) -> SpritesData:
+def build_sprites_from_paths(sprite_paths: List[TraitSpritePathsData],
+        desired_size: Optional[Tuple[int, int]] = None) -> TraitSpritesData:
     """
-    Build a SpritesData class from a list of SpritePathsData. For each member in SpritePathsData, combines the
-     sprites from each SpritePathsData in the  list and flattens to a single surface.
+    Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData, combines the
+     sprites from each TraitSpritePathsData in the  list and flattens to a single surface.
     """
     paths: Dict[str, List[str]] = {}
     sprites: Dict[str, List[pygame.Surface]] = {}
@@ -292,7 +292,7 @@ def build_sprites_from_paths(sprite_paths: List[SpritePathsData],
         flattened_sprites[name] = utility.flatten_images(surface_list)
 
     # convert to dataclass
-    converted = SpritesData(**flattened_sprites)
+    converted = TraitSpritesData(**flattened_sprites)
     return converted
 
 

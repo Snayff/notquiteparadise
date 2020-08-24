@@ -46,7 +46,7 @@ if TYPE_CHECKING:
 
 @register_dataclass_with_json
 @dataclass
-class SpritesData:
+class TraitSpritesData:
     """
     Possible sprites.
     """
@@ -60,7 +60,7 @@ class SpritesData:
 
 @register_dataclass_with_json
 @dataclass
-class SpritePathsData:
+class TraitSpritePathsData:
     """
     Possible sprites paths for a trait
     """
@@ -88,7 +88,6 @@ class ActorData:
     behaviour_name: str = "none"
 
 
-
 @register_dataclass_with_json
 @dataclass
 class TraitData:
@@ -98,7 +97,7 @@ class TraitData:
     name: str = "none"
     group: TraitGroupType = TraitGroup.NPC
     description: str = "none"
-    sprite_paths: SpritePathsData = field(default_factory=SpritePathsData)
+    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
     sight_range: int = 0
     vigour: int = 0
     clout: int = 0
@@ -179,7 +178,7 @@ class ProjectileData:
     direction: Optional[DirectionType] = None
 
     # what does it look like?
-    sprite_paths: SpritePathsData = field(default_factory=SpritePathsData)
+    sprite_paths: TraitSpritePathsData = field(default_factory=TraitSpritePathsData)
 
     # how does it travel?
     speed: ProjectileSpeedType = ProjectileSpeed.SLOW
@@ -249,29 +248,56 @@ class GodData:
 @dataclass
 class MapData:
     """
-    Data class for a Map.
+    Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on
+    the map, how they are placed and joined up (tunnels).
     """
-    name: str = ""
+    name: str = "none"
+    key: str = "none"
 
     # map size
     width: int = 0
     height: int = 0
 
     # map gen rules
-    max_enemies_per_room: int = 0
     max_rooms: int = 0
     max_tunnel_length: int = 0
-    max_neighbouring_walls_in_room: int = 0
-    chance_of_spawning_wall: float = 0.0
-    room_weights: Dict[str, float] = field(default_factory=dict)
-    min_room_areas: Dict[str, int] = field(default_factory=dict)
-    max_room_areas: Dict[str, int] = field(default_factory=dict)
     min_path_distance_for_shortcut: int = 0
-    actors: List[str] = field(default_factory=list)
+    max_room_entrances: int = 0
+    extra_entrance_chance: int = 0
+    chance_of_tunnel_winding: int = 0
+
+    rooms: Dict[str, float] = field(default_factory=dict)  # room name, room weight
 
     # aesthetics
-    floor_sprite_path: str = "none"
-    wall_sprite_path: str = "none"
+    sprite_paths: Dict[str, str] = field(default_factory=dict)  # sprite name, sprite path
+
+
+@register_dataclass_with_json
+@dataclass
+class RoomData:
+    """
+    Data class for a Room. Only used in generation.
+    """
+    name: str = "none"
+    key: str = "none"
+
+    # sizes
+    min_width: int = 0
+    min_height: int = 0
+    max_width: int = 0
+    max_height: int = 0
+
+    # room parameters
+    design: str = ""
+    max_neighbouring_walls_in_room: int = 0
+    chance_of_spawning_wall: float = 0.0
+
+    # actor generation
+    actors: Dict[str, float] = field(default_factory=dict)  # actor name, actor weight
+    max_enemies_per_room: int = 0
+
+    # aesthetics
+    sprite_paths: Dict[str, str] = field(default_factory=dict)  # sprite name, sprite path
 
 
 ######################### ACTIONS ##################################

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import List, TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING
 
 import random
 
@@ -11,7 +11,7 @@ import tcod
 
 from scripts.engine import library, utility, world
 from scripts.engine.core.constants import Direction, TILE_SIZE, TileCategory, TileCategoryType
-from scripts.engine.core.definitions import ActorData, MapData
+from scripts.engine.core.definitions import ActorData, MapData, RoomData
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -34,11 +34,8 @@ class DungeonGenerator:
     max_generate_room_attempts = 100
     max_place_room_attempts = 200
     max_place_entrance_attempts = 50
-    max_room_entrances = 2
     max_make_room_accessible_attempts = 100
-    extra_entrance_chance = 10
-    room_extra_size = 0
-    chance_of_tunnel_winding = 10
+
     border_size = 4
 
     def is_in_bounds(self, x: int, y: int):
@@ -135,10 +132,23 @@ class DungeonGenerator:
         width = self.map_data.width
         height = self.map_data.height
 
+        # build the full size map and fill with tunnel sprites
         for x in range(width):
             generated_level.append([])
             for y in range(height):
-                generated_level[x].append(self._create_tile_from_category(x, y, self.map_of_categories[x][y]))
+                tile = _create_tile_from_category(x, y, self.map_of_categories[x][y], self.map_data.sprite_paths)
+                generated_level[x].append(tile)
+
+        # overwrite tunnel sprites with room sprites
+        for room in self.placed_rooms:
+            sprite_paths = library.ROOMS[room.key].sprite_paths
+            start_x = room.start_x
+            start_y = room.start_y
+            for x in range(room.width):
+                for y in range(room.height):
+                    tile = _create_tile_from_category(start_x + x, start_y + y, room.tile_categories[x][y],
+                                                      sprite_paths)
+                    generated_level[start_x + x][start_y + y] = tile
 
         return generated_level
 
@@ -169,24 +179,15 @@ class DungeonGenerator:
 
         return gen_info
 
-    def _create_tile_from_category(self, x: int, y: int, tile_category: TileCategoryType) -> Tile:
+    def get_room(self, x: int, y: int) -> Optional[Room]:
         """
-        Convert a tile category into the relevant tile
+        Returns the room at xy.
         """
-        if tile_category == TileCategory.WALL:
-            sprite_path = self.map_data.wall_sprite_path
-            sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
-            blocks_sight = True
-            blocks_movement = True
-        else:  # tile_category == TileCategory.FLOOR:
-            sprite_path = self.map_data.floor_sprite_path
-            sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
-            blocks_sight = False
-            blocks_movement = False
-
-        tile = Tile(x, y, sprite, sprite_path, blocks_sight, blocks_movement)
-
-        return tile
+        _room = Room([], "", "", x, y, [])
+        for room in self.placed_rooms:
+            if room.intersects(_room):
+                return room
+        return None
 
 
 @dataclass
@@ -196,7 +197,7 @@ class Room:
     """
     tile_categories: List[List[TileCategory]]  # what to place in a tile
     design: str  # algorithm used to generate
-    category: str  # the type of room placed
+    key: str  # the type of room placed
     start_x: int = -1
     start_y: int = -1
     entities: List[str] = field(default_factory=list)
@@ -249,7 +250,7 @@ class Room:
         """
         Return the generation information about the room
         """
-        gen_info = f"{self.category} | {self.design} | (w:{self.width}, h:{self.height}) " \
+        gen_info = f"{self.key} | {self.design} | (w:{self.width}, h:{self.height}) " \
                    f"| available:{self.available_area}/ total:{self.total_area}."
 
         return gen_info
@@ -294,7 +295,10 @@ def generate(map_name: str, rng: random.Random,
     dungen = DungeonGenerator(rng, library.MAPS[map_name])
 
     # generate the level
-    _generate_map_categories(dungen, player_data)
+    for _ in _generate_map_in_steps(dungen, player_data):
+        pass
+
+    # add entities
 
     return dungen.map_of_tiles, dungen.generation_string
 
@@ -309,14 +313,6 @@ def generate_steps(map_name: str):
 
     for step in _generate_map_in_steps(dungen):
         yield step
-
-
-def _generate_map_categories(dungen: DungeonGenerator, player_data: Optional[ActorData] = None):
-    """
-    Generates the tile categories on the map.
-    """
-    for _ in _generate_map_in_steps(dungen, player_data):
-        pass
 
 
 def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[ActorData] = None):
@@ -338,11 +334,22 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
 
     yield dungen.map_of_categories
 
+    # get room options for this map
+    rooms = dungen.map_data.rooms
+    room_names = []
+    room_weights = []
+
+    # break out names and weights
+    for name, weight in rooms.items():
+        room_names.append(name)
+        room_weights.append(weight)
+
+
     # generate and place rooms
     while rooms_placed <= dungen.map_data.max_rooms and rooms_generated <= dungen.max_generate_room_attempts:
         found_place = False
 
-        room = _generate_room(dungen)
+        room = _generate_room(dungen, room_names, room_weights)
         rooms_generated += 1
 
         # find place for the room
@@ -428,23 +435,25 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
 
 ############################ GENERATE ROOMS ############################
 
-def _generate_room(dungen: DungeonGenerator) -> Room:
+def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights: List[float]) -> Room:
     """
     Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
     random, using weightings in the data.
     """
-    room_weights = dungen.map_data.room_weights
-    options = [_generate_cellular_automata_room, _generate_room_square]
-    weights = [room_weights["cellular"], room_weights["square"]]
+    design_methods = {
+        "square": _generate_room_square,
+        "cellular": _generate_cellular_automata_room
+    }
 
-    # pick a generation method based on weights
-    _room_generation_method = dungen.rng.choices(options, weights, k=1)[0]
-    room = _room_generation_method(dungen)
+    # pick a room based on weights
+    room_name = dungen.rng.choices(room_names, room_weights, k=1)[0]
+    room_data = library.ROOMS[room_name]
+    room = design_methods[room_data.design](dungen, room_data)
 
     return room
 
 
-def _generate_cellular_automata_room(dungen: DungeonGenerator, ) -> Room:
+def _generate_cellular_automata_room(dungen: DungeonGenerator, room_data: RoomData) -> Room:
     """
     Generate a room using cellular automata generation.
     """
@@ -488,22 +497,20 @@ def _generate_cellular_automata_room(dungen: DungeonGenerator, ) -> Room:
                     room_tile_cats[x][y] = TileCategory.FLOOR
 
     # convert to room
-    room = Room(tile_categories=room_tile_cats, design="cellular", category="tbc")
+    room = Room(tile_categories=room_tile_cats, design="cellular", key=room_data.key)
     return room
 
 
-def _generate_room_square(dungen: DungeonGenerator) -> Room:
+def _generate_room_square(dungen: DungeonGenerator, room_data: RoomData) -> Room:
     """
     Generate a square-shaped room.
     """
-    room_min_area = dungen.map_data.min_room_areas["square"]
-    room_max_area = dungen.map_data.max_room_areas["square"]
+    map_width = dungen.map_data.width
     map_height = dungen.map_data.height
 
     # ensure not bigger than the map
-    room_width = dungen.rng.randint(room_min_area, room_max_area)
-    room_height = min(dungen.rng.randint(max(int(room_width * 0.5), room_min_area),
-                              min(int(room_width * 1.5), room_max_area)), map_height)
+    room_width = min(dungen.rng.randint(room_data.min_width, room_data.max_width), map_width)
+    room_height = min(dungen.rng.randint(room_data.min_height, room_data.max_height), map_height)
 
     # populate area with floor categories
     tile_categories = []
@@ -513,7 +520,7 @@ def _generate_room_square(dungen: DungeonGenerator) -> Room:
             tile_categories[x].append(TileCategory.FLOOR)
 
     # convert to room
-    room = Room(tile_categories=tile_categories, design="square", category="tbc")
+    room = Room(tile_categories=tile_categories, design="square", key=room_data.key)
 
     return room
 
@@ -584,7 +591,7 @@ def _add_tunnels(dungen: DungeonGenerator, x: int, y: int) -> bool:
         if possible_directions:
             # pick a possible position, preferring previous direction
             if last_direction in possible_directions and \
-                    dungen.rng.randint(1, 100) > dungen.chance_of_tunnel_winding:
+                    dungen.rng.randint(1, 100) > dungen.map_data.chance_of_tunnel_winding:
                 new_direction = last_direction
             else:
                 new_direction = dungen.rng.choice(possible_directions)
@@ -630,11 +637,13 @@ def _add_entrances(dungen: DungeonGenerator, room: Room):
     attempts = 0
 
     # roll for an extra entrance
-    if dungen.rng.randint(1, 100) >= dungen.extra_entrance_chance:
-        max_entrances = dungen.max_room_entrances + 1
+    base_num_entrances = dungen.map_data.max_room_entrances
+    if dungen.rng.randint(1, 100) >= dungen.map_data.extra_entrance_chance:
+        max_entrances = base_num_entrances + 1
     else:
-        max_entrances = dungen.max_room_entrances
+        max_entrances = base_num_entrances
 
+    # find somewhere to place the entrance
     while attempts <= dungen.max_place_entrance_attempts and entrances <= max_entrances:
         attempts += 1
         poss_positions = []
@@ -782,3 +791,25 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
     # repaint the anchor room's centre
     dungen.map_of_categories[anchor_x][anchor_y] = TileCategory.ANCHOR
 
+
+####################### HELPER FUNCTIONS ##############################
+
+def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType,
+        sprite_paths: Dict[str, str]) -> Tile:
+    """
+    Convert a tile category into the relevant tile
+    """
+    if tile_category == TileCategory.WALL:
+        sprite_path = sprite_paths[TileCategory.WALL]
+        sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+        blocks_sight = True
+        blocks_movement = True
+    else:  # tile_category == TileCategory.FLOOR:
+        sprite_path = sprite_paths[TileCategory.FLOOR]
+        sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+        blocks_sight = False
+        blocks_movement = False
+
+    tile = Tile(x, y, sprite, sprite_path, blocks_sight, blocks_movement)
+
+    return tile

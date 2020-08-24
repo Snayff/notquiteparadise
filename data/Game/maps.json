@@ -1,37 +1,22 @@
 {
     "cave": {
         "name": "cave",
+        "key": "cave",
         "__dataclass__": "MapData",
-        "max_enemies_per_room": 3,
         "max_rooms": 30,
         "max_tunnel_length": 20,
-        "width": 100,
-        "height": 50,
-        "room_weights": {
-            "cross": 0,
-            "square": 1,
-            "cavern": 0,
-            "cellular": 0
-        },
-        "min_room_areas": {
-            "cross": 4,
-            "square": 4,
-            "cavern": 15,
-            "cellular": 10
-        },
-        "max_room_areas": {
-            "cross": 12,
-            "square": 18,
-            "cavern": 40,
-            "cellular": 35
-        },
-        "chance_of_spawning_wall": 0.45,
-        "max_neighbouring_walls_in_room": 4,
         "min_path_distance_for_shortcut": 5,
-        "floor_sprite_path": "assets/world/placeholder/_test.png",
-        "wall_sprite_path": "assets/world/placeholder/_testWall.png",
-        "actors": [
-            "training_dummy"
-        ]
+        "width": 50,
+        "height": 50,
+        "rooms": {
+            "combat_room": 0.1
+        },
+        "sprite_paths": {
+            "wall": "assets/world/placeholder/_testWall.png",
+            "floor": "assets/world/placeholder/_test.png"
+        },
+        "max_room_entrances": 2,
+        "extra_entrance_chance": 10,
+        "chance_of_tunnel_winding": 10
     }
 }

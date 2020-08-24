@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from typing import List, Dict, Optional, Type, Tuple
     from scripts.engine.thought import AIBehaviour
     from scripts.engine.action import Affliction, Skill
-    from scripts.engine.core.definitions import SpritePathsData, SpritesData
+    from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 
 ##########################################################
@@ -165,11 +165,11 @@ class Aesthetic(RegisteredComponent):
     An entity's sprite.
     """
 
-    def __init__(self, current_sprite: pygame.Surface, sprites: SpritesData,
-            sprite_paths: List[SpritePathsData], render_layer: RenderLayerType, draw_pos: Tuple[float, float]):
-        self._sprite_paths: List[SpritePathsData] = sprite_paths
+    def __init__(self, current_sprite: pygame.Surface, sprites: TraitSpritesData,
+            sprite_paths: List[TraitSpritePathsData], render_layer: RenderLayerType, draw_pos: Tuple[float, float]):
+        self._sprite_paths: List[TraitSpritePathsData] = sprite_paths
         self.current_sprite: pygame.Surface = current_sprite
-        self.sprites: SpritesData = sprites
+        self.sprites: TraitSpritesData = sprites
         self.render_layer = render_layer
 
         draw_x, draw_y = draw_pos
@@ -203,9 +203,9 @@ class Aesthetic(RegisteredComponent):
 
         # unpack sprite paths
         sprite_paths = []
-        from scripts.engine.core.definitions import SpritePathsData
+        from scripts.engine.core.definitions import TraitSpritePathsData
         for sprite_path in _sprite_paths:
-            sprite_paths.append(SpritePathsData(**sprite_path))
+            sprite_paths.append(TraitSpritePathsData(**sprite_path))
 
         # convert sprite paths to sprites
         from scripts.engine import world

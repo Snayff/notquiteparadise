@@ -6,7 +6,7 @@ import logging
 import json
 
 from scripts.engine import dungen
-from scripts.engine.core.constants import TILE_SIZE
+from scripts.engine.core.constants import TILE_SIZE, TileCategory
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.world_objects.tile import Tile
 
@@ -29,7 +29,7 @@ class GameMap:
 
         # get details for a wall tile
         from scripts.engine import utility
-        wall_sprite_path = _map_data.wall_sprite_path
+        wall_sprite_path = _map_data.sprite_paths[TileCategory.WALL]
         wall_sprite = utility.get_image(wall_sprite_path, (TILE_SIZE, TILE_SIZE))
         blocks_sight = True
         blocks_movement = True
