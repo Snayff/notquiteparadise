@@ -29,7 +29,6 @@ class DungenViewer(UIPanel):
             TileCategory.ACTOR: (133, 28, 31, 255),
             TileCategory.PLAYER: (0, 255, 0, 255),
             TileCategory.DEBUG: (255, 0, 0, 255),
-            TileCategory.ANCHOR: (195, 9, 232)
         }
 
         # create the image to hold the rooms

@@ -81,6 +81,7 @@ class ActorData:
     """
     Data class for an actor
     """
+    key: str = "none"
     possible_names: List[str] = field(default_factory=list)
     description: str = "none"
     position_offsets: List[Tuple[int, int]] = field(default_factory=list)

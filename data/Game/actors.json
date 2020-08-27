@@ -1,6 +1,7 @@
 {
     "training_dummy": {
         "__dataclass__": "ActorData",
+        "key": "training_dummy",
         "possible_names": [
             "sally dummy",
             "steve dummy"

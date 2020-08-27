@@ -327,5 +327,4 @@ class TileCategory(SimpleNamespace):
     WALL = TileCategoryType("wall")
     ACTOR = TileCategoryType("actor")
     DEBUG = TileCategoryType("debug")
-    ANCHOR = TileCategoryType("anchor")
     PLAYER = TileCategoryType("player")

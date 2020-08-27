@@ -105,16 +105,6 @@ def game_loop():
         ui.draw()
 
 
-def _create_entity_pool() -> EntityPool:
-    """
-    Return a pool of entities for the gamemap
-    """
-    pool = EntityPool()
-    pool.add("player", "a desc", [(0, 0)], ["shoom", "soft_tops", "dandy"], True, 1, 1),
-    pool.add("dummy steve", "steve's desc", [(0, 0)], ["training_dummy"], False, 3, 0.25)
-    return pool
-
-
 def initialise_game():
     """
     Init the game`s required info
@@ -124,7 +114,8 @@ def initialise_game():
     store.current_gamemap = game_map
 
     # populate the map
-    player_data = ActorData(["player"], "a desc", [(0, 0)], ["shoom", "soft_tops", "dandy"])
+    player_data = ActorData(key="player", possible_names=["player"], description="a desc",
+                            position_offsets=[(0, 0)], trait_names=["shoom", "soft_tops", "dandy"])
     game_map.generate_new_map(player_data)
 
     # init the player

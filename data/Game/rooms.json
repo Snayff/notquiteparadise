@@ -7,9 +7,9 @@
         "min_actors": 0,
         "max_actors": 0,
         "min_width": 2,
-        "min_height": 4,
-        "max_width": 2,
-        "max_height": 4,
+        "min_height": 2,
+        "max_width": 6,
+        "max_height": 6,
         "chance_of_spawning_wall": 0,
         "max_neighbouring_walls_in_room": 0,
         "sprite_paths": {
@@ -25,10 +25,10 @@
         "design": "square",
         "min_actors": 1,
         "max_actors": 3,
-        "min_width": 2,
-        "min_height": 4,
-        "max_width": 10,
-        "max_height": 10,
+        "min_width": 8,
+        "min_height": 10,
+        "max_width": 12,
+        "max_height": 14,
         "chance_of_spawning_wall": 0.45,
         "max_neighbouring_walls_in_room": 4,
         "sprite_paths": {
@@ -36,7 +36,7 @@
             "wall": "assets/world/placeholder/_testWall.png"
         },
         "actors": {
-            "training_dummy": 1
+            "training_dummy": 0.9
         }
     }
 }

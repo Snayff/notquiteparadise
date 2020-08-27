@@ -216,6 +216,20 @@ class DungeonGenerator:
 
         return actor_data
 
+    def create_entities(self):
+        """
+        Create all entities listed in rooms
+        """
+        for room in self.placed_rooms:
+            for actor_key, pos in room.actors.items():
+                actor_data = self.get_actor_data(actor_key)
+
+                # create actor
+                if actor_key != "player":
+                    actor = world.create_actor(actor_data, (pos[0], pos[1]))
+                else:
+                    actor = world.create_actor(actor_data, (pos[0], pos[1]), True)
+
 
 @dataclass
 class RoomConcept:
@@ -227,7 +241,7 @@ class RoomConcept:
     key: str  # the type of room placed
     start_x: int = -1
     start_y: int = -1
-    actors: Dict[str, Tuple[int, int]] = field(default_factory=dict)  # name, position
+    actors: Dict[str, Tuple[int, int]] = field(default_factory=dict)  # key, position
 
     @property
     def available_area(self) -> int:
@@ -278,7 +292,7 @@ class RoomConcept:
         Return the generation information about the room
         """
         gen_info = f"{self.key} | {self.design} | (w:{self.width}, h:{self.height}) " \
-                   f"| available:{self.available_area}/ total:{self.total_area}."
+                   f"| available:{self.available_area}/ total:{self.total_area}. Actors:{self.actors}"
 
         return gen_info
 
@@ -324,9 +338,12 @@ def generate(map_name: str, rng: random.Random, player_data: ActorData) -> Tuple
     for _ in _generate_map_in_steps(dungen):
         pass
 
-    # add entities
+    # generate entities
     for _ in _generate_entities_in_steps(dungen, player_data):
         pass
+
+    # create the generated entities
+    dungen.create_entities()
 
     return dungen.map_of_tiles, dungen.generation_string
 
@@ -470,7 +487,7 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
     # we might not have player data if we are viewing generations
     if player_data:
         # put player in first room
-        player_room = rooms.pop()
+        player_room = rooms[0]
         placed = False
         placement_attempts = 0
         while placement_attempts <= 1000 and not placed:
@@ -479,11 +496,12 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
 
             if xy:
                 x, y = xy
-                # create actor
-                actor = world.create_actor(player_data, (x, y), True)
+
+                # add player data to list so we can use it when creating the entities
+                dungen.actors_data["player"] = player_data
 
                 # log actor in room
-                player_room.actors[world.get_name(actor)] = (x, y)
+                player_room.actors["player"] = (x, y)
                 dungen.map_of_categories[x][y] = TileCategory.PLAYER
 
                 placed = True
@@ -495,8 +513,14 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
     yield dungen.map_of_categories
 
     # work through all rooms and populate
-    while rooms:
-        room = rooms.pop()
+    skipped_player_room = False
+    for room in rooms:
+
+        # make sure to skip player room as that is handled differently
+        if not skipped_player_room:
+            skipped_player_room = True
+            continue
+
         room_key = room.key
         room_data = dungen.get_room_data(room_key)
 
@@ -505,6 +529,12 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
         placement_attempts = 0
         max_attempts = dungen.max_place_entity_attempts
         max_actors = dungen.rng.randint(room_data.min_actors, room_data.max_actors)
+
+        # if this room is empty of actors go to next room
+        if max_actors == 0:
+            continue
+
+        # try and place the actor
         while actors_placed <= max_actors and placement_attempts <= max_attempts:
             actor_data = _generate_actor(dungen, room_data)
 
@@ -514,12 +544,12 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
             if xy:
                 x, y = xy
 
-                # create actor
-                actor = world.create_actor(actor_data, (x, y))
-
                 # log actor in room (for generation string)
-                room.actors[world.get_name(actor)] = (x, y)
-                dungen.map_of_categories[x][y] = TileCategory.ACTOR
+                room.actors[actor_data.key] = (x, y)
+
+                # mark actors on map, handle multi tile.
+                for pos in actor_data.position_offsets:
+                    dungen.map_of_categories[x + pos[0]][y + pos[1]] = TileCategory.ACTOR
 
                 actors_placed += 1
 
@@ -607,9 +637,9 @@ def _generate_room_square(dungen: DungeonGenerator, room_data: RoomConceptData) 
 
     # populate area with floor categories
     tile_categories = []
-    for x in range(room_width - 1):
+    for x in range(room_width):
         tile_categories.append([])
-        for y in range(room_height - 1):
+        for y in range(room_height):
             tile_categories[x].append(TileCategory.FLOOR)
 
     # convert to room
@@ -880,9 +910,6 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
         if not path:
             _add_ignorant_tunnel(dungen, anchor_x, anchor_y, x, y)
             add_path_counter += 1
-
-    # repaint the anchor room's centre
-    dungen.map_of_categories[anchor_x][anchor_y] = TileCategory.ANCHOR
 
 
 ####################### GENERATE ENTITIES ##############################
