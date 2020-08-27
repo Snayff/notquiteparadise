@@ -274,9 +274,9 @@ class MapData:
 
 @register_dataclass_with_json
 @dataclass
-class RoomData:
+class RoomConceptData:
     """
-    Data class for a Room. Only used in generation.
+    Data class for a RoomConcept. Only used in generation.
     """
     name: str = "none"
     key: str = "none"
@@ -294,7 +294,8 @@ class RoomData:
 
     # actor generation
     actors: Dict[str, float] = field(default_factory=dict)  # actor name, actor weight
-    max_enemies_per_room: int = 0
+    min_actors: int = 0
+    max_actors: int = 0
 
     # aesthetics
     sprite_paths: Dict[str, str] = field(default_factory=dict)  # sprite name, sprite path

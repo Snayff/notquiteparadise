@@ -24,11 +24,13 @@ class DungenViewer(UIPanel):
         self.sleep_per_room = 0.1
         self.scale_factor = 20.0
         self.category_colours = {
-                    TileCategory.FLOOR: (214, 211, 191, 255),
-                    TileCategory.WALL: (51, 39, 18, 255),
-                    TileCategory.DEBUG: (255, 0, 0, 255),
-                    TileCategory.ANCHOR: (0, 255, 0, 255)
-                }
+            TileCategory.FLOOR: (214, 211, 191, 255),
+            TileCategory.WALL: (51, 39, 18, 255),
+            TileCategory.ACTOR: (133, 28, 31, 255),
+            TileCategory.PLAYER: (0, 255, 0, 255),
+            TileCategory.DEBUG: (255, 0, 0, 255),
+            TileCategory.ANCHOR: (195, 9, 232)
+        }
 
         # create the image to hold the rooms
         rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
@@ -37,7 +39,7 @@ class DungenViewer(UIPanel):
                                container=self.get_container(), object_id="#roomview")
 
         self.timer: float = 0.0
-        self.level = None
+        self.map = None
         self.iterator: Optional[Iterator] = None
 
     def update(self, time_delta: float):
@@ -48,8 +50,8 @@ class DungenViewer(UIPanel):
         if self.visible:
             self.timer += time_delta
             if self.timer > self.sleep_per_room:
-                self.level = next(self.iterator, None)  # type: ignore
-                if self.level:
+                self.map = next(self.iterator, None)  # type: ignore
+                if self.map:
                     self._update_view()  # type: ignore
                 self.timer = 0
 
@@ -66,9 +68,9 @@ class DungenViewer(UIPanel):
         surf = Surface((self.view.rect.width, self.view.rect.height), SRCALPHA)
         scale = self.scale_factor
 
-        for x in range(len(self.level)):
-            for y in range(len(self.level[x])):
-                tile_cat = self.level[x][y]
+        for x in range(len(self.map)):
+            for y in range(len(self.map[x])):
+                tile_cat = self.map[x][y]
                 if tile_cat in self.category_colours:
                     colour = self.category_colours[tile_cat]
                 else:

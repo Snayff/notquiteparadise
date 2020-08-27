@@ -33,6 +33,8 @@ class Camera(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
+        # FIXME - doesnt scroll to edge (so player can walk off the side).
+        # FIXME - grid doesnt stay aligned to player movement/position
 
         # general info
         self.ignore_fov = True

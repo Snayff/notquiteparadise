@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, TYPE_CHECKING
+from typing import Dict, Iterator, List, TYPE_CHECKING
 
 import random
 
@@ -11,7 +11,7 @@ import tcod
 
 from scripts.engine import library, utility, world
 from scripts.engine.core.constants import Direction, TILE_SIZE, TileCategory, TileCategoryType
-from scripts.engine.core.definitions import ActorData, MapData, RoomData
+from scripts.engine.core.definitions import ActorData, MapData, RoomConceptData
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -26,17 +26,20 @@ class DungeonGenerator:
 
     # containers
     map_data: MapData
-    placed_rooms: List[Room] = field(default_factory=list)
+    rooms_data: Dict[str, RoomConceptData] = field(default_factory=dict)
+    actors_data: Dict[str, ActorData] = field(default_factory=dict)
+    placed_rooms: List[RoomConcept] = field(default_factory=list)
     map_of_categories: List[List[TileCategoryType]] = field(default_factory=list)
     positions_in_rooms: List[Tuple[int, int]] = field(default_factory=list)
 
     # parameters/config
-    max_generate_room_attempts = 100
-    max_place_room_attempts = 200
-    max_place_entrance_attempts = 50
-    max_make_room_accessible_attempts = 100
+    max_generate_room_attempts = 100  # lower number means likely less rooms
+    max_place_room_attempts = 500  # lower number means likely less rooms
+    max_place_entrance_attempts = 50  # lower number means likely less entrances (and poss more ignorant tunnels)
+    max_make_room_accessible_attempts = 100  # lower number means likely more ignorant tunnels
+    max_place_entity_attempts = 50  # lower number means likely less entities
 
-    border_size = 4
+    border_size = 4  # tiles to place around the outside of the map
 
     def is_in_bounds(self, x: int, y: int):
         """
@@ -179,19 +182,43 @@ class DungeonGenerator:
 
         return gen_info
 
-    def get_room(self, x: int, y: int) -> Optional[Room]:
+    def get_room(self, x: int, y: int) -> Optional[RoomConcept]:
         """
         Returns the room at xy.
         """
-        _room = Room([], "", "", x, y, [])
+        _room = RoomConcept([], "", "", x, y)
         for room in self.placed_rooms:
             if room.intersects(_room):
                 return room
         return None
 
+    def get_room_data(self, key: str) -> RoomConceptData:
+        """
+        Get the data for a room based on key.
+        """
+        if key in self.rooms_data:
+            room_data = self.rooms_data[key]
+        else:
+            room_data = library.ROOMS[key]
+            self.rooms_data[key] = room_data
+
+        return room_data
+
+    def get_actor_data(self, key: str) -> ActorData:
+        """
+        Get the data for an actor based on key.
+        """
+        if key in self.actors_data:
+            actor_data = self.actors_data[key]
+        else:
+            actor_data = library.ACTORS[key]
+            self.actors_data[key] = actor_data
+
+        return actor_data
+
 
 @dataclass
-class Room:
+class RoomConcept:
     """
     Details of a room. Used for world generation.
     """
@@ -200,7 +227,7 @@ class Room:
     key: str  # the type of room placed
     start_x: int = -1
     start_y: int = -1
-    entities: List[str] = field(default_factory=list)
+    actors: Dict[str, Tuple[int, int]] = field(default_factory=dict)  # name, position
 
     @property
     def available_area(self) -> int:
@@ -273,7 +300,7 @@ class Room:
         centre_y = (self.height // 2) + self.start_y
         return centre_y
 
-    def intersects(self, room: Room) -> bool:
+    def intersects(self, room: RoomConcept) -> bool:
         """
         Check if this room intersects with another.
         """
@@ -286,8 +313,7 @@ class Room:
 
 ############################ GENERATE MAP ############################
 
-def generate(map_name: str, rng: random.Random,
-        player_data: Optional[ActorData] = None) -> Tuple[List[List[Tile]], str]:
+def generate(map_name: str, rng: random.Random, player_data: ActorData) -> Tuple[List[List[Tile]], str]:
     """
     Generate the map using the specified details.
     """
@@ -295,15 +321,17 @@ def generate(map_name: str, rng: random.Random,
     dungen = DungeonGenerator(rng, library.MAPS[map_name])
 
     # generate the level
-    for _ in _generate_map_in_steps(dungen, player_data):
+    for _ in _generate_map_in_steps(dungen):
         pass
 
     # add entities
+    for _ in _generate_entities_in_steps(dungen, player_data):
+        pass
 
     return dungen.map_of_tiles, dungen.generation_string
 
 
-def generate_steps(map_name: str):
+def generate_steps(map_name: str) -> Iterator:
     """
     Generates a map, returning each step of the generation. Used for dev view.
     """
@@ -314,10 +342,13 @@ def generate_steps(map_name: str):
     for step in _generate_map_in_steps(dungen):
         yield step
 
+    for step in _generate_entities_in_steps(dungen):
+        yield step
 
-def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[ActorData] = None):
+
+def _generate_map_in_steps(dungen: DungeonGenerator) -> Iterator:
     """
-    Generate the next step of the level generation.
+    Generate the next step of the map generation.
     """
     rooms_placed = 0
     placement_attempts = 0
@@ -343,7 +374,6 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
     for name, weight in rooms.items():
         room_names.append(name)
         room_weights.append(weight)
-
 
     # generate and place rooms
     while rooms_placed <= dungen.map_data.max_rooms and rooms_generated <= dungen.max_generate_room_attempts:
@@ -389,10 +419,6 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
         dungen.placed_rooms.append(room)
         rooms_placed += 1
 
-        # do we need to spawn the player?
-        if rooms_placed == 1 and player_data:
-            world.create_actor(player_data, (room.start_x, room.start_y), True)
-
         # yield map after each room is painted
         yield dungen.map_of_categories
 
@@ -408,7 +434,7 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
             if not dungen.is_in_room(x, y):
                 # if its a wall, start a tunnel
                 if dungen.map_of_categories[x][y] == TileCategory.WALL:
-                    if _add_tunnels(dungen, x, y):
+                    if _add_tunnel(dungen, x, y):
                         yield dungen.map_of_categories
 
     # join rooms to tunnels
@@ -423,19 +449,86 @@ def _generate_map_in_steps(dungen: DungeonGenerator, player_data: Optional[Actor
     yield dungen.map_of_categories
 
     # this is needed due to cardinal only movement
-    _open_diagonal_only_positions_on_map(dungen)
+    _open_diagonal_only_positions(dungen)
     yield dungen.map_of_categories
 
     _make_rooms_accessible(dungen)
     yield dungen.map_of_categories
 
-    _remove_deadends_from_map(dungen)
+    _remove_deadends(dungen)
     yield dungen.map_of_categories
+
+
+def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[ActorData] = None) -> Iterator:
+    """
+    Add entities to all rooms using the room data. Also places player.
+    """
+    # randomise order of rooms
+    rooms = dungen.placed_rooms
+    dungen.rng.shuffle(rooms)
+
+    # we might not have player data if we are viewing generations
+    if player_data:
+        # put player in first room
+        player_room = rooms.pop()
+        placed = False
+        placement_attempts = 0
+        while placement_attempts <= 1000 and not placed:
+            xy = _find_place_for_actor(dungen, player_room, player_data)
+            placement_attempts += 1
+
+            if xy:
+                x, y = xy
+                # create actor
+                actor = world.create_actor(player_data, (x, y), True)
+
+                # log actor in room
+                player_room.actors[world.get_name(actor)] = (x, y)
+                dungen.map_of_categories[x][y] = TileCategory.PLAYER
+
+                placed = True
+
+        # just in case player hasnt been placed
+        if not placed:
+            raise Exception("Dungen: Unable to place player.")
+
+    yield dungen.map_of_categories
+
+    # work through all rooms and populate
+    while rooms:
+        room = rooms.pop()
+        room_key = room.key
+        room_data = dungen.get_room_data(room_key)
+
+        # generate the actor
+        actors_placed = 0
+        placement_attempts = 0
+        max_attempts = dungen.max_place_entity_attempts
+        max_actors = dungen.rng.randint(room_data.min_actors, room_data.max_actors)
+        while actors_placed <= max_actors and placement_attempts <= max_attempts:
+            actor_data = _generate_actor(dungen, room_data)
+
+            # try to place the actor
+            xy = _find_place_for_actor(dungen, room, actor_data)
+            placement_attempts += 1
+            if xy:
+                x, y = xy
+
+                # create actor
+                actor = world.create_actor(actor_data, (x, y))
+
+                # log actor in room (for generation string)
+                room.actors[world.get_name(actor)] = (x, y)
+                dungen.map_of_categories[x][y] = TileCategory.ACTOR
+
+                actors_placed += 1
+
+                yield dungen.map_of_categories
 
 
 ############################ GENERATE ROOMS ############################
 
-def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights: List[float]) -> Room:
+def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights: List[float]) -> RoomConcept:
     """
     Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
     random, using weightings in the data.
@@ -453,7 +546,7 @@ def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights
     return room
 
 
-def _generate_cellular_automata_room(dungen: DungeonGenerator, room_data: RoomData) -> Room:
+def _generate_cellular_automata_room(dungen: DungeonGenerator, room_data: RoomConceptData) -> RoomConcept:
     """
     Generate a room using cellular automata generation.
     """
@@ -497,11 +590,11 @@ def _generate_cellular_automata_room(dungen: DungeonGenerator, room_data: RoomDa
                     room_tile_cats[x][y] = TileCategory.FLOOR
 
     # convert to room
-    room = Room(tile_categories=room_tile_cats, design="cellular", key=room_data.key)
+    room = RoomConcept(tile_categories=room_tile_cats, design="cellular", key=room_data.key)
     return room
 
 
-def _generate_room_square(dungen: DungeonGenerator, room_data: RoomData) -> Room:
+def _generate_room_square(dungen: DungeonGenerator, room_data: RoomConceptData) -> RoomConcept:
     """
     Generate a square-shaped room.
     """
@@ -520,14 +613,14 @@ def _generate_room_square(dungen: DungeonGenerator, room_data: RoomData) -> Room
             tile_categories[x].append(TileCategory.FLOOR)
 
     # convert to room
-    room = Room(tile_categories=tile_categories, design="square", key=room_data.key)
+    room = RoomConcept(tile_categories=tile_categories, design="square", key=room_data.key)
 
     return room
 
 
 ####################### MAP AMENDMENTS ##############################
 
-def _add_tunnels(dungen: DungeonGenerator, x: int, y: int) -> bool:
+def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
     """
     Follow a path from origin (xy) setting relevant position in map_of_categories to TileCategory.FLOOR. Uses flood
     fill. Returns True if tunnel added
@@ -628,7 +721,7 @@ def _add_ignorant_tunnel(dungen: DungeonGenerator, start_x: int, start_y: int, e
         y += 1
 
 
-def _add_entrances(dungen: DungeonGenerator, room: Room):
+def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
     """
     Loop all rooms and if it isnt a tunnel then search the outer edge for two adjoining floors and break through to
     link the locations.
@@ -686,7 +779,7 @@ def _add_entrances(dungen: DungeonGenerator, room: Room):
             entrances += 1
 
 
-def _remove_deadends_from_map(dungen: DungeonGenerator):
+def _remove_deadends(dungen: DungeonGenerator):
     """
     Find all instances where a tunnel has a deadend and uncarve it, converting it back to a wall.
     """
@@ -720,7 +813,7 @@ def _remove_deadends_from_map(dungen: DungeonGenerator):
                     deadends.add((x_check, y_check))
 
 
-def _open_diagonal_only_positions_on_map(dungen: DungeonGenerator):
+def _open_diagonal_only_positions(dungen: DungeonGenerator):
     """
     Find positions where they can only be accessed via a diagonal and set surrounding tiles to floor.
     """
@@ -792,12 +885,60 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
     dungen.map_of_categories[anchor_x][anchor_y] = TileCategory.ANCHOR
 
 
+####################### GENERATE ENTITIES ##############################
+
+def _generate_actor(dungen: DungeonGenerator, room_data: RoomConceptData) -> ActorData:
+    """
+    Pick an actor using the possible options in the room and their weighting and return the actor's data.
+    """
+    # pick an actor
+    keys = []
+    weights = []
+    for key, weight in room_data.actors.items():
+        keys.append(key)
+        weights.append(weight)
+    actor_key = dungen.rng.choices(keys, weights, k=1)[0]
+
+    # get the actor data
+    actor_data = dungen.get_actor_data(actor_key)
+
+    return actor_data
+
+
+def _find_place_for_actor(dungen: DungeonGenerator, room: RoomConcept,
+        actor_data: ActorData) -> Optional[Tuple[int, int]]:
+    """
+    Keep picking random locations in a room to place the actor. Returns xy if successful.
+    """
+    # pick random location to place actor
+    x = room.start_x + dungen.rng.randint(1, max(1, room.width - 1))
+    y = room.start_y + dungen.rng.randint(1, max(1, room.height - 1))
+
+    # check if actor is blocked
+    blocked = True
+    for pos in actor_data.position_offsets:
+        offset_x = x + pos[0]
+        offset_y = y + pos[1]
+
+        # only need to check tile category as that capture entity placement too
+        if dungen.map_of_categories[offset_x][offset_y] == TileCategory.FLOOR:
+            blocked = False
+        else:
+            blocked = True
+
+    # if blocked try again
+    if not blocked:
+        return x, y
+    else:
+        return None
+
+
 ####################### HELPER FUNCTIONS ##############################
 
 def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType,
         sprite_paths: Dict[str, str]) -> Tile:
     """
-    Convert a tile category into the relevant tile
+    Convert a tile category into the relevant tile. If it isnt a wall it is floor by default.
     """
     if tile_category == TileCategory.WALL:
         sprite_path = sprite_paths[TileCategory.WALL]

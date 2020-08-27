@@ -20,7 +20,6 @@ from scripts.engine.debug import (
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.gamemap import GameMap
 from scripts.nqp.processors import display_processors, input_processors
-from scripts.engine.world_objects.entity_gen import EntityPool
 
 
 def main():

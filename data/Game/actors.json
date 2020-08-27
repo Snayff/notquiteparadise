@@ -7,9 +7,7 @@
         ],
         "description": "A thing to hit hard. It has no feelings.",
         "position_offsets": [
-            [0, 1],
-            [1, 1],
-            [1, 0]
+            [0, 0]
         ],
         "trait_names": [
             "dummy"
