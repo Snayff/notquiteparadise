@@ -3,6 +3,7 @@
         "name": "cave",
         "key": "cave",
         "__dataclass__": "MapData",
+        "min_rooms": 10,
         "max_rooms": 30,
         "max_tunnel_length": 20,
         "min_path_distance_for_shortcut": 5,

@@ -260,6 +260,7 @@ class MapData:
     height: int = 0
 
     # map gen rules
+    min_rooms: int = 0
     max_rooms: int = 0
     max_tunnel_length: int = 0
     min_path_distance_for_shortcut: int = 0

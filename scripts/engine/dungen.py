@@ -236,7 +236,7 @@ class RoomConcept:
     """
     Details of a room. Used for world generation.
     """
-    tile_categories: List[List[TileCategory]]  # what to place in a tile
+    tile_categories: List[List[TileCategory]]  # what to place in a tile  # FIXME - can we remove?
     design: str  # algorithm used to generate
     key: str  # the type of room placed
     start_x: int = -1
@@ -393,7 +393,9 @@ def _generate_map_in_steps(dungen: DungeonGenerator) -> Iterator:
         room_weights.append(weight)
 
     # generate and place rooms
-    while rooms_placed <= dungen.map_data.max_rooms and rooms_generated <= dungen.max_generate_room_attempts:
+    max_rooms = dungen.rng.randint(dungen.map_data.min_rooms, dungen.map_data.max_rooms)
+    max_generate_room_attempts = dungen.max_generate_room_attempts
+    while rooms_placed <= max_rooms and rooms_generated <= max_generate_room_attempts:
         found_place = False
 
         room = _generate_room(dungen, room_names, room_weights)
@@ -402,20 +404,7 @@ def _generate_map_in_steps(dungen: DungeonGenerator) -> Iterator:
         # find place for the room
         while placement_attempts < dungen.max_place_room_attempts and not found_place:
             placement_attempts += 1
-            intersects = False
-
-            # pick random location to place room
-            room.start_x = dungen.rng.randint(1, max(1, map_width - room.width - 1))
-            room.start_y = dungen.rng.randint(1, max(1, map_height - room.height - 1))
-
-            # if placed there does room overlap any existing rooms?
-            for _room in dungen.placed_rooms:
-                if room.intersects(_room):
-                    intersects = True
-                    break
-
-            if not intersects:
-                found_place = True
+            found_place = _place_room(dungen, room)
 
         # if no place found for the room try again
         if not found_place:
@@ -556,7 +545,7 @@ def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[
                 yield dungen.map_of_categories
 
 
-############################ GENERATE ROOMS ############################
+############################ ROOMS ############################
 
 def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights: List[float]) -> RoomConcept:
     """
@@ -646,6 +635,30 @@ def _generate_room_square(dungen: DungeonGenerator, room_data: RoomConceptData) 
     room = RoomConcept(tile_categories=tile_categories, design="square", key=room_data.key)
 
     return room
+
+
+def _place_room(dungen: DungeonGenerator, room: RoomConcept) -> bool:
+    """
+    Place room in random location. Updates room start_x and start_y. Returns True if valid placement found.
+    """
+    intersects = False
+    map_width = dungen.map_data.width
+    map_height = dungen.map_data.height
+
+    # pick random location to place room
+    room.start_x = dungen.rng.randint(1, max(1, map_width - room.width - 1))
+    room.start_y = dungen.rng.randint(1, max(1, map_height - room.height - 1))
+
+    # if placed there does room overlap any existing rooms?
+    for _room in dungen.placed_rooms:
+        if room.intersects(_room):
+            intersects = True
+            break
+
+    if not intersects:
+        return True
+    else:
+        return False
 
 
 ####################### MAP AMENDMENTS ##############################
@@ -756,6 +769,8 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
     Loop all rooms and if it isnt a tunnel then search the outer edge for two adjoining floors and break through to
     link the locations.
     """
+    # FIXME - not actually joining to floor spaces so just creating random floors
+
     entrances = 0
     attempts = 0
 
@@ -880,6 +895,8 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
     """
     Pick a room as the anchor and make sure all other floor tiles can connect to it via pathfinding.
     """
+    # FIXME - connect room to nearest and prevent that room connecting back to the first. Creates a tree. 
+
     bools_map = dungen.map_of_bools
 
     # start by picking one room that all other rooms should connect to
@@ -912,7 +929,7 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
             add_path_counter += 1
 
 
-####################### GENERATE ENTITIES ##############################
+####################### ENTITIES ##############################
 
 def _generate_actor(dungen: DungeonGenerator, room_data: RoomConceptData) -> ActorData:
     """

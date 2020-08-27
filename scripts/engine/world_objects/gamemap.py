@@ -17,6 +17,8 @@ class GameMap:
     init.
     """
     def __init__(self, map_name: str, seed: Any):
+        # FIXME - fix deserialisation
+
         self.name: str = map_name
         self.seed = seed
         self.rng = random.Random()
@@ -96,7 +98,7 @@ class GameMap:
                 for y in range(height):
                     tiles[x].append(Tile.deserialise(serialised["tiles"][x][y]))
 
-            game_map = GameMap(seed, algo_name, width, height)
+            game_map = GameMap(seed, algo_name)
             game_map.tiles = tiles
             return game_map
         except KeyError as e:
