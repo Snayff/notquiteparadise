@@ -158,7 +158,8 @@ class DungeonGenerator:
     @property
     def map_of_bools(self) -> List[List[bool]]:
         """
-        Returns an array of bools by converting values from map_of_categories to bool. Floor == True, Wall == False.
+        Returns an array of bools by converting values from map_of_categories to bool.
+        Floor == True, Wall == False.
         """
 
         bools_map = []
@@ -242,6 +243,14 @@ class RoomConcept:
     start_x: int = -1
     start_y: int = -1
     actors: Dict[str, Tuple[int, int]] = field(default_factory=dict)  # key, position
+
+    @property
+    def id(self) -> str:
+        """
+        Return the id. Uses xy.
+        """
+        _id = f"{self.start_x}.{self.start_y}"
+        return _id
 
     @property
     def available_area(self) -> int:
@@ -754,7 +763,7 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
     attempts = 0
     placed_entrances = set()
 
-    print(f"Add entrance to room: x:{room.start_x} | end_x:{room.end_x} | y:{room.start_y} | end_y:{room.end_y}")
+    #print(f"Add entrance to room: x:{room.start_x} | end_x:{room.end_x} | y:{room.start_y} | end_y:{room.end_y}")
 
     # roll for an extra entrance
     base_num_entrances = dungen.map_data.max_room_entrances
@@ -784,8 +793,8 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
         right_pos = (room.start_x + room.width + 1, room.start_y + dungen.rng.randint(1, room.height - 1))
         right_pos2 = right_pos[0] + 1, right_pos[1]
 
-        print(f"-> Random pos: top:{top_pos}:{top_pos2} | bot:{bot_pos}:{bot_pos2} | left:{left_pos}"
-              f":{left_pos2} | right:{right_pos}:{right_pos2}")
+        # print(f"-> Random pos: top:{top_pos}:{top_pos2} | bot:{bot_pos}:{bot_pos2} | left:{left_pos}"
+        #       f":{left_pos2} | right:{right_pos}:{right_pos2}")
 
         # note which ones are applicable
         for _pos, _pos2 in (
@@ -813,7 +822,7 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
             dungen.map_of_categories[pos[0]][pos[1]] = TileCategory.DEBUG
             placed_entrances.add(pos)
 
-            print(f"-> Placed entrance: {_pos}")
+            # print(f"-> Placed entrance: {_pos}")
 
             entrances += 1
 
@@ -891,6 +900,7 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
     """
     # FIXME - connect room to nearest and prevent that room connecting back to the first. Creates a tree. 
 
+    connections: Dict[str, List[str]] = {}  # room, connected rooms
     bools_map = dungen.map_of_bools
 
     # start by picking one room that all other rooms should connect to
@@ -902,10 +912,11 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
     dungen.map_of_categories[anchor_x][anchor_y] = TileCategory.FLOOR
 
     # loop all rooms
-    counter = 0
-    add_path_counter = 0
     for room in dungen.placed_rooms:
-        counter += 1
+        # dont check anchor room
+        if room == anchor_room:
+            continue
+
         x = room.centre_x
         y = room.centre_y
 
@@ -919,9 +930,84 @@ def _make_rooms_accessible(dungen: DungeonGenerator):
 
         # if no possible route, make one
         if not path:
-            _add_ignorant_tunnel(dungen, anchor_x, anchor_y, x, y)
-            add_path_counter += 1
+            # get ignore list i.e. connected rooms
+            ignore_list = []
+            for _room_id, connected_rooms_ids in connections.items():
+                if _room_id == room.id:
+                    # if the key matches then add all of the values in the list
+                    ignore_list.extend(connected_rooms_ids)
+                elif room.id in connected_rooms_ids:
+                    # if id in the value list then add the key
+                    ignore_list.append(_room_id)
 
+            # get nearest room and tunnel to that
+            print(f"Ignore list: {ignore_list}")
+            nearest_room = get_nearest_room(dungen, x, y, ignore_list)
+            _add_ignorant_tunnel(dungen, nearest_room.centre_x, nearest_room.centre_y, x, y)
+
+            # log the connection
+            if room.id in connections:
+                connections[room.id].append(nearest_room.id)
+            else:
+                connections[room.id] = [nearest_room.id]
+
+            print(f"Connected {room.id} to {nearest_room.id}.")
+        else:
+            # we have a path so log the connection to the anchor room
+            if anchor_room.id in connections:
+                connections[anchor_room.id].append(room.id)
+            else:
+                connections[anchor_room.id] = [room.id]
+
+            print(f"Path exists between {anchor_room.id} and {room.id}.")
+
+    print(f"Connections: {connections}")
+
+
+def get_nearest_room(dungen: DungeonGenerator, x: int, y: int,
+        id_ignore_list: List[str]) -> Optional[RoomConcept]:
+    """
+    Starting from xy find the directly nearest room. Treats all tiles as floors.
+    """
+    passable_map = []
+    closest_room = None
+    shortest_path_length = 0
+    width = dungen.map_data.width
+    height = dungen.map_data.height
+
+    # create empty map
+    for x in range(width):
+        passable_map.append([])
+        for y in range(height):
+            passable_map[x].append(True)
+
+    # create pathfinder
+    pathfinder = tcod.path.Dijkstra(passable_map, 0)
+    pathfinder.set_goal(x, y)
+
+    # check each room to see which is closest
+    for room in dungen.placed_rooms:
+        # check ignore list
+        if room.id in id_ignore_list:
+            continue
+
+        # create new path
+        path = pathfinder.get_path(room.centre_x, room.centre_y)
+        path_length = len(path)
+
+        # if we havent got any room yet set values
+        if not closest_room:
+            closest_room = room
+            shortest_path_length = path_length
+            continue
+
+        # check length
+        if path_length < shortest_path_length:
+            shortest_path_length = path_length
+            closest_room = room
+
+
+    return closest_room
 
 ####################### ENTITIES ##############################
 
