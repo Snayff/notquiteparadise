@@ -33,8 +33,11 @@ class Camera(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
+        # FIXME - doesnt scroll to edge (so player can walk off the side).
+        # FIXME - grid doesnt stay aligned to player movement/position
 
         # general info
+        self.ignore_fov = True
         self.rows = rect.height // TILE_SIZE
         self.columns = rect.width // TILE_SIZE
 
@@ -173,19 +176,19 @@ class Camera(UIPanel):
         # draw tiles
         for tile in self._get_current_tiles():
             # if in player fov
-            if tile.is_visible:
+            if tile.is_visible or self.ignore_fov:
                 self.draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
         # draw entities
         for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
-            # if in camera view
+            # if part of entity in camera view
             for offset in pos.offsets:
                 src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                 position = (pos.x + offset[0], pos.y + offset[1])
                 draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])
                 if self.is_in_camera_view(position):
                     tile = world.get_tile(position)
-                    if tile.is_visible:
+                    if tile.is_visible or self.ignore_fov:
                         self.draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
 
         self.gamemap.set_image(map_surf)

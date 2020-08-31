@@ -8,7 +8,7 @@ import pygame
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.118.0"
+VERSION = "0.119.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -49,6 +49,7 @@ TargetingMethodType = NewType("TargetingMethodType", str)
 TraitGroupType = NewType("TraitGroupType", str)
 AfflictionTriggerType = NewType("AfflictionTriggerType", str)
 RenderLayerType = NewType("RenderLayerType", int)
+TileCategoryType = NewType("TileCategoryType", str)
 
 
 #################### INTERNAL, NON-SERIALISED ###########################################
@@ -98,7 +99,7 @@ class UIElement(SimpleNamespace):
     CAMERA = UIElementType(6)
     DATA_EDITOR = UIElementType(7)
     TILE_INFO = UIElementType(8)
-    DUNGEON_DEV_VIEW = UIElementType(9)
+    DUNGEN_VIEWER = UIElementType(9)
 
 
 class InputIntent(SimpleNamespace):
@@ -316,3 +317,14 @@ class ProjectileSpeed(SimpleNamespace):
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
     FAST = ProjectileSpeedType(int(AVERAGE / 2))
     INSTANT = ProjectileSpeedType(0)
+
+
+class TileCategory(SimpleNamespace):
+    """
+    The type of tile to be placed
+    """
+    FLOOR = TileCategoryType("floor")
+    WALL = TileCategoryType("wall")
+    ACTOR = TileCategoryType("actor")
+    DEBUG = TileCategoryType("debug")
+    PLAYER = TileCategoryType("player")

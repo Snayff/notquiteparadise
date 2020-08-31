@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class Tile:
     """
-    A Tile on the GameMap.
+    A Tile on the Gamemap.
     """
 
     def __init__(self, x: int, y: int, sprite: pygame.Surface, sprite_path: str, blocks_sight: bool = False,

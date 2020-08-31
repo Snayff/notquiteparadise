@@ -1,0 +1,24 @@
+{
+    "cave": {
+        "name": "cave",
+        "key": "cave",
+        "__dataclass__": "MapData",
+        "min_rooms": 10,
+        "max_rooms": 30,
+        "max_tunnel_length": 20,
+        "min_path_distance_for_shortcut": 5,
+        "width": 50,
+        "height": 50,
+        "rooms": {
+            "combat": 0.2,
+            "empty": 0.1
+        },
+        "sprite_paths": {
+            "wall": "assets/world/placeholder/_testWall.png",
+            "floor": "assets/world/placeholder/_test.png"
+        },
+        "max_room_entrances": 2,
+        "extra_entrance_chance": 10,
+        "chance_of_tunnel_winding": 10
+    }
+}

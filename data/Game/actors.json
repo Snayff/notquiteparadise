@@ -1,0 +1,18 @@
+{
+    "training_dummy": {
+        "__dataclass__": "ActorData",
+        "key": "training_dummy",
+        "possible_names": [
+            "sally dummy",
+            "steve dummy"
+        ],
+        "description": "A thing to hit hard. It has no feelings.",
+        "position_offsets": [
+            [0, 0]
+        ],
+        "trait_names": [
+            "dummy"
+        ],
+        "behaviour_name": "SkipTurnBehaviour"
+    }
+}

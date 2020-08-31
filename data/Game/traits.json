@@ -2,7 +2,6 @@
     "soft_tops": {
         "__dataclass__": "TraitData",
         "group":"homeland",
-        "behaviour_name": "none",
         "bustle": 1,
         "clout": 3,
         "description": "Home to beautiful wildlife, towering, majestic fauna and the air of constant, never-ending warfare.",
@@ -17,7 +16,7 @@
         ],
         "skullduggery": 0,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/homeland/soft_tops_idle.png",
             "attack": "assets/actor/homeland/soft_tops_attack.png",
             "hit": "assets/actor/homeland/soft_tops_hit.png",
@@ -30,10 +29,9 @@
     "goblynn": {
         "__dataclass__": "TraitData",
         "group":"people",
-        "behaviour_name": "none",
         "bustle": 0,
         "clout": 0,
-        "description": "A goblinn description",
+        "description": "A goblynn description",
         "exactitude": 0,
         "name": "goblynn",
         "sight_range": 3,
@@ -45,7 +43,7 @@
         ],
         "skullduggery": 0,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/people/goblynn_idle.png",
             "attack": "assets/actor/people/goblynn_attack.png",
             "hit": "assets/actor/people/goblynn_hit.png",
@@ -58,7 +56,6 @@
 	"shoom": {
         "__dataclass__": "TraitData",
         "group":"people",
-        "behaviour_name": "none",
         "bustle": 0,
         "clout": -1,
         "description": "Often found in their ancestral home of the Soft Tops they have spent most of the last century being drafted into a war over which of the causes it the right one. Not that anyone can quite remember which cause they're fighting for.",
@@ -73,7 +70,7 @@
         ],
         "skullduggery": 2,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/people/shoom_idle.png",
             "attack": "assets/actor/people/shoom_attack.png",
             "hit": "assets/actor/people/shoom_hit.png",
@@ -86,7 +83,6 @@
     "fungechist": {
         "__dataclass__": "TraitData",
         "group":"savvy",
-        "behaviour_name": "none",
         "bustle": 1,
         "clout": -1,
         "description": "Drafted into service as a chemist to the Mushroom Barons of the Soft Tops the fungechists always keep Ou in their minds.",
@@ -101,7 +97,7 @@
         ],
         "skullduggery": 4,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/savvy/fungechist_idle.png",
             "attack": "assets/actor/savvy/fungechist_attack.png",
             "hit": "assets/actor/savvy/fungechist_hit.png",
@@ -114,7 +110,6 @@
 	"dandy": {
         "__dataclass__": "TraitData",
         "group":"savvy",
-        "behaviour_name": "none",
         "bustle": 2,
         "clout": 2,
         "description": "Lounging around the taverns of the world they can always be found one word away from an indignant splutter and a grasp for their sword.",
@@ -130,7 +125,7 @@
         ],
         "skullduggery": 1,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/savvy/dandy_idle.png",
             "attack": "assets/actor/savvy/dandy_attack.png",
             "hit": "assets/actor/savvy/dandy_hit.png",
@@ -140,15 +135,14 @@
         },
         "vigour": -1
     },
-    "training_dummy": {
+    "dummy": {
         "__dataclass__": "TraitData",
         "group":"npc",
-        "behaviour_name": "skip",
         "bustle": 1,
         "clout": 1,
         "description": "",
         "exactitude": 1,
-        "name": "training dummy",
+        "name": "dummy",
         "sight_range": 1,
         "known_skills": [
             "none"
@@ -158,7 +152,7 @@
         ],
         "skullduggery": 1,
         "sprite_paths": {
-            "__dataclass__": "SpritePathsData",
+            "__dataclass__": "TraitSpritePathsData",
             "idle": "assets/actor/npc/training_dummy_idle.png",
             "attack": "assets/actor/npc/training_dummy_idle.png",
             "hit": "assets/actor/npc/training_dummy_idle.png",

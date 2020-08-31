@@ -1,19 +1,16 @@
 from __future__ import annotations
-
-import logging
 from typing import TYPE_CHECKING, Union
 
+import logging
 import pygame
+
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement as PygameGuiElement
-from snecs.typedefs import EntityID
-
 from scripts.engine import debug, library, utility
 from scripts.engine.core.constants import (
     GAP_SIZE,
     MAX_SKILLS,
     SKILL_BUTTON_SIZE,
-    Direction,
     UIElement,
     UIElementType,
 )
@@ -23,17 +20,19 @@ from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.ui.elements.tile_info import TileInfo
-from scripts.engine.ui.elements.dungeon_dev_view import DungeonDevView
+from scripts.engine.ui.elements.dungen_viewer import DungenViewer
 from scripts.engine.ui.widgets.screen_message import ScreenMessage
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict, Tuple
 
-_ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo]
+_ui_element_union = Union[MessageLog, ActorInfo, SkillBar, Camera, DataEditor, TileInfo, DungenViewer]
+
+__all__ = ["ui"]
 
 
-class _UIManager:
+class UI:
     """
     Manage the UI, such as windows, resource bars etc
     """
@@ -48,7 +47,6 @@ class _UIManager:
         # get config info
         base_window_data = library.VIDEO_CONFIG.base_window
         desired_window_data = library.VIDEO_CONFIG.desired_window
-
 
         ##  set the display
         # base values
@@ -220,7 +218,8 @@ class _UIManager:
             UIElement.SKILL_BAR: (SkillBar, pygame.Rect((skill_x, skill_y), (skill_width, skill_height))),
             UIElement.CAMERA: (Camera, pygame.Rect((camera_x, camera_y), (camera_width, camera_height))),
             UIElement.DATA_EDITOR: (DataEditor, pygame.Rect((data_x, data_y), (data_width, data_height))),
-            UIElement.DUNGEON_DEV_VIEW: (DungeonDevView, pygame.Rect((dungeon_dev_view_x, dungeon_dev_view_y), (dungeon_dev_view_width, dungeon_dev_view_height))),
+            UIElement.DUNGEN_VIEWER: (DungenViewer, pygame.Rect((dungeon_dev_view_x, dungeon_dev_view_y),
+                                                                (dungeon_dev_view_width, dungeon_dev_view_height))),
             UIElement.ACTOR_INFO: (ActorInfo, pygame.Rect((npc_info_x, npc_info_y), (npc_info_width, npc_info_height))),
         }
         self._element_details = layout
@@ -361,7 +360,6 @@ class _UIManager:
         except AttributeError:
             logging.warning(f"Tried to add text to MessageLog but key not found. Is it init`d?")
 
-
     def set_element_visibility(self, element_type: UIElementType, visible: bool):
         """
         Set whether the element is visible or not.
@@ -378,4 +376,4 @@ class _UIManager:
             logging.debug(f"Hid {element_name} ui element.")
 
 
-ui = _UIManager()
+ui = UI()

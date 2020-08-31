@@ -15,7 +15,7 @@ from scripts.engine import (
     utility,
     world,
 )
-from scripts.engine.action import Move, Skill
+from scripts.engine.action import Skill
 from scripts.engine.component import IsActor, Knowledge, Position
 from scripts.engine.core.constants import (
     SAVE_PATH,
@@ -32,6 +32,7 @@ from scripts.engine.core.constants import (
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.tile import Tile
+from scripts.nqp.actions.skills import Move
 from scripts.nqp.processors import ai_processors
 
 if TYPE_CHECKING:
@@ -119,14 +120,13 @@ def _process_stateless_intents(intent: InputIntentType):
     ## Activate data editor
     # TODO - have this trigger dev console and move skill editor to a command in the console.
     elif intent == InputIntent.DUNGEON_DEV_VIEW:
-        element = ui.get_element(UIElement.DUNGEON_DEV_VIEW)
-        if not element.visible:
-            element.set_data(world.get_gamemap().world_gen)
-            ui.set_element_visibility(UIElement.DUNGEON_DEV_VIEW, True)
-            state.set_new(GameState.MENU)
-        else:
-            ui.set_element_visibility(UIElement.DUNGEON_DEV_VIEW, False)
+        if ui.element_is_visible(UIElement.DUNGEN_VIEWER):
+            ui.set_element_visibility(UIElement.DUNGEN_VIEWER, False)
             state.set_new(state.get_previous())
+        else:
+            ui.get_element(UIElement.DUNGEN_VIEWER).refresh_viewer()
+            ui.set_element_visibility(UIElement.DUNGEN_VIEWER, True)
+            state.set_new(GameState.MENU)
 
     elif intent == InputIntent.DEV_TOGGLE:
         if ui.get_element(UIElement.DATA_EDITOR):
@@ -140,10 +140,11 @@ def _process_stateless_intents(intent: InputIntentType):
         debug.enable_profiling(120)
 
     elif intent == InputIntent.TEST:
+        # add whatever we want to test here
         import os
         full_save_path = os.getcwd() + "/" + SAVE_PATH
         for save_name in os.listdir(full_save_path):
-            save = save_name.replace(".json","")
+            save = save_name.replace(".json", "")
             state.load_game(save)
 
 
@@ -259,13 +260,13 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
      """
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
-        world.judge_action(player, skill.name)
+        world.judge_action(player, skill.key)
         ai_processors.process_interventions()
         chronicle.end_turn(player, skill.time_cost)
 
         state.save_game()
 
-        if skill.name == "move":
+        if skill.key == "move":
             ui.set_player_tile(target_tile)
 
 

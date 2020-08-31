@@ -1,11 +1,11 @@
 {
     "basic_attack": {
         "__dataclass__": "SkillData",
-        "class_name": "BasicAttack",
         "cooldown": 2,
         "description": "A simple attack.",
         "icon_path": "assets/skills/placeholder/basic_attack.png",
         "name": "basic attack",
+        "key": "basic_attack",
         "resource_cost": 10,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -29,7 +29,7 @@
         "projectile_data": {
             "__dataclass__": "ProjectileData",
             "sprite_paths": {
-                "__dataclass__": "SpritePathsData",
+                "__dataclass__": "TraitSpritePathsData",
                 "idle": "assets/skills/placeholder/projectile.png",
                 "move": "assets/skills/placeholder/projectile.png"
             },
@@ -42,11 +42,11 @@
     },
     "lunge": {
         "__dataclass__": "SkillData",
-        "class_name": "Lunge",
         "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
         "icon_path": "placeholder/lunge.png",
         "name": "lunge",
+        "key": "lunge",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -67,11 +67,11 @@
     },
     "tar_and_feather": {
         "__dataclass__": "SkillData",
-        "class_name": "TarAndFeather",
         "cooldown": 1,
         "description": "Launch a projectile that deals damage to enemies in the specified direction.",
         "icon_path": "placeholder/lunge.png",
-        "name": "tar_and_feather",
+        "name": "tar and feather",
+        "key": "tar_and_feather",
         "resource_cost": 15,
         "resource_type": "stamina",
         "targeting_method": "target",
@@ -91,7 +91,7 @@
         "projectile_data": {
             "__dataclass__": "ProjectileData",
             "sprite_paths": {
-                "__dataclass__": "SpritePathsData",
+                "__dataclass__": "TraitSpritePathsData",
                 "idle": "assets/skills/placeholder/projectile.png",
                 "move": "assets/skills/placeholder/projectile.png"
             },

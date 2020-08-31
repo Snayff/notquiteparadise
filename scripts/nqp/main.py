@@ -3,21 +3,22 @@ from __future__ import annotations
 import logging
 import sys
 import traceback
-
 import pygame
 import snecs
-from snecs.world import default_world
 
+from snecs.world import default_world
 from scripts.engine import chronicle, debug, state, world
 from scripts.engine.core.constants import GameState, UIElement
+from scripts.engine.core.definitions import ActorData
+from scripts.engine.core.store import store
 from scripts.engine.debug import (
     enable_profiling,
     initialise_logging,
     kill_logging,
 )
 from scripts.engine.ui.manager import ui
+from scripts.engine.world_objects.gamemap import Gamemap
 from scripts.nqp.processors import display_processors, input_processors
-from scripts.engine.world_objects.entity_gen import EntityPool
 
 
 def main():
@@ -70,7 +71,6 @@ def game_loop():
     """
     The core game loop, handling input, rendering and logic.
     """
-
     while not state.get_current() == GameState.EXIT_GAME:
         # progress frame
         delta_time = state.update_clock()
@@ -104,31 +104,22 @@ def game_loop():
         ui.draw()
 
 
-def _create_entity_pool() -> EntityPool:
-    """
-    Return a pool of entities for the gamemap
-    """
-    pool = EntityPool()
-    pool.add("player", "a desc", [(0, 0)], ["shoom", "soft_tops", "dandy"], True, 1, 1),
-    pool.add("dummy steve", "steve's desc", [(0, 0)], ["training_dummy"], False, 3, 0.25)
-    return pool
-
-
 def initialise_game():
     """
     Init the game`s required info
     """
-    map_width = 50
-    map_height = 30
-    pool = _create_entity_pool()
-    world.create_gamemap(10, 'room_addition', map_width, map_height)
+    # init and save map
+    game_map = Gamemap("cave", 10)
+    store.current_gamemap = game_map
 
-    players, actors = world.populate(pool)
+    # populate the map
+    player_data = ActorData(key="player", possible_names=["player"], description="a desc",
+                            position_offsets=[(0, 0)], trait_names=["shoom", "soft_tops", "dandy"])
+    game_map.generate_new_map(player_data)
 
     # init the player
-    player = players[0]
+    player = world.get_player()
     world.recompute_fov(player)
-
 
     # tell places about the player
     chronicle.set_turn_holder(player)
@@ -147,13 +138,17 @@ def initialise_game():
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
-    # FIXME - entities load before camera so they cant get their screen position. If ui loads before entities then it
-    #  fails due to player not existing. Below is a hacky fix.
-    from scripts.engine.component import Aesthetic, Position
+    # FIXME - entities load before camera so they cant get their screen position.
+    #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
+    from scripts.engine.component import Aesthetic, Position, FOV
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
         aesthetic.target_draw_x = aesthetic.draw_x
         aesthetic.target_draw_y = aesthetic.draw_y
+
+    # entities load with a blank fov, update them now
+    for entity, (fov, position) in world.get_components([FOV, Position]):
+        world.update_tile_visibility(fov.map)
 
     # loading finished, give player control
     state.set_new(GameState.GAMEMAP)

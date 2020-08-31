@@ -1,83 +1,63 @@
 from __future__ import annotations
+from typing import Any, Dict, List, Tuple
 
+import random
 import logging
 import json
 
-from typing import Any, Dict, List, Tuple
-from scripts.engine.world_objects.entity_gen import EntityGeneration, EntityPool
+from scripts.engine import dungen
+from scripts.engine.core.constants import TILE_SIZE, TileCategory
+from scripts.engine.core.definitions import ActorData
 from scripts.engine.world_objects.tile import Tile
-from snecs.typedefs import EntityID
-from scripts.engine.world_objects.world_gen import DungeonGeneration
 
 
-class GameMap:
+class Gamemap:
     """
-    object to hold tile and fov
+    Holds tiles for a map. Handles generation of the map and placement of the entities. Fills map with floors on
+    init.
     """
-    def __init__(self, seed: int, algorithm_name: str, width: int, height: int):
-        self.width: int = width
-        self.height: int = height
-        self.seed: int = seed
-        self.algorithm_name: str = algorithm_name
+    def __init__(self, map_name: str, seed: Any):
+        # FIXME - fix deserialisation
 
-        world_gen = DungeonGeneration(seed, algorithm_name, width, height)
-        tiles, rooms, tunnels = world_gen.generate()
+        self.name: str = map_name
+        self.seed = seed
+        self.rng = random.Random()
+        self.rng.seed(self.seed)
 
-        self.tiles: List[List[Tile]] = tiles
-        self.rooms: List[Tuple[Tuple[int, int], List[List[int]]]] = rooms
-        self.tunnels = tunnels
-        self.world_gen_info = world_gen.get_gen_info()
+        from scripts.engine import library
+        _map_data = library.MAPS[map_name]
+        self.width = _map_data.width
+        self.height = _map_data.height
 
-        self.entity_gen = EntityGeneration(self.seed, self.rooms)
-        self.actors_per_room: Dict[int, List[EntityID]] = {}
+        # get details for a wall tile
+        from scripts.engine import utility
+        wall_sprite_path = _map_data.sprite_paths[TileCategory.WALL]
+        wall_sprite = utility.get_image(wall_sprite_path, (TILE_SIZE, TILE_SIZE))
+        blocks_sight = True
+        blocks_movement = True
 
-    def populate(self, pool: EntityPool) -> Tuple[List[EntityID], List[EntityID]]:
+        # populate with wall tiles
+        self.tiles: List[List[Tile]] = []
+        for x in range(self.width):
+            self.tiles.append([])  # create new list for every col
+            for y in range(self.height):
+                self.tiles[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement))
+
+        self.generation_info: str = ""
+
+    def generate_new_map(self, player_data: ActorData):
         """
-        Populate the gamemap with entities and players
-        :return: The players and actors spawned
+        Generate the map for the current game map. Creates tiles. Saves the values directly to the Gamemap.
         """
-        self.entity_gen.set_pool(pool)
-        players = self.entity_gen.place_players()
-        actors, actors_per_room = self.entity_gen.place_entities()
-        self.actors_per_room = actors_per_room
-        return players, actors
+        self.tiles, self.generation_info = dungen.generate(self.name, self.rng, player_data)
 
     def dump(self, path: str):
         """
         Dumps the dungeon tree into a file
         :param path: File path
         """
-        rooms_data: Dict[str, Any] = {}
-        rooms = self.rooms
-        i = 0
-        for room_pos, room_cells in rooms:
-            area = self.calculate_room_area(room_cells)
-            rooms_data[f"{i}"] = {
-                "area": area,
-                "actors": len(self.actors_per_room[i]),
-                "aspects": 0
-            }
-            i += 1
-
-        gen_content = self.world_gen_info
-        content = {
-            **gen_content,
-            'rooms': rooms_data
-        }
         with open(path, 'w') as fp:
-            fp.write(json.dumps(content, indent=2))
-
-    def calculate_room_area(self, room_cells: List[List[int]]) -> int:
-        """
-        Calculate the area of a room based on the cells given
-        """
-        area = 0
-        for i in range(len(room_cells)):
-            for j in range(len(room_cells[i])):
-                if room_cells[i][j] == 0:
-                    area += 1
-        # take into account the door slot
-        return area + 1
+            fp.write(json.dumps(self.generation_info, indent=4))
 
     def serialise(self) -> Dict[str, Any]:
         """
@@ -97,7 +77,6 @@ class GameMap:
             "width": self.width,
             "height": self.height,
             "tiles": tiles,
-            "algorithm_name": self.algorithm_name,
             "seed": self.seed
         }
         return _dict
@@ -105,7 +84,7 @@ class GameMap:
     @classmethod
     def deserialise(cls, serialised: Dict[str, Any]):
         """
-        Loads the details from the serialised data back into the GameMap.
+        Loads the details from the serialised data back into the Gamemap.
         """
         try:
             seed = serialised["seed"]
@@ -119,9 +98,9 @@ class GameMap:
                 for y in range(height):
                     tiles[x].append(Tile.deserialise(serialised["tiles"][x][y]))
 
-            game_map = GameMap(seed, algo_name, width, height)
+            game_map = Gamemap(seed, algo_name)
             game_map.tiles = tiles
             return game_map
         except KeyError as e:
-            logging.warning(f"GameMap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
+            logging.warning(f"Gamemap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
             raise Exception  # throw exception to hit outer error handler and exit

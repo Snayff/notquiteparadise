@@ -1,11 +1,10 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import json
 import logging
 import os
 import time
-from typing import TYPE_CHECKING
-
 import pygame
 
 from scripts.engine.core.constants import InputIntent
@@ -16,7 +15,7 @@ from scripts.engine.core.definitions import (
     BaseSecondaryStatData,
     GameConfigData,
     GodData,
-    SkillData,
+    MapData, ActorData, RoomConceptData, SkillData,
     TraitData,
     VideoConfigData,
 )
@@ -24,6 +23,10 @@ from scripts.engine.core.extend_json import deserialise_dataclasses
 
 if TYPE_CHECKING:
     from typing import Dict, Any, List, Union
+
+
+__all__ = ["TRAITS", "AFFLICTIONS", "ASPECTS", "BASE_STATS_PRIMARY", "BASE_STATS_SECONDARY", "GODS", "SKILLS",
+    "MAPS", "ACTORS", "ROOMS", "INPUT_CONFIG", "VIDEO_CONFIG", "GAME_CONFIG", "refresh_library"]
 
 
 ####################### DATA DICTS ##############################
@@ -35,6 +38,9 @@ BASE_STATS_PRIMARY: Dict[str, BasePrimaryStatData] = {}
 BASE_STATS_SECONDARY: Dict[str, BaseSecondaryStatData] = {}
 GODS: Dict[str, GodData] = {}
 SKILLS: Dict[str, SkillData] = {}
+MAPS: Dict[str, MapData] = {}
+ROOMS: Dict[str, RoomConceptData] = {}
+ACTORS: Dict[str, ActorData] = {}
 INPUT_CONFIG: Dict[str, List[str]] = {}
 VIDEO_CONFIG: VideoConfigData
 GAME_CONFIG: GameConfigData
@@ -62,6 +68,9 @@ def refresh_library():
         _load_base_stat_secondary_data()
         _load_gods_data()
         _load_skills_data()
+        _load_map_data()
+        _load_room_data()
+        _load_npc_data()
         _load_input_config()
         _load_video_config()
         _load_game_config()
@@ -125,6 +134,28 @@ def _load_skills_data():
     global SKILLS
 
     SKILLS = data
+
+
+def _load_map_data():
+    with open('data/game/maps.json') as file:
+        data = json.load(file, object_hook=deserialise_dataclasses)
+    global MAPS
+
+    MAPS = data
+
+
+def _load_room_data():
+    with open('data/game/rooms.json') as file:
+        data = json.load(file, object_hook=deserialise_dataclasses)
+    global ROOMS
+    ROOMS = data
+
+
+def _load_npc_data():
+    with open('data/game/actors.json') as file:
+        data = json.load(file, object_hook=deserialise_dataclasses)
+    global ACTORS
+    ACTORS = data
 
 
 def _load_input_config():

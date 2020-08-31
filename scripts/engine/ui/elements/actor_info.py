@@ -206,7 +206,7 @@ class ActorInfo(UIWindow):
                         duration = affliction.duration
                     affliction_icon = utility.get_image(affliction.icon_path, (32, 32))
                     info.append(("image", affliction_icon))
-                    info.append(("text", f"{affliction.name.title()}: {duration}"))
+                    info.append(("text", f"{affliction.key.title()}: {duration}"))
 
                 # if no afflictions, say so
             if not afflictions:

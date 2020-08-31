@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING, List, Optional
 
 import cProfile
 import datetime
@@ -6,11 +7,9 @@ import io
 import logging
 import pstats
 import time
-from typing import TYPE_CHECKING, List, Optional
 
 from snecs import Component
 from snecs.typedefs import EntityID
-
 from scripts.engine import state, world
 from scripts.engine.core.constants import INFINITE, VERSION
 
@@ -28,7 +27,7 @@ _FRAMES: int = 0
 _PROFILE_DURATION_REMAINING: int = INFINITE
 
 # flags
-IS_FPS_VISIBLE: bool = True
+IS_FPS_VISIBLE: bool = False
 IS_PROFILING: bool = True
 IS_LOGGING: bool = True
 

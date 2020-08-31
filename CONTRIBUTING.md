@@ -65,6 +65,7 @@ pytest
 To include any development into NQP you can submit a pull request. 
 
 Any pull request must pass mypy's typing check
- and must remain compatible with the building of the [Sphinx] documentation so that the docs are always up to date. 
+ and must remain compatible with the building of the [Sphinx] documentation so that the docs are always up to date
+ . As you'd expect, all tests must pass, too and new code should include tests. 
  
 [Sphinx]: https://www.sphinx-doc.org/en/master/  
