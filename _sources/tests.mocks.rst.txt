@@ -20,7 +20,6 @@ tests.mocks.world\_mock module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

@@ -28,10 +28,10 @@ scripts.engine.ui.elements.data\_editor module
    :undoc-members:
    :show-inheritance:
 
-scripts.engine.ui.elements.dungeon\_dev\_view module
-----------------------------------------------------
+scripts.engine.ui.elements.dungen\_viewer module
+------------------------------------------------
 
-.. automodule:: scripts.engine.ui.elements.dungeon_dev_view
+.. automodule:: scripts.engine.ui.elements.dungen_viewer
    :members:
    :undoc-members:
    :show-inheritance:
@@ -59,7 +59,6 @@ scripts.engine.ui.elements.tile\_info module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

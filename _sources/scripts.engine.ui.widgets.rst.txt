@@ -12,7 +12,6 @@ scripts.engine.ui.widgets.screen\_message module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

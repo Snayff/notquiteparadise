@@ -46,6 +46,14 @@ scripts.engine.debug module
    :undoc-members:
    :show-inheritance:
 
+scripts.engine.dungen module
+----------------------------
+
+.. automodule:: scripts.engine.dungen
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scripts.engine.effect module
 ----------------------------
 
@@ -101,7 +109,6 @@ scripts.engine.world module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------
