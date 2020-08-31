@@ -1,8 +1,8 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import logging
 
-from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 from scripts.engine import library, world
 from scripts.engine.action import Skill, properties_set_by_data, register_action

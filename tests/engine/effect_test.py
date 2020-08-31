@@ -1,13 +1,17 @@
+from typing import List
+
+from snecs.typedefs import EntityID
+
 from scripts.engine import action, world
-from scripts.engine.action import Affliction
-from scripts.engine.component import Afflictions, Identity, Knowledge, Position
+from scripts.engine.action import Affliction, Skill
+from scripts.engine.component import Aesthetic, Afflictions, Identity, Knowledge, Position
 from scripts.engine.core.constants import (
     AfflictionTrigger,
-    EffectType,
-    TargetTag,
+    Direction, EffectType,
+    Resource, Shape, TargetTag, TargetingMethod,
 )
 from scripts.engine.effect import (
-    ReduceSkillCooldownEffect,
+    Effect, ReduceSkillCooldownEffect,
     TriggerAfflictionsEffect,
 )
 from tests.mocks import world_mock
@@ -46,6 +50,38 @@ class MockAfflictionMovement(MockAffliction):
     ]
 
 
+class MockSkill(Skill):
+    key = "mock_skill"
+    required_tags = [TargetTag.SELF]
+    description = "this is the normal movement."
+    icon_path = ""
+    resource_type = Resource.STAMINA
+    resource_cost = 0
+    time_cost = 10
+    base_cooldown = 0
+    targeting_method = TargetingMethod.TARGET
+    target_directions = [
+        Direction.UP_LEFT,
+        Direction.UP,
+        Direction.UP_RIGHT,
+        Direction.LEFT,
+        Direction.CENTRE,
+        Direction.RIGHT,
+        Direction.DOWN_LEFT,
+        Direction.DOWN,
+        Direction.DOWN_RIGHT
+    ]
+    shape = Shape.TARGET
+    shape_size = 1
+    uses_projectile = False
+
+    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[Effect]:
+        return []
+
+    def get_animation(self, aesthetic: Aesthetic):
+        pass
+
+
 class TestEffects:
 
     @staticmethod
@@ -81,13 +117,13 @@ class TestEffects:
         """
         Test for the reduce skill cooldown effect
         """
-        knowledge = Knowledge([action.skill_registry["move"]])
-        knowledge.set_skill_cooldown("move", 15)
+        knowledge = Knowledge([MockSkill])
+        knowledge.set_skill_cooldown("mock_skill", 15)
 
         entity = TestEffects._create_default_entity()
         world.add_component(entity, knowledge)
 
-        effect = ReduceSkillCooldownEffect(entity, entity, "move", 5, [], [])
+        effect = ReduceSkillCooldownEffect(entity, entity, "mock_skill", 5, [], [])
         effect.evaluate()
 
-        assert knowledge.cooldowns["move"] == 10
+        assert knowledge.cooldowns["mock_skill"] == 10
