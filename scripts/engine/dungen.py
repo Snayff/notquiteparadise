@@ -78,12 +78,23 @@ class DungeonGenerator:
         """
         Check if a position is in the border of the map
         """
-        border = self.border_size
-        if (x < border or x > self.map_data.width - border - 1) and\
-                (y < border or y > self.map_data.height - border - 1):
-            return True
-        else:
-            return False
+        border_size = self.border_size
+        width = self.map_data.width
+        height = self.map_data.height
+
+        # top and bottom
+        for _x in range(0, width):
+            for _y in range(0, border_size):
+                if (_x, _y) == (x, y) or (_x, height - _y - 1) == (x, y):
+                    return True
+
+        # left and right
+        for _x in range(0, border_size):
+            for _y in range(0, height):
+                if (_x, _y) == (x, y) or (width - _x - 1, _y) == (x, y):
+                    return True
+
+        return False
 
     def count_neighbouring_walls(self, x: int, y: int) -> int:
         """
@@ -457,12 +468,6 @@ def _generate_map_in_steps(dungen: DungeonGenerator) -> Iterator:
         _add_entrances(dungen, room)
         yield dungen.map_of_categories
 
-    _make_rooms_accessible(dungen)
-    yield dungen.map_of_categories
-
-    _add_border_to_map(dungen)
-    yield dungen.map_of_categories
-
     # this is needed due to cardinal only movement
     _open_diagonal_only_positions(dungen)
     yield dungen.map_of_categories
@@ -472,6 +477,7 @@ def _generate_map_in_steps(dungen: DungeonGenerator) -> Iterator:
 
     _remove_deadends(dungen)
     yield dungen.map_of_categories
+
 
 
 def _generate_entities_in_steps(dungen: DungeonGenerator, player_data: Optional[ActorData] = None) -> Iterator:
@@ -653,10 +659,11 @@ def _place_room(dungen: DungeonGenerator, room: RoomConcept) -> bool:
     intersects = False
     map_width = dungen.map_data.width
     map_height = dungen.map_data.height
+    border_size = dungen.border_size
 
-    # pick random location to place room
-    room.start_x = dungen.rng.randint(1, max(1, map_width - room.width - 1))
-    room.start_y = dungen.rng.randint(1, max(1, map_height - room.height - 1))
+    # pick random location to place room, not including borders
+    room.start_x = dungen.rng.randint(border_size, max(border_size, map_width - room.width - border_size - 1))
+    room.start_y = dungen.rng.randint(border_size, max(border_size, map_height - room.height - border_size - 1))
 
     # if placed there does room overlap any existing rooms?
     for _room in dungen.placed_rooms:
@@ -675,7 +682,7 @@ def _place_room(dungen: DungeonGenerator, room: RoomConcept) -> bool:
 def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
     """
     Follow a path from origin (xy) setting relevant position in map_of_categories to TileCategory.FLOOR. Uses flood
-    fill. Returns True if tunnel added
+    fill. Returns True if tunnel added.
     """
     added_tunnel = False
     to_fill_positions = set()
@@ -683,9 +690,10 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
 
     # check position we've been given is OK before entering loop
     in_bounds = dungen.is_in_bounds(x, y)
+    in_border = dungen.is_in_border(x, y)
     in_room = dungen.is_in_room(x, y)
     num_walls = dungen.count_neighbouring_walls(x, y)  # only start where no other floors are
-    if in_bounds and not in_room and num_walls >= 8:
+    if in_bounds and not in_room and not in_border and num_walls >= 8:
         # first position is good, add to list
         to_fill_positions.add((x, y))
 
@@ -696,6 +704,8 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
         _x, _y = to_fill_positions.pop()
 
         # convert to floor
+        if dungen.is_in_border(_x, _y):
+            _i = 0
         dungen.map_of_categories[_x][_y] = TileCategory.FLOOR
         dungen.positions_in_rooms.append((_x, _y))
         added_tunnel = True
@@ -707,11 +717,13 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
 
             in_bounds = dungen.is_in_bounds(x_check, y_check)
             in_room = dungen.is_in_room(x_check, y_check)
+            in_border = dungen.is_in_border(x_check, y_check)
             num_walls = dungen.count_adjacent_walls(x_check, y_check)  # can only move cardinal so check that
 
             # direction must be in bounds, not in a room and be surrounded by walls on all but X sides
+            # must also not be adjacent to a room - i.e. can connect to a tunnel but not a room.
             # N.B. the lower the num walls the more overlapping and joined up the tunnels are
-            if in_bounds and not in_room and num_walls >= 3:
+            if in_bounds and not in_room and not in_border and num_walls >= 3:
                 if dungen.map_of_categories[x_check][y_check] == TileCategory.WALL and \
                         not dungen.is_in_room(_x + (x_dir * 2), _y + (y_dir * 2)):
                     possible_directions.append((x_dir, y_dir))
@@ -877,29 +889,10 @@ def _open_diagonal_only_positions(dungen: DungeonGenerator):
                         dungen.map_of_categories[x_check][y_check] = TileCategory.FLOOR
 
 
-def _add_border_to_map(dungen: DungeonGenerator):
-    """
-    Add a border of walls around the map
-    """
-    # top and bottom
-    for x in range(0, dungen.map_data.width):
-        for y in range(0, dungen.border_size):
-            dungen.map_of_categories[x][y] = TileCategory.WALL
-            dungen.map_of_categories[x][dungen.map_data.height - y - 1] = TileCategory.WALL
-
-    # left and right
-    for x in range(0, dungen.border_size):
-        for y in range(0, dungen.map_data.height):
-            dungen.map_of_categories[x][y] = TileCategory.WALL
-            dungen.map_of_categories[dungen.map_data.width - x - 1][y] = TileCategory.WALL
-
-
 def _make_rooms_accessible(dungen: DungeonGenerator):
     """
     Pick a room as the anchor and make sure all other floor tiles can connect to it via pathfinding.
     """
-    # FIXME - connect room to nearest and prevent that room connecting back to the first. Creates a tree. 
-
     connections: Dict[str, List[str]] = {}  # room, connected rooms
     bools_map = dungen.map_of_bools
 
@@ -1008,6 +1001,7 @@ def get_nearest_room(dungen: DungeonGenerator, x: int, y: int,
 
 
     return closest_room
+
 
 ####################### ENTITIES ##############################
 
