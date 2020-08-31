@@ -21,7 +21,7 @@ class DungenViewer(UIPanel):
         super().__init__(rect, RenderLayer.UI_WINDOW, manager, element_id="dungeon_dev_view")
 
         # config of view
-        self.sleep_per_room = 0.2
+        self.sleep_per_room = 0.1
         self.scale_factor = 20.0
         self.category_colours = {
             TileCategory.FLOOR: (214, 211, 191, 255),

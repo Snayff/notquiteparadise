@@ -10,8 +10,8 @@
         "width": 50,
         "height": 50,
         "rooms": {
-            "combat": 0.1,
-            "empty": 0.2
+            "combat": 0.2,
+            "empty": 0.1
         },
         "sprite_paths": {
             "wall": "assets/world/placeholder/_testWall.png",

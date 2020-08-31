@@ -31,7 +31,7 @@ class DungeonGenerator:
 
     # parameters/config
     max_generate_room_attempts = 100  # lower number means likely less rooms
-    max_place_room_attempts = 500  # lower number means likely less rooms
+    max_place_room_attempts = 1000  # lower number means likely less rooms
     max_place_entrance_attempts = 50  # lower number means likely less entrances (and poss more ignorant tunnels)
     max_make_room_accessible_attempts = 100  # lower number means likely more ignorant tunnels
     max_place_entity_attempts = 50  # lower number means likely less entities
@@ -299,7 +299,7 @@ class RoomConcept:
     """
     Details of a room. Used for world generation.
     """
-    tile_categories: List[List[TileCategory]]  # what to place in a tile  # FIXME - can we remove?
+    tile_categories: List[List[TileCategory]]  # what to place in a tile. Needed to hold values when returning room
     design: str  # algorithm used to generate
     key: str  # the type of room placed
     start_x: int = -1
@@ -614,6 +614,7 @@ def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights
     Select a room type to generate and return that room. If a generation method isnt provided then one is picked at
     random, using weightings in the data.
     """
+    # N.B. add more generation methods here
     design_methods = {
         "square": _generate_room_square,
     }
