@@ -616,7 +616,6 @@ def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights
     """
     design_methods = {
         "square": _generate_room_square,
-        "cellular": _generate_cellular_automata_room
     }
 
     # pick a room based on weights
@@ -624,54 +623,6 @@ def _generate_room(dungen: DungeonGenerator, room_names: List[str], room_weights
     room_data = library.ROOMS[room_name]
     room = design_methods[room_data.design](dungen, room_data)
 
-    return room
-
-
-def _generate_cellular_automata_room(dungen: DungeonGenerator, room_data: RoomConceptData) -> RoomConcept:
-    """
-    Generate a room using cellular automata generation.
-    """
-    pass
-    chance_of_spawning_wall = dungen.map_data.chance_of_spawning_wall
-    birth_limit = 4
-    death_limit = 3
-
-    # randomly pick a size for the room
-    min_tiles_per_side = 4
-    width = dungen.rng.randint(min_tiles_per_side, dungen.map_data.max_room_areas["cellular"] // min_tiles_per_side)
-    min_height = max(min_tiles_per_side, dungen.map_data.min_room_areas["cellular"] // width)
-    max_height = max(min_tiles_per_side, dungen.map_data.max_room_areas["cellular"] // width)
-    height = dungen.rng.randint(min_height, max_height)
-
-    # populate the room with floor
-    room_tile_cats = [[TileCategory.FLOOR for y in range(height)] for x in range(width)]
-
-    # randomly place some walls
-    for y in range(height):
-        for x in range(width):
-            if dungen.rng.random() <= chance_of_spawning_wall:
-                dungen.set_tile_category(x, y, TileCategory.WALL)
-
-    # spawn new walls around neighbours
-    for y in range(height):
-        for x in range(width):
-            num_neighbours = dungen.count_neighbouring_walls(x, y)
-
-            # if we have a wall check if enough neighbours to keep alive
-            if room_tile_cats[x][y] == TileCategory.WALL:
-                if num_neighbours < death_limit:
-                    dungen.set_tile_category(x, y, TileCategory.FLOOR)
-                else:
-                    dungen.set_tile_category(x, y, TileCategory.WALL)
-            else:
-                # we have a floor so see if enough neighbours to birth new wall
-                if num_neighbours > birth_limit:
-                    dungen.set_tile_category(x, y, TileCategory.WALL)
-                else:
-                    dungen.set_tile_category(x, y, TileCategory.FLOOR)
-
-    # convert to room
-    room = RoomConcept(tile_categories=room_tile_cats, design="cellular", key=room_data.key)
     return room
 
 
