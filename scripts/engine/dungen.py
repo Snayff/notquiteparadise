@@ -343,7 +343,12 @@ class RoomConcept:
         """
         Widest width.
         """
-        return len(self.tile_categories)
+        try:
+            width = len(self.tile_categories)
+        except IndexError:
+            raise Exception("Something referenced room width before the room had any tile categories.")
+
+        return width
 
     @property
     def height(self) -> int:
@@ -353,8 +358,7 @@ class RoomConcept:
         try:
             height = len(self.tile_categories[0])
         except IndexError:
-            height = 0
-            logging.error("Something referenced room height before the room had any tile categories.")
+            raise Exception("Something referenced room height before the room had any tile categories.")
 
         return height
 
@@ -378,13 +382,11 @@ class RoomConcept:
 
     @property
     def centre_x(self) -> int:
-        centre_x = (self.width // 2) + self.start_x
-        return centre_x
+        return (self.width // 2) + self.start_x
 
     @property
     def centre_y(self) -> int:
-        centre_y = (self.height // 2) + self.start_y
-        return centre_y
+        return (self.height // 2) + self.start_y
 
     def intersects(self, room: RoomConcept) -> bool:
         """
@@ -393,8 +395,8 @@ class RoomConcept:
         if (self.start_x <= room.end_x and self.end_x >= room.start_x) and \
                 (self.start_y <= room.end_y and self.end_y >= room.start_y):
             return True
-        else:
-            return False
+
+        return False
 
 
 ############################ GENERATE MAP ############################
