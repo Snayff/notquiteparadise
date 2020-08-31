@@ -671,19 +671,6 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
     added_tunnel = False
     to_fill_positions = set()
     last_direction = (0, 0)
-    room_tile_categories = []
-
-    # FIXME - this make every tunnel take up the space of the entire map.
-    #  if we swap to numpy we can add rows and cols more easily and expand the array as required.
-    width = dungen.map_data.width
-    height = dungen.map_data.height
-    for _room_x in range(width):
-        room_tile_categories.append([])
-        for _room_y in range(height):
-            room_tile_categories[_room_x].append(TileCategory.WALL)
-
-    room_x = 0
-    room_y = 0
 
     # check position we've been given is OK before entering loop
     in_bounds = dungen.is_in_bounds(x, y)
@@ -702,9 +689,6 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
         # convert to floor
         dungen.map_of_categories[_x][_y] = TileCategory.FLOOR
         dungen.positions_in_rooms.append((_x, _y))
-
-        # build room info
-        room_tile_categories[room_x][room_y] = TileCategory.FLOOR
         added_tunnel = True
 
         # check for appropriate, adjacent wall tiles
@@ -725,7 +709,7 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
 
         # choose next direction to go in
         if possible_directions:
-            # pick a possible position, preferring previous direction
+            # pick a possible position, preferring previous direction, unless tunnel winds
             if last_direction in possible_directions and \
                     dungen.rng.randint(1, 100) > dungen.map_data.chance_of_tunnel_winding:
                 new_direction = last_direction
@@ -737,10 +721,6 @@ def _add_tunnel(dungen: DungeonGenerator, x: int, y: int) -> bool:
 
             # update last direction
             last_direction = new_direction
-
-            # update room xy
-            room_x += new_direction[0]
-            room_y += new_direction[1]
 
     return added_tunnel
 
@@ -766,20 +746,25 @@ def _add_ignorant_tunnel(dungen: DungeonGenerator, start_x: int, start_y: int, e
 
 def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
     """
-    Loop all rooms and if it isnt a tunnel then search the outer edge for two adjoining floors and break through to
-    link the locations.
+    Loop the outer edge of the room for two adjoining floors and break through to link the locations.
     """
     # FIXME - not actually joining to floor spaces so just creating random floors
 
     entrances = 0
     attempts = 0
+    placed_entrances = set()
+
+    print(f"Add entrance to room: x:{room.start_x} | end_x:{room.end_x} | y:{room.start_y} | end_y:{room.end_y}")
 
     # roll for an extra entrance
     base_num_entrances = dungen.map_data.max_room_entrances
     if dungen.rng.randint(1, 100) >= dungen.map_data.extra_entrance_chance:
-        max_entrances = base_num_entrances + 1
+        _max_entrances = base_num_entrances + 1
     else:
-        max_entrances = base_num_entrances
+        _max_entrances = base_num_entrances
+
+    # roll for max entrances, ensure minimum 1
+    max_entrances = dungen.rng.randint(1, max(1, _max_entrances))
 
     # find somewhere to place the entrance
     while attempts <= dungen.max_place_entrance_attempts and entrances <= max_entrances:
@@ -787,39 +772,48 @@ def _add_entrances(dungen: DungeonGenerator, room: RoomConcept):
         poss_positions = []
 
         # pick random positions
-        top_pos = (room.start_x + dungen.rng.randint(0, room.width - 1), room.start_y - 1)
-        next_top_pos = top_pos[0], top_pos[1] - 1
+        top_pos = (room.start_x + dungen.rng.randint(1, room.width - 1), room.start_y - 1)
+        top_pos2 = top_pos[0], top_pos[1] - 1
 
-        bot_pos = (room.start_x + dungen.rng.randint(0, room.width - 1), room.start_y + room.height + 1)
-        next_bot_pos = bot_pos[0], bot_pos[1] + 1
+        bot_pos = (room.start_x + dungen.rng.randint(1, room.width - 1), room.start_y + room.height + 1)
+        bot_pos2 = bot_pos[0], bot_pos[1] + 1
 
-        left_pos = (room.start_x - 1, room.start_y + dungen.rng.randint(0, room.height - 1))
-        next_left_pos = left_pos[0] - 1, left_pos[1]
+        left_pos = (room.start_x - 1, room.start_y + dungen.rng.randint(1, room.height - 1))
+        left_pos2 = left_pos[0] - 1, left_pos[1]
 
-        right_pos = (room.start_x + room.width + 1, room.start_y + dungen.rng.randint(0, room.height - 1))
-        next_right_pos = right_pos[0] + 1, right_pos[1]
+        right_pos = (room.start_x + room.width + 1, room.start_y + dungen.rng.randint(1, room.height - 1))
+        right_pos2 = right_pos[0] + 1, right_pos[1]
+
+        print(f"-> Random pos: top:{top_pos}:{top_pos2} | bot:{bot_pos}:{bot_pos2} | left:{left_pos}"
+              f":{left_pos2} | right:{right_pos}:{right_pos2}")
 
         # note which ones are applicable
-        for _pos, _next_pos in (
-                (top_pos, next_top_pos),
-                (bot_pos, next_bot_pos),
-                (left_pos, next_left_pos),
-                (right_pos, next_right_pos)):
-            next_pos_is_floor = False
+        for _pos, _pos2 in (
+                (top_pos, top_pos2),
+                (bot_pos, bot_pos2),
+                (left_pos, left_pos2),
+                (right_pos, right_pos2)):
+            pos2_is_floor = False
+            x, y = _pos2
 
-            in_bounds = dungen.is_in_bounds(_pos[0], _pos[1])
-            in_border = dungen.is_in_border(_pos[0], _pos[1])
+            # if second pos in bounds then first and target must be
+            in_bounds = dungen.is_in_bounds(x, y)
+            in_border = dungen.is_in_border(x, y)
             if in_bounds and not in_border:
-                if dungen.map_of_categories[_next_pos[0]][_next_pos[1]] == TileCategory.FLOOR:
-                    next_pos_is_floor = True
+                if dungen.map_of_categories[x][y] == TileCategory.FLOOR:
+                    pos2_is_floor = True
 
-            if in_bounds and next_pos_is_floor:
+            # if target is wall and one after is floor and not already a placed entrance
+            if pos2_is_floor and _pos not in placed_entrances:
                 poss_positions.append(_pos)
 
         # pick one of the possible options and update the map
         if poss_positions:
             pos = dungen.rng.choice(poss_positions)
-            dungen.map_of_categories[pos[0]][pos[1]] = TileCategory.FLOOR
+            dungen.map_of_categories[pos[0]][pos[1]] = TileCategory.DEBUG
+            placed_entrances.add(pos)
+
+            print(f"-> Placed entrance: {_pos}")
 
             entrances += 1
 
