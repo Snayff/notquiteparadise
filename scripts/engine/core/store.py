@@ -6,7 +6,7 @@ import pygame
 
 from snecs.typedefs import EntityID
 from scripts.engine.core.constants import GameState, GameStateType
-from scripts.engine.world_objects.gamemap import GameMap
+from scripts.engine.world_objects.gamemap import Gamemap
 
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict
@@ -26,7 +26,7 @@ class _Store:
         self.active_skill = None
 
         # used in world
-        self.current_gamemap: Optional[GameMap] = None
+        self.current_gamemap: Optional[Gamemap] = None
 
         # used in chronicle
         self.turn_queue: Dict[EntityID, int] = {}  # (entity, time)
@@ -43,7 +43,7 @@ class _Store:
         if self.current_gamemap:
             game_map = self.current_gamemap.serialise()
         else:
-            game_map = None
+            game_map = {}
 
         _dict = {
             "current_game_state": self.current_game_state,
@@ -66,7 +66,7 @@ class _Store:
             self.current_game_state = serialised["current_game_state"]
             self.previous_game_state = serialised["previous_game_state"]
             if serialised["current_gamemap"]:
-                game_map = GameMap.deserialise(serialised["current_gamemap"])
+                game_map = Gamemap.deserialise(serialised["current_gamemap"])
             else:
                 game_map = None
             self.current_gamemap = game_map

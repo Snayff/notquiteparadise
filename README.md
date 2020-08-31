@@ -7,6 +7,7 @@ Possibly, one day, a roguelike.
   
   ![GitHub
  Workflow Status](https://img.shields.io/github/workflow/status/Snayff/notquiteparadise/Not%20Quite%20Paradise) 
+ [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
  [![Test Coverage](https://api.codeclimate.com/v1/badges/949315f916b1125113cb/test_coverage)](https://codeclimate.com/github/Snayff/notquiteparadise/test_coverage)
  [![Maintainability](https://api.codeclimate.com/v1/badges/949315f916b1125113cb/maintainability)](https://codeclimate.com/github/Snayff/notquiteparadise/maintainability) 
  ![Code Climate

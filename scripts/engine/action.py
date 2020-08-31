@@ -48,6 +48,7 @@ class Skill(ABC):
 
     # to be overwritten in subclass, including being set by external data
     key: str
+    name: str
     description: str
     icon_path: str
     resource_type: ResourceType
@@ -142,10 +143,11 @@ class Skill(ABC):
     @classmethod
     def set_properties(cls):
         """
-        Sets the class properties of the skill from a skill name
+        Sets the class properties of the skill from the class key
         """
         from scripts.engine import library
         cls.data = library.SKILLS[cls.key]
+        cls.name = cls.data.name
         cls.required_tags = cls.data.required_tags
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
@@ -172,9 +174,10 @@ class Affliction(ABC):
     """
 
     # to be overwritten in subclass, including being set by external data
-    key: str = ""
-    description: str = ""
-    icon_path: str = ""
+    key: str
+    name: str
+    description: str
+    icon_path: str
     required_tags: List[TargetTagType]
     identity_tags: List[EffectTypeType]
     triggers: List[AfflictionTriggerType]
@@ -211,12 +214,12 @@ class Affliction(ABC):
     @classmethod
     def set_properties(cls):
         """
-        Sets the class properties of the skill from a skill name
+        Sets the class properties of the affliction from the class key
         """
         from scripts.engine import library
 
         cls.data = library.AFFLICTIONS[cls.key]
-        cls.key = cls.data.name
+        cls.name = cls.data.name
         cls.description = cls.data.description
         cls.icon_path = cls.data.icon_path
         cls.category = cls.data.category

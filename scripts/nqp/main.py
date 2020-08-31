@@ -3,11 +3,10 @@ from __future__ import annotations
 import logging
 import sys
 import traceback
-
 import pygame
 import snecs
-from snecs.world import default_world
 
+from snecs.world import default_world
 from scripts.engine import chronicle, debug, state, world
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.core.definitions import ActorData
@@ -18,7 +17,7 @@ from scripts.engine.debug import (
     kill_logging,
 )
 from scripts.engine.ui.manager import ui
-from scripts.engine.world_objects.gamemap import GameMap
+from scripts.engine.world_objects.gamemap import Gamemap
 from scripts.nqp.processors import display_processors, input_processors
 
 
@@ -110,7 +109,7 @@ def initialise_game():
     Init the game`s required info
     """
     # init and save map
-    game_map = GameMap("cave", 10)
+    game_map = Gamemap("cave", 10)
     store.current_gamemap = game_map
 
     # populate the map

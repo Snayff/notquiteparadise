@@ -1,5 +1,5 @@
 from scripts.engine import world
-from scripts.engine.action import Affliction, Move
+from scripts.engine.action import Affliction
 from scripts.engine.component import Afflictions, Identity, Knowledge, Position
 from scripts.engine.core.constants import (
     AfflictionTrigger,

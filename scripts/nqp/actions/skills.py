@@ -73,11 +73,10 @@ class Move(Skill):
 
         super().__init__(user, tile, direction)
 
-    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[MoveActorEffect]:
+    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
-
         move_effect = MoveActorEffect(
             origin=self.user,
             target=entity,
@@ -102,7 +101,7 @@ class BasicAttack(Skill):
     """
     key = "basic_attack"
 
-    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[DamageEffect]:
+    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -153,7 +152,6 @@ class Lunge(Skill):
         """
         Build the skill effects
         """
-
         # chain the effects conditionally
 
         cooldown_effect = self._build_cooldown_reduction_effect(
@@ -267,10 +265,12 @@ class TarAndFeather(Skill):
 
         reduced_effects = []
         for entity_in_cone in entities_in_cone:
-            reduced_effects += self._create_effects(target=entity_in_cone, modifier=self.reduced_modifier * effect_strength)
+            reduced_effects += self._create_effects(target=entity_in_cone,
+                                                    modifier=self.reduced_modifier * effect_strength)
             logging.warning(f"creating effects for {entity_in_cone}")
 
-        first_hit_effects = self._create_effects(target=hit_entity, success_effects=reduced_effects, modifier=effect_strength)
+        first_hit_effects = self._create_effects(target=hit_entity,
+                                                 success_effects=reduced_effects, modifier=effect_strength)
 
         return first_hit_effects
 

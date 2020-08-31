@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, Iterator, List, TYPE_CHECKING
+from typing import Dict, Iterator, List, Literal, TYPE_CHECKING
 
 import logging
 import random
@@ -38,9 +38,9 @@ class DungeonGenerator:
     border_size = 4  # tiles to place around the outside of the map
 
     # info accessed via property but only created once requested
-    _passable_map = []
-    _bools_map = []
-    _tiles_map = []
+    _passable_map: List[List[Literal[True]]] = field(default_factory=list)
+    _bools_map: List[List[bool]] = field(default_factory=list)
+    _tiles_map: List[List[Tile]] = field(default_factory=list)
 
     # flags
     is_dirty = False
@@ -146,7 +146,7 @@ class DungeonGenerator:
         """
         Returns an array of Tiles by converting values from map_of_categories to tiles.
         """
-        generated_level = []
+        generated_level: List[List[Tile]] = []
         width = self.map_data.width
         height = self.map_data.height
 
@@ -185,7 +185,7 @@ class DungeonGenerator:
         Floor == True, Wall == False.
         """
 
-        bools_map = []
+        bools_map: List[List[bool]] = []
         width = self.map_data.width
         height = self.map_data.height
 
@@ -207,11 +207,11 @@ class DungeonGenerator:
         return self._bools_map
 
     @property
-    def passable_map(self) -> List[List[True]]:
+    def passable_map(self) -> List[List[Literal[True]]]:
         """
         2d array of True, matching map size
         """
-        passable_map = []
+        passable_map: List[List[Literal[True]]] = []
         width = self.map_data.width
         height = self.map_data.height
 
@@ -299,7 +299,8 @@ class RoomConcept:
     """
     Details of a room. Used for world generation.
     """
-    tile_categories: List[List[TileCategory]]  # what to place in a tile. Needed to hold values when returning room
+    # what to place in a tile. Needed to hold values when returning room
+    tile_categories: List[List[TileCategoryType]]
     design: str  # algorithm used to generate
     key: str  # the type of room placed
     start_x: int = -1
@@ -639,7 +640,7 @@ def _generate_room_square(dungen: DungeonGenerator, room_data: RoomConceptData) 
     room_height = min(dungen.rng.randint(room_data.min_height, room_data.max_height), map_height)
 
     # populate area with floor categories
-    tile_categories = []
+    tile_categories: List[List[TileCategoryType]] = []
     for x in range(room_width):
         tile_categories.append([])
         for y in range(room_height):
@@ -1037,7 +1038,8 @@ def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType,
         sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
         blocks_sight = True
         blocks_movement = True
-    else:  # tile_category == TileCategory.FLOOR:
+    else:
+        # everything else is considered a floor:
         sprite_path = sprite_paths[TileCategory.FLOOR]
         sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
         blocks_sight = False

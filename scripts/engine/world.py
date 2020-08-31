@@ -68,7 +68,7 @@ from scripts.engine.core.store import store
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
-from scripts.engine.world_objects.gamemap import GameMap
+from scripts.engine.world_objects.gamemap import Gamemap
 from scripts.engine.world_objects.tile import Tile
 
 
@@ -197,7 +197,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     for name in perm_afflictions_names:
         # create the affliction with no specific source
         perm_afflictions.append(
-            create_affliction(name, None, entity, INFINITE)
+            create_affliction(name, entity, entity, INFINITE)
         )
     add_component(entity, Afflictions(perm_afflictions))
 
@@ -242,19 +242,20 @@ def create_projectile(creating_entity: EntityID, tile_pos: Tuple[int, int], data
 
     move = action.skill_registry["move"]
     known_skills = [move]
-    add_component(entity, Knowledge(known_skills))  # type: ignore  # getting mypy error stating Move != Skill
+    add_component(entity, Knowledge(known_skills))
 
     logging.debug(f"{name}`s projectile created at ({x},{y}) heading {data.direction}.")
 
     return entity
 
 
-def create_affliction(name: str, creator: Optional[EntityID], target: EntityID, duration: int) -> Affliction:
+def create_affliction(name: str, creator: EntityID, target: EntityID, duration: int) -> Affliction:
     """
     Creates an instance of an Affliction provided the name
     """
     affliction_data = library.AFFLICTIONS[name]
-    return action.affliction_registry[affliction_data.name](creator, target, duration)
+    affliction = action.affliction_registry[affliction_data.name](creator, target, duration)
+    return affliction
 
 
 def build_sprites_from_paths(sprite_paths: List[TraitSpritePathsData],
@@ -324,11 +325,15 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
-def get_gamemap() -> GameMap:
+def get_gamemap() -> Gamemap:
     """
     Get current gamemap
     """
-    return store.current_gamemap
+    if store.current_gamemap:
+        gamemap = store.current_gamemap
+    else:
+        raise Exception("get_gamemap: Tried to get the gamemap but there isnt one.")
+    return gamemap
 
 
 def get_tile(tile_pos: Tuple[int, int]) -> Tile:
@@ -341,10 +346,13 @@ def get_tile(tile_pos: Tuple[int, int]) -> Tile:
 
     try:
         _tile = gamemap.tiles[x][y]
-        if _is_tile_in_bounds(_tile):
-            return _tile
 
     except IndexError:
+        raise Exception(f"Tried to get tile({x},{y}), which doesnt exist.")
+
+    if _is_tile_in_bounds(_tile):
+        return _tile
+    else:
         raise Exception(f"Tried to get tile({x},{y}), which is out of bounds.")
 
 

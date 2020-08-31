@@ -51,7 +51,7 @@ class DungenViewer(UIPanel):
             if self.timer > self.sleep_per_room:
                 self.map = next(self.iterator, None)  # type: ignore
                 if self.map:
-                    self._update_view()  # type: ignore
+                    self._update_view()
                 self.timer = 0
 
     def handle_events(self, event):

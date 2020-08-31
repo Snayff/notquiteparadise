@@ -11,7 +11,7 @@ from scripts.engine.core.definitions import ActorData
 from scripts.engine.world_objects.tile import Tile
 
 
-class GameMap:
+class Gamemap:
     """
     Holds tiles for a map. Handles generation of the map and placement of the entities. Fills map with floors on
     init.
@@ -47,7 +47,7 @@ class GameMap:
 
     def generate_new_map(self, player_data: ActorData):
         """
-        Generate the map for the current game map. Creates tiles. Saves the values directly to the GameMap.
+        Generate the map for the current game map. Creates tiles. Saves the values directly to the Gamemap.
         """
         self.tiles, self.generation_info = dungen.generate(self.name, self.rng, player_data)
 
@@ -84,7 +84,7 @@ class GameMap:
     @classmethod
     def deserialise(cls, serialised: Dict[str, Any]):
         """
-        Loads the details from the serialised data back into the GameMap.
+        Loads the details from the serialised data back into the Gamemap.
         """
         try:
             seed = serialised["seed"]
@@ -98,9 +98,9 @@ class GameMap:
                 for y in range(height):
                     tiles[x].append(Tile.deserialise(serialised["tiles"][x][y]))
 
-            game_map = GameMap(seed, algo_name)
+            game_map = Gamemap(seed, algo_name)
             game_map.tiles = tiles
             return game_map
         except KeyError as e:
-            logging.warning(f"GameMap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
+            logging.warning(f"Gamemap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
             raise Exception  # throw exception to hit outer error handler and exit
