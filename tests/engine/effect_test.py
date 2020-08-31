@@ -1,4 +1,4 @@
-from scripts.engine import world
+from scripts.engine import action, world
 from scripts.engine.action import Affliction
 from scripts.engine.component import Afflictions, Identity, Knowledge, Position
 from scripts.engine.core.constants import (
@@ -50,7 +50,7 @@ class TestEffects:
 
     @staticmethod
     def _create_default_entity():
-        components = [Identity('mock_entity'), Position((0, 0))]
+        components = [Identity("mock_entity"), Position((0, 0))]
         entity = world.create_entity(components)
         return entity
 
@@ -64,7 +64,7 @@ class TestEffects:
             nonlocal affliction_called
             affliction_called = affliction
 
-        world_mock.mock_methods({'apply_affliction': _trigger_affliction_mock})
+        world_mock.mock_methods({"apply_affliction": _trigger_affliction_mock})
         entity = TestEffects._create_default_entity()
 
         mock_affliction_movement = MockAfflictionMovement(entity, entity, 5)
@@ -81,7 +81,7 @@ class TestEffects:
         """
         Test for the reduce skill cooldown effect
         """
-        knowledge = Knowledge([Move])
+        knowledge = Knowledge([action.skill_registry["move"]])
         knowledge.set_skill_cooldown("move", 15)
 
         entity = TestEffects._create_default_entity()
