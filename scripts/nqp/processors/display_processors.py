@@ -29,7 +29,7 @@ def _process_aesthetic_update(time_delta: float):
         # cast for typing
         aesthetic = cast(Aesthetic, aesthetic)
 
-        max_duration = 0.3
+        max_duration = 0.5
 
         # increment time
         aesthetic.current_sprite_duration += time_delta
@@ -48,13 +48,17 @@ def _process_aesthetic_update(time_delta: float):
                 aesthetic.draw_x = aesthetic.target_draw_x
                 aesthetic.draw_y = aesthetic.target_draw_y
 
+                # reset to idle
+                aesthetic.current_sprite = aesthetic.sprites.idle
+                aesthetic.current_sprite_duration = 0
+
             # keep moving:
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
                 aesthetic.draw_x = utility.lerp(aesthetic.draw_x, aesthetic.target_draw_x, lerp_amount)
                 aesthetic.draw_y = utility.lerp(aesthetic.draw_y, aesthetic.target_draw_y, lerp_amount)
 
-        # if not moving and the animation ended then reset to idle
-        elif (aesthetic.current_sprite == aesthetic.sprites.move) or time_exceeded:
+        # arrived at destination
+        else:
             aesthetic.current_sprite = aesthetic.sprites.idle
             aesthetic.current_sprite_duration = 0

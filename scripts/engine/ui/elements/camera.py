@@ -39,8 +39,13 @@ class Camera(UIPanel):
         # general info
         self.ignore_fov = True
         self.is_dirty = True
+
+
         self.rows = rect.height // TILE_SIZE + 2
         self.columns = rect.width // TILE_SIZE + 2
+        gamemap = world.get_gamemap()
+        self.map_width = gamemap.width
+        self.map_height = gamemap.height
 
         self._end_x = 0
         self._end_y = 0
@@ -84,14 +89,14 @@ class Camera(UIPanel):
     @property
     def end_x(self) -> int:
         if self.is_dirty:
-            self._end_x = round(self.start_x + self.columns)
+            self._end_x = min(round(self.start_x + self.columns), self.map_width)
 
         return self._end_x
 
     @property
     def end_y(self) -> int:
         if self.is_dirty:
-            self._end_y = round(self.start_y + self.rows)
+            self._end_y = min(round(self.start_y + self.rows), self.map_height)
 
         return self._end_y
 
@@ -182,8 +187,7 @@ class Camera(UIPanel):
             time_exceeded = self.move_duration > self.max_move_duration
 
             # time for animation exceeded or animation very close to end
-            if time_exceeded or utility.is_close((self.start_x, self.start_y),
-                                         (self.target_x, self.target_y)):
+            if time_exceeded or utility.is_close((self.start_x, self.start_y), (self.target_x, self.target_y)):
 
                 # set start_tile to target
                 self.start_x = self.target_x
@@ -333,14 +337,17 @@ class Camera(UIPanel):
 
     ############## SET #########################
 
-    def set_target(self, position: Tuple[int, int], ignore_edge: bool = False):
+    def set_target(self, position: Tuple[int, int]):
         """
-        Set the target position. Only sets camera to update if target is in edge or ignore_edge = True.
+        Set the target position.
         """
-        if self.is_target_pos_in_camera_edge(position) or ignore_edge:
-            gamemap = world.get_gamemap()
-            self.target_x = clamp(position[0] - self.columns // 2, 0, gamemap.width - self.columns // 2)
-            self.target_y = clamp(position[1] - self.rows // 2, 0, gamemap.height - self.rows // 2)
+        x, y = position
+
+        # centre the target
+        half_width = (self.columns // 2) - 2
+        half_height = (self.rows // 2) - 2
+        self.target_x = clamp(x - half_width, 0, self.map_width - half_width)
+        self.target_y = clamp(y - half_height, 0, self.map_height - half_height)
 
         self.is_dirty = True
 
@@ -383,9 +390,8 @@ class Camera(UIPanel):
         """
         Convert from a draw position to a tile position, rounding down.
         """
-        gamemap = world.get_gamemap()
-        x = int(clamp(pos[0] // TILE_SIZE, 0,  gamemap.width))
-        y = int(clamp(pos[1] // TILE_SIZE, 0, gamemap.height))
+        x = int(clamp(pos[0] // TILE_SIZE, 0,  self.map_width))
+        y = int(clamp(pos[1] // TILE_SIZE, 0, self.map_height))
 
         return x, y
 
@@ -415,17 +421,36 @@ class Camera(UIPanel):
 
         return in_view
 
-    def is_target_pos_in_camera_edge(self, target_pos: Tuple) -> bool:
+    def is_target_pos_in_camera_edge(self, target_pos: Tuple[int, int]) -> bool:
         """
         Determine if target position is within the edge of the camera. N.B. they are tile positions.
         """
-        x, y = target_pos
-        edge_size = self.edge_size
         in_edge = False
 
-        if x < self.start_x + edge_size or x > self.end_x - edge_size:
-            in_edge = True
-        elif y < self.start_y + edge_size or y > self.end_y - edge_size:
+        if self.get_edge_offset(target_pos) != 0:
             in_edge = True
 
         return in_edge
+
+    def get_edge_offset(self, target_pos: Tuple[int, int]) -> Tuple[int, int]:
+        """
+        Determine how far the player is into the edge of the camera
+        """
+        x, y = target_pos
+        edge_size = self.edge_size
+        dir_x = 0
+        dir_y = 0
+
+        if x < self.start_x + edge_size:
+            dir_x = x - (self.start_x + edge_size)
+
+        elif x > self.end_x - edge_size:
+            dir_x = x - (self.end_x - edge_size)
+
+        if y < self.start_y + edge_size:
+            dir_y = y - (self.start_y + edge_size)
+
+        elif y > self.end_y - edge_size:
+            dir_y = y - (self.end_y - edge_size)
+
+        return dir_x, dir_y
