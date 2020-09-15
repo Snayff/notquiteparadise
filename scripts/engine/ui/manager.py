@@ -16,6 +16,7 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.elements.camera import Camera
+from scripts.engine.ui.elements.camera2 import Camera2
 from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.skill_bar import SkillBar
@@ -77,11 +78,11 @@ class UI:
 
     ################ CORE METHODS ########################
 
-    def update(self, delta_time: float):
+    def update(self, time_delta: float):
         """
         Update all ui_manager elements
         """
-        self._gui.update(delta_time)
+        self._gui.update(time_delta)
 
     def process_ui_events(self, event):
         """
@@ -335,7 +336,7 @@ class UI:
 
             camera.set_overlay_directions(directions)
             camera.set_overlay_visibility(is_visible)
-            camera.update_grid()
+            camera._update_grid()
 
     def set_selected_tile_pos(self, tile_pos: Tuple[int, int]):
         """

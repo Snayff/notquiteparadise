@@ -7,8 +7,8 @@
         "max_rooms": 30,
         "max_tunnel_length": 20,
         "min_path_distance_for_shortcut": 5,
-        "width": 50,
-        "height": 50,
+        "width": 40,
+        "height": 40,
         "rooms": {
             "combat": 0.2,
             "empty": 0.1

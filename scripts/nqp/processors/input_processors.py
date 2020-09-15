@@ -258,6 +258,10 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
     Process the use of specified skill. Wrapper for actions needed to handle a full skill use. Assumed
     'can_use_skill' already completed.
      """
+    # get players starting position for camera updates
+    pos = world.get_entitys_component(player, Position)
+    start_pos = pos.x, pos.y
+
     if world.use_skill(player, skill, target_tile, direction):
         world.pay_resource_cost(player, skill.resource_type, skill.resource_cost)
         world.judge_action(player, skill.key)
@@ -266,9 +270,12 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
         state.save_game()
 
-        if skill.key == "move":
-            ui.set_player_tile(target_tile)
-
+        # update camera if position changes
+        try:
+            if (pos.x, pos.y) != start_pos:
+                ui.get_element(UIElement.CAMERA).set_target((pos.x, pos.y))
+        except KeyError:
+            logging.warning("Process skill use: tried to call camera but not init`d.")
 
 ######################### GET ##########################
 

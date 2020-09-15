@@ -282,16 +282,6 @@ def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], 
     return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
 
 
-def is_coordinate_in_bounds(coordinate: float, bounds: Tuple[float, float], edge=0) -> bool:
-    """
-    check if a coordinate is inside a bound for a given edge
-    """
-    start_coordinate = bounds[0] + edge
-    end_coordinate = bounds[1] - edge - 1
-    within_bounds = start_coordinate <= coordinate < end_coordinate
-    return within_bounds
-
-
 ################################### CONVERSIONS ########################################
 
 def value_to_member(value: Any, cls: Type[Any]) -> str:

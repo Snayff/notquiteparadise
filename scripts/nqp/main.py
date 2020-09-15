@@ -73,7 +73,7 @@ def game_loop():
     """
     while not state.get_current() == GameState.EXIT_GAME:
         # progress frame
-        delta_time = state.update_clock()
+        time_delta = state.update_clock()
 
         # get info to support UI updates and handling events
         current_state = state.get_current()
@@ -96,9 +96,9 @@ def game_loop():
             ui.process_ui_events(event)
 
         # allow everything to update in response to new state
-        display_processors.process_display_updates(delta_time)
+        display_processors.process_display_updates(time_delta)
         debug.update()
-        ui.update(delta_time)
+        ui.update(time_delta)
 
         # show the new state
         ui.draw()
@@ -135,12 +135,18 @@ def initialise_game():
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
+    # point the camera at the player
+    from scripts.engine.component import Position
+    pos = world.get_entitys_component(player, Position)
+    camera = ui.get_element(UIElement.CAMERA)
+    camera.set_target((pos.x, pos.y), True)
+
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
     # FIXME - entities load before camera so they cant get their screen position.
     #  If ui loads before entities then it fails due to player not existing. Below is a hacky fix.
-    from scripts.engine.component import Aesthetic, Position, FOV
+    from scripts.engine.component import Aesthetic, FOV
     for entity, (aesthetic, position) in world.get_components([Aesthetic, Position]):
         aesthetic.draw_x, aesthetic.draw_y = (position.x, position.y)
         aesthetic.target_draw_x = aesthetic.draw_x
