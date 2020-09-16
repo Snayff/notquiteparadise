@@ -1,6 +1,6 @@
-name: Not Quite Paradise
+name: NQP - Run Tests
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: lint
+        - name: mypy type check
           command: poetry run python -m mypy scripts/
           python-version: 3.8
         - name: test

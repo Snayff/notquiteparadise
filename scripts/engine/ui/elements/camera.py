@@ -218,32 +218,32 @@ class Camera(UIPanel):
         """
         return
         # FIXME - update to work with new position. COnsider moving out of camera. 
-        if self.is_overlay_visible:
-
-            # player column and row
-            p_col = self.player_tile.x
-            p_row = self.player_tile.y
-
-            # offset center column and center row
-            cx = p_col - int(self.start_tile_col)
-            cy = p_row - int(self.start_tile_row)
-
-            # set to contain all the tile positions in the overlay_directions
-            tile_positions = {(cx + dir_x, cy + dir_y) for dir_x, dir_y in self.overlay_directions}
-
-        else:
-            tile_positions = []
-
-            # tile positions generator - contains 1 layer of padding to ensure smooth rollover
-            for x in range(-1, self.columns + 1):
-                for y in range(-1, self.rows + 1):
-                    # FIXME - this falls out of line with FOV being drawn by
-                    # check is in fov
-                    tile = world.get_tile((x, y))
-                    if tile.is_visible:
-                        tile_positions.append((x, y))
-
-        self._draw_grid(tile_positions)
+        # if self.is_overlay_visible:
+        #
+        #     # player column and row
+        #     p_col = self.player_tile.x
+        #     p_row = self.player_tile.y
+        #
+        #     # offset center column and center row
+        #     cx = p_col - int(self.start_tile_col)
+        #     cy = p_row - int(self.start_tile_row)
+        #
+        #     # set to contain all the tile positions in the overlay_directions
+        #     tile_positions = {(cx + dir_x, cy + dir_y) for dir_x, dir_y in self.overlay_directions}
+        #
+        # else:
+        #     tile_positions = []
+        #
+        #     # tile positions generator - contains 1 layer of padding to ensure smooth rollover
+        #     for x in range(-1, self.columns + 1):
+        #         for y in range(-1, self.rows + 1):
+        #             # FIXME - this falls out of line with FOV being drawn by
+        #             # check is in fov
+        #             tile = world.get_tile((x, y))
+        #             if tile.is_visible:
+        #                 tile_positions.append((x, y))
+        #
+        # self._draw_grid(tile_positions)
 
     def _update_ui_element_pos(self):
         """

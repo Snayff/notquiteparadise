@@ -1,8 +1,11 @@
-name: Not Quite Paradise
+name: NQP - Build Docs
 
 on:
-  push:
-    branches: develop
+  workflow_run:
+    workflows: ["NQP - Run Tests"]
+    branches: [develop, master]
+    types:
+      - completed
 
 jobs:
   docs:
