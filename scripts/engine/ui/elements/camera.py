@@ -217,6 +217,7 @@ class Camera(UIPanel):
         Update the tile grid to only have options in line with the tiles set OR the overlay
         """
         return
+        # FIXME - update to work with new position. COnsider moving out of camera. 
         if self.is_overlay_visible:
 
             # player column and row
