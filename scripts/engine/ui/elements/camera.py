@@ -33,7 +33,6 @@ class Camera(UIPanel):
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
-        # FIXME - doesnt scroll to edge (so player can walk off the side).
         # FIXME - grid doesnt stay aligned to player movement/position
 
         # flags
@@ -111,8 +110,13 @@ class Camera(UIPanel):
         """
         if self.is_dirty:
             tiles = []
-            for x in range(int(self.start_x), self.end_x - 1):
-                for y in range(int(self.start_y), self.end_y - 1):
+            start_x = int(clamp(self.start_x, 0, self.map_width - self.columns))
+            start_y = int(clamp(self.start_y, 0, self.map_height - self.rows))
+            end_x = int(clamp(self.end_x + 2, self.columns, self.map_width))
+            end_y = int(clamp(self.end_y + 2, self.rows, self.map_height))
+
+            for x in range(start_x, end_x):
+                for y in range(start_y, end_y):
                     tile = world.get_tile((x, y))
                     if tile.is_visible or self.ignore_fov:
                         tiles.append(tile)
@@ -172,7 +176,7 @@ class Camera(UIPanel):
             self._update_grid()
 
         # update entities in game map every frame
-        self._update_gamemap()
+        self._draw_gamemap()
         self._update_ui_element_pos()
 
         # all updates will have been processed
@@ -197,49 +201,19 @@ class Camera(UIPanel):
                 self.start_x = self.target_x
                 self.start_y = self.target_y
 
-                self.is_dirty = True
-
             # keep moving
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, self.move_duration / self.max_move_duration))
                 self.start_x = utility.lerp(self.start_x, self.target_x, lerp_amount)
                 self.start_y = utility.lerp(self.start_y, self.target_y, lerp_amount)
 
-                self.is_dirty = True
-
         # not moving
         else:
             self.move_duration = 0
             self.start_x = int(self.target_x)
             self.start_y = int(self.target_y)
-            self.is_dirty = True
 
-    def _update_gamemap(self):
-        """
-        Update the game map to show the current tiles and entities
-        """
-        # create new surface for the game map
-        map_width = self.gamemap.rect.width
-        map_height = self.gamemap.rect.height
-        map_surf = Surface((map_width, map_height), SRCALPHA)
-
-        # draw tiles
-        for tile in self.current_tiles:
-            self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
-
-        # draw entities
-        for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
-            # if part of entity in camera view
-            for offset in pos.offsets:
-                src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-                position = (pos.x + offset[0], pos.y + offset[1])
-                draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])
-                if self.is_in_camera_view(position):
-                    tile = world.get_tile(position)
-                    if tile.is_visible or self.ignore_fov:
-                        self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
-
-        self.gamemap.set_image(map_surf)
+        self.is_dirty = True
 
     def _update_grid(self):
         """
@@ -315,6 +289,33 @@ class Camera(UIPanel):
                 element.set_relative_position(updated_pos)
 
     ############### DRAW ###########################
+
+    def _draw_gamemap(self):
+        """
+        Update the game map to show the current tiles and entities
+        """
+        # create new surface for the game map
+        map_width = self.gamemap.rect.width
+        map_height = self.gamemap.rect.height
+        map_surf = Surface((map_width, map_height), SRCALPHA)
+
+        # draw tiles
+        for tile in self.current_tiles:
+            self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
+
+        # draw entities
+        for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
+            # if part of entity in camera view
+            for offset in pos.offsets:
+                src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                position = (pos.x + offset[0], pos.y + offset[1])
+                draw_position = (aesthetic.draw_x + offset[0], aesthetic.draw_y + offset[1])
+                if self.is_in_camera_view(position):
+                    tile = world.get_tile(position)
+                    if tile.is_visible or self.ignore_fov:
+                        self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
+
+        self.gamemap.set_image(map_surf)
 
     def _draw_grid(self, tile_positions: Iterable):
         """
