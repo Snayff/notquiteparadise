@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import dataclasses
+import logging
+import random
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -10,16 +13,14 @@ from typing import (
     TypeVar,
     cast,
 )
-import dataclasses
-import logging
-import random
+
 import numpy as np
 import pygame
 import snecs
 import tcod.map
-
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
+
 from scripts.engine import action, chronicle, debug, library, utility
 from scripts.engine.component import (
     FOV,
@@ -60,7 +61,8 @@ from scripts.engine.core.constants import (
     TravelMethodType,
 )
 from scripts.engine.core.definitions import (
-    ActorData, ProjectileData,
+    ActorData,
+    ProjectileData,
     TraitSpritePathsData,
     TraitSpritesData,
 )
@@ -70,7 +72,6 @@ from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.gamemap import Gamemap
 from scripts.engine.world_objects.tile import Tile
-
 
 if TYPE_CHECKING:
     from typing import Union, Optional, Any, Tuple, Dict, List
@@ -1398,4 +1399,3 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
             chosen_interventions.append((entity, chosen_intervention))
 
     return chosen_interventions
-

@@ -20,10 +20,7 @@ from scripts.engine.core.constants import (
     RenderLayer,
     UIElement,
 )
-from scripts.engine.utility import (
-    clamp,
-    convert_tile_string_to_xy,
-)
+from scripts.engine.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.world_objects.tile import Tile
 
 

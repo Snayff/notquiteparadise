@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 import gc
 import logging
 import math
 import timeit
+from typing import TYPE_CHECKING
+
 import pygame
 import scipy
 
