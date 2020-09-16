@@ -4,14 +4,22 @@ Possibly, one day, a roguelike.
 
 ![GitHub tag (latest by date
   )](https://img.shields.io/github/v/tag/Snayff/notquiteparadise?label=version)
+ [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=ncloc)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
   
   ![GitHub
  Workflow Status](https://img.shields.io/github/workflow/status/Snayff/notquiteparadise/Not%20Quite%20Paradise) 
  [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
- [![Test Coverage](https://api.codeclimate.com/v1/badges/949315f916b1125113cb/test_coverage)](https://codeclimate.com/github/Snayff/notquiteparadise/test_coverage)
- [![Maintainability](https://api.codeclimate.com/v1/badges/949315f916b1125113cb/maintainability)](https://codeclimate.com/github/Snayff/notquiteparadise/maintainability) 
- ![Code Climate
-  technical debt](https://img.shields.io/codeclimate/tech-debt/Snayff/notquiteparadise) 
+ 
+ 
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=coverage)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+ [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=bugs)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+ [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=code_smells)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+ 
+ [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+ [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+  [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=sqale_index)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+  
+
 
 
 ## Table of Contents

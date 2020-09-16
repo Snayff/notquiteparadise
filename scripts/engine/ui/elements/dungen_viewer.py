@@ -1,13 +1,14 @@
 from __future__ import annotations
-from typing import Optional, Iterator
+
+from typing import Iterator, Optional
 
 import pygame
 import pygame_gui
-
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface
 from pygame_gui.elements import UIImage, UIPanel
+
 from scripts.engine import library
 from scripts.engine.core.constants import RenderLayer, TileCategory
 
@@ -99,5 +100,3 @@ class DungenViewer(UIPanel):
         Resets the state of the dungeon view object
         """
         self.timer = self.sleep_per_room
-
-

@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Union
 
 import logging
-import pygame
+from typing import TYPE_CHECKING, Union
 
+import pygame
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement as PygameGuiElement
+
 from scripts.engine import debug, library, utility
 from scripts.engine.core.constants import (
     GAP_SIZE,
@@ -17,10 +18,10 @@ from scripts.engine.core.constants import (
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor
+from scripts.engine.ui.elements.dungen_viewer import DungenViewer
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.skill_bar import SkillBar
 from scripts.engine.ui.elements.tile_info import TileInfo
-from scripts.engine.ui.elements.dungen_viewer import DungenViewer
 from scripts.engine.ui.widgets.screen_message import ScreenMessage
 from scripts.engine.world_objects.tile import Tile
 
@@ -77,11 +78,11 @@ class UI:
 
     ################ CORE METHODS ########################
 
-    def update(self, delta_time: float):
+    def update(self, time_delta: float):
         """
         Update all ui_manager elements
         """
-        self._gui.update(delta_time)
+        self._gui.update(time_delta)
 
     def process_ui_events(self, event):
         """
@@ -335,7 +336,7 @@ class UI:
 
             camera.set_overlay_directions(directions)
             camera.set_overlay_visibility(is_visible)
-            camera.update_grid()
+            camera._update_grid()
 
     def set_selected_tile_pos(self, tile_pos: Tuple[int, int]):
         """

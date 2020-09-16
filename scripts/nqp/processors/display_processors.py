@@ -13,55 +13,14 @@ if TYPE_CHECKING:
     pass
 
 
-def process_display_updates(delta_time: float):
+def process_display_updates(time_delta: float):
     """
     Fire realtime processors.
     """
-    _process_camera_update(delta_time)
-    _process_aesthetic_update(delta_time)
+    _process_aesthetic_update(time_delta)
 
 
-def _process_camera_update(delta_time: float):
-    """
-    Update realtime camera timers, such as the camera scrolling to reveal new tiles.
-    """
-    camera = world.ui.get_element(UIElement.CAMERA)
-
-    if not camera:
-        return
-
-    max_duration = 1
-
-    # increment time
-    camera.current_sprite_duration += delta_time
-
-    if not camera.has_reached_target():
-
-        # time for animation exceeded
-        time_exceeded = camera.current_sprite_duration > max_duration
-
-        # time for animation exceeded or animation very close to end
-        if time_exceeded or is_close((camera.start_tile_col, camera.start_tile_row),
-                                     (camera.target_tile_col, camera.target_tile_row)):
-
-            # set start_tile to target
-            camera.set_start_to_target()
-
-        # keep moving:
-        else:
-
-            lerp_amount = pytweening.easeOutCubic(min(1.0, camera.current_sprite_duration / max_duration))
-            col_ = utility.lerp(camera.start_tile_col, camera.target_tile_col, lerp_amount)
-            row_ = utility.lerp(camera.start_tile_row, camera.target_tile_row, lerp_amount)
-
-            camera.set_start_col_row((col_, row_))
-
-    # not moving
-    else:
-        camera.current_sprite_duration = 0
-
-
-def _process_aesthetic_update(delta_time: float):
+def _process_aesthetic_update(time_delta: float):
     """
     Update real-time timers on entities, such as entity animations.
     """
@@ -70,10 +29,10 @@ def _process_aesthetic_update(delta_time: float):
         # cast for typing
         aesthetic = cast(Aesthetic, aesthetic)
 
-        max_duration = 0.3
+        max_duration = 0.5
 
         # increment time
-        aesthetic.current_sprite_duration += delta_time
+        aesthetic.current_sprite_duration += time_delta
 
         # Have we exceeded animation duration?
         time_exceeded = aesthetic.current_sprite_duration > max_duration
@@ -89,13 +48,17 @@ def _process_aesthetic_update(delta_time: float):
                 aesthetic.draw_x = aesthetic.target_draw_x
                 aesthetic.draw_y = aesthetic.target_draw_y
 
+                # reset to idle
+                aesthetic.current_sprite = aesthetic.sprites.idle
+                aesthetic.current_sprite_duration = 0
+
             # keep moving:
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, aesthetic.current_sprite_duration * 2))
                 aesthetic.draw_x = utility.lerp(aesthetic.draw_x, aesthetic.target_draw_x, lerp_amount)
                 aesthetic.draw_y = utility.lerp(aesthetic.draw_y, aesthetic.target_draw_y, lerp_amount)
 
-        # if not moving and the animation ended then reset to idle
-        elif (aesthetic.current_sprite == aesthetic.sprites.move) or time_exceeded:
+        # arrived at destination
+        else:
             aesthetic.current_sprite = aesthetic.sprites.idle
             aesthetic.current_sprite_duration = 0

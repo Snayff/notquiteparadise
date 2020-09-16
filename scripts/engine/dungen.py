@@ -1,13 +1,19 @@
 from __future__ import annotations
-from typing import Dict, Iterator, List, Literal, TYPE_CHECKING
 
 import logging
 import random
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Dict, Iterator, List, Literal
+
 import tcod
 
-from dataclasses import dataclass, field
 from scripts.engine import library, utility, world
-from scripts.engine.core.constants import Direction, TILE_SIZE, TileCategory, TileCategoryType
+from scripts.engine.core.constants import (
+    TILE_SIZE,
+    Direction,
+    TileCategory,
+    TileCategoryType,
+)
 from scripts.engine.core.definitions import ActorData, MapData, RoomConceptData
 from scripts.engine.world_objects.tile import Tile
 
@@ -147,17 +153,16 @@ class DungeonGenerator:
         Returns an array of Tiles by converting values from map_of_categories to tiles.
         """
         generated_level: List[List[Tile]] = []
-        width = self.map_data.width
-        height = self.map_data.height
+        map_width = self.map_data.width
+        map_height = self.map_data.height
 
         if self._tiles_map and not self.is_dirty:
             return self._tiles_map
 
-
         # build the full size map and fill with tunnel sprites
-        for x in range(width):
+        for x in range(map_width):
             generated_level.append([])
-            for y in range(height):
+            for y in range(map_height):
                 tile = _create_tile_from_category(x, y, self.map_of_categories[x][y], self.map_data.sprite_paths)
                 generated_level[x].append(tile)
 
@@ -168,9 +173,11 @@ class DungeonGenerator:
             start_y = room.start_y
             for x in range(room.width):
                 for y in range(room.height):
-                    tile = _create_tile_from_category(start_x + x, start_y + y, room.tile_categories[x][y],
+                    target_x = min(start_x + x, map_width - 1)
+                    target_y = min(start_y + y, map_height - 1)
+                    tile = _create_tile_from_category(target_x, target_y, room.tile_categories[x][y],
                                                       sprite_paths)
-                    generated_level[start_x + x][start_y + y] = tile
+                    generated_level[target_x][target_y] = tile
 
         # update self
         self._tiles_map = generated_level

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Dict, TYPE_CHECKING, Iterator, Type
+from typing import TYPE_CHECKING, Dict, Iterator, Type
 
 from snecs.typedefs import EntityID
 

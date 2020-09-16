@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import Any, Dict, List, Tuple
 
-import random
-import logging
 import json
+import logging
+import random
+from typing import Any, Dict, List, Tuple
 
 from scripts.engine import dungen
 from scripts.engine.core.constants import TILE_SIZE, TileCategory
