@@ -29,14 +29,14 @@ from scripts.engine.world_objects.tile import Tile
 
 class Camera(UIPanel):
     """
-    Hold the visual info for the game Map
+    UI element to display the Gamemap.
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
         # FIXME - grid doesnt stay aligned to player movement/position
 
         # flags
-        self.ignore_fov = True
+        self.ignore_fov = False
         self.is_dirty = True
 
         # determine how many tiles to show
@@ -110,6 +110,7 @@ class Camera(UIPanel):
         """
         if self.is_dirty:
             tiles = []
+            # ensure all values are ints and clamped. + 2 to end to have tiles to roll onto (no black borders)
             start_x = int(clamp(self.start_x, 0, self.map_width - self.columns))
             start_y = int(clamp(self.start_y, 0, self.map_height - self.rows))
             end_x = int(clamp(self.end_x + 2, self.columns, self.map_width))
@@ -367,19 +368,14 @@ class Camera(UIPanel):
                 self.target_y = y
                 offset_x = -half_width
                 offset_y = -half_height
-                print(f"> Recentre camera")
             else:
                 offset_x, offset_y = self.get_edge_offset(position)
-                print(f"> Adjust camera")
 
-            print(f">> Current Target: {self.target_x},  {self.target_y} | Pos: {x}, {y} | Offset: {offset_x},"
-                  f" {offset_y}")
             new_x = self.target_x + offset_x
             new_y = self.target_y + offset_y
 
             self.target_x = int(clamp(new_x, 0 + half_width, self.map_width - half_width))
             self.target_y = int(clamp(new_y, 0 + half_height, self.map_height - half_height))
-            print(f">>> New Target: {self.target_x},  {self.target_y}")
 
         self.is_dirty = True
 
@@ -460,7 +456,6 @@ class Camera(UIPanel):
         in_edge = False
 
         if self.get_edge_offset(target_pos) != 0:
-            print(f"Is in edge...")
             in_edge = True
 
         return in_edge
