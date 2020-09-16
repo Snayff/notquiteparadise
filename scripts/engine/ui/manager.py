@@ -16,7 +16,6 @@ from scripts.engine.core.constants import (
 )
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.elements.camera import Camera
-from scripts.engine.ui.elements.camera2 import Camera2
 from scripts.engine.ui.elements.data_editor import DataEditor
 from scripts.engine.ui.elements.message_log import MessageLog
 from scripts.engine.ui.elements.skill_bar import SkillBar

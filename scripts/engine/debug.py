@@ -214,14 +214,3 @@ def get_visible_values() -> List[str]:
                       f"Avg={format(AVERAGE_FPS, '.2f')}")
 
     return values
-
-
-########################## DEBUG FUNCTIONS #####################################
-
-def log_component_not_found(entity: EntityID, component: Type[Component]):
-    """
-    Use if component not found. Log the error as a warning in the format '{entity} tried to get {component} but it was
-    not found.'
-    """
-    name = world.get_name(entity)
-    logging.warning(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")

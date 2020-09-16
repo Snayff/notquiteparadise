@@ -632,15 +632,15 @@ def get_player() -> EntityID:
     raise ValueError
 
 
-def get_entitys_component(entity: EntityID, component: Type[_C]) -> Optional[_C]:
+def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
     """
     Get an entity's component. Log if component not found.
     """
     if entity_has_component(entity, component):
         return snecs.entity_component(entity, component)
     else:
-        debug.log_component_not_found(entity, component)
-        return None
+        name = get_name(entity)
+        raise Exception(f"'{name}'({entity}) tried to get {component.__name__}, but it was not found.")
 
 
 def get_name(entity: EntityID) -> str:

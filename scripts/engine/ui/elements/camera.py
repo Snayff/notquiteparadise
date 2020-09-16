@@ -122,7 +122,6 @@ class Camera(UIPanel):
                     if tile.is_visible or self.ignore_fov:
                         tiles.append(tile)
             self._tiles_in_view = tiles
-
         return self._tiles_in_view
 
     ############### EVENTS ###########################

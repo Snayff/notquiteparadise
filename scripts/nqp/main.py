@@ -8,6 +8,7 @@ import snecs
 
 from snecs.world import default_world
 from scripts.engine import chronicle, debug, state, world
+from scripts.engine.component import Position
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.core.store import store
@@ -135,12 +136,6 @@ def initialise_game():
     ui.set_element_visibility(UIElement.MESSAGE_LOG, True)
     ui.set_element_visibility(UIElement.SKILL_BAR, True)
 
-    # point the camera at the player
-    from scripts.engine.component import Position
-    pos = world.get_entitys_component(player, Position)
-    camera = ui.get_element(UIElement.CAMERA)
-    camera.set_target((pos.x, pos.y), True)
-
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)
 
@@ -154,7 +149,12 @@ def initialise_game():
 
     # entities load with a blank fov, update them now
     for entity, (fov, position) in world.get_components([FOV, Position]):
-        world.update_tile_visibility(fov.map)
+        world.recompute_fov(entity)
+
+    # point the camera at the player, now that FOV is updated
+    pos = world.get_entitys_component(player, Position)
+    camera = ui.get_element(UIElement.CAMERA)
+    camera.set_target((pos.x, pos.y), True)
 
     # loading finished, give player control
     state.set_new(GameState.GAMEMAP)
