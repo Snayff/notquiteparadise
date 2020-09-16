@@ -139,7 +139,7 @@ def initialise_game():
     from scripts.engine.component import Position
     pos = world.get_entitys_component(player, Position)
     camera = ui.get_element(UIElement.CAMERA)
-    camera.set_target((pos.x, pos.y))
+    camera.set_target((pos.x, pos.y), True)
 
     # welcome message
     ui.create_screen_message("Welcome to Not Quite Paradise", "", 6)

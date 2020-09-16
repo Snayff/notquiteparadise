@@ -36,17 +36,20 @@ class Camera(UIPanel):
         # FIXME - doesnt scroll to edge (so player can walk off the side).
         # FIXME - grid doesnt stay aligned to player movement/position
 
-        # general info
+        # flags
         self.ignore_fov = True
         self.is_dirty = True
 
+        # determine how many tiles to show
+        self.rows = rect.height // TILE_SIZE
+        self.columns = rect.width // TILE_SIZE
 
-        self.rows = rect.height // TILE_SIZE + 2
-        self.columns = rect.width // TILE_SIZE + 2
+        # store this now so we can refer to it later
         gamemap = world.get_gamemap()
         self.map_width = gamemap.width
         self.map_height = gamemap.height
 
+        # to hold the last stored end values
         self._end_x = 0
         self._end_y = 0
 
@@ -60,7 +63,8 @@ class Camera(UIPanel):
         self.target_x = 0.0
         self.target_y = 0.0
 
-        self.edge_size = 5  # number of tiles around the edge that trigger camera movement
+        # number of tiles around the edge that trigger camera movement
+        self.edge_size = 3
 
         self._tiles_in_view: List[Tile] = []
 
@@ -193,15 +197,22 @@ class Camera(UIPanel):
                 self.start_x = self.target_x
                 self.start_y = self.target_y
 
-            # keep moving:
+                self.is_dirty = True
+
+            # keep moving
             else:
                 lerp_amount = pytweening.easeOutCubic(min(1.0, self.move_duration / self.max_move_duration))
                 self.start_x = utility.lerp(self.start_x, self.target_x, lerp_amount)
                 self.start_y = utility.lerp(self.start_y, self.target_y, lerp_amount)
 
+                self.is_dirty = True
+
         # not moving
         else:
             self.move_duration = 0
+            self.start_x = int(self.target_x)
+            self.start_y = int(self.target_y)
+            self.is_dirty = True
 
     def _update_gamemap(self):
         """
@@ -337,17 +348,37 @@ class Camera(UIPanel):
 
     ############## SET #########################
 
-    def set_target(self, position: Tuple[int, int]):
+    def set_target(self, position: Tuple[int, int], recentre: bool = False):
         """
         Set the target position.
         """
         x, y = position
 
-        # centre the target
-        half_width = (self.columns // 2) - 2
-        half_height = (self.rows // 2) - 2
-        self.target_x = clamp(x - half_width, 0, self.map_width - half_width)
-        self.target_y = clamp(y - half_height, 0, self.map_height - half_height)
+        if self.is_in_camera_edge(position) or recentre:
+            # centre the target
+            half_width = int((self.rect.width / TILE_SIZE) / 2)
+            half_height = int((self.rect.height / TILE_SIZE) / 2)
+
+            if recentre:
+                self.start_x = x
+                self.start_y = y
+                self.target_x = x
+                self.target_y = y
+                offset_x = -half_width
+                offset_y = -half_height
+                print(f"> Recentre camera")
+            else:
+                offset_x, offset_y = self.get_edge_offset(position)
+                print(f"> Adjust camera")
+
+            print(f">> Current Target: {self.target_x},  {self.target_y} | Pos: {x}, {y} | Offset: {offset_x},"
+                  f" {offset_y}")
+            new_x = self.target_x + offset_x
+            new_y = self.target_y + offset_y
+
+            self.target_x = int(clamp(new_x, 0 + half_width, self.map_width - half_width))
+            self.target_y = int(clamp(new_y, 0 + half_height, self.map_height - half_height))
+            print(f">>> New Target: {self.target_x},  {self.target_y}")
 
         self.is_dirty = True
 
@@ -421,13 +452,14 @@ class Camera(UIPanel):
 
         return in_view
 
-    def is_target_pos_in_camera_edge(self, target_pos: Tuple[int, int]) -> bool:
+    def is_in_camera_edge(self, target_pos: Tuple[int, int]) -> bool:
         """
         Determine if target position is within the edge of the camera. N.B. they are tile positions.
         """
         in_edge = False
 
         if self.get_edge_offset(target_pos) != 0:
+            print(f"Is in edge...")
             in_edge = True
 
         return in_edge
@@ -440,17 +472,23 @@ class Camera(UIPanel):
         edge_size = self.edge_size
         dir_x = 0
         dir_y = 0
+        start_x = int(self.start_x)
+        start_y = int(self.start_y)
+        end_x = self.end_x
+        end_y = self.end_y
 
-        if x < self.start_x + edge_size:
-            dir_x = x - (self.start_x + edge_size)
+        # check left and right edges
+        if x < start_x + edge_size:
+            dir_x = x - (start_x + edge_size)
 
-        elif x > self.end_x - edge_size:
-            dir_x = x - (self.end_x - edge_size)
+        elif x > end_x - edge_size:
+            dir_x = x - (end_x - edge_size)
 
-        if y < self.start_y + edge_size:
-            dir_y = y - (self.start_y + edge_size)
+        # check top and bottom edges
+        if y < start_y + edge_size:
+            dir_y = y - (start_y + edge_size)
 
-        elif y > self.end_y - edge_size:
-            dir_y = y - (self.end_y - edge_size)
+        elif y > end_y - edge_size:
+            dir_y = y - (end_y - edge_size)
 
         return dir_x, dir_y
