@@ -16,6 +16,9 @@ from scripts.engine.core.constants import INFINITE, VERSION
 if TYPE_CHECKING:
     from typing import (Callable, TYPE_CHECKING, List, Optional, Tuple, Union)
 
+__all__ = ["update", "initialise_logging", "kill_logging", "is_logging", "enable_profiling", "disable_profiling",
+    "kill_profiler", "performance_test", "is_profiling", "print_values_to_console", "set_fps_visibility",
+    "get_visible_values"]
 
 class Debugger:
     def __init__(self):
