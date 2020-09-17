@@ -1,71 +1,74 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
+import gc
+import timeit
 import cProfile
 import datetime
 import io
 import logging
 import pstats
 import time
-from typing import TYPE_CHECKING, List, Optional
 
-from snecs import Component
-from snecs.typedefs import EntityID
-
-from scripts.engine import state, world
+from scripts.engine import state
 from scripts.engine.core.constants import INFINITE, VERSION
 
 if TYPE_CHECKING:
-    from typing import Type
+    from typing import (Callable, TYPE_CHECKING, List, Optional, Tuple, Union)
 
-# objects
-PROFILER: Optional[cProfile.Profile] = None
 
-# counters
-CURRENT_FPS: int = 0
-RECENT_AVERAGE_FPS: int = 0
-AVERAGE_FPS: int = 0
-_FRAMES: int = 0
-_PROFILE_DURATION_REMAINING: int = INFINITE
+class Debugger:
+    def __init__(self):
+        # objects
+        self.profiler: Optional[cProfile.Profile] = None
 
-# flags
-IS_FPS_VISIBLE: bool = False
-IS_PROFILING: bool = True
-IS_LOGGING: bool = True
+        # counters
+        self.current_fps: int = 0
+        self.recent_average_fps: int = 0
+        self.average_fps: int = 0
+        self._frames: int = 0
+        self.profile_duration_remaining: int = INFINITE
 
-# values
-_NUM_FRAMES_CONSIDERED_RECENT: int = 600
+        # flags
+        self.is_fps_visible: bool = False
+        self.is_profiling: bool = True
+        self.is_logging: bool = True
+
+        # values
+        self._num_frames_considered_recent: int = 600
+
+    def update(self):
+
+        self._frames += 1
+        self.current_fps = state.get_internal_clock().get_fps()
+        self.average_fps += (self.current_fps - self.average_fps) / self._frames
+
+        # count down profiler duration, if it isnt running temporarily
+        if self.profile_duration_remaining != INFINITE:
+            self.profile_duration_remaining -= 1
+
+        # check if profiler needs to turn off
+        if self.profile_duration_remaining == 0:
+            disable_profiling(True)
+
+        # get recent fps
+        if self._frames >= self._num_frames_considered_recent:
+            frames_to_count = self._num_frames_considered_recent
+        else:
+            frames_to_count = self._frames
+        self.recent_average_fps += (self.current_fps - self.average_fps) / frames_to_count
+
+
+_debugger = Debugger()
 
 
 ########################## UPDATE #####################################
 
 def update():
-    global _FRAMES
-    global CURRENT_FPS
-    global _PROFILE_DURATION_REMAINING
-    global AVERAGE_FPS
-    global RECENT_AVERAGE_FPS
-
-    _FRAMES += 1
-    CURRENT_FPS = state.get_internal_clock().get_fps()
-    AVERAGE_FPS += (CURRENT_FPS - AVERAGE_FPS) / _FRAMES
-
-    # count down profiler duration, if it isnt running temporarily
-    if _PROFILE_DURATION_REMAINING != INFINITE:
-        _PROFILE_DURATION_REMAINING -= 1
-
-    # check if profiler needs to turn off
-    if _PROFILE_DURATION_REMAINING == 0:
-        disable_profiling(True)
-
-    # get recent fps
-    if _FRAMES >= _NUM_FRAMES_CONSIDERED_RECENT:
-        frames_to_count = _NUM_FRAMES_CONSIDERED_RECENT
-    else:
-        frames_to_count = _FRAMES
-    RECENT_AVERAGE_FPS += (CURRENT_FPS - AVERAGE_FPS) / frames_to_count
+    _debugger.update()
 
 
-########################## LOGGING AND PROFILING #####################################
+########################## LOGGING  #####################################
 
 def initialise_logging():
     """
@@ -84,8 +87,7 @@ def initialise_logging():
     #     'x' - open for exclusive creation, failing if the file already exists
     #     'a' - open for writing, appending to the end of the file if it exists
 
-    global IS_LOGGING
-    IS_LOGGING = True
+    _debugger.is_logging = True
 
     log_file_name = "logs/" + "game.log"
     log_level = logging.DEBUG
@@ -103,80 +105,75 @@ def initialise_logging():
     logging.Formatter.converter = time.gmtime
 
 
+def kill_logging():
+    """
+    Kill logging resources
+    """
+    logging.shutdown()
+    _debugger.is_logging = False
+
+
+def is_logging():
+    """
+    Returns true if logging is active
+    """
+    return _debugger.is_logging
+
+
+########################## PROFILING  #####################################
+
 def _create_profiler():
     """
-    Create the profiler. If it exists does nothing.
+    Create the profiler.
     """
-    global PROFILER
-    if not PROFILER:
-        PROFILER = cProfile.Profile()
+    _debugger.profiler = cProfile.Profile()
 
 
 def enable_profiling(duration: int = INFINITE):
     """
     Enable profiling. Create profiler if one doesnt exist
     """
-    global IS_PROFILING
-    global _PROFILE_DURATION_REMAINING
-    global PROFILER
-
     # if we dont have a profiler create one
-    if not PROFILER:
+    if not _debugger.profiler:
         _create_profiler()
 
     # enable, set flag and set duration
-    assert isinstance(PROFILER, cProfile.Profile)
-    PROFILER.enable()
-    IS_PROFILING = True
-    _PROFILE_DURATION_REMAINING = duration
+    assert isinstance(_debugger.profiler, cProfile.Profile)
+    _debugger.profiler.enable()
+    _debugger.profiler = True
+    _debugger.profile_duration_remaining = duration
 
 
 def disable_profiling(dump_data: bool = False):
     """
     Turn off current profiling. Dump data to file if required.
     """
-    global PROFILER
-    global IS_PROFILING
-
-    if PROFILER:
-        assert isinstance(PROFILER, cProfile.Profile)
+    if _debugger.profiler:
+        assert isinstance(_debugger.profiler, cProfile.Profile)
         if dump_data:
             _dump_profiling_data()
 
-        PROFILER.disable()
-        IS_PROFILING = False
+        _debugger.profiler.disable()
+        _debugger.is_profiling = False
 
 
 def kill_profiler():
     """
     Kill profiling resource
     """
-    global PROFILER
-
-    if PROFILER:
+    if _debugger.profiler:
         disable_profiling(True)
-        PROFILER = None
-
-
-def kill_logging():
-    """
-    Kill logging resources
-    """
-    global IS_LOGGING
-
-    logging.shutdown()
-    IS_LOGGING = False
+        _debugger.profiler = None
 
 
 def _dump_profiling_data():
     """
     Dump data to a readable file
     """
-    global PROFILER
-    _ = PROFILER.create_stats()
+    _ = _debugger.profiler.create_stats()
     # dump the profiler stats
     s = io.StringIO()
-    ps = pstats.Stats(PROFILER, stream=s).sort_stats("cumulative")
+    ps = pstats.Stats(_debugger.profiler, stream=s).sort_stats("cumulative")
     ps.dump_stats("logs/profiling/profile.dump")
 
     # convert profiling to human readable format
@@ -186,22 +183,62 @@ def _dump_profiling_data():
     ps.strip_dirs().sort_stats("cumulative").print_stats()
 
 
+def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str, Callable], str]],
+        new_methods: List[Tuple[Union[str, Callable], str]], num_runs: int = 1000, repeats: int = 3) -> str:
+    """
+    Run performance testing on a collection of methods/functions. Returns a formatted string detailing performance of
+     old, new and % change between them.
+
+    method_descs are used as descriptions only.
+    old_methods/new_methods expects a list of tuples that are (method_to_test, setup). Setup can be an empty string
+    but is usually an import.
+    Index in each list much match, i.e. method_name[0] is the alias of the methods in old_methods[0] and
+    new_methods[0].
+
+    Outputs as "Access Trait: 0.00123 -> 0.00036(71.00033%)".
+
+    example usage:
+    method_descs = ["Set Var", "Access Skill"]
+    old_methods = [("x = 1", ""),("library.get_skill_data('lunge')", "")]
+    new_methods = [("x = 'one'", ""), ("library2.SKILLS.get('lunge')", "from scripts.engine import library2")]
+    print( performance_test(method_descs, old_methods, new_methods) )
+    """
+    result = f"== Performance Test ==\n(Run {num_runs} * {repeats})"
+    gc.disable()
+
+    for x in range(0, len(method_descs)):
+        name = method_descs[x]
+        old = min(timeit.repeat(old_methods[x][0], setup=old_methods[x][1], number=num_runs, repeat=repeats))
+        new = min(timeit.repeat(new_methods[x][0], setup=new_methods[x][1], number=num_runs, repeat=repeats))
+        result += f"\n{name}: {format(old, '0.5f')} -> {format(new, '0.5f')}" \
+                  f"({format(((old - new) / old) * 100, '0.2f')}%)"
+
+    gc.enable()
+    return result
+
+
+def is_profiling():
+    """
+    Returns true if profiling is active
+    """
+    return _debugger.is_profiling
+
+
 ########################## GET OR SET VALUES #####################################
 
 def print_values_to_console():
     """
     Print the debuggers stats.
     """
-    print(f"Avg FPS: {format(AVERAGE_FPS, '.2f')}, "
-          f"R_Avg: {format(RECENT_AVERAGE_FPS, '.2f')}")
+    print(f"Avg FPS: {format(_debugger.average_fps, '.2f')}, "
+          f"R_Avg: {format(_debugger.recent_average_fps, '.2f')}")
 
 
 def set_fps_visibility(is_visible: bool = True):
     """
     Set whether the FPS is visible
     """
-    global IS_FPS_VISIBLE
-    IS_FPS_VISIBLE = is_visible
+    _debugger.is_fps_visible = is_visible
 
 
 def get_visible_values() -> List[str]:
@@ -209,9 +246,9 @@ def get_visible_values() -> List[str]:
     Get all visible values from the debugger
     """
     values = []
-    if IS_FPS_VISIBLE:
-        values.append(f"FPS: C={format(CURRENT_FPS, '.2f')}, "
-                      f"R_Avg={format(RECENT_AVERAGE_FPS, '.2f')}, "
-                      f"Avg={format(AVERAGE_FPS, '.2f')}")
+    if _debugger.is_fps_visible:
+        values.append(f"FPS: C={format(_debugger.current_fps, '.2f')}, "
+                      f"R_Avg={format(_debugger.recent_average_fps, '.2f')}, "
+                      f"Avg={format(_debugger.average_fps, '.2f')}")
 
     return values
