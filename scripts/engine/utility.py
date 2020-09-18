@@ -2,9 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import logging
-import math
 import pygame
-import scipy
 
 from scripts.engine.core.constants import (
     IMAGE_NOT_FOUND_PATH,
@@ -13,7 +11,6 @@ from scripts.engine.core.constants import (
     Shape,
     ShapeType,
 )
-from scripts.engine.core.data import store
 
 if TYPE_CHECKING:
     from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
@@ -31,6 +28,8 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
     path is "none" then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
     dimensions provided.
     """
+    from scripts.engine.core.data import store  # circular import in testing.
+
     # check if image path provided
     if img_path.lower() != "none":
 
@@ -178,6 +177,7 @@ def get_euclidean_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     """
     dx = target_pos[0] - start_pos[0]
     dy = target_pos[1] - start_pos[1]
+    import math  # only used in this method
     return math.sqrt(dx ** 2 + dy ** 2)
 
 
@@ -186,7 +186,7 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     Get distance from an xy position towards another location. Expected tuple in the form of (x, y).
     This returns an int indicating the number of tile moves between the two points.
     """
-    
+    import scipy  # only used in this method
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
@@ -195,6 +195,7 @@ def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], 
     returns true if the absolute distance between both coordinates is less than delta
     """
     return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
+
 
 ################################### SHAPES  ########################################
 
