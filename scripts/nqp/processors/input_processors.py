@@ -107,7 +107,7 @@ def _process_stateless_intents(intent: InputIntentType):
     """
     ## Activate Debug
     if intent == InputIntent.DEBUG_TOGGLE:
-        if debug.IS_FPS_VISIBLE:
+        if debug.is_fps_visible():
             debug.set_fps_visibility(False)
         else:
             debug.set_fps_visibility(True)

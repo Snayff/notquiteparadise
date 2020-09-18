@@ -1044,13 +1044,13 @@ def _create_tile_from_category(x: int, y: int, tile_category: TileCategoryType,
     """
     if tile_category == TileCategory.WALL:
         sprite_path = sprite_paths[TileCategory.WALL]
-        sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+        sprite = utility.get_image(sprite_path)
         blocks_sight = True
         blocks_movement = True
     else:
         # everything else is considered a floor:
         sprite_path = sprite_paths[TileCategory.FLOOR]
-        sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+        sprite = utility.get_image(sprite_path)
         blocks_sight = False
         blocks_movement = False
 

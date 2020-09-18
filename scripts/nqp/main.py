@@ -12,7 +12,7 @@ from scripts.engine import chronicle, debug, state, world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.core.definitions import ActorData
-from scripts.engine.core.store import store
+from scripts.engine.core.data import store
 from scripts.engine.debug import (
     enable_profiling,
     initialise_logging,
@@ -28,11 +28,11 @@ def main():
     The entry for the game initialisation and game loop
     """
     # initialise logging
-    if debug.IS_LOGGING:
+    if debug.is_logging():
         initialise_logging()
 
     # initialise profiling
-    if debug.IS_PROFILING:
+    if debug.is_profiling():
         enable_profiling()
 
     # initialise the game
@@ -55,11 +55,11 @@ def main():
     state.dump_save_game()
 
     # we've left the game loop so now close everything down
-    if debug.IS_LOGGING:
+    if debug.is_logging():
         kill_logging()
         # print debug values
         debug.print_values_to_console()
-    if debug.IS_PROFILING:
+    if debug.is_profiling():
         debug.kill_profiler()
 
     # clean up pygame resources

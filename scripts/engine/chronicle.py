@@ -8,7 +8,7 @@ from snecs.typedefs import EntityID
 from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE
-from scripts.engine.core.store import store
+from scripts.engine.core.data import store
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
