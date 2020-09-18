@@ -260,7 +260,7 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
 
 
 def build_sprites_from_paths(sprite_paths: List[TraitSpritePathsData],
-        desired_size: [Tuple[int, int]] = (TILE_SIZE, TILE_SIZE)) -> TraitSpritesData:
+        desired_size: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> TraitSpritesData:
     """
     Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
     combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.
@@ -635,7 +635,8 @@ def get_player() -> EntityID:
 
 def get_entitys_component(entity: EntityID, component: Type[_C]) -> _C:
     """
-    Get an entity's component. Log if component not found.
+    Get an entity's component. Will raise exception if entity does not have the component.  Use entity_has_component
+    to check.
     """
     if entity_has_component(entity, component):
         return snecs.entity_component(entity, component)
