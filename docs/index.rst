@@ -39,6 +39,11 @@ Last updated on |today| for version |version|.
     nqp/world_objects
 
 
+..  toctree::
+    :maxdepth: 1
+    :caption: Changelog
+    changelog
+
 
 Indices and tables
 ==================

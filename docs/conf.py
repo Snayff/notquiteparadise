@@ -45,10 +45,13 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinx_autodoc_typehints'
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.githubpages',
+    'sphinx_autodoc_typehints',
+    'sphinx_autodoc_annotation',
+    'sphinx_git',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,7 +59,6 @@ templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-#
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst', '.txt'
 
@@ -93,7 +95,7 @@ html_theme = 'sphinx_rtd_theme'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
+# https://sphinx-rtd-theme.readthedocs.io/en/latest/configuring.html
 # html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -210,11 +212,21 @@ autodoc_default_options = {
     'member-order': 'bysource',
     'undoc-members': True,
     'show-inheritance': True,
-    'private-members': True
+    'private-members': False
 }
 autoclass_content = "both"
 
 # -- sphinx-autodoc-typehints ---------------------------------------------------
 always_document_param_types = True
-# set_type_checking_flag = True  # N.B. enabling breaks managers
-# typehints_document_rtype  = True # N.B. enabling breaks managers
+set_type_checking_flag = True
+typehints_document_rtype  = True
+
+# -- sphinx.ext.autosectionlabel ---------------------------------------------------
+# True to prefix each section label with the name of the document it is in, followed by a colon. For example, index:Introduction for a section called Introduction that appears in document index.rst. Useful for avoiding ambiguity when the same section heading appears in different documents.
+# autosectionlabel_prefix_document
+
+# If set, autosectionlabel chooses the sections for labeling by its depth. For example, when set 1 to autosectionlabel_maxdepth, labels are generated only for top level sections, and deeper sections are not labeled. It defaults to None (disabled).
+autosectionlabel_maxdepth = 4
+
+# -- sphinx.ext.viewcode ---------------------------------------------------
+viewcode_follow_imported_members = True#

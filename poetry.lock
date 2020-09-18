@@ -153,6 +153,28 @@ version = "0.18.2"
 
 [[package]]
 category = "dev"
+description = "Git Object Database"
+name = "gitdb"
+optional = false
+python-versions = ">=3.4"
+version = "4.0.5"
+
+[package.dependencies]
+smmap = ">=3.0.1,<4"
+
+[[package]]
+category = "dev"
+description = "Python Git Library"
+name = "gitpython"
+optional = false
+python-versions = ">=3.4"
+version = "3.1.8"
+
+[package.dependencies]
+gitdb = ">=4.0.1,<5"
+
+[[package]]
+category = "dev"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -464,6 +486,14 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "1.15.0"
 
 [[package]]
+category = "dev"
+description = "A pure Python implementation of a sliding window memory map manager"
+name = "smmap"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "3.0.4"
+
+[[package]]
 category = "main"
 description = "A straightforward, nimble ECS for Python"
 name = "snecs"
@@ -513,6 +543,17 @@ test = ["pytest", "pytest-cov", "html5lib", "typed-ast", "cython"]
 
 [[package]]
 category = "dev"
+description = "Use Python 3 annotations in sphinx-enabled docstrings"
+name = "sphinx-autodoc-annotation"
+optional = false
+python-versions = "*"
+version = "1.0-1"
+
+[package.dependencies]
+sphinx = ">=1.1"
+
+[[package]]
+category = "dev"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 name = "sphinx-autodoc-typehints"
 optional = false
@@ -525,6 +566,33 @@ Sphinx = ">=3.0"
 [package.extras]
 test = ["pytest (>=3.1.0)", "typing-extensions (>=3.5)", "sphobjinv (>=2.0)", "dataclasses"]
 type_comments = ["typed-ast (>=1.4.0)"]
+
+[[package]]
+category = "dev"
+description = "git Changelog for Sphinx"
+name = "sphinx-git"
+optional = false
+python-versions = "*"
+version = "11.0.0"
+
+[package.dependencies]
+GitPython = ">=0.3.6"
+six = "*"
+sphinx = "*"
+
+[[package]]
+category = "dev"
+description = "Read the Docs theme for Sphinx"
+name = "sphinx-rtd-theme"
+optional = false
+python-versions = "*"
+version = "0.5.0"
+
+[package.dependencies]
+sphinx = "*"
+
+[package.extras]
+dev = ["transifex-client", "sphinxcontrib-httpdomain", "bump2version"]
 
 [[package]]
 category = "dev"
@@ -663,7 +731,7 @@ python-versions = "*"
 version = "0.2.5"
 
 [metadata]
-content-hash = "c2152c1a98c48cf2afbbe87ae8be1e7647edfe7f53ab49f7bc8b6ee17ee0cfc3"
+content-hash = "0ad2c0312b037ad3a6545803a16ef1040e2ceeef45e010c83638e2a9a3735720"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -751,6 +819,14 @@ flake8-polyfill = [
 ]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
+]
+gitdb = [
+    {file = "gitdb-4.0.5-py3-none-any.whl", hash = "sha256:91f36bfb1ab7949b3b40e23736db18231bf7593edada2ba5c3a174a7b23657ac"},
+    {file = "gitdb-4.0.5.tar.gz", hash = "sha256:c9e1f2d0db7ddb9a704c2a0217be31214e91a4fe1dea1efad19ae42ba0c285c9"},
+]
+gitpython = [
+    {file = "GitPython-3.1.8-py3-none-any.whl", hash = "sha256:1858f4fd089abe92ae465f01d5aaaf55e937eca565fb2c1fce35a51b5f85c910"},
+    {file = "GitPython-3.1.8.tar.gz", hash = "sha256:080bf8e2cf1a2b907634761c2eaefbe83b69930c94c66ad11b65a8252959f912"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
@@ -996,6 +1072,10 @@ six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
     {file = "six-1.15.0.tar.gz", hash = "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"},
 ]
+smmap = [
+    {file = "smmap-3.0.4-py2.py3-none-any.whl", hash = "sha256:54c44c197c819d5ef1991799a7e30b662d1e520f2ac75c9efbeb54a742214cf4"},
+    {file = "smmap-3.0.4.tar.gz", hash = "sha256:9c98bbd1f9786d22f14b3d4126894d56befb835ec90cef151af566c7e19b5d24"},
+]
 snecs = [
     {file = "snecs-1.2.1-py3-none-any.whl", hash = "sha256:2c726fe70217e64afb69ff6e7630faf4e4683cf37e8675f03b5508af2d7fa0df"},
     {file = "snecs-1.2.1.tar.gz", hash = "sha256:9ef2a0f00d4a5a881a149ce337a5bdb1c96cb9f9491faff4baac7f29976ccc99"},
@@ -1008,9 +1088,19 @@ sphinx = [
     {file = "Sphinx-3.2.1-py3-none-any.whl", hash = "sha256:ce6fd7ff5b215af39e2fcd44d4a321f6694b4530b6f2b2109b64d120773faea0"},
     {file = "Sphinx-3.2.1.tar.gz", hash = "sha256:321d6d9b16fa381a5306e5a0b76cd48ffbc588e6340059a729c6fdd66087e0e8"},
 ]
+sphinx-autodoc-annotation = [
+    {file = "sphinx-autodoc-annotation-1.0-1.tar.gz", hash = "sha256:4a3d03081efe1e5f2bc9b9d00746550f45b9f543b0c79519c523168ca7f7d89a"},
+]
 sphinx-autodoc-typehints = [
     {file = "sphinx-autodoc-typehints-1.11.0.tar.gz", hash = "sha256:bbf0b203f1019b0f9843ee8eef0cff856dc04b341f6dbe1113e37f2ebf243e11"},
     {file = "sphinx_autodoc_typehints-1.11.0-py3-none-any.whl", hash = "sha256:89e19370a55db4aef1be2094d8fb1fb500ca455c55b3fcc8d2600ff805227e04"},
+]
+sphinx-git = [
+    {file = "sphinx-git-11.0.0.tar.gz", hash = "sha256:6bf9d837de108c79fb7db585ebd590fd48f4d1f830b540420d0ca675f3b9f800"},
+]
+sphinx-rtd-theme = [
+    {file = "sphinx_rtd_theme-0.5.0-py2.py3-none-any.whl", hash = "sha256:373413d0f82425aaa28fb288009bf0d0964711d347763af2f1b65cafcb028c82"},
+    {file = "sphinx_rtd_theme-0.5.0.tar.gz", hash = "sha256:22c795ba2832a169ca301cd0a083f7a434e09c538c70beb42782c073651b707d"},
 ]
 sphinxcontrib-applehelp = [
     {file = "sphinxcontrib-applehelp-1.0.2.tar.gz", hash = "sha256:a072735ec80e7675e3f432fcae8610ecf509c5f1869d17e2eecff44389cdbc58"},
