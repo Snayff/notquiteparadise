@@ -1,10 +1,11 @@
 Welcome to Not Quite Paradise's Engine documentation!
-==================================================
+===============================================================
 Last updated on |today| for version |version|.
 
 ..  toctree::
     :maxdepth: 1
     :caption: Core API
+
     nqp/core.constants
     nqp/core.definitions
     nqp/core.extend_json
@@ -30,18 +31,21 @@ Last updated on |today| for version |version|.
 ..  toctree::
     :maxdepth: 1
     :caption: UI API
+
     nqp/ui.elements
     nqp/ui.widgets
 
 ..  toctree::
     :maxdepth: 2
     :caption: World Objects API
+
     nqp/world_objects
 
 
 ..  toctree::
     :maxdepth: 1
     :caption: Changelog
+
     changelog
 
 

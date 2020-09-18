@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>UI Elements &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="UI Widgets" href="ui.widgets.html" />
+    <link rel="prev" title="World" href="world.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.121.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.store.html">Store</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">UI Elements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#actor-info">Actor Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#camera">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-editor">Data Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dungen-viewer">Dungen Viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manager">Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.ui.elements.message_log">Message Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.ui.elements.skill_bar">Skill Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tile-info">Tile Info</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ui.widgets.html">UI Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>UI Elements</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/nqp/ui.elements.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ui-elements">
+<h1>UI Elements<a class="headerlink" href="#ui-elements" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="actor-info">
+<h2>Actor Info<a class="headerlink" href="#actor-info" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="camera">
+<h2>Camera<a class="headerlink" href="#camera" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="data-editor">
+<h2>Data Editor<a class="headerlink" href="#data-editor" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="dungen-viewer">
+<h2>Dungen Viewer<a class="headerlink" href="#dungen-viewer" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="manager">
+<h2>Manager<a class="headerlink" href="#manager" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-scripts.engine.ui.elements.message_log">
+<span id="message-log"></span><h2>Message Log<a class="headerlink" href="#module-scripts.engine.ui.elements.message_log" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.ui.elements.message_log.MessageLog">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.ui.elements.message_log.</code><code class="sig-name descname">MessageLog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rect</span></em>, <em class="sig-param"><span class="n">manager</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/message_log.html#MessageLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.message_log.MessageLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.elements.ui_panel.UIPanel</span></code></p>
+<p>Hold text relating to the game’s events, to display to the player. This should be a log of all notable things
+that have happened. It is recommended that all messages are in the past tense.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rect</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Rect</span></code>) – </p></li>
+<li><p><strong>manager</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">UIManager</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.message_log.MessageLog.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_delta</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/message_log.html#MessageLog.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.message_log.MessageLog.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.message_log.MessageLog.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/message_log.html#MessageLog.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.message_log.MessageLog.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.message_log.MessageLog._create_text_box">
+<code class="sig-name descname">_create_text_box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/message_log.html#MessageLog._create_text_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.message_log.MessageLog._create_text_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the text box to show the messages</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">UITextBox</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.ui.elements.message_log.MessageLog._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.ui.elements.message_log.MessageLog._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.message_log.MessageLog.add_message">
+<code class="sig-name descname">add_message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/message_log.html#MessageLog.add_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.message_log.MessageLog.add_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add message to the message log. Formatting the text is done via a subset of HTML tags. Currently supported
+tags are:
+&lt;b&gt;&lt;/b&gt; or &lt;strong&gt;&lt;/strong&gt; - to encase bold styled text.
+&lt;i&gt;&lt;/i&gt;, &lt;em&gt;&lt;/em&gt; or &lt;var&gt;&lt;/var&gt; - to encase italic styled text.
+&lt;u&gt;&lt;/u&gt; - to encase underlined text.
+&lt;a href=’id’&gt;&lt;/a&gt; - to encase ‘link’ text that can be clicked on to generate events with the id given in href.
+&lt;body bgcolor=’#FFFFFF’&gt;&lt;/body&gt; - to change the background colour of encased text.
+&lt;br&gt; - to start a new line.
+&lt;font face=’verdana’ color=’#000000’ size=3.5&gt;&lt;/font&gt; - To set the font, colour and size of encased text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-scripts.engine.ui.elements.skill_bar">
+<span id="skill-bar"></span><h2>Skill Bar<a class="headerlink" href="#module-scripts.engine.ui.elements.skill_bar" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.ui.elements.skill_bar.SkillBar">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.ui.elements.skill_bar.</code><code class="sig-name descname">SkillBar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rect</span></em>, <em class="sig-param"><span class="n">manager</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/skill_bar.html#SkillBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.skill_bar.SkillBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pygame_gui.elements.ui_panel.UIPanel</span></code></p>
+<p>Display and hold the info for the skills in the skill bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rect</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Rect</span></code>) – </p></li>
+<li><p><strong>manager</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">UIManager</span></code>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.skill_bar.SkillBar.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_delta</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/skill_bar.html#SkillBar.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.skill_bar.SkillBar.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update based on current state and data. Run every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_delta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.skill_bar.SkillBar.handle_events">
+<code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/skill_bar.html#SkillBar.handle_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.skill_bar.SkillBar.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle events created by this UI widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.ui.elements.skill_bar.SkillBar.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/ui/elements/skill_bar.html#SkillBar.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.ui.elements.skill_bar.SkillBar.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>In addition to the base UIElement.show() - call show() of owned container - panel_container.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.ui.elements.skill_bar.SkillBar._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.ui.elements.skill_bar.SkillBar._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="tile-info">
+<h2>Tile Info<a class="headerlink" href="#tile-info" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ui.widgets.html" class="btn btn-neutral float-right" title="UI Widgets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="world.html" class="btn btn-neutral float-left" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

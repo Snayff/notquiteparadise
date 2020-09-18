@@ -212,7 +212,7 @@ autodoc_default_options = {
     'member-order': 'bysource',
     'undoc-members': True,
     'show-inheritance': True,
-    'private-members': False
+    'private-members': True
 }
 autoclass_content = "both"
 
