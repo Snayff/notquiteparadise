@@ -12,7 +12,7 @@ from scripts.engine import chronicle, debug, state, world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.core.definitions import ActorData
-from scripts.engine.core.store import store
+from scripts.engine.core.data import store
 from scripts.engine.debug import (
     enable_profiling,
     initialise_logging,

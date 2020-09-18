@@ -12,8 +12,10 @@ from scripts.engine.world_objects.gamemap import Gamemap
 if TYPE_CHECKING:
     from typing import TYPE_CHECKING, Dict
 
+__all__ = ["store"]
 
-class _Store:
+
+class Store:
     """
     Hold the current state info required by the engine. Must be serialised.
     Should only be accessed via getters and setters, not directly.
@@ -36,6 +38,9 @@ class _Store:
         self.time_of_last_turn: int = 1
         self.round_time: int = 0  # tracker of time progressed in current round
         self.turn_holder: EntityID = -1  # current acting entity
+
+        # used to hold images called during runtime so only one copy ever exists. Not serialised.
+        self.images: Dict[str, pygame.Surface] = {}
         
     def serialise(self) -> Dict[str, Any]:
         """
@@ -81,4 +86,4 @@ class _Store:
             logging.warning(f"Store.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
 
 
-store = _Store()
+store = Store()

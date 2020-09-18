@@ -15,7 +15,7 @@ from scripts.engine.core.constants import (
     GameState,
     GameStateType,
 )
-from scripts.engine.core.store import store
+from scripts.engine.core.data import store
 
 if TYPE_CHECKING:
     pass

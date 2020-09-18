@@ -13,6 +13,7 @@ from scripts.engine.core.constants import (
     Shape,
     ShapeType,
 )
+from scripts.engine.core.data import store
 
 if TYPE_CHECKING:
     from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
@@ -24,7 +25,7 @@ __all__ = ["get_image", "get_images", "flatten_images", "recursive_replace", "re
 
 ################################### IMAGES ########################################
 
-def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pygame.Surface:
+def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> pygame.Surface:
     """
     Get the specified image and resize if dimensions provided. Dimensions are in (width, height) format. If img
     path is "none" then a blank surface is created to the size of the desired dimensions, or TILE_SIZE if no
@@ -32,26 +33,35 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = None) -> pyga
     """
     # check if image path provided
     if img_path.lower() != "none":
-        try:
-            # try and get the image provided
-            image = pygame.image.load(img_path).convert_alpha()
 
-        except:
-            image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
-            logging.warning(f"Used not_found image. Tried to use {img_path}.")
+        if f"{img_path}{desired_dimensions}" in store.images:
+            image = store.images[f"{img_path}{desired_dimensions}"]
+        else:
+            try:
+                # try and get the image provided
+                image = pygame.image.load(img_path).convert_alpha()
+
+            except:
+                image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
+                logging.warning(f"Get_image: Tried to use {img_path} but it wasn`t found. Used the not_found image "
+                                f"instead.")
     else:
         image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         image.set_alpha(0)
 
-    # resize if needed
-    if desired_dimensions:
+    # resize if needed - should only need to resize if we havent got it from storage
+    if image.get_width() != desired_dimensions[0] or image.get_height() != desired_dimensions[1]:
         width, height = desired_dimensions
         image = pygame.transform.smoothscale(image, (width, height))
+
+        # add to storage
+        store.images[f"{img_path}{desired_dimensions}"] = image
 
     return image
 
 
-def get_images(img_paths: List[str], desired_dimensions: Tuple[int, int] = None) -> List[pygame.Surface]:
+def get_images(img_paths: List[str],
+        desired_dimensions: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> List[pygame.Surface]:
     """
     Get a collection of images.
     """
@@ -72,7 +82,8 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
     biggest_image_index = -1
     for i in range(len(images)):
         img = images[i]
-        if (biggest_image is None) or (img.get_width() > biggest_image.get_width() and img.get_height() > biggest_image.get_height()):
+        if (biggest_image is None) or (img.get_width() > biggest_image.get_width()
+                                       and img.get_height() > biggest_image.get_height()):
             biggest_image = img
             biggest_image_index = i
 
@@ -179,6 +190,41 @@ def get_chebyshev_distance(start_pos: Tuple[int, int], target_pos: Tuple[int, in
     return scipy.spatial.distance.chebyshev(start_pos, target_pos)
 
 
+def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
+    """
+    returns true if the absolute distance between both coordinates is less than delta
+    """
+    return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
+
+################################### SHAPES  ########################################
+
+def get_coords_from_shape(shape: ShapeType, size: int, direction: Optional[Tuple[int, int]]) -> List[Tuple[int, int]]:
+    """
+    Get a list of coordinates from a shape, size and direction.
+    """
+    if shape == Shape.TARGET:
+        return [(0, 0)]  # single target, centred on selection
+
+    elif shape == Shape.SQUARE:
+        return _calculate_square_shape(size)
+
+    elif shape == Shape.CIRCLE:
+        return _calculate_circle_shape(size)
+
+    elif shape == Shape.CROSS:
+        return _calculate_cross_shape(size)
+
+    elif shape == Shape.CONE:
+        if direction:
+            return _calculate_cone_shape(size, direction)
+        else:
+            logging.error(f"No direction passed to get_coords_from_shape for a Cone.")
+            raise KeyError("No direction for Cone.")
+
+    logging.error(f"Unknown shape '{shape}' passed to get_coords_from_shape")
+    raise KeyError(f"Unknown shape '{shape}'")
+
+
 def _calculate_square_shape(size: int) -> List[Tuple[int, int]]:
     """
     Calculate all the tiles in the range of a square
@@ -248,40 +294,6 @@ def _calculate_cone_shape(size: int, direction: Tuple[int, int]) -> List[Tuple[i
         #  "List[Tuple[int, int]]")
         last_row = new_row  # type: ignore
     return coord_list + list(last_row)
-
-
-def get_coords_from_shape(shape: ShapeType, size: int, direction: Optional[Tuple[int, int]]) -> List[Tuple[int, int]]:
-    """
-    Get a list of coordinates from a shape, size and direction.
-    """
-    if shape == Shape.TARGET:
-        return [(0, 0)]  # single target, centred on selection
-
-    elif shape == Shape.SQUARE:
-        return _calculate_square_shape(size)
-
-    elif shape == Shape.CIRCLE:
-        return _calculate_circle_shape(size)
-
-    elif shape == Shape.CROSS:
-        return _calculate_cross_shape(size)
-
-    elif shape == Shape.CONE:
-        if direction:
-            return _calculate_cone_shape(size, direction)
-        else:
-            logging.error(f"No direction passed to get_coords_from_shape for a Cone.")
-            raise KeyError("No direction for Cone.")
-
-    logging.error(f"Unknown shape '{shape}' passed to get_coords_from_shape")
-    raise KeyError(f"Unknown shape '{shape}'")
-
-
-def is_close(current_pos: Tuple[float, float], target_pos: Tuple[float, float], delta=0.05) -> bool:
-    """
-    returns true if the absolute distance between both coordinates is less than delta
-    """
-    return abs(current_pos[0] - target_pos[0]) <= delta and abs(current_pos[1] - target_pos[1]) <= delta
 
 
 ################################### CONVERSIONS ########################################

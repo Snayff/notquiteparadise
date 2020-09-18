@@ -48,7 +48,7 @@ class Tile:
             y = serialised["y"]
             sprite_path = serialised["sprite_path"]
             from scripts.engine import utility
-            sprite = utility.get_image(sprite_path, (TILE_SIZE, TILE_SIZE))
+            sprite = utility.get_image(sprite_path)
             is_visible = serialised["is_visible"]
             blocks_sight = serialised["blocks_sight"]
             blocks_movement = serialised["blocks_movement"]

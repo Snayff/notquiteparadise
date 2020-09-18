@@ -20,6 +20,7 @@ __all__ = ["update", "initialise_logging", "kill_logging", "is_logging", "enable
     "kill_profiler", "performance_test", "is_profiling", "print_values_to_console", "set_fps_visibility",
     "get_visible_values"]
 
+
 class Debugger:
     def __init__(self):
         # objects
@@ -116,7 +117,7 @@ def kill_logging():
     _debugger.is_logging = False
 
 
-def is_logging():
+def is_logging() -> bool:
     """
     Returns true if logging is active
     """
@@ -143,7 +144,7 @@ def enable_profiling(duration: int = INFINITE):
     # enable, set flag and set duration
     assert isinstance(_debugger.profiler, cProfile.Profile)
     _debugger.profiler.enable()
-    _debugger.profiler = True
+    _debugger.is_profiling = True
     _debugger.profile_duration_remaining = duration
 
 
@@ -152,7 +153,6 @@ def disable_profiling(dump_data: bool = False):
     Turn off current profiling. Dump data to file if required.
     """
     if _debugger.profiler:
-        assert isinstance(_debugger.profiler, cProfile.Profile)
         if dump_data:
             _dump_profiling_data()
 
@@ -173,7 +173,11 @@ def _dump_profiling_data():
     """
     Dump data to a readable file
     """
+    if not _debugger.is_profiling:
+        return
+
     _ = _debugger.profiler.create_stats()
+
     # dump the profiler stats
     s = io.StringIO()
     ps = pstats.Stats(_debugger.profiler, stream=s).sort_stats("cumulative")
@@ -220,11 +224,20 @@ def performance_test(method_descs: List[str], old_methods: List[Tuple[Union[str,
     return result
 
 
-def is_profiling():
+def is_profiling() -> bool:
     """
     Returns true if profiling is active
     """
     return _debugger.is_profiling
+
+
+########################## FPS #####################################
+
+def is_fps_visible() -> bool:
+    """
+    Returns true if fps stats are visible
+    """
+    return _debugger.is_fps_visible
 
 
 ########################## GET OR SET VALUES #####################################

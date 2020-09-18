@@ -32,7 +32,7 @@ class Gamemap:
         # get details for a wall tile
         from scripts.engine import utility
         wall_sprite_path = _map_data.sprite_paths[TileCategory.WALL]
-        wall_sprite = utility.get_image(wall_sprite_path, (TILE_SIZE, TILE_SIZE))
+        wall_sprite = utility.get_image(wall_sprite_path)
         blocks_sight = True
         blocks_movement = True
 

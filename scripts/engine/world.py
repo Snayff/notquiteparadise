@@ -66,7 +66,7 @@ from scripts.engine.core.definitions import (
     TraitSpritePathsData,
     TraitSpritesData,
 )
-from scripts.engine.core.store import store
+from scripts.engine.core.data import store
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -260,10 +260,10 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
 
 
 def build_sprites_from_paths(sprite_paths: List[TraitSpritePathsData],
-        desired_size: Optional[Tuple[int, int]] = None) -> TraitSpritesData:
+        desired_size: [Tuple[int, int]] = (TILE_SIZE, TILE_SIZE)) -> TraitSpritesData:
     """
-    Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData, combines the
-     sprites from each TraitSpritePathsData in the  list and flattens to a single surface.
+    Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
+    combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.
     """
     paths: Dict[str, List[str]] = {}
     sprites: Dict[str, List[pygame.Surface]] = {}
