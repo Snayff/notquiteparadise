@@ -1,5 +1,7 @@
 
-Component
+Chronicle
 ============================================
-.. automodule:: scripts.engine.component
+
+.. automodule:: scripts.engine.chronicle
     :show-inheritance:
+    :members:
