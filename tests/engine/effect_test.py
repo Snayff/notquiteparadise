@@ -4,13 +4,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import action, world
 from scripts.engine.action import Affliction, Skill
-from scripts.engine.component import (
-    Aesthetic,
-    Afflictions,
-    Identity,
-    Knowledge,
-    Position,
-)
+from scripts.engine.component import Aesthetic, Afflictions, Identity, Knowledge, Position
 from scripts.engine.core.constants import (
     AfflictionTrigger,
     Direction,
@@ -20,11 +14,7 @@ from scripts.engine.core.constants import (
     TargetingMethod,
     TargetTag,
 )
-from scripts.engine.effect import (
-    Effect,
-    ReduceSkillCooldownEffect,
-    TriggerAfflictionsEffect,
-)
+from scripts.engine.effect import Effect, ReduceSkillCooldownEffect, TriggerAfflictionsEffect
 from tests.mocks import world_mock
 
 

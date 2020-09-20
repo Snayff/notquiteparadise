@@ -73,11 +73,11 @@
          {
              "normal_image":
              {
-                 "path": "assets/skills/placeholder/icon_01.png"
+                 "path": "assets/skills/basic_attack.png"
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_02.png"
+                 "path": "assets/skills/basic_attack.png"
              }
          },
          "misc":
@@ -92,11 +92,11 @@
          {
              "normal_image":
              {
-                 "path": "assets/skills/placeholder/icon_02.png"
+                 "path": "assets/skills/lunge.png"
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_04.png"
+                 "path": "assets/skills/lunge.png"
              }
          },
          "misc":
@@ -111,11 +111,11 @@
          {
              "normal_image":
              {
-                 "path": "assets/skills/placeholder/icon_04.png"
+                 "path": "assets/skills/basic_attack.png"
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_05.png"
+                 "path": "assets/skills/basic_attack.png"
              }
          },
          "misc":
@@ -131,11 +131,11 @@
          {
              "normal_image":
              {
-                 "path": "assets/skills/placeholder/icon_06.png"
+                 "path": "assets/skills/basic_attack.png"
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_08.png"
+                 "path": "assets/skills/basic_attack.png"
              }
          },
          "misc":
@@ -150,11 +150,11 @@
          {
              "normal_image":
              {
-                 "path": "assets/skills/placeholder/icon_08.png"
+                 "path": "assets/skills/basic_attack.png"
              },
              "hovered_image":
              {
-                 "path": "assets/skills/placeholder/icon_09.png"
+                 "path": "assets/skills/basic_attack.png"
              }
          },
          "misc":

@@ -3,21 +3,16 @@ from __future__ import annotations
 import logging
 import sys
 import traceback
-
 import pygame
 import snecs
-from snecs.world import default_world
 
+from snecs.world import default_world
 from scripts.engine import chronicle, debug, state, world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import GameState, UIElement
-from scripts.engine.core.definitions import ActorData
 from scripts.engine.core.data import store
-from scripts.engine.debug import (
-    enable_profiling,
-    initialise_logging,
-    kill_logging,
-)
+from scripts.engine.core.definitions import ActorData
+from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.gamemap import Gamemap
 from scripts.nqp.processors import display_processors, input_processors

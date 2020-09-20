@@ -14,8 +14,8 @@
             "empty": 0.1
         },
         "sprite_paths": {
-            "wall": "assets/world/placeholder/_testWall.png",
-            "floor": "assets/world/placeholder/_test.png"
+            "wall": "world/wall.png",
+            "floor": "world/floor.png"
         },
         "max_room_entrances": 2,
         "extra_entrance_chance": 10,

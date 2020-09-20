@@ -9,6 +9,8 @@ from pygame_gui.core import UIElement as PygameGuiElement
 
 from scripts.engine import debug, library, utility
 from scripts.engine.core.constants import (
+    ASSET_PATH,
+    DATA_PATH,
     GAP_SIZE,
     MAX_SKILLS,
     SKILL_BUTTON_SIZE,
@@ -63,7 +65,7 @@ class UI:
         self._window: pygame.display = pygame.display.set_mode((self._desired_width, self._desired_height))
 
         # now that the display is configured  init the pygame_gui
-        self._gui = UIManager((self._base_width, self._base_height), "data/ui/themes.json")
+        self._gui = UIManager((self._base_width, self._base_height), DATA_PATH + "ui/themes.json")
 
         # elements info
         self._elements = {}  # dict of all init'd ui_manager elements
@@ -157,11 +159,11 @@ class UI:
         Initialise display settings.
         """
         pygame.display.set_caption("Not Quite Paradise")
-        pygame.display.set_icon(utility.get_image("assets/ui/nqp_icon.png"))
+        pygame.display.set_icon(utility.get_image("ui/nqp_icon.png"))
 
     def _load_fonts(self):
-        self._gui.add_font_paths("barlow", "assets/fonts/Barlow-Light.otf")
-        self.debug_font = pygame.font.Font("assets/fonts/Kenney Future Narrow.ttf", 12)
+        self._gui.add_font_paths("barlow", ASSET_PATH + "fonts/Barlow-Light.otf")
+        self.debug_font = pygame.font.Font(ASSET_PATH + "fonts/Kenney Future Narrow.ttf", 12)
 
         fonts = [
             {'name': 'barlow', 'point_size': 24, 'style': 'regular'}

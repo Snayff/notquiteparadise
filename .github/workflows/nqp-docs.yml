@@ -13,30 +13,37 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+
       - name: Use cache
         uses: actions/cache@v2
         with:
           path: ~\AppData\Local\pip\Cache
           key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
           restore-keys: ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           sudo apt-get update
+          sudo apt-get install libsdl2-dev
           sudo apt-get install python-sphinx
-          python -m pip install sphinx-autodoc-typehints
+          python -m pip install --upgrade poetry
+          poetry config virtualenvs.create false
+          poetry install --no-root
+
       - name: build-docs
         run: |
           sphinx-apidoc -o ./docs .
           cd docs
-          make html
+          sphinx-build -a -E --keep-going . _build
           
       - name: deploy-docs
         uses: JamesIves/github-pages-deploy-action@3.5.7
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: docs/_build/html
+          FOLDER: docs/_build

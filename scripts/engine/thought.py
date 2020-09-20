@@ -8,11 +8,7 @@ from snecs.typedefs import EntityID
 
 from scripts.engine import chronicle, library, world
 from scripts.engine.component import Position
-from scripts.engine.core.constants import (
-    ProjectileExpiry,
-    TargetTag,
-    TerrainCollision,
-)
+from scripts.engine.core.constants import ProjectileExpiry, TargetTag, TerrainCollision
 from scripts.engine.core.definitions import ProjectileData
 
 if TYPE_CHECKING:

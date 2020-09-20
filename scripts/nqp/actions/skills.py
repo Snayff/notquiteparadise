@@ -6,11 +6,7 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, world
-from scripts.engine.action import (
-    Skill,
-    properties_set_by_data,
-    register_action,
-)
+from scripts.engine.action import Skill, properties_set_by_data, register_action
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     DamageType,

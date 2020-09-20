@@ -69,8 +69,10 @@ target/
 radon
 
 # log files
-profiling/
-game.log
+logs/
 
 # saves
-saves/
+data/saves/
+
+# local docs
+docs/_build/**

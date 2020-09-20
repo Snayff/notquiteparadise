@@ -20,9 +20,16 @@ SKILL_BUTTON_SIZE = 64
 INFINITE = 999
 
 ######################## PATHS ######################################
-IMAGE_NOT_FOUND_PATH = "assets/image_not_found.png"
-SAVE_PATH = "data/saves/"
+if "GENERATING_SPHINX_DOCS" in os.environ:
+    prefix = "../"
+else:
+    prefix = ""
+
+DATA_PATH = prefix + "data/"
+ASSET_PATH = prefix + "assets/"
 CURRENT_WORKING_DIRECTORY = os.getcwd() + "/"
+IMAGE_NOT_FOUND_PATH = ASSET_PATH + "image_not_found.png"
+SAVE_PATH = DATA_PATH + "saves/"
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of

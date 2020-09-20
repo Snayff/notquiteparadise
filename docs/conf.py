@@ -24,11 +24,11 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = 'NotQuiteParadise'
-copyright = '2020, Snayff'
-author = 'Snayff'
+copyright = '2019-2020, Josh Snaith'
+author = 'Josh Snaith (Snayff)'
 
 # The short X.Y version
-version = "0.121.0"
+version = "0.122.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -45,11 +45,13 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinx.ext.napoleon',
-    'sphinx_autodoc_typehints'
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.githubpages',
+    #'sphinx_autodoc_typehints',  # causes circular error with snecs
+    'sphinx_autodoc_annotation',
+    #'sphinx_git',  # causes CI to fail with git error code 128
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -57,9 +59,8 @@ templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-#
 # source_suffix = ['.rst', '.md']
-source_suffix = '.rst', '.txt'
+source_suffix = ['.rst'] # , '.txt'
 
 # The master toctree document.
 master_doc = 'index'
@@ -85,22 +86,26 @@ pygments_style = 'sphinx'
 # Else, today_fmt is used as the format for a strftime call.
 today_fmt = '%d %b %y at %H:%M'
 
+# A boolean that decides whether module names are prepended to all object names (for object types where a “module” of
+# some kind is defined), e.g. for py:function directives. Default is True.
+add_module_names = False
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'classic'
+html_theme = 'sphinx_rtd_theme'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
+# https://sphinx-rtd-theme.readthedocs.io/en/latest/configuring.html
 # html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -121,111 +126,113 @@ htmlhelp_basename = 'NotQuiteParadisedoc'
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'NotQuiteParadise.tex', 'NotQuiteParadise Documentation',
-     'Snayff', 'manual'),
-]
-
-
-# -- Options for manual page output ------------------------------------------
-
-# One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'notquiteparadise', 'NotQuiteParadise Documentation',
-     [author], 1)
-]
-
-
-# -- Options for Texinfo output ----------------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, 'NotQuiteParadise', 'NotQuiteParadise Documentation',
-     author, 'NotQuiteParadise', 'A game about dreams.',
-     '???'),
-]
-
-
-# -- Options for Epub output -------------------------------------------------
-
-# Bibliographic Dublin Core info.
-epub_title = project
-
-# The unique identifier of the text. This can be a ISBN number
-# or the project homepage.
+# latex_elements = {
+#     # The paper size ('letterpaper' or 'a4paper').
+#     #
+#     # 'papersize': 'letterpaper',
 #
-# epub_identifier = ''
-
-# A unique identification for the text.
+#     # The font size ('10pt', '11pt' or '12pt').
+#     #
+#     # 'pointsize': '10pt',
 #
-# epub_uid = ''
-
-# A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
+#     # Additional stuff for the LaTeX preamble.
+#     #
+#     # 'preamble': '',
+#
+#     # Latex figure (float) alignment
+#     #
+#     # 'figure_align': 'htbp',
+# }
+#
+# # Grouping the document tree into LaTeX files. List of tuples
+# # (source start file, target name, title,
+# #  author, documentclass [howto, manual, or own class]).
+# latex_documents = [
+#     (master_doc, 'NotQuiteParadise.tex', 'NotQuiteParadise Documentation',
+#      'Snayff', 'manual'),
+# ]
+#
+#
+# # -- Options for manual page output ------------------------------------------
+#
+# # One entry per manual page. List of tuples
+# # (source start file, name, description, authors, manual section).
+# # man_pages = [
+# #     (master_doc, 'notquiteparadise', 'NotQuiteParadise Documentation',
+# #      [author], 1)
+# # ]
+#
+#
+# # -- Options for Texinfo output ----------------------------------------------
+#
+# # Grouping the document tree into Texinfo files. List of tuples
+# # (source start file, target name, title, author,
+# #  dir menu entry, description, category)
+# texinfo_documents = [
+#     (master_doc, 'NotQuiteParadise', 'NotQuiteParadise Documentation',
+#      author, 'NotQuiteParadise', 'A game about dreams.',
+#      '???'),
+# ]
+#
+#
+# # -- Options for Epub output -------------------------------------------------
+#
+# # Bibliographic Dublin Core info.
+# epub_title = project
+#
+# # The unique identifier of the text. This can be a ISBN number
+# # or the project homepage.
+# #
+# # epub_identifier = ''
+#
+# # A unique identification for the text.
+# #
+# # epub_uid = ''
+#
+# # A list of files that should not be packed into the epub file.
+# epub_exclude_files = ['search.html']
 
 
 # -- Extension configuration -------------------------------------------------
 
-# -- Options for intersphinx extension ---------------------------------------
+# -- sphinx.ext.intersphinx  ---------------------------------------
 
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {
+    'https://docs.python.org/3/': None,
+    'https://numpy.org/doc/stable/': None,
+    'https://snecs.slavfox.space/' : None,
+    'https://pygame-gui.readthedocs.io/en/latest/': None,
+    'https://www.pygame.org/docs/' : None,
+}
 
-# -- Options for todo extension ----------------------------------------------
+# -- sphinx.ext.todo ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-# -- Napoleon ----------------------------------------------------------------
-# Napoleon settings
-napoleon_google_docstring = True
-napoleon_numpy_docstring = False
-napoleon_include_init_with_doc = True
-napoleon_include_private_with_doc = True
-napoleon_include_special_with_doc = True
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = False
-napoleon_use_param = True
-napoleon_use_rtype = True
 
-# -- Autodoc ----------------------------------------------------------------
+# -- sphinx.ext.autdoc ----------------------------------------------------------------
 # Auiodoc settings
 autodoc_default_options = {
     'members': True,
     'member-order': 'bysource',
     'undoc-members': True,
     'show-inheritance': True,
-    'private-members': True
+    'private-members': True,  # Dont set to False. There is a bug that causes the build to break.
 }
 autoclass_content = "both"
 
 # -- sphinx-autodoc-typehints ---------------------------------------------------
 always_document_param_types = True
-# set_type_checking_flag = True  # N.B. enabling breaks managers
-# typehints_document_rtype  = True # N.B. enabling breaks managers
+set_type_checking_flag = True
+typehints_document_rtype  = True
+
+# -- sphinx.ext.autosectionlabel ---------------------------------------------------
+# True to prefix each section label with the name of the document it is in, followed by a colon. For example, index:Introduction for a section called Introduction that appears in document index.rst. Useful for avoiding ambiguity when the same section heading appears in different documents.
+# autosectionlabel_prefix_document
+
+# If set, autosectionlabel chooses the sections for labeling by its depth. For example, when set 1 to autosectionlabel_maxdepth, labels are generated only for top level sections, and deeper sections are not labeled. It defaults to None (disabled).
+autosectionlabel_maxdepth = 2
+
+# -- sphinx.ext.viewcode ---------------------------------------------------
+viewcode_follow_imported_members = True

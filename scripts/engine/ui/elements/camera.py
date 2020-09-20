@@ -13,13 +13,7 @@ from pygame_gui.elements import UIButton, UIImage, UIPanel
 
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (
-    TILE_SIZE,
-    DirectionType,
-    EventType,
-    RenderLayer,
-    UIElement,
-)
+from scripts.engine.core.constants import TILE_SIZE, DirectionType, EventType, RenderLayer, UIElement
 from scripts.engine.utility import clamp, convert_tile_string_to_xy
 from scripts.engine.world_objects.tile import Tile
 

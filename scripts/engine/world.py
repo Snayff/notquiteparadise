@@ -3,16 +3,7 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    List,
-    Optional,
-    Tuple,
-    Type,
-    TypeVar,
-    cast,
-)
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 import pygame
@@ -60,13 +51,8 @@ from scripts.engine.core.constants import (
     TravelMethod,
     TravelMethodType,
 )
-from scripts.engine.core.definitions import (
-    ActorData,
-    ProjectileData,
-    TraitSpritePathsData,
-    TraitSpritesData,
-)
 from scripts.engine.core.data import store
+from scripts.engine.core.definitions import ActorData, ProjectileData, TraitSpritePathsData, TraitSpritesData
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
@@ -436,12 +422,6 @@ def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
 def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
     """
     Use a* pathfinding to get a direction from one entity to another
-    Args:
-        start_pos ():
-        target_pos ():
-
-    Returns:
-
     """
     # FIXME - update to use EC
     pass

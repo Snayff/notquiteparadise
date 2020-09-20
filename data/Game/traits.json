@@ -17,12 +17,12 @@
         "skullduggery": 0,
         "sprite_paths": {
             "__dataclass__": "TraitSpritePathsData",
-            "idle": "assets/actor/homeland/soft_tops_idle.png",
-            "attack": "assets/actor/homeland/soft_tops_attack.png",
-            "hit": "assets/actor/homeland/soft_tops_hit.png",
-            "dead": "assets/actor/homeland/soft_tops_dead.png",
-            "icon": "assets/actor/homeland/soft_tops_idle.png",
-            "move": "assets/actor/homeland/soft_tops_move.png"
+            "idle": "actor/homeland/soft_tops_idle.png",
+            "attack": "actor/homeland/soft_tops_attack.png",
+            "hit": "actor/homeland/soft_tops_hit.png",
+            "dead": "actor/homeland/soft_tops_dead.png",
+            "icon": "actor/homeland/soft_tops_idle.png",
+            "move": "actor/homeland/soft_tops_move.png"
         },
         "vigour": 1
     },
@@ -44,12 +44,12 @@
         "skullduggery": 0,
         "sprite_paths": {
             "__dataclass__": "TraitSpritePathsData",
-            "idle": "assets/actor/people/goblynn_idle.png",
-            "attack": "assets/actor/people/goblynn_attack.png",
-            "hit": "assets/actor/people/goblynn_hit.png",
-            "dead": "assets/actor/people/goblynn_dead.png",
-            "icon": "assets/actor/people/goblynn_icon.png",
-            "move": "assets/actor/homeland/goblynn_move.png"
+            "idle": "actor/people/goblynn_idle.png",
+            "attack": "actor/people/goblynn_attack.png",
+            "hit": "actor/people/goblynn_hit.png",
+            "dead": "actor/people/goblynn_dead.png",
+            "icon": "actor/people/goblynn_icon.png",
+            "move": "actor/homeland/goblynn_move.png"
         },
         "vigour": 0
     },
@@ -71,12 +71,12 @@
         "skullduggery": 2,
         "sprite_paths": {
             "__dataclass__": "TraitSpritePathsData",
-            "idle": "assets/actor/people/shoom_idle.png",
-            "attack": "assets/actor/people/shoom_attack.png",
-            "hit": "assets/actor/people/shoom_hit.png",
-            "dead": "assets/actor/people/shoom_dead.png",
-            "icon": "assets/actor/people/shoom_icon.png",
-            "move": "assets/actor/people/shoom_move.png"
+            "idle": "actor/people/shoom_idle.png",
+            "attack": "actor/people/shoom_attack.png",
+            "hit": "actor/people/shoom_hit.png",
+            "dead": "actor/people/shoom_dead.png",
+            "icon": "actor/people/shoom_icon.png",
+            "move": "actor/people/shoom_move.png"
         },
         "vigour": 0
     },
@@ -98,12 +98,12 @@
         "skullduggery": 4,
         "sprite_paths": {
             "__dataclass__": "TraitSpritePathsData",
-            "idle": "assets/actor/savvy/fungechist_idle.png",
-            "attack": "assets/actor/savvy/fungechist_attack.png",
-            "hit": "assets/actor/savvy/fungechist_hit.png",
-            "dead": "assets/actor/savvy/fungechist_dead.png",
-            "icon": "assets/actor/savvy/fungechist_idle.png",
-            "move": "assets/actor/savvy/fungechist_move.png"
+            "idle": "actor/savvy/fungechist_idle.png",
+            "attack": "actor/savvy/fungechist_attack.png",
+            "hit": "actor/savvy/fungechist_hit.png",
+            "dead": "actor/savvy/fungechist_dead.png",
+            "icon": "actor/savvy/fungechist_idle.png",
+            "move": "actor/savvy/fungechist_move.png"
         },
         "vigour": -1
     },
@@ -126,12 +126,12 @@
         "skullduggery": 1,
         "sprite_paths": {
             "__dataclass__": "TraitSpritePathsData",
-            "idle": "assets/actor/savvy/dandy_idle.png",
-            "attack": "assets/actor/savvy/dandy_attack.png",
-            "hit": "assets/actor/savvy/dandy_hit.png",
-            "dead": "assets/actor/savvy/dandy_dead.png",
-            "icon": "assets/actor/savvy/dandy_idle.png",
-            "move": "assets/actor/savvy/dandy_move.png"
+            "idle": "actor/savvy/dandy_idle.png",
+            "attack": "actor/savvy/dandy_attack.png",
+            "hit": "actor/savvy/dandy_hit.png",
+            "dead": "actor/savvy/dandy_dead.png",
+            "icon": "actor/savvy/dandy_idle.png",
+            "move": "actor/savvy/dandy_move.png"
         },
         "vigour": -1
     },
@@ -153,12 +153,12 @@
         "skullduggery": 1,
         "sprite_paths": {
             "__dataclass__": "TraitSpritePathsData",
-            "idle": "assets/actor/npc/training_dummy_idle.png",
-            "attack": "assets/actor/npc/training_dummy_idle.png",
-            "hit": "assets/actor/npc/training_dummy_idle.png",
-            "dead": "assets/actor/npc/training_dummy_idle.png",
-            "icon": "assets/actor/npc/training_dummy_idle.png",
-            "move": "assets/actor/npc/training_dummy_idle.png"
+            "idle": "actor/npc/training_dummy_idle.png",
+            "attack": "actor/npc/training_dummy_idle.png",
+            "hit": "actor/npc/training_dummy_idle.png",
+            "dead": "actor/npc/training_dummy_idle.png",
+            "icon": "actor/npc/training_dummy_idle.png",
+            "move": "actor/npc/training_dummy_idle.png"
         },
         "vigour": 1
     }
