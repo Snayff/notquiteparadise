@@ -115,7 +115,7 @@ def _load_traits_data():
 
 
 def _load_base_stat_primary_data():
-    with open(DATA_PATH + "/game/base_stats_primary.json") as file:
+    with open(DATA_PATH + "game/base_stats_primary.json") as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
 
     global BASE_STATS_PRIMARY
