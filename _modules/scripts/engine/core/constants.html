@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.122.0
+                0.123.0
               </div>
             
           
@@ -189,7 +189,7 @@
 
 <span class="c1">######################## TOP LEVEL CONSTANTS ######################################</span>
 
-<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.122.0&quot;</span>  <span class="c1"># DONT FORGET TO UPDATE SPHINX VERSION</span>
+<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.123.0&quot;</span>  <span class="c1"># DONT FORGET TO UPDATE SPHINX VERSION</span>
 
 <span class="n">MAX_SKILLS</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">MAX_SAVES</span> <span class="o">=</span> <span class="mi">1</span>
@@ -200,14 +200,12 @@
 <span class="n">SKILL_BUTTON_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
 <span class="n">INFINITE</span> <span class="o">=</span> <span class="mi">999</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;!!!!!!!!! CWD: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1">######################## PATHS ######################################</span>
 <span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
     <span class="c1"># to move up from docs and handle being in Ubuntu in CI</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">))</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;!!!!!!!! PATH: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>  <span class="s2">&quot;data/&quot;</span><span class="p">)</span>
 <span class="n">ASSET_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;assets/&quot;</span><span class="p">)</span>
