@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING
 
 from scripts.engine import library, utility, world
 from scripts.engine.core.constants import (
-    CURRENT_WORKING_DIRECTORY,
     MAX_SAVES,
     SAVE_PATH,
     VERSION,
@@ -95,7 +94,7 @@ def save_game():
     _SAVE = {}
 
     # get the info needed
-    full_save_path = CURRENT_WORKING_DIRECTORY + SAVE_PATH
+    full_save_path = SAVE_PATH
     save = {}
 
     # add data to dict

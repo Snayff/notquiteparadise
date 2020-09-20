@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import os
+import pygame
+
 from types import SimpleNamespace
 from typing import NewType, Tuple
 
-import pygame
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
-VERSION = "0.121.0"  # DONT FORGET TO UPDATE SPHINX VERSION
+VERSION = "0.123.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 
 MAX_SKILLS = 6
 MAX_SAVES = 1
@@ -21,15 +22,15 @@ INFINITE = 999
 
 ######################## PATHS ######################################
 if "GENERATING_SPHINX_DOCS" in os.environ:
-    prefix = "../"
+    # to move up from docs and handle being in Ubuntu in CI
+    path = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 else:
-    prefix = ""
+    path = os.path.abspath(os.getcwd())
 
-DATA_PATH = prefix + "data/"
-ASSET_PATH = prefix + "assets/"
-CURRENT_WORKING_DIRECTORY = os.getcwd() + "/"
-IMAGE_NOT_FOUND_PATH = ASSET_PATH + "image_not_found.png"
-SAVE_PATH = DATA_PATH + "saves/"
+DATA_PATH = os.path.join(path,  "data/")
+ASSET_PATH = os.path.join(path, "assets/")
+IMAGE_NOT_FOUND_PATH = os.path.join(ASSET_PATH, "image_not_found.png")
+SAVE_PATH = os.path.join(DATA_PATH, "saves/")
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of
