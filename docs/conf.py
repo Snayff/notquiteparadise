@@ -51,7 +51,7 @@ extensions = [
     'sphinx.ext.githubpages',
     #'sphinx_autodoc_typehints',  # causes circular error with snecs
     'sphinx_autodoc_annotation',
-    'sphinx_git',
+    #'sphinx_git',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
