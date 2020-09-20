@@ -19,10 +19,14 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Use cache
+      - name: Locate Pip Cache
+        id: pip-cache
+        run: echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: ~\AppData\Local\pip\Cache
+          path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
           restore-keys: ${{ runner.os }}-pip-
 
@@ -40,7 +44,7 @@ jobs:
           sphinx-apidoc -o ./docs .
           cd docs
           sphinx-build -a -E --keep-going . _build
-          
+
       - name: Deploy Docs
         uses: peaceiris/actions-gh-pages@v3
         with:
