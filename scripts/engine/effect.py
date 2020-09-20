@@ -1,20 +1,14 @@
 from __future__ import annotations
 
 import logging
+
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
 
 from snecs.typedefs import EntityID
 
 from scripts.engine import utility, world
-from scripts.engine.component import (
-    Aesthetic,
-    Afflictions,
-    Blocking,
-    Knowledge,
-    Position,
-    Resources,
-)
+from scripts.engine.component import Aesthetic, Afflictions, Blocking, Knowledge, Position, Resources
 from scripts.engine.core.constants import (
     AfflictionTrigger,
     AfflictionTriggerType,

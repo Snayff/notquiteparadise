@@ -13,8 +13,8 @@
         "chance_of_spawning_wall": 0,
         "max_neighbouring_walls_in_room": 0,
         "sprite_paths": {
-            "floor": "assets/world/placeholder/_test.png",
-            "wall": "assets/world/placeholder/_testWall.png"
+            "floor": "assets/world/floor.png",
+            "wall": "assets/world/wall.png"
         },
         "actors": {}
     },
@@ -32,8 +32,8 @@
         "chance_of_spawning_wall": 0.45,
         "max_neighbouring_walls_in_room": 4,
         "sprite_paths": {
-            "floor": "assets/world/placeholder/_test.png",
-            "wall": "assets/world/placeholder/_testWall.png"
+            "floor": "assets/world/floor.png",
+            "wall": "assets/world/wall.png"
         },
         "actors": {
             "training_dummy": 0.9

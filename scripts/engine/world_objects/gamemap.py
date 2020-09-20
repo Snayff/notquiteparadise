@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import random
+
 from typing import Any, Dict, List, Tuple
 
 from scripts.engine import dungen

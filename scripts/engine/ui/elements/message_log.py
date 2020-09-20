@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import logging
+
 from typing import TYPE_CHECKING
 
 import pygame
+
 from pygame.math import Vector2
 from pygame.rect import Rect
 from pygame_gui.elements import UIPanel, UITextBox

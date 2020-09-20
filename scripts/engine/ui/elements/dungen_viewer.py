@@ -4,6 +4,7 @@ from typing import Iterator, Optional
 
 import pygame
 import pygame_gui
+
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface

@@ -1,14 +1,15 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
-import gc
-import timeit
 import cProfile
 import datetime
+import gc
 import io
 import logging
 import pstats
 import time
+import timeit
+
+from typing import TYPE_CHECKING
 
 from scripts.engine import state
 from scripts.engine.core.constants import INFINITE, VERSION

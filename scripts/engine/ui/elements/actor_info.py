@@ -1,28 +1,18 @@
 from __future__ import annotations
 
 import logging
+
 from typing import List, Optional, Tuple, Union, cast
 
 import pygame
+
 from pygame_gui import UI_BUTTON_PRESSED, UIManager
 from pygame_gui.core import UIElement as PygameUiElement
-from pygame_gui.elements import (
-    UIImage,
-    UIPanel,
-    UITextBox,
-    UIVerticalScrollBar,
-    UIWindow,
-)
+from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIVerticalScrollBar, UIWindow
 from snecs.typedefs import EntityID
 
 from scripts.engine import state, utility, world
-from scripts.engine.component import (
-    Aesthetic,
-    Afflictions,
-    Identity,
-    Resources,
-    Traits,
-)
+from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.core.constants import (
     GAP_SIZE,
     ICON_SIZE,

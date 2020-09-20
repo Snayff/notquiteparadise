@@ -1,20 +1,16 @@
 from __future__ import annotations
 
 import logging
+
 from typing import TYPE_CHECKING, Union
 
 import pygame
+
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement as PygameGuiElement
 
 from scripts.engine import debug, library, utility
-from scripts.engine.core.constants import (
-    GAP_SIZE,
-    MAX_SKILLS,
-    SKILL_BUTTON_SIZE,
-    UIElement,
-    UIElementType,
-)
+from scripts.engine.core.constants import GAP_SIZE, MAX_SKILLS, SKILL_BUTTON_SIZE, UIElement, UIElementType
 from scripts.engine.ui.elements.actor_info import ActorInfo
 from scripts.engine.ui.elements.camera import Camera
 from scripts.engine.ui.elements.data_editor import DataEditor

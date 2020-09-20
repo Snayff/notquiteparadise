@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts.engine.ui.elements.dungen_viewer &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.121.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/core.store.html">Store</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>scripts.engine.ui.elements.dungen_viewer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for scripts.engine.ui.elements.dungen_viewer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">pygame_gui</span>
+<span class="kn">from</span> <span class="nn">pygame.constants</span> <span class="kn">import</span> <span class="n">SRCALPHA</span>
+<span class="kn">from</span> <span class="nn">pygame.rect</span> <span class="kn">import</span> <span class="n">Rect</span>
+<span class="kn">from</span> <span class="nn">pygame.surface</span> <span class="kn">import</span> <span class="n">Surface</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UIPanel</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">RenderLayer</span><span class="p">,</span> <span class="n">TileCategory</span>
+
+
+<div class="viewcode-block" id="DungenViewer"><a class="viewcode-back" href="../../../../../nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer">[docs]</a><span class="k">class</span> <span class="nc">DungenViewer</span><span class="p">(</span><span class="n">UIPanel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    UI component that renders the construction of a dungeon as a separate window, step by step.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">:</span> <span class="n">Rect</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">pygame_gui</span><span class="o">.</span><span class="n">ui_manager</span><span class="o">.</span><span class="n">UIManager</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">RenderLayer</span><span class="o">.</span><span class="n">UI_WINDOW</span><span class="p">,</span> <span class="n">manager</span><span class="p">,</span> <span class="n">element_id</span><span class="o">=</span><span class="s2">&quot;dungeon_dev_view&quot;</span><span class="p">)</span>
+
+        <span class="c1"># config of view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep_per_room</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="mf">20.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category_colours</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">TileCategory</span><span class="o">.</span><span class="n">FLOOR</span><span class="p">:</span> <span class="p">(</span><span class="mi">214</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">191</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="n">TileCategory</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span> <span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="n">TileCategory</span><span class="o">.</span><span class="n">ACTOR</span><span class="p">:</span> <span class="p">(</span><span class="mi">235</span><span class="p">,</span> <span class="mi">172</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="n">TileCategory</span><span class="o">.</span><span class="n">PLAYER</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="n">TileCategory</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># create the image to hold the rooms</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+        <span class="n">blank_surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">((</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">UIImage</span><span class="p">(</span><span class="n">relative_rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rect</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">image_surface</span><span class="o">=</span><span class="n">blank_surf</span><span class="p">,</span> <span class="n">manager</span><span class="o">=</span><span class="n">manager</span><span class="p">,</span>
+                               <span class="n">container</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_container</span><span class="p">(),</span> <span class="n">object_id</span><span class="o">=</span><span class="s2">&quot;#roomview&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterator</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DungenViewer.update"><a class="viewcode-back" href="../../../../../nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update based on current state and data. Run every frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">+=</span> <span class="n">time_delta</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">sleep_per_room</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_update_view</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="DungenViewer.handle_events"><a class="viewcode-back" href="../../../../../nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer.handle_events">[docs]</a>    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle events created by this UI widget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DungenViewer._update_view"><a class="viewcode-back" href="../../../../../nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._update_view">[docs]</a>    <span class="k">def</span> <span class="nf">_update_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the view of the dungeon</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">[</span><span class="n">x</span><span class="p">])):</span>
+                <span class="n">tile_cat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">tile_cat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_colours</span><span class="p">:</span>
+                    <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_colours</span><span class="p">[</span><span class="n">tile_cat</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">category_colours</span><span class="p">[</span><span class="n">TileCategory</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">]</span>
+                <span class="n">surf</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">colour</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="n">Rect</span><span class="p">((</span><span class="n">x</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">scale</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_image</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DungenViewer.refresh_viewer"><a class="viewcode-back" href="../../../../../nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer.refresh_viewer">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_viewer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the data for the viewer and runs generation again.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">map_name</span> <span class="o">=</span> <span class="s2">&quot;cave&quot;</span>
+
+        <span class="c1"># set the scale so map always fits on screen</span>
+        <span class="n">map_data</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">MAPS</span><span class="p">[</span><span class="n">map_name</span><span class="p">]</span>
+        <span class="n">x_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">//</span> <span class="n">map_data</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">y_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">//</span> <span class="n">map_data</span><span class="o">.</span><span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x_scale</span><span class="p">,</span> <span class="n">y_scale</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">dungen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">dungen</span><span class="o">.</span><span class="n">generate_steps</span><span class="p">(</span><span class="n">map_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DungenViewer._reset"><a class="viewcode-back" href="../../../../../nqp/ui.elements.html#scripts.engine.ui.elements.dungen_viewer.DungenViewer._reset">[docs]</a>    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the state of the dungeon view object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sleep_per_room</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

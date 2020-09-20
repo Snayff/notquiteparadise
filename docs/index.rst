@@ -47,11 +47,3 @@ Last updated on |today| for version |version|.
     :caption: Changelog
 
     changelog
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

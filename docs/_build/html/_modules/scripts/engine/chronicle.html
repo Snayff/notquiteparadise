@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts.engine.chronicle &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.121.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.widgets.html">UI Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Changelog</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>scripts.engine.chronicle</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for scripts.engine.chronicle</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Knowledge</span><span class="p">,</span> <span class="n">Tracked</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">INFINITE</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+
+<span class="c1">############ ACTIONS ##################</span>
+
+<div class="viewcode-block" id="rebuild_turn_queue"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.rebuild_turn_queue">[docs]</a><span class="k">def</span> <span class="nf">rebuild_turn_queue</span><span class="p">(</span><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Build a new turn queue that includes all timed entities. entity_to_exclude is one that should not be added</span>
+<span class="sd">    to the queue. Usually used in relation to deletion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building a new turn queue...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># create a turn queue from the entities list</span>
+    <span class="n">new_queue</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">tracked</span><span class="p">,</span> <span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Tracked</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">entity_to_exclude</span><span class="p">:</span>
+            <span class="n">tracked</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Tracked</span><span class="p">,</span> <span class="n">tracked</span><span class="p">)</span>
+            <span class="n">new_queue</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">tracked</span><span class="o">.</span><span class="n">time_spent</span>
+    <span class="n">set_turn_queue</span><span class="p">(</span><span class="n">new_queue</span><span class="p">)</span>
+
+    <span class="c1"># get the next entity in the queue and set as new turn holder</span>
+    <span class="n">set_turn_holder</span><span class="p">(</span><span class="n">_get_next_entity_in_queue</span><span class="p">())</span>
+
+    <span class="c1"># log result</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; New queue built: </span><span class="si">{</span><span class="n">_get_pretty_queue</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="next_turn"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.next_turn">[docs]</a><span class="k">def</span> <span class="nf">next_turn</span><span class="p">(</span><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EntityID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.</span>
+<span class="sd">    Update game state to reflect turn holder.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Moving to the next turn...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># update the queue</span>
+    <span class="n">rebuild_turn_queue</span><span class="p">(</span><span class="n">entity_to_exclude</span><span class="p">)</span>
+
+    <span class="c1"># get next entity in queue</span>
+    <span class="n">turn_holder</span> <span class="o">=</span> <span class="n">get_turn_holder</span><span class="p">()</span>
+
+    <span class="c1"># whats the difference between current time and when they last acted?</span>
+    <span class="n">tracked</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_entitys_component</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">,</span> <span class="n">Tracked</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tracked</span><span class="p">:</span>
+        <span class="n">next_entity_time</span> <span class="o">=</span> <span class="n">tracked</span><span class="o">.</span><span class="n">time_spent</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">next_entity_time</span> <span class="o">=</span> <span class="n">get_time_of_last_turn</span><span class="p">()</span>  <span class="c1"># turn holder should always have Tracked but handle if they dont</span>
+
+    <span class="n">time_progressed</span> <span class="o">=</span> <span class="n">next_entity_time</span> <span class="o">-</span> <span class="n">get_time_of_last_turn</span><span class="p">()</span>
+
+    <span class="c1"># add the difference to the time</span>
+    <span class="n">_add_time</span><span class="p">(</span><span class="n">time_progressed</span><span class="p">)</span>
+    <span class="n">set_time_of_last_turn</span><span class="p">(</span><span class="n">get_time</span><span class="p">())</span>
+
+    <span class="c1"># check if we need to set new round</span>
+    <span class="k">if</span> <span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span> <span class="o">&gt;=</span> <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">:</span>
+        <span class="n">next_round</span><span class="p">(</span><span class="n">time_progressed</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">set_time_in_round</span><span class="p">(</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span>
+
+    <span class="c1"># log new turn holder</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">turn_holder</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; Current time is </span><span class="si">{</span><span class="n">get_time</span><span class="p">()</span><span class="si">}</span><span class="s2">. We are </span><span class="si">{</span><span class="n">get_time_in_round</span><span class="p">()</span><span class="si">}</span><span class="s2"> TU`s into round </span><span class="si">{</span><span class="n">get_round</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-&gt; &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; is now the turn holder.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="next_round"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.next_round">[docs]</a><span class="k">def</span> <span class="nf">next_round</span><span class="p">(</span><span class="n">time_progressed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Move to the next round and trigger end of round events, like cooldown and affliction reduction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">## skill cooldowns</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">knowledge</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Knowledge</span><span class="p">]):</span>
+        <span class="n">knowledge</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Knowledge</span><span class="p">,</span> <span class="n">knowledge</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">skill_name</span> <span class="ow">in</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">skill_names</span><span class="p">:</span>
+            <span class="n">skill_cooldown</span> <span class="o">=</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">cooldowns</span><span class="p">[</span><span class="n">skill_name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">skill_cooldown</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">knowledge</span><span class="o">.</span><span class="n">set_skill_cooldown</span><span class="p">(</span><span class="n">skill_name</span><span class="p">,</span> <span class="n">skill_cooldown</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">## affliction durations</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="p">(</span><span class="n">afflictions</span><span class="p">,</span> <span class="p">)</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">get_components</span><span class="p">([</span><span class="n">Afflictions</span><span class="p">]):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">afflictions</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">)</span>  <span class="c1"># handle mypy type error</span>
+        <span class="k">for</span> <span class="n">affliction</span> <span class="ow">in</span> <span class="n">afflictions</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># expired</span>
+                <span class="n">world</span><span class="o">.</span><span class="n">remove_affliction</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">affliction</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">!=</span> <span class="n">INFINITE</span><span class="p">:</span>
+                <span class="c1"># reduce duration if not infinite</span>
+                <span class="n">affliction</span><span class="o">.</span><span class="n">duration</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="c1">## time management</span>
+    <span class="c1"># add progressed time and minus time_in_round to keep the remaining time</span>
+    <span class="n">set_time_in_round</span><span class="p">((</span><span class="n">get_time_in_round</span><span class="p">()</span> <span class="o">+</span> <span class="n">time_progressed</span><span class="p">)</span> <span class="o">-</span>
+                      <span class="n">library</span><span class="o">.</span><span class="n">GAME_CONFIG</span><span class="o">.</span><span class="n">default_values</span><span class="o">.</span><span class="n">time_per_round</span><span class="p">)</span>
+
+    <span class="c1"># increment rounds</span>
+    <span class="n">_increment_round_number</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;It is now round </span><span class="si">{</span><span class="n">get_round</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="_increment_round_number"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle._increment_round_number">[docs]</a><span class="k">def</span> <span class="nf">_increment_round_number</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Increment the round by 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">round</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="_add_time"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle._add_time">[docs]</a><span class="k">def</span> <span class="nf">_add_time</span><span class="p">(</span><span class="n">time_to_add</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add to the current time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">time</span> <span class="o">+=</span> <span class="n">time_to_add</span></div>
+
+
+<span class="c1">############# GET ###################</span>
+
+<div class="viewcode-block" id="get_turn_holder"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.get_turn_holder">[docs]</a><span class="k">def</span> <span class="nf">get_turn_holder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the entity who has the current turn</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">turn_holder</span></div>
+
+
+<div class="viewcode-block" id="get_turn_queue"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.get_turn_queue">[docs]</a><span class="k">def</span> <span class="nf">get_turn_queue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the turn queue</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">turn_queue</span></div>
+
+
+<div class="viewcode-block" id="get_time_in_round"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.get_time_in_round">[docs]</a><span class="k">def</span> <span class="nf">get_time_in_round</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get current time in the current round</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># FIXME - returning negative value for projectiles</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">round_time</span></div>
+
+
+<div class="viewcode-block" id="get_time"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.get_time">[docs]</a><span class="k">def</span> <span class="nf">get_time</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the current time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">time</span></div>
+
+
+<div class="viewcode-block" id="get_time_of_last_turn"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.get_time_of_last_turn">[docs]</a><span class="k">def</span> <span class="nf">get_time_of_last_turn</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the time of the last turn</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">time_of_last_turn</span></div>
+
+
+<div class="viewcode-block" id="get_round"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.get_round">[docs]</a><span class="k">def</span> <span class="nf">get_round</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the current round</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">round</span></div>
+
+
+<div class="viewcode-block" id="_get_pretty_queue"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle._get_pretty_queue">[docs]</a><span class="k">def</span> <span class="nf">_get_pretty_queue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entity</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">get_turn_queue</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+        <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">queue</span></div>
+
+
+<div class="viewcode-block" id="_get_next_entity_in_queue"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle._get_next_entity_in_queue">[docs]</a><span class="k">def</span> <span class="nf">_get_next_entity_in_queue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EntityID</span><span class="p">:</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">get_turn_queue</span><span class="p">()</span>
+    <span class="n">next_entity</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">next_entity</span></div>
+
+
+<span class="c1">############# SET ###################</span>
+
+<div class="viewcode-block" id="set_turn_holder"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.set_turn_holder">[docs]</a><span class="k">def</span> <span class="nf">set_turn_holder</span><span class="p">(</span><span class="n">active_entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the entity who has the current turn</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">turn_holder</span> <span class="o">=</span> <span class="n">active_entity</span></div>
+
+
+<div class="viewcode-block" id="set_time_in_round"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.set_time_in_round">[docs]</a><span class="k">def</span> <span class="nf">set_time_in_round</span><span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set current time in the current round</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">round_time</span> <span class="o">=</span> <span class="n">time</span></div>
+
+
+<div class="viewcode-block" id="set_turn_queue"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.set_turn_queue">[docs]</a><span class="k">def</span> <span class="nf">set_turn_queue</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">EntityID</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the turn queue</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">turn_queue</span> <span class="o">=</span> <span class="n">queue</span></div>
+
+
+<div class="viewcode-block" id="set_time_of_last_turn"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.set_time_of_last_turn">[docs]</a><span class="k">def</span> <span class="nf">set_time_of_last_turn</span><span class="p">(</span><span class="n">time</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the time of the last turn</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">time_of_last_turn</span> <span class="o">=</span> <span class="n">time</span></div>
+
+
+<div class="viewcode-block" id="end_turn"><a class="viewcode-back" href="../../../nqp/chronicle.html#scripts.engine.chronicle.end_turn">[docs]</a><span class="k">def</span> <span class="nf">end_turn</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Spend an entities time, progress time, move to next acting entity in queue.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="n">get_turn_holder</span><span class="p">():</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">spend_time</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">time_spent</span><span class="p">)</span>
+        <span class="n">next_turn</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tried to end </span><span class="si">{</span><span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;s turn but they&#39;re not turn holder.&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

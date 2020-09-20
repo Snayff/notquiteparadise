@@ -3,7 +3,7 @@
         "__dataclass__": "SkillData",
         "cooldown": 2,
         "description": "A simple attack.",
-        "icon_path": "assets/skills/placeholder/basic_attack.png",
+        "icon_path": "assets/skills/basic_attack.png",
         "name": "basic attack",
         "key": "basic_attack",
         "resource_cost": 10,
@@ -30,8 +30,8 @@
             "__dataclass__": "ProjectileData",
             "sprite_paths": {
                 "__dataclass__": "TraitSpritePathsData",
-                "idle": "assets/skills/placeholder/projectile.png",
-                "move": "assets/skills/placeholder/projectile.png"
+                "idle": "assets/skills/projectile.png",
+                "move": "assets/skills/projectile.png"
             },
             "speed": "average",
             "travel_method": "standard",
@@ -44,7 +44,7 @@
         "__dataclass__": "SkillData",
         "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
-        "icon_path": "placeholder/lunge.png",
+        "icon_path": "assets/skills/lunge.png",
         "name": "lunge",
         "key": "lunge",
         "resource_cost": 15,
@@ -69,7 +69,7 @@
         "__dataclass__": "SkillData",
         "cooldown": 1,
         "description": "Launch a projectile that deals damage to enemies in the specified direction.",
-        "icon_path": "placeholder/lunge.png",
+        "icon_path": "none",
         "name": "tar and feather",
         "key": "tar_and_feather",
         "resource_cost": 15,
@@ -92,8 +92,8 @@
             "__dataclass__": "ProjectileData",
             "sprite_paths": {
                 "__dataclass__": "TraitSpritePathsData",
-                "idle": "assets/skills/placeholder/projectile.png",
-                "move": "assets/skills/placeholder/projectile.png"
+                "idle": "assets/skills/projectile.png",
+                "move": "assets/skills/projectile.png"
             },
             "speed": "average",
             "travel_method": "standard",

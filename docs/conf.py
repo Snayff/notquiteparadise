@@ -47,9 +47,9 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinx.ext.autosectionlabel',
+    #sphinx.ext.autosectionlabel',
     'sphinx.ext.githubpages',
-    'sphinx_autodoc_typehints',
+    #'sphinx_autodoc_typehints',
     'sphinx_autodoc_annotation',
     'sphinx_git',
 ]
@@ -191,28 +191,27 @@ epub_exclude_files = ['search.html']
 
 # -- Extension configuration -------------------------------------------------
 
-# -- Options for intersphinx extension ---------------------------------------
+# -- sphinx.ext.intersphinx  ---------------------------------------
 
-# Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'https://docs.python.org/3/': None,
     'https://numpy.org/doc/stable/': None,
 }
 
-# -- Options for todo extension ----------------------------------------------
+# -- sphinx.ext.todo ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
 
-# -- Autodoc ----------------------------------------------------------------
+# -- sphinx.ext.autdoc ----------------------------------------------------------------
 # Auiodoc settings
 autodoc_default_options = {
     'members': True,
     'member-order': 'bysource',
     'undoc-members': True,
     'show-inheritance': True,
-    'private-members': True
+    'private-members': True,  # Dont set to False. There is a bug that causes the build to break.
 }
 autoclass_content = "both"
 
@@ -229,4 +228,4 @@ typehints_document_rtype  = True
 autosectionlabel_maxdepth = 4
 
 # -- sphinx.ext.viewcode ---------------------------------------------------
-viewcode_follow_imported_members = True#
+viewcode_follow_imported_members = True

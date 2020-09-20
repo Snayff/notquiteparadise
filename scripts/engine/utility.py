@@ -1,16 +1,12 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 import logging
+
+from typing import TYPE_CHECKING
+
 import pygame
 
-from scripts.engine.core.constants import (
-    IMAGE_NOT_FOUND_PATH,
-    TILE_SIZE,
-    DirectionType,
-    Shape,
-    ShapeType,
-)
+from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, ShapeType
 
 if TYPE_CHECKING:
     from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
@@ -343,4 +339,3 @@ def convert_direction_to_name(direction: DirectionType) -> str:
         direction_name = "centre"
 
     return direction_name
-
