@@ -10,15 +10,12 @@
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+# documentation root, use os.path.abspath to make it absolute.
 
 import os
 import sys
-
 os.environ["GENERATING_SPHINX_DOCS"] = ""
-
-sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir))) # go up a folder to access scripts
 
 
 # -- Project information -----------------------------------------------------
@@ -28,7 +25,7 @@ copyright = '2019-2020, Josh Snaith'
 author = 'Josh Snaith (Snayff)'
 
 # The short X.Y version
-version = "0.122.0"
+version = "0.123.0"
 
 
 # -- General configuration ---------------------------------------------------

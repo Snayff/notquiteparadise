@@ -35,15 +35,14 @@ jobs:
           poetry config virtualenvs.create false
           poetry install --no-root
 
-      - name: build-docs
+      - name: Build Docs
         run: |
           sphinx-apidoc -o ./docs .
           cd docs
           sphinx-build -a -E --keep-going . _build
           
-      - name: deploy-docs
-        uses: JamesIves/github-pages-deploy-action@3.5.7
+      - name: Deploy Docs
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: docs/_build
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build
