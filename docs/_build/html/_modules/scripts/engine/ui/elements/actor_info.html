@@ -185,29 +185,17 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
-
 <span class="kn">import</span> <span class="nn">pygame</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">from</span> <span class="nn">pygame_gui</span> <span class="kn">import</span> <span class="n">UI_BUTTON_PRESSED</span><span class="p">,</span> <span class="n">UIManager</span>
 <span class="kn">from</span> <span class="nn">pygame_gui.core</span> <span class="kn">import</span> <span class="n">UIElement</span> <span class="k">as</span> <span class="n">PygameUiElement</span>
-<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">UIImage</span><span class="p">,</span>
-    <span class="n">UIPanel</span><span class="p">,</span>
-    <span class="n">UITextBox</span><span class="p">,</span>
-    <span class="n">UIVerticalScrollBar</span><span class="p">,</span>
-    <span class="n">UIWindow</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pygame_gui.elements</span> <span class="kn">import</span> <span class="n">UIImage</span><span class="p">,</span> <span class="n">UITextBox</span><span class="p">,</span> <span class="n">UIVerticalScrollBar</span><span class="p">,</span> <span class="n">UIWindow</span>
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
-
-<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">state</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
-<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Aesthetic</span><span class="p">,</span>
-    <span class="n">Afflictions</span><span class="p">,</span>
-    <span class="n">Identity</span><span class="p">,</span>
-    <span class="n">Resources</span><span class="p">,</span>
-    <span class="n">Traits</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.component</span> <span class="kn">import</span> <span class="n">Aesthetic</span><span class="p">,</span> <span class="n">Afflictions</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">Resources</span><span class="p">,</span> <span class="n">Traits</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ASSET_PATH</span><span class="p">,</span>
     <span class="n">GAP_SIZE</span><span class="p">,</span>
     <span class="n">ICON_SIZE</span><span class="p">,</span>
     <span class="n">INFINITE</span><span class="p">,</span>
@@ -316,7 +304,7 @@
         <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
 
             <span class="n">info</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">section_break_image</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="s2">&quot;assets/ui/menu_window_n_repeat.png&quot;</span><span class="p">,</span>
+            <span class="n">section_break_image</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span><span class="n">ASSET_PATH</span> <span class="o">+</span> <span class="s2">&quot;ui/menu_window_n_repeat.png&quot;</span><span class="p">,</span>
                                                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scrollbar_width</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
 
             <span class="c1"># get aesthetic</span>

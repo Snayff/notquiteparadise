@@ -1,19 +1,17 @@
 from __future__ import annotations
 
 import logging
-
-from typing import List, Optional, Tuple, Union, cast
-
 import pygame
 
+from typing import List, Optional, Tuple, Union, cast
 from pygame_gui import UI_BUTTON_PRESSED, UIManager
 from pygame_gui.core import UIElement as PygameUiElement
-from pygame_gui.elements import UIImage, UIPanel, UITextBox, UIVerticalScrollBar, UIWindow
+from pygame_gui.elements import UIImage, UITextBox, UIVerticalScrollBar, UIWindow
 from snecs.typedefs import EntityID
-
-from scripts.engine import state, utility, world
+from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Identity, Resources, Traits
 from scripts.engine.core.constants import (
+    ASSET_PATH,
     GAP_SIZE,
     ICON_SIZE,
     INFINITE,
@@ -122,7 +120,7 @@ class ActorInfo(UIWindow):
         if entity:
 
             info: List[Tuple[str, Union[str, pygame.Surface]]] = []
-            section_break_image = utility.get_image("assets/ui/menu_window_n_repeat.png",
+            section_break_image = utility.get_image(ASSET_PATH + "ui/menu_window_n_repeat.png",
                                                     (self.rect.width - self.scrollbar_width, 13))
 
             # get aesthetic

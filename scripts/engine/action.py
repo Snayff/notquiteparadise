@@ -4,9 +4,7 @@ import logging
 
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Dict, Iterator, Type
-
 from snecs.typedefs import EntityID
-
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     AfflictionCategoryType,

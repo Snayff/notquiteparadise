@@ -3,7 +3,7 @@
         "__dataclass__": "SkillData",
         "cooldown": 2,
         "description": "A simple attack.",
-        "icon_path": "assets/skills/basic_attack.png",
+        "icon_path": "skills/basic_attack.png",
         "name": "basic attack",
         "key": "basic_attack",
         "resource_cost": 10,
@@ -30,8 +30,8 @@
             "__dataclass__": "ProjectileData",
             "sprite_paths": {
                 "__dataclass__": "TraitSpritePathsData",
-                "idle": "assets/skills/projectile.png",
-                "move": "assets/skills/projectile.png"
+                "idle": "skills/projectile.png",
+                "move": "skills/projectile.png"
             },
             "speed": "average",
             "travel_method": "standard",
@@ -44,7 +44,7 @@
         "__dataclass__": "SkillData",
         "cooldown": 4,
         "description": "Launch forwards and hit the enemy in your way.",
-        "icon_path": "assets/skills/lunge.png",
+        "icon_path": "skills/lunge.png",
         "name": "lunge",
         "key": "lunge",
         "resource_cost": 15,
@@ -92,8 +92,8 @@
             "__dataclass__": "ProjectileData",
             "sprite_paths": {
                 "__dataclass__": "TraitSpritePathsData",
-                "idle": "assets/skills/projectile.png",
-                "move": "assets/skills/projectile.png"
+                "idle": "skills/projectile.png",
+                "move": "skills/projectile.png"
             },
             "speed": "average",
             "travel_method": "standard",

@@ -62,6 +62,4 @@ All planned features and known issues are held on the [NQP Issue Tracker].
 
 
 ## License
-Code: [MIT](https://tldrlegal.com/license/mit-license)
-
-Art: [Restrictive, custom](assets/asset_license.txt) 
+[MIT](https://tldrlegal.com/license/mit-license)

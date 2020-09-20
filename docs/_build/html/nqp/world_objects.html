@@ -116,7 +116,7 @@
 <p class="caption"><span class="caption-text">World Objects API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">World Objects</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#combat-stats">Combat Stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.world_objects.combat_stats">Combat Stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.world_objects.gamemap">Gamemap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scripts.engine.world_objects.tile">Tile</a></li>
 </ul>
@@ -192,8 +192,105 @@
             
   <div class="section" id="world-objects">
 <h1>World Objects<a class="headerlink" href="#world-objects" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="combat-stats">
-<h2>Combat Stats<a class="headerlink" href="#combat-stats" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.engine.world_objects.combat_stats">
+<span id="combat-stats"></span><h2>Combat Stats<a class="headerlink" href="#module-scripts.engine.world_objects.combat_stats" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats">
+<em class="property">class </em><code class="sig-prename descclassname">scripts.engine.world_objects.combat_stats.</code><code class="sig-name descname">CombatStats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/world_objects/combat_stats.html#CombatStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Object to hold all of an entities stats. Derived from various components.</p>
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.vigour">
+<em class="property">property </em><code class="sig-name descname">vigour</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.vigour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Influences healthiness. Never below 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.clout">
+<em class="property">property </em><code class="sig-name descname">clout</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.clout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Influences forceful things. Never below 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.skullduggery">
+<em class="property">property </em><code class="sig-name descname">skullduggery</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.skullduggery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Influences sneaky things. Never below 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.bustle">
+<em class="property">property </em><code class="sig-name descname">bustle</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.bustle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Influences speedy things. Never below 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.exactitude">
+<em class="property">property </em><code class="sig-name descname">exactitude</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.exactitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Influences preciseness. Never below 1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.max_health">
+<em class="property">property </em><code class="sig-name descname">max_health</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.max_health" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total damage an entity can take before death.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.max_stamina">
+<em class="property">property </em><code class="sig-name descname">max_stamina</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.max_stamina" title="Permalink to this definition">¶</a></dt>
+<dd><p>an entities energy to take actions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.accuracy">
+<em class="property">property </em><code class="sig-name descname">accuracy</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>an entities likelihood to hit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.resist_burn">
+<em class="property">property </em><code class="sig-name descname">resist_burn</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.resist_burn" title="Permalink to this definition">¶</a></dt>
+<dd><p>an entities resistance to burn damage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.resist_cold">
+<em class="property">property </em><code class="sig-name descname">resist_cold</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.resist_cold" title="Permalink to this definition">¶</a></dt>
+<dd><p>an entities resistance to cold damage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.resist_chemical">
+<em class="property">property </em><code class="sig-name descname">resist_chemical</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.resist_chemical" title="Permalink to this definition">¶</a></dt>
+<dd><p>an entities resistance to chemical damage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.resist_astral">
+<em class="property">property </em><code class="sig-name descname">resist_astral</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.resist_astral" title="Permalink to this definition">¶</a></dt>
+<dd><p>an entities resistance to astral damage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.resist_mundane">
+<em class="property">property </em><code class="sig-name descname">resist_mundane</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.resist_mundane" title="Permalink to this definition">¶</a></dt>
+<dd><p>an entities resistance to mundane damage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.sight_range">
+<em class="property">property </em><code class="sig-name descname">sight_range</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.sight_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Highest value among base contributions then modifiers applied. Cant be less than 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.combat_stats.CombatStats.rush">
+<em class="property">property </em><code class="sig-name descname">rush</code><a class="headerlink" href="#scripts.engine.world_objects.combat_stats.CombatStats.rush" title="Permalink to this definition">¶</a></dt>
+<dd><p>how quickly an entity does things. Reduce time cost of actions.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine.world_objects.gamemap">
 <span id="gamemap"></span><h2>Gamemap<a class="headerlink" href="#module-scripts.engine.world_objects.gamemap" title="Permalink to this headline">¶</a></h2>

@@ -3,7 +3,7 @@ Welcome to Not Quite Paradise's Engine documentation!
 Last updated on |today| for version |version|.
 
 ..  toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :caption: Core API
 
     nqp/core.constants
@@ -29,7 +29,7 @@ Last updated on |today| for version |version|.
     nqp/world
 
 ..  toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :caption: UI API
 
     nqp/ui.elements
@@ -43,15 +43,7 @@ Last updated on |today| for version |version|.
 
 
 ..  toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :caption: Changelog
 
     changelog
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

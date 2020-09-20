@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import logging
-
-from typing import TYPE_CHECKING
-
 import pygame
 
-from scripts.engine.core.constants import IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, ShapeType
+from typing import TYPE_CHECKING
+from scripts.engine.core.constants import ASSET_PATH, IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, ShapeType
 
 if TYPE_CHECKING:
     from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
@@ -34,7 +32,7 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
         else:
             try:
                 # try and get the image provided
-                image = pygame.image.load(img_path).convert_alpha()
+                image = pygame.image.load(ASSET_PATH + img_path).convert_alpha()
 
             except:
                 image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()

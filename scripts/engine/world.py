@@ -424,12 +424,6 @@ def get_direct_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
 def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]):
     """
     Use a* pathfinding to get a direction from one entity to another
-    Args:
-        start_pos ():
-        target_pos ():
-
-    Returns:
-
     """
     # FIXME - update to use EC
     pass
