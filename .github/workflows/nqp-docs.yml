@@ -44,7 +44,7 @@ jobs:
           sphinx-apidoc -o ./docs .
           cd docs
           sphinx-build -a -E --keep-going . _build
-          
+
       - name: Deploy Docs
         uses: peaceiris/actions-gh-pages@v3
         with:
