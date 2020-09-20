@@ -201,7 +201,7 @@
 
 <span class="c1">######################## PATHS ######################################</span>
 <span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;../&quot;</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="s2">&quot;../&quot;</span><span class="p">)</span>  <span class="c1"># to move up from docs and handle being in Ubuntu in CI</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
