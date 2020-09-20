@@ -1,78 +1,502 @@
 
-<!DOCTYPE html>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>scripts.engine.core.definitions &#8212; NotQuiteParadise 0.103.0 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts.engine.core.definitions &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
     
-    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
     
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">scripts.engine.core.definitions</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.121.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/core.store.html">Store</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/ui.widgets.html">UI Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>scripts.engine.core.definitions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for scripts.engine.core.definitions</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
+
 <span class="kn">from</span> <span class="nn">snecs.typedefs</span> <span class="kn">import</span> <span class="n">EntityID</span>
 
-<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">AfflictionCategoryType</span><span class="p">,</span> <span class="n">DamageTypeType</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">DirectionType</span><span class="p">,</span> \
-    <span class="n">EffectType</span><span class="p">,</span> \
-    <span class="n">EffectTypeType</span><span class="p">,</span> <span class="n">PrimaryStatType</span><span class="p">,</span> <span class="n">ProjectileExpiry</span><span class="p">,</span> <span class="n">ProjectileExpiryType</span><span class="p">,</span> <span class="n">ProjectileSpeed</span><span class="p">,</span> <span class="n">ProjectileSpeedType</span><span class="p">,</span> \
-    <span class="n">Resource</span><span class="p">,</span> <span class="n">ResourceType</span><span class="p">,</span> <span class="n">SecondaryStatType</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">ShapeType</span><span class="p">,</span> <span class="n">TargetTag</span><span class="p">,</span> <span class="n">TargetTagType</span><span class="p">,</span> <span class="n">TargetingMethod</span><span class="p">,</span> \
-    <span class="n">TargetingMethodType</span><span class="p">,</span> <span class="n">TerrainCollision</span><span class="p">,</span> <span class="n">TerrainCollisionType</span><span class="p">,</span> <span class="n">TravelMethod</span><span class="p">,</span> <span class="n">TravelMethodType</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AfflictionCategory</span><span class="p">,</span>
+    <span class="n">AfflictionCategoryType</span><span class="p">,</span>
+    <span class="n">AfflictionTriggerType</span><span class="p">,</span>
+    <span class="n">Direction</span><span class="p">,</span>
+    <span class="n">DirectionType</span><span class="p">,</span>
+    <span class="n">EffectType</span><span class="p">,</span>
+    <span class="n">EffectTypeType</span><span class="p">,</span>
+    <span class="n">PrimaryStatType</span><span class="p">,</span>
+    <span class="n">ProjectileExpiry</span><span class="p">,</span>
+    <span class="n">ProjectileExpiryType</span><span class="p">,</span>
+    <span class="n">ProjectileSpeed</span><span class="p">,</span>
+    <span class="n">ProjectileSpeedType</span><span class="p">,</span>
+    <span class="n">RenderLayer</span><span class="p">,</span>
+    <span class="n">RenderLayerType</span><span class="p">,</span>
+    <span class="n">Resource</span><span class="p">,</span>
+    <span class="n">ResourceType</span><span class="p">,</span>
+    <span class="n">SecondaryStatType</span><span class="p">,</span>
+    <span class="n">Shape</span><span class="p">,</span>
+    <span class="n">ShapeType</span><span class="p">,</span>
+    <span class="n">TargetingMethod</span><span class="p">,</span>
+    <span class="n">TargetingMethodType</span><span class="p">,</span>
+    <span class="n">TargetTagType</span><span class="p">,</span>
+    <span class="n">TerrainCollision</span><span class="p">,</span>
+    <span class="n">TerrainCollisionType</span><span class="p">,</span>
+    <span class="n">TraitGroup</span><span class="p">,</span>
+    <span class="n">TraitGroupType</span><span class="p">,</span>
+    <span class="n">TravelMethod</span><span class="p">,</span>
+    <span class="n">TravelMethodType</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">scripts.engine.core.extend_json</span> <span class="kn">import</span> <span class="n">register_dataclass_with_json</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">scripts.nqp.actions.skills</span> <span class="kn">import</span> <span class="n">Skill</span>
+    <span class="kn">from</span> <span class="nn">scripts.engine.action</span> <span class="kn">import</span> <span class="n">Skill</span>
 
 
-<span class="c1">######################### SKILLS ##################################</span>
+<span class="c1">######################### Aesthetics ##################################</span>
 
-<div class="viewcode-block" id="SkillData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.SkillData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="TraitSpritesData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TraitSpritesData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Possible sprites.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">icon</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">idle</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">attack</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">hit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">dead</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">move</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TraitSpritePathsData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TraitSpritePathsData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Possible sprites paths for a trait</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">render_order</span><span class="p">:</span> <span class="n">RenderLayerType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">RenderLayer</span><span class="o">.</span><span class="n">BOTTOM</span><span class="p">)</span>
+    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">idle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">attack</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">hit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">dead</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">move</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1">##################### ACTORS #################################</span>
+
+<div class="viewcode-block" id="ActorData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ActorData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ActorData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for an actor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">possible_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">position_offsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">trait_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">behaviour_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span></div>
+
+
+<div class="viewcode-block" id="TraitData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.TraitData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TraitData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for a trait.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">group</span><span class="p">:</span> <span class="n">TraitGroupType</span> <span class="o">=</span> <span class="n">TraitGroup</span><span class="o">.</span><span class="n">NPC</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">TraitSpritePathsData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TraitSpritePathsData</span><span class="p">)</span>
+    <span class="n">sight_range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">vigour</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">clout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">skullduggery</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bustle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">exactitude</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">known_skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">permanent_afflictions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># update sprite path render order</span>
+        <span class="c1"># FIXME - this should be handled prior to coming to the dataclass</span>
+        <span class="n">trait_render_order</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;npc&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;people&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;homeland&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&quot;savvy&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite_paths</span><span class="o">.</span><span class="n">render_order</span> <span class="o">=</span> <span class="n">trait_render_order</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseStatData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.BaseStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseStatData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class to contain primary and secondary stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">primary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">secondary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePrimaryStatData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.BasePrimaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BasePrimaryStatData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for primary  stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">primary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="BaseSecondaryStatData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.BaseSecondaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BaseSecondaryStatData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for secondary stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">secondary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SecondaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">vigour_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">clout_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">skullduggery_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bustle_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">exactitude_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<span class="c1">####################### NON-ACTOR ENTITIES ######################</span>
+
+<div class="viewcode-block" id="ProjectileData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ProjectileData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for a projectile</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># what created it?</span>
+    <span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">EntityID</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># this will be overwritten or will break, but need defaults to allow passing</span>
+    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">skill_instance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Skill</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+
+    <span class="c1"># who are we targeting?</span>
+    <span class="n">required_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># where are we going?</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># what does it look like?</span>
+    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">TraitSpritePathsData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">TraitSpritePathsData</span><span class="p">)</span>
+
+    <span class="c1"># how does it travel?</span>
+    <span class="n">speed</span><span class="p">:</span> <span class="n">ProjectileSpeedType</span> <span class="o">=</span> <span class="n">ProjectileSpeed</span><span class="o">.</span><span class="n">SLOW</span>
+    <span class="n">travel_method</span><span class="p">:</span> <span class="n">TravelMethodType</span> <span class="o">=</span> <span class="n">TravelMethod</span><span class="o">.</span><span class="n">STANDARD</span>
+    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># how does it interact?</span>
+    <span class="n">terrain_collision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TerrainCollisionType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">expiry_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileExpiryType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ProjectileSpeed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="AspectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AspectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AspectData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for an aspects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">sprite</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<span class="c1">################### GODS ###################################################</span>
+
+<div class="viewcode-block" id="AttitudeData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AttitudeData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AttitudeData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for  a god&#39;s attitude</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">opinion_change</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="InterventionData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.InterventionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">InterventionData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for a god&#39;s intervention</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">skill_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">required_opinion</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="GodData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.GodData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">GodData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for a god</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+    <span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">interventions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">InterventionData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+
+<span class="c1">####################### WORLD ######################</span>
+
+<div class="viewcode-block" id="MapData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.MapData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MapData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for a Map, specifically for generation. A map is a collection of rooms. Defines the rooms on</span>
+<span class="sd">    the map, how they are placed and joined up (tunnels).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+
+    <span class="c1"># map size</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># map gen rules</span>
+    <span class="n">min_rooms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_rooms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_tunnel_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">min_path_distance_for_shortcut</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_room_entrances</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">extra_entrance_chance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">chance_of_tunnel_winding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">rooms</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># room name, room weight</span>
+
+    <span class="c1"># aesthetics</span>
+    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># sprite name, sprite path</span></div>
+
+
+<div class="viewcode-block" id="RoomConceptData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.RoomConceptData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">RoomConceptData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data class for a RoomConcept. Only used in generation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+
+    <span class="c1"># sizes</span>
+    <span class="n">min_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">min_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># room parameters</span>
+    <span class="n">design</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">max_neighbouring_walls_in_room</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">chance_of_spawning_wall</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1"># actor generation</span>
+    <span class="n">actors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># actor name, actor weight</span>
+    <span class="n">min_actors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">max_actors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># aesthetics</span>
+    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># sprite name, sprite path</span></div>
+
+
+<span class="c1">######################### ACTIONS ##################################</span>
+
+<div class="viewcode-block" id="SkillData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.SkillData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SkillData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Data class for a skill. Used by the library to load from json.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO - rename relevant sections to indicate they are base values</span>
     <span class="c1"># how do we know it?</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
 
     <span class="c1"># when do we use it?</span>
     <span class="n">required_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
@@ -93,48 +517,39 @@
 
     <span class="c1"># projectile info</span>
     <span class="n">uses_projectile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">projectile_speed</span><span class="p">:</span> <span class="n">ProjectileSpeedType</span> <span class="o">=</span> <span class="n">ProjectileSpeed</span><span class="o">.</span><span class="n">SLOW</span>
-    <span class="n">travel_method</span><span class="p">:</span> <span class="n">TravelMethodType</span> <span class="o">=</span> <span class="n">TravelMethod</span><span class="o">.</span><span class="n">STANDARD</span>
-    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">terrain_collision</span><span class="p">:</span> <span class="n">TerrainCollisionType</span> <span class="o">=</span> <span class="n">TerrainCollision</span><span class="o">.</span><span class="n">FIZZLE</span>
-    <span class="n">expiry_type</span><span class="p">:</span> <span class="n">ProjectileExpiryType</span> <span class="o">=</span> <span class="n">ProjectileExpiry</span><span class="o">.</span><span class="n">FIZZLE</span></div>
+    <span class="n">projectile_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># convert directions to their constant values</span>
+        <span class="n">_mapped_directions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">_direction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_directions</span><span class="p">:</span>
+            <span class="n">_mapped_directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">Direction</span><span class="p">,</span> <span class="n">_direction</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_directions</span> <span class="o">=</span> <span class="n">_mapped_directions</span></div>
 
 
-<div class="viewcode-block" id="ProjectileData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.ProjectileData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ProjectileData</span><span class="p">:</span>
+<div class="viewcode-block" id="AfflictionData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.AfflictionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">AfflictionData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for a projectile</span>
+<span class="sd">    Data class for an Afflictions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># what created it?</span>
-    <span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span>
-    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="c1"># what does it look like?</span>
-    <span class="n">sprite</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-
-    <span class="c1"># who are we targeting?</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">icon_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+    <span class="n">category</span><span class="p">:</span> <span class="n">AfflictionCategoryType</span> <span class="o">=</span> <span class="n">AfflictionCategory</span><span class="o">.</span><span class="n">BANE</span>
+    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
+    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">required_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-
-    <span class="c1"># how does it travel?</span>
-    <span class="n">direction</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DirectionType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">speed</span><span class="p">:</span> <span class="n">ProjectileSpeedType</span> <span class="o">=</span> <span class="n">ProjectileSpeed</span><span class="o">.</span><span class="n">SLOW</span>
-    <span class="n">travel_method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TravelMethodType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="c1"># how does it interact?</span>
-    <span class="n">terrain_collision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TerrainCollisionType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">expiry_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProjectileExpiryType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+    <span class="n">identity_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectTypeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">triggers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AfflictionTriggerType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
 
 
-<span class="c1">####################### EFFECTS ######################################</span>
-
-<div class="viewcode-block" id="EffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.EffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="EffectData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.EffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EffectData</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">EffectData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base data class for an effect.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -155,314 +570,110 @@
     <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="c1"># what next?</span>
-    <span class="n">success_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">EffectData</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">fail_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">EffectData</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+    <span class="n">success_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">fail_effects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ApplyAfflictionEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.ApplyAfflictionEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<span class="c1">################### CONFIG ###################################################</span>
+
+<div class="viewcode-block" id="Dimensions"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.Dimensions">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ApplyAfflictionEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the Apply Afflictions effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">APPLY_AFFLICTION</span>
-
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">affliction_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span></div>
+<span class="k">class</span> <span class="nc">Dimensions</span><span class="p">:</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span></div>
 
 
-<div class="viewcode-block" id="DamageEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.DamageEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="VideoConfigData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.VideoConfigData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">DamageEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the Damage effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">DAMAGE</span>
-
-    <span class="n">damage</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">damage_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DamageTypeType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">mod_stat</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">mod_amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+<span class="k">class</span> <span class="nc">VideoConfigData</span><span class="p">:</span>
+    <span class="n">base_window</span><span class="p">:</span> <span class="n">Dimensions</span>
+    <span class="n">desired_window</span><span class="p">:</span> <span class="n">Dimensions</span>
+    <span class="n">fps_limit</span><span class="p">:</span> <span class="nb">int</span></div>
 
 
-<div class="viewcode-block" id="AffectStatEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.AffectStatEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="HitInfoData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.HitInfoData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AffectStatEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the Affect Stat effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">AFFECT_STAT</span>
-
-    <span class="n">stat_to_affect</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">affect_stat_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
+<span class="k">class</span> <span class="nc">HitInfoData</span><span class="p">:</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">modifier</span><span class="p">:</span> <span class="nb">float</span></div>
 
 
-<div class="viewcode-block" id="AddAspectEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.AddAspectEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="HitTypeData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.HitTypeData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AddAspectEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the Add Aspect effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">ADD_ASPECT</span>
-
-    <span class="n">aspect_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>  <span class="c1"># TODO - confirm if we want aspect name or key</span></div>
+<span class="k">class</span> <span class="nc">HitTypeData</span><span class="p">:</span>
+    <span class="n">graze</span><span class="p">:</span> <span class="n">HitInfoData</span>
+    <span class="n">hit</span><span class="p">:</span> <span class="n">HitInfoData</span>
+    <span class="n">crit</span><span class="p">:</span> <span class="n">HitInfoData</span></div>
 
 
-<div class="viewcode-block" id="RemoveAspectEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.RemoveAspectEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="BaseValueData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.BaseValueData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">RemoveAspectEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the Remove Aspect effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">REMOVE_ASPECT</span>
-
-    <span class="n">aspect_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>  <span class="c1"># TODO - confirm if we want aspect name or key</span></div>
+<span class="k">class</span> <span class="nc">BaseValueData</span><span class="p">:</span>
+    <span class="n">move_cost</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">accuracy</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">damage</span><span class="p">:</span> <span class="nb">int</span></div>
 
 
-<div class="viewcode-block" id="UseSkillEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.UseSkillEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="DefaultValueData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.DefaultValueData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">UseSkillEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the  Trigger Skill effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">TRIGGER_SKILL</span>
-
-    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>  <span class="c1"># TODO - confirm if we want skill name or key</span>
-    <span class="n">required_tags</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+<span class="k">class</span> <span class="nc">DefaultValueData</span><span class="p">:</span>
+    <span class="n">time_per_round</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">entity_blocks_sight</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">reduced_effectiveness_multi_tile_modifier</span><span class="p">:</span> <span class="nb">float</span></div>
 
 
-<div class="viewcode-block" id="ActivateSkillEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.ActivateSkillEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
+<div class="viewcode-block" id="GameConfigData"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.definitions.GameConfigData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ActivateSkillEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the  Activate Skill effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">TRIGGER_SKILL</span>
-
-    <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>  <span class="c1"># TODO - confirm if we want skill name or key</span></div>
-
-
-<div class="viewcode-block" id="KillEntityEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.KillEntityEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">KillEntityEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the  Kill Entity effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">KILL</span>
-
-    <span class="c1"># use an init to prevent need to specify default arg</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_entity</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_entity</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="n">target_entity</span></div>
-
-
-<div class="viewcode-block" id="MoveActorEffectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.MoveActorEffectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">MoveActorEffectData</span><span class="p">(</span><span class="n">EffectData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data for the  Activate Skill effect.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">effect_type</span> <span class="o">=</span> <span class="n">EffectType</span><span class="o">.</span><span class="n">MOVE</span>
-
-    <span class="c1"># TODO - likley to need different options to get the direction, e.g. absolute, away, towards</span>
-    <span class="n">move_direction</span><span class="p">:</span> <span class="n">DirectionType</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">CENTRE</span>
-    <span class="c1"># TODO - this needs to be determined at use, between the two affected entities</span>
-    <span class="n">move_amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">move_target</span><span class="p">:</span> <span class="n">EntityID</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># type: ignore</span>
-    <span class="n">allow_bump_attack</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">move_time_cost</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-
-<span class="c1">##################### ACTORS #################################</span>
-
-<div class="viewcode-block" id="BaseStatData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.BaseStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">BaseStatData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class to contain primary and secondary stats</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">primary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BasePrimaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-    <span class="n">secondary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseSecondaryStatData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="BasePrimaryStatData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.BasePrimaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">BasePrimaryStatData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for primary  stats</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">primary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PrimaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-
-<div class="viewcode-block" id="BaseSecondaryStatData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.BaseSecondaryStatData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">BaseSecondaryStatData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for secondary stats</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">secondary_stat_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SecondaryStatType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">base_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">vigour_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">clout_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">skullduggery_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">bustle_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">exactitude_mod</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-
-<div class="viewcode-block" id="CharacteristicSpritesData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.CharacteristicSpritesData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">CharacteristicSpritesData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Possible sprites for a characteristic</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">icon</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">idle</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">attack</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">hit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">dead</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">move</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="CharacteristicSpritePathsData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.CharacteristicSpritePathsData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">CharacteristicSpritePathsData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Possible sprites paths for a characteristic</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">idle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">attack</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">hit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">dead</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">move</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="CharacteristicData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.CharacteristicData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">CharacteristicData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for an aspects</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">CharacteristicSpritePathsData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">CharacteristicSpritePathsData</span><span class="p">)</span>
-    <span class="n">sight_range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">vigour</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">clout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">skullduggery</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">bustle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">exactitude</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">known_skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">permanent_afflictions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="AfflictionData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.AfflictionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span><span class="p">()</span>
-<span class="k">class</span> <span class="nc">AfflictionData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for an Afflictions</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">category</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AfflictionCategoryType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">shape</span><span class="p">:</span> <span class="n">ShapeType</span> <span class="o">=</span> <span class="n">Shape</span><span class="o">.</span><span class="n">TARGET</span>
-    <span class="n">shape_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">required_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">TargetTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span><span class="p">))</span>
-    <span class="n">identity_tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EffectTypeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">EffectType</span><span class="o">.</span><span class="n">DAMAGE</span><span class="p">))</span></div>
-
-
-<span class="c1">########################## WORLD #########################################</span>
-
-<div class="viewcode-block" id="AspectData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.AspectData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AspectData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for an aspects</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">sprite</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">blocks_sight</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">blocks_movement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
-
-
-<span class="c1">#################### GODS ###################################################</span>
-
-<div class="viewcode-block" id="AttitudeData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.AttitudeData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AttitudeData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for  a god&#39;s attitude</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>  <span class="c1"># TODO - standardise what this can be</span>
-    <span class="n">opinion_change</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-
-<div class="viewcode-block" id="InterventionData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.InterventionData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">InterventionData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for a god&#39;s intervention</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">skill_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>  <span class="c1"># TODO - confirm if we want skill key or name</span>
-    <span class="n">required_opinion</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></div>
-
-
-<div class="viewcode-block" id="GodData"><a class="viewcode-back" href="../../../../core.html#scripts.engine.core.definitions.GodData">[docs]</a><span class="nd">@register_dataclass_with_json</span>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">GodData</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Data class for a god</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-    <span class="n">sprite_paths</span><span class="p">:</span> <span class="n">CharacteristicSpritePathsData</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">CharacteristicSpritePathsData</span><span class="p">)</span>
-    <span class="n">attitudes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">AttitudeData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-    <span class="n">interventions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">InterventionData</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+<span class="k">class</span> <span class="nc">GameConfigData</span><span class="p">:</span>
+    <span class="n">hit_types</span><span class="p">:</span> <span class="n">HitTypeData</span>
+    <span class="n">base_values</span><span class="p">:</span> <span class="n">BaseValueData</span>
+    <span class="n">default_values</span><span class="p">:</span> <span class="n">DefaultValueData</span></div>
 </pre></div>
 
-            <div class="clearer"></div>
+           </div>
+           
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">NotQuiteParadise 0.103.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">scripts.engine.core.definitions</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Snayff.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>
