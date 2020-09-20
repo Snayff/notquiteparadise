@@ -40,10 +40,3 @@ Last updated on |today| for version |version|.
     :caption: World Objects API
 
     nqp/world_objects
-
-
-..  toctree::
-    :maxdepth: 2
-    :caption: Changelog
-
-    changelog
