@@ -19,6 +19,8 @@ ICON_SIZE = TILE_SIZE // 2
 GAP_SIZE = 2
 SKILL_BUTTON_SIZE = 64
 INFINITE = 999
+MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
+# TODO - add an active component and then we can look for this (and only update once per turn!)
 
 ######################## PATHS ######################################
 if "GENERATING_SPHINX_DOCS" in os.environ:
@@ -141,7 +143,7 @@ class InputIntent(SimpleNamespace):
 
 
 #################### EXTERNAL, SERIALISED  ###########################################
-# i.e used externally
+# i.e used in the data files
 
 class Direction(SimpleNamespace):
     """

@@ -137,9 +137,6 @@ class MoveActorEffect(Effect):
                     aesthetic.target_draw_x, aesthetic.target_draw_y = (new_x, new_y)
                     aesthetic.current_sprite = aesthetic.sprites.move
 
-                # update fov
-                world.recompute_fov(entity)
-
         if success:
             return self.success_effects + self.success_triggers
         else:

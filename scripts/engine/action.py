@@ -1,29 +1,23 @@
 from __future__ import annotations
 
 import logging
+
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Dict, Iterator, Type
-
 from snecs.typedefs import EntityID
-
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     AfflictionCategoryType,
     AfflictionTriggerType,
-    Direction,
     DirectionType,
     EffectTypeType,
-    Resource,
     ResourceType,
-    Shape,
     ShapeType,
-    TargetingMethod,
     TargetingMethodType,
-    TargetTag,
     TargetTagType,
 )
 from scripts.engine.core.definitions import ProjectileData
-from scripts.engine.effect import Effect, MoveActorEffect
+from scripts.engine.effect import Effect
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
+import time
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
@@ -25,7 +26,7 @@ from scripts.engine.component import (
     IsGod,
     IsPlayer,
     Knowledge,
-    Opinion,
+    LightSource, Opinion,
     Position,
     Resources,
     Tracked,
@@ -134,6 +135,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV(create_fov_map()))
+    components.append(LightSource(3))
     components.append(Tracked(chronicle.get_time()))
 
     # get info from traits
@@ -307,7 +309,8 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
     """
     Create and return a stat object  for an entity.
     """
-    return CombatStats(entity)
+    stats = CombatStats(entity)
+    return stats
 
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
@@ -982,41 +985,6 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
 
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
 
-def recompute_fov(entity: EntityID) -> bool:
-    """
-    Recalculate an entity's FOV
-    """
-    if entity_has_component(entity, FOV) and entity_has_component(entity, Position):
-        # get sight range
-        if entity_has_component(entity, HasCombatStats):
-            stats = create_combat_stats(entity)
-            sight_range = stats.sight_range
-        else:
-            sight_range = 0
-
-        # get the needed components
-        fov = get_entitys_component(entity, FOV)
-        pos = get_entitys_component(entity, Position)
-
-        # compute the fov
-        if fov and pos:
-            transparency = create_fov_map()
-            maps = []
-            for coordinate in pos.coordinates:
-                fov_map = tcod.map.compute_fov(transparency, coordinate, sight_range, fov.light_walls, fov.algorithm)
-                maps.append(fov_map)
-
-            fov.map = maps[0]
-            for m in maps:
-                fov.map |= m
-            # update tiles if it is player
-            if entity == get_player():
-                update_tile_visibility(fov.map)
-
-        return True
-    return False
-
-
 def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
     """
     Remove the resource cost from the using entity
@@ -1207,19 +1175,6 @@ def add_component(entity: EntityID, component: Component):
     Add a component to the entity
     """
     snecs.add_component(entity, component)
-
-
-def update_tile_visibility(fov_map: np.array):
-    """
-    Update the the visibility of the tiles on the came map
-    """
-    gamemap = get_gamemap()
-    width = gamemap.width
-    height = gamemap.height
-
-    for x in range(0, width):
-        for y in range(0, height):
-            gamemap.tiles[x][y].is_visible = bool(fov_map[x][y])  # cast to bool as otherwise is _bool from numpy
 
 
 def judge_action(entity: EntityID, action_name: str):

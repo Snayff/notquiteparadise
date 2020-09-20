@@ -487,3 +487,25 @@ class FOV(RegisteredComponent):
     def deserialize(cls, serialised):
         fov_map = np.array(serialised)
         return FOV(fov_map)
+
+
+class LightSource(RegisteredComponent):
+    """
+    An emitter of light.
+    """
+    def __init__(self, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
+        if not colour:
+            colour = [230, 182, 41, 80]
+        self.radius: int = radius
+        self.colour: Tuple[int, int, int, int] = colour
+
+    def serialize(self):
+        data = {
+            "radius": self.radius,
+            "colour": self.colour
+        }
+        return data
+
+    @classmethod
+    def deserialize(cls, serialised):
+        return LightSource(*serialised)

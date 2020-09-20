@@ -9,6 +9,7 @@ from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE
 from scripts.engine.core.data import store
+from scripts.engine.systems.vision import process_fov, process_tile_visibility
 
 if TYPE_CHECKING:
     from typing import Dict, Tuple, List, Optional
@@ -69,6 +70,11 @@ def next_turn(entity_to_exclude: Optional[EntityID] = None):
         next_round(time_progressed)
     else:
         set_time_in_round(get_time_in_round() + time_progressed)
+
+    # update visibility
+    # TODO - implement scheduling so this doesnt need to be called here
+    process_fov()
+    process_tile_visibility()
 
     # log new turn holder
     name = world.get_name(turn_holder)

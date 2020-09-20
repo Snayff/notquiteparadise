@@ -69,7 +69,7 @@ def refresh_library():
     """
     start_time = time.time()
 
-    if "GENERATING_SPHINX_DOCS" in os.environ:  # when building in CI these fail
+    if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
         _load_traits_data()
         _load_affliction_data()
         _load_aspects_data()
