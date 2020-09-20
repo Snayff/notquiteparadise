@@ -8,7 +8,6 @@ import logging
 import pstats
 import time
 import timeit
-
 from typing import TYPE_CHECKING
 
 from scripts.engine import state

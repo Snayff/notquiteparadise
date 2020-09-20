@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import random
-
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, Iterator, List, Literal
 

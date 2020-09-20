@@ -3,12 +3,10 @@ from __future__ import annotations
 import dataclasses
 import json
 import logging
-
 from typing import TYPE_CHECKING
 
 import pygame
 import pygame_gui
-
 from pygame_gui.core import UIContainer
 from pygame_gui.elements import UIButton, UIDropDownMenu, UILabel, UITextEntryLine, UIWindow
 

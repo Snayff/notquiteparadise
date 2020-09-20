@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
+
 import pygame
 
-from typing import TYPE_CHECKING
 from scripts.engine.core.constants import ASSET_PATH, IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, ShapeType
 
 if TYPE_CHECKING:

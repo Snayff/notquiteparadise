@@ -4,7 +4,6 @@ from dataclasses import asdict
 from typing import TYPE_CHECKING
 
 import numpy as np
-
 from snecs import RegisteredComponent
 
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType

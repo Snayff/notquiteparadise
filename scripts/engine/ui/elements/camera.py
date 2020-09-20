@@ -1,11 +1,9 @@
 import logging
-
 from typing import Iterable, List, Optional, Tuple, cast
 
 import pygame
 import pygame_gui
 import pytweening
-
 from pygame.constants import SRCALPHA
 from pygame.rect import Rect
 from pygame.surface import Surface

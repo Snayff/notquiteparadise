@@ -4,7 +4,6 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, cast
 
 import pygame
-
 from snecs.typedefs import EntityID
 
 from scripts.engine.core.constants import (

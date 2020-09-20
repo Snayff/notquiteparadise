@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-
 from typing import TYPE_CHECKING, Any, Dict
 
 from scripts.engine.core.constants import TILE_SIZE

@@ -5,8 +5,8 @@ import sys
 import traceback
 import pygame
 import snecs
-from snecs.world import default_world
 
+from snecs.world import default_world
 from scripts.engine import chronicle, debug, state, world
 from scripts.engine.component import Position
 from scripts.engine.core.constants import GameState, UIElement

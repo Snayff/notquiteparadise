@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import logging
-
 from typing import TYPE_CHECKING
 
 import pygame
 import pygame_gui
-
 from pygame.rect import Rect
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel

@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import logging
-
 from typing import List, Tuple
 
 import pygame
-
 from pygame_gui import UIManager
 from pygame_gui.core import UIElement
 from pygame_gui.elements import UIImage, UIPanel, UITextBox

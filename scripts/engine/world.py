@@ -3,14 +3,12 @@ from __future__ import annotations
 import dataclasses
 import logging
 import random
-
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
 import pygame
 import snecs
 import tcod.map
-
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 

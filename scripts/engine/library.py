@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 import json
 import logging
 import time
 import pygame
-
+from typing import TYPE_CHECKING
 from scripts.engine.core.constants import DATA_PATH, InputIntent
 from scripts.engine.core.definitions import (
     ActorData,
@@ -13,9 +12,14 @@ from scripts.engine.core.definitions import (
     AspectData,
     BasePrimaryStatData,
     BaseSecondaryStatData,
-    BaseValueData, DefaultValueData, Dimensions, GameConfigData,
+    BaseValueData,
+    DefaultValueData,
+    Dimensions,
+    GameConfigData,
     GodData,
-    HitInfoData, HitTypeData, MapData,
+    HitInfoData,
+    HitTypeData,
+    MapData,
     RoomConceptData,
     SkillData,
     TraitData,
