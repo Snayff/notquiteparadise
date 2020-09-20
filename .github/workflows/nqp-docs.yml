@@ -1,11 +1,11 @@
 name: NQP - Build Docs
 
-on: [push]
-#  workflow_run:
-#    workflows: ["NQP - Run Tests"]
-#    branches: [develop, master]
-#    types:
-#      - completed
+on:
+  workflow_run:
+    workflows: ["NQP - Run Tests"]
+    branches: [develop, master]
+    types:
+      - completed
 
 jobs:
   docs:
@@ -39,7 +39,7 @@ jobs:
         run: |
           sphinx-apidoc -o ./docs .
           cd docs
-          make html
+          sphinx-build -a -E --keep-going . _build
           
       - name: deploy-docs
         uses: JamesIves/github-pages-deploy-action@3.5.7

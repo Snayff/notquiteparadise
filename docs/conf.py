@@ -88,7 +88,7 @@ today_fmt = '%d %b %y at %H:%M'
 
 # A boolean that decides whether module names are prepended to all object names (for object types where a “module” of
 # some kind is defined), e.g. for py:function directives. Default is True.
-add_module_names = True
+add_module_names = False
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -200,6 +200,9 @@ htmlhelp_basename = 'NotQuiteParadisedoc'
 intersphinx_mapping = {
     'https://docs.python.org/3/': None,
     'https://numpy.org/doc/stable/': None,
+    'https://snecs.slavfox.space/' : None,
+    'https://pygame-gui.readthedocs.io/en/latest/': None,
+    'https://www.pygame.org/docs/' : None,
 }
 
 # -- sphinx.ext.todo ----------------------------------------------
@@ -229,7 +232,7 @@ typehints_document_rtype  = True
 # autosectionlabel_prefix_document
 
 # If set, autosectionlabel chooses the sections for labeling by its depth. For example, when set 1 to autosectionlabel_maxdepth, labels are generated only for top level sections, and deeper sections are not labeled. It defaults to None (disabled).
-autosectionlabel_maxdepth = 4
+autosectionlabel_maxdepth = 2
 
 # -- sphinx.ext.viewcode ---------------------------------------------------
 viewcode_follow_imported_members = True
