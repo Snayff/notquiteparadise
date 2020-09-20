@@ -1,11 +1,11 @@
 name: NQP - Build Docs
 
-on:
-  workflow_run:
-    workflows: ["NQP - Run Tests"]
-    branches: [develop, master]
-    types:
-      - completed
+on: [push]
+#  workflow_run:
+#    workflows: ["NQP - Run Tests"]
+#    branches: [develop, master]
+#    types:
+#      - completed
 
 jobs:
   docs:
