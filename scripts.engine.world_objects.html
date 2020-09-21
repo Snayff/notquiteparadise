@@ -187,8 +187,41 @@
 <div class="section" id="scripts-engine-world-objects-combat-stats-module">
 <h2>scripts.engine.world_objects.combat_stats module<a class="headerlink" href="#scripts-engine-world-objects-combat-stats-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="scripts-engine-world-objects-gamemap-module">
-<h2>scripts.engine.world_objects.gamemap module<a class="headerlink" href="#scripts-engine-world-objects-gamemap-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.engine.world_objects.gamemap">
+<span id="scripts-engine-world-objects-gamemap-module"></span><h2>scripts.engine.world_objects.gamemap module<a class="headerlink" href="#module-scripts.engine.world_objects.gamemap" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.world_objects.gamemap.Gamemap">
+<em class="property">class </em><code class="sig-name descname">Gamemap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">map_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">seed</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/gamemap.html#Gamemap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.gamemap.Gamemap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Holds tiles for a map. Handles generation of the map and placement of the entities. Fills map with floors on
+init.</p>
+<dl class="py method">
+<dt id="scripts.engine.world_objects.gamemap.Gamemap.generate_new_map">
+<code class="sig-name descname">generate_new_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">player_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData" title="scripts.engine.core.definitions.ActorData">scripts.engine.core.definitions.ActorData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/gamemap.html#Gamemap.generate_new_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.gamemap.Gamemap.generate_new_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the map for the current game map. Creates tiles. Saves the values directly to the Gamemap.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.gamemap.Gamemap.dump">
+<code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/gamemap.html#Gamemap.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.gamemap.Gamemap.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps the dungeon tree into a file
+:param path: File path</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.gamemap.Gamemap.serialise">
+<code class="sig-name descname">serialise</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/world_objects/gamemap.html#Gamemap.serialise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.gamemap.Gamemap.serialise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialise the game map to dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="scripts.engine.world_objects.gamemap.Gamemap.deserialise">
+<em class="property">classmethod </em><code class="sig-name descname">deserialise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serialised</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world_objects/gamemap.html#Gamemap.deserialise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world_objects.gamemap.Gamemap.deserialise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the details from the serialised data back into the Gamemap.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine.world_objects.tile">
 <span id="scripts-engine-world-objects-tile-module"></span><h2>scripts.engine.world_objects.tile module<a class="headerlink" href="#module-scripts.engine.world_objects.tile" title="Permalink to this headline">¶</a></h2>

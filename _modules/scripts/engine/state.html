@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts.engine.state &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.123.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.widgets.html">UI Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>scripts.engine.state</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for scripts.engine.state</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">library</span><span class="p">,</span> <span class="n">utility</span><span class="p">,</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MAX_SAVES</span><span class="p">,</span>
+    <span class="n">SAVE_PATH</span><span class="p">,</span>
+    <span class="n">VERSION</span><span class="p">,</span>
+    <span class="n">GameState</span><span class="p">,</span>
+    <span class="n">GameStateType</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.data</span> <span class="kn">import</span> <span class="n">store</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="n">_SAVE</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1">################### GET ##############################</span>
+
+
+<div class="viewcode-block" id="get_previous"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.get_previous">[docs]</a><span class="k">def</span> <span class="nf">get_previous</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameStateType</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the previous game state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">previous_game_state</span></div>
+
+
+<div class="viewcode-block" id="get_internal_clock"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.get_internal_clock">[docs]</a><span class="k">def</span> <span class="nf">get_internal_clock</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the internal clock</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">internal_clock</span></div>
+
+
+<div class="viewcode-block" id="get_active_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.get_active_skill">[docs]</a><span class="k">def</span> <span class="nf">get_active_skill</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the active skill. Used for targeting mode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">active_skill</span></div>
+
+
+<div class="viewcode-block" id="get_current"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.get_current">[docs]</a><span class="k">def</span> <span class="nf">get_current</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GameStateType</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the current game state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_state</span></div>
+
+
+<span class="c1">################### SET ##############################</span>
+
+<div class="viewcode-block" id="set_active_skill"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.set_active_skill">[docs]</a><span class="k">def</span> <span class="nf">set_active_skill</span><span class="p">(</span><span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the active skill. Used for targeting mode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">active_skill</span> <span class="o">=</span> <span class="n">skill_name</span></div>
+
+
+<span class="c1">################### MANAGING STATE ###################</span>
+
+<div class="viewcode-block" id="update_clock"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.update_clock">[docs]</a><span class="k">def</span> <span class="nf">update_clock</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tick the internal clock. Manages the frame rate. Returns delta time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">store</span><span class="o">.</span><span class="n">internal_clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">VIDEO_CONFIG</span><span class="o">.</span><span class="n">fps_limit</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span></div>
+
+
+<div class="viewcode-block" id="set_new"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.set_new">[docs]</a><span class="k">def</span> <span class="nf">set_new</span><span class="p">(</span><span class="n">new_game_state</span><span class="p">:</span> <span class="n">GameStateType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the current game state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">previous_game_state</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">current_game_state</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">current_game_state</span> <span class="o">=</span> <span class="n">new_game_state</span>
+
+    <span class="n">prev_name</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">value_to_member</span><span class="p">(</span><span class="n">store</span><span class="o">.</span><span class="n">previous_game_state</span><span class="p">,</span> <span class="n">GameState</span><span class="p">)</span>
+    <span class="n">curr_name</span> <span class="o">=</span> <span class="n">utility</span><span class="o">.</span><span class="n">value_to_member</span><span class="p">(</span><span class="n">store</span><span class="o">.</span><span class="n">current_game_state</span><span class="p">,</span> <span class="n">GameState</span><span class="p">)</span>
+
+    <span class="n">log_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;game_state updated from </span><span class="si">{</span><span class="n">prev_name</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">curr_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">log_string</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_game"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.save_game">[docs]</a><span class="k">def</span> <span class="nf">save_game</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Serialise the game data to an internal container</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_SAVE</span>
+
+    <span class="c1"># clear existing save data</span>
+    <span class="n">_SAVE</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># get the info needed</span>
+    <span class="n">full_save_path</span> <span class="o">=</span> <span class="n">SAVE_PATH</span>
+    <span class="n">save</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># add data to dict</span>
+    <span class="n">save</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">VERSION</span>
+    <span class="n">save</span><span class="p">[</span><span class="s2">&quot;world&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">serialise</span><span class="p">()</span>
+    <span class="n">save</span><span class="p">[</span><span class="s2">&quot;store&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">serialise</span><span class="p">()</span>
+
+    <span class="c1"># prep filename</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_player</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>  <span class="c1"># clean name</span>
+    <span class="n">date_and_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">@%H%M%S&quot;</span><span class="p">)</span>
+    <span class="n">save_name_prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">new_save_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_name_prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">date_and_time</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+    <span class="c1"># clear old saves</span>
+    <span class="n">existing_saves</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># get existing save files and check if they match</span>
+    <span class="k">for</span> <span class="n">save_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">full_save_path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">save_name_prefix</span> <span class="ow">in</span> <span class="n">save_name</span><span class="p">:</span>
+            <span class="n">existing_saves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">save_name</span><span class="p">)</span>
+    <span class="n">existing_saves</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">existing_saves</span><span class="p">)</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">existing_saves</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_SAVES</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># -1 to handle the offset</span>
+        <span class="n">save_name</span> <span class="o">=</span> <span class="n">existing_saves</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">full_save_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">save_name</span><span class="p">)</span>
+
+    <span class="c1"># update save data</span>
+    <span class="n">_SAVE</span><span class="p">[</span><span class="n">new_save_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">save</span></div>
+
+
+<div class="viewcode-block" id="dump_save_game"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.dump_save_game">[docs]</a><span class="k">def</span> <span class="nf">dump_save_game</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Export the save game data, if it exists, to an external json file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_SAVE</span>
+
+    <span class="k">for</span> <span class="n">save_name</span><span class="p">,</span> <span class="n">save_values</span> <span class="ow">in</span> <span class="n">_SAVE</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="c1"># write to json</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">SAVE_PATH</span> <span class="o">+</span> <span class="n">save_name</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">save_values</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Save file dumped.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_game"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.state.load_game">[docs]</a><span class="k">def</span> <span class="nf">load_game</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deserialise the game data from a file. Filename does not include path to save folder.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># read from json</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">SAVE_PATH</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">save</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="c1"># check the version</span>
+    <span class="k">if</span> <span class="n">save</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">VERSION</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading data from a previous version, </span><span class="si">{</span><span class="n">save</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># deserialise data</span>
+    <span class="n">new_world</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">deserialise</span><span class="p">(</span><span class="n">save</span><span class="p">[</span><span class="s2">&quot;world&quot;</span><span class="p">])</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">deserialise</span><span class="p">(</span><span class="n">save</span><span class="p">[</span><span class="s2">&quot;store&quot;</span><span class="p">])</span>
+
+    <span class="c1"># set the data as the default world</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">move_world</span><span class="p">(</span><span class="n">new_world</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Game loaded from </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
