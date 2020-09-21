@@ -30,11 +30,11 @@ Quality of last commit:
 
 
 ## Table of Contents
-- [Motivation and Intent](#Motivation and Intent)
-- [Engine Design Goals](#Engine Design Goals)
-- [Engine Documentation](#Engine Documentation)
+- [Motivation and Intent](#motivation-and-intent)
+- [Engine Design Goals](#engine-design-goals)
+- [Engine Documentation](#engine-documentation)
 - [Contributing](#contributing)
-- [NQP MVP Roadmap](#NQP MVP Roadmap)
+- [NQP MVP Roadmap](#nqp-mvp-roadmap)
 - [License](#license)
 
 ## Motivation and Intent

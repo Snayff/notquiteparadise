@@ -8,6 +8,10 @@ on:
       - completed
 
 jobs:
+  env:
+    SDL_VIDEODRIVER: dummy
+    SDL_AUDIODRIVER: disk
+    
   docs:
     runs-on: ubuntu-latest
     steps:
