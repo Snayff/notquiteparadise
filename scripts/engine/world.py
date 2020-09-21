@@ -4,14 +4,13 @@ import dataclasses
 import logging
 import random
 from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar, cast
-
 import numpy as np
 import pygame
 import snecs
 import tcod.map
+
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
-
 from scripts.engine import action, chronicle, debug, library, utility
 from scripts.engine.component import (
     FOV,

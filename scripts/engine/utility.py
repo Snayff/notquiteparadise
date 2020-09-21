@@ -1,8 +1,7 @@
 from __future__ import annotations
-
-import logging
 from typing import TYPE_CHECKING
 
+import logging
 import pygame
 
 from scripts.engine.core.constants import ASSET_PATH, IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, ShapeType
