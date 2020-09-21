@@ -181,62 +181,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-scripts.engine.thought">
-<span id="thought"></span><h1>Thought<a class="headerlink" href="#module-scripts.engine.thought" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="scripts.engine.thought.AIBehaviour">
-<em class="property">class </em><code class="sig-name descname">AIBehaviour</code><a class="reference internal" href="../_modules/scripts/engine/thought.html#AIBehaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.AIBehaviour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
-<p>Base class for AI behaviours.</p>
-<dl class="py method">
-<dt id="scripts.engine.thought.AIBehaviour.act">
-<em class="property">abstract </em><code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/thought.html#AIBehaviour.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.AIBehaviour.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the behaviour</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.thought.AIBehaviour._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.thought.AIBehaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="scripts.engine.thought.ProjectileBehaviour">
-<em class="property">class </em><code class="sig-name descname">ProjectileBehaviour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData" title="scripts.engine.core.definitions.ProjectileData">scripts.engine.core.definitions.ProjectileData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/thought.html#ProjectileBehaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.ProjectileBehaviour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../scripts.engine.html#scripts.engine.thought.AIBehaviour" title="scripts.engine.thought.AIBehaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.thought.AIBehaviour</span></code></a></p>
-<p>Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.</p>
-<dl class="py method">
-<dt id="scripts.engine.thought.ProjectileBehaviour.act">
-<code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/thought.html#ProjectileBehaviour.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.ProjectileBehaviour.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the behaviour</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.thought.ProjectileBehaviour._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.thought.ProjectileBehaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="scripts.engine.thought.SkipTurnBehaviour">
-<em class="property">class </em><code class="sig-name descname">SkipTurnBehaviour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/thought.html#SkipTurnBehaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.SkipTurnBehaviour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../scripts.engine.html#scripts.engine.thought.AIBehaviour" title="scripts.engine.thought.AIBehaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.thought.AIBehaviour</span></code></a></p>
-<p>Just skips turn</p>
-<dl class="py method">
-<dt id="scripts.engine.thought.SkipTurnBehaviour.act">
-<code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/thought.html#SkipTurnBehaviour.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.SkipTurnBehaviour.act" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform the behaviour</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="scripts.engine.thought.SkipTurnBehaviour._abc_impl">
-<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.thought.SkipTurnBehaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="thought">
+<h1>Thought<a class="headerlink" href="#thought" title="Permalink to this headline">¶</a></h1>
 </div>
 
 

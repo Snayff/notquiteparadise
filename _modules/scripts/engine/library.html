@@ -249,20 +249,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>  <span class="c1"># when building in CI these fail</span>
-        <span class="n">_load_traits_data</span><span class="p">()</span>
-        <span class="n">_load_affliction_data</span><span class="p">()</span>
-        <span class="n">_load_aspects_data</span><span class="p">()</span>
-        <span class="n">_load_base_stat_primary_data</span><span class="p">()</span>
-        <span class="n">_load_base_stat_secondary_data</span><span class="p">()</span>
-        <span class="n">_load_gods_data</span><span class="p">()</span>
-        <span class="n">_load_skills_data</span><span class="p">()</span>
-        <span class="n">_load_map_data</span><span class="p">()</span>
-        <span class="n">_load_room_data</span><span class="p">()</span>
-        <span class="n">_load_npc_data</span><span class="p">()</span>
-        <span class="n">_load_input_config</span><span class="p">()</span>
-        <span class="n">_load_video_config</span><span class="p">()</span>
-        <span class="n">_load_game_config</span><span class="p">()</span>
+    <span class="n">_load_traits_data</span><span class="p">()</span>
+    <span class="n">_load_affliction_data</span><span class="p">()</span>
+    <span class="n">_load_aspects_data</span><span class="p">()</span>
+    <span class="n">_load_base_stat_primary_data</span><span class="p">()</span>
+    <span class="n">_load_base_stat_secondary_data</span><span class="p">()</span>
+    <span class="n">_load_gods_data</span><span class="p">()</span>
+    <span class="n">_load_skills_data</span><span class="p">()</span>
+    <span class="n">_load_map_data</span><span class="p">()</span>
+    <span class="n">_load_room_data</span><span class="p">()</span>
+    <span class="n">_load_npc_data</span><span class="p">()</span>
+    <span class="n">_load_input_config</span><span class="p">()</span>
+    <span class="n">_load_video_config</span><span class="p">()</span>
+    <span class="n">_load_game_config</span><span class="p">()</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Library data refreshed...&quot;</span><span class="p">)</span>
 
@@ -404,8 +403,9 @@
 
 <span class="c1">####################### REFRESH ON INIT ##############################</span>
 
-<span class="c1"># Refresh the library immediately on init. Need this to ensure everything here is init&#39;d and updated.</span>
-<span class="n">refresh_library</span><span class="p">()</span>
+<span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>  <span class="c1"># when building in CI these fail</span>
+    <span class="c1"># Refresh the library immediately on init. Need this to ensure everything here is init&#39;d and updated.</span>
+    <span class="n">refresh_library</span><span class="p">()</span>
 </pre></div>
 
            </div>
