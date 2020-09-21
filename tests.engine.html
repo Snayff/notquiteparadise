@@ -222,11 +222,303 @@
 </dd></dl>
 
 </div>
-<div class="section" id="tests-engine-effect-test-module">
-<h2>tests.engine.effect_test module<a class="headerlink" href="#tests-engine-effect-test-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tests.engine.effect_test">
+<span id="tests-engine-effect-test-module"></span><h2>tests.engine.effect_test module<a class="headerlink" href="#module-tests.engine.effect_test" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.engine.effect_test.MockAffliction">
+<em class="property">class </em><code class="sig-name descname">MockAffliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">creator</span></em>, <em class="sig-param"><span class="n">affected_entity</span></em>, <em class="sig-param"><span class="n">duration</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#MockAffliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.MockAffliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="scripts.engine.html#scripts.engine.action.Affliction" title="scripts.engine.action.Affliction"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.action.Affliction</span></code></a></p>
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.name">
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = 'mock_affliction'</em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.identity_tags">
+<code class="sig-name descname">identity_tags</code><em class="property">: List<span class="p">[</span>EffectTypeType<span class="p">]</span></em><em class="property"> = ['affect_stat']</em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.identity_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.triggers">
+<code class="sig-name descname">triggers</code><em class="property">: List<span class="p">[</span>AfflictionTriggerType<span class="p">]</span></em><em class="property"> = ['movement']</em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.triggers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.required_tags">
+<code class="sig-name descname">required_tags</code><em class="property">: List<span class="p">[</span>TargetTagType<span class="p">]</span></em><em class="property"> = ['other_entity']</em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.required_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tests.engine.effect_test.MockAffliction.build_effects">
+<code class="sig-name descname">build_effects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#MockAffliction.build_effects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.build_effects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the effects of this affliction applying to a single entity. Must be overridden by subclass.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.key">
+<code class="sig-name descname">key</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.icon_path">
+<code class="sig-name descname">icon_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.icon_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.category">
+<code class="sig-name descname">category</code><em class="property">: AfflictionCategoryType</em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.category" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.shape">
+<code class="sig-name descname">shape</code><em class="property">: ShapeType</em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAffliction.shape_size">
+<code class="sig-name descname">shape_size</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAffliction.shape_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tests.engine.effect_test.MockAfflictionDamage">
+<em class="property">class </em><code class="sig-name descname">MockAfflictionDamage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">creator</span></em>, <em class="sig-param"><span class="n">affected_entity</span></em>, <em class="sig-param"><span class="n">duration</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#MockAfflictionDamage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tests.engine.effect_test.MockAffliction" title="tests.engine.effect_test.MockAffliction"><code class="xref py py-class docutils literal notranslate"><span class="pre">tests.engine.effect_test.MockAffliction</span></code></a></p>
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage.triggers">
+<code class="sig-name descname">triggers</code><em class="property">: List<span class="p">[</span>AfflictionTriggerType<span class="p">]</span></em><em class="property"> = ['take_damage']</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage.triggers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage.key">
+<code class="sig-name descname">key</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage.key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage.icon_path">
+<code class="sig-name descname">icon_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage.icon_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage.category">
+<code class="sig-name descname">category</code><em class="property">: AfflictionCategoryType</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage.category" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage.shape">
+<code class="sig-name descname">shape</code><em class="property">: ShapeType</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionDamage.shape_size">
+<code class="sig-name descname">shape_size</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionDamage.shape_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tests.engine.effect_test.MockAfflictionMovement">
+<em class="property">class </em><code class="sig-name descname">MockAfflictionMovement</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">creator</span></em>, <em class="sig-param"><span class="n">affected_entity</span></em>, <em class="sig-param"><span class="n">duration</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#MockAfflictionMovement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tests.engine.effect_test.MockAffliction" title="tests.engine.effect_test.MockAffliction"><code class="xref py py-class docutils literal notranslate"><span class="pre">tests.engine.effect_test.MockAffliction</span></code></a></p>
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement.triggers">
+<code class="sig-name descname">triggers</code><em class="property">: List<span class="p">[</span>AfflictionTriggerType<span class="p">]</span></em><em class="property"> = ['movement']</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement.triggers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement.key">
+<code class="sig-name descname">key</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement.key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement.icon_path">
+<code class="sig-name descname">icon_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement.icon_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement.category">
+<code class="sig-name descname">category</code><em class="property">: AfflictionCategoryType</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement.category" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement.shape">
+<code class="sig-name descname">shape</code><em class="property">: ShapeType</em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockAfflictionMovement.shape_size">
+<code class="sig-name descname">shape_size</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><a class="headerlink" href="#tests.engine.effect_test.MockAfflictionMovement.shape_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tests.engine.effect_test.MockSkill">
+<em class="property">class </em><code class="sig-name descname">MockSkill</code><span class="sig-paren">(</span><em class="sig-param">user: int</em>, <em class="sig-param">target_tile: scripts.engine.world_objects.tile.Tile</em>, <em class="sig-param">direction: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#MockSkill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.MockSkill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="scripts.engine.html#scripts.engine.action.Skill" title="scripts.engine.action.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.action.Skill</span></code></a></p>
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.key">
+<code class="sig-name descname">key</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = 'mock_skill'</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.required_tags">
+<code class="sig-name descname">required_tags</code><em class="property">: List<span class="p">[</span>TargetTagType<span class="p">]</span></em><em class="property"> = ['self']</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.required_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.description">
+<code class="sig-name descname">description</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = 'this is the normal movement.'</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.icon_path">
+<code class="sig-name descname">icon_path</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><em class="property"> = ''</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.icon_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.resource_type">
+<code class="sig-name descname">resource_type</code><em class="property">: ResourceType</em><em class="property"> = 'stamina'</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.resource_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.resource_cost">
+<code class="sig-name descname">resource_cost</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><em class="property"> = 0</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.resource_cost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.time_cost">
+<code class="sig-name descname">time_cost</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><em class="property"> = 10</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.time_cost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.base_cooldown">
+<code class="sig-name descname">base_cooldown</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><em class="property"> = 0</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.base_cooldown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.targeting_method">
+<code class="sig-name descname">targeting_method</code><em class="property">: TargetingMethodType</em><em class="property"> = 'target'</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.targeting_method" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.target_directions">
+<code class="sig-name descname">target_directions</code><em class="property">: List<span class="p">[</span>DirectionType<span class="p">]</span></em><em class="property"> = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.target_directions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.shape">
+<code class="sig-name descname">shape</code><em class="property">: ShapeType</em><em class="property"> = 'target'</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.shape_size">
+<code class="sig-name descname">shape_size</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><em class="property"> = 1</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.shape_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.uses_projectile">
+<code class="sig-name descname">uses_projectile</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></em><em class="property"> = False</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.uses_projectile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tests.engine.effect_test.MockSkill.build_effects">
+<code class="sig-name descname">build_effects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">effect_strength</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="scripts.engine.html#scripts.engine.effect.Effect" title="scripts.engine.effect.Effect">scripts.engine.effect.Effect</a><span class="p">]</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#MockSkill.build_effects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.MockSkill.build_effects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the effects of this skill applying to a single entity. Must be overridden by subclass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.engine.effect_test.MockSkill.get_animation">
+<code class="sig-name descname">get_animation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">aesthetic</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.html#scripts.engine.component.Aesthetic" title="scripts.engine.component.Aesthetic">scripts.engine.component.Aesthetic</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#MockSkill.get_animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.MockSkill.get_animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the animation to play when executing the skill</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.name">
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="tests.engine.effect_test.MockSkill.projectile_data">
+<code class="sig-name descname">projectile_data</code><em class="property">: ProjectileData</em><a class="headerlink" href="#tests.engine.effect_test.MockSkill.projectile_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tests.engine.effect_test.TestEffects">
+<em class="property">class </em><code class="sig-name descname">TestEffects</code><a class="reference internal" href="_modules/tests/engine/effect_test.html#TestEffects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.TestEffects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="tests.engine.effect_test.TestEffects._create_default_entity">
+<em class="property">static </em><code class="sig-name descname">_create_default_entity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#TestEffects._create_default_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.TestEffects._create_default_entity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="tests.engine.effect_test.TestEffects.test_trigger_afflictions_effect">
+<code class="sig-name descname">test_trigger_afflictions_effect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#TestEffects.test_trigger_afflictions_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.TestEffects.test_trigger_afflictions_effect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for the trigger afflictions effect</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="tests.engine.effect_test.TestEffects.test_reduce_skill_cooldown_effect">
+<code class="sig-name descname">test_reduce_skill_cooldown_effect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/effect_test.html#TestEffects.test_reduce_skill_cooldown_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.effect_test.TestEffects.test_reduce_skill_cooldown_effect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for the reduce skill cooldown effect</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="tests-engine-state-test-module">
-<h2>tests.engine.state_test module<a class="headerlink" href="#tests-engine-state-test-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tests.engine.state_test">
+<span id="tests-engine-state-test-module"></span><h2>tests.engine.state_test module<a class="headerlink" href="#module-tests.engine.state_test" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.engine.state_test.TestState">
+<em class="property">class </em><code class="sig-name descname">TestState</code><a class="reference internal" href="_modules/tests/engine/state_test.html#TestState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.state_test.TestState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="tests.engine.state_test.TestState.test_set_state">
+<code class="sig-name descname">test_set_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/engine/state_test.html#TestState.test_set_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.engine.state_test.TestState.test_set_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test changing the state</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-tests.engine.utility_test">
 <span id="tests-engine-utility-test-module"></span><h2>tests.engine.utility_test module<a class="headerlink" href="#module-tests.engine.utility_test" title="Permalink to this headline">¶</a></h2>

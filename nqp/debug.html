@@ -181,8 +181,93 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="debug">
-<h1>Debug<a class="headerlink" href="#debug" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-scripts.engine.debug">
+<span id="debug"></span><h1>Debug<a class="headerlink" href="#module-scripts.engine.debug" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="scripts.engine.debug.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.initialise_logging">
+<code class="sig-name descname">initialise_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#initialise_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.initialise_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise logging.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.kill_logging">
+<code class="sig-name descname">kill_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#kill_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.kill_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill logging resources</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.is_logging">
+<code class="sig-name descname">is_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="../_modules/scripts/engine/debug.html#is_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.is_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if logging is active</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.enable_profiling">
+<code class="sig-name descname">enable_profiling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">999</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#enable_profiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.enable_profiling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable profiling. Create profiler if one doesnt exist</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.disable_profiling">
+<code class="sig-name descname">disable_profiling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dump_data</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#disable_profiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.disable_profiling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn off current profiling. Dump data to file if required.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.kill_profiler">
+<code class="sig-name descname">kill_profiler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#kill_profiler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.kill_profiler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill profiling resource</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.performance_test">
+<code class="sig-name descname">performance_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method_descs</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">old_methods</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Callable<span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">new_methods</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Callable<span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">num_runs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">repeats</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">3</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="reference internal" href="../_modules/scripts/engine/debug.html#performance_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.performance_test" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Run performance testing on a collection of methods/functions. Returns a formatted string detailing performance of</dt><dd><p>old, new and % change between them.</p>
+</dd>
+</dl>
+<p>method_descs are used as descriptions only.
+old_methods/new_methods expects a list of tuples that are (method_to_test, setup). Setup can be an empty string
+but is usually an import.
+Index in each list much match, i.e. method_name[0] is the alias of the methods in old_methods[0] and
+new_methods[0].</p>
+<p>Outputs as “Access Trait: 0.00123 -&gt; 0.00036(71.00033%)”.</p>
+<p>example usage:
+method_descs = [“Set Var”, “Access Skill”]
+old_methods = [(“x = 1”, “”),(“library.get_skill_data(‘lunge’)”, “”)]
+new_methods = [(“x = ‘one’”, “”), (“library2.SKILLS.get(‘lunge’)”, “from scripts.engine import library2”)]
+print( performance_test(method_descs, old_methods, new_methods) )</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.is_profiling">
+<code class="sig-name descname">is_profiling</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="../_modules/scripts/engine/debug.html#is_profiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.is_profiling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if profiling is active</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.print_values_to_console">
+<code class="sig-name descname">print_values_to_console</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#print_values_to_console"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.print_values_to_console" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the debuggers stats.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.set_fps_visibility">
+<code class="sig-name descname">set_fps_visibility</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_visible</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#set_fps_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.set_fps_visibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether the FPS is visible</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.get_visible_values">
+<code class="sig-name descname">get_visible_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><a class="reference internal" href="../_modules/scripts/engine/debug.html#get_visible_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.get_visible_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all visible values from the debugger</p>
+</dd></dl>
+
 </div>
 
 

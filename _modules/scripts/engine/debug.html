@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>scripts.engine.debug &mdash; NotQuiteParadise  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> NotQuiteParadise
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.123.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Core API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.constants.html">Constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.extend_json.html">Extend Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/core.store.html">Store</a></li>
+</ul>
+<p class="caption"><span class="caption-text">General API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/action.html">Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/chronicle.html">Chronicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/component.html">Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/debug.html">Debug</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/dungen.html">Dungen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/effect.html">Effect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/key.html">Key</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/state.html">State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/thought.html">Thought</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/utility.html">Utility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world.html">World</a></li>
+</ul>
+<p class="caption"><span class="caption-text">UI API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.elements.html">UI Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/ui.widgets.html">UI Widgets</a></li>
+</ul>
+<p class="caption"><span class="caption-text">World Objects API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../nqp/world_objects.html">World Objects</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NotQuiteParadise</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>scripts.engine.debug</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for scripts.engine.debug</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span> <span class="nn">cProfile</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pstats</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">timeit</span>
+
+<span class="kn">from</span> <span class="nn">scripts.engine</span> <span class="kn">import</span> <span class="n">state</span>
+<span class="kn">from</span> <span class="nn">scripts.engine.core.constants</span> <span class="kn">import</span> <span class="n">INFINITE</span><span class="p">,</span> <span class="n">VERSION</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Callable</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;initialise_logging&quot;</span><span class="p">,</span> <span class="s2">&quot;kill_logging&quot;</span><span class="p">,</span> <span class="s2">&quot;is_logging&quot;</span><span class="p">,</span> <span class="s2">&quot;enable_profiling&quot;</span><span class="p">,</span> <span class="s2">&quot;disable_profiling&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kill_profiler&quot;</span><span class="p">,</span> <span class="s2">&quot;performance_test&quot;</span><span class="p">,</span> <span class="s2">&quot;is_profiling&quot;</span><span class="p">,</span> <span class="s2">&quot;print_values_to_console&quot;</span><span class="p">,</span> <span class="s2">&quot;set_fps_visibility&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_visible_values&quot;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Debugger</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiler</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># counters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profile_duration_remaining</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">INFINITE</span>
+
+        <span class="c1"># flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fps_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_profiling</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_logging</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_frames_considered_recent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">600</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_internal_clock</span><span class="p">()</span><span class="o">.</span><span class="n">get_fps</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span>
+
+        <span class="c1"># count down profiler duration, if it isnt running temporarily</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile_duration_remaining</span> <span class="o">!=</span> <span class="n">INFINITE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile_duration_remaining</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="c1"># check if profiler needs to turn off</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile_duration_remaining</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">disable_profiling</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># get recent fps</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_frames_considered_recent</span><span class="p">:</span>
+            <span class="n">frames_to_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_frames_considered_recent</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">frames_to_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recent_average_fps</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_fps</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">average_fps</span><span class="p">)</span> <span class="o">/</span> <span class="n">frames_to_count</span>
+
+
+<span class="k">if</span> <span class="s2">&quot;GENERATING_SPHINX_DOCS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>  <span class="c1"># when building in CI these fail</span>
+    <span class="n">_debugger</span> <span class="o">=</span> <span class="n">Debugger</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">_debugger</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+
+<span class="c1">########################## UPDATE #####################################</span>
+
+<div class="viewcode-block" id="update"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.update">[docs]</a><span class="k">def</span> <span class="nf">update</span><span class="p">():</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<span class="c1">########################## LOGGING  #####################################</span>
+
+<div class="viewcode-block" id="initialise_logging"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.initialise_logging">[docs]</a><span class="k">def</span> <span class="nf">initialise_logging</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialise logging.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Logging levels:</span>
+    <span class="c1">#     CRITICAL - A serious error, indicating that may be unable to continue running.</span>
+    <span class="c1">#     ERROR - A more serious problem, has not been able to perform some function.</span>
+    <span class="c1">#     WARNING - An indication that something unexpected happened, but otherwise still working as expected.</span>
+    <span class="c1">#     INFO - Confirmation that things are working as expected.</span>
+    <span class="c1">#     DEBUG - Detailed information, typically of interest only when diagnosing problems</span>
+    <span class="c1">#</span>
+    <span class="c1"># File mode options:</span>
+    <span class="c1">#     &#39;r&#39; - open for reading(default)</span>
+    <span class="c1">#     &#39;w&#39; - open for writing, truncating the file first</span>
+    <span class="c1">#     &#39;x&#39; - open for exclusive creation, failing if the file already exists</span>
+    <span class="c1">#     &#39;a&#39; - open for writing, appending to the end of the file if it exists</span>
+
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">is_logging</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">log_file_name</span> <span class="o">=</span> <span class="s2">&quot;logs/&quot;</span> <span class="o">+</span> <span class="s2">&quot;game.log&quot;</span>
+    <span class="n">log_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+    <span class="n">file_mode</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span>
+
+    <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">[:]:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+    <span class="c1"># 8 adds space for 8 characters (# CRITICAL)</span>
+    <span class="n">log_format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2">| </span><span class="si">%(levelname)-8s</span><span class="s2">| </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">log_file_name</span><span class="p">,</span> <span class="n">filemode</span><span class="o">=</span><span class="n">file_mode</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span>
+                        <span class="nb">format</span><span class="o">=</span><span class="n">log_format</span><span class="p">)</span>
+
+    <span class="c1"># format into uk time</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="o">.</span><span class="n">converter</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span></div>
+
+
+<div class="viewcode-block" id="kill_logging"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.kill_logging">[docs]</a><span class="k">def</span> <span class="nf">kill_logging</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Kill logging resources</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">is_logging</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="is_logging"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.is_logging">[docs]</a><span class="k">def</span> <span class="nf">is_logging</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns true if logging is active</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">is_logging</span></div>
+
+
+<span class="c1">########################## PROFILING  #####################################</span>
+
+<span class="k">def</span> <span class="nf">_create_profiler</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the profiler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="enable_profiling"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.enable_profiling">[docs]</a><span class="k">def</span> <span class="nf">enable_profiling</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">INFINITE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enable profiling. Create profiler if one doesnt exist</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># if we dont have a profiler create one</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="p">:</span>
+        <span class="n">_create_profiler</span><span class="p">()</span>
+
+    <span class="c1"># enable, set flag and set duration</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="p">,</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">)</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">is_profiling</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">profile_duration_remaining</span> <span class="o">=</span> <span class="n">duration</span></div>
+
+
+<div class="viewcode-block" id="disable_profiling"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.disable_profiling">[docs]</a><span class="k">def</span> <span class="nf">disable_profiling</span><span class="p">(</span><span class="n">dump_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Turn off current profiling. Dump data to file if required.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dump_data</span><span class="p">:</span>
+            <span class="n">_dump_profiling_data</span><span class="p">()</span>
+
+        <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+        <span class="n">_debugger</span><span class="o">.</span><span class="n">is_profiling</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="kill_profiler"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.kill_profiler">[docs]</a><span class="k">def</span> <span class="nf">kill_profiler</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Kill profiling resource</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="p">:</span>
+        <span class="n">disable_profiling</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<span class="k">def</span> <span class="nf">_dump_profiling_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dump data to a readable file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">is_profiling</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">_</span> <span class="o">=</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="o">.</span><span class="n">create_stats</span><span class="p">()</span>
+
+    <span class="c1"># dump the profiler stats</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">profiler</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">&quot;cumulative&quot;</span><span class="p">)</span>
+    <span class="n">ps</span><span class="o">.</span><span class="n">dump_stats</span><span class="p">(</span><span class="s2">&quot;logs/profiling/profile.dump&quot;</span><span class="p">)</span>
+
+    <span class="c1"># convert profiling to human readable format</span>
+    <span class="n">date_and_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+    <span class="n">out_stream</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;logs/profiling/&quot;</span> <span class="o">+</span> <span class="n">date_and_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">@%H%M&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">VERSION</span> <span class="o">+</span> <span class="s2">&quot;.profile&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="n">ps</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="s2">&quot;logs/profiling/profile.dump&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">out_stream</span><span class="p">)</span>
+    <span class="n">ps</span><span class="o">.</span><span class="n">strip_dirs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="s2">&quot;cumulative&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="performance_test"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.performance_test">[docs]</a><span class="k">def</span> <span class="nf">performance_test</span><span class="p">(</span><span class="n">method_descs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">old_methods</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span>
+        <span class="n">new_methods</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">num_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run performance testing on a collection of methods/functions. Returns a formatted string detailing performance of</span>
+<span class="sd">     old, new and % change between them.</span>
+
+<span class="sd">    method_descs are used as descriptions only.</span>
+<span class="sd">    old_methods/new_methods expects a list of tuples that are (method_to_test, setup). Setup can be an empty string</span>
+<span class="sd">    but is usually an import.</span>
+<span class="sd">    Index in each list much match, i.e. method_name[0] is the alias of the methods in old_methods[0] and</span>
+<span class="sd">    new_methods[0].</span>
+
+<span class="sd">    Outputs as &quot;Access Trait: 0.00123 -&gt; 0.00036(71.00033%)&quot;.</span>
+
+<span class="sd">    example usage:</span>
+<span class="sd">    method_descs = [&quot;Set Var&quot;, &quot;Access Skill&quot;]</span>
+<span class="sd">    old_methods = [(&quot;x = 1&quot;, &quot;&quot;),(&quot;library.get_skill_data(&#39;lunge&#39;)&quot;, &quot;&quot;)]</span>
+<span class="sd">    new_methods = [(&quot;x = &#39;one&#39;&quot;, &quot;&quot;), (&quot;library2.SKILLS.get(&#39;lunge&#39;)&quot;, &quot;from scripts.engine import library2&quot;)]</span>
+<span class="sd">    print( performance_test(method_descs, old_methods, new_methods) )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;== Performance Test ==</span><span class="se">\n</span><span class="s2">(Run </span><span class="si">{</span><span class="n">num_runs</span><span class="si">}</span><span class="s2"> * </span><span class="si">{</span><span class="n">repeats</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">gc</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">method_descs</span><span class="p">)):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">method_descs</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="n">old</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">old_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">setup</span><span class="o">=</span><span class="n">old_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">number</span><span class="o">=</span><span class="n">num_runs</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">repeats</span><span class="p">))</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">new_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">setup</span><span class="o">=</span><span class="n">new_methods</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">number</span><span class="o">=</span><span class="n">num_runs</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">repeats</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="s1">&#39;0.5f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="s1">&#39;0.5f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> \
+                  <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="nb">format</span><span class="p">(((</span><span class="n">old</span> <span class="o">-</span> <span class="n">new</span><span class="p">)</span> <span class="o">/</span> <span class="n">old</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;0.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">%)&quot;</span>
+
+    <span class="n">gc</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="is_profiling"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.is_profiling">[docs]</a><span class="k">def</span> <span class="nf">is_profiling</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns true if profiling is active</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">is_profiling</span></div>
+
+
+<span class="c1">########################## FPS #####################################</span>
+
+<span class="k">def</span> <span class="nf">is_fps_visible</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns true if fps stats are visible</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">is_fps_visible</span>
+
+
+<span class="c1">########################## GET OR SET VALUES #####################################</span>
+
+<div class="viewcode-block" id="print_values_to_console"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.print_values_to_console">[docs]</a><span class="k">def</span> <span class="nf">print_values_to_console</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print the debuggers stats.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Avg FPS: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;R_Avg: </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="set_fps_visibility"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.set_fps_visibility">[docs]</a><span class="k">def</span> <span class="nf">set_fps_visibility</span><span class="p">(</span><span class="n">is_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set whether the FPS is visible</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_debugger</span><span class="o">.</span><span class="n">is_fps_visible</span> <span class="o">=</span> <span class="n">is_visible</span></div>
+
+
+<div class="viewcode-block" id="get_visible_values"><a class="viewcode-back" href="../../../scripts.engine.html#scripts.engine.debug.get_visible_values">[docs]</a><span class="k">def</span> <span class="nf">get_visible_values</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all visible values from the debugger</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">_debugger</span><span class="o">.</span><span class="n">is_fps_visible</span><span class="p">:</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FPS: C=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">current_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+                      <span class="sa">f</span><span class="s2">&quot;R_Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">recent_average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+                      <span class="sa">f</span><span class="s2">&quot;Avg=</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">_debugger</span><span class="o">.</span><span class="n">average_fps</span><span class="p">,</span> <span class="s1">&#39;.2f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">values</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019-2020, Josh Snaith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

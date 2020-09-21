@@ -198,13 +198,13 @@
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.ui.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="scripts.engine.ui.elements.html">scripts.engine.ui.elements package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#scripts-engine-ui-elements-actor-info-module">scripts.engine.ui.elements.actor_info module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#scripts-engine-ui-elements-camera-module">scripts.engine.ui.elements.camera module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements.actor_info">scripts.engine.ui.elements.actor_info module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements.camera">scripts.engine.ui.elements.camera module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements.data_editor">scripts.engine.ui.elements.data_editor module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements.dungen_viewer">scripts.engine.ui.elements.dungen_viewer module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements.message_log">scripts.engine.ui.elements.message_log module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements.skill_bar">scripts.engine.ui.elements.skill_bar module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#scripts-engine-ui-elements-tile-info-module">scripts.engine.ui.elements.tile_info module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements.tile_info">scripts.engine.ui.elements.tile_info module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scripts.engine.ui.elements.html#module-scripts.engine.ui.elements">Module contents</a></li>
 </ul>
 </li>
@@ -217,13 +217,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.ui.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.ui.html#scripts-engine-ui-manager-module">scripts.engine.ui.manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.ui.html#module-scripts.engine.ui.manager">scripts.engine.ui.manager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.ui.html#module-scripts.engine.ui">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scripts.engine.world_objects.html">scripts.engine.world_objects package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#scripts-engine-world-objects-combat-stats-module">scripts.engine.world_objects.combat_stats module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.combat_stats">scripts.engine.world_objects.combat_stats module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.gamemap">scripts.engine.world_objects.gamemap module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects.tile">scripts.engine.world_objects.tile module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts.engine.world_objects.html#module-scripts.engine.world_objects">Module contents</a></li>
@@ -466,8 +466,116 @@ the user and target.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="scripts-engine-chronicle-module">
-<h2>scripts.engine.chronicle module<a class="headerlink" href="#scripts-engine-chronicle-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.engine.chronicle">
+<span id="scripts-engine-chronicle-module"></span><h2>scripts.engine.chronicle module<a class="headerlink" href="#module-scripts.engine.chronicle" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.engine.chronicle.rebuild_turn_queue">
+<code class="sig-name descname">rebuild_turn_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>EntityID<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#rebuild_turn_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.rebuild_turn_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a new turn queue that includes all timed entities. entity_to_exclude is one that should not be added
+to the queue. Usually used in relation to deletion.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.next_turn">
+<code class="sig-name descname">next_turn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity_to_exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>EntityID<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#next_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.next_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proceed to the next turn, setting the next entity to act as the turn holder and updating the passage of time.
+Update game state to reflect turn holder.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.next_round">
+<code class="sig-name descname">next_round</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_progressed</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#next_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.next_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to the next round and trigger end of round events, like cooldown and affliction reduction.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle._increment_round_number">
+<code class="sig-name descname">_increment_round_number</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#_increment_round_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle._increment_round_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment the round by 1</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle._add_time">
+<code class="sig-name descname">_add_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_to_add</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#_add_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle._add_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add to the current time</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.get_turn_holder">
+<code class="sig-name descname">get_turn_holder</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/chronicle.html#get_turn_holder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.get_turn_holder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the entity who has the current turn</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.get_turn_queue">
+<code class="sig-name descname">get_turn_queue</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>EntityID<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#get_turn_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.get_turn_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the turn queue</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.get_time_in_round">
+<code class="sig-name descname">get_time_in_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/chronicle.html#get_time_in_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.get_time_in_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current time in the current round</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.get_time">
+<code class="sig-name descname">get_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/chronicle.html#get_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.get_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current time</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.get_time_of_last_turn">
+<code class="sig-name descname">get_time_of_last_turn</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/chronicle.html#get_time_of_last_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.get_time_of_last_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the time of the last turn</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.get_round">
+<code class="sig-name descname">get_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/chronicle.html#get_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.get_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current round</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle._get_pretty_queue">
+<code class="sig-name descname">_get_pretty_queue</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#_get_pretty_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle._get_pretty_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle._get_next_entity_in_queue">
+<code class="sig-name descname">_get_next_entity_in_queue</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/chronicle.html#_get_next_entity_in_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle._get_next_entity_in_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.set_turn_holder">
+<code class="sig-name descname">set_turn_holder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">active_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#set_turn_holder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.set_turn_holder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the entity who has the current turn</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.set_time_in_round">
+<code class="sig-name descname">set_time_in_round</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#set_time_in_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.set_time_in_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set current time in the current round</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.set_turn_queue">
+<code class="sig-name descname">set_turn_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>EntityID<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#set_turn_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.set_turn_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the turn queue</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.set_time_of_last_turn">
+<code class="sig-name descname">set_time_of_last_turn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#set_time_of_last_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.set_time_of_last_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the time of the last turn</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.chronicle.end_turn">
+<code class="sig-name descname">end_turn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">time_spent</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/chronicle.html#end_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.chronicle.end_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spend an entities time, progress time, move to next acting entity in queue.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine.component">
 <span id="scripts-engine-component-module"></span><h2>scripts.engine.component module<a class="headerlink" href="#module-scripts.engine.component" title="Permalink to this headline">¶</a></h2>
@@ -1128,8 +1236,93 @@ full-World serialization feature.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="scripts-engine-debug-module">
-<h2>scripts.engine.debug module<a class="headerlink" href="#scripts-engine-debug-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.engine.debug">
+<span id="scripts-engine-debug-module"></span><h2>scripts.engine.debug module<a class="headerlink" href="#module-scripts.engine.debug" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.engine.debug.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.initialise_logging">
+<code class="sig-name descname">initialise_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#initialise_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.initialise_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise logging.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.kill_logging">
+<code class="sig-name descname">kill_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#kill_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.kill_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill logging resources</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.is_logging">
+<code class="sig-name descname">is_logging</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/debug.html#is_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.is_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if logging is active</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.enable_profiling">
+<code class="sig-name descname">enable_profiling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">999</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#enable_profiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.enable_profiling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable profiling. Create profiler if one doesnt exist</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.disable_profiling">
+<code class="sig-name descname">disable_profiling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dump_data</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#disable_profiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.disable_profiling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn off current profiling. Dump data to file if required.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.kill_profiler">
+<code class="sig-name descname">kill_profiler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#kill_profiler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.kill_profiler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill profiling resource</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.performance_test">
+<code class="sig-name descname">performance_test</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method_descs</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">old_methods</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Callable<span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">new_methods</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span>Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Callable<span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">num_runs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">repeats</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">3</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="reference internal" href="_modules/scripts/engine/debug.html#performance_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.performance_test" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Run performance testing on a collection of methods/functions. Returns a formatted string detailing performance of</dt><dd><p>old, new and % change between them.</p>
+</dd>
+</dl>
+<p>method_descs are used as descriptions only.
+old_methods/new_methods expects a list of tuples that are (method_to_test, setup). Setup can be an empty string
+but is usually an import.
+Index in each list much match, i.e. method_name[0] is the alias of the methods in old_methods[0] and
+new_methods[0].</p>
+<p>Outputs as “Access Trait: 0.00123 -&gt; 0.00036(71.00033%)”.</p>
+<p>example usage:
+method_descs = [“Set Var”, “Access Skill”]
+old_methods = [(“x = 1”, “”),(“library.get_skill_data(‘lunge’)”, “”)]
+new_methods = [(“x = ‘one’”, “”), (“library2.SKILLS.get(‘lunge’)”, “from scripts.engine import library2”)]
+print( performance_test(method_descs, old_methods, new_methods) )</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.is_profiling">
+<code class="sig-name descname">is_profiling</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/debug.html#is_profiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.is_profiling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if profiling is active</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.print_values_to_console">
+<code class="sig-name descname">print_values_to_console</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#print_values_to_console"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.print_values_to_console" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the debuggers stats.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.set_fps_visibility">
+<code class="sig-name descname">set_fps_visibility</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_visible</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/debug.html#set_fps_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.set_fps_visibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether the FPS is visible</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.debug.get_visible_values">
+<code class="sig-name descname">get_visible_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/debug.html#get_visible_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.debug.get_visible_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all visible values from the debugger</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine.dungen">
 <span id="scripts-engine-dungen-module"></span><h2>scripts.engine.dungen module<a class="headerlink" href="#module-scripts.engine.dungen" title="Permalink to this headline">¶</a></h2>
@@ -1392,11 +1585,125 @@ full-World serialization feature.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="scripts-engine-state-module">
-<h2>scripts.engine.state module<a class="headerlink" href="#scripts-engine-state-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.engine.state">
+<span id="scripts-engine-state-module"></span><h2>scripts.engine.state module<a class="headerlink" href="#module-scripts.engine.state" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.engine.state.get_previous">
+<code class="sig-name descname">get_previous</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; NewType.&lt;locals&gt;.new_type<a class="reference internal" href="_modules/scripts/engine/state.html#get_previous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.get_previous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the previous game state</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.get_internal_clock">
+<code class="sig-name descname">get_internal_clock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/state.html#get_internal_clock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.get_internal_clock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the internal clock</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.get_active_skill">
+<code class="sig-name descname">get_active_skill</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="reference internal" href="_modules/scripts/engine/state.html#get_active_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.get_active_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the active skill. Used for targeting mode.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.get_current">
+<code class="sig-name descname">get_current</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; NewType.&lt;locals&gt;.new_type<a class="reference internal" href="_modules/scripts/engine/state.html#get_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.get_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current game state</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.set_active_skill">
+<code class="sig-name descname">set_active_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/state.html#set_active_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.set_active_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the active skill. Used for targeting mode.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.update_clock">
+<code class="sig-name descname">update_clock</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a><a class="reference internal" href="_modules/scripts/engine/state.html#update_clock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.update_clock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tick the internal clock. Manages the frame rate. Returns delta time.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.set_new">
+<code class="sig-name descname">set_new</code><span class="sig-paren">(</span><em class="sig-param">new_game_state: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/state.html#set_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.set_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current game state</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.save_game">
+<code class="sig-name descname">save_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/state.html#save_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.save_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialise the game data to an internal container</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.dump_save_game">
+<code class="sig-name descname">dump_save_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/state.html#dump_save_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.dump_save_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the save game data, if it exists, to an external json file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.state.load_game">
+<code class="sig-name descname">load_game</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/state.html#load_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.state.load_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialise the game data from a file. Filename does not include path to save folder.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="scripts-engine-thought-module">
-<h2>scripts.engine.thought module<a class="headerlink" href="#scripts-engine-thought-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.engine.thought">
+<span id="scripts-engine-thought-module"></span><h2>scripts.engine.thought module<a class="headerlink" href="#module-scripts.engine.thought" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="scripts.engine.thought.AIBehaviour">
+<em class="property">class </em><code class="sig-name descname">AIBehaviour</code><a class="reference internal" href="_modules/scripts/engine/thought.html#AIBehaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.AIBehaviour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>Base class for AI behaviours.</p>
+<dl class="py method">
+<dt id="scripts.engine.thought.AIBehaviour.act">
+<em class="property">abstract </em><code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/thought.html#AIBehaviour.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.AIBehaviour.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the behaviour</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.thought.AIBehaviour._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.thought.AIBehaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.thought.ProjectileBehaviour">
+<em class="property">class </em><code class="sig-name descname">ProjectileBehaviour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData" title="scripts.engine.core.definitions.ProjectileData">scripts.engine.core.definitions.ProjectileData</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/thought.html#ProjectileBehaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.ProjectileBehaviour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.thought.AIBehaviour" title="scripts.engine.thought.AIBehaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.thought.AIBehaviour</span></code></a></p>
+<p>Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.</p>
+<dl class="py method">
+<dt id="scripts.engine.thought.ProjectileBehaviour.act">
+<code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/thought.html#ProjectileBehaviour.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.ProjectileBehaviour.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the behaviour</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.thought.ProjectileBehaviour._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.thought.ProjectileBehaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="scripts.engine.thought.SkipTurnBehaviour">
+<em class="property">class </em><code class="sig-name descname">SkipTurnBehaviour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attached_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/thought.html#SkipTurnBehaviour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.SkipTurnBehaviour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scripts.engine.thought.AIBehaviour" title="scripts.engine.thought.AIBehaviour"><code class="xref py py-class docutils literal notranslate"><span class="pre">scripts.engine.thought.AIBehaviour</span></code></a></p>
+<p>Just skips turn</p>
+<dl class="py method">
+<dt id="scripts.engine.thought.SkipTurnBehaviour.act">
+<code class="sig-name descname">act</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/thought.html#SkipTurnBehaviour.act"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.thought.SkipTurnBehaviour.act" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the behaviour</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="scripts.engine.thought.SkipTurnBehaviour._abc_impl">
+<code class="sig-name descname">_abc_impl</code><em class="property"> = &lt;_abc_data object&gt;</em><a class="headerlink" href="#scripts.engine.thought.SkipTurnBehaviour._abc_impl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine.utility">
 <span id="scripts-engine-utility-module"></span><h2>scripts.engine.utility module<a class="headerlink" href="#module-scripts.engine.utility" title="Permalink to this headline">¶</a></h2>
@@ -1496,8 +1803,363 @@ This returns an int indicating the number of tile moves between the two points.<
 </dd></dl>
 
 </div>
-<div class="section" id="scripts-engine-world-module">
-<h2>scripts.engine.world module<a class="headerlink" href="#scripts-engine-world-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-scripts.engine.world">
+<span id="scripts-engine-world-module"></span><h2>scripts.engine.world module<a class="headerlink" href="#module-scripts.engine.world" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="scripts.engine.world.create_entity">
+<code class="sig-name descname">create_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">components</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>snecs.component.Component<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use each component in a list of components to create_entity an entity</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_god">
+<code class="sig-name descname">create_god</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">god_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_god"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_god" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an entity with all of the components to be a god. god_name must be in the gods json file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_actor">
+<code class="sig-name descname">create_actor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actor_data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.ActorData" title="scripts.engine.core.definitions.ActorData">scripts.engine.core.definitions.ActorData</a></span></em>, <em class="sig-param"><span class="n">spawn_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">is_player</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_actor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an entity with all of the components to be an actor. Returns entity ID.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_projectile">
+<code class="sig-name descname">create_projectile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">creating_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">tile_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.ProjectileData" title="scripts.engine.core.definitions.ProjectileData">scripts.engine.core.definitions.ProjectileData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_projectile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_projectile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an entity with all of the components to be a projectile. Returns entity ID.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_affliction">
+<code class="sig-name descname">create_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">creator</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">duration</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; Affliction<a class="reference internal" href="_modules/scripts/engine/world.html#create_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_affliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an instance of an Affliction provided the name</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.build_sprites_from_paths">
+<code class="sig-name descname">build_sprites_from_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sprite_paths</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritePathsData" title="scripts.engine.core.definitions.TraitSpritePathsData">scripts.engine.core.definitions.TraitSpritePathsData</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">desired_size</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">64, 64</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.core.html#scripts.engine.core.definitions.TraitSpritesData" title="scripts.engine.core.definitions.TraitSpritesData">scripts.engine.core.definitions.TraitSpritesData</a><a class="reference internal" href="_modules/scripts/engine/world.html#build_sprites_from_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.build_sprites_from_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
+combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_fov_map">
+<code class="sig-name descname">create_fov_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="_modules/scripts/engine/world.html#create_fov_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_fov_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a blank fov map</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.create_combat_stats">
+<code class="sig-name descname">create_combat_stats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.combat_stats.CombatStats" title="scripts.engine.world_objects.combat_stats.CombatStats">scripts.engine.world_objects.combat_stats.CombatStats</a><a class="reference internal" href="_modules/scripts/engine/world.html#create_combat_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.create_combat_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a stat object  for an entity.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_gamemap">
+<code class="sig-name descname">get_gamemap</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.gamemap.Gamemap" title="scripts.engine.world_objects.gamemap.Gamemap">scripts.engine.world_objects.gamemap.Gamemap</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_gamemap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_gamemap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current gamemap</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_tile">
+<code class="sig-name descname">get_tile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_tiles">
+<code class="sig-name descname">get_tiles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">coords</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/world.html#get_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get multiple tiles based on starting position and coordinates given. Coords are relative  to start
+position given.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_direction">
+<code class="sig-name descname">get_direction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; NewType.&lt;locals&gt;.new_type<a class="reference internal" href="_modules/scripts/engine/world.html#get_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the direction between two locations.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_direct_direction">
+<code class="sig-name descname">get_direct_direction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#get_direct_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_direct_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get direction from an entity towards another entity`s location. Respects blocked tiles.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_a_star_direction">
+<code class="sig-name descname">get_a_star_direction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#get_a_star_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_a_star_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use a* pathfinding to get a direction from one entity to another</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_reflected_direction">
+<code class="sig-name descname">get_reflected_direction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_direction</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; NewType.&lt;locals&gt;.new_type<a class="reference internal" href="_modules/scripts/engine/world.html#get_reflected_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_reflected_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use surrounding walls to understand how the object should be reflected.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._get_furthest_free_position">
+<code class="sig-name descname">_get_furthest_free_position</code><span class="sig-paren">(</span><em class="sig-param">start_pos: Tuple[int, int], target_direction: Tuple[int, int], max_distance: int, travel_type: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/world.html#_get_furthest_free_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._get_furthest_free_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks each position in a line and returns the last position that doesnt block movement. If no position in
+range blocks movement then the last position checked is returned. If all positions in range block movement
+then starting position is returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_hit_type">
+<code class="sig-name descname">get_hit_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">to_hit_score</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; NewType.&lt;locals&gt;.new_type<a class="reference internal" href="_modules/scripts/engine/world.html#get_hit_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_hit_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the hit type from the to hit score</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_player">
+<code class="sig-name descname">get_player</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the player.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_entitys_component">
+<code class="sig-name descname">get_entitys_component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">component</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>_C<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; _C<a class="reference internal" href="_modules/scripts/engine/world.html#get_entitys_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_entitys_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s component. Will raise exception if entity does not have the component.  Use entity_has_component
+to check.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_name">
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s Identity component’s name.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_primary_stat">
+<code class="sig-name descname">get_primary_stat</code><span class="sig-paren">(</span><em class="sig-param">entity: int</em>, <em class="sig-param">primary_stat: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_primary_stat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_primary_stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s primary stat.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_secondary_stat">
+<code class="sig-name descname">get_secondary_stat</code><span class="sig-paren">(</span><em class="sig-param">entity: int</em>, <em class="sig-param">secondary_stat: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#get_secondary_stat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_secondary_stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s secondary stat.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_known_skill">
+<code class="sig-name descname">get_known_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; Type<span class="p">[</span>Skill<span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/world.html#get_known_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_known_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an entity’s known skill from their Knowledge component.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_affected_entities">
+<code class="sig-name descname">get_affected_entities</code><span class="sig-paren">(</span><em class="sig-param">target_pos: Tuple[int, int], shape: NewType.&lt;locals&gt;.new_type, shape_size: int, shape_direction: Optional[Tuple[int, int]] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#get_affected_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_affected_entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of entities that are within the shape given, using target position as a centre point. Entity must
+have Position, Resources to be eligible.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.tile_has_tag">
+<code class="sig-name descname">tile_has_tag</code><span class="sig-paren">(</span><em class="sig-param">tile: scripts.engine.world_objects.tile.Tile</em>, <em class="sig-param">tag: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">active_entity: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#tile_has_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.tile_has_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a given tag applies to the tile.  True if tag applies.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.tile_has_tags">
+<code class="sig-name descname">tile_has_tags</code><span class="sig-paren">(</span><em class="sig-param">tile: scripts.engine.world_objects.tile.Tile, tags: List[NewType.&lt;locals&gt;.new_type], active_entity: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#tile_has_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.tile_has_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check a tile has all required tags</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._is_tile_blocking_sight">
+<code class="sig-name descname">_is_tile_blocking_sight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_is_tile_blocking_sight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._is_tile_blocking_sight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a tile is blocking sight</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._is_tile_visible_to_player">
+<code class="sig-name descname">_is_tile_visible_to_player</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_is_tile_visible_to_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._is_tile_visible_to_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the specified tile is visible to the player</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._is_tile_in_bounds">
+<code class="sig-name descname">_is_tile_in_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_is_tile_in_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._is_tile_in_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if specified tile is in the map.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._is_tile_blocking_movement">
+<code class="sig-name descname">_is_tile_blocking_movement</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_is_tile_blocking_movement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._is_tile_blocking_movement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the specified tile is blocking movement</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._tile_has_any_entity">
+<code class="sig-name descname">_tile_has_any_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_tile_has_any_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._tile_has_any_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the specified tile  has an entity on it</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.get_entities_on_tile">
+<code class="sig-name descname">get_entities_on_tile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/world.html#get_entities_on_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.get_entities_on_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all the entities in that tile</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._tile_has_other_entities">
+<code class="sig-name descname">_tile_has_other_entities</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em>, <em class="sig-param"><span class="n">active_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_tile_has_other_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._tile_has_other_entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the specified tile has other entities apart from the provided active entity</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._tile_has_specific_entity">
+<code class="sig-name descname">_tile_has_specific_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em>, <em class="sig-param"><span class="n">active_entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_tile_has_specific_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._tile_has_specific_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the specified tile  has the specified entity on it</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._tile_has_entity_blocking_movement">
+<code class="sig-name descname">_tile_has_entity_blocking_movement</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_tile_has_entity_blocking_movement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._tile_has_entity_blocking_movement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._tile_has_entity_blocking_sight">
+<code class="sig-name descname">_tile_has_entity_blocking_sight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile</span><span class="p">:</span> <span class="n"><a class="reference internal" href="scripts.engine.world_objects.html#scripts.engine.world_objects.tile.Tile" title="scripts.engine.world_objects.tile.Tile">scripts.engine.world_objects.tile.Tile</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_tile_has_entity_blocking_sight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._tile_has_entity_blocking_sight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.is_tile_in_fov">
+<code class="sig-name descname">is_tile_in_fov</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile_pos</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fov_map</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#is_tile_in_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.is_tile_in_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if  target tile is in player`s FOV</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world._can_afford_cost">
+<code class="sig-name descname">_can_afford_cost</code><span class="sig-paren">(</span><em class="sig-param">entity: int</em>, <em class="sig-param">resource: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">cost: int</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#_can_afford_cost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world._can_afford_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if entity can afford the resource cost</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.can_use_skill">
+<code class="sig-name descname">can_use_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#can_use_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.can_use_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if entity can use skill. Checks cooldown and resource affordability.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.recompute_fov">
+<code class="sig-name descname">recompute_fov</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#recompute_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.recompute_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recalculate an entity’s FOV</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.pay_resource_cost">
+<code class="sig-name descname">pay_resource_cost</code><span class="sig-paren">(</span><em class="sig-param">entity: int</em>, <em class="sig-param">resource: NewType.&lt;locals&gt;.new_type</em>, <em class="sig-param">cost: int</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#pay_resource_cost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.pay_resource_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the resource cost from the using entity</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.use_skill">
+<code class="sig-name descname">use_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">skill</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>Skill<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">target_tile</span><span class="p">:</span> <span class="n">Tile</span></em>, <em class="sig-param"><span class="n">direction</span><span class="p">:</span> <span class="n">DirectionType</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#use_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.use_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the specified skill on the target tile, usually creating a projectile. Returns True is successful if
+criteria to use skill was met, False if not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.apply_skill">
+<code class="sig-name descname">apply_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#apply_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve the skill’s effects. Returns True is successful if criteria to apply skill was met, False if not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.set_skill_on_cooldown">
+<code class="sig-name descname">set_skill_on_cooldown</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skill_instance</span><span class="p">:</span> <span class="n">Skill</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#set_skill_on_cooldown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.set_skill_on_cooldown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a skill on cooldown</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.apply_affliction">
+<code class="sig-name descname">apply_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">affliction_instance</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#apply_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_affliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the affliction’s effects. Returns True is successful if criteria to trigger the affliction was met,
+False if not.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.take_turn">
+<code class="sig-name descname">take_turn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#take_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.take_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the entity’s Behaviour component. If no component found then EndTurn event is fired.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.apply_damage">
+<code class="sig-name descname">apply_damage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">damage</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#apply_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.apply_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove damage from entity’s health. Return remaining health.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.spend_time">
+<code class="sig-name descname">spend_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">time_spent</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="_modules/scripts/engine/world.html#spend_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.spend_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add time_spent to the entity’s total time spent.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.kill_entity">
+<code class="sig-name descname">kill_entity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#kill_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.kill_entity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.delete">
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queues entity for removal from the world_objects. Happens at the next run of process.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.add_component">
+<code class="sig-name descname">add_component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">component</span><span class="p">:</span> <span class="n">snecs.component.Component</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#add_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.add_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a component to the entity</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.update_tile_visibility">
+<code class="sig-name descname">update_tile_visibility</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fov_map</span><span class="p">:</span> <span class="n">numpy.array</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#update_tile_visibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.update_tile_visibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the the visibility of the tiles on the came map</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.judge_action">
+<code class="sig-name descname">judge_action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">action_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#judge_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.judge_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Have all entities alter opinions of the entity based on the skill used, if they have an attitude towards
+the tags in that skill.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.remove_affliction">
+<code class="sig-name descname">remove_affliction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span></em>, <em class="sig-param"><span class="n">affliction</span><span class="p">:</span> <span class="n">Affliction</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#remove_affliction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.remove_affliction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove affliction from active list and undo any stat modification.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.learn_skill">
+<code class="sig-name descname">learn_skill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">skill_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/engine/world.html#learn_skill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.learn_skill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the skill name to the entity’s knowledge component.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.calculate_damage">
+<code class="sig-name descname">calculate_damage</code><span class="sig-paren">(</span><em class="sig-param">base_damage: int</em>, <em class="sig-param">damage_mod_amount: int</em>, <em class="sig-param">resist_value: int</em>, <em class="sig-param">hit_type: NewType.&lt;locals&gt;.new_type</em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#calculate_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.calculate_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Work out the damage to be dealt.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.calculate_to_hit_score">
+<code class="sig-name descname">calculate_to_hit_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attacker_accuracy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">skill_accuracy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">stat_to_target_value</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><a class="reference internal" href="_modules/scripts/engine/world.html#calculate_to_hit_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.calculate_to_hit_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the to hit score based on the stats of both entities and a random roll.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="scripts.engine.world.choose_interventions">
+<code class="sig-name descname">choose_interventions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">action_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/scripts/engine/world.html#choose_interventions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.world.choose_interventions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Have all entities consider intervening. Action can be str if matching name, e.g. affliction name,
+or class attribute, e.g. Hit Type name. Returns a list of tuples containing (god_entity_id, intervention name).</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-scripts.engine">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-scripts.engine" title="Permalink to this headline">¶</a></h2>
