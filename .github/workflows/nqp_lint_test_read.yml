@@ -34,15 +34,17 @@ jobs:
 #        poetry config virtualenvs.create false
 #        poetry install --no-root
 
-    - name: black
-      uses: lgeiger/black-action@v1.0.1
-      with:
-        args: .
+    - name: Lint with Black
+      if: always()
+      run: |
+        python -m black -l=120 t=3.8 scripts/
 
     - name: mypy Type Check
+      if: always()
       run: |
         poetry run python -m mypy scripts/
 
     - name: Pytest with Coverage
+      if: always()
       run: |
         poetry run python -m pytest --cov=nqp

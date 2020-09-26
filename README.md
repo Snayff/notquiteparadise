@@ -8,6 +8,7 @@ Current position:
 ![GitHub tag (latest by date
   )](https://img.shields.io/github/v/tag/Snayff/notquiteparadise?label=version)
  [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Snayff_notquiteparadise&metric=ncloc)](https://sonarcloud.io/dashboard?id=Snayff_notquiteparadise)
+ [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Quality of last commit:  
 
