@@ -17,11 +17,11 @@ jobs:
         python-version: 3.8
 
     - name: Cache dependencies
-    uses: actions/cache@v2
-    with:
-      path: ~\AppData\Local\pip\Cache
-      key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-      restore-keys: ${{ runner.os }}-poetry-
+      uses: actions/cache@v2
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: ${{ runner.os }}-poetry-
 
     - name: Run image
       uses: abatilo/actions-poetry@v2.0.0
