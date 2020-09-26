@@ -48,8 +48,6 @@ class GameMap:
             for y in range(self.height):
                 self.tile_map[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement))
 
-                world.create_entity([Position((x, y)), Blocking(False, False)])
-
         self.generation_info: str = ""
 
     def generate_new_map(self, player_data: ActorData):

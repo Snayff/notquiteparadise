@@ -35,7 +35,8 @@ Quality of last commit:
 - [Documentation](#documentation)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
-- [NQP MVP Roadmap](#nqp-mvp-roadmap)
+- [NQP Roadmap](#nqp-roadmap)
+- [NQP Philosophies](#nqp-philosophies)
 - [License](#license)
 
 ## Motivation and Intent
@@ -91,11 +92,11 @@ The NQP engine has several dependencies, though most of these will be removed ov
  
 
 ## Contributing
-See the [Contributing] document for details in how you can get involved.
+See the [Contributing] document for details on how you can get involved.
 
 [Contributing]: CONTRIBUTING.md
 
-## NQP MVP Roadmap
+## NQP Roadmap
 Following advice from a knowledgeable sage, for the time being this project is focused on achieving an MVP. That is
  to say that the aim is to achieve a basic level of functionality and a core set of features on which to build.
 
@@ -103,6 +104,19 @@ All planned features and known issues are held on the [NQP Issue Tracker].
 
 [NQP Issue Tracker]: https://nqp.myjetbrains.com/youtrack/issues
 
+## NQP Philosophies 
+For NQP, the game, the design is underpinned by the following philosophies:
+* **Flow** - Periods of impetus to ensure the player is driven forward appropriately. Periods of openness to allow self
+ pacing, reflection and exploration.
+* **Coherent** - Information pertinent to the player is always made available and easy to parse, utilising a mix of
+ art and text. Avoid need for external resource use e.g. a wiki.
+* **Flexible**  - Never a best way, always a different one. The only limitations in place should be those that drive
+ diversity of play.
+* **Accessible** - Supports different kinds of players, e.g. can use keyboard, mouse or controller interchangeably, with
+ minimal
+ difference in experience. e.g. Colour scheme is colour-blind aware.
+* **Customisable** - Near-core game settings can be influenced or set by the player allowing for extensive
+ personalisation.
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)

@@ -249,16 +249,14 @@ def create_fov_map() -> np.array:
     Create a blank fov map
     """
     game_map = get_game_map()
-
-    fov_map = np.array(
+    return np.array(
         [
             [not tile.blocks_sight for tile in column]
             for column in game_map.tile_map
         ],
         dtype=bool,
-    ).transpose()
-
-    return np.asfortranarray(fov_map)
+        order="F",
+    )
 
 
 def create_combat_stats(entity: EntityID) -> CombatStats:

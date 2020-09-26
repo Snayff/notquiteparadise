@@ -25,11 +25,12 @@ FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
 
 ######################## PATHS ######################################
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 if "GENERATING_SPHINX_DOCS" in os.environ:
     # to move up from docs and handle being in Ubuntu in CI
-    path = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+    path = os.path.abspath(os.path.join(ROOT_PATH, os.pardir))
 else:
-    path = os.path.abspath(os.getcwd())
+    path = os.path.abspath(ROOT_PATH)
 
 DATA_PATH = os.path.join(path,  "data/")
 ASSET_PATH = os.path.join(path, "assets/")
