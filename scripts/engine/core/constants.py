@@ -8,6 +8,7 @@ from typing import NewType, Tuple
 
 
 ######################## TOP LEVEL CONSTANTS ######################################
+import tcod
 
 VERSION = "0.123.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 
@@ -22,7 +23,7 @@ INFINITE = 999
 MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
 # TODO - add an active component and then we can look for this (and only update once per turn!)
 FOV_LIGHT_WALLS = True
-FOV_ALGORITHM = 0
+FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
 
 ######################## PATHS ######################################
 if "GENERATING_SPHINX_DOCS" in os.environ:

@@ -135,7 +135,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     components.append(Blocking(True, library.GAME_CONFIG.default_values.entity_blocks_sight))
     components.append(Traits(actor_data.trait_names))
     components.append(FOV(create_fov_map()))
-    components.append(LightSource(3))
+    components.append(LightSource(2))
     components.append(Tracked(chronicle.get_time()))
 
     # get info from traits
@@ -673,6 +673,7 @@ def get_secondary_stat(entity: EntityID, secondary_stat: SecondaryStatType) -> i
     """
     Get an entity's secondary stat.
     """
+    # FIXME - this doesnt work for sight range
     stat = secondary_stat
     value = 0
 
