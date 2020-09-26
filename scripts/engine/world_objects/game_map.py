@@ -8,7 +8,8 @@ from typing import Any, Dict, List, Tuple
 import numpy as np
 from numpy import ndarray
 
-from scripts.engine import dungen
+from scripts.engine import dungen, world
+from scripts.engine.component import Blocking, Position
 from scripts.engine.core.constants import TILE_SIZE, TileCategory
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.world_objects.tile import Tile
@@ -46,6 +47,8 @@ class GameMap:
             self.tile_map.append([])  # create new list for every col
             for y in range(self.height):
                 self.tile_map[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement))
+
+                world.create_entity([Position((x, y)), Blocking(False, False)])
 
         self.generation_info: str = ""
 

@@ -76,7 +76,7 @@ move_world = snecs.ecs.move_world
 
 def create_entity(components: List[Component] = None) -> EntityID:
     """
-    Use each component in a list of components to create_entity an entity
+    Use each component in a list of components to create an entity
     """
     if components is None:
         _components = []
@@ -248,21 +248,17 @@ def create_fov_map() -> np.array:
     """
     Create a blank fov map
     """
-    start_time = time.time()
-
     game_map = get_game_map()
-    width = game_map.width
-    height = game_map.height
 
-    fov_map = np.zeros((width, height), dtype=bool, order="F")
+    fov_map = np.array(
+        [
+            [not tile.blocks_sight for tile in column]
+            for column in game_map.tile_map
+        ],
+        dtype=bool,
+    ).transpose()
 
-    for x in range(width):
-        for y in range(height):
-            tile = get_tile((x, y))
-            if tile:
-                fov_map[x][y] = not tile.blocks_sight and not tile.blocks_movement
-
-    return fov_map
+    return np.asfortranarray(fov_map)
 
 
 def create_combat_stats(entity: EntityID) -> CombatStats:
