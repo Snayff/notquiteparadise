@@ -6,6 +6,7 @@ import pytweening
 
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic
+from scripts.engine.core import queries
 from scripts.engine.core.constants import UIElement
 from scripts.engine.utility import is_close
 
@@ -25,7 +26,7 @@ def _process_aesthetic_update(time_delta: float):
     Update real-time timers on entities, such as entity animations.
     """
     # move entities screen position towards target
-    for entity, (aesthetic, ) in world.get_components([Aesthetic]):
+    for entity, (aesthetic, ) in queries.aesthetic:
         # cast for typing
         aesthetic = cast(Aesthetic, aesthetic)
 

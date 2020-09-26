@@ -142,7 +142,8 @@ class Camera(UIPanel):
             elif event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
                 updated_tile_info = False
                 from scripts.engine.ui.manager import ui
-                for entity, (position, ) in world.get_components([Position]):
+                from scripts.engine.core import queries
+                for entity, (position, ) in queries.position:
                     position: Position
                     if (x, y) in position:
                         ui.set_selected_tile_pos((x, y))
@@ -296,7 +297,8 @@ class Camera(UIPanel):
             self._draw_surface(tile.sprite, map_surf, (tile.x, tile.y))
 
         # draw entities
-        for entity, (pos, aesthetic) in world.get_components([Position, Aesthetic]):
+        from scripts.engine.core import queries
+        for entity, (pos, aesthetic) in queries.position_and_aesthetic:
             # if part of entity in camera view
             for offset in pos.offsets:
                 src_area = Rect(offset[0] * TILE_SIZE, offset[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)

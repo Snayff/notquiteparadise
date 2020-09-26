@@ -857,7 +857,8 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     x = tile.x
     y = tile.y
     entities = []
-    for entity, (position,) in get_components([Position]):
+    from scripts.engine.core import queries
+    for entity, (position,) in queries.position:
         position = cast(Position, position)
         if (x, y) in position:
             entities.append(entity)

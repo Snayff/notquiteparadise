@@ -3,9 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Blocking, Knowledge, Position, Resources
 from scripts.engine.core.constants import (
@@ -178,7 +176,8 @@ class MoveActorEffect(Effect):
 
             # check if entity blocking tile
             elif is_entity_on_tile and target_tile:
-                for blocking_entity, (position, blocking) in world.get_components([Position, Blocking]):
+                from scripts.engine.core import queries
+                for blocking_entity, (position, blocking) in queries.position_and_blocking:
                     # cast for typing
                     position = cast(Position, position)
                     blocking = cast(Blocking, blocking)

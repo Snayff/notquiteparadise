@@ -74,7 +74,8 @@ class TileInfo(UIPanel):
             info = []
 
             # get entities at selected position
-            for entity, (position, identity, aesthetic) in world.get_components([Position, Identity, Aesthetic]):
+            from scripts.engine.core import queries
+            for entity, (position, identity, aesthetic) in queries.position_and_identity_and_aesthetic:
                 if self.selected_tile_pos in position:
 
                     # get universal info

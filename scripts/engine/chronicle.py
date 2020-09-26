@@ -2,9 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, cast
-
 from snecs.typedefs import EntityID
-
 from scripts.engine import library, world
 from scripts.engine.component import Afflictions, Knowledge, Tracked
 from scripts.engine.core.constants import INFINITE
@@ -26,7 +24,8 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
 
     # create a turn queue from the entities list
     new_queue = {}
-    for entity, (tracked, ) in world.get_components([Tracked]):
+    from scripts.engine.core import queries
+    for entity, (tracked, ) in queries.tracked:
         if entity != entity_to_exclude:
             tracked = cast(Tracked, tracked)
             new_queue[entity] = tracked.time_spent
@@ -87,7 +86,8 @@ def next_round(time_progressed: int):
     Move to the next round and trigger end of round events, like cooldown and affliction reduction.
     """
     ## skill cooldowns
-    for entity, (knowledge,) in world.get_components([Knowledge]):
+    from scripts.engine.core import queries
+    for entity, (knowledge,) in queries.knowledge:
         knowledge = cast(Knowledge, knowledge)
         for skill_name in knowledge.skill_names:
             skill_cooldown = knowledge.cooldowns[skill_name]
@@ -95,7 +95,7 @@ def next_round(time_progressed: int):
                 knowledge.set_skill_cooldown(skill_name, skill_cooldown - 1)
 
     ## affliction durations
-    for entity, (afflictions, ) in world.get_components([Afflictions]):
+    for entity, (afflictions, ) in queries.affliction:
         assert isinstance(afflictions, Afflictions)  # handle mypy type error
         for affliction in afflictions.active:
             if affliction.duration == 0:

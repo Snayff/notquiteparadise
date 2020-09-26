@@ -8,6 +8,7 @@ from snecs.typedefs import EntityID
 from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.action import Skill
 from scripts.engine.component import IsActor, Knowledge, Position
+from scripts.engine.core import queries
 from scripts.engine.core.constants import (
     SAVE_PATH,
     Direction,
@@ -53,7 +54,7 @@ def process_event(event: pygame.event, game_state: GameStateType):
             ## Activate Actor Info Menu
             x, y = event.tile_pos
             # get entity on tile
-            for entity, (position, *other) in world.get_components([Position, IsActor]):  # type: ignore
+            for entity, (position, _) in queries.position_and_actor:
                 if (x, y) in position:
                     # found entity, set to selected
                     actor_info: ActorInfo = ui.get_element(UIElement.ACTOR_INFO)
