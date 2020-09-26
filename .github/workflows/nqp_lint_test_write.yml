@@ -1,4 +1,4 @@
-name: NQP - Lint and Test (Write)
+name: NQP - PR Review - Lint and Test (Write)
 
 on:
   pull_request:

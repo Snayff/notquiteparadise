@@ -1,4 +1,4 @@
-name: NQP - Lint and Test (Read Only)
+name: NQP - Feature Check - Test (Read Only)
 
 on:
   push:
@@ -28,11 +28,6 @@ jobs:
         python -m pip install --upgrade poetry
         poetry config virtualenvs.create false
         poetry install --no-root
-
-    - name: Lint with Black
-      if: always()
-      run: |
-        python -m black scripts/
 
     - name: mypy Type Check
       if: always()
