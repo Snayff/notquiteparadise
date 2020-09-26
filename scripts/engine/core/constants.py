@@ -21,6 +21,8 @@ SKILL_BUTTON_SIZE = 64
 INFINITE = 999
 MAX_ACTIVATION_DISTANCE = 7  # this is how far from the player an entity can be and still be considered active
 # TODO - add an active component and then we can look for this (and only update once per turn!)
+FOV_LIGHT_WALLS = True
+FOV_ALGORITHM = 0
 
 ######################## PATHS ######################################
 if "GENERATING_SPHINX_DOCS" in os.environ:
@@ -90,7 +92,7 @@ class GameState(SimpleNamespace):
     States the game can be in.
     """
     LOADING = GameStateType(1)  # while loading, to prevent key press.
-    GAMEMAP = GameStateType(2)  # while player moving around the gamemap
+    GAMEMAP = GameStateType(2)  # while player moving around the game_map
     PLAYER_DEAD = GameStateType(3)  # while player is dead
     TARGETING = GameStateType(4)  # while player is targeting
     EXIT_GAME = GameStateType(5)  # while exiting

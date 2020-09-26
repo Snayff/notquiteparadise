@@ -473,9 +473,6 @@ class FOV(RegisteredComponent):
     """
     An entity's field of view.
     """
-    algorithm: int = 0
-    light_walls: bool = True
-
     def __init__(self, fov_map: np.array):
         self.map: np.array = fov_map
 

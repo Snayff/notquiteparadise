@@ -13,9 +13,9 @@ from scripts.engine.core.constants import GameState, UIElement
 from scripts.engine.core.data import store
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.debug import enable_profiling, initialise_logging, kill_logging
-from scripts.engine.systems.vision import process_fov, process_tile_visibility
+from scripts.engine.systems.vision import process_fov, process_light_map, process_tile_visibility
 from scripts.engine.ui.manager import ui
-from scripts.engine.world_objects.gamemap import Gamemap
+from scripts.engine.world_objects.game_map import GameMap
 from scripts.nqp.processors import display_processors, input_processors
 
 
@@ -107,8 +107,8 @@ def initialise_game():
     Init the game`s required info
     """
     # init and save map
-    game_map = Gamemap("cave", 10)
-    store.current_gamemap = game_map
+    game_map = GameMap("cave", 10)
+    store.current_game_map = game_map
 
     # populate the map
     player_data = ActorData(key="player", possible_names=["player"], description="a desc",
@@ -143,6 +143,7 @@ def initialise_game():
         aesthetic.target_draw_y = aesthetic.draw_y
 
     # entities load with a blank fov, update them now
+    process_light_map()
     process_fov()
     process_tile_visibility()
 

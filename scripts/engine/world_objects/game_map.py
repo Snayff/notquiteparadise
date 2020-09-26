@@ -5,13 +5,16 @@ import logging
 import random
 from typing import Any, Dict, List, Tuple
 
+import numpy as np
+from numpy import ndarray
+
 from scripts.engine import dungen
 from scripts.engine.core.constants import TILE_SIZE, TileCategory
 from scripts.engine.core.definitions import ActorData
 from scripts.engine.world_objects.tile import Tile
 
 
-class Gamemap:
+class GameMap:
     """
     Holds tiles for a map. Handles generation of the map and placement of the entities. Fills map with floors on
     init.
@@ -28,6 +31,8 @@ class Gamemap:
         _map_data = library.MAPS[map_name]
         self.width = _map_data.width
         self.height = _map_data.height
+        self.light_map: np.array = np.zeros((self.width, self.height), dtype=bool, order="F")
+        self.tile_map: List[List[Tile]] = []
 
         # get details for a wall tile
         from scripts.engine import utility
@@ -36,20 +41,19 @@ class Gamemap:
         blocks_sight = True
         blocks_movement = True
 
-        # populate with wall tiles
-        self.tiles: List[List[Tile]] = []
+        # populate tile_map with wall tiles
         for x in range(self.width):
-            self.tiles.append([])  # create new list for every col
+            self.tile_map.append([])  # create new list for every col
             for y in range(self.height):
-                self.tiles[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement))
+                self.tile_map[x].append(Tile(x, y, wall_sprite, wall_sprite_path, blocks_sight, blocks_movement))
 
         self.generation_info: str = ""
 
     def generate_new_map(self, player_data: ActorData):
         """
-        Generate the map for the current game map. Creates tiles. Saves the values directly to the Gamemap.
+        Generate the map for the current game map. Creates tiles. Saves the values directly to the GameMap.
         """
-        self.tiles, self.generation_info = dungen.generate(self.name, self.rng, player_data)
+        self.tile_map, self.generation_info = dungen.generate(self.name, self.rng, player_data)
 
     def dump(self, path: str):
         """
@@ -70,7 +74,7 @@ class Gamemap:
             tiles.append([])
             for y in range(self.height):
                 # add to the column
-                tiles[x].append(self.tiles[x][y].serialise())
+                tiles[x].append(self.tile_map[x][y].serialise())
 
 
         _dict = {
@@ -84,7 +88,7 @@ class Gamemap:
     @classmethod
     def deserialise(cls, serialised: Dict[str, Any]):
         """
-        Loads the details from the serialised data back into the Gamemap.
+        Loads the details from the serialised data back into the GameMap.
         """
         try:
             seed = serialised["seed"]
@@ -98,9 +102,9 @@ class Gamemap:
                 for y in range(height):
                     tiles[x].append(Tile.deserialise(serialised["tiles"][x][y]))
 
-            game_map = Gamemap(seed, algo_name)
-            game_map.tiles = tiles
+            game_map = GameMap(seed, algo_name)
+            game_map.tile_map = tiles
             return game_map
         except KeyError as e:
-            logging.warning(f"Gamemap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
+            logging.warning(f"GameMap.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
             raise Exception  # throw exception to hit outer error handler and exit

@@ -20,7 +20,7 @@ from scripts.engine.world_objects.tile import Tile
 
 class Camera(UIPanel):
     """
-    UI element to display the Gamemap.
+    UI element to display the GameMap.
     """
 
     def __init__(self, rect: Rect, manager: UIManager):
@@ -35,9 +35,9 @@ class Camera(UIPanel):
         self.columns = rect.width // TILE_SIZE
 
         # store this now so we can refer to it later
-        gamemap = world.get_gamemap()
-        self.map_width = gamemap.width
-        self.map_height = gamemap.height
+        game_map = world.get_game_map()
+        self.map_width = game_map.width
+        self.map_height = game_map.height
 
         # to hold the last stored end values
         self._end_x = 0
@@ -67,8 +67,8 @@ class Camera(UIPanel):
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
-        self.gamemap = UIImage(relative_rect=Rect((0, 0), rect.size), image_surface=blank_surf, manager=manager,
-                                container=self.get_container(), object_id="#gamemap")
+        self.game_map = UIImage(relative_rect=Rect((0, 0), rect.size), image_surface=blank_surf, manager=manager,
+                                container=self.get_container(), object_id="#game_map")
 
         # create grid
         self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager,
@@ -168,7 +168,7 @@ class Camera(UIPanel):
             self._update_grid()
 
         # update entities in game map every frame
-        self._draw_gamemap()
+        self._draw_game_map()
         self._update_ui_element_pos()
 
         # all updates will have been processed
@@ -283,13 +283,13 @@ class Camera(UIPanel):
 
     ############### DRAW ###########################
 
-    def _draw_gamemap(self):
+    def _draw_game_map(self):
         """
         Update the game map to show the current tiles and entities
         """
         # create new surface for the game map
-        map_width = self.gamemap.rect.width
-        map_height = self.gamemap.rect.height
+        map_width = self.game_map.rect.width
+        map_height = self.game_map.rect.height
         map_surf = Surface((map_width, map_height), SRCALPHA)
 
         # draw tiles
@@ -309,7 +309,7 @@ class Camera(UIPanel):
                     if tile.is_visible or self.ignore_fov:
                         self._draw_surface(aesthetic.current_sprite, map_surf, draw_position, src_area)
 
-        self.gamemap.set_image(map_surf)
+        self.game_map.set_image(map_surf)
 
     def _draw_grid(self, tile_positions: Iterable):
         """

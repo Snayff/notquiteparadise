@@ -57,7 +57,7 @@ from scripts.engine.core.definitions import ActorData, ProjectileData, TraitSpri
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
 from scripts.engine.world_objects.combat_stats import CombatStats
-from scripts.engine.world_objects.gamemap import Gamemap
+from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
@@ -290,9 +290,9 @@ def create_fov_map() -> np.array:
     """
     Create a blank fov map
     """
-    gamemap = get_gamemap()
-    width = gamemap.width
-    height = gamemap.height
+    game_map = get_game_map()
+    width = game_map.width
+    height = game_map.height
 
     fov_map = np.zeros((width, height), dtype=bool, order="F")
 
@@ -315,27 +315,27 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
 
-def get_gamemap() -> Gamemap:
+def get_game_map() -> GameMap:
     """
-    Get current gamemap
+    Get current game_map
     """
-    if store.current_gamemap:
-        gamemap = store.current_gamemap
+    if store.current_game_map:
+        game_map = store.current_game_map
     else:
-        raise Exception("get_gamemap: Tried to get the gamemap but there isnt one.")
-    return gamemap
+        raise Exception("get_game_map: Tried to get the game_map but there isnt one.")
+    return game_map
 
 
 def get_tile(tile_pos: Tuple[int, int]) -> Tile:
     """
     Get the tile at the specified location. Raises exception if out of bounds or doesnt exist.
     """
-    gamemap = get_gamemap()
+    game_map = get_game_map()
     x = tile_pos[0]
     y = tile_pos[1]
 
     try:
-        _tile = gamemap.tiles[x][y]
+        _tile = game_map.tile_map[x][y]
 
     except IndexError:
         raise Exception(f"Tried to get tile({x},{y}), which doesnt exist.")
@@ -352,7 +352,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
     position given.
     """
     start_x, start_y = start_pos
-    gamemap = get_gamemap()
+    game_map = get_game_map()
     tiles = []
 
     for coord in coords:
@@ -363,7 +363,7 @@ def get_tiles(start_pos: Tuple[int, int], coords: List[Tuple[int, int]]) -> List
         tile = get_tile((x, y))
         if tile:
             if _is_tile_in_bounds(tile):
-                tiles.append(gamemap.tiles[x][y])
+                tiles.append(game_map.tile_map[x][y])
 
     return tiles
 
@@ -430,7 +430,7 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     pass
     #
     # max_path_length = 25
-    # gamemap = _manager.gamemap
+    # game_map = _manager.game_map
     # entities = []
     # for entity, (pos, blocking) in _manager.get_entitys_components(Position, Blocking):
     #     entities.append(entity)
@@ -441,13 +441,13 @@ def get_a_star_direction(start_pos: Tuple[int, int], target_pos: Tuple[int, int]
     # logging.debug(log_string)
     #
     # # Create a FOV map that has the dimensions of the map
-    # fov = tcod.map_new(gamemap.width, gamemap.height)
+    # fov = tcod.map_new(game_map.width, game_map.height)
     #
     # # Scan the current map each turn and set all the walls as unwalkable
-    # for y1 in range(gamemap.height):
-    #     for x1 in range(gamemap.width):
-    #         tcod.map_set_properties(fov, x1, y1, not gamemap.tiles[x1][y1].blocks_sight,
-    #                                 not gamemap.tiles[x1][y1].blocks_movement)
+    # for y1 in range(game_map.height):
+    #     for x1 in range(game_map.width):
+    #         tcod.map_set_properties(fov, x1, y1, not game_map.tiles[x1][y1].blocks_sight,
+    #                                 not game_map.tiles[x1][y1].blocks_movement)
     #
     # # Scan all the objects to see if there are objects that must be navigated around
     # # Check also that the object isn't  or the target (so that the start and the end points are free)
@@ -828,9 +828,9 @@ def _is_tile_in_bounds(tile: Tile) -> bool:
     """
     Check if specified tile is in the map.
     """
-    gamemap = get_gamemap()
+    game_map = get_game_map()
 
-    if (0 <= tile.x < gamemap.width) and (0 <= tile.y < gamemap.height):
+    if (0 <= tile.x < game_map.width) and (0 <= tile.y < game_map.height):
         return True
     else:
         return False

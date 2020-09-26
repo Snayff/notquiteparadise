@@ -84,7 +84,7 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
     _process_stateless_intents(intent)
 
     if game_state == GameState.GAMEMAP:
-        _process_gamemap_intents(intent)
+        _process_game_map_intents(intent)
     elif game_state == GameState.TARGETING:
         _process_targeting_mode_intents(intent)
     elif game_state == GameState.MENU:
@@ -140,7 +140,7 @@ def _process_stateless_intents(intent: InputIntentType):
             state.load_game(save)
 
 
-def _process_gamemap_intents(intent: InputIntentType):
+def _process_game_map_intents(intent: InputIntentType):
     """
     Process intents for the player turn game state.
     """
