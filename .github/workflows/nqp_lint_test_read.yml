@@ -3,7 +3,7 @@ name: NQP - Lint and Test (Read Only)
 on:
   push:
     branches:
-      - develop
+      - "feature/**"
 
 jobs:
   build:
