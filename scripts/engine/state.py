@@ -135,7 +135,8 @@ def dump_save_game():
     for save_name, save_values in _SAVE.items():
 
         # write to json
-        with open(str(SAVE_PATH / save_name) + ".json", "w") as file:
+        str_path = str(SAVE_PATH / save_name) + ".json"
+        with open(str_path, "w") as file:
             json.dump(save_values, file, indent=4)
             logging.info("Save file dumped.")
 
@@ -145,7 +146,8 @@ def load_game(filename: str):
     Deserialise the game data from a file. Filename does not include path to save folder.
     """
     # read from json
-    with open(SAVE_PATH / filename + ".json", "r") as file:
+    str_path = str(SAVE_PATH / filename) + ".json"
+    with open(str_path, "r") as file:
         save = json.load(file)
 
     # check the version

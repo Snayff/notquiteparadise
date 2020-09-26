@@ -134,7 +134,7 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.TEST:
         # add whatever we want to test here
         import os
-        full_save_path = os.getcwd() + "/" + SAVE_PATH
+        full_save_path = str(SAVE_PATH)
         for save_name in os.listdir(full_save_path):
             save = save_name.replace(".json", "")
             state.load_game(save)
