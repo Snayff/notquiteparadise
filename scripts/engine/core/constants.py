@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
+
 import pygame
 import tcod
 
@@ -25,17 +27,16 @@ FOV_LIGHT_WALLS = True
 FOV_ALGORITHM = tcod.FOV_RESTRICTIVE
 
 ######################## PATHS ######################################
-ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-if "GENERATING_SPHINX_DOCS" in os.environ:
-    # to move up from docs and handle being in Ubuntu in CI
-    path = os.path.abspath(os.path.join(ROOT_PATH, os.pardir))
-else:
-    path = os.path.abspath(ROOT_PATH)
+ROOT_PATH = Path(__file__).parent.parent.parent.parent  # constants.py is three directories deep
 
-DATA_PATH = os.path.join(path,  "data/")
-ASSET_PATH = os.path.join(path, "assets/")
-IMAGE_NOT_FOUND_PATH = os.path.join(ASSET_PATH, "image_not_found.png")
-SAVE_PATH = os.path.join(DATA_PATH, "saves/")
+# to move up from docs and handle being in Ubuntu in CI
+if "GENERATING_SPHINX_DOCS" in os.environ:
+    ROOT_PATH = ROOT_PATH / os.pardir
+
+DATA_PATH = ROOT_PATH / "data/"
+ASSET_PATH = ROOT_PATH / "assets/"
+IMAGE_NOT_FOUND_PATH = ASSET_PATH / "image_not_found.png"
+SAVE_PATH = DATA_PATH / "saves/"
 
 ######################## NEW TYPES ######################################
 # NewType guarantees you don't accidentally pass in a normal str instead of a value explicitly defined as a member of

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Type
 
-from scripts.engine import world
+from snecs import Query
 from scripts.engine.component import (
     Aesthetic,
     Afflictions,
@@ -24,29 +24,31 @@ __all__ = ["tracked", "aesthetic", "knowledge", "affliction", "position", "light
     "position_and_identity_and_aesthetic", "position_and_actor"]
 
 
+get_components = Query  # import from snecs to avoid issues with importing from world
+
 ################### SINGLE QUERIES #######################
 
-tracked = world.get_components([Tracked]).compile()
+tracked = get_components([Tracked]).compile()
 
-aesthetic = world.get_components([Aesthetic]).compile()
+aesthetic = get_components([Aesthetic]).compile()
 
-knowledge = world.get_components([Knowledge]).compile()
+knowledge = get_components([Knowledge]).compile()
 
-affliction = world.get_components([Afflictions]).compile()
+affliction = get_components([Afflictions]).compile()
 
-position = world.get_components([Position]).compile()
+position = get_components([Position]).compile()
 
 ################## MULTI QUERIES ##########################
 
-light_source_and_position = world.get_components([LightSource, Position]).compile()
+light_source_and_position = get_components([LightSource, Position]).compile()
 
-position_and_fov_and_combat_stats = world.get_components([FOV, Position, HasCombatStats]).compile()
+position_and_fov_and_combat_stats = get_components([FOV, Position, HasCombatStats]).compile()
 
-position_and_blocking = world.get_components([Position, Blocking]).compile()
+position_and_blocking = get_components([Position, Blocking]).compile()
 
-position_and_aesthetic = world.get_components([Position, Aesthetic]).compile()
+position_and_aesthetic = get_components([Position, Aesthetic]).compile()
 
-position_and_actor = world.get_components([Position, IsActor]).compile()
+position_and_actor = get_components([Position, IsActor]).compile()
 
-position_and_identity_and_aesthetic = world.get_components([Position, Identity, Aesthetic]).compile()
+position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()
 

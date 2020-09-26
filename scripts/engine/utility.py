@@ -15,7 +15,8 @@ if TYPE_CHECKING:
 
 __all__ = ["get_image", "get_images", "flatten_images", "recursive_replace", "recursive_find_in_dict",
     "get_class_members", "lerp", "clamp", "get_euclidean_distance", "get_chebyshev_distance",
-    "get_coords_from_shape", "is_close", "value_to_member", "convert_tile_string_to_xy", "convert_direction_to_name"]
+    "get_coords_from_shape", "is_close", "value_to_member", "convert_tile_string_to_xy", "convert_direction_to_name",
+    "build_sprites_from_paths"]
 
 
 ################################### IMAGES ########################################
@@ -36,10 +37,10 @@ def get_image(img_path: str, desired_dimensions: Tuple[int, int] = (TILE_SIZE, T
         else:
             try:
                 # try and get the image provided
-                image = pygame.image.load(ASSET_PATH + img_path).convert_alpha()
+                image = pygame.image.load(str(ASSET_PATH / img_path)).convert_alpha()
 
             except:
-                image = pygame.image.load(IMAGE_NOT_FOUND_PATH).convert_alpha()
+                image = pygame.image.load(str(IMAGE_NOT_FOUND_PATH)).convert_alpha()
                 logging.warning(f"Get_image: Tried to use {img_path} but it wasn`t found. Used the not_found image "
                                 f"instead.")
     else:

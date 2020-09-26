@@ -1,8 +1,8 @@
-from typing import List
 
+from typing import List
 from snecs.typedefs import EntityID
 
-from scripts.engine import action, world
+from scripts.engine import world
 from scripts.engine.action import Affliction, Skill
 from scripts.engine.component import Aesthetic, Afflictions, Identity, Knowledge, Position
 from scripts.engine.core.constants import (

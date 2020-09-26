@@ -121,7 +121,7 @@ class ActorInfo(UIWindow):
         if entity:
 
             info: List[Tuple[str, Union[str, pygame.Surface]]] = []
-            section_break_image = utility.get_image(ASSET_PATH + "ui/menu_window_n_repeat.png",
+            section_break_image = utility.get_image(ASSET_PATH / "ui/menu_window_n_repeat.png",
                                                     (self.rect.width - self.scrollbar_width, 13))
 
             # get aesthetic

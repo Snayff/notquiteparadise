@@ -93,7 +93,7 @@ def refresh_library():
 ####################### LOAD ##############################
 
 def _load_affliction_data():
-    with open(DATA_PATH + "game/afflictions.json") as file:
+    with open(str(DATA_PATH / "game/afflictions.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global AFFLICTIONS
     AFFLICTIONS = data
@@ -108,14 +108,14 @@ def _load_aspects_data():
 
 
 def _load_traits_data():
-    with open(DATA_PATH + "game/traits.json") as file:
+    with open(str(DATA_PATH / "game/traits.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global TRAITS
     TRAITS = data
 
 
 def _load_base_stat_primary_data():
-    with open(DATA_PATH + "/game/base_stats_primary.json") as file:
+    with open(str(DATA_PATH / "game/base_stats_primary.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
 
     global BASE_STATS_PRIMARY
@@ -123,7 +123,7 @@ def _load_base_stat_primary_data():
 
 
 def _load_base_stat_secondary_data():
-    with open(DATA_PATH + "game/base_stats_secondary.json") as file:
+    with open(str(DATA_PATH / "game/base_stats_secondary.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
 
     global BASE_STATS_SECONDARY
@@ -131,14 +131,14 @@ def _load_base_stat_secondary_data():
 
 
 def _load_gods_data():
-    with open(DATA_PATH + "game/gods.json") as file:
+    with open(str(DATA_PATH / "game/gods.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global GODS
     GODS = data
 
 
 def _load_skills_data():
-    with open(DATA_PATH + "game/skills.json") as file:
+    with open(str(DATA_PATH / "game/skills.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global SKILLS
 
@@ -146,7 +146,7 @@ def _load_skills_data():
 
 
 def _load_map_data():
-    with open(DATA_PATH + "game/maps.json") as file:
+    with open(str(DATA_PATH / "game/maps.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global MAPS
 
@@ -154,14 +154,14 @@ def _load_map_data():
 
 
 def _load_room_data():
-    with open(DATA_PATH + "game/rooms.json") as file:
+    with open(str(DATA_PATH / "game/rooms.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global ROOMS
     ROOMS = data
 
 
 def _load_npc_data():
-    with open(DATA_PATH + "game/actors.json") as file:
+    with open(str(DATA_PATH / "game/actors.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global ACTORS
     ACTORS = data
@@ -171,7 +171,7 @@ def _load_input_config():
     """
     Load the input config and map to pygame constants
     """
-    with open(DATA_PATH + "config/input.json") as file:
+    with open(str(DATA_PATH / "config/input.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
 
     _input_list = {}
@@ -205,7 +205,7 @@ def _load_video_config():
     """
     Load the _video config
     """
-    with open(DATA_PATH + "config/video.json") as file:
+    with open(str(DATA_PATH / "config/video.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
 
     global VIDEO_CONFIG
@@ -216,7 +216,7 @@ def _load_game_config():
     """
     Load the game config
     """
-    with open(DATA_PATH + "config/game.json") as file:
+    with open(str(DATA_PATH / "config/game.json")) as file:
         data = json.load(file, object_hook=deserialise_dataclasses)
     global GAME_CONFIG
     GAME_CONFIG = data

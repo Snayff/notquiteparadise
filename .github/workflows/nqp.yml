@@ -14,7 +14,7 @@ jobs:
           command: poetry run python -m mypy scripts/
           python-version: 3.8
         - name: test
-          command: poetry run python -m pytest
+          command: poetry run python -m pytest --cov=nqp
           python-version: 3.8
 
     steps:
