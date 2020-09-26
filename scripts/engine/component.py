@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 from snecs import RegisteredComponent
 
+import scripts.engine.utility
 from scripts.engine.core.constants import EffectType, PrimaryStatType, RenderLayerType
 
 if TYPE_CHECKING:
@@ -205,7 +206,7 @@ class Aesthetic(RegisteredComponent):
 
         # convert sprite paths to sprites
         from scripts.engine import world
-        sprites = world.build_sprites_from_paths(sprite_paths)
+        sprites = scripts.engine.utility.build_sprites_from_paths(sprite_paths)
 
         return Aesthetic(sprites.idle, sprites, sprite_paths, render_layer, (x, y))
 
@@ -492,9 +493,12 @@ class LightSource(RegisteredComponent):
     """
     def __init__(self, radius: int, colour: Optional[Tuple[int, int, int, int]] = None):
         if not colour:
-            colour = [230, 182, 41, 80]
+            _colour = (230, 182, 41, 80)
+        else:
+            _colour = colour
+
         self.radius: int = radius
-        self.colour: Tuple[int, int, int, int] = colour
+        self.colour: Tuple[int, int, int, int] = _colour
 
     def serialize(self):
         data = {

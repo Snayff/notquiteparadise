@@ -1,8 +1,5 @@
 from __future__ import annotations
-
-import logging
-import time
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 import tcod
 
@@ -13,15 +10,13 @@ from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_AC
 
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    pass
 
 
 def process_light_map():
     """
     Update light map using light sources of all entities
     """
-    start_time = time.time()
-
     # get player details
     player = world.get_player()
     player_pos: Position = world.get_entitys_component(player, Position)
@@ -50,16 +45,11 @@ def process_light_map():
             fov = tcod.map.compute_fov(transparency, (pos.x, pos.y), radius, FOV_LIGHT_WALLS, FOV_ALGORITHM)
             light_map |= fov
 
-    end_time = time.time()
-    logging.debug(f"Completed process_light_map in {format(end_time - start_time, '.5f')}")
-
 
 def process_fov():
     """
     Update FOV for all entities within MAX_ACTIVATION_DISTANCE of player.
     """
-    start_time = time.time()
-
     # get player details
     player = world.get_player()
     player_pos: Position = world.get_entitys_component(player, Position)
@@ -67,7 +57,7 @@ def process_fov():
     # create transparency layer
     transparency = world.create_fov_map()
 
-    for entity, (fov, pos, stats) in queries.fov_and_position_and_combat_stats:
+    for entity, (fov, pos, stats) in queries.position_and_fov_and_combat_stats:
 
         # check if they're close enough that we care
         offset_x = player_pos.x - pos.x
@@ -81,16 +71,10 @@ def process_fov():
                                            FOV_ALGORITHM)
 
 
-    end_time = time.time()
-    logging.debug(f"Completed process_fov in {format(end_time - start_time, '.5f')}")
-
-
 def process_tile_visibility():
     """
     Update tile visibility based on player fov
     """
-    start_time = time.time()
-
     # get player info
     player = world.get_player()
     fov_map = world.get_entitys_component(player, FOV).map
@@ -114,6 +98,3 @@ def process_tile_visibility():
     for x in range(0, width):
         for y in range(0, height):
             tile_map[x][y].is_visible = bool(visible_map[x, y])  # cast to bool as it is numpy _bool
-
-    end_time = time.time()
-    logging.debug(f"Completed process_tile_visibility in {format(end_time - start_time, '.5f')}")

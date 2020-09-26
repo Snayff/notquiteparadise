@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import dataclasses
 import logging
-from typing import TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING, Tuple
 
 import pygame
 
-from scripts.engine.core.constants import ASSET_PATH, IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, ShapeType
+from scripts.engine.core.constants import ASSET_PATH, ICON_SIZE, IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, \
+    ShapeType
+from scripts.engine.core.definitions import TraitSpritePathsData, TraitSpritesData
 
 if TYPE_CHECKING:
     from typing import (Any, Callable, Dict, List, Optional, Tuple, Type, Union)
@@ -87,6 +90,45 @@ def flatten_images(images: List[pygame.Surface]) -> pygame.Surface:
             base.blit(image, (0, 0))
 
     return base
+
+
+def build_sprites_from_paths(sprite_paths: List[TraitSpritePathsData],
+        desired_size: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> TraitSpritesData:
+    """
+    Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
+    combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.
+    """
+    paths: Dict[str, List[str]] = {}
+    sprites: Dict[str, List[pygame.Surface]] = {}
+    flattened_sprites: Dict[str, pygame.Surface] = {}
+
+    # bundle into cross-trait sprite path lists
+    for sprite_path in sprite_paths:
+        char_dict = dataclasses.asdict(sprite_path)
+        for name, path in char_dict.items():
+            if name != "render_order":
+                # check if key exists
+                if name in paths:
+                    paths[name].append(path)
+                # if not init the dict
+                else:
+                    paths[name] = [path]
+
+    # convert to sprites
+    for name, path_list in paths.items():
+        # override size for icon
+        if name == "icon_path":
+            desired_size = (ICON_SIZE, ICON_SIZE)
+
+        sprites[name] = get_images(path_list, desired_size)
+
+    # flatten the images
+    for name, surface_list in sprites.items():
+        flattened_sprites[name] = flatten_images(surface_list)
+
+    # convert to dataclass
+    converted = TraitSpritesData(**flattened_sprites)
+    return converted
 
 
 ################################### QUERY TOOLS ########################################
@@ -338,3 +380,6 @@ def convert_direction_to_name(direction: DirectionType) -> str:
         direction_name = "centre"
 
     return direction_name
+
+
+

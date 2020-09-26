@@ -1,19 +1,16 @@
 from __future__ import annotations
 
-import dataclasses
 import logging
 import random
 import time
-from typing import TYPE_CHECKING, Any, List, Optional, Tuple, Type, TypeVar, cast
+from typing import TYPE_CHECKING, List, Optional, Tuple, Type, TypeVar, cast
 
 import numpy as np
-import pygame
 import snecs
-import tcod.map
 from snecs import Component, Query, new_entity
 from snecs.typedefs import EntityID
 
-from scripts.engine import action, chronicle, debug, library, utility
+from scripts.engine import action, chronicle, library, utility
 from scripts.engine.component import (
     FOV,
     Aesthetic,
@@ -33,7 +30,6 @@ from scripts.engine.component import (
     Traits,
 )
 from scripts.engine.core.constants import (
-    ICON_SIZE,
     INFINITE,
     TILE_SIZE,
     Direction,
@@ -53,15 +49,16 @@ from scripts.engine.core.constants import (
     TravelMethodType,
 )
 from scripts.engine.core.data import store
-from scripts.engine.core.definitions import ActorData, ProjectileData, TraitSpritePathsData, TraitSpritesData
+from scripts.engine.core.definitions import ActorData, ProjectileData
 from scripts.engine.thought import ProjectileBehaviour, SkipTurnBehaviour
 from scripts.engine.ui.manager import ui
+from scripts.engine.utility import build_sprites_from_paths
 from scripts.engine.world_objects.combat_stats import CombatStats
 from scripts.engine.world_objects.game_map import GameMap
 from scripts.engine.world_objects.tile import Tile
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    from typing import Optional, Tuple, List
     from scripts.engine.action import Affliction, Skill
 
 ########################### LOCAL DEFINITIONS ##########################
@@ -247,49 +244,12 @@ def create_affliction(name: str, creator: EntityID, target: EntityID, duration: 
     return affliction
 
 
-def build_sprites_from_paths(sprite_paths: List[TraitSpritePathsData],
-        desired_size: Tuple[int, int] = (TILE_SIZE, TILE_SIZE)) -> TraitSpritesData:
-    """
-    Build a TraitSpritesData class from a list of TraitSpritePathsData. For each member in TraitSpritePathsData,
-    combines the sprites from each TraitSpritePathsData in the  list and flattens to a single surface.
-    """
-    paths: Dict[str, List[str]] = {}
-    sprites: Dict[str, List[pygame.Surface]] = {}
-    flattened_sprites: Dict[str, pygame.Surface] = {}
-
-    # bundle into cross-trait sprite path lists
-    for sprite_path in sprite_paths:
-        char_dict = dataclasses.asdict(sprite_path)
-        for name, path in char_dict.items():
-            if name != "render_order":
-                # check if key exists
-                if name in paths:
-                    paths[name].append(path)
-                # if not init the dict
-                else:
-                    paths[name] = [path]
-
-    # convert to sprites
-    for name, path_list in paths.items():
-        # override size for icon
-        if name == "icon_path":
-            desired_size = (ICON_SIZE, ICON_SIZE)
-
-        sprites[name] = utility.get_images(path_list, desired_size)
-
-    # flatten the images
-    for name, surface_list in sprites.items():
-        flattened_sprites[name] = utility.flatten_images(surface_list)
-
-    # convert to dataclass
-    converted = TraitSpritesData(**flattened_sprites)
-    return converted
-
-
 def create_fov_map() -> np.array:
     """
     Create a blank fov map
     """
+    start_time = time.time()
+
     game_map = get_game_map()
     width = game_map.width
     height = game_map.height

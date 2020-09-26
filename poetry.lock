@@ -454,7 +454,7 @@ description = "A straightforward, nimble ECS for Python"
 name = "snecs"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "1.2.1"
+version = "1.2.2"
 
 [[package]]
 category = "dev"
@@ -1020,8 +1020,8 @@ smmap = [
     {file = "smmap-3.0.4.tar.gz", hash = "sha256:9c98bbd1f9786d22f14b3d4126894d56befb835ec90cef151af566c7e19b5d24"},
 ]
 snecs = [
-    {file = "snecs-1.2.1-py3-none-any.whl", hash = "sha256:2c726fe70217e64afb69ff6e7630faf4e4683cf37e8675f03b5508af2d7fa0df"},
-    {file = "snecs-1.2.1.tar.gz", hash = "sha256:9ef2a0f00d4a5a881a149ce337a5bdb1c96cb9f9491faff4baac7f29976ccc99"},
+    {file = "snecs-1.2.2-py3-none-any.whl", hash = "sha256:bc7797c258ec4691d99e4b146d8cb4b44d80bff3778020bde56bc7a72d988adb"},
+    {file = "snecs-1.2.2.tar.gz", hash = "sha256:e71c4500d8bf1c536c64517a5e2c168ae3683dd1b1e6139074879967aa927779"},
 ]
 snowballstemmer = [
     {file = "snowballstemmer-2.0.0-py2.py3-none-any.whl", hash = "sha256:209f257d7533fdb3cb73bdbd24f436239ca3b2fa67d56f6ff88e86be08cc5ef0"},

@@ -10,6 +10,7 @@ Last updated on |today| for version |version|.
     nqp/core.definitions
     nqp/core.extend_json
     nqp/core.store
+    nqp/core.queries
 
 ..  toctree::
     :maxdepth: 2

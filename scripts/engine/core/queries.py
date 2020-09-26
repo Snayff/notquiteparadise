@@ -2,16 +2,26 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Type
 
 from scripts.engine import world
-from scripts.engine.component import Aesthetic, Afflictions, Blocking, FOV, HasCombatStats, Identity, IsActor, \
-    Knowledge, \
-    LightSource, \
-    Position, \
-    Tracked
+from scripts.engine.component import (
+    Aesthetic,
+    Afflictions,
+    Blocking,
+    FOV,
+    HasCombatStats,
+    Identity,
+    IsActor,
+    Knowledge,
+    LightSource,
+    Position,
+    Tracked,
+)
 
 if TYPE_CHECKING:
-    from typing import Union, Optional, Any, Tuple, Dict, List
+    pass
 
-__all__ = []
+__all__ = ["tracked", "aesthetic", "knowledge", "affliction", "position", "light_source_and_position",
+    "position_and_fov_and_combat_stats", "position_and_blocking", "position_and_aesthetic",
+    "position_and_identity_and_aesthetic", "position_and_actor"]
 
 
 ################### SINGLE QUERIES #######################
@@ -30,7 +40,7 @@ position = world.get_components([Position]).compile()
 
 light_source_and_position = world.get_components([LightSource, Position]).compile()
 
-fov_and_position_and_combat_stats = world.get_components([FOV, Position, HasCombatStats]).compile()
+position_and_fov_and_combat_stats = world.get_components([FOV, Position, HasCombatStats]).compile()
 
 position_and_blocking = world.get_components([Position, Blocking]).compile()
 

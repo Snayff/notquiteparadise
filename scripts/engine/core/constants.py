@@ -2,13 +2,12 @@ from __future__ import annotations
 
 import os
 import pygame
+import tcod
 
 from types import SimpleNamespace
 from typing import NewType, Tuple
 
-
 ######################## TOP LEVEL CONSTANTS ######################################
-import tcod
 
 VERSION = "0.123.0"  # DONT FORGET TO UPDATE SPHINX VERSION
 
