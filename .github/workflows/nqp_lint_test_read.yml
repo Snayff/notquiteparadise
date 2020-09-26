@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build Environment
+    name: Lint and Test (Read Only)
     runs-on: windows-latest
 
     steps:
@@ -37,7 +37,7 @@ jobs:
     - name: Lint with Black
       if: always()
       run: |
-        python -m black -l=120 t=3.8 scripts/
+        python -m black scripts/
 
     - name: mypy Type Check
       if: always()
