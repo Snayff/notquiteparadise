@@ -2,7 +2,7 @@ name: NQP - Build Docs
 
 on:
   workflow_run:
-    workflows: ["NQP - Run Tests"]
+    workflows: ["NQP - Lint and Test"]
     branches: [develop, master]
     types:
       - completed
