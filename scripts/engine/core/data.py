@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Any, Optional
 
 import logging
 import os
-import pygame
+from typing import TYPE_CHECKING, Any, Optional
 
+import pygame
 from snecs.typedefs import EntityID
+
 from scripts.engine.core.constants import GameState, GameStateType
 from scripts.engine.world_objects.game_map import GameMap
 

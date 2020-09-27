@@ -3,7 +3,9 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, cast
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import utility, world
 from scripts.engine.component import Aesthetic, Afflictions, Blocking, Knowledge, Position, Resources
 from scripts.engine.core.constants import (
@@ -24,8 +26,10 @@ class Effect(ABC):
     """
     A collection of parameters and instructions to apply a change to an entity's or tile's state.
     """
-    def __init__(self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect],
-            potency: float = 1.0):
+
+    def __init__(
+        self, origin: EntityID, success_effects: List[Effect], failure_effects: List[Effect], potency: float = 1.0
+    ):
         self.origin = origin
         self.success_effects: List[Effect] = success_effects
         self.failure_effects: List[Effect] = failure_effects
@@ -55,7 +59,7 @@ class DamageEffect(Effect):
         damage_type: DamageTypeType,
         mod_stat: PrimaryStatType,
         mod_amount: float,
-        potency: float = 1.0
+        potency: float = 1.0,
     ):
 
         super().__init__(origin, success_effects, failure_effects, potency)

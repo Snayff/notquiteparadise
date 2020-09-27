@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import library
 from scripts.engine.action import Affliction, init_action
 from scripts.engine.core.constants import DamageType, PrimaryStat

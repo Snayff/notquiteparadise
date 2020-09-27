@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, Type
 
 import logging
-import pygame
+from typing import TYPE_CHECKING, Optional, Type
 
+import pygame
 from snecs.typedefs import EntityID
+
 from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.action import Skill
 from scripts.engine.component import IsActor, Knowledge, Position

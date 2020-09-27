@@ -7,13 +7,7 @@ import os
 from typing import TYPE_CHECKING
 
 from scripts.engine import library, utility, world
-from scripts.engine.core.constants import (
-    MAX_SAVES,
-    SAVE_PATH,
-    VERSION,
-    GameState,
-    GameStateType,
-)
+from scripts.engine.core.constants import MAX_SAVES, SAVE_PATH, VERSION, GameState, GameStateType
 from scripts.engine.core.data import store
 
 if TYPE_CHECKING:

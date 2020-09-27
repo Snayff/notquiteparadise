@@ -2,16 +2,13 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
+
 from snecs.typedefs import EntityID
+
 from scripts.engine import library, world
 from scripts.engine.action import Skill, init_action
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (
-    DamageType,
-    DirectionType,
-    PrimaryStat,
-    Shape,
-)
+from scripts.engine.core.constants import DamageType, DirectionType, PrimaryStat, Shape
 from scripts.engine.effect import (
     ApplyAfflictionEffect,
     DamageEffect,
@@ -43,9 +40,7 @@ class Move(Skill):
         position = world.get_entitys_component(user, Position)
         tile = world.get_tile((position.x, position.y))
 
-
         super().__init__(user, tile, direction)
-
 
     def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
         """
@@ -147,9 +142,7 @@ class Lunge(Skill):
         )
         return move_effect
 
-    def _build_damage_effect(
-        self, success_effects: List[Effect], potency: float = 1.0
-    ) -> Optional[DamageEffect]:
+    def _build_damage_effect(self, success_effects: List[Effect], potency: float = 1.0) -> Optional[DamageEffect]:
         """
         Return the damage effect for the lunge
         """
@@ -228,14 +221,10 @@ class TarAndFeather(Skill):
 
         reduced_effects = []
         for entity_in_cone in entities_in_cone:
-            reduced_effects += self._create_effects(
-                target=entity_in_cone, modifier=self.reduced_modifier * potency
-            )
+            reduced_effects += self._create_effects(target=entity_in_cone, modifier=self.reduced_modifier * potency)
             logging.warning(f"creating effects for {entity_in_cone}")
 
-        first_hit_effects = self._create_effects(
-            target=hit_entity, success_effects=reduced_effects, modifier=potency
-        )
+        first_hit_effects = self._create_effects(target=hit_entity, success_effects=reduced_effects, modifier=potency)
 
         return first_hit_effects
 

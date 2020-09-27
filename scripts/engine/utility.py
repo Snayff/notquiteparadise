@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import dataclasses
 import logging
-from typing import Dict, List, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
-import logging
 import pygame
 
 from scripts.engine.core.constants import (

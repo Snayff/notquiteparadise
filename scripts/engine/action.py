@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
-
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING, Dict, Iterator, Type
+from typing import TYPE_CHECKING, Dict, Iterator, Optional, Type
+
 from snecs.typedefs import EntityID
+
 from scripts.engine.component import Aesthetic, Position
 from scripts.engine.core.constants import (
     AfflictionCategoryType,
@@ -163,6 +164,7 @@ class Skill(Action):
 
         # create the projectile
         from scripts.engine import world
+
         projectile = world.create_projectile(self.user, (self.target_tile.x, self.target_tile.y), projectile_data)
 
         # save the reference to the projectile entity
@@ -195,7 +197,6 @@ class Affliction(Action):
     identity_tags: List[EffectTypeType]
     triggers: List[AfflictionTriggerType]
     category: AfflictionCategoryType
-
 
     def __init__(self, origin: EntityID, affected_entity: EntityID, duration: int):
         self.origin = origin
@@ -255,6 +256,3 @@ def init_action(cls):
         skill_registry[cls.key] = cls
     elif issubclass(cls, Affliction):
         affliction_registry[cls.key] = cls
-
-
-

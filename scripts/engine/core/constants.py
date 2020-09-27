@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import os
-import pygame
-import tcod
-
 from pathlib import Path
 from types import SimpleNamespace
 from typing import NewType, Tuple, Union
+
+import pygame
+import tcod
 
 ######################## TOP LEVEL CONSTANTS ######################################
 
