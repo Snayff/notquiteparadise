@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.123.0
+                0.124.0
               </div>
             
           
@@ -207,7 +207,7 @@
     <span class="n">triggers</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">AfflictionTrigger</span><span class="o">.</span><span class="n">MOVEMENT</span>
     <span class="p">]</span>
-    <span class="n">required_tags</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">target_tags</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">TargetTag</span><span class="o">.</span><span class="n">OTHER_ENTITY</span>
     <span class="p">]</span>
 
@@ -234,7 +234,7 @@
 
 <div class="viewcode-block" id="MockSkill"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.effect_test.MockSkill">[docs]</a><span class="k">class</span> <span class="nc">MockSkill</span><span class="p">(</span><span class="n">Skill</span><span class="p">):</span>
     <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;mock_skill&quot;</span>
-    <span class="n">required_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">TargetTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">]</span>
+    <span class="n">target_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">TargetTag</span><span class="o">.</span><span class="n">SELF</span><span class="p">]</span>
     <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;this is the normal movement.&quot;</span>
     <span class="n">icon_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="n">resource_type</span> <span class="o">=</span> <span class="n">Resource</span><span class="o">.</span><span class="n">STAMINA</span>
@@ -257,7 +257,7 @@
     <span class="n">shape_size</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">uses_projectile</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="MockSkill.build_effects"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.effect_test.MockSkill.build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">effect_strength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>
+<div class="viewcode-block" id="MockSkill.build_effects"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.effect_test.MockSkill.build_effects">[docs]</a>    <span class="k">def</span> <span class="nf">build_effects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">EntityID</span><span class="p">,</span> <span class="n">potency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Effect</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="MockSkill.get_animation"><a class="viewcode-back" href="../../../tests.engine.html#tests.engine.effect_test.MockSkill.get_animation">[docs]</a>    <span class="k">def</span> <span class="nf">get_animation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aesthetic</span><span class="p">:</span> <span class="n">Aesthetic</span><span class="p">):</span>

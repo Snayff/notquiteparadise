@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.123.0
+                0.124.0
               </div>
             
           
@@ -183,16 +183,15 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NewType</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">tcod</span>
 
-<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NewType</span><span class="p">,</span> <span class="n">Tuple</span>
-
 <span class="c1">######################## TOP LEVEL CONSTANTS ######################################</span>
 
-<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.123.0&quot;</span>  <span class="c1"># DONT FORGET TO UPDATE SPHINX VERSION</span>
+<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;0.124.0&quot;</span>  <span class="c1"># DONT FORGET TO UPDATE SPHINX VERSION</span>
 
 <span class="n">MAX_SKILLS</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">MAX_SAVES</span> <span class="o">=</span> <span class="mi">1</span>
@@ -208,6 +207,7 @@
 <span class="n">FOV_ALGORITHM</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">FOV_RESTRICTIVE</span>
 
 <span class="c1">######################## PATHS ######################################</span>
+
 <span class="n">ROOT_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>  <span class="c1"># constants.py is three directories deep</span>
 
 <span class="c1"># to move up from docs and handle being in Ubuntu in CI</span>
@@ -245,6 +245,8 @@
 <span class="n">AfflictionTriggerType</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;AfflictionTriggerType&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
 <span class="n">RenderLayerType</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;RenderLayerType&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
 <span class="n">TileCategoryType</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;TileCategoryType&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+<span class="n">TagType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">TargetTagType</span><span class="p">,</span> <span class="n">DamageTypeType</span><span class="p">,</span> <span class="n">AfflictionCategoryType</span><span class="p">]</span>
 
 
 <span class="c1">#################### INTERNAL, NON-SERIALISED ###########################################</span>
@@ -354,45 +356,6 @@
     <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="n">DirectionType</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="TargetTag"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.TargetTag">[docs]</a><span class="k">class</span> <span class="nc">TargetTag</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Types of target</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">SELF</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;self&quot;</span><span class="p">)</span>
-    <span class="n">OTHER_ENTITY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)</span>
-    <span class="n">NO_ENTITY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;no_entity&quot;</span><span class="p">)</span>
-    <span class="n">ANY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
-    <span class="n">OPEN_SPACE</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;open_space&quot;</span><span class="p">)</span>
-    <span class="n">BLOCKED_MOVEMENT</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;blocked_movement&quot;</span><span class="p">)</span>
-    <span class="n">IS_VISIBLE</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;is_visible&quot;</span><span class="p">)</span>
-    <span class="n">NO_BLOCKING_TILE</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;no_blocking_tile&quot;</span><span class="p">)</span>
-    <span class="n">ACTOR</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;actor&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="TraitGroup"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.TraitGroup">[docs]</a><span class="k">class</span> <span class="nc">TraitGroup</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The types of player traits</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">PEOPLE</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;people&quot;</span><span class="p">)</span>
-    <span class="n">SAVVY</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;savvy&quot;</span><span class="p">)</span>
-    <span class="n">HOMELAND</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;homeland&quot;</span><span class="p">)</span>
-    <span class="n">NPC</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;npc&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="DamageType"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.DamageType">[docs]</a><span class="k">class</span> <span class="nc">DamageType</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Damage types</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">BURN</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;burn&quot;</span><span class="p">)</span>
-    <span class="n">CHEMICAL</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;chemical&quot;</span><span class="p">)</span>
-    <span class="n">ASTRAL</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;astral&quot;</span><span class="p">)</span>
-    <span class="n">COLD</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;cold&quot;</span><span class="p">)</span>
-    <span class="n">MUNDANE</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;mundane&quot;</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="PrimaryStat"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.PrimaryStat">[docs]</a><span class="k">class</span> <span class="nc">PrimaryStat</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Primary stats. Values are strings.</span>
@@ -443,6 +406,17 @@
     <span class="n">CRIT</span> <span class="o">=</span> <span class="n">HitTypeType</span><span class="p">(</span><span class="s2">&quot;crit&quot;</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="TraitGroup"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.TraitGroup">[docs]</a><span class="k">class</span> <span class="nc">TraitGroup</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The types of player traits</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PEOPLE</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;people&quot;</span><span class="p">)</span>
+    <span class="n">SAVVY</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;savvy&quot;</span><span class="p">)</span>
+    <span class="n">HOMELAND</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;homeland&quot;</span><span class="p">)</span>
+    <span class="n">NPC</span> <span class="o">=</span> <span class="n">TraitGroupType</span><span class="p">(</span><span class="s2">&quot;npc&quot;</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="EffectType"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.EffectType">[docs]</a><span class="k">class</span> <span class="nc">EffectType</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Types of effects</span>
@@ -456,6 +430,34 @@
     <span class="n">REMOVE_ASPECT</span> <span class="o">=</span> <span class="n">EffectTypeType</span><span class="p">(</span><span class="s2">&quot;remove_aspect&quot;</span><span class="p">)</span>
     <span class="n">TRIGGER_SKILL</span> <span class="o">=</span> <span class="n">EffectTypeType</span><span class="p">(</span><span class="s2">&quot;trigger_skill&quot;</span><span class="p">)</span>
     <span class="n">KILL</span> <span class="o">=</span> <span class="n">EffectTypeType</span><span class="p">(</span><span class="s2">&quot;kill&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TargetTag"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.TargetTag">[docs]</a><span class="k">class</span> <span class="nc">TargetTag</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Types of target</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SELF</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;self&quot;</span><span class="p">)</span>
+    <span class="n">OTHER_ENTITY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)</span>
+    <span class="n">NO_ENTITY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;no_entity&quot;</span><span class="p">)</span>
+    <span class="n">ANY</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
+    <span class="n">OPEN_SPACE</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;open_space&quot;</span><span class="p">)</span>
+    <span class="n">BLOCKED_MOVEMENT</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;blocked_movement&quot;</span><span class="p">)</span>
+    <span class="n">IS_VISIBLE</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;is_visible&quot;</span><span class="p">)</span>
+    <span class="n">NO_BLOCKING_TILE</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;no_blocking_tile&quot;</span><span class="p">)</span>
+    <span class="n">ACTOR</span> <span class="o">=</span> <span class="n">TargetTagType</span><span class="p">(</span><span class="s2">&quot;actor&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DamageType"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.DamageType">[docs]</a><span class="k">class</span> <span class="nc">DamageType</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Damage types</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BURN</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;burn&quot;</span><span class="p">)</span>
+    <span class="n">CHEMICAL</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;chemical&quot;</span><span class="p">)</span>
+    <span class="n">ASTRAL</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;astral&quot;</span><span class="p">)</span>
+    <span class="n">COLD</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;cold&quot;</span><span class="p">)</span>
+    <span class="n">MUNDANE</span> <span class="o">=</span> <span class="n">DamageTypeType</span><span class="p">(</span><span class="s2">&quot;mundane&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="AfflictionTrigger"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.AfflictionTrigger">[docs]</a><span class="k">class</span> <span class="nc">AfflictionTrigger</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
@@ -493,7 +495,7 @@
     <span class="n">TARGET</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>  <span class="c1"># single target</span>
     <span class="n">SQUARE</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">)</span>
     <span class="n">CIRCLE</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-    <span class="n">CROSS</span> <span class="o">=</span> <span class="p">(</span><span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;cross&quot;</span><span class="p">),)</span>
+    <span class="n">CROSS</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;cross&quot;</span><span class="p">)</span>
     <span class="n">CONE</span> <span class="o">=</span> <span class="n">ShapeType</span><span class="p">(</span><span class="s2">&quot;cone&quot;</span><span class="p">)</span></div>
 
 
@@ -540,7 +542,7 @@
 
 <div class="viewcode-block" id="TileCategory"><a class="viewcode-back" href="../../../../scripts.engine.core.html#scripts.engine.core.constants.TileCategory">[docs]</a><span class="k">class</span> <span class="nc">TileCategory</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The type of tile to be placed</span>
+<span class="sd">    The type of tile to be placed. Used in Dungen</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">FLOOR</span> <span class="o">=</span> <span class="n">TileCategoryType</span><span class="p">(</span><span class="s2">&quot;floor&quot;</span><span class="p">)</span>

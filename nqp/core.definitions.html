@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.123.0
+                0.124.0
               </div>
             
           
@@ -455,7 +455,7 @@
 
 <dl class="py class">
 <dt id="scripts.engine.core.definitions.ProjectileData">
-<em class="property">class </em><code class="sig-name descname">ProjectileData</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">required_tags: List[TargetTagType] = &lt;factory&gt;</em>, <em class="sig-param">direction: Optional[DirectionType] = None</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">travel_method: TravelMethodType = 'standard'</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">terrain_collision: Optional[TerrainCollisionType] = None</em>, <em class="sig-param">expiry_type: Optional[ProjectileExpiryType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#ProjectileData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.ProjectileData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ProjectileData</code><span class="sig-paren">(</span><em class="sig-param">creator: EntityID = 0</em>, <em class="sig-param">skill_name: str = 'none'</em>, <em class="sig-param">skill_instance: Optional[Skill] = None</em>, <em class="sig-param">name: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">target_tags: List[TargetTagType] = &lt;factory&gt;</em>, <em class="sig-param">direction: Optional[DirectionType] = None</em>, <em class="sig-param">sprite_paths: TraitSpritePathsData = &lt;factory&gt;</em>, <em class="sig-param">speed: ProjectileSpeedType = 10</em>, <em class="sig-param">travel_method: TravelMethodType = 'standard'</em>, <em class="sig-param">range: int = 1</em>, <em class="sig-param">terrain_collision: Optional[TerrainCollisionType] = None</em>, <em class="sig-param">expiry_type: Optional[ProjectileExpiryType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#ProjectileData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.ProjectileData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Data class for a projectile</p>
 <dl class="py attribute">
@@ -484,8 +484,8 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.definitions.ProjectileData.required_tags">
-<code class="sig-name descname">required_tags</code><em class="property">: List<span class="p">[</span>TargetTagType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.core.definitions.ProjectileData.required_tags" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.definitions.ProjectileData.target_tags">
+<code class="sig-name descname">target_tags</code><em class="property">: List<span class="p">[</span>TargetTagType<span class="p">]</span></em><a class="headerlink" href="#scripts.engine.core.definitions.ProjectileData.target_tags" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -770,7 +770,7 @@ the map, how they are placed and joined up (tunnels).</p>
 
 <dl class="py class">
 <dt id="scripts.engine.core.definitions.SkillData">
-<em class="property">class </em><code class="sig-name descname">SkillData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">key: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">required_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">resource_type: NewType.&lt;locals&gt;.new_type = 'stamina'</em>, <em class="sig-param">resource_cost: int = 0</em>, <em class="sig-param">time_cost: int = 0</em>, <em class="sig-param">cooldown: int = 0</em>, <em class="sig-param">targeting_method: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">target_directions: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">uses_projectile: bool = True</em>, <em class="sig-param">projectile_data: Optional[scripts.engine.core.definitions.ProjectileData] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#SkillData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.SkillData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SkillData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">key: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">target_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">resource_type: NewType.&lt;locals&gt;.new_type = 'stamina'</em>, <em class="sig-param">resource_cost: int = 0</em>, <em class="sig-param">time_cost: int = 0</em>, <em class="sig-param">cooldown: int = 0</em>, <em class="sig-param">targeting_method: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">target_directions: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">uses_projectile: bool = True</em>, <em class="sig-param">projectile_data: Optional[scripts.engine.core.definitions.ProjectileData] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#SkillData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.SkillData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Data class for a skill. Used by the library to load from json.</p>
 <dl class="py attribute">
@@ -794,8 +794,8 @@ the map, how they are placed and joined up (tunnels).</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.definitions.SkillData.required_tags">
-<code class="sig-name descname">required_tags</code><em class="property">: List[NewType.&lt;locals&gt;.new_type]</em><a class="headerlink" href="#scripts.engine.core.definitions.SkillData.required_tags" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.definitions.SkillData.target_tags">
+<code class="sig-name descname">target_tags</code><em class="property">: List[NewType.&lt;locals&gt;.new_type]</em><a class="headerlink" href="#scripts.engine.core.definitions.SkillData.target_tags" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -852,7 +852,7 @@ the map, how they are placed and joined up (tunnels).</p>
 
 <dl class="py class">
 <dt id="scripts.engine.core.definitions.AfflictionData">
-<em class="property">class </em><code class="sig-name descname">AfflictionData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">key: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">category: NewType.&lt;locals&gt;.new_type = 'boon'</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">required_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">identity_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">triggers: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#AfflictionData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.AfflictionData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">AfflictionData</code><span class="sig-paren">(</span><em class="sig-param">name: str = 'none'</em>, <em class="sig-param">key: str = 'none'</em>, <em class="sig-param">description: str = 'none'</em>, <em class="sig-param">icon_path: str = 'none'</em>, <em class="sig-param">category: NewType.&lt;locals&gt;.new_type = 'boon'</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">target_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">identity_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">triggers: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#AfflictionData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.AfflictionData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Data class for an Afflictions</p>
 <dl class="py attribute">
@@ -891,8 +891,8 @@ the map, how they are placed and joined up (tunnels).</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.definitions.AfflictionData.required_tags">
-<code class="sig-name descname">required_tags</code><em class="property">: List[NewType.&lt;locals&gt;.new_type]</em><a class="headerlink" href="#scripts.engine.core.definitions.AfflictionData.required_tags" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.definitions.AfflictionData.target_tags">
+<code class="sig-name descname">target_tags</code><em class="property">: List[NewType.&lt;locals&gt;.new_type]</em><a class="headerlink" href="#scripts.engine.core.definitions.AfflictionData.target_tags" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -909,7 +909,7 @@ the map, how they are placed and joined up (tunnels).</p>
 
 <dl class="py class">
 <dt id="scripts.engine.core.definitions.EffectData">
-<em class="property">class </em><code class="sig-name descname">EffectData</code><span class="sig-paren">(</span><em class="sig-param">originator: Optional[int] = None</em>, <em class="sig-param">creators_name: Optional[str] = None</em>, <em class="sig-param">required_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">stat_to_target: Optional[NewType.&lt;locals&gt;.new_type] = None</em>, <em class="sig-param">accuracy: int = 0</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">success_effects: List[scripts.engine.core.definitions.EffectData] = &lt;factory&gt;</em>, <em class="sig-param">fail_effects: List[scripts.engine.core.definitions.EffectData] = &lt;factory&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#EffectData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.EffectData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">EffectData</code><span class="sig-paren">(</span><em class="sig-param">originator: Optional[int] = None</em>, <em class="sig-param">creators_name: Optional[str] = None</em>, <em class="sig-param">target_tags: List[NewType.&lt;locals&gt;.new_type] = &lt;factory&gt;</em>, <em class="sig-param">stat_to_target: Optional[NewType.&lt;locals&gt;.new_type] = None</em>, <em class="sig-param">accuracy: int = 0</em>, <em class="sig-param">shape: NewType.&lt;locals&gt;.new_type = 'target'</em>, <em class="sig-param">shape_size: int = 1</em>, <em class="sig-param">success_effects: List[scripts.engine.core.definitions.EffectData] = &lt;factory&gt;</em>, <em class="sig-param">fail_effects: List[scripts.engine.core.definitions.EffectData] = &lt;factory&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scripts/engine/core/definitions.html#EffectData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#scripts.engine.core.definitions.EffectData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Base data class for an effect.</p>
 <dl class="py attribute">
@@ -928,8 +928,8 @@ the map, how they are placed and joined up (tunnels).</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="scripts.engine.core.definitions.EffectData.required_tags">
-<code class="sig-name descname">required_tags</code><em class="property">: List[NewType.&lt;locals&gt;.new_type]</em><a class="headerlink" href="#scripts.engine.core.definitions.EffectData.required_tags" title="Permalink to this definition">¶</a></dt>
+<dt id="scripts.engine.core.definitions.EffectData.target_tags">
+<code class="sig-name descname">target_tags</code><em class="property">: List[NewType.&lt;locals&gt;.new_type]</em><a class="headerlink" href="#scripts.engine.core.definitions.EffectData.target_tags" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
