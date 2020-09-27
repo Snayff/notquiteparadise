@@ -179,7 +179,7 @@ class ProjectileData:
     description: str = "none"
 
     # who are we targeting?
-    required_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TargetTagType] = field(default_factory=list)
 
     # where are we going?
     direction: Optional[DirectionType] = None
@@ -333,7 +333,7 @@ class SkillData:
     icon_path: str = "none"
 
     # when do we use it?
-    required_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TargetTagType] = field(default_factory=list)
 
     # what does it cost?
     resource_type: ResourceType = Resource.STAMINA
@@ -377,7 +377,7 @@ class AfflictionData:
     category: AfflictionCategoryType = AfflictionCategory.BANE
     shape: ShapeType = Shape.TARGET
     shape_size: int = 1
-    required_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TargetTagType] = field(default_factory=list)
     identity_tags: List[EffectTypeType] = field(default_factory=list)
     triggers: List[AfflictionTriggerType] = field(default_factory=list)
 
@@ -395,7 +395,7 @@ class EffectData:
     effect_type = EffectType.MOVE
 
     # who are we targeting?
-    required_tags: List[TargetTagType] = field(default_factory=list)
+    target_tags: List[TargetTagType] = field(default_factory=list)
 
     # how are we targeting?
     stat_to_target: Optional[PrimaryStatType] = None

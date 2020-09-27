@@ -1,12 +1,14 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING, Type
 
 from snecs import Query
+
 from scripts.engine.component import (
+    FOV,
     Aesthetic,
     Afflictions,
     Blocking,
-    FOV,
     HasCombatStats,
     Identity,
     IsActor,

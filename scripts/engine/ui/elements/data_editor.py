@@ -530,7 +530,7 @@ class DataEditor(UIWindow):
 #             "effect_type": (effect_options, None),
 #             "stat_to_affect": (primary_stat_options + secondary_stat_options, None),
 #             "stat_to_target": (primary_stat_options, None),
-#             "activate_required_tags": (get_members(TargetTag), None),
+#             "activate_target_tags": (get_members(TargetTag), None),
 #             "mod_stat": (primary_stat_options + secondary_stat_options, None),
 #             "blocks_movement": (bool_options, None),
 #             "blocks_sight": (bool_options, None),

@@ -1,16 +1,27 @@
 # Developer Guide
 
-## Motivation
+## Table of Contents
+- [Motivation and Intent](#motivation-and-intent)
+- [Coding Style Guide](#coding-style-guide)
+- [Contributing](#contributing)
+
+## Motivation and Intent
 Provide a way for people to contribute updates, fix bugs, try out ideas, etc.
 
 
 ## Coding Style Guide
-There are a number of conventions followed, including using the following tool:
+### Tools
+The following tools are used as standard.
 
-* [mypy] - python's static linter
+* [mypy] - python's static type checker
+* [black] - opinionated python linter 
 
 [mypy]: http://mypy-lang.org/
+[black]: https://github.com/psf/black
 
+When you submit a pull request the CI, Github Actions, will run these tools automatically. 
+
+### Naming conventions
 Below are the naming conventions followed in this project:
 * If only one of a class should exist the creation function is called "init_[object]", otherwise "create_[object]".
 * Where the object is taken as an argument the function name should default to "create_[object_type]".
@@ -27,32 +38,60 @@ Below are the naming conventions followed in this project:
   
 
 
-## Getting Started
-To get started, pick your favorite editor, create a virtual environment and then run:
+## Contributing
+### Getting started
+To get started, [fork the repo] and open it up in your favorite editor. Then, open your terminal and point it to
+ where you just saved the repo and then run:
 
 ```shell
 poetry install
 ```
 
-This will install all of the dependencies needed to run the software.  To run, please run:
+This will install all of the dependencies needed, using [poetry].  
+
+To run the program use:
 
 ```shell script
 python -m scripts
 ```
 
-## Testing
-Updates to the software should also include updates to testing where needed.  Please add where appropriate.  To
-run the current suite of tests, simply run:
+If you're not sure where to start helping out you can look at the existing feature requests and issues, [here]. Pick
+ one you think you'd like to tackle and make the relevant changes to your fork. 
+ 
+[fork the repo]: https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo
+[poetry]: https://python-poetry.org/
+[here]: https://github.com/Snayff/notquiteparadise/issues
+ 
+### Testing
+Updates to the code should ideally include updates to the test suite. Please add new tests to support your changes, if
+ you can. At the very least, as you'd imagine all tests must pass before code can be merged.
+  
+To run the current suite of tests and confirm they're all passing, use:
 
 ```shell
-pytest
+pytest --cov=nqp
 ```
 
-## Merging
-To include any development into NQP you can submit a pull request. 
-
-Any pull request must pass mypy's typing check
- and must remain compatible with the building of the [Sphinx] documentation so that the docs are always up to date
- . As you'd expect, all tests must pass, too and new code should include tests. 
+And to check that all the types are what they should be:
+```shell
+mypy
+```
+ 
+### Merging
+When you're ready, submit a [pull request] to have your changes added to the main repository. Any pull request must
+ the checks in the Github Actions, currently mypy type checking and pytest's testing. The code must remain compatible with the building of the [Sphinx] documentation, so that the docs are always up to date. 
  
 [Sphinx]: https://www.sphinx-doc.org/en/master/  
+[pull request]: https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
+
+### Existing Issues
+If you find any problems in the existing code you can raise a [new issue] on GitHub.
+
+[new issue]: https://github.com/Snayff/notquiteparadise/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D
+
+
+
+
+
+
+

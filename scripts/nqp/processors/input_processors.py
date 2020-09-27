@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, Type
 
 import logging
-import pygame
+from typing import TYPE_CHECKING, Optional, Type
 
+import pygame
 from snecs.typedefs import EntityID
+
 from scripts.engine import chronicle, debug, key, library, state, utility, world
 from scripts.engine.action import Skill
 from scripts.engine.component import IsActor, Knowledge, Position
@@ -164,9 +165,9 @@ def _process_game_map_intents(intent: InputIntentType):
     if intent in possible_move_intents and position:
         direction = _get_pressed_direction(intent)
         target_tile = world.get_tile((position.x, position.y))
-        possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
-        if direction in possible_moves:
-            _process_skill_use(player, Move, target_tile, direction)
+        move = world.get_known_skill(player, "move")
+        if direction in move.target_directions:
+            _process_skill_use(player, move, target_tile, direction)
 
     ## Use a skill
     elif intent in possible_skill_intents and position:

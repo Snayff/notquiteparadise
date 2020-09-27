@@ -1,4 +1,4 @@
-name: NQP - PR Review - Run Lint and Tests (Write)
+name: NQP - PR Review
 
 on:
   pull_request:
@@ -6,14 +6,14 @@ on:
 
 jobs:
   build:
-    name: Run Lint and Tests (Write)
+    name: PR Review
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-        ref: ${{ github.event.pull_request.head.ref }}
+        ref: ${{ github.event.pull_request.head.ref }}  # this doesnt work for forks
     - uses: actions/setup-python@v2
       with:
         python-version: 3.8
@@ -40,6 +40,13 @@ jobs:
       run: |
         poetry run python -m black scripts/
 
+    - name: Format with isort
+      if: always()
+      run: |
+        cd scripts
+        poetry run python -m isort -y
+        cd ..
+
     - name: mypy Type Check
       if: always()
       run: |
@@ -51,6 +58,7 @@ jobs:
         poetry run python -m pytest --cov=nqp
 
     - name: Push changes
+      if: github.repository == 'Snayff/notquiteparadise'
       run: |
         git config --global user.name 'snayff'
         git config --global user.email 'snayff@users.noreply.github.com'

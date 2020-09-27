@@ -6,18 +6,9 @@ from typing import TYPE_CHECKING
 from snecs.typedefs import EntityID
 
 from scripts.engine import library, world
-from scripts.engine.action import Skill, properties_set_by_data, register_action
+from scripts.engine.action import Skill, init_action
 from scripts.engine.component import Aesthetic, Position
-from scripts.engine.core.constants import (
-    DamageType,
-    Direction,
-    DirectionType,
-    PrimaryStat,
-    Resource,
-    Shape,
-    TargetingMethod,
-    TargetTag,
-)
+from scripts.engine.core.constants import DamageType, DirectionType, PrimaryStat, Shape
 from scripts.engine.effect import (
     ApplyAfflictionEffect,
     DamageEffect,
@@ -31,39 +22,13 @@ if TYPE_CHECKING:
     from typing import List, Optional
 
 
-@register_action
+@init_action
 class Move(Skill):
     """
     Basic move for an entity.
     """
 
-    # FIXME - define in json, as per other skills
-    # Move's definitions are not defined in the json. They are set here and only here.
-    from scripts.engine import library
-
     key = "move"
-    required_tags = [TargetTag.SELF]
-    description = "this is the normal movement."
-    icon_path = ""
-    resource_type = Resource.STAMINA
-    resource_cost = 0
-    time_cost = library.GAME_CONFIG.base_values.move_cost
-    base_cooldown = 0
-    targeting_method = TargetingMethod.TARGET
-    target_directions = [
-        Direction.UP_LEFT,
-        Direction.UP,
-        Direction.UP_RIGHT,
-        Direction.LEFT,
-        Direction.CENTRE,
-        Direction.RIGHT,
-        Direction.DOWN_LEFT,
-        Direction.DOWN,
-        Direction.DOWN_RIGHT,
-    ]
-    shape = Shape.TARGET
-    shape_size = 1
-    uses_projectile = False
 
     def __init__(self, user: EntityID, target_tile: Tile, direction):
         """
@@ -73,14 +38,11 @@ class Move(Skill):
 
         # override target
         position = world.get_entitys_component(user, Position)
-        if position:
-            tile = world.get_tile((position.x, position.y))
-        else:
-            tile = world.get_tile((0, 0))
+        tile = world.get_tile((position.x, position.y))
 
         super().__init__(user, tile, direction)
 
-    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[MoveActorEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
@@ -100,8 +62,7 @@ class Move(Skill):
         return None
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class BasicAttack(Skill):
     """
     Basic attack for an entity
@@ -109,11 +70,10 @@ class BasicAttack(Skill):
 
     key = "basic_attack"
 
-    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[DamageEffect]:  # type:ignore
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[DamageEffect]:  # type:ignore
         """
         Build the effects of this skill applying to a single entity.
         """
-        # TODO - externalise effect data to allow specifying in json
         damage_effect = DamageEffect(
             origin=self.user,
             success_effects=[],
@@ -121,7 +81,7 @@ class BasicAttack(Skill):
             target=entity,
             stat_to_target=PrimaryStat.VIGOUR,
             accuracy=library.GAME_CONFIG.base_values.accuracy,
-            damage=int(library.GAME_CONFIG.base_values.damage * effect_strength),
+            damage=int(library.GAME_CONFIG.base_values.damage * potency),
             damage_type=DamageType.MUNDANE,
             mod_stat=PrimaryStat.CLOUT,
             mod_amount=0.1,
@@ -134,8 +94,7 @@ class BasicAttack(Skill):
         return aesthetic.sprites.attack
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class Lunge(Skill):
     """
     Lunge skill for an entity
@@ -157,14 +116,14 @@ class Lunge(Skill):
         super().__init__(user, _tile, direction)
         self.move_amount = 2
 
-    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[Effect]:
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the skill effects
         """
         # chain the effects conditionally
 
         cooldown_effect = self._build_cooldown_reduction_effect(entity=entity)
-        damage_effect = self._build_damage_effect(success_effects=[cooldown_effect], effect_strength=effect_strength)
+        damage_effect = self._build_damage_effect(success_effects=[cooldown_effect], potency=potency)
         move_effect = self._build_move_effect(entity=entity, success_effects=([damage_effect] if damage_effect else []))
 
         return [move_effect]
@@ -183,9 +142,7 @@ class Lunge(Skill):
         )
         return move_effect
 
-    def _build_damage_effect(
-        self, success_effects: List[Effect], effect_strength: float = 1.0
-    ) -> Optional[DamageEffect]:
+    def _build_damage_effect(self, success_effects: List[Effect], potency: float = 1.0) -> Optional[DamageEffect]:
         """
         Return the damage effect for the lunge
         """
@@ -199,7 +156,7 @@ class Lunge(Skill):
                 target=target,
                 stat_to_target=PrimaryStat.VIGOUR,
                 accuracy=library.GAME_CONFIG.base_values.accuracy,
-                damage=int(library.GAME_CONFIG.base_values.damage * effect_strength),
+                damage=int(library.GAME_CONFIG.base_values.damage * potency),
                 damage_type=DamageType.MUNDANE,
                 mod_stat=PrimaryStat.CLOUT,
                 mod_amount=0.1,
@@ -231,8 +188,7 @@ class Lunge(Skill):
         return aesthetic.sprites.attack
 
 
-@properties_set_by_data
-@register_action
+@init_action
 class TarAndFeather(Skill):
     """
     TarAndFeather skill for an entity
@@ -247,7 +203,7 @@ class TarAndFeather(Skill):
         self.reduced_modifier = 0.5
         self.cone_size = 1
 
-    def build_effects(self, hit_entity: EntityID, effect_strength: float = 1.0) -> List[Effect]:
+    def build_effects(self, hit_entity: EntityID, potency: float = 1.0) -> List[Effect]:
         """
         Build the skill effects
         """
@@ -265,14 +221,10 @@ class TarAndFeather(Skill):
 
         reduced_effects = []
         for entity_in_cone in entities_in_cone:
-            reduced_effects += self._create_effects(
-                target=entity_in_cone, modifier=self.reduced_modifier * effect_strength
-            )
+            reduced_effects += self._create_effects(target=entity_in_cone, modifier=self.reduced_modifier * potency)
             logging.warning(f"creating effects for {entity_in_cone}")
 
-        first_hit_effects = self._create_effects(
-            target=hit_entity, success_effects=reduced_effects, modifier=effect_strength
-        )
+        first_hit_effects = self._create_effects(target=hit_entity, success_effects=reduced_effects, modifier=potency)
 
         return first_hit_effects
 

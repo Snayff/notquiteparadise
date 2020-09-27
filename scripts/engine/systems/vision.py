@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 import tcod
@@ -7,7 +8,6 @@ from scripts.engine import world
 from scripts.engine.component import FOV, LightSource, Position
 from scripts.engine.core import queries
 from scripts.engine.core.constants import FOV_ALGORITHM, FOV_LIGHT_WALLS, MAX_ACTIVATION_DISTANCE
-
 
 if TYPE_CHECKING:
     pass

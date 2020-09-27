@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 import cProfile
 import datetime
@@ -10,6 +9,7 @@ import os
 import pstats
 import time
 import timeit
+from typing import TYPE_CHECKING
 
 from scripts.engine import state
 from scripts.engine.core.constants import INFINITE, VERSION

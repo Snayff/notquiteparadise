@@ -420,7 +420,7 @@ class Afflictions(RegisteredComponent):
         active = {}
         for affliction in self.active:
             active[affliction.__class__.__name__] = (
-                affliction.creator,
+                affliction.origin,
                 affliction.affected_entity,
                 affliction.duration,
             )

@@ -4,8 +4,10 @@ import json
 import logging
 import os
 import time
-import pygame
 from typing import TYPE_CHECKING
+
+import pygame
+
 from scripts.engine.core.constants import DATA_PATH, InputIntent
 from scripts.engine.core.definitions import (
     ActorData,

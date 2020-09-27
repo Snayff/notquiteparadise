@@ -1,14 +1,15 @@
-name: NQP - Feature Check - Run Tests (Read)
+name: NQP - Checks
 
-on: push
-  branches-ignore:
-    - 'feature/**'
-    - master
+on:
+  push:
+    branches:
+      - '!develop'
+      - '!master'
 
 
 jobs:
   build:
-    name: Run Tests (Read)
+    name: Checks
     runs-on: windows-latest
 
     steps:
@@ -43,3 +44,9 @@ jobs:
       if: always()
       run: |
         poetry run python -m pytest --cov=nqp
+
+    - name: Check Docs Build
+      run: |
+        sphinx-apidoc -o ./docs .
+        cd docs
+        sphinx-build -a -E --keep-going . _build
