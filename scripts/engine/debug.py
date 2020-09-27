@@ -111,6 +111,12 @@ def initialise_logging():
     _debugger.is_logging = True
 
     log_file_name = "logs/" + "game.log"
+
+    # Creating directory "logs/" if it does not exist, as logging.basicConfig() appears
+    # to be unable to create the directory itself, resulting in FileNotFoundError
+    if not os.path.isdir("logs/"):
+        os.mkdir("logs")
+
     log_level = logging.DEBUG
     file_mode = "w"
 
