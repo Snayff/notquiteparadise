@@ -76,7 +76,7 @@ class MockSkill(Skill):
     shape_size = 1
     uses_projectile = False
 
-    def build_effects(self, entity: EntityID, effect_strength: float = 1.0) -> List[Effect]:
+    def build_effects(self, entity: EntityID, potency: float = 1.0) -> List[Effect]:
         return []
 
     def get_animation(self, aesthetic: Aesthetic):

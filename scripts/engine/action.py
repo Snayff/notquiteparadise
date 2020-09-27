@@ -115,7 +115,8 @@ class Skill(Action):
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
-        An iterator over pairs of (affected entity, [effects])
+        An iterator over pairs of (affected entity, [effects]). Uses target tile. Can apply to an entity multiple
+        times.
         """
         entity_names = []
         from scripts.engine import world
@@ -228,7 +229,8 @@ class Affliction(Action):
 
     def apply(self) -> Iterator[Tuple[EntityID, List[Effect]]]:
         """
-        An iterator over pairs of (affected entity, [effects])
+        An iterator over pairs of (affected entity, [effects]). Use affected entity position.  Applies to each
+        entity only once.
         """
         from scripts.engine import world
 

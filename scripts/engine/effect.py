@@ -55,9 +55,10 @@ class DamageEffect(Effect):
         damage_type: DamageTypeType,
         mod_stat: PrimaryStatType,
         mod_amount: float,
+        potency: float = 1.0
     ):
 
-        super().__init__(origin, success_effects, failure_effects)
+        super().__init__(origin, success_effects, failure_effects, potency)
 
         self.accuracy = accuracy
         self.stat_to_target = stat_to_target
