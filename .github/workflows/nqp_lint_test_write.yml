@@ -1,12 +1,12 @@
-name: NQP - PR Review - Lint and Test (Write)
+name: NQP - PR Review - Run Lint and Tests (Write)
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, edited, synchronize]
 
 jobs:
   build:
-    name: Lint and Test (Write)
+    name: Run Lint and Tests (Write)
     runs-on: windows-latest
 
     steps:
@@ -15,12 +15,16 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Locate Pip Cache
+      id: pip-cache
+      run: echo "::set-output name=dir::$(pip cache dir)"
+
     - name: Cache dependencies
       uses: actions/cache@v2
       with:
-        path: ~\AppData\Local\pip\Cache
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-        restore-keys: ${{ runner.os }}-poetry-
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: ${{ runner.os }}-pip-
 
     - name: Install dependencies
       run: |

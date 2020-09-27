@@ -67,7 +67,7 @@ class Debugger:
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     _debugger = Debugger()
 else:
-    _debugger = ""
+    _debugger = ""  # type: ignore
 
 
 ########################## UPDATE #####################################

@@ -382,4 +382,4 @@ class UI:
 if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
     ui = UI()
 else:
-    ui = ""
+    ui = ""  # type: ignore
