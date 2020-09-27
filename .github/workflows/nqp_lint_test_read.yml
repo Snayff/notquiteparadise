@@ -1,9 +1,9 @@
 name: NQP - Feature Check - Test (Read Only)
 
 on:
-  push:
-    branches:
-      - "feature/**"
+  pull_request:
+    types: [opened, edited]
+
 
 jobs:
   build:
