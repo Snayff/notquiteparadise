@@ -99,6 +99,10 @@ def save_game():
     full_save_path = SAVE_PATH
     save = {}
 
+    # Prevent FileNotFoundError
+    if not os.path.isdir(full_save_path):
+        os.makedirs(full_save_path)
+
     # add data to dict
     save["version"] = VERSION
     save["world"] = world.serialise()
