@@ -3,9 +3,7 @@
 ## Table of Contents
 - [Motivation and Intent](#motivation-and-intent)
 - [Coding Style Guide](#coding-style-guide)
-- [Getting Started](#getting-started)
-- [Testing](#testing)
-- [Merging](#merging)
+- [Contributing](#contributing)
 
 ## Motivation and Intent
 Provide a way for people to contribute updates, fix bugs, try out ideas, etc.
@@ -40,34 +38,56 @@ Below are the naming conventions followed in this project:
   
 
 
-## Getting Started
-To get started, pick your favorite editor, create a virtual environment and then run:
+## Contributing
+### Getting started
+To get started, [fork the repo] and open it up in your favorite editor. Then, open your terminal and point it to
+ where you just saved the repo and then run:
 
 ```shell
 poetry install
 ```
 
-This will install all of the dependencies needed to run the software.  To run, please run:
+This will install all of the dependencies needed, using [poetry].  
+
+To run the program use:
 
 ```shell script
 python -m scripts
 ```
 
-## Testing
-Updates to the software should also include updates to testing where needed and possible.  Please add where
- appropriate, if you can
-.  To
-run the current suite of tests, simply run:
+If you're not sure where to start helping out you can look at the existing feature requests and issues, [here]. Pick
+ one you think you'd like to tackle and make the relevant changes to your fork. 
+ 
+[fork the repo]: https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo
+[poetry]: https://python-poetry.org/
+[here]: https://github.com/Snayff/notquiteparadise/issues
+ 
+### Testing
+Updates to the code should ideally include updates to the test suite. Please add new tests to support your changes, if
+ you can. At the very least, as you'd imagine all tests must pass before code can be merged.
+  
+To run the current suite of tests and confirm they're all passing, use:
 
 ```shell
 pytest --cov=nqp
 ```
-
-## Merging
-To include any changes into the NQP engine you can submit a pull request. 
-
-Any pull request must pass mypy's typing check
- and must remain compatible with the building of the [Sphinx] documentation, so that the docs are always up to date
- . As you'd expect, all tests must pass, too.
+ 
+### Merging
+When you're ready, submit a [pull request] to have your changes added to the main repository. Any pull request must
+ the checks in the Github Actions, currently mypy type checking and pytest's testing. The code must remain compatible with the building of the [Sphinx] documentation, so that the docs are always up to date. 
  
 [Sphinx]: https://www.sphinx-doc.org/en/master/  
+
+[pull request]: https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
+
+### Existing Issues
+If you find any problems in the existing code you can raise a [new issue] on GitHub.
+
+[new issue]: https://github.com/Snayff/notquiteparadise/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D
+
+
+
+
+
+
+
