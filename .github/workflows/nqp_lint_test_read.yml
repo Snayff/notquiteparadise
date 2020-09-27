@@ -1,9 +1,7 @@
 name: NQP - Feature Check - Run Tests (Read)
 
 on: push
-  branches-ignore:
-    - 'feature/**'
-    - master
+  branches-ignore: [develop, master]
 
 
 jobs:
