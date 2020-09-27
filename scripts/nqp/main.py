@@ -111,8 +111,13 @@ def initialise_game():
     store.current_game_map = game_map
 
     # populate the map
-    player_data = ActorData(key="player", possible_names=["player"], description="a desc",
-                            position_offsets=[(0, 0)], trait_names=["shoom", "soft_tops", "dandy"])
+    player_data = ActorData(
+        key="player",
+        possible_names=["player"],
+        description="a desc",
+        position_offsets=[(0, 0)],
+        trait_names=["shoom", "soft_tops", "dandy"],
+    )
     game_map.generate_new_map(player_data)
 
     # init the player

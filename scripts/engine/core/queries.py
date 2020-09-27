@@ -19,9 +19,19 @@ from scripts.engine.component import (
 if TYPE_CHECKING:
     pass
 
-__all__ = ["tracked", "aesthetic", "knowledge", "affliction", "position", "light_source_and_position",
-    "position_and_fov_and_combat_stats", "position_and_blocking", "position_and_aesthetic",
-    "position_and_identity_and_aesthetic", "position_and_actor"]
+__all__ = [
+    "tracked",
+    "aesthetic",
+    "knowledge",
+    "affliction",
+    "position",
+    "light_source_and_position",
+    "position_and_fov_and_combat_stats",
+    "position_and_blocking",
+    "position_and_aesthetic",
+    "position_and_identity_and_aesthetic",
+    "position_and_actor",
+]
 
 
 get_components = Query  # import from snecs to avoid issues with importing from world
@@ -51,4 +61,3 @@ position_and_aesthetic = get_components([Position, Aesthetic]).compile()
 position_and_actor = get_components([Position, IsActor]).compile()
 
 position_and_identity_and_aesthetic = get_components([Position, Identity, Aesthetic]).compile()
-

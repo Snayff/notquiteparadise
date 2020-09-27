@@ -19,6 +19,7 @@ class AIBehaviour(ABC):
     """
     Base class for AI behaviours.
     """
+
     @abstractmethod
     def act(self):
         """
@@ -31,6 +32,7 @@ class ProjectileBehaviour(AIBehaviour):
     """
     Move in direction, up to max_range (in tiles). Speed is time spent per tile moved.
     """
+
     def __init__(self, attached_entity: EntityID, data: ProjectileData):
         self.entity = attached_entity  # the entity this component is attached too
         self.data = data
@@ -89,8 +91,9 @@ class ProjectileBehaviour(AIBehaviour):
 
                     elif collision_type == TerrainCollision.REFLECT:
                         # change direction and move
-                        new_dir = world.get_reflected_direction((current_tile.x, current_tile.y),
-                                                                (target_tile.x, target_tile.y))
+                        new_dir = world.get_reflected_direction(
+                            (current_tile.x, current_tile.y), (target_tile.x, target_tile.y)
+                        )
                         self.data.direction = new_dir
                         activate = True
                         move = world.get_known_skill(entity, "Move")
@@ -135,6 +138,7 @@ class SkipTurnBehaviour(AIBehaviour):
     """
     Just skips turn
     """
+
     def __init__(self, attached_entity: int):
         self.entity = attached_entity
 

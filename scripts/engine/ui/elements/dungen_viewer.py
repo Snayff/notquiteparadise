@@ -35,8 +35,13 @@ class DungenViewer(UIPanel):
         # create the image to hold the rooms
         rect = pygame.Rect((0, 0), (self.rect.width, self.rect.height))
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
-        self.view = UIImage(relative_rect=Rect((0, 0), rect.size), image_surface=blank_surf, manager=manager,
-                               container=self.get_container(), object_id="#roomview")
+        self.view = UIImage(
+            relative_rect=Rect((0, 0), rect.size),
+            image_surface=blank_surf,
+            manager=manager,
+            container=self.get_container(),
+            object_id="#roomview",
+        )
 
         self.timer: float = 0.0
         self.map = None
@@ -92,6 +97,7 @@ class DungenViewer(UIPanel):
         self.scale_factor = min(x_scale, y_scale)
 
         from scripts.engine import dungen
+
         self.iterator = dungen.generate_steps(map_name)
         self._reset()
 

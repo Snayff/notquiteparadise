@@ -20,6 +20,7 @@ class GameMap:
     Holds tiles for a map. Handles generation of the map and placement of the entities. Fills map with floors on
     init.
     """
+
     def __init__(self, map_name: str, seed: Any):
         # FIXME - fix deserialisation
 
@@ -29,6 +30,7 @@ class GameMap:
         self.rng.seed(self.seed)
 
         from scripts.engine import library
+
         _map_data = library.MAPS[map_name]
         self.width = _map_data.width
         self.height = _map_data.height
@@ -37,6 +39,7 @@ class GameMap:
 
         # get details for a wall tile
         from scripts.engine import utility
+
         wall_sprite_path = _map_data.sprite_paths[TileCategory.WALL]
         wall_sprite = utility.get_image(wall_sprite_path)
         blocks_sight = True
@@ -61,7 +64,7 @@ class GameMap:
         Dumps the dungeon tree into a file
         :param path: File path
         """
-        with open(path, 'w') as fp:
+        with open(path, "w") as fp:
             fp.write(json.dumps(self.generation_info, indent=4))
 
     def serialise(self) -> Dict[str, Any]:
@@ -77,13 +80,7 @@ class GameMap:
                 # add to the column
                 tiles[x].append(self.tile_map[x][y].serialise())
 
-
-        _dict = {
-            "width": self.width,
-            "height": self.height,
-            "tiles": tiles,
-            "seed": self.seed
-        }
+        _dict = {"width": self.width, "height": self.height, "tiles": tiles, "seed": self.seed}
         return _dict
 
     @classmethod

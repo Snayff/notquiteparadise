@@ -54,6 +54,7 @@ def get_current() -> GameStateType:
 
 ################### SET ##############################
 
+
 def set_active_skill(skill_name: str):
     """
     Set the active skill. Used for targeting mode.
@@ -62,6 +63,7 @@ def set_active_skill(skill_name: str):
 
 
 ################### MANAGING STATE ###################
+
 
 def update_clock() -> float:
     """
@@ -109,7 +111,6 @@ def save_game():
     date_and_time = datetime.datetime.utcnow().strftime("%Y%m%d@%H%M%S")
     save_name_prefix = f"{name}"
     new_save_name = f"{save_name_prefix}_{date_and_time}"
-
 
     # clear old saves
     existing_saves = []

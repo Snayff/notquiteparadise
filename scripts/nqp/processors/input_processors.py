@@ -33,6 +33,7 @@ if TYPE_CHECKING:
 
 ########################## OUTER LAYER PROCESSORS - EXTERNAL FACING #####################################
 
+
 def process_event(event: pygame.event, game_state: GameStateType):
     """
     Extract the intent from the event and process them in the context of the game state
@@ -93,6 +94,7 @@ def process_intent(intent: InputIntentType, game_state: GameStateType):
 
 ############################### INNER PROCESSORS - LOCAL ONLY ################################
 
+
 def _process_stateless_intents(intent: InputIntentType):
     """
     Process intents that don't rely on game state.
@@ -134,6 +136,7 @@ def _process_stateless_intents(intent: InputIntentType):
     elif intent == InputIntent.TEST:
         # add whatever we want to test here
         import os
+
         full_save_path = str(SAVE_PATH)
         for save_name in os.listdir(full_save_path):
             save = save_name.replace(".json", "")
@@ -148,8 +151,14 @@ def _process_game_map_intents(intent: InputIntentType):
     position = world.get_entitys_component(player, Position)
 
     possible_move_intents = [InputIntent.DOWN, InputIntent.UP, InputIntent.LEFT, InputIntent.RIGHT]
-    possible_skill_intents = [InputIntent.SKILL0, InputIntent.SKILL1, InputIntent.SKILL2, InputIntent.SKILL3,
-    InputIntent.SKILL4, InputIntent.SKILL5]
+    possible_skill_intents = [
+        InputIntent.SKILL0,
+        InputIntent.SKILL1,
+        InputIntent.SKILL2,
+        InputIntent.SKILL3,
+        InputIntent.SKILL4,
+        InputIntent.SKILL5,
+    ]
 
     ## Player movement
     if intent in possible_move_intents and position:
@@ -158,7 +167,6 @@ def _process_game_map_intents(intent: InputIntentType):
         possible_moves = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
         if direction in possible_moves:
             _process_skill_use(player, Move, target_tile, direction)
-
 
     ## Use a skill
     elif intent in possible_skill_intents and position:
@@ -201,8 +209,14 @@ def _process_targeting_mode_intents(intent):
     active_skill_name = state.get_active_skill()
     skill = world.get_known_skill(player, active_skill_name)
 
-    possible_skill_intents = [InputIntent.SKILL0, InputIntent.SKILL1, InputIntent.SKILL2, InputIntent.SKILL3,
-        InputIntent.SKILL4, InputIntent.SKILL5]
+    possible_skill_intents = [
+        InputIntent.SKILL0,
+        InputIntent.SKILL1,
+        InputIntent.SKILL2,
+        InputIntent.SKILL3,
+        InputIntent.SKILL4,
+        InputIntent.SKILL5,
+    ]
 
     ## Cancel use
     if intent == InputIntent.CANCEL:
@@ -242,6 +256,7 @@ def _process_menu_intents(intent):
         state.set_new(state.get_previous())
         ui.set_element_visibility(UIElement.ACTOR_INFO, False)
 
+
 ################## HELPER FUNCTIONS ############################
 
 
@@ -271,6 +286,7 @@ def _process_skill_use(player: EntityID, skill: Type[Skill], target_tile: Tile, 
 
 
 ######################### GET ##########################
+
 
 def _get_pressed_direction(intent: InputIntentType) -> DirectionType:
     """

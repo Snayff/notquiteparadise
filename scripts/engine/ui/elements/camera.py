@@ -67,12 +67,18 @@ class Camera(UIPanel):
 
         # create game map
         blank_surf = Surface((rect.width, rect.height), SRCALPHA)
-        self.game_map = UIImage(relative_rect=Rect((0, 0), rect.size), image_surface=blank_surf, manager=manager,
-                                container=self.get_container(), object_id="#game_map")
+        self.game_map = UIImage(
+            relative_rect=Rect((0, 0), rect.size),
+            image_surface=blank_surf,
+            manager=manager,
+            container=self.get_container(),
+            object_id="#game_map",
+        )
 
         # create grid
-        self.grid = UIContainer(relative_rect=Rect((0, 0), rect.size), manager=manager,
-                                container=self.get_container(), object_id="#grid")
+        self.grid = UIContainer(
+            relative_rect=Rect((0, 0), rect.size), manager=manager, container=self.get_container(), object_id="#grid"
+        )
 
         # update everything
         self.update(0)
@@ -124,7 +130,7 @@ class Camera(UIPanel):
         ui_object_id = event.ui_object_id
 
         # For tiles
-        if '#tile' in ui_object_id:
+        if "#tile" in ui_object_id:
 
             # get the row, col of the UI element
             x, y = self.get_tile_col_row(ui_object_id)
@@ -143,7 +149,8 @@ class Camera(UIPanel):
                 updated_tile_info = False
                 from scripts.engine.ui.manager import ui
                 from scripts.engine.core import queries
-                for entity, (position, ) in queries.position:
+
+                for entity, (position,) in queries.position:
                     position: Position
                     if (x, y) in position:
                         ui.set_selected_tile_pos((x, y))
@@ -212,7 +219,7 @@ class Camera(UIPanel):
         Update the tile grid to only have options in line with the tiles set OR the overlay
         """
         return
-        # FIXME - update to work with new position. COnsider moving out of camera. 
+        # FIXME - update to work with new position. COnsider moving out of camera.
         # if self.is_overlay_visible:
         #
         #     # player column and row
@@ -298,6 +305,7 @@ class Camera(UIPanel):
 
         # draw entities
         from scripts.engine.core import queries
+
         for entity, (pos, aesthetic) in queries.position_and_aesthetic:
             # if part of entity in camera view
             for offset in pos.offsets:
@@ -330,11 +338,18 @@ class Camera(UIPanel):
             tile_rect = Rect(start_x, start_y, TILE_SIZE, TILE_SIZE)
 
             # draw a button
-            UIButton(relative_rect=tile_rect, manager=manager, text="", container=grid, parent_element=grid,
-                     object_id=f"#tile{col},{row}")
+            UIButton(
+                relative_rect=tile_rect,
+                manager=manager,
+                text="",
+                container=grid,
+                parent_element=grid,
+                object_id=f"#tile{col},{row}",
+            )
 
-    def _draw_surface(self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float],
-            src_area: Optional[Rect] = None):
+    def _draw_surface(
+        self, sprite: Surface, map_surface: Surface, col_row: Tuple[float, float], src_area: Optional[Rect] = None
+    ):
         """
         Draw a surface on the surface map. The function handles coordinates transformation to the screen
         """
@@ -391,9 +406,9 @@ class Camera(UIPanel):
         """
         Get the (col, row) from the object_id string
         """
-        prefix = '#tile'
+        prefix = "#tile"
         index = id_string.index(prefix)
-        tile_string = id_string[index + len(prefix):]
+        tile_string = id_string[index + len(prefix) :]
         return convert_tile_string_to_xy(tile_string)
 
     ############# UTILITY #########################
@@ -411,7 +426,7 @@ class Camera(UIPanel):
         """
         Convert from a draw position to a tile position, rounding down.
         """
-        x = int(clamp(pos[0] // TILE_SIZE, 0,  self.map_width))
+        x = int(clamp(pos[0] // TILE_SIZE, 0, self.map_width))
         y = int(clamp(pos[1] // TILE_SIZE, 0, self.map_height))
 
         return x, y

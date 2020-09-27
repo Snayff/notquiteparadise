@@ -32,8 +32,22 @@ if TYPE_CHECKING:
     from typing import Dict, Any, List, Union
 
 
-__all__ = ["TRAITS", "AFFLICTIONS", "ASPECTS", "BASE_STATS_PRIMARY", "BASE_STATS_SECONDARY", "GODS", "SKILLS",
-    "MAPS", "ACTORS", "ROOMS", "INPUT_CONFIG", "VIDEO_CONFIG", "GAME_CONFIG", "refresh_library"]
+__all__ = [
+    "TRAITS",
+    "AFFLICTIONS",
+    "ASPECTS",
+    "BASE_STATS_PRIMARY",
+    "BASE_STATS_SECONDARY",
+    "GODS",
+    "SKILLS",
+    "MAPS",
+    "ACTORS",
+    "ROOMS",
+    "INPUT_CONFIG",
+    "VIDEO_CONFIG",
+    "GAME_CONFIG",
+    "refresh_library",
+]
 
 
 ####################### DATA DICTS ##############################
@@ -53,7 +67,8 @@ VIDEO_CONFIG: VideoConfigData = VideoConfigData(Dimensions(1, 1), Dimensions(1, 
 GAME_CONFIG: GameConfigData = GameConfigData(
     HitTypeData(HitInfoData(0, 0.0), HitInfoData(0, 0.0), HitInfoData(0, 0.0)),
     BaseValueData(0, 0, 0),
-    DefaultValueData(0, True, 0.0))   # load empty object
+    DefaultValueData(0, True, 0.0),
+)  # load empty object
 
 # build default list for input - needed in case json doesnt include all required values
 for member in InputIntent.__dict__.keys():
@@ -62,6 +77,7 @@ for member in InputIntent.__dict__.keys():
 
 
 ####################### REFRESH ##############################
+
 
 def refresh_library():
     """
@@ -91,6 +107,7 @@ def refresh_library():
 
 
 ####################### LOAD ##############################
+
 
 def _load_affliction_data():
     with open(str(DATA_PATH / "game/afflictions.json")) as file:
@@ -188,8 +205,7 @@ def _load_input_config():
                 if not any(pygame_constant in sublist for sublist in _input_list.values()):
                     inputs.append(pygame_constant)
                 else:
-                    logging.warning(
-                        f"{value} already mapped to another intent in input.json. Not added to {key}")
+                    logging.warning(f"{value} already mapped to another intent in input.json. Not added to {key}")
             except AttributeError:
                 logging.warning(f"{value} specified in input.json not found in pygame constants.")
 

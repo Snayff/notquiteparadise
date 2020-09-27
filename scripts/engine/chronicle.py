@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 
 ############ ACTIONS ##################
 
+
 def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     """
     Build a new turn queue that includes all timed entities. entity_to_exclude is one that should not be added
@@ -26,7 +27,8 @@ def rebuild_turn_queue(entity_to_exclude: Optional[EntityID] = None):
     # create a turn queue from the entities list
     new_queue = {}
     from scripts.engine.core import queries
-    for entity, (tracked, ) in queries.tracked:
+
+    for entity, (tracked,) in queries.tracked:
         if entity != entity_to_exclude:
             tracked = cast(Tracked, tracked)
             new_queue[entity] = tracked.time_spent
@@ -89,6 +91,7 @@ def next_round(time_progressed: int):
     """
     ## skill cooldowns
     from scripts.engine.core import queries
+
     for entity, (knowledge,) in queries.knowledge:
         knowledge = cast(Knowledge, knowledge)
         for skill_name in knowledge.skill_names:
@@ -97,7 +100,7 @@ def next_round(time_progressed: int):
                 knowledge.set_skill_cooldown(skill_name, skill_cooldown - 1)
 
     ## affliction durations
-    for entity, (afflictions, ) in queries.affliction:
+    for entity, (afflictions,) in queries.affliction:
         assert isinstance(afflictions, Afflictions)  # handle mypy type error
         for affliction in afflictions.active:
             if affliction.duration == 0:
@@ -110,8 +113,7 @@ def next_round(time_progressed: int):
 
     ## time management
     # add progressed time and minus time_in_round to keep the remaining time
-    set_time_in_round((get_time_in_round() + time_progressed) -
-                      library.GAME_CONFIG.default_values.time_per_round)
+    set_time_in_round((get_time_in_round() + time_progressed) - library.GAME_CONFIG.default_values.time_per_round)
 
     # increment rounds
     _increment_round_number()
@@ -134,6 +136,7 @@ def _add_time(time_to_add: int):
 
 
 ############# GET ###################
+
 
 def get_turn_holder() -> EntityID:
     """
@@ -193,6 +196,7 @@ def _get_next_entity_in_queue() -> EntityID:
 
 
 ############# SET ###################
+
 
 def set_turn_holder(active_entity: EntityID):
     """

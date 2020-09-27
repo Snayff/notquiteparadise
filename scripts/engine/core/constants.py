@@ -68,10 +68,12 @@ TileCategoryType = NewType("TileCategoryType", str)
 
 #################### INTERNAL, NON-SERIALISED ###########################################
 
+
 class EventType(SimpleNamespace):
     """
     Constant info about the different custom event names that we can pass to pygame
     """
+
     TILE_CLICK = pygame.USEREVENT + 1
     SKILL_BAR_CLICK = pygame.USEREVENT + 2
     EXIT_MENU = pygame.USEREVENT + 3
@@ -81,6 +83,7 @@ class RenderLayer(SimpleNamespace):
     """
     The possible render layers. Lower number is further down the stack.
     """
+
     BOTTOM = RenderLayerType(10)
     TILE = RenderLayerType(20)
     ASPECT = RenderLayerType(30)
@@ -93,6 +96,7 @@ class GameState(SimpleNamespace):
     """
     States the game can be in.
     """
+
     LOADING = GameStateType(1)  # while loading, to prevent key press.
     GAMEMAP = GameStateType(2)  # while player moving around the game_map
     PLAYER_DEAD = GameStateType(3)  # while player is dead
@@ -106,6 +110,7 @@ class UIElement(SimpleNamespace):
     """
     The different, single instance UI elements
     """
+
     MESSAGE_LOG = UIElementType(1)
     ACTOR_INFO = UIElementType(2)
     SKILL_BAR = UIElementType(4)
@@ -120,6 +125,7 @@ class InputIntent(SimpleNamespace):
     """
     Values of the conversion from input to intent. Strings.
     """
+
     UP = InputIntentType("up")
     DOWN = InputIntentType("down")
     LEFT = InputIntentType("left")
@@ -149,10 +155,12 @@ class InputIntent(SimpleNamespace):
 #################### EXTERNAL, SERIALISED  ###########################################
 # i.e used in the data files
 
+
 class Direction(SimpleNamespace):
     """
     Holds a tuple as (x, y) for the relative direction.
     """
+
     # N.B external values  must be actively mapped to these on load as they are not held as strings
     UP_LEFT = DirectionType((-1, -1))
     UP = DirectionType((0, -1))
@@ -169,6 +177,7 @@ class TargetTag(SimpleNamespace):
     """
     Types of target
     """
+
     SELF = TargetTagType("self")
     OTHER_ENTITY = TargetTagType("other_entity")
     NO_ENTITY = TargetTagType("no_entity")
@@ -184,6 +193,7 @@ class TraitGroup(SimpleNamespace):
     """
     The types of player traits
     """
+
     PEOPLE = TraitGroupType("people")
     SAVVY = TraitGroupType("savvy")
     HOMELAND = TraitGroupType("homeland")
@@ -194,6 +204,7 @@ class DamageType(SimpleNamespace):
     """
     Damage types
     """
+
     BURN = DamageTypeType("burn")
     CHEMICAL = DamageTypeType("chemical")
     ASTRAL = DamageTypeType("astral")
@@ -205,6 +216,7 @@ class PrimaryStat(SimpleNamespace):
     """
     Primary stats. Values are strings.
     """
+
     VIGOUR = PrimaryStatType("vigour")
     CLOUT = PrimaryStatType("clout")
     SKULLDUGGERY = PrimaryStatType("skullduggery")
@@ -216,6 +228,7 @@ class SecondaryStat(SimpleNamespace):
     """
     Secondary stats
     """
+
     MAX_HEALTH = SecondaryStatType("max_health")
     MAX_STAMINA = SecondaryStatType("max_stamina")
     HEALTH = SecondaryStatType("health")
@@ -234,6 +247,7 @@ class Resource(SimpleNamespace):
     """
     Resources that can be used. Must map to secondary stats.
     """
+
     HEALTH = ResourceType("health")
     STAMINA = ResourceType("stamina")
 
@@ -242,6 +256,7 @@ class HitType(SimpleNamespace):
     """
     The value of each hit type. The value is the starting amount.
     """
+
     GRAZE = HitTypeType("graze")
     HIT = HitTypeType("hit")
     CRIT = HitTypeType("crit")
@@ -251,6 +266,7 @@ class EffectType(SimpleNamespace):
     """
     Types of effects
     """
+
     APPLY_AFFLICTION = EffectTypeType("apply_affliction")
     DAMAGE = EffectTypeType("damage")
     MOVE = EffectTypeType("move")
@@ -265,6 +281,7 @@ class AfflictionTrigger(SimpleNamespace):
     """
     Type of trigger for the affliction
     """
+
     MOVEMENT = AfflictionTriggerType("movement")
     TAKE_DAMAGE = AfflictionTriggerType("take_damage")
 
@@ -273,6 +290,7 @@ class AfflictionCategory(SimpleNamespace):
     """
     Boon or Bane
     """
+
     BANE = AfflictionCategoryType("boon")
     BOON = AfflictionCategoryType("bane")
 
@@ -281,6 +299,7 @@ class TargetingMethod(SimpleNamespace):
     """
     Specify the way in which as skill is targeted
     """
+
     AUTO = TargetingMethodType("auto")
     TARGET = TargetingMethodType("target")
 
@@ -289,10 +308,11 @@ class Shape(SimpleNamespace):
     """
     When to trigger the afflictions
     """
+
     TARGET = ShapeType("target")  # single target
     SQUARE = ShapeType("square")
     CIRCLE = ShapeType("circle")
-    CROSS = ShapeType("cross"),
+    CROSS = (ShapeType("cross"),)
     CONE = ShapeType("cone")
 
 
@@ -300,6 +320,7 @@ class TerrainCollision(SimpleNamespace):
     """
     What to do when a skill hits terrain
     """
+
     REFLECT = TerrainCollisionType("reflect")  # bounce back
     ACTIVATE = TerrainCollisionType("activate")  # trigger effects
     FIZZLE = TerrainCollisionType("fizzle")  # kill self
@@ -309,6 +330,7 @@ class TravelMethod(SimpleNamespace):
     """
     How the skill travels
     """
+
     STANDARD = TravelMethodType("standard")  # travels tile by tile
     ARC = TravelMethodType("arc")  # only impacts last tile in range, can reflect if hits terrain early.
 
@@ -317,6 +339,7 @@ class ProjectileExpiry(SimpleNamespace):
     """
     What happens when the skill reaches the range limit
     """
+
     FIZZLE = ProjectileExpiryType("fizzle")
     ACTIVATE = ProjectileExpiryType("activate")
 
@@ -326,6 +349,7 @@ class ProjectileSpeed(SimpleNamespace):
     The speed at which a projectile travels; how much time to move a tile.
     N.B. does not use base move_cost
     """
+
     # N.B external values  must be actively mapped to these on load as they are not held as strings
     SLOW = ProjectileSpeedType(10)
     AVERAGE = ProjectileSpeedType(int(SLOW / 2))
@@ -337,6 +361,7 @@ class TileCategory(SimpleNamespace):
     """
     The type of tile to be placed
     """
+
     FLOOR = TileCategoryType("floor")
     WALL = TileCategoryType("wall")
     ACTOR = TileCategoryType("actor")

@@ -36,67 +36,70 @@ if TYPE_CHECKING:
 
 class DataEditor(UIWindow):
     pass
-#     """
-#     Dev tool to allow creating and editing data.
-#     """
-#
-#     def __init__(self, rect, manager):
-#         super().__init__(rect, manager, "data_editor")
-#
-#         # data holders
-#         self.all_data: Dict[str, Dict[str, dataclass()]] = {}
-#         self.current_data_category: str = None
-#         self.current_data_instance: str = None
-#         self.current_primary_field: str = None
-#         self.current_secondary_field: str = None
-#         self.key_being_edited: str = None
-#         self.field_options: Dict[str, Tuple[List[str], Optional[dataclass]]] = {}
-#
-#         # data selectors
-#         self.category_selector: UIDropDownMenu = None
-#         self.instance_selector: UIDropDownMenu = None
-#
-#         # dicts of data fields
-#         self.primary_data_fields: Dict[str, DataField] = {}
-#         self.secondary_data_fields: Dict[str, DataField] = {}
-#
-#         # size info
-#         self.start_x = 2
-#         self.start_y = 2
-#         self.width = self.rect.width
-#         self.height = self.rect.height
-#         self.row_height = 25
-#         self.max_rows = self.height // self.row_height
-#         self.selectors_end_y = self.start_y + (self.row_height * 2)  # 2 is number of selectors
-#
-#         self.primary_x = self.start_x
-#         self.primary_y = self.selectors_end_y
-#         self.primary_width = self.width // 2
-#
-#         self.secondary_x = self.primary_x + self.primary_width
-#         self.secondary_y = self.selectors_end_y
-#         self.secondary_width = self.width - self.primary_width
-#
-#         self.label_width_mod = 0.3  # decimal % of row width that label takes up
-#
-#         self.max_y = self.height
-#
-#         # get the data & field options
-#         self._load_library_data()
-#         self._load_field_options()
-#
-#         # display the initial selector
-#         self.category_selector = self._create_data_category_selector()
-#
+    #     """
+    #     Dev tool to allow creating and editing data.
+    #     """
+    #
+    #     def __init__(self, rect, manager):
+    #         super().__init__(rect, manager, "data_editor")
+    #
+    #         # data holders
+    #         self.all_data: Dict[str, Dict[str, dataclass()]] = {}
+    #         self.current_data_category: str = None
+    #         self.current_data_instance: str = None
+    #         self.current_primary_field: str = None
+    #         self.current_secondary_field: str = None
+    #         self.key_being_edited: str = None
+    #         self.field_options: Dict[str, Tuple[List[str], Optional[dataclass]]] = {}
+    #
+    #         # data selectors
+    #         self.category_selector: UIDropDownMenu = None
+    #         self.instance_selector: UIDropDownMenu = None
+    #
+    #         # dicts of data fields
+    #         self.primary_data_fields: Dict[str, DataField] = {}
+    #         self.secondary_data_fields: Dict[str, DataField] = {}
+    #
+    #         # size info
+    #         self.start_x = 2
+    #         self.start_y = 2
+    #         self.width = self.rect.width
+    #         self.height = self.rect.height
+    #         self.row_height = 25
+    #         self.max_rows = self.height // self.row_height
+    #         self.selectors_end_y = self.start_y + (self.row_height * 2)  # 2 is number of selectors
+    #
+    #         self.primary_x = self.start_x
+    #         self.primary_y = self.selectors_end_y
+    #         self.primary_width = self.width // 2
+    #
+    #         self.secondary_x = self.primary_x + self.primary_width
+    #         self.secondary_y = self.selectors_end_y
+    #         self.secondary_width = self.width - self.primary_width
+    #
+    #         self.label_width_mod = 0.3  # decimal % of row width that label takes up
+    #
+    #         self.max_y = self.height
+    #
+    #         # get the data & field options
+    #         self._load_library_data()
+    #         self._load_field_options()
+    #
+    #         # display the initial selector
+    #         self.category_selector = self._create_data_category_selector()
+    #
     def update(self, time_delta: float):
         pass
-#         """
-#         Update based on current state and data. Run every frame.
-#         """
-#         super().update(time_delta)
-#
+
+    #         """
+    #         Update based on current state and data. Run every frame.
+    #         """
+    #         super().update(time_delta)
+    #
     def handle_events(self, event):
-         pass
+        pass
+
+
 #         """
 #         Handle events created by this UI widget
 #         """

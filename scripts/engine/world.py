@@ -23,7 +23,8 @@ from scripts.engine.component import (
     IsGod,
     IsPlayer,
     Knowledge,
-    LightSource, Opinion,
+    LightSource,
+    Opinion,
     Position,
     Resources,
     Tracked,
@@ -73,6 +74,7 @@ move_world = snecs.ecs.move_world
 
 
 ################################ CREATE - INIT OBJECT - RETURN NEW OBJECT ###############################
+
 
 def create_entity(components: List[Component] = None) -> EntityID:
     """
@@ -182,9 +184,7 @@ def create_actor(actor_data: ActorData, spawn_pos: Tuple[int, int], is_player: b
     perm_afflictions = []
     for name in perm_afflictions_names:
         # create the affliction with no specific source
-        perm_afflictions.append(
-            create_affliction(name, entity, entity, INFINITE)
-        )
+        perm_afflictions.append(create_affliction(name, entity, entity, INFINITE))
     add_component(entity, Afflictions(perm_afflictions))
 
     # add behaviour  N.B. Can only be added once entity is created
@@ -250,12 +250,7 @@ def create_fov_map() -> np.array:
     """
     game_map = get_game_map()
     return np.array(
-        [
-            [not tile.blocks_sight for tile in column]
-            for column in game_map.tile_map
-        ],
-        dtype=bool,
-        order="F",
+        [[not tile.blocks_sight for tile in column] for column in game_map.tile_map], dtype=bool, order="F",
     )
 
 
@@ -268,6 +263,7 @@ def create_combat_stats(entity: EntityID) -> CombatStats:
 
 
 ############################# GET - RETURN AN EXISTING SOMETHING ###########################
+
 
 def get_game_map() -> GameMap:
     """
@@ -493,8 +489,9 @@ def get_reflected_direction(current_pos: Tuple[int, int], target_direction: Tupl
     return cast(DirectionType, (dir_x, dir_y))
 
 
-def _get_furthest_free_position(start_pos: Tuple[int, int], target_direction: Tuple[int, int],
-        max_distance: int, travel_type: TravelMethodType) -> Tuple[int, int]:
+def _get_furthest_free_position(
+    start_pos: Tuple[int, int], target_direction: Tuple[int, int], max_distance: int, travel_type: TravelMethodType
+) -> Tuple[int, int]:
     """
     Checks each position in a line and returns the last position that doesnt block movement. If no position in
     range blocks movement then the last position checked is returned. If all positions in range block movement
@@ -670,8 +667,9 @@ def get_known_skill(entity: EntityID, skill_name: str) -> Type[Skill]:
     raise Exception("Skill not found")
 
 
-def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_size: int,
-        shape_direction: Optional[Tuple[int, int]] = None):
+def get_affected_entities(
+    target_pos: Tuple[int, int], shape: ShapeType, shape_size: int, shape_direction: Optional[Tuple[int, int]] = None
+):
     """
     Return a list of entities that are within the shape given, using target position as a centre point. Entity must
     have Position, Resources to be eligible.
@@ -697,6 +695,7 @@ def get_affected_entities(target_pos: Tuple[int, int], shape: ShapeType, shape_s
 
 
 ############################# QUERIES - CAN, IS, HAS - RETURN BOOL #############################
+
 
 def tile_has_tag(tile: Tile, tag: TargetTagType, active_entity: Optional[int] = None) -> bool:
     """
@@ -813,6 +812,7 @@ def get_entities_on_tile(tile: Tile) -> List[EntityID]:
     y = tile.y
     entities = []
     from scripts.engine.core import queries
+
     for entity, (position,) in queries.position:
         position = cast(Position, position)
         if (x, y) in position:
@@ -826,8 +826,9 @@ def _tile_has_other_entities(tile: Tile, active_entity: EntityID) -> bool:
     """
     entities_on_tile = get_entities_on_tile(tile)
     active_entity_is_on_tile = active_entity in entities_on_tile
-    return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or \
-           (len(entities_on_tile) > 1 and active_entity_is_on_tile)
+    return (len(entities_on_tile) > 0 and not active_entity_is_on_tile) or (
+        len(entities_on_tile) > 1 and active_entity_is_on_tile
+    )
 
 
 def _tile_has_specific_entity(tile: Tile, active_entity: EntityID) -> bool:
@@ -932,14 +933,16 @@ def can_use_skill(entity: EntityID, skill_name: str) -> bool:
                 cooldown_msg = "unknown"
             else:
                 cooldown_msg = str(cooldown)
-            logging.warning(f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait "
-                            f"{cooldown_msg} more rounds.")
+            logging.warning(
+                f"'{get_name(entity)}' tried to use {skill_name}, but needs to wait " f"{cooldown_msg} more rounds."
+            )
 
     # we've reached the end, no good.
     return False
 
 
 ################################ CONDITIONAL ACTIONS - CHANGE STATE - RETURN SUCCESS STATE  #############
+
 
 def pay_resource_cost(entity: EntityID, resource: ResourceType, cost: int) -> bool:
     """
@@ -999,7 +1002,8 @@ def apply_skill(skill_instance: Skill) -> bool:
         return True
     else:
         logging.info(
-            f"Could not apply skill \"{skill.key}\", target tile does not have required tags ({skill.required_tags}).")
+            f'Could not apply skill "{skill.key}", target tile does not have required tags ({skill.required_tags}).'
+        )
 
     return False
 
@@ -1037,8 +1041,10 @@ def apply_affliction(affliction_instance: Affliction) -> bool:
                     effect_queue.extend(effect.evaluate())
             return True
         else:
-            logging.info(f"Could not apply affliction \"{affliction.key}\", target tile does not have required "
-                         f"tags ({affliction.required_tags}).")
+            logging.info(
+                f'Could not apply affliction "{affliction.key}", target tile does not have required '
+                f"tags ({affliction.required_tags})."
+            )
 
     return False
 
@@ -1087,6 +1093,7 @@ def spend_time(entity: EntityID, time_spent: int) -> bool:
 
 
 ################################ DEFINITE ACTIONS - CHANGE STATE - RETURN NOTHING  #############
+
 
 def kill_entity(entity: EntityID):
     # if not player
@@ -1154,8 +1161,10 @@ def judge_action(entity: EntityID, action_name: str):
                 opinion.opinions[entity] = attitudes[action_name].opinion_change
 
             name = get_name(entity)
-            logging.info(f"'{identity.name}' reacted to '{name}' using {action_name}.  New "
-                         f"opinion = {opinion.opinions[entity]}")
+            logging.info(
+                f"'{identity.name}' reacted to '{name}' using {action_name}.  New "
+                f"opinion = {opinion.opinions[entity]}"
+            )
 
 
 def remove_affliction(entity: EntityID, affliction: Affliction):
@@ -1181,6 +1190,7 @@ def learn_skill(entity: EntityID, skill_name: str):
 
 ############################## ASSESS - REVIEW STATE - RETURN OUTCOME ########################################
 
+
 def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int, hit_type: HitTypeType) -> int:
     """
     Work out the damage to be dealt.
@@ -1205,8 +1215,10 @@ def calculate_damage(base_damage: int, damage_mod_amount: int, resist_value: int
     int_modified_damage = int(modified_damage)
 
     # log the info
-    log_string = f"-> Initial:{base_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified" \
-                 f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
+    log_string = (
+        f"-> Initial:{base_damage}, Mitigated: {format(mitigated_damage, '.2f')},  Modified"
+        f":{format(modified_damage, '.2f')}, Final: {int_modified_damage}"
+    )
     logging.debug(log_string)
 
     return int_modified_damage
@@ -1283,7 +1295,7 @@ def choose_interventions(entity: EntityID, action_name: str) -> List[Tuple[Entit
         intervention_weightings.append(desire_to_do_nothing - desire_to_intervene)
 
         # which intervention, if any, shall the god consider using?
-        chosen_intervention, = random.choices(eligible_interventions, intervention_weightings)
+        (chosen_intervention,) = random.choices(eligible_interventions, intervention_weightings)
         # N.B. use , to unpack the result
 
         # if god has chosen to take an action then add to list

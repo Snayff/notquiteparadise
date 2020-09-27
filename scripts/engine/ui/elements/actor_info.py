@@ -40,9 +40,14 @@ class ActorInfo(UIWindow):
 
         # setup scroll bar
         self.scrollbar_width = 50
-        self.scrollbar = UIVerticalScrollBar(pygame.Rect((rect.width - self.scrollbar_width, 0),
-                                                         (self.scrollbar_width, rect.height)), 0.5, manager,
-                                             self.get_container(), self, "#scrollbar")
+        self.scrollbar = UIVerticalScrollBar(
+            pygame.Rect((rect.width - self.scrollbar_width, 0), (self.scrollbar_width, rect.height)),
+            0.5,
+            manager,
+            self.get_container(),
+            self,
+            "#scrollbar",
+        )
 
         # block mouse clicks outside of menu
         self.set_blocking(True)
@@ -73,27 +78,29 @@ class ActorInfo(UIWindow):
         NOTE: Copied from pygame_gui UIWindow to allow overwriting use of close button.
 
         """
-        if (event.type == pygame.MOUSEBUTTONDOWN and
-                event.button in [pygame.BUTTON_LEFT,
-                                 pygame.BUTTON_MIDDLE,
-                                 pygame.BUTTON_RIGHT]):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button in [
+            pygame.BUTTON_LEFT,
+            pygame.BUTTON_MIDDLE,
+            pygame.BUTTON_RIGHT,
+        ]:
             scaled_mouse_pos = self.ui_manager.calculate_scaled_mouse_position(event.pos)
 
-            edge_hovered = (self.edge_hovering[0] or self.edge_hovering[1] or
-                            self.edge_hovering[2] or self.edge_hovering[3])
-            if (self.is_enabled and
-                    event.button == pygame.BUTTON_LEFT and
-                    edge_hovered):
+            edge_hovered = (
+                self.edge_hovering[0] or self.edge_hovering[1] or self.edge_hovering[2] or self.edge_hovering[3]
+            )
+            if self.is_enabled and event.button == pygame.BUTTON_LEFT and edge_hovered:
                 self.resizing_mode_active = True
                 self.start_resize_point = scaled_mouse_pos
                 self.start_resize_rect = self.rect.copy()
 
-        if (event.type == pygame.MOUSEBUTTONUP and
-                event.button == pygame.BUTTON_LEFT and self.resizing_mode_active):
+        if event.type == pygame.MOUSEBUTTONUP and event.button == pygame.BUTTON_LEFT and self.resizing_mode_active:
             self.resizing_mode_active = False
 
-        if (event.type == pygame.USEREVENT and event.user_type == UI_BUTTON_PRESSED
-                and event.ui_element == self.close_window_button):
+        if (
+            event.type == pygame.USEREVENT
+            and event.user_type == UI_BUTTON_PRESSED
+            and event.ui_element == self.close_window_button
+        ):
             self.process_close_button()
 
     ############## GET / SET ########################
@@ -121,8 +128,9 @@ class ActorInfo(UIWindow):
         if entity:
 
             info: List[Tuple[str, Union[str, pygame.Surface]]] = []
-            section_break_image = utility.get_image(ASSET_PATH / "ui/menu_window_n_repeat.png",
-                                                    (self.rect.width - self.scrollbar_width, 13))
+            section_break_image = utility.get_image(
+                ASSET_PATH / "ui/menu_window_n_repeat.png", (self.rect.width - self.scrollbar_width, 13)
+            )
 
             # get aesthetic
             aesthetic = world.get_entitys_component(entity, Aesthetic)
@@ -154,7 +162,6 @@ class ActorInfo(UIWindow):
                     # in case it fails to pull expected attribute
                     except AttributeError:
                         logging.warning(f"ActorInfo: attribute {name} not found in primary stats.")
-
 
                 secondary_stats = get_class_members(SecondaryStat)
                 for name in secondary_stats:
@@ -242,7 +249,7 @@ class ActorInfo(UIWindow):
         for type_str, text_or_image in info:
             # build current text block
             if type_str == "text":
-                assert isinstance(text_or_image,str)  # handle mypy error
+                assert isinstance(text_or_image, str)  # handle mypy error
                 current_text_block += text_or_image + "<br>"
 
             elif type_str == "image":
@@ -251,9 +258,14 @@ class ActorInfo(UIWindow):
                 if current_text_block:
                     ## Display text
                     rect = pygame.Rect((x, current_y), (width, text_height))
-                    ui_text = UITextBox(html_text=current_text_block, relative_rect=rect, manager=self.ui_manager,
-                                        wrap_to_height=True, layer_starting_height=1,
-                                        container=self.get_container())
+                    ui_text = UITextBox(
+                        html_text=current_text_block,
+                        relative_rect=rect,
+                        manager=self.ui_manager,
+                        wrap_to_height=True,
+                        layer_starting_height=1,
+                        container=self.get_container(),
+                    )
                     sections.append(ui_text)
 
                     # update position
@@ -262,7 +274,6 @@ class ActorInfo(UIWindow):
                     # clear to prevent any carry over
                     ui_text = None
                     current_text_block = ""
-
 
                 ##  Display image
                 # draw info
@@ -277,8 +288,12 @@ class ActorInfo(UIWindow):
 
                 # create rect and image element
                 image_rect = pygame.Rect((draw_x, current_y), (image_width, image_height))
-                ui_image = UIImage(relative_rect=image_rect, image_surface=text_or_image, manager=self.ui_manager,
-                                   container=self.get_container())
+                ui_image = UIImage(
+                    relative_rect=image_rect,
+                    image_surface=text_or_image,
+                    manager=self.ui_manager,
+                    container=self.get_container(),
+                )
                 sections.append(ui_image)
 
                 # update position
@@ -291,12 +306,15 @@ class ActorInfo(UIWindow):
         if current_text_block:
             ## Display text
             rect = pygame.Rect((x, current_y), (width, text_height))
-            ui_text = UITextBox(html_text=current_text_block, relative_rect=rect, manager=self.ui_manager,
-                                wrap_to_height=True, layer_starting_height=1,
-                                container=self.get_container())
+            ui_text = UITextBox(
+                html_text=current_text_block,
+                relative_rect=rect,
+                manager=self.ui_manager,
+                wrap_to_height=True,
+                layer_starting_height=1,
+                container=self.get_container(),
+            )
             sections.append(ui_text)
-
-
 
         # update main sections list
         self.sections = sections

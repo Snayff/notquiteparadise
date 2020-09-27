@@ -24,11 +24,13 @@ class TileInfo(UIPanel):
         self.sections: List[UIElement] = []
 
         # complete base class init
-        super().__init__(rect, RenderLayer.UI_BASE, manager, element_id="tile_info",
-                         anchors={"left": "right",
-                             "right": "right",
-                             "top": "bottom",
-                             "bottom": "bottom"})
+        super().__init__(
+            rect,
+            RenderLayer.UI_BASE,
+            manager,
+            element_id="tile_info",
+            anchors={"left": "right", "right": "right", "top": "bottom", "bottom": "bottom"},
+        )
 
         # show self
         self.show()
@@ -75,6 +77,7 @@ class TileInfo(UIPanel):
 
             # get entities at selected position
             from scripts.engine.core import queries
+
             for entity, (position, identity, aesthetic) in queries.position_and_identity_and_aesthetic:
                 if self.selected_tile_pos in position:
 
@@ -117,7 +120,6 @@ class TileInfo(UIPanel):
             # create the box for the info
             self._create_sections(images, info)
 
-
     def cleanse(self):
         """
         Cleanse existing section info.
@@ -128,7 +130,6 @@ class TileInfo(UIPanel):
         self.sections = []
 
     ############## CREATE ########################
-
 
     def _create_sections(self, images: List[pygame.surface], info: List[List[str]]):
         """
@@ -150,8 +151,9 @@ class TileInfo(UIPanel):
         for image in images:
             #  create image
             _image = pygame.transform.scale(image, (ICON_IN_TEXT_SIZE, ICON_IN_TEXT_SIZE))
-            ui_image = UIImage(relative_rect=image_rect, image_surface=_image, manager=self.ui_manager,
-                               container=self.get_container())
+            ui_image = UIImage(
+                relative_rect=image_rect, image_surface=_image, manager=self.ui_manager, container=self.get_container()
+            )
             sections.append(ui_image)
             ui_image = None  # clear to prevent any carry over
 
@@ -165,9 +167,14 @@ class TileInfo(UIPanel):
 
             # create textbox
             rect = pygame.Rect((x, current_y), (width, text_height))
-            ui_text = UITextBox(html_text=text, relative_rect=rect, manager=self.ui_manager,
-                              wrap_to_height=True, layer_starting_height=1,
-                              container=self.get_container())
+            ui_text = UITextBox(
+                html_text=text,
+                relative_rect=rect,
+                manager=self.ui_manager,
+                wrap_to_height=True,
+                layer_starting_height=1,
+                container=self.get_container(),
+            )
             sections.append(ui_text)
             ui_text = None  # clear to prevent any carry over
 
