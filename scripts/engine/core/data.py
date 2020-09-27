@@ -1,11 +1,11 @@
 from __future__ import annotations
-
-import logging
 from typing import TYPE_CHECKING, Any, Optional
 
+import logging
+import os
 import pygame
-from snecs.typedefs import EntityID
 
+from snecs.typedefs import EntityID
 from scripts.engine.core.constants import GameState, GameStateType
 from scripts.engine.world_objects.game_map import GameMap
 
@@ -86,4 +86,7 @@ class Store:
             logging.warning(f"Store.Deserialise: Incorrect key ({e.args[0]}) given. Data not loaded correctly.")
 
 
-store = Store()
+if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
+    store = Store()
+else:
+    store = ""

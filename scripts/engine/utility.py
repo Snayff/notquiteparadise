@@ -4,6 +4,7 @@ import dataclasses
 import logging
 from typing import Dict, List, TYPE_CHECKING, Tuple
 
+import logging
 import pygame
 
 from scripts.engine.core.constants import ASSET_PATH, ICON_SIZE, IMAGE_NOT_FOUND_PATH, TILE_SIZE, DirectionType, Shape, \

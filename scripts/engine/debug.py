@@ -1,14 +1,15 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import cProfile
 import datetime
 import gc
 import io
 import logging
+import os
 import pstats
 import time
 import timeit
-from typing import TYPE_CHECKING
 
 from scripts.engine import state
 from scripts.engine.core.constants import INFINITE, VERSION
@@ -63,7 +64,10 @@ class Debugger:
         self.recent_average_fps += (self.current_fps - self.average_fps) / frames_to_count
 
 
-_debugger = Debugger()
+if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
+    _debugger = Debugger()
+else:
+    _debugger = ""
 
 
 ########################## UPDATE #####################################

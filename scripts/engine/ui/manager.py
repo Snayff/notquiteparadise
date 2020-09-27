@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from typing import TYPE_CHECKING, Union
 
 import pygame
@@ -378,4 +379,7 @@ class UI:
             logging.debug(f"Hid {element_name} ui element.")
 
 
-ui = UI()
+if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
+    ui = UI()
+else:
+    ui = ""

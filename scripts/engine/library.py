@@ -224,5 +224,6 @@ def _load_game_config():
 
 ####################### REFRESH ON INIT ##############################
 
-# Refresh the library immediately on init. Need this to ensure everything here is init'd and updated.
-refresh_library()
+if "GENERATING_SPHINX_DOCS" not in os.environ:  # when building in CI these fail
+    # Refresh the library immediately on init. Need this to ensure everything here is init'd and updated.
+    refresh_library()
